@@ -1,6 +1,6 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
+using Everglow.Commons.Physics.Abstracts;
+using Everglow.Commons.Physics.DataStructures;
 using ReLogic.Content;
 
 namespace Everglow.Commons.CustomTiles.Tiles;
@@ -52,7 +52,7 @@ public abstract class CustomTile
 	/// <summary>
 	/// 检验碰撞的碰撞箱
 	/// </summary>
-	public virtual Collider Collider { get; }
+	public virtual ICollider2D Collider { get; }
 
 	public virtual bool IsGrabbable => false;
 
@@ -76,17 +76,7 @@ public abstract class CustomTile
 	/// <summary>
 	/// 在数组中的下标
 	/// </summary>
-	public virtual int WhoAmI
-	{
-		get
-		{
-			return whoAmI;
-		}
-		set
-		{
-			whoAmI = value;
-		}
-	}
+	public virtual int WhoAmI { get => whoAmI; set => whoAmI = value; }
 
 	/// <summary>
 	/// 空的，用来执行物块运动逻辑
@@ -95,9 +85,9 @@ public abstract class CustomTile
 	{
 	}
 
-	public virtual bool Collision(Collider collider)
+	public virtual bool Collision(ICollider2D collider)
 	{
-		return Collider.Collision(collider);
+		return Collider.Intersect(collider);
 	}
 
 	public virtual void Draw()
@@ -106,7 +96,8 @@ public abstract class CustomTile
 	}
 
 	public virtual void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
-	{ }
+	{
+	}
 
 	public virtual void Kill()
 	{
@@ -114,7 +105,8 @@ public abstract class CustomTile
 	}
 
 	public virtual void Leave(EntityHandler entity)
-	{ }
+	{
+	}
 
 	public virtual void Move()
 	{
@@ -124,10 +116,12 @@ public abstract class CustomTile
 	public abstract Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false);
 
 	public virtual void OnCollision(AABB aabb, Direction dir)
-	{ }
+	{
+	}
 
 	public virtual void Stand(EntityHandler entity, bool newStand)
-	{ }
+	{
+	}
 
 	/// <summary>
 	/// 更新顺序不固定，可以自己重写

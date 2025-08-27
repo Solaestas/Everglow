@@ -1,16 +1,20 @@
-namespace Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.Physics.Abstracts;
 
-[DebuggerDisplay("position = ({position.X}, {position.Y}) size = ({size.X}, {size.Y})")]
+namespace Everglow.Commons.Physics.DataStructures;
+
+[DebuggerDisplay("Position = ({Position.X}, {Position.Y}) Size = ({Size.X}, {Size.Y})")]
 public struct AABB
 {
 	public Vector2 position;
 	public Vector2 size;
+
 	public float Top
 	{
 		get
 		{
 			return position.Y;
 		}
+
 		set
 		{
 			Debug.Assert(value <= position.Y + size.Y);
@@ -19,12 +23,14 @@ public struct AABB
 			position.Y = value;
 		}
 	}
+
 	public float Bottom
 	{
 		get
 		{
 			return position.Y + size.Y;
 		}
+
 		set
 		{
 			Debug.Assert(value >= position.Y);
@@ -32,12 +38,14 @@ public struct AABB
 			size.Y = value - position.Y;
 		}
 	}
+
 	public float Left
 	{
 		get
 		{
 			return position.X;
 		}
+
 		set
 		{
 			Debug.Assert(value <= position.X + size.X);
@@ -46,12 +54,14 @@ public struct AABB
 			position.X = value;
 		}
 	}
+
 	public float Right
 	{
 		get
 		{
 			return position.X + size.X;
 		}
+
 		set
 		{
 			Debug.Assert(value >= position.X);
@@ -59,28 +69,33 @@ public struct AABB
 			size.X = value - position.X;
 		}
 	}
+
 	public float Width
 	{
 		get
 		{
 			return size.X;
 		}
+
 		set
 		{
 			size.X = value;
 		}
 	}
+
 	public float Height
 	{
 		get
 		{
 			return size.Y;
 		}
+
 		set
 		{
 			size.Y = value;
 		}
 	}
+
 	/// <summary>
 	/// 右下角顶点位置不变，移动左上角顶点
 	/// </summary>
@@ -90,6 +105,7 @@ public struct AABB
 		{
 			return position;
 		}
+
 		set
 		{
 			Debug.Assert(value.X <= position.X + size.X && value.Y <= position.Y + size.Y);
@@ -98,12 +114,14 @@ public struct AABB
 			position = value;
 		}
 	}
+
 	public Vector2 TopRight
 	{
 		get
 		{
 			return position + new Vector2(size.X, 0);
 		}
+
 		set
 		{
 			Debug.Assert(value.X >= position.X && value.Y <= position.Y + size.Y);
@@ -113,12 +131,14 @@ public struct AABB
 			position = value - new Vector2(size.X, 0);
 		}
 	}
+
 	public Vector2 BottomLeft
 	{
 		get
 		{
 			return position + new Vector2(0, size.Y);
 		}
+
 		set
 		{
 			Debug.Assert(value.X <= position.X + size.X && value.Y >= position.Y);
@@ -128,12 +148,14 @@ public struct AABB
 			position = value - new Vector2(0, size.Y);
 		}
 	}
+
 	public Vector2 BottomRight
 	{
 		get
 		{
 			return position + size;
 		}
+
 		set
 		{
 			Debug.Assert(value.X >= position.X && value.Y >= position.Y);
@@ -141,34 +163,44 @@ public struct AABB
 			size = value - position;
 		}
 	}
+
 	public Vector2 Center
 	{
 		get
 		{
 			return position + size / 2;
 		}
+
 		set
 		{
 			position = value - size / 2;
 		}
 	}
-	public Edge[] Edges => new Edge[4] { new Edge(TopLeft, TopRight), new Edge(TopRight, BottomRight),
-		new Edge(BottomRight, BottomLeft), new Edge(BottomLeft, TopLeft) };
+
+	public Edge[] Edges => new Edge[4]
+	{
+		new Edge(TopLeft, TopRight), new Edge(TopRight, BottomRight),
+		new Edge(BottomRight, BottomLeft), new Edge(BottomLeft, TopLeft),
+	};
+
 	public AABB(Vector2 position, Vector2 size)
 	{
 		this.position = position;
 		this.size = size;
 	}
+
 	public AABB(Vector2 position, float sizeX, float sizeY)
 	{
 		this.position = position;
 		size = new Vector2(sizeX, sizeY);
 	}
+
 	public AABB(float x, float y, float sizeX, float sizeY)
 	{
 		position = new Vector2(x, y);
 		size = new Vector2(sizeX, sizeY);
 	}
+
 	public override string ToString()
 	{
 		return $"({position.X}, {position.Y}, {size.X}, {size.Y})";
