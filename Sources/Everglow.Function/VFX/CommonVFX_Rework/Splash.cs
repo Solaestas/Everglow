@@ -1,9 +1,9 @@
-﻿using Everglow.Commons.Enums;
+using Everglow.Commons.Enums;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.VFX.Pipelines;
 
-namespace Everglow.Commons.VFX.CommonVFXDusts;
+namespace Everglow.Commons.VFX.CommonVFX_Rework;
 
 public class SplashPipeline : Pipeline
 {

@@ -1,4 +1,4 @@
-using Everglow.Common.VFX.CommonVFXDusts;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

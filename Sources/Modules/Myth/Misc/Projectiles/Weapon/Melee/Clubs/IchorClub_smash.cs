@@ -1,4 +1,5 @@
 using Everglow.Commons.Graphics;
+using Everglow.Commons.VFX.CommonVFX_Rework;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Accessory;
 

@@ -4,7 +4,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 using SteelSeries.GameSense;
 
-namespace Everglow.Commons.VFX.CommonVFXDusts;
+namespace Everglow.Commons.VFX.CommonDusts;
 
 
 [Pipeline(typeof(WCSPipeline))]

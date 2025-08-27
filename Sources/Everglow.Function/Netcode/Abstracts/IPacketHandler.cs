@@ -1,6 +1,4 @@
-using Everglow.Commons.Netcode.Abstracts;
-
-namespace Everglow.Commons.Netcode.PacketHandle;
+namespace Everglow.Commons.Netcode.Abstracts;
 
 /// <summary>
 /// 定义特定类型网络封包的处理逻辑
