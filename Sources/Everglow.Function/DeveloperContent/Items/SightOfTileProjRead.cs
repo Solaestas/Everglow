@@ -2,7 +2,7 @@ using Everglow.Commons.TileHelper;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.ZY;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 internal class SightOfTileProjRead : ModProjectile
 {

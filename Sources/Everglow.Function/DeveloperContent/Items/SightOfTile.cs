@@ -2,7 +2,7 @@ using Everglow.Commons.TileHelper;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.ZY;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 public class SightOfTile : ModItem
 {
@@ -216,7 +216,7 @@ internal class SightOfTileUI : ModSystem
             {
                 count++;
                 Dx += 18;
-                Texture2D sqrt = ModAsset.RectangleSmall.Value;
+                Texture2D sqrt = ModAsset.TileBlock.Value;
                 Vector2 DrawPos = DrawCenter + c0.AddCenter + new Vector2(Dx, Dy);
                 if (!new Rectangle(0, 0, Main.screenWidth, Main.screenHeight).Contains(new Rectangle((int)DrawPos.X - 9, (int)DrawPos.Y - 9, 18, 18)))
                 {

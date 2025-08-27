@@ -2,7 +2,7 @@ using Everglow.Commons.TileHelper;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.ZY;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 internal class SightOfTileProj : ModProjectile
 {
@@ -145,7 +145,7 @@ internal class SightOfTileProj : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		Texture2D t = ModAsset.Rectangle.Value;
+		Texture2D t = ModAsset.TileBlock3x3.Value;
 		var baseColor = new Color(0, 30, 120, 180);
 		if (LeftX == RightX)
 		{

@@ -1,11 +1,11 @@
 using Everglow.Commons.FeatureFlags;
 
-namespace Everglow.Commons.ZY;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 internal class HardmodeItem : ModItem
 {
 	// public override bool CloneNewInstances => true;
-	public override string Texture => "Terraria/Images/UI/Wires_0";
+	public override string Texture => ModAsset.Wires_0_Mod;
 
 	public override void SetDefaults()
 	{

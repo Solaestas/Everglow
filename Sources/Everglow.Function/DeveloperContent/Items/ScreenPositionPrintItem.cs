@@ -1,4 +1,4 @@
-namespace Everglow.Commons.ZY;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 internal class ScreenPositionPrintItem : ModItem
 {

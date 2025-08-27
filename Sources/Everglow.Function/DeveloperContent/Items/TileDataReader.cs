@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
-namespace Everglow.Commons.TileHelper;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 /// <summary>
 /// Visulalize the data of mouse-covered-tile.
@@ -27,7 +27,7 @@ public class TileDataReader : ModItem
 		if (!TileDataReaderSystem.OwnerPlayerWhoAmI.Contains(player.whoAmI))
 		{
 			TileDataReaderSystem.OwnerPlayerWhoAmI.Add(player.whoAmI);
-			TileDataReaderSystem vfx = new TileDataReaderSystem { FixPoint = new Point(i, j), Active = true, Visible = true, EverLasting = EnableResidentEffect };
+			var vfx = new TileDataReaderSystem { FixPoint = new Point(i, j), Active = true, Visible = true, EverLasting = EnableResidentEffect };
 			Ins.VFXManager.Add(vfx);
 		}
 
@@ -120,7 +120,7 @@ public class TileDataReaderSystem : Visual
 		DrawBlockBound(i, j, drawColor);
 		if (ContinueTiles.Count < MaxContinueCount)
 		{
-			Color drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
+			var drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
 			foreach (Point point in ContinueTiles)
 			{
 				DrawBlockBound(point.X, point.Y, drawContinueColor);
@@ -128,7 +128,7 @@ public class TileDataReaderSystem : Visual
 		}
 		if (CheckLiquidTiles.Count < MaxContinueCount)
 		{
-			Color drawContinueColor = new Color(0.0f, 0.0f, 0.6f, 0);
+			var drawContinueColor = new Color(0.0f, 0.0f, 0.6f, 0);
 			foreach (Point point in CheckLiquidTiles)
 			{
 				DrawBlockBound(point.X, point.Y, drawContinueColor);
@@ -198,11 +198,11 @@ public class TileDataReaderSystem : Visual
 
 	public void BFSContinueTile(Point checkPoint)
 	{
-		Queue<Point> queueChecked = new Queue<Point>();
+		var queueChecked = new Queue<Point>();
 
 		// 将起始点加入队列
 		queueChecked.Enqueue(checkPoint);
-		List<Point> visited = new List<Point>();
+		var visited = new List<Point>();
 
 		while (queueChecked.Count > 0)
 		{
@@ -212,7 +212,7 @@ public class TileDataReaderSystem : Visual
 			{
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
-				Point point = new Point(checkX, checkY);
+				var point = new Point(checkX, checkY);
 				Tile tile = SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
@@ -238,11 +238,11 @@ public class TileDataReaderSystem : Visual
 
 	public void BFSFillLiquid(Point checkPoint)
 	{
-		Queue<Point> queueChecked = new Queue<Point>();
+		var queueChecked = new Queue<Point>();
 
 		// 将起始点加入队列
 		queueChecked.Enqueue(checkPoint);
-		List<Point> visited = new List<Point>();
+		var visited = new List<Point>();
 
 		while (queueChecked.Count > 0)
 		{
@@ -252,7 +252,7 @@ public class TileDataReaderSystem : Visual
 			{
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
-				Point point = new Point(checkX, checkY);
+				var point = new Point(checkX, checkY);
 				Tile tile = SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
@@ -274,7 +274,7 @@ public class TileDataReaderSystem : Visual
 	public void DrawBlockBound(int i, int j, Color color)
 	{
 		Vector2 pos = new Vector2(i, j) * 16;
-		List<Vertex2D> bars = new List<Vertex2D>()
+		var bars = new List<Vertex2D>()
 		{
 			new Vertex2D(pos, color, new Vector3(0, 0, 0)),
 			new Vertex2D(pos + new Vector2(16, 0), color, new Vector3(1, 0, 0)),

@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Skeleton2D;
+namespace Everglow.Commons.DeveloperContent.Items;
 
 internal class SkeletonSight : ModItem
 {
