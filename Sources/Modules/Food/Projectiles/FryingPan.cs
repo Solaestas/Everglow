@@ -46,7 +46,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{
@@ -430,7 +430,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 		return;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

@@ -103,7 +103,7 @@ internal class SightOfTileProjRead : ModProjectile
 		Vdr = Vdr / Vdr.Length() * 7;
 
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(Vdr.Y, Vdr.X) - Math.PI / 2d));
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/SightOfTileProjRead").Value;
+		Texture2D t = ModAsset.SightOfTileProjRead.Value;
 		Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects S = SpriteEffects.None;
 		if (Math.Sign(Vdr.X) == -1)
@@ -152,7 +152,7 @@ internal class SightOfTileProjRead : ModProjectile
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D t = ModContent.Request<Texture2D>("Everglow/ZY/Items/Rectangle").Value;
+		Texture2D t = ModAsset.TileBlock3x3.Value;
 		var baseColor = new Color(0, 30, 120, 180);
 		if (LeftX == RightX)
 		{

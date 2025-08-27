@@ -20,7 +20,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{

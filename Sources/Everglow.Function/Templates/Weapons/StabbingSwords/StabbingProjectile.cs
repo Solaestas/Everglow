@@ -443,7 +443,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 
 	public virtual void DrawEffect(Color lightColor)
 	{
-		Texture2D Shadow = ModAsset.StabbingProjectileShade.Value;
+		Texture2D Shadow = ModAsset.Star2_black.Value;
 		Texture2D light = ModAsset.StabbingProjectile.Value;
 		Vector2 drawOrigin = light.Size() / 2f;
 		Vector2 drawShadowOrigin = Shadow.Size() / 2f;

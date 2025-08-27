@@ -16,11 +16,11 @@ public class ScaleWingBladeProj : MeleeProj
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/MEAC/Images/TestColor";
+		return Commons.ModAsset.MEAC_Color1_Mod;
 	}
 	public override float TrailAlpha(float factor)
 	{

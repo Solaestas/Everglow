@@ -84,7 +84,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;

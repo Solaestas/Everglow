@@ -399,9 +399,9 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 	public virtual float TrailAlpha(float factor) => MathHelper.Lerp(0f, 1, factor);
 
-	public virtual string TrailShapeTex() => "Everglow/MEAC/Images/Melee";
+	public virtual string TrailShapeTex() => ModAsset.Melee_Mod;
 
-	public virtual string TrailColorTex() => "Everglow/MEAC/Images/TestColor";
+	public virtual string TrailColorTex() => ModAsset.MEAC_Color1_Mod;
 
 	public virtual BlendState TrailBlendState() => BlendState.NonPremultiplied;
 
@@ -452,7 +452,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
@@ -545,7 +545,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			bars.Add(new Vertex2D(center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 
 	/// <summary>

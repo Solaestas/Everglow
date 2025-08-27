@@ -49,7 +49,7 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.02f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
-		Texture2D t = ModAsset.EShoot.Value;
+		Texture2D t = ModAsset.Trail_1.Value;
 		DrawTexCircle(value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 	public override bool PreDraw(ref Color lightColor)
@@ -89,7 +89,7 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.6f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
-		Texture2D t = ModAsset.EShoot.Value;
+		Texture2D t = ModAsset.Trail_1.Value;
 		DrawTexCircle_VFXBatch(spriteBatch, value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.4f * (1 - value), colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

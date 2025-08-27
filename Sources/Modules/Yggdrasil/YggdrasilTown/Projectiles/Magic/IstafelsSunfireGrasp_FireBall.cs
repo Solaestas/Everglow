@@ -248,7 +248,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 		var drawPos = Projectile.Center - Main.screenPosition;
 		var drawScale = MathHelper.Lerp(InitialScale, 1f, BuildUpProgress);
 		var drawSize = Projectile.width / 2 * drawScale;
-		var blackBall = Commons.ModAsset.blackBall.Value;
+		var blackBall = Commons.ModAsset.Ball_black.Value;
 		Main.spriteBatch.Draw(blackBall, drawPos, null, Color.White, 0, blackBall.Size() * 0.5f, drawScale * 0.4f, SpriteEffects.None, 0);
 
 		DrawTrail();

@@ -15,7 +15,7 @@ public class AcroporaSpear_proj : MeleeProj
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{

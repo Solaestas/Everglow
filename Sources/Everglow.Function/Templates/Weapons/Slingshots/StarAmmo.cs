@@ -74,7 +74,7 @@ public class StarAmmo : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = ModAsset.EShoot.Value;
+			Texture2D t = ModAsset.Trail_1.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

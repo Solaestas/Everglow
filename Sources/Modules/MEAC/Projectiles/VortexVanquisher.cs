@@ -16,7 +16,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/MEAC/Images/img_color";
+		return Commons.ModAsset.MEAC_Color2_Mod;
 	}
 	public override float TrailAlpha(float factor)
 	{

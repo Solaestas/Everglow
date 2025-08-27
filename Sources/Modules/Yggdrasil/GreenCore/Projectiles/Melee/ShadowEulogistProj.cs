@@ -17,7 +17,7 @@ public class ShadowEulogistProj : MeleeProj
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{
