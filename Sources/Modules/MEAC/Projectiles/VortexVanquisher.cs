@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.MEAC.Enums;
 using Terraria.Audio;
 
 namespace Everglow.MEAC.Projectiles;
@@ -10,7 +11,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 		maxAttackType = 4;
 		trailLength = 20;
 		longHandle = true;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 		CanLongLeftClick = true;
 	}
@@ -162,7 +163,7 @@ public class VortexVanquisher : MeleeProj, IBloomProjectile
 			if (timer == (int)(8 * timeMul))
 			{
 				AttSound(new SoundStyle(
-			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 			if (timer > 20 * timeMul && timer < 35 * timeMul)
 			{

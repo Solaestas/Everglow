@@ -27,7 +27,7 @@ class ToothKnife : MeleeProj, IWarpProjectile
 		longHandle = false;
 		maxAttackType = 5;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 		selfWarp = true;
 	}

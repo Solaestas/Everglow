@@ -11,7 +11,7 @@ public class ShadowEulogistProj : MeleeProj
 		maxAttackType = 1;
 		trailLength = 7;
 		Projectile.hide = true;
-		//shadertype = "Trail";
+		//shadertype = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		Projectile.scale *= 1.0f;
         longHandle = true;
 	}

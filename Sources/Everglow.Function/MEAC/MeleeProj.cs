@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.MEAC.Enums;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -86,9 +87,11 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	public float drawScaleFactor = 1f;
 
 	public float disFromPlayer = 6;
-	public string shadertype = "Trail0";
+	public MeleeTrailShaderType shaderType = MeleeTrailShaderType.ArcBladeAutoTransparent;
 	public bool isRightClick = false;
 	public bool useBloom;
+
+	public string ShaderTypeName => shaderType.ToString();
 
 	public Player Player => Main.player[Projectile.owner];
 
@@ -456,7 +459,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();

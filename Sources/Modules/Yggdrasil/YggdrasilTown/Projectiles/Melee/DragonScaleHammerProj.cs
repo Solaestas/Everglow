@@ -9,7 +9,7 @@ public class DragonScaleHammerProj : MeleeProj
 		Projectile.width = 20;
 		maxAttackType = 4;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		longHandle = true;
 		Projectile.scale *= 1.1f;
 	}
@@ -51,13 +51,13 @@ public class DragonScaleHammerProj : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Melee.Value;
 		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -109,7 +109,7 @@ public class DragonScaleHammerProj : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 24)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
 			if (timer > 30 && timer < 70)
 			{
 				isAttacking = true;
@@ -147,7 +147,7 @@ public class DragonScaleHammerProj : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing").WithPitchOffset(-0.5f));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.5f));
 			if (timer > 30 && timer < 80)
 			{
 				isAttacking = true;
@@ -197,7 +197,7 @@ public class DragonScaleHammerProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 			if (timer == 20)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing").WithPitchOffset(-0.2f));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.2f));
 			if (timer > 50 + 25 * timeMul)
 				NextAttackType();
 		}
@@ -233,7 +233,7 @@ public class DragonScaleHammerProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 			if (timer == 20)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing").WithPitchOffset(-0.2f));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.2f));
 			if (timer > 70 + 25 * timeMul)
 				NextAttackType();
 		}
@@ -267,7 +267,7 @@ public class DragonScaleHammerProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 			if (timer == 32)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing").WithPitchOffset(-0.6f));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.6f));
 			if (timer >80 + 25 * timeMul)
 				NextAttackType();
 		}

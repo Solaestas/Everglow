@@ -1,3 +1,4 @@
+using Everglow.Commons.Enums;
 using Terraria.Graphics.Effects;
 using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
@@ -14,8 +15,8 @@ internal class MEACManager : ILoadable
 		if (!Main.dedServ)
 		{
 			var hookManager = Ins.HookManager;
-			hookManager.AddHook(Enums.CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
-			hookManager.AddHook(Enums.CodeLayer.PreDrawFilter, FilterManager_EndCapture);
+			hookManager.AddHook(CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
+			hookManager.AddHook(CodeLayer.PreDrawFilter, FilterManager_EndCapture);
 			ScreenWarp = ModAsset.ScreenWarp.Value;
 			ModIns.OnUnload += () =>
 			{

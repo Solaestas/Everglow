@@ -25,7 +25,7 @@ public class CyanVineSword_Projectile : MeleeProj
 		longHandle = false;
 		maxAttackType = 0;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		selfWarp = true;
 		AutoEnd = false;
 	}
@@ -130,7 +130,7 @@ public class CyanVineSword_Projectile : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 
 		MeleeTrail.Parameters["tex0"].SetValue(Commons.ModAsset.Melee.Value);

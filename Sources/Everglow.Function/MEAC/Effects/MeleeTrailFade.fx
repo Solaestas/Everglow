@@ -43,8 +43,8 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //Ö÷ÎÆÀí
-    c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //³ËÑÕÉ«Í¼
+    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //ä¸»çº¹ç†
+    c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //ä¹˜é¢œè‰²å›¾
     if(max(max(c.r,c.g),c.b) < FadeValue)
         return float4(0,0,0,0);
     return c * coord.z;
@@ -54,22 +54,22 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 float4 PixelShaderFunction2(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //Ö÷ÎÆÀí
-    c = tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //È¡ÑÕÉ«
+    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //ä¸»çº¹ç†
+    c = tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //å–é¢œè‰²
     float a = 1 - (c.r - 1) * 0.7f;
-    c *= a; //³ËÉÏÍ¸Ã÷¶È
+    c *= a; //ä¹˜ä¸Šé€æ˜åº¦
     return c;
 }
 
 technique Technique1
 {
-    pass Trail
-    {
+	pass ArcBladeTransparentedByZ
+	{
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction();
     }
-    pass Trail0
-    {
+	pass ArcBladeAutoTransparent
+	{
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction2();
     }

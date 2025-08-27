@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.MEAC.Enums;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
@@ -31,7 +32,7 @@ public abstract class ClubProj_Smash : MeleeProj
 		longHandle = false;
 		maxAttackType = 2;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 		selfWarp = false;
 	}

@@ -135,7 +135,7 @@ public class AcroporaThumpEff : ModProjectile
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
         var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
         var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * (Projectile.ai[0] == 0 ? Main.GameViewMatrix.ZoomMatrix : Main.Transform);
-        Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+        Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
         MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
         Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_TexShade.Value;
         MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_Color.Value);
@@ -162,7 +162,7 @@ public class AcroporaThumpEff : ModProjectile
 
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone);
-        MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		MeleeTrail = Commons.ModAsset.MeleeTrailFade.Value;
         MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
         float k0 = (40 - Projectile.timeLeft) / 40f;
         MeleeTrail.Parameters["FadeValue"].SetValue((k0 * 1.2f).Sqrt());

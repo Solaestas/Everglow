@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.MEAC.Enums;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -18,7 +19,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 
 		trailLength = 10;//拖尾的长度
 
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 
 		drawScaleFactor = 1f;
 
