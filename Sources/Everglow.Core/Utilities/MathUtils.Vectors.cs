@@ -5,13 +5,28 @@ namespace Everglow.Commons.Utilities;
 public static partial class MathUtils
 {
 	/// <summary>
+	/// 向量点积
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <returns></returns>
+	public static float Dot(this Vector2 a, Vector2 b) => a.X * b.X + a.Y * b.Y;
+
+	/// <summary>
+	/// 向量自点积
+	/// </summary>
+	/// <param name="a"></param>
+	/// <returns></returns>
+	public static float Dot(this Vector2 a) => Dot(a, a);
+
+	/// <summary>
 	/// 向量叉积
 	/// </summary>
 	/// <param name="a"></param>
 	/// <param name="b"></param>
 	/// <returns></returns>
 	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y + a.Y * b.X;
+	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
 
 	/// <summary>
 	/// 向量绝对值
@@ -37,7 +52,7 @@ public static partial class MathUtils
 	public static Vector2 Approach(this Vector2 val, Vector2 target, float maxMove)
 	{
 		var diff = target - val;
-		if (Cross(diff, diff) < maxMove * maxMove) // 这里用叉积来计算平方距离，避免开方
+		if (Dot(diff, diff) < maxMove * maxMove) // 这里用叉积来计算平方距离，避免开方
 		{
 			return target;
 		}
