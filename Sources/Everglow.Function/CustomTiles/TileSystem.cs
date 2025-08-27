@@ -1,8 +1,9 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Enums;
+using Everglow.Commons.Physics.Abstracts;
+using Everglow.Commons.Physics.Colliders;
+using Everglow.Commons.Physics.DataStructures;
 
 namespace Everglow.Commons.CustomTiles;
 
@@ -67,7 +68,7 @@ public class TileSystem
 		_tiles.Clear();
 	}
 
-	public bool Collision(Collider collider, out CustomTile tile)
+	public bool Collision(ICollider2D collider, out CustomTile tile)
 	{
 		foreach (var c in _tiles)
 		{
@@ -81,7 +82,7 @@ public class TileSystem
 		return false;
 	}
 
-	public bool Collision(Collider collider)
+	public bool Collision(ICollider2D collider)
 	{
 		foreach (var c in _tiles)
 		{
@@ -197,7 +198,7 @@ public class TileSystem
 			{
 				float t = MathHelper.Lerp(0, samples[i], j / 20f);
 				Vector2 p = samplingPoint + t * directionUnit;
-				if (Collision(new CAABB(new AABB(p - Vector2.One, Vector2.One * 2))))
+				if (Collision(new AABBCollider2D(new AABB(p - Vector2.One, Vector2.One * 2))))
 				{
 					samples[i] = t;
 					break;
@@ -210,14 +211,14 @@ public class TileSystem
 	{
 		if (!Enable || !EnableCollisionHook)
 			return orig(Position, Width, Height);
-		return orig(Position, Width, Height) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
+		return orig(Position, Width, Height) || Collision(new AABBCollider2D(new AABB(Position.X, Position.Y, Width, Height)));
 	}
 
 	private bool Collision_SolidCollision_Vector2_int_int_bool(On_Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
 	{
 		if (!Enable || !EnableCollisionHook)
 			return orig(Position, Width, Height, acceptTopSurfaces);
-		return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new CAABB(new AABB(Position.X, Position.Y, Width, Height)));
+		return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new AABBCollider2D(new AABB(Position.X, Position.Y, Width, Height)));
 	}
 
 	private Vector2 Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)

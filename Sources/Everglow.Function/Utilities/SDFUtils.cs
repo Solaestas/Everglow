@@ -1,9 +1,11 @@
-using Everglow.Commons.Physics;
+using Everglow.Commons.Physics.Abstracts;
+using Everglow.Commons.Physics.Colliders;
 
 namespace Everglow.Commons.Utilities;
 
 public class SDFUtils
 {
+	[Obsolete("Not all tiles are supported.", true)]
 	public static Vector3 CalculateTileSDF(Vector2 pos)
 	{
 		int tileX = (int)Math.Floor(pos.X / 16);
@@ -35,7 +37,7 @@ public class SDFUtils
 					continue;
 				}
 				var tile = Main.tile[tileX + j, tileY + i];
-				ICollider2D collider = SDFUtils.ExtractColliderFromTile(tile, tileX + j, tileY + i, inner);
+				var collider = SDFUtils.ExtractColliderFromTile(tile, tileX + j, tileY + i, inner);
 
 				if (collider != null)
 				{
@@ -73,6 +75,7 @@ public class SDFUtils
 		}
 	}
 
+	[Obsolete("Not all tiles are supported.", true)]
 	public static ICollider2D ExtractColliderFromTile(in Tile tile, int i, int j, bool inverse = false)
 	{
 		if (!tile.HasTile || !Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType])
@@ -129,7 +132,7 @@ public class SDFUtils
 			}
 
 			// 斜坡只要线方向相反就是反形状
-			return new TileTriangleCollider2D()
+			return new TriangleCollider2D()
 			{
 				Center = new Vector2(i * 16 + 8, j * 16 + 8),
 				Size = new Vector2(8, 8),
@@ -137,4 +140,51 @@ public class SDFUtils
 			};
 		}
 	}
+
+	public static Vector3 SdgBox(Vector2 p, Vector2 b)
+	{
+		Vector2 w = new Vector2(Math.Abs(p.X), Math.Abs(p.Y)) - b;
+		var s = new Vector2(p.X < 0.0 ? -1 : 1, p.Y < 0.0 ? -1 : 1);
+		float g = Math.Max(w.X, w.Y);
+		var q = new Vector2(Math.Max(w.X, 0.0f), Math.Max(w.Y, 0.0f));
+		float l = q.Length();
+		var v = s * (g > 0.0 ? q / l : w.X > w.Y ? new Vector2(1, 0) : new Vector2(0, 1));
+		return new Vector3(g > 0.0 ? l : g, v.X, v.Y);
+	}
+
+	private Vector3 SdgSmoothMin(Vector3 a, Vector3 b, float k)
+	{
+		float h = Math.Max(k - Math.Abs(a.X - b.X), 0.0f);
+		float m = 0.25f * h * h / k;
+		float n = 0.50f * h / k;
+		var v = Vector2.Lerp(new Vector2(a.Y, a.Z), new Vector2(b.Y, b.Z), a.X < b.X ? n : 1.0f - n);
+		return new Vector3(Math.Min(a.X, b.X) - m, v.X, v.Y);
+	}
+
+	public static Vector3 SdgLine(Vector2 p, Vector2 d)
+	{
+		// 直线的SDF
+		d.Normalize();
+		Vector2 proj = Vector2.Dot(d, p) * d;
+		Vector2 N = p - proj;
+		float x = Math.Sign(-MathUtils.Cross(d, p)) * N.Length();
+		if (N != Vector2.zeroVector)
+		{
+			N = N.NormalizeSafe();
+		}
+		else
+		{
+			N = new Vector2(-d.Y, d.X);
+		}
+		return new Vector3(x, N.X, N.Y);
+	}
+
+	//private Vector3 sdgSegment(in Vector2 p, in Vector2 a, in Vector2 b)
+	//{
+	//    // 直线的SDF
+	//    Vector2 proj = Vector2.Dot(d, p) / d.Length() * d;
+	//    Vector2 N = p - proj;
+	//    float x = Math.Sign(cross(d, p)) * N.Length();
+	//    return new Vector3(x, N.X, N.Y);
+	//}
 }
