@@ -1,4 +1,5 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
+
 namespace Everglow.Example.Test;
 
 public class HandholdProj2 : HandholdProjectile

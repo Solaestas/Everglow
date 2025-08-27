@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.CrossBow;
+using Everglow.Commons.Templates.Weapons.CrossBow;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;

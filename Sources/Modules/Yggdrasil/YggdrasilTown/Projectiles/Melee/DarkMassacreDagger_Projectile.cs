@@ -1,5 +1,4 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 
@@ -35,7 +34,7 @@ public class DarkMassacreDagger_Projectile : MeleeProj
 
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 
 	public override string TrailColorTex()

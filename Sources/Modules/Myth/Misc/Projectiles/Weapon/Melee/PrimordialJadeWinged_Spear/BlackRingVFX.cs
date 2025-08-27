@@ -1,3 +1,5 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 public class BlackRingVFXPipeline : Pipeline
 {
@@ -25,7 +27,7 @@ public class BlackRingVFXPipeline : Pipeline
 		Ins.Batch.RegisterVertex<Vertex3D_2>();
 	}
 }
-[Pipeline(typeof(Commons.Weapons.StabbingSwords.VFX.Draw3DPipieline))]
+[Pipeline(typeof(Draw3DPipieline))]
 public class BlackRingVFX : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;

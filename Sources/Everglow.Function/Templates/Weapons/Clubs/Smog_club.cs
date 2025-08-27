@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 
-namespace Everglow.Commons.Weapons.Clubs;
+namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public class Smog_clubPipeline : Pipeline
 {
@@ -17,7 +17,7 @@ public class Smog_clubPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
+		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_flame_0.Value);
 		effect.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
 		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Smog_club_Heatmap.Value);
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);

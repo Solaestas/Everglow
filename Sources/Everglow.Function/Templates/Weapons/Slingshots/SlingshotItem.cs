@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 /// <summary>
 /// Default damage = 6 width*height = 36*36 useT = useA = 21 crit = 8  useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = Item.sellPrice(0, 0, 0, 50) 
@@ -13,7 +13,7 @@ namespace Everglow.Commons.Weapons.Slingshots;
 /// </summary>
 public abstract class SlingshotItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
+    public override string LocalizationCategory => LocalizationUtils.Categories.RangedWeapons;
 
     public override void SetStaticDefaults()
     {

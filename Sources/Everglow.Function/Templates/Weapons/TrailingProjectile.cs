@@ -5,7 +5,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons;
+namespace Everglow.Commons.Templates.Weapons;
 
 public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpStyle2
 {
@@ -122,7 +122,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	/// </summary>
 	public virtual void DrawTrailDark()
 	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
+		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -162,7 +162,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
@@ -185,7 +185,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	}
 	public virtual void DrawTrail()
 	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
+		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -233,7 +233,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
@@ -304,7 +304,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	{
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		float width = TrailWidth;
-		List<Vector2> unSmoothPos = new List<Vector2>();
+		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)

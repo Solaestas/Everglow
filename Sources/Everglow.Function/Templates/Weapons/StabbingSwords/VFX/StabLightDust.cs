@@ -1,9 +1,8 @@
-using Everglow.Commons;
 using Everglow.Commons.Enums;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
-namespace Everglow.Commons.Weapons.StabbingSwords.VFX;
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 
 [Pipeline(typeof(WCSPipeline))]
 internal class StabLightDust : Visual
@@ -33,7 +32,7 @@ internal class StabLightDust : Visual
 	public override void Draw()
 	{
 		Color drawColor = color;
-		Texture2D tex = Commons.ModAsset.Point.Value;
+		Texture2D tex = ModAsset.Point.Value;
 		//drawColor.A = 0;
 		Ins.Batch.Draw(Terraria.GameContent.TextureAssets.MagicPixel.Value, Center, new Rectangle(0, 0, 3, 3), Color.White, 0, Vector2.zeroVector, 10, SpriteEffects.None);
 		//Main.NewText(Center);

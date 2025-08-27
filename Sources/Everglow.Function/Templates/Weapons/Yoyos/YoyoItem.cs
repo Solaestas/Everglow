@@ -1,10 +1,10 @@
 using Terraria.GameContent.Creative;
 
-namespace Everglow.Commons.Weapons.Yoyos;
+namespace Everglow.Commons.Templates.Weapons.Yoyos;
 
 public abstract class YoyoItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.MeleeWeapons;
 
     public override void SetStaticDefaults()
     {

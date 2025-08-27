@@ -2,7 +2,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.Weapons.CrossBow
+namespace Everglow.Commons.Templates.Weapons.CrossBow
 {
 	public abstract class CrossBowProjectile : ModProjectile
 	{
@@ -97,7 +97,7 @@ namespace Everglow.Commons.Weapons.CrossBow
 				return;
 			}
 			Player player = Main.player[Projectile.owner];
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + HeldPoint, Utils.SafeNormalize(Projectile.velocity, Vector2.zeroVector) * Weapon.shootSpeed, ShootProjType, Weapon.damage, Weapon.knockBack, player.whoAmI);
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + HeldPoint, Projectile.velocity.SafeNormalize(Vector2.zeroVector) * Weapon.shootSpeed, ShootProjType, Weapon.damage, Weapon.knockBack, player.whoAmI);
 			SoundEngine.PlaySound(SoundID.Item5, Projectile.Center);
 			Projectile.Kill();
 		}

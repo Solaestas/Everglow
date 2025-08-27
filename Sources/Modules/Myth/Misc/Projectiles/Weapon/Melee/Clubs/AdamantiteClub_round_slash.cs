@@ -7,7 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class AdamantiteClub_round_slash : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	private Vector2 StartCenter;
 	private Vector2 StartStickCenter;
 	public Projectile StickProjectile;

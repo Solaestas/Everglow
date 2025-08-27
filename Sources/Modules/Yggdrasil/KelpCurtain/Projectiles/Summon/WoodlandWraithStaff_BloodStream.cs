@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 

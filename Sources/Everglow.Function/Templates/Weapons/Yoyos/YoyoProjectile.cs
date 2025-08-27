@@ -1,5 +1,5 @@
 using Terraria.GameContent;
-namespace Everglow.Commons.Weapons.Yoyos;
+namespace Everglow.Commons.Templates.Weapons.Yoyos;
 
 public abstract class YoyoProjectile : ModProjectile
 {
@@ -134,7 +134,7 @@ public abstract class YoyoProjectile : ModProjectile
 			if (vector.Length() > MaxRopeLength)
 			{
 				flag3 = true;
-				if ((double)vector.Length() > (double)MaxRopeLength * 1.3)
+				if ((double)vector.Length() > MaxRopeLength * 1.3)
 					flag4 = true;
 			}
 			if (Projectile.owner == Main.myPlayer)

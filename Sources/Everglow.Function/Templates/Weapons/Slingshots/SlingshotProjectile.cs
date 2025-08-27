@@ -3,7 +3,7 @@ using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 public abstract class SlingshotProjectile : ModProjectile
 {
@@ -187,7 +187,7 @@ public abstract class SlingshotProjectile : ModProjectile
 			Head1 = HeadCenter + HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 			Head2 = HeadCenter - HeadCenter.RotatedBy(Math.PI / 8 * 5 + DrawRot).SafeNormalize(Vector2.Zero) * SplitBranchDis;
 		}
-		SpriteBatchState spriteBatchState = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState spriteBatchState = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTexLine(Head1, SlingshotStringTail, 1, drawColor, ModAsset.String.Value);

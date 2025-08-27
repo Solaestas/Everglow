@@ -52,7 +52,7 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 
 	public override string TrailColorTex()

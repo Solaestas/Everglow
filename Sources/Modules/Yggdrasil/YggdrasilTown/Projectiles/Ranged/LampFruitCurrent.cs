@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Terraria;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;

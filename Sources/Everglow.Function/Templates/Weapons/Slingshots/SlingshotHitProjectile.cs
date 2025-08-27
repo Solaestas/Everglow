@@ -2,7 +2,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 /// <summary>
 /// ai[0]强度ai[1]角度

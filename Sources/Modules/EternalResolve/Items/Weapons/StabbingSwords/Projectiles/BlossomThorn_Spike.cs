@@ -7,7 +7,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class BlossomThorn_Spike : ModProjectile
     {
-		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 		private Vector2 StartCenter;
 		public override void OnSpawn(IEntitySource source)
 		{

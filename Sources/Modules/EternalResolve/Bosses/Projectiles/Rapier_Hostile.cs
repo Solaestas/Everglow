@@ -59,7 +59,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// 荧光颜色缩变,小于1
 		/// </summary>
 		public float FadeGlowColorValue = 0f;
-		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 		/// <summary>
 		/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
 		/// </summary>
@@ -90,7 +90,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			npc.spriteDirection = Projectile.spriteDirection;
             if (Projectile.soundDelay <= 0)
             {
-				//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+				//SoundStyle ss = new SoundStyle(ModAsset.Swordswing_Mod);
 				SoundStyle ss = SoundID.Item1;
 				SoundEngine.PlaySound(ss, Projectile.Center);
                 Projectile.soundDelay = 6;

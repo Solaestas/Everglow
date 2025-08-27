@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Weapons.StabbingSwords
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 {
 	public class TileClassification
 	{

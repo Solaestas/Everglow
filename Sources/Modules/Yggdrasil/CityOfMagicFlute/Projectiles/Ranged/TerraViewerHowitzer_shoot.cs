@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

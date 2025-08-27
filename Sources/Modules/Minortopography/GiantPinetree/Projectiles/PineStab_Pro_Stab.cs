@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Minortopography.GiantPinetree.Dusts;
 using Terraria.Audio;
 

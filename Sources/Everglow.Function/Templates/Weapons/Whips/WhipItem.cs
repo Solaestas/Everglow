@@ -1,10 +1,10 @@
 using static Terraria.GameContent.Prefixes.PrefixLegacy;
 
-namespace Everglow.Commons.Weapons.Whips;
+namespace Everglow.Commons.Templates.Weapons.Whips;
 
 public abstract class WhipItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.SummonWeapons;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.SummonWeapons;
 
     public float WhipLength;
 

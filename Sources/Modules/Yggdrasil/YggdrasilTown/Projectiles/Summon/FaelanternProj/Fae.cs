@@ -1,20 +1,7 @@
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.Skeleton2D.Renderer;
-using Everglow.Commons.Skeleton2D;
-using Terraria.IO;
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.Skeleton2D.Reader;
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Templates.Weapons;
 using Terraria.DataStructures;
-using Terraria.Audio;
-using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.WorldBuilding;
-using Spine;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Terraria;
-using static Everglow.Yggdrasil.YggdrasilTown.NPCs.RockElemental;
-using Everglow.Commons.Weapons;
-using Humanizer;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon.FaelanternProj;
 

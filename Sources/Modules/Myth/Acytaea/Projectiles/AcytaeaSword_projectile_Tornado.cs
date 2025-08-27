@@ -194,7 +194,7 @@ public class AcytaeaSword_projectile_Tornado : ModProjectile, IWarpProjectile, I
 	}
 	public string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public string TrailColorTex()
 	{

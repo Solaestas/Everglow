@@ -1,16 +1,16 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 
-namespace Everglow.Commons.Weapons.StabbingSwords;
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
 public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 {
@@ -61,7 +61,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 
 	private CoroutineManager _coroutineManager = new CoroutineManager();
 
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 
 	public override void SetDefaults()
 	{
@@ -111,7 +111,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
                 Ins.VFXManager.Add(v1);
             }*/
 
-		SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+		var ss = new SoundStyle(ModAsset.Swordswing_Mod);
 		SoundEngine.PlaySound(ss, Projectile.Center);
 		StartCenter = Projectile.Center;
 	}
@@ -140,7 +140,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public virtual IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 	{
 		yield return new WaitForFrames(40);
-		StabVFX v = new StabVFX()
+		var v = new StabVFX()
 		{
 			pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
 			vel = velocity,
@@ -304,10 +304,10 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			end = EndPos;
 		}
 		float value = (Projectile.timeLeft + ToKill) / 135f;
-		Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+		var middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		float dark = MathF.Sin(value * MathF.PI) * 4;
-		List<Vertex2D> bars = new List<Vertex2D>
+		var bars = new List<Vertex2D>
 		{
 			new Vertex2D(start + normalized, new Color(0, 0, 0, 120) * Shade, new Vector3(1 + time, 0, 0)),
 			new Vertex2D(start - normalized, new Color(0, 0, 0, 120) * Shade, new Vector3(1 + time, 1, 0)),
@@ -404,14 +404,14 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			end = EndPos;
 		}
 		float value = (Projectile.timeLeft + ToKill) / 135f;
-		Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
+		var middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		Color alphaColor = Color;
 		alphaColor.A = 0;
-		alphaColor.R = (byte)(((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
+		alphaColor.R = (byte)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 		alphaColor.G = 120;
 
-		List<Vertex2D> bars = new List<Vertex2D>
+		var bars = new List<Vertex2D>
 		{
 			new Vertex2D(start + normalized - Main.screenPosition, new Color(alphaColor.R, 0, 0, 0), new Vector3(1 + time, 0, 0)),
 			new Vertex2D(start - normalized - Main.screenPosition, new Color(alphaColor.R, 0, 0, 0), new Vector3(1 + time, 1, 0)),

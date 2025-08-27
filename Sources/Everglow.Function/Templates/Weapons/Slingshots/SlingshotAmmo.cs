@@ -1,10 +1,9 @@
-
 using Everglow.Commons.Vertex;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 public abstract class SlingshotAmmo : ModProjectile
 {

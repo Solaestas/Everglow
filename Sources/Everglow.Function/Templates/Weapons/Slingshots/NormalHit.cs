@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 public class NormalHit : SlingshotHitProjectile
 {

@@ -2,7 +2,7 @@ using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 using static Terraria.GameContent.Prefixes.PrefixLegacy;
 
-namespace Everglow.Commons.Weapons.Clubs;
+namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 /// <summary>
 /// Default damage = 5 width*height = 48*48 useT = useA = 4 useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = 50
@@ -12,7 +12,7 @@ namespace Everglow.Commons.Weapons.Clubs;
 /// </summary>
 public abstract class ClubItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
+    public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
 
     public override void SetStaticDefaults()
     {
@@ -71,7 +71,7 @@ public abstract class ClubItem : ModItem
             Point bottomPos = pos.ToTileCoordinates();
             bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
             bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-            if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+            if (TileCollisionUtils.PlatformCollision(pos) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
             {
                 return false;
             }
@@ -82,7 +82,7 @@ public abstract class ClubItem : ModItem
             Point bottomPos = pos.ToTileCoordinates();
             bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
             bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-            if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+            if (TileCollisionUtils.PlatformCollision(pos) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
             {
                 return true;
             }
@@ -108,7 +108,7 @@ public abstract class ClubItem : ModItem
                 if (player.ownedProjectileCounts[typeDown] < 1 && Main.mouseLeftRelease)
                 {
                     player.mount.Dismount(player);
-                    Projectile p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, typeDown, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
+                    var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, typeDown, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
                     p.scale = Item.scale;
 
                     // 查重
@@ -131,7 +131,7 @@ public abstract class ClubItem : ModItem
             {
                 if (player.ownedProjectileCounts[type] + player.ownedProjectileCounts[typeDown] < 1)
                 {
-                    Projectile p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+                    var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
                     p.scale = Item.scale;
                 }
             }

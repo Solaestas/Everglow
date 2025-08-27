@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs.IstafelsEffects;

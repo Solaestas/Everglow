@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.Projectiles.PylonPostEffect;
 using Terraria.Audio;

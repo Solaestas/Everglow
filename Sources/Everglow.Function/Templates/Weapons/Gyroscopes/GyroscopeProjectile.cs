@@ -1,9 +1,9 @@
+using Everglow.Commons.Templates.Weapons.Whips;
 using Everglow.Commons.Utilities;
-using Everglow.Commons.Weapons.Whips;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Gyroscopes;
+namespace Everglow.Commons.Templates.Weapons.Gyroscopes;
 
 /// <summary>
 /// Non-air summon projectile.

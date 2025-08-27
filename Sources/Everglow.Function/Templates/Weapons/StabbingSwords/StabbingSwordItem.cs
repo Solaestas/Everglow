@@ -1,14 +1,14 @@
 using Everglow.Commons.FeatureFlags;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.StabbingSwords
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 {
     public abstract class StabbingSwordItem : ModItem
     {
         /// <summary>
         /// 以下属性仍需手动设置:damage,knockBack,value,rare,shoot,PowerfulStabProj
         /// </summary>
-        public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
+        public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.MeleeWeapons;
 
         /// <summary>
         /// 以下属性仍需手动设置:damage,knockBack,value,rare,shoot,PowerfulStabProj

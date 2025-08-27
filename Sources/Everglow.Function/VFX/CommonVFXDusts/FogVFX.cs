@@ -17,7 +17,7 @@ public class FogVFX : MEACVFX
     public override void SetDefault()
     {
         maxTimeleft = 60;
-        texPath = "Everglow/Commons/Textures/FBM";
+        texPath = ModAsset.FBM_Mod;
         alpha = 0;
        
     }

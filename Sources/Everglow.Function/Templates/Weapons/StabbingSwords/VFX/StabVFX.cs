@@ -2,7 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 
-namespace Everglow.Commons.Weapons.StabbingSwords.VFX;
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 public class Draw3DPipieline : Pipeline
 {
 
@@ -85,7 +85,7 @@ public class StabVFX : Visual
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;
@@ -108,7 +108,7 @@ public class SelfLightingStabVFX : StabVFX
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;
@@ -135,7 +135,7 @@ public class BloodGoldStabVFX : StabVFX
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;
@@ -148,7 +148,7 @@ public class BloodGoldStabVFX : StabVFX
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;
@@ -175,7 +175,7 @@ public class NightStabVFX : StabVFX
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;
@@ -188,7 +188,7 @@ public class NightStabVFX : StabVFX
 		{
 			float a = i * MathHelper.TwoPi / 30f;
 			Vector3 v = RotatedBy(Vector3.unitZ, new Vector3(vel.X, vel.Y, 0), a);
-			Vector3 rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
+			var rAix = Vector3.Cross(new Vector3(vel.X, vel.Y, 0), Vector3.unitZ);
 			v = RotatedBy(v * (1 - timeValue * timeValue * timeValue) * 1.2f, rAix, 0);
 			Vector3 p = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale;
 			Vector3 p2 = new Vector3(pos.X, pos.Y, 525 / ssc) + v * scale * 1.5f;

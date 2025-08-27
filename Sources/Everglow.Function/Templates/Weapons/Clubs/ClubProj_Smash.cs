@@ -5,7 +5,7 @@ using Everglow.Commons.Vertex;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Clubs;
+namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public abstract class ClubProj_Smash : MeleeProj
 {
@@ -48,7 +48,7 @@ public abstract class ClubProj_Smash : MeleeProj
 
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return ModAsset.Melee_Mod;
 	}
 
 	public override string TrailColorTex()
@@ -121,7 +121,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				Point bottomPos = player.Bottom.ToTileCoordinates();
 				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
 				{
 					if (timer <= 70)
 					{
@@ -346,7 +346,7 @@ public abstract class ClubProj_Smash : MeleeProj
 			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w)));
 		}
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -357,7 +357,7 @@ public abstract class ClubProj_Smash : MeleeProj
 
 		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		Vector4 vColor = color.ToVector4();
+		var vColor = color.ToVector4();
 		vColor.W *= 0.1f;
 		MeleeTrail.Parameters["Light"].SetValue(vColor);
 		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();

@@ -1,3 +1,5 @@
+using Everglow.Commons.Templates.Weapons.Clubs;
+
 namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class SpikeClub_Item : ClubItem

@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.Slingshots;
+namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
 public class StarAmmo : SlingshotAmmo
 {
@@ -142,8 +142,8 @@ public class StarAmmo : SlingshotAmmo
 		{
 			if ((target.Center - Projectile.Center).Length() < 25 * (1 + DrawC * 3) && !target.dontTakeDamage && !target.friendly)
 			{
-				NPC.HitModifiers npcHitM = new NPC.HitModifiers();
-				NPC.HitInfo hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 0);
+				var npcHitM = new NPC.HitModifiers();
+				var hit = npcHitM.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 0);
 				target.StrikeNPC(hit, true, true);
 				NetMessage.SendStrikeNPC(target, hit);
 			}

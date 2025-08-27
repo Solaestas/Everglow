@@ -3,7 +3,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.DataStructures;
-namespace Everglow.Commons.Weapons.Clubs;
+namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public abstract class ClubProj_Smash_metal : ClubProj_Smash
 {
@@ -41,7 +41,7 @@ public abstract class ClubProj_Smash_metal : ClubProj_Smash
 			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w * ReflectStrength)));
 		}
 
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -52,7 +52,7 @@ public abstract class ClubProj_Smash_metal : ClubProj_Smash
 
 		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		Vector4 vColor = color.ToVector4();
+		var vColor = color.ToVector4();
 		vColor.W *= 0.15f;
 		MeleeTrail.Parameters["Light"].SetValue(vColor);
 		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();

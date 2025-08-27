@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.Weapons.Whips;
+namespace Everglow.Commons.Templates.Weapons.Whips;
 
 public abstract class WhipProjectile : ModProjectile
 {
@@ -207,7 +207,7 @@ public abstract class WhipProjectile : ModProjectile
 			var value3 = Vector2.Lerp(vector2, vector0, duration1 * 0.9f + 0.1f);
 			var value4 = Vector2.Lerp(vector1, value3, duration1 * 0.7f + 0.3f);
 			Vector2 spinningpoint = startArmPosition + (value4 - startArmPosition) * new Vector2(1f, duration15);
-			Vector2 thisPos = spinningpoint.RotatedBy((double)(Projectile.rotation + (3 * MathHelper.PiOver2) * factor * factor * Projectile.spriteDirection), startArmPosition);
+			Vector2 thisPos = spinningpoint.RotatedBy((double)(Projectile.rotation + 3 * MathHelper.PiOver2 * factor * factor * Projectile.spriteDirection), startArmPosition);
 			controlPoints.Add(thisPos);
 			alpha += rotProcess;
 			gama += rotProcess;
@@ -250,7 +250,7 @@ public abstract class WhipProjectile : ModProjectile
 			{
 				frame = 0;
 			}
-			Rectangle rectangle = new Rectangle(0, frameHeight * frame, mainTexture.Width, frameHeight);
+			var rectangle = new Rectangle(0, frameHeight * frame, mainTexture.Width, frameHeight);
 			var origin = new Vector2(rectangle.Width / 2, 2f);
 			Vector2 positionNow = list0[i];
 			Vector2 positionAdd = list0[i + 1] - positionNow;

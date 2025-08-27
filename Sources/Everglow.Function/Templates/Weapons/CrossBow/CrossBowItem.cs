@@ -1,10 +1,10 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Commons.Weapons.CrossBow;
+namespace Everglow.Commons.Templates.Weapons.CrossBow;
 
 public abstract class CrossBowItem : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedWeapons;
+    public override string LocalizationCategory => Utilities.LocalizationUtils.Categories.RangedWeapons;
 
     public int CrossBowProjType = -1;
     public override void SetDefaults()
@@ -32,8 +32,8 @@ public abstract class CrossBowItem : ModItem
         {
             return false;
         }
-        Projectile p0 = Projectile.NewProjectileDirect(source, position, Vector2.zeroVector, CrossBowProjType, damage, knockback, player.whoAmI);
-        CrossBowProjectile crossBowProjectile = p0.ModProjectile as CrossBowProjectile;
+        var p0 = Projectile.NewProjectileDirect(source, position, Vector2.zeroVector, CrossBowProjType, damage, knockback, player.whoAmI);
+        var crossBowProjectile = p0.ModProjectile as CrossBowProjectile;
         crossBowProjectile.ShootProjType = type;
         return false;
     }

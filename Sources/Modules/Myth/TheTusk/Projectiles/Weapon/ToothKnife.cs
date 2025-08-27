@@ -43,7 +43,7 @@ class ToothKnife : MeleeProj, IWarpProjectile
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{

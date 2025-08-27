@@ -7,7 +7,7 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.Utilities;
 
-namespace Everglow.Commons.Weapons.StabbingSwords;
+namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
 public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 {
@@ -76,7 +76,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float FadeGlowColorValue = 0f;
 
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => ModAsset.StabbingProjectile_Mod;
 
 	/// <summary>
 	/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
@@ -418,7 +418,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		float velBottomRight = -(deltaBottom.X - flagTexture.Width) * 1f;
 		flagBottomLeft.X += velBottomLeft;
 		flagBottomRight.X += velBottomRight;
-		List<Vertex2D> bars = new List<Vertex2D>();
+		var bars = new List<Vertex2D>();
 		bars.Add(new Vertex2D(flagTopLeft, lightColor, new Vector3(0, 0, 0)));
 		bars.Add(new Vertex2D(flagTopRight, lightColor, new Vector3(1, 0, 0)));
 		bars.Add(new Vertex2D(flagBottomLeft, lightColor, new Vector3(0, 1, 0)));
@@ -497,9 +497,9 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 				Vector2 end = center + normalX;
 				Color alphaColor = Color;
 				alphaColor.A = 0;
-				alphaColor.R = (byte)(((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-				alphaColor.G = (byte)DarkDraw[f].Color.A;
-				List<Vertex2D> bars = new List<Vertex2D>
+				alphaColor.R = (byte)((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
+				alphaColor.G = DarkDraw[f].Color.A;
+				var bars = new List<Vertex2D>
 				{
 					new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
 					new Vertex2D(start + normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 1, 0)),
@@ -523,7 +523,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			alphaColor.A = 0;
 			alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 			alphaColor.G = 200;
-			List<Vertex2D> bars = new List<Vertex2D>
+			var bars = new List<Vertex2D>
 			{
 				new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
 				new Vertex2D(start + normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 1, 0)),
