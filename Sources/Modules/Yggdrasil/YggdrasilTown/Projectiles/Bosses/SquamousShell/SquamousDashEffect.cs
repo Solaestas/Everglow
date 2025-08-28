@@ -204,6 +204,7 @@ public class SquamousDashEffect : ModProjectile, IWarpProjectile_warpStyle2
             float height = t / 40f;
             height = MathF.Pow(height, 0.35f);
             float fade = 1 - height;
+			fade *= 0.1f;
             bars.Add(checkPos, drawColor * fade, new Vector3(t / 60f + timeValue, 0, height));
             bars.Add(checkPos + new Vector2(0, -250), drawColor * fade, new Vector3(t / 60f + timeValue, 1, height));
             checkPos += new Vector2(-8 * npcDir, 0);
