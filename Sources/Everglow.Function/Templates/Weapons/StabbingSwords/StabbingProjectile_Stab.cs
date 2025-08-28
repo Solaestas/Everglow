@@ -111,7 +111,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
                 Ins.VFXManager.Add(v1);
             }*/
 
-		var ss = new SoundStyle(ModAsset.Swordswing_Mod);
+		var ss = new SoundStyle(ModAsset.SwordSwing_Mod);
 		SoundEngine.PlaySound(ss, Projectile.Center);
 		StartCenter = Projectile.Center;
 	}
