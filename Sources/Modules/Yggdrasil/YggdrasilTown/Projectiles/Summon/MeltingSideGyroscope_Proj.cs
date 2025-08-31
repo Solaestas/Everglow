@@ -1,6 +1,6 @@
+using Everglow.Commons.Templates.Weapons.Gyroscopes;
+using Everglow.Commons.Templates.Weapons.Whips;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.Gyroscopes;
-using Everglow.Commons.Weapons.Whips;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 

@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons.DevilHeart;

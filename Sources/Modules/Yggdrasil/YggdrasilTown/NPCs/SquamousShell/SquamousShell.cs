@@ -1775,7 +1775,7 @@ public class SquamousShell : ModNPC
 		var cmdList = skeletonRenderer.Draw(SquamousShellSkeleton);
 		skeletonRenderer.UseEnvironmentLight = false;
 		cmdList.AddRange(skeletonRenderer.DrawWithOtherTexture(SquamousShellSkeleton, ModAsset.monster_glow.Value));
-		if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>())
+		if (Skeleton2D.ShowSkeleton)
 		{
 			cmdList.AddRange(skeletonDebugRenderer.Draw(SquamousShellSkeleton));
 		}

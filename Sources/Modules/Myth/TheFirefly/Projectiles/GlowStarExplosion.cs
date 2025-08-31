@@ -2,7 +2,7 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class GlowStarExplosion : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/GlowStar";
+	public override string Texture => ModAsset.GlowStar_Mod;
 	public override void SetDefaults()
 	{
 		Projectile.extraUpdates = 3;
@@ -28,7 +28,7 @@ public class GlowStarExplosion : ModProjectile, IWarpProjectile
 		value = MathF.Sqrt(value);
 		float colorV = 0.9f * (1 - value);
 		colorV *= 10;
-		Texture2D t = ModAsset.EShoot.Value;
+		Texture2D t = Commons.ModAsset.Trail_1.Value;
 		Texture2D shade = Commons.ModAsset.Trail_2_black_thick.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)

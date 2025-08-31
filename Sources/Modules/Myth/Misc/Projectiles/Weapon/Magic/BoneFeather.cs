@@ -1,6 +1,4 @@
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using static Everglow.Commons.Utilities.ProjectileUtils;

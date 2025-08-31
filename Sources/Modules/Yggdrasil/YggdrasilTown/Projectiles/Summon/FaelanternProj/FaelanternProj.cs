@@ -1,17 +1,12 @@
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.Skeleton2D.Renderer;
-using Everglow.Commons.Skeleton2D;
-using Terraria.IO;
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.Skeleton2D;
 using Everglow.Commons.Skeleton2D.Reader;
-using Terraria.DataStructures;
-using Terraria.Audio;
+using Everglow.Commons.Skeleton2D.Renderer;
 using Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.WorldBuilding;
-using Spine;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon.FaelanternProj;
 
@@ -294,7 +289,7 @@ public class FaelanternProj : ModProjectile
         var cmdList = skeletonRenderer.Draw(FaelanternSkeleton);
 
         skeletonRenderer.UseEnvironmentLight = true;
-        if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>())
+        if (Skeleton2D.ShowSkeleton)
         {
             cmdList.AddRange(skeletonDebugRenderer.Draw(FaelanternSkeleton));
         }

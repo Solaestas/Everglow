@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Whips;
+using Everglow.Commons.Templates.Weapons.Whips;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Weapons;

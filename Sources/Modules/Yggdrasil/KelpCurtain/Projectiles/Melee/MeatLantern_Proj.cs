@@ -11,7 +11,7 @@ public class MeatLantern_Proj : MeleeProj
 		maxAttackType = 3;
 		trailLength = 20;
 		longHandle = true;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 		CanLongLeftClick = true;
 	}
@@ -142,7 +142,7 @@ public class MeatLantern_Proj : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
 			if (timer > 20 && timer < 35)
@@ -179,7 +179,7 @@ public class MeatLantern_Proj : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
 			if (timer > 20 && timer < 35)
@@ -215,7 +215,7 @@ public class MeatLantern_Proj : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 			if (timer % 10 == 8 && timer > 30)
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
@@ -262,7 +262,7 @@ public class MeatLantern_Proj : MeleeProj
 			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
-			"Everglow/MEAC/Sounds/TrueMeleeSwing"));
+			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
 			if (timer > 20 && timer < 30)
@@ -339,13 +339,13 @@ public class MeatLantern_Proj : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrailFade", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrailFade.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		float k0 = timer / 80f + 0.1f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 

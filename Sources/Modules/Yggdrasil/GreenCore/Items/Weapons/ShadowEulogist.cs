@@ -1,8 +1,4 @@
-using Everglow.Common.VFX.CommonVFXDusts;
-using Everglow.Commons.Graphics;
 using Everglow.Yggdrasil.GreenCore.Projectiles.Melee;
-using Terraria.Audio;
-using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.GreenCore.Items.Weapons
 {

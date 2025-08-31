@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Gyroscopes;
+using Everglow.Commons.Templates.Weapons.Gyroscopes;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Summon;
 using Terraria.DataStructures;

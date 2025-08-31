@@ -1,7 +1,6 @@
-using Everglow.Commons.TileHelper;
 using Terraria.GameContent.Drawing;
 
-namespace Everglow.Commons;
+namespace Everglow.Commons.TileHelper;
 
 /// <summary>
 /// 为物块提供一个每帧绘制60次的接口，这是管理类 <br/>

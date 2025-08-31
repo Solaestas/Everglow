@@ -5,7 +5,7 @@ namespace Everglow.MEAC.NonTrueMeleeProj;
 
 public class GoldShield_backTextureSubProj : ModProjectile
 {
-	public override string Texture => "Everglow/MEAC/NonTrueMeleeProj/GoldShield";
+	public override string Texture => ModAsset.GoldShield_Mod;
 	public override void SetDefaults()
 	{
 		Projectile.width = 10;

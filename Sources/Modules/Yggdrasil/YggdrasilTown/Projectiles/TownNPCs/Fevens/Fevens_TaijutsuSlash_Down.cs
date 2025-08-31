@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities.BuffHelpers;
-using Everglow.Commons.Weapons.Clubs;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
 

@@ -1,5 +1,5 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.Physics.Colliders;
+using Everglow.Commons.Physics.DataStructures;
 
 namespace Everglow.Commons.CustomTiles;
 
@@ -46,5 +46,5 @@ public static class Extensions
 	public static Direction GetControlDirectionV(this Player player) =>
 		player.controlUp ^ player.controlDown ? player.controlDown ? Direction.Bottom : Direction.Top : Direction.None;
 
-	public static CAABB GetCollider(this Entity entity) => new(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
+	public static AABBCollider2D GetCollider(this Entity entity) => new(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
 }

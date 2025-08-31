@@ -1,4 +1,4 @@
-using Everglow.Commons.ItemAbstracts.Furniture;
+using Everglow.Commons.Templates.Furniture;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Terraria.Audio;

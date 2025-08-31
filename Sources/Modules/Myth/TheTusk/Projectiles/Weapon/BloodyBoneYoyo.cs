@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Yoyos;
+using Everglow.Commons.Templates.Weapons.Yoyos;
 using Humanizer;
 using Terraria;
 using Terraria.DataStructures;

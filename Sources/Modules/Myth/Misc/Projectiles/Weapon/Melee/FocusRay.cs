@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
 public class FocusRay : ModProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	public override void SetDefaults()
 	{
 		Projectile.width = 16;

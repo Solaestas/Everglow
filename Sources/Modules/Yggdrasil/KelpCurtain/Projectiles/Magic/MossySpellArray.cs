@@ -1,7 +1,7 @@
 using System.Reflection.Metadata;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;

@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;

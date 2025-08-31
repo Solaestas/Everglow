@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.CrossBow;
+using Everglow.Commons.Templates.Weapons.CrossBow;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 

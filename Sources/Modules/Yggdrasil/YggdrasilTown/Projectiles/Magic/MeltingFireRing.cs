@@ -1,4 +1,4 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.VFX.CommonDusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;

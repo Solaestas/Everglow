@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.LightSeeker;
 using Terraria.Audio;

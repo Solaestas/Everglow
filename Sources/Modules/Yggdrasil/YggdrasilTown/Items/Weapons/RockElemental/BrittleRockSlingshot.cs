@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Slingshots;
+using Everglow.Commons.Templates.Weapons.Slingshots;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;

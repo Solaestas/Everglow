@@ -1,7 +1,7 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.DataStructures;
 

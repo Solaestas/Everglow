@@ -1,7 +1,5 @@
-using System.Runtime.CompilerServices;
 using Everglow.Commons.CustomTiles;
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
+using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Utilities;
@@ -10,11 +8,6 @@ public static class CollisionUtils
 {
 	public const float Epsilon = 1e-4f;
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-	public static float Cross(this Vector2 a, Vector2 b) => a.X * b.Y - a.Y * b.X;
-
-	public static Vector2 Abs(this Vector2 v) => new(Math.Abs(v.X), Math.Abs(v.Y));
-
 	public static AABB ToAABB(this Edge line)
 	{
 		var min = Vector2.Min(line.begin, line.end);
@@ -22,7 +15,7 @@ public static class CollisionUtils
 		return new AABB(min, max - min);
 	}
 
-	public static AABB ToAABB(this Vertices vertices)
+	public static AABB ToAABB(this List<Vector2> vertices)
 	{
 		var min = new Vector2(float.MaxValue, float.MaxValue);
 		var max = new Vector2(float.MinValue, float.MinValue);
@@ -339,7 +332,31 @@ public static class CollisionUtils
 			aabb.position.Y <= position.Y && position.Y <= aabb.position.Y + aabb.size.Y;
 	}
 
-	public static bool Contain(this Circle circle, Vector2 position) => position.Distance(circle.position) <= circle.radius;
+	public static bool Contain(this Circle circle, Vector2 position) =>
+		(position - circle.position).Dot() <= circle.radius * circle.radius;
+
+	public static bool Contain(this Edge edge, Vector2 position)
+	{
+		if (edge.begin == edge.end)
+		{
+			return position == edge.begin;
+		}
+
+		Vector2 v = edge.end - edge.begin;
+		Vector2 w = position - edge.begin;
+		float c1 = Vector2.Dot(w, v);
+		if (c1 <= 0)
+		{
+			return position == edge.begin;
+		}
+		float c2 = Vector2.Dot(v, v);
+		if (c2 <= c1)
+		{
+			return position == edge.end;
+		}
+
+		return Math.Abs(MathUtils.Cross(v, w)) / v.Length() < Epsilon;
+	}
 
 	public static float Distance(this Edge edge, Vector2 point)
 	{
@@ -366,6 +383,19 @@ public static class CollisionUtils
 	}
 
 	public static float Distance(this float a, float b) => Math.Abs(a - b);
+
+	public static float Distance(this Circle circle, Vector2 point) => Math.Max(0, (point - circle.position).Length() - circle.radius);
+
+	public static float Distance(this AABB aabb, Vector2 point)
+	{
+		var dx = Math.Max(aabb.position.X - point.X, 0);
+		dx = Math.Max(dx, point.X - (aabb.position.X + aabb.size.X));
+
+		var dy = Math.Max(aabb.position.Y - point.Y, 0);
+		dy = Math.Max(dy, point.Y - (aabb.position.Y + aabb.size.Y));
+
+		return MathF.Sqrt(dx * dx + dy * dy);
+	}
 
 	public static AABB Scan(this AABB aabb, Vector2 move)
 	{
@@ -428,12 +458,12 @@ public static class CollisionUtils
 
 	public static bool PointOnLine(Vector2 A, Vector2 d, Vector2 C)
 	{
-		return Math.Abs(Utilities.CollisionUtils.Cross(d, C - A)) < 1e-2;
+		return Math.Abs(MathUtils.Cross(d, C - A)) < 1e-2;
 	}
 
 	public static bool PointOnSegment(Vector2 A, Vector2 B, Vector2 C)
 	{
-		return Math.Abs(Utilities.CollisionUtils.Cross(B - A, C - A)) < 1e-2
+		return Math.Abs(MathUtils.Cross(B - A, C - A)) < 1e-2
 			&& Vector2.Dot(C - A, B - A) * Vector2.Dot(C - B, A - B) >= 0;
 	}
 
