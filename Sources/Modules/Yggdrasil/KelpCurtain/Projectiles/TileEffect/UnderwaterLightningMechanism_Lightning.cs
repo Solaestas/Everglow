@@ -1,4 +1,4 @@
-using Terraria.DataStructures;
+using Everglow.Commons.Graphics;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
 
@@ -10,11 +10,13 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 
 	public Vector2 EndPos;
 
-	public List<Vector4> JointsAndVels = new List<Vector4>();
-
 	public List<Vector2> LightningTrail = new List<Vector2>();
 
 	public bool Initialized = false;
+
+	public int Timer = 0;
+
+	public List<Point> ContinueAirTilesArea = new List<Point>();
 
 	public override void SetDefaults()
 	{
@@ -23,48 +25,84 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = true;
 		Projectile.penetrate = -1;
-		Projectile.timeLeft = 120;
+		Projectile.timeLeft = 60;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
+		Projectile.extraUpdates = 1;
 	}
 
-	public override void OnSpawn(IEntitySource source)
+	public override void AI()
 	{
-	}
-
-	public List<Point> ContinueAirTilesArea = new List<Point>();
-
-	public Vector2 GetMarginalForce(Vector2 pos)
-	{
-		Vector2 marginalRejectionalForce = Vector2.zeroVector;
-		float forceSize = 0.3f;
-		Main.NewText(pos.ToTileCoordinates());
-		for (int i = 0; i < 8; i++)
+		Timer++;
+		if (!Initialized)
 		{
-			Vector2 v0 = new Vector2(0, -16).RotatedBy(i / 8f * MathHelper.TwoPi);
-			if (ContinueAirTilesArea.Contains((v0 + pos).ToTileCoordinates()))
+			if (Collision.IsWorldPointSolid(StartPos) || Collision.IsWorldPointSolid(EndPos))
 			{
-				marginalRejectionalForce += v0 * forceSize;
+				Projectile.Kill();
+				return;
 			}
-			else
+			BFSContinueEmpty();
+			Initialized = true;
+		}
+		else if (LightningTrail.Count > 0)
+		{
+			List<Vector2> newLightningTrail = new List<Vector2>();
+			newLightningTrail.Add(LightningTrail[0]);
+			for (int i = 1; i < LightningTrail.Count; i++)
 			{
-				marginalRejectionalForce -= v0 * forceSize;
+				var oldTrail = LightningTrail[i - 1];
+				var distance = LightningTrail[i] - oldTrail;
+				if (distance.Length() > 16)
+				{
+					int addJointCount = (int)(distance.Length() / 16f);
+					for (int c = 0; c < addJointCount; c++)
+					{
+						float lerpVec = (c + 1) / (addJointCount + 1f);
+						newLightningTrail.Add(oldTrail * (1 - lerpVec) + LightningTrail[i] * lerpVec);
+					}
+				}
+				newLightningTrail.Add(LightningTrail[i]);
+			}
+			LightningTrail = new List<Vector2>();
+			LightningTrail.AddRange(newLightningTrail);
+			for (int i = 1; i < LightningTrail.Count - 1; i++)
+			{
+				Vector2 dirWidth = (LightningTrail[i] - LightningTrail[i - 1]).NormalizeSafe().RotatedBy(MathHelper.PiOver2);
+				Vector2 randomMove = dirWidth * GetRandomValueMove(i / (float)LightningTrail.Count * 10) * 0.55f;
+				if (i < 5)
+				{
+					randomMove *= i / 5f;
+				}
+				if (i > LightningTrail.Count - 7)
+				{
+					randomMove *= (LightningTrail.Count - i - 1) / 5f;
+				}
+				int safeCount = 0;
+				while (Collision.IsWorldPointSolid(LightningTrail[i] + randomMove))
+				{
+					randomMove = randomMove.RotatedBy(MathHelper.PiOver2);
+					safeCount++;
+					if (safeCount >= 4)
+					{
+						randomMove *= 0;
+						break;
+					}
+				}
+				LightningTrail[i] += randomMove;
+				Vector2 rejectiveForce = Vector2.zeroVector;
+				Vector2 toBefore = LightningTrail[i] - LightningTrail[i - 1];
+				Vector2 toNext = LightningTrail[i] - LightningTrail[i + 1];
+				if (toBefore.Length() < 10)
+				{
+					rejectiveForce += toBefore.NormalizeSafe() / (toBefore.Length() + 2) * 3;
+				}
+				if (toNext.Length() < 10)
+				{
+					rejectiveForce += toNext.NormalizeSafe() / (toNext.Length() + 2) * 3;
+				}
+				LightningTrail[i] += rejectiveForce;
 			}
 		}
-		forceSize = 0.01f;
-		for (int i = 0; i < 16; i++)
-		{
-			Vector2 v0 = new Vector2(0, -48).RotatedBy(i / 16f * MathHelper.TwoPi);
-			if (ContinueAirTilesArea.Contains((v0 + pos).ToTileCoordinates()))
-			{
-				marginalRejectionalForce += v0 * forceSize;
-			}
-			else
-			{
-				marginalRejectionalForce -= v0 * forceSize;
-			}
-		}
-		return marginalRejectionalForce;
 	}
 
 	public void BFSContinueEmpty()
@@ -156,6 +194,7 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 				checkPoint += visitedStartDir[checkIndex];
 				if (checkPoint == StartPos.ToTileCoordinates())
 				{
+					trailToStart.Add(checkPoint);
 					break;
 				}
 			}
@@ -234,6 +273,38 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 		}
 	}
 
+	public Vector2 GetMarginalForce(Vector2 pos)
+	{
+		Vector2 marginalRejectionalForce = Vector2.zeroVector;
+		float forceSize = 0.3f;
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 v0 = new Vector2(0, -16).RotatedBy(i / 8f * MathHelper.TwoPi);
+			if (ContinueAirTilesArea.Contains((v0 + pos).ToTileCoordinates()))
+			{
+				marginalRejectionalForce += v0 * forceSize;
+			}
+			else
+			{
+				marginalRejectionalForce -= v0 * forceSize;
+			}
+		}
+		forceSize = 0.01f;
+		for (int i = 0; i < 16; i++)
+		{
+			Vector2 v0 = new Vector2(0, -48).RotatedBy(i / 16f * MathHelper.TwoPi);
+			if (ContinueAirTilesArea.Contains((v0 + pos).ToTileCoordinates()))
+			{
+				marginalRejectionalForce += v0 * forceSize;
+			}
+			else
+			{
+				marginalRejectionalForce -= v0 * forceSize;
+			}
+		}
+		return marginalRejectionalForce;
+	}
+
 	public bool LineInSafeArea(Vector2 pos0, Vector2 pos1)
 	{
 		Vector2 route = pos1 - pos0;
@@ -255,39 +326,34 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 		return true;
 	}
 
-	public override void AI()
-	{
-		if (!Initialized)
-		{
-			if (Collision.IsWorldPointSolid(StartPos) || Collision.IsWorldPointSolid(EndPos))
-			{
-				Projectile.Kill();
-				return;
-			}
-			BFSContinueEmpty();
-			Initialized = true;
-		}
-		else if (LightningTrail.Count > 0)
-		{
-			for (int i = 1; i < LightningTrail.Count - 1; i++)
-			{
-				Vector2 dirWidth = (LightningTrail[i] - LightningTrail[i - 1]).NormalizeSafe().RotatedBy(MathHelper.PiOver2);
-				LightningTrail[i] += dirWidth * GetRandomValueMove(i);
-			}
-		}
-	}
-
 	public float GetRandomValueMove(float index)
 	{
 		float value = 0;
 		for (int i = 0; i < 8; i++)
 		{
-			value += MathF.Sin((i + index + (float)Main.time / 36f) * MathF.Pow(2, i)) / (2 ^ i);
+			value += MathF.Sin((i + index) * MathF.Pow(2, i) + (float)Main.time / 256f + Projectile.ai[0]) * MathF.Pow(2, -i);
 		}
 		return value;
 	}
 
-	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => base.Colliding(projHitbox, targetHitbox);
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		if (LightningTrail.Count <= 1)
+		{
+			return false;
+		}
+		for (int i = 0; i < LightningTrail.Count; i++)
+		{
+			Vector2 sizeHalf = new Vector2(16);
+			Vector2 checkTopLeft = LightningTrail[i] - sizeHalf;
+			Rectangle check = new Rectangle((int)checkTopLeft.X, (int)checkTopLeft.Y, 32, 32);
+			if (check.Intersects(targetHitbox))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
@@ -296,15 +362,42 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 			return false;
 		}
 		Texture2D tex = Commons.ModAsset.Trail_10.Value;
-		Color drawColor = new Color(1f, 1f, 1f, 0);
+		float value = Timer / 60f;
+		GradientColor gradientColor = new GradientColor();
+		gradientColor.colorList.Add((new Color(1f, 1f, 1f, 0), 0));
+		gradientColor.colorList.Add((new Color(140, 232, 255, 0), 0.2f));
+		gradientColor.colorList.Add((new Color(252, 170, 255, 0), 0.4f));
+		gradientColor.colorList.Add((new Color(255, 166, 114, 0), 0.6f));
+		gradientColor.colorList.Add((new Color(255, 84, 81, 0), 0.8f));
+		gradientColor.colorList.Add((new Color(0, 0, 0, 0), 1));
+		Color drawColor = gradientColor.GetColor(value);
+		float width = 10f;
+		if (Timer < 10)
+		{
+			width += (10 - Timer) * 6;
+		}
+		if (Projectile.timeLeft < 60)
+		{
+			width *= Projectile.timeLeft / 60f;
+		}
 		for (int j = 0; j < 3; j++)
 		{
 			List<Vertex2D> bars = new List<Vertex2D>();
 			for (int i = 0; i < LightningTrail.Count; i++)
 			{
-				Vector2 dir = new Vector2(0, -10).RotatedBy(j / 3f * MathHelper.TwoPi);
+				float mulWidth = 1f;
+				if (i <= 5)
+				{
+					mulWidth += (5 - i) / 5f;
+				}
+				if (i >= LightningTrail.Count - 6)
+				{
+					mulWidth += (i + 5 - LightningTrail.Count) / 5f;
+				}
+				Vector2 dir = new Vector2(0, -width * mulWidth).RotatedBy(j / 3f * MathHelper.TwoPi);
 				bars.Add(LightningTrail[i] + dir - Main.screenPosition, drawColor, new Vector3(i / 15f, 0, 0));
 				bars.Add(LightningTrail[i] - dir - Main.screenPosition, drawColor, new Vector3(i / 15f, 1, 0));
+				Lighting.AddLight(LightningTrail[i], drawColor.ToVector3() * MathF.Pow(width, 0.5f) / 10f);
 			}
 			if (bars.Count > 3)
 			{
@@ -312,7 +405,17 @@ public class UnderwaterLightningMechanism_Lightning : ModProjectile
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
 		}
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
+		Texture2D bloom = Commons.ModAsset.LightPoint2.Value;
+		value = 1 - value;
+		Vector2 scaleH = new Vector2(value, 0.5f + value * 0.5f) * MathF.Pow(width, 0.5f) / 10f;
+		Main.EntitySpriteDraw(bloom, LightningTrail[0] - Main.screenPosition, null, drawColor, 0, bloom.Size() * 0.5f, MathF.Pow(width, 0.2f) * 1f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, LightningTrail[0] - Main.screenPosition, null, drawColor, 0, star.Size() * 0.5f, scaleH, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, LightningTrail[0] - Main.screenPosition, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, scaleH, SpriteEffects.None, 0);
 
+		Main.EntitySpriteDraw(bloom, LightningTrail[^1] - Main.screenPosition, null, drawColor, 0, bloom.Size() * 0.5f, MathF.Pow(width, 0.2f) * 1f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, LightningTrail[^1] - Main.screenPosition, null, drawColor, 0, star.Size() * 0.5f, scaleH, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, LightningTrail[^1] - Main.screenPosition, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, scaleH, SpriteEffects.None, 0);
 		return false;
 	}
 }

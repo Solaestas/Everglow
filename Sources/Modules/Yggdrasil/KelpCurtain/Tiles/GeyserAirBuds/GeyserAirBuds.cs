@@ -89,17 +89,6 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		int relX = tile.TileFrameX / 18;
 		int relY = tile.TileFrameY / 18;
 
-		int originX = i - relX + 1;
-		int originY = j - relY + 1;
-
-		Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
-		int height = tile.TileFrameY % AnimationFrameHeight == 18 ? 18 : 16;
-
-		// spriteBatch.Draw(
-		// TextureAssets.Tile[Type].Value,
-		// new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-		// new Rectangle(tile.TileFrameX, tile.TileFrameY + frameYOffset, 16, height),
-		// Lighting.GetColor(i, j), 0f, default, 1f, SpriteEffects.None, 0f);
 		if (tile.TileFrameY == 18 && tile.TileFrameX == 0)
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
@@ -135,6 +124,7 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		{
 			return;
 		}
+
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
 		{
