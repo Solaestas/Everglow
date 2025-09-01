@@ -60,7 +60,7 @@ public class UnderwaterLightningMechanismEntity : ModTileEntity
 	public override bool IsTileValidForEntity(int x, int y)
 	{
 		Tile tile = Main.tile[x, y];
-		return tile.HasTile && tile.TileType == ModContent.TileType<UnderwaterLightningMechanism>();
+		return tile.HasTile && (tile.TileType == ModContent.TileType<UnderwaterLightningMechanism>() || tile.TileType == ModContent.TileType<UnderwaterLightningMechanism_H>());
 	}
 
 	public override void SaveData(TagCompound tag)

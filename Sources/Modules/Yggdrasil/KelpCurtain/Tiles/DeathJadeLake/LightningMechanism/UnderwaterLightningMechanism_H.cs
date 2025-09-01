@@ -1,6 +1,5 @@
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
-using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -9,7 +8,7 @@ using static Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.LightningMechani
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.LightningMechanism;
 
-public class UnderwaterLightningMechanism : ModTile
+public class UnderwaterLightningMechanism_H : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -22,9 +21,10 @@ public class UnderwaterLightningMechanism : ModTile
 		DustType = ModContent.DustType<WaterErodedGreenBrickDust>();
 
 		// Placement - Standard Chandelier Setup Below
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-		TileObjectData.newTile.Height = 5;
-		TileObjectData.newTile.CoordinateHeights = new int[5];
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
+		TileObjectData.newTile.Height = 3;
+		TileObjectData.newTile.Width = 5;
+		TileObjectData.newTile.CoordinateHeights = new int[3];
 		Array.Fill(TileObjectData.newTile.CoordinateHeights, 16);
 		TileObjectData.newTile.StyleWrapLimit = 2;
 		TileObjectData.newTile.StyleLineSkip = 10;
@@ -36,15 +36,15 @@ public class UnderwaterLightningMechanism : ModTile
 		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 3, 0);
 
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-		TileObjectData.newAlternate.Origin = new Point16(1, 0);
-		TileObjectData.newAlternate.AnchorTop = SolidOrSolidSideAnchor1TilesLong;
+		TileObjectData.newAlternate.Origin = new Point16(0, 1);
+		TileObjectData.newAlternate.AnchorLeft = SolidOrSolidSideAnchor1TilesLong;
 		TileObjectData.newAlternate.Style = 1;
 		TileObjectData.addAlternate(1);
 
-		TileObjectData.newTile.Origin = new Point16(1, 4);
-		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 3, 0);
+		TileObjectData.newTile.Origin = new Point16(4, 1);
+		TileObjectData.newTile.AnchorRight = SolidOrSolidSideAnchor1TilesLong;
 		TileObjectData.addTile(Type);
-		AnimationFrameHeight = 90;
+		AnimationFrameHeight = 54;
 		AddMapEntry(new Color(101, 107, 121));
 	}
 
@@ -56,14 +56,15 @@ public class UnderwaterLightningMechanism : ModTile
 	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX == 18)
-		{
-			ModTileEntity.PlaceEntityNet(i, j - 4, ModContent.TileEntityType<UnderwaterLightningMechanismEntity>());
-			TileEntity.ByPosition.TryGetValue(new Point16(i, j), out _);
-		}
+		Main.NewText((tile.TileFrameX, tile.TileFrameY));
 		if (tile.TileFrameX == 72)
 		{
-			ModTileEntity.PlaceEntityNet(i, j + 4, ModContent.TileEntityType<UnderwaterLightningMechanismEntity>());
+			ModTileEntity.PlaceEntityNet(i - 4, j, ModContent.TileEntityType<UnderwaterLightningMechanismEntity>());
+			TileEntity.ByPosition.TryGetValue(new Point16(i, j), out _);
+		}
+		if (tile.TileFrameX == 90)
+		{
+			ModTileEntity.PlaceEntityNet(i + 4, j, ModContent.TileEntityType<UnderwaterLightningMechanismEntity>());
 			TileEntity.ByPosition.TryGetValue(new Point16(i, j), out _);
 		}
 		base.PlaceInWorld(i, j, item);
@@ -72,11 +73,11 @@ public class UnderwaterLightningMechanism : ModTile
 	public override void HitWire(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		Point entityPos = new Point(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY / 18);
+		Point entityPos = new Point(i - tile.TileFrameX % 90 / 18, j - tile.TileFrameY / 18 + 1);
 		Tile entityTile = Main.tile[entityPos];
-		if (entityTile.TileFrameX == 72)
+		if (entityTile.TileFrameX == 90)
 		{
-			entityPos = entityPos + new Point(0, 4);
+			entityPos += new Point(4, 0);
 		}
 		entityTile = Main.tile[entityPos];
 		if (TileEntity.ByPosition.TryGetValue(new Point16(entityPos.X, entityPos.Y), out TileEntity entity) && entity is UnderwaterLightningMechanismEntity mechanismEntity)
@@ -84,55 +85,33 @@ public class UnderwaterLightningMechanism : ModTile
 			mechanismEntity.SetState(MechanismState.Resting);
 			mechanismEntity.CurrentFrame = 0;
 		}
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
 			{
 				UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
 				if (uLLML is not null)
 				{
-					if(uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
+					if (uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
 					{
 						return;
 					}
 				}
 			}
 		}
-		if (entityTile.TileFrameX == 18)
+		if (!Main.dedServ)
 		{
-			if (!Main.dedServ)
+			Point point = BFSFindOtherMechanism(entityPos.X, entityPos.Y);
+			Projectile proj = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, true, Main.LocalPlayer), point.ToWorldCoordinates(), Vector2.zeroVector, ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>(), 250, 1.5f, Main.myPlayer, Main.rand.NextFloat(30f));
+			UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
+			if (uLLML is not null)
 			{
-				Point point = BFSFindOtherMechanism(entityPos.X, entityPos.Y);
-				Projectile proj = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, true, Main.LocalPlayer), point.ToWorldCoordinates(), Vector2.zeroVector, ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>(), 250, 1.5f, Main.myPlayer, Main.rand.NextFloat(30f));
-				UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
-				if (uLLML is not null)
+				uLLML.StartPos = entityPos.ToWorldCoordinates();
+				uLLML.EndPos = point.ToWorldCoordinates();
+				if (TileEntity.ByPosition.TryGetValue(new Point16(point.X, point.Y), out TileEntity entity2) && entity2 is UnderwaterLightningMechanismEntity mechanismEntity2)
 				{
-					uLLML.StartPos = entityPos.ToWorldCoordinates();
-					uLLML.EndPos = point.ToWorldCoordinates();
-					if (TileEntity.ByPosition.TryGetValue(new Point16(point.X, point.Y), out TileEntity entity2) && entity2 is UnderwaterLightningMechanismEntity mechanismEntity2)
-					{
-						mechanismEntity2.SetState(MechanismState.Resting);
-						mechanismEntity2.CurrentFrame = 0;
-					}
-				}
-			}
-		}
-		if (entityTile.TileFrameX == 72)
-		{
-			if (!Main.dedServ)
-			{
-				Point point = BFSFindOtherMechanism(entityPos.X, entityPos.Y);
-				Projectile proj = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, true, Main.LocalPlayer), point.ToWorldCoordinates(), Vector2.zeroVector, ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>(), 250, 1.5f, Main.myPlayer, Main.rand.NextFloat(30f));
-				UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
-				if (uLLML is not null)
-				{
-					uLLML.StartPos = entityPos.ToWorldCoordinates();
-					uLLML.EndPos = point.ToWorldCoordinates();
-					if (TileEntity.ByPosition.TryGetValue(new Point16(point.X, point.Y), out TileEntity entity2) && entity2 is UnderwaterLightningMechanismEntity mechanismEntity2)
-					{
-						mechanismEntity2.SetState(MechanismState.Resting);
-						mechanismEntity2.CurrentFrame = 0;
-					}
+					mechanismEntity2.SetState(MechanismState.Resting);
+					mechanismEntity2.CurrentFrame = 0;
 				}
 			}
 		}
@@ -150,6 +129,7 @@ public class UnderwaterLightningMechanism : ModTile
 		};
 		Queue<Point> queueChecked = new Queue<Point>();
 		Tile tile = Main.tile[i, j];
+
 		// 将起始点加入队列
 		queueChecked.Enqueue(new Point(i, j));
 		List<Point> visited = new List<Point>();
@@ -222,11 +202,11 @@ public class UnderwaterLightningMechanism : ModTile
 	public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
 	{
 		Tile tile = Main.tile[i, j];
-		Point16 entityPoint = new Point16(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY / 18);
+		Point16 entityPoint = new Point16(i - tile.TileFrameX % 90 / 18, j - tile.TileFrameY / 18 + 1);
 		Tile entityTile = Main.tile[entityPoint];
-		if(entityTile.TileFrameX == 72)
+		if (entityTile.TileFrameX == 90)
 		{
-			entityPoint += new Point16(0, 4);
+			entityPoint += new Point16(4, 0);
 		}
 		if (TileEntity.ByPosition.TryGetValue(entityPoint, out TileEntity entity) && entity is UnderwaterLightningMechanismEntity mechanismEntity)
 		{
@@ -247,12 +227,12 @@ public class UnderwaterLightningMechanism : ModTile
 		{
 			zero = Vector2.zeroVector;
 		}
-		Texture2D glowTex = ModAsset.UnderwaterLightningMechanism_glow.Value;
-		Point16 entityPoint = new Point16(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY / 18);
+		Texture2D glowTex = ModAsset.UnderwaterLightningMechanism_H_glow.Value;
+		Point16 entityPoint = new Point16(i - tile.TileFrameX % 90 / 18, j - tile.TileFrameY / 18 + 1);
 		Tile entityTile = Main.tile[entityPoint];
-		if (entityTile.TileFrameX == 72)
+		if (entityTile.TileFrameX == 90)
 		{
-			entityPoint += new Point16(0, 4);
+			entityPoint += new Point16(4, 0);
 		}
 		int frameYOffset = 0;
 		if (TileEntity.ByPosition.TryGetValue(entityPoint, out TileEntity entity) && entity is UnderwaterLightningMechanismEntity mechanismEntity)
