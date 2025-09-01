@@ -11,8 +11,8 @@ public class GreenSungloShield_B : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.width = 32;
-		Projectile.height = 48;
+		Projectile.width = 48;
+		Projectile.height = 64;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = false;
 		Projectile.hostile = false;

@@ -15,8 +15,8 @@ public class GreenSungloShield_A : ModProjectile
 	{
 		Projectile.DamageType = DamageClass.Magic;
 
-		Projectile.width = 32;
-		Projectile.height = 48;
+		Projectile.width = 48;
+		Projectile.height = 64;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -58,13 +58,14 @@ public class GreenSungloShield_A : ModProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(0.375f, 0.75f, 0.375f) * timer / 157);
 	}
 
-	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) =>
-		(targetHitbox.Center() - projHitbox.Center()).Length() < 110f;
+
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		target.AddElementalDebuffBuildUp(Main.player[Projectile.owner], NecrosisDebuff.ID, Projectile.damage * 3);
 		target.AddBuff(BuffID.Confused, 180);
+		modifiers.FinalDamage *= timer / 157;
+		modifiers.Knockback *= timer / 157;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

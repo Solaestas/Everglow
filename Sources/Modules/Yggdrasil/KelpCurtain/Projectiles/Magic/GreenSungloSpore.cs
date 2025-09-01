@@ -18,12 +18,35 @@ public class GreenSungloSpore : TrailingProjectile
 
 		Projectile.width = 20;
 		Projectile.height = 20;
+
+		Projectile.friendly = false;
+		Projectile.hostile = false;
 	}
 
 	public override void AI()
 	{
 		Projectile.velocity.Y += 0.25f;
 		base.AI();
+	}
+
+	public override void OnKill(int timeLeft)
+	{
+		int tileX = ((int)Projectile.Center.X) / 16;
+		int tileY = ((int)Projectile.Center.Y) / 16;
+		do
+		{
+			tileY -= 3;
+		}
+		while (WorldGen.SolidTile2(tileX, tileY) || WorldGen.SolidTile2(tileX, tileY + 1) || WorldGen.SolidTile2(tileX, tileY + 2));
+
+		for (; tileY < Main.maxTilesY - 10
+			&& (Main.tile[tileX, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null
+			|| !WorldGen.SolidTile2(tileX, tileY + 3) || !WorldGen.SolidTile2(tileX - 1, tileY + 3) || !WorldGen.SolidTile2(tileX - 1, tileY + 3)); tileY++)
+		{
+		}
+
+		Vector2 pos = new Vector2(tileX * 16, tileY * 16 + 16);
+		Projectile.NewProjectileDirect(null, pos, Vector2.Zero, ModContent.ProjectileType<GreenSungloThorns>(), 0, 0, Projectile.owner);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
