@@ -62,7 +62,7 @@ public class ElectroProbe_HitWireHelper : Visual
 	public override void Draw()
 	{
 		Color drawColor = Color.White * (Power + 0.25f);
-		if ((FixPoint.ToWorldCoordinates() - MyOwner.Center).Length() >= 600)
+		if ((FixPoint.ToWorldCoordinates() - MyOwner.Center).Length() >= 300)
 		{
 			drawColor = new Color(0.5f, 0f, 0f, 0.3f);
 		}
@@ -72,7 +72,7 @@ public class ElectroProbe_HitWireHelper : Visual
 	public void DrawBlockBound(int i, int j, Color color)
 	{
 		bool overFar = false;
-		if ((FixPoint.ToWorldCoordinates() - MyOwner.Center).Length() >= 600)
+		if ((FixPoint.ToWorldCoordinates() - MyOwner.Center).Length() >= 300)
 		{
 			overFar = true;
 		}
@@ -180,6 +180,25 @@ public class ElectroProbe_HitWireHelper : Visual
 				new Vertex2D(pos + new Vector2(16), color, new Vector3(1, 1, 0)),
 			};
 			Ins.Batch.Draw(ModAsset.ElectroProbe_Mark.Value, bars, PrimitiveType.TriangleList);
+
+			if (Power > 0)
+			{
+				float size = 16f + (1 - Power) * 24f;
+				size *= 0.5f;
+				drawColor = new Color(Power, Power, Power, 0);
+				Vector2 newPos = pos + new Vector2(8);
+				bars = new List<Vertex2D>()
+				{
+					new Vertex2D(newPos + new Vector2(-size, -size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(0, 0, 0)),
+					new Vertex2D(newPos + new Vector2(size, -size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(1, 0, 0)),
+					new Vertex2D(newPos + new Vector2(-size, size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(0, 1, 0)),
+
+					new Vertex2D(newPos + new Vector2(-size, size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(0, 1, 0)),
+					new Vertex2D(newPos + new Vector2(size, -size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(1, 0, 0)),
+					new Vertex2D(newPos + new Vector2(size, size).RotatedBy(MathHelper.PiOver4), drawColor, new Vector3(1, 1, 0)),
+				};
+			}
+			Ins.Batch.Draw(Commons.ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList);
 		}
 	}
 }
