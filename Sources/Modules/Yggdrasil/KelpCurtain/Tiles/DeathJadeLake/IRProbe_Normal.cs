@@ -58,6 +58,7 @@ public class IRProbe_Normal : ModTile, ISceneTile
 	{
 		var tile = Main.tile[i, j];
 		int style = tile.TileFrameX / 18;
+		bool noneRot = false;
 		float rot = 0;
 		switch (style)
 		{
@@ -75,10 +76,12 @@ public class IRProbe_Normal : ModTile, ISceneTile
 				break;
 			case 4:
 				rot = 0;
+				noneRot = true;
 				break;
 		}
 		IRProbe_Normal_Laser laser = new IRProbe_Normal_Laser { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 		laser.Style = 0;
+		laser.NoneRotation = noneRot;
 		laser.StartRotation = rot;
 		Ins.VFXManager.Add(laser);
 	}

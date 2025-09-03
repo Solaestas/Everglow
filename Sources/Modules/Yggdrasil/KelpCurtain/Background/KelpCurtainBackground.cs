@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.Common.BackgroundManager;
+using Everglow.Yggdrasil.KelpCurtain.Biomes;
 using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Background;
@@ -69,6 +70,15 @@ public class KelpCurtainBackground : ModSystem
 		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, minY, maxY, false, false);
 		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, minY, maxY, false, false);
 		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, minY, maxY, false, false);
+		DrawSubBiomeBackground();
+	}
+
+	public void DrawSubBiomeBackground()
+	{
+		if (Main.LocalPlayer.InModBiome<DeathJadeLakeBiome>())
+		{
+			DeathJadeLakeBackground.DrawBackground();
+		}
 	}
 
 	/// <summary>

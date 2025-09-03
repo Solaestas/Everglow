@@ -11,6 +11,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	public float StartRotation;
 	public int Style;
 	public bool AnyPlayerCollision = false;
+	public bool NoneRotation;
 	private int length;
 
 	public override void OnSpawn()
@@ -47,18 +48,46 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	{
 		bool oldPlayerHit = AnyPlayerCollision;
 		position = originTile.ToWorldCoordinates() + new Vector2(0, -8).RotatedBy(Rotation);
-		Rotation = StartRotation;
-		Vector2 collisionUnit = new Vector2(0, -8).RotatedBy(Rotation);
-		int count = 0;
-		for (int step = 1; step < 1000; step++)
+		if(!NoneRotation)
 		{
-			count++;
-			if (Collision.SolidCollision(position + step * collisionUnit - new Vector2(4), 8, 8))
+			Rotation = StartRotation;
+			Vector2 collisionUnit = new Vector2(0, -8).RotatedBy(Rotation);
+			int count = 0;
+			for (int step = 1; step < 1000; step++)
 			{
-				AnyPlayerCollision = false;
-				break;
+				count++;
+				if (Collision.SolidCollision(position + step * collisionUnit - new Vector2(4), 8, 8))
+				{
+					AnyPlayerCollision = false;
+					break;
+				}
+				Vector2 pos = position + step * collisionUnit - new Vector2(4);
+				Rectangle collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
+				bool playerCollision = false;
+				foreach (var player in Main.player)
+				{
+					if (player != null && player.active)
+					{
+						if (Rectangle.Intersect(player.Hitbox, collisionRectangle) != Rectangle.emptyRectangle)
+						{
+							playerCollision = true;
+							break;
+						}
+					}
+				}
+				if (playerCollision)
+				{
+					AnyPlayerCollision = true;
+					break;
+				}
 			}
-			Vector2 pos = position + step * collisionUnit - new Vector2(4);
+			length = count;
+		}
+		else
+		{
+			length = 0;
+			AnyPlayerCollision = false;
+			Vector2 pos = position - new Vector2(4);
 			Rectangle collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
 			bool playerCollision = false;
 			foreach (var player in Main.player)
@@ -75,10 +104,8 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 			if (playerCollision)
 			{
 				AnyPlayerCollision = true;
-				break;
 			}
 		}
-		length = count;
 		if (AnyPlayerCollision && !oldPlayerHit)
 		{
 			Wiring.TripWire(originTile.X, originTile.Y, 1, 1);
@@ -89,7 +116,51 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	public override void Draw()
 	{
 		var frame = new Rectangle(0, 74, 16, 16);
-		var laserColor = new Color(GetColor().X, GetColor().Y, GetColor().Z, 0) * 0.1f;
+		var laserColor = new Color(GetColor().X, GetColor().Y, GetColor().Z, 0) * 0.2f;
+		if (NoneRotation)
+		{
+			if(!AnyPlayerCollision)
+			{
+				frame = new Rectangle(0, 120, 72, 22);
+				float subRot = Rotation + MathHelper.PiOver4;
+				Vector2 starX = new Vector2(36, 0).RotatedBy(subRot);
+				Vector2 starY = new Vector2(0, 11).RotatedBy(subRot);
+				var star = new List<Vertex2D>();
+				star.Add(position - starX - starY, laserColor, new Vector3(frame.X / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX + starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+
+				subRot = Rotation - MathHelper.PiOver4;
+				starX = new Vector2(36, 0).RotatedBy(subRot);
+				starY = new Vector2(0, 11).RotatedBy(subRot);
+				star.Add(position - starX - starY, laserColor, new Vector3(frame.X / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX + starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+
+				subRot = Rotation;
+				starX = new Vector2(6, 0).RotatedBy(subRot);
+				starY = new Vector2(0, 6).RotatedBy(subRot);
+				frame = new Rectangle(0, 94, 24, 24);
+				laserColor = Color.Lerp(laserColor, new Color(1f, 1f, 1f, 0), 0.2f);
+				star.Add(position - starX - starY, laserColor, new Vector3(frame.X / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+
+				star.Add(position - starX + starY, laserColor, new Vector3(frame.X / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+				star.Add(position + starX - starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, frame.Y / (float)texture.Height, 0));
+				star.Add(position + starX + starY, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
+				Ins.Batch.Draw(texture, star, PrimitiveType.TriangleList);
+			}
+			return;
+		}
 		Vector2 stepPos = position;
 		Vector2 collisionUnit = new Vector2(0, -8).RotatedBy(Rotation);
 		Vector2 collisionUnit_T = new Vector2(0, -8).RotatedBy(Rotation + MathHelper.PiOver2);

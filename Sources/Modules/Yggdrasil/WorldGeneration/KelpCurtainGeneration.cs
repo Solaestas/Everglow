@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.Common.Tiles;
 using Everglow.Yggdrasil.KelpCurtain;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -29,6 +30,7 @@ public class KelpCurtainGeneration
 		GreenTundra();
 		ScarletGarden();
 		MazeUnderLake();
+		DragonPond();
 
 		// BuildRainValley();
 	}
@@ -287,6 +289,360 @@ public class KelpCurtainGeneration
 	}
 
 	/// <summary>
+	/// 高海拔苔穴
+	/// </summary>
+	public static void BuildMossyCavesHigh()
+	{
+		for (int x = (int)(Main.maxTilesX * 0.75); x < Main.maxTilesX - 20; x++)
+		{
+			for (int y = (int)(Main.maxTilesY * 0.877); y < (int)(Main.maxTilesY * 0.9); y++)
+			{
+				Vector2 origVec = new Vector2(x, y);
+				Vector2 decayCenter = new Vector2(Main.maxTilesX * 0.78f, Main.maxTilesY * 0.89f);
+				float distanceToDecayCenter = (decayCenter - origVec).Length();
+				Vector2 transform = origVec.RotatedBy(MathHelper.PiOver4);
+				float decayValue = GetMeltingPixel((int)transform.X, (int)transform.Y);
+				if (distanceToDecayCenter < 250)
+				{
+					decayValue += (250 - distanceToDecayCenter) / 120f;
+				}
+				if (y < Main.maxTilesY * 0.88)
+				{
+					float lerpValue = (float)(Main.maxTilesY * 0.88 - y) / 63f;
+					decayValue = (float)Utils.Lerp(decayValue, 0.6f, lerpValue);
+				}
+				var tile = SafeGetTile(x, y);
+				if (!tile.HasTile && tile.wall == 0)
+				{
+					if (decayValue is > 0.2f and < 1f)
+					{
+						tile.HasTile = false;
+						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
+					}
+					if (decayValue is > 0.5f and < 0.7f)
+					{
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
+					}
+				}
+			}
+		}
+		for (int x = (int)(Main.maxTilesX * 0.6); x <= (int)(Main.maxTilesX * 0.75); x++)
+		{
+			for (int y = (int)(Main.maxTilesY * 0.877); y < (int)(Main.maxTilesY * 0.884); y++)
+			{
+				Vector2 origVec = new Vector2(x, y);
+				Vector2 transform = origVec.RotatedBy(MathHelper.PiOver4);
+				float decayValue = GetMeltingPixel((int)transform.X, (int)transform.Y);
+				Vector2 decayCenter = new Vector2(Main.maxTilesX * 0.78f, Main.maxTilesY * 0.89f);
+				float distanceToDecayCenter = (decayCenter - origVec).Length();
+				if (distanceToDecayCenter < 250)
+				{
+					decayValue += (250 - distanceToDecayCenter) / 120f;
+				}
+				if (x <= (int)(Main.maxTilesX * 0.7))
+				{
+					decayValue += (float)(Main.maxTilesX * 0.7f - x) / 200f;
+				}
+				if (y < Main.maxTilesY * 0.88)
+				{
+					float lerpValue = (float)(Main.maxTilesY * 0.88 - y) / 63f;
+					decayValue = (float)Utils.Lerp(decayValue, 0.6f, lerpValue);
+				}
+				else
+				{
+					decayValue += (y - Main.maxTilesY * 0.88f) / 80f;
+				}
+				var tile = SafeGetTile(x, y);
+				if (!tile.HasTile && tile.wall == 0)
+				{
+					if (decayValue is > 0.2f and < 1f)
+					{
+						tile.HasTile = false;
+						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
+					}
+					if (decayValue is > 0.5f and < 0.7f)
+					{
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 碧绿苔原
+	/// </summary>
+	public static void GreenTundra()
+	{
+		Vector2 checkPos = new Vector2(Main.maxTilesX * 0.25f, Main.maxTilesY * 0.88f);
+		Vector2 vel = new Vector2(3, -1.5f);
+		int maxStep = 500;
+		float radius = 4f;
+		for (int t = 0; t < maxStep; t++)
+		{
+			CircleTile(checkPos, radius, ModContent.TileType<OldMoss>());
+			CircleWall(checkPos, radius - 1, ModContent.WallType<OldMossWall>());
+			vel = vel * 0.98f + new Vector2(4, 0) * 0.02f;
+			checkPos += vel;
+			radius = radius * 0.99f + 34 * 0.01f;
+			if (checkPos.X > Main.maxTilesX * 0.96f)
+			{
+				break;
+			}
+		}
+
+		// maxStep = 60;
+		// for (int t = 0; t < maxStep; t++)
+		// {
+		// Vector2 check = new Vector2(GenRand.NextFloat(Main.maxTilesX * 0.75f, Main.maxTilesX * 0.94f), GenRand.NextFloat(Main.maxTilesY * 0.874f, Main.maxTilesY * 0.878f));
+		// DigTunnel(check.X, check.Y, GenRand.NextFloat(-1, 1), 1, GenRand.Next(12, 65), GenRand.Next(4, 8));
+		// }
+		for (int x = (int)(Main.maxTilesX * 0.75f); x <= (int)(Main.maxTilesX * 0.96f); x++)
+		{
+			int y = (int)(Main.maxTilesY * 0.8795f);
+			if (To100NearestBlockDistance(x, y) >= 3)
+			{
+				int middleX = x - CheckSpaceLeft(x, y) + (CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2;
+				x = middleX;
+				float width = (CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2;
+				width = Math.Min((CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2, 7);
+				DigGreenTundraTunnel(x, y, width, new Vector2(-1, -1).RotatedByRandom(0.3), 0);
+				x += CheckSpaceLeft(x, y) + 3;
+			}
+		}
+	}
+
+	/// <summary>
+	/// 碧绿苔原专用的挖隧道
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="velocity"></param>
+	/// <param name="depth"></param>
+	public static void DigGreenTundraTunnel(int x, int y, float width, Vector2 velocity, int depth)
+	{
+		if (depth >= 3)
+		{
+			return;
+		}
+		Vector2 checkPos = new Vector2(x, y);
+		Vector2 vel = velocity.NormalizeSafe() * 2.6f;
+		int maxStep = 400;
+		for (int t = 0; t < maxStep; t++)
+		{
+			CircleTile(checkPos, width, -1, true);
+			checkPos += vel;
+			vel = vel.RotatedBy((GetPerlinPixelR(checkPos.X, checkPos.Y) - 60f / 255f) * 0.06f);
+			if (!SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
+			{
+				maxStep = t + 4;
+			}
+			if (checkPos.Y < (int)(Main.maxTilesY * 0.875f) || checkPos.Y > (int)(Main.maxTilesY * 0.88f))
+			{
+				return;
+			}
+		}
+	}
+
+	/// <summary>
+	/// 森雨幽谷
+	/// </summary>
+	public static void BuildRainValley()
+	{
+		int startY = (int)(Main.maxTilesY * 0.85f);
+		int randY = GenRand.Next(512);
+		int randX = GenRand.Next(512);
+		while (startY < (int)(Main.maxTilesY * 0.89f))
+		{
+			startY++;
+			Tile tile = SafeGetTile(Main.maxTilesX / 2, startY);
+			if (tile.HasTile)
+			{
+				break;
+			}
+		}
+		startY -= 200;
+		for (int y = startY; y > (int)(Main.maxTilesY * 0.80f); y--)
+		{
+			for (int x = Main.maxTilesX / 2; x <= Main.maxTilesX - 20; x++)
+			{
+				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
+				if (dense > 160)
+				{
+					Tile tile = SafeGetTile(x, y);
+					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
+					tile.HasTile = true;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 绯红花园
+	/// </summary>
+	public static void ScarletGarden()
+	{
+		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
+		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
+		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
+		int xBoundLeft = (int)(Main.maxTilesX * 0.22f);
+		int xBoundRight = (int)(Main.maxTilesX * 0.4f);
+		for (int x = xBoundLeft; x < xBoundRight; x++)
+		{
+			int lakeBottomY = (int)(Main.maxTilesY * 0.88);
+			lakeBottomY += CheckSpaceDown(lakeCenterX, lakeBottomY);
+			float xLength = xBoundRight - xBoundLeft;
+			float height = (MathF.Sin((x - xBoundLeft) / xLength * MathHelper.TwoPi - MathHelper.PiOver2) + 1) * 465f;
+			float heightMax = lakeBottomY - lakeSurfaceY + GetPerlinPixeG(x, 15) * 16;
+			height = MathF.Min(heightMax, height);
+			for (int y = 0; y < height; y++)
+			{
+				var tile = SafeGetTile(x, lakeBottomY - y);
+				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+				tile.HasTile = true;
+			}
+		}
+	}
+
+	/// <summary>
+	/// 水下迷宫
+	/// </summary>
+	public static void MazeUnderLake()
+	{
+		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
+		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
+		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
+		int xBoundLeft = (int)(Main.maxTilesX * 0.34f);
+		int xBoundRight = (int)(Main.maxTilesX * 0.64f);
+		lakeCenterX = (int)(Main.maxTilesX * 0.5);
+		int lakeBottomYHalfX = (int)(Main.maxTilesY * 0.88);
+		lakeBottomYHalfX += CheckSpaceDown(lakeCenterX, lakeBottomYHalfX);
+		float halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
+
+		// Random seed Points
+		int seedCount = 120;
+		Point size = new Point((int)(Main.maxTilesX * 0.3f), (int)(halfHeight / 0.6f));
+		List<(int X, int Y)> seeds = MazeUnderLake_GenerateRandomSeeds(size, seedCount);
+
+		for (int x = xBoundLeft; x < xBoundRight; x++)
+		{
+			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
+			halfHeight += GetPerlinPixeG(x, 60) * 16f;
+			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
+			if (x >= xBoundRight - 30)
+			{
+				float valueH = MathF.Pow((30 + x - xBoundRight) / 6f, 2);
+				halfHeight += valueH;
+				thick += valueH;
+			}
+			for (int y = 0; y < halfHeight; y++)
+			{
+				float value = 0;
+				if (y >= halfHeight - thick)
+				{
+					value += (thick - (halfHeight - y)) / (float)thick;
+				}
+
+				// Exist a projection. SeedMap is not TileMap.
+				var tile = SafeGetTile(x, lakeBottomYHalfX - y);
+				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
+				{
+					if (!tile.HasTile)
+					{
+						tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+						tile.HasTile = true;
+					}
+				}
+			}
+		}
+		float middleSeedPosX = (xBoundRight - xBoundLeft) / 2f;
+		float minDis = 200;
+		Vector2 centerSeed = Vector2.zeroVector;
+		foreach (var seed in seeds)
+		{
+			Vector2 check = new Vector2(seed.X, seed.Y);
+			Vector2 toCenter = check - new Vector2(middleSeedPosX, 60);
+			if (toCenter.Length() < minDis)
+			{
+				minDis = toCenter.Length();
+				centerSeed = check;
+			}
+		}
+		CircleTile(new Vector2(xBoundLeft + centerSeed.X, lakeBottomYHalfX - centerSeed.Y), 10, ModContent.TileType<OldMoss>());
+	}
+
+	/// <summary>
+	/// 龙潭
+	/// </summary>
+	public static void DragonPond()
+	{
+		int sandLayerTopY = (int)(Main.maxTilesY * 0.893f);
+		int sandLayerBottomY = (int)(Main.maxTilesY * 0.9f);
+		int leftX = (int)(Main.maxTilesX * 0.08f);
+		int RightX = (int)(Main.maxTilesX * 0.26f);
+		for (int x = leftX; x <= RightX; x++)
+		{
+			float xDuration = Math.Abs((x - leftX) / (float)(RightX - leftX));
+			float deltaY = Main.maxTilesY * 0.003f * MathF.Pow(xDuration, 0.5f);
+			sandLayerTopY = (int)(Main.maxTilesY * 0.893f + deltaY);
+			for (int y = sandLayerBottomY; y >= sandLayerTopY; y--)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
+				{
+					tile.TileType = (ushort)ModContent.TileType<DecaySandSoil>();
+					tile.HasTile = true;
+				}
+				if (y > sandLayerTopY + 3)
+				{
+					tile.wall = (ushort)ModContent.WallType<DecaySandSoilWall>();
+				}
+			}
+		}
+		sandLayerTopY = (int)(Main.maxTilesY * 0.893f);
+		SmoothTile(leftX, sandLayerTopY, RightX, sandLayerBottomY);
+		for (int x = leftX; x <= RightX; x++)
+		{
+			for (int y = sandLayerTopY - 10; y < sandLayerBottomY; y++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (tile.HasTile)
+				{
+					if (GenRand.NextBool(2) && tile.Slope == SlopeType.Solid)
+					{
+						for (int algeaY = 0; algeaY < 90; algeaY++)
+						{
+							if (Main.rand.Next(90) < algeaY)
+							{
+								break;
+							}
+							Tile algea = SafeGetTile(x, y - algeaY - 1);
+							if (!algea.HasTile)
+							{
+								algea.TileType = (ushort)ModContent.TileType<JadeLakeSargassum>();
+								algea.HasTile = true;
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// 水下宝库
+	/// </summary>
+	public static void UnderwaterTreasury()
+	{
+	}
+
+	/// <summary>
 	/// Build a mossy cave(horizental cave, long and flat), with moss side, radius at lease = 10.
 	/// </summary>
 	/// <param name="i"></param>
@@ -463,286 +819,6 @@ public class KelpCurtainGeneration
 	public static void ConnectMossyTunnel(Point p0, Point p1, float width)
 	{
 		ConnectMossyTunnel(p0.X, p0.Y, p1.X, p1.Y, width);
-	}
-
-	/// <summary>
-	/// 高海拔苔穴
-	/// </summary>
-	public static void BuildMossyCavesHigh()
-	{
-		for (int x = (int)(Main.maxTilesX * 0.75); x < Main.maxTilesX - 20; x++)
-		{
-			for (int y = (int)(Main.maxTilesY * 0.877); y < (int)(Main.maxTilesY * 0.9); y++)
-			{
-				Vector2 origVec = new Vector2(x, y);
-				Vector2 decayCenter = new Vector2(Main.maxTilesX * 0.78f, Main.maxTilesY * 0.89f);
-				float distanceToDecayCenter = (decayCenter - origVec).Length();
-				Vector2 transform = origVec.RotatedBy(MathHelper.PiOver4);
-				float decayValue = GetMeltingPixel((int)transform.X, (int)transform.Y);
-				if (distanceToDecayCenter < 250)
-				{
-					decayValue += (250 - distanceToDecayCenter) / 120f;
-				}
-				if (y < Main.maxTilesY * 0.88)
-				{
-					float lerpValue = (float)(Main.maxTilesY * 0.88 - y) / 63f;
-					decayValue = (float)Utils.Lerp(decayValue, 0.6f, lerpValue);
-				}
-				var tile = SafeGetTile(x, y);
-				if (!tile.HasTile && tile.wall == 0)
-				{
-					if (decayValue is > 0.2f and < 1f)
-					{
-						tile.HasTile = false;
-						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
-					}
-					if (decayValue is > 0.5f and < 0.7f)
-					{
-						tile.HasTile = true;
-						tile.TileType = (ushort)ModContent.TileType<OldMoss>();
-						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
-					}
-				}
-			}
-		}
-		for (int x = (int)(Main.maxTilesX * 0.6); x <= (int)(Main.maxTilesX * 0.75); x++)
-		{
-			for (int y = (int)(Main.maxTilesY * 0.877); y < (int)(Main.maxTilesY * 0.884); y++)
-			{
-				Vector2 origVec = new Vector2(x, y);
-				Vector2 transform = origVec.RotatedBy(MathHelper.PiOver4);
-				float decayValue = GetMeltingPixel((int)transform.X, (int)transform.Y);
-				Vector2 decayCenter = new Vector2(Main.maxTilesX * 0.78f, Main.maxTilesY * 0.89f);
-				float distanceToDecayCenter = (decayCenter - origVec).Length();
-				if (distanceToDecayCenter < 250)
-				{
-					decayValue += (250 - distanceToDecayCenter) / 120f;
-				}
-				if (x <= (int)(Main.maxTilesX * 0.7))
-				{
-					decayValue += (float)(Main.maxTilesX * 0.7f - x) / 200f;
-				}
-				if (y < Main.maxTilesY * 0.88)
-				{
-					float lerpValue = (float)(Main.maxTilesY * 0.88 - y) / 63f;
-					decayValue = (float)Utils.Lerp(decayValue, 0.6f, lerpValue);
-				}
-				else
-				{
-					decayValue += (y - Main.maxTilesY * 0.88f) / 80f;
-				}
-				var tile = SafeGetTile(x, y);
-				if (!tile.HasTile && tile.wall == 0)
-				{
-					if (decayValue is > 0.2f and < 1f)
-					{
-						tile.HasTile = false;
-						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
-					}
-					if (decayValue is > 0.5f and < 0.7f)
-					{
-						tile.HasTile = true;
-						tile.TileType = (ushort)ModContent.TileType<OldMoss>();
-						tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
-					}
-				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// 碧绿苔原
-	/// </summary>
-	public static void GreenTundra()
-	{
-		Vector2 checkPos = new Vector2(Main.maxTilesX * 0.25f, Main.maxTilesY * 0.88f);
-		Vector2 vel = new Vector2(3, -1.5f);
-		int maxStep = 500;
-		float radius = 4f;
-		for (int t = 0; t < maxStep; t++)
-		{
-			CircleTile(checkPos, radius, ModContent.TileType<OldMoss>());
-			CircleWall(checkPos, radius - 1, ModContent.WallType<OldMossWall>());
-			vel = vel * 0.98f + new Vector2(4, 0) * 0.02f;
-			checkPos += vel;
-			radius = radius * 0.99f + 34 * 0.01f;
-			if (checkPos.X > Main.maxTilesX * 0.96f)
-			{
-				break;
-			}
-		}
-
-		// maxStep = 60;
-		// for (int t = 0; t < maxStep; t++)
-		// {
-		// Vector2 check = new Vector2(GenRand.NextFloat(Main.maxTilesX * 0.75f, Main.maxTilesX * 0.94f), GenRand.NextFloat(Main.maxTilesY * 0.874f, Main.maxTilesY * 0.878f));
-		// DigTunnel(check.X, check.Y, GenRand.NextFloat(-1, 1), 1, GenRand.Next(12, 65), GenRand.Next(4, 8));
-		// }
-		for (int x = (int)(Main.maxTilesX * 0.75f); x <= (int)(Main.maxTilesX * 0.96f); x++)
-		{
-			int y = (int)(Main.maxTilesY * 0.8795f);
-			if (To100NearestBlockDistance(x, y) >= 3)
-			{
-				int middleX = x - CheckSpaceLeft(x, y) + (CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2;
-				x = middleX;
-				float width = (CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2;
-				width = Math.Min((CheckSpaceRight(x, y) + CheckSpaceLeft(x, y)) / 2, 7);
-				DigGreenTundraTunnel(x, y, width, new Vector2(-1, -1).RotatedByRandom(0.3), 0);
-				x += CheckSpaceLeft(x, y) + 3;
-			}
-		}
-	}
-
-	public static void DigGreenTundraTunnel(int x, int y, float width, Vector2 velocity, int depth)
-	{
-		if (depth >= 3)
-		{
-			return;
-		}
-		Vector2 checkPos = new Vector2(x, y);
-		Vector2 vel = velocity.NormalizeSafe() * 2.6f;
-		int maxStep = 400;
-		for (int t = 0; t < maxStep; t++)
-		{
-			CircleTile(checkPos, width, -1, true);
-			checkPos += vel;
-			vel = vel.RotatedBy((GetPerlinPixelR(checkPos.X, checkPos.Y) - 60f / 255f) * 0.06f);
-			if (!SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
-			{
-				maxStep = t + 4;
-			}
-			if (checkPos.Y < (int)(Main.maxTilesY * 0.875f) || checkPos.Y > (int)(Main.maxTilesY * 0.88f))
-			{
-				return;
-			}
-		}
-	}
-
-	/// <summary>
-	/// 森雨幽谷
-	/// </summary>
-	public static void BuildRainValley()
-	{
-		int startY = (int)(Main.maxTilesY * 0.85f);
-		int randY = GenRand.Next(512);
-		int randX = GenRand.Next(512);
-		while (startY < (int)(Main.maxTilesY * 0.89f))
-		{
-			startY++;
-			Tile tile = SafeGetTile(Main.maxTilesX / 2, startY);
-			if (tile.HasTile)
-			{
-				break;
-			}
-		}
-		startY -= 200;
-		for (int y = startY; y > (int)(Main.maxTilesY * 0.80f); y--)
-		{
-			for (int x = Main.maxTilesX / 2; x <= Main.maxTilesX - 20; x++)
-			{
-				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
-				if (dense > 160)
-				{
-					Tile tile = SafeGetTile(x, y);
-					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
-					tile.HasTile = true;
-				}
-			}
-		}
-	}
-
-	/// <summary>
-	/// 绯红花园
-	/// </summary>
-	public static void ScarletGarden()
-	{
-		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
-		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
-		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
-		int xBoundLeft = (int)(Main.maxTilesX * 0.22f);
-		int xBoundRight = (int)(Main.maxTilesX * 0.4f);
-		for (int x = xBoundLeft; x < xBoundRight; x++)
-		{
-			int lakeBottomY = (int)(Main.maxTilesY * 0.88);
-			lakeBottomY += CheckSpaceDown(lakeCenterX, lakeBottomY);
-			float xLength = xBoundRight - xBoundLeft;
-			float height = (MathF.Sin((x - xBoundLeft) / xLength * MathHelper.TwoPi - MathHelper.PiOver2) + 1) * 465f;
-			float heightMax = lakeBottomY - lakeSurfaceY + GetPerlinPixeG(x, 15) * 16;
-			height = MathF.Min(heightMax, height);
-			for (int y = 0; y < height; y++)
-			{
-				var tile = SafeGetTile(x, lakeBottomY - y);
-				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
-				tile.HasTile = true;
-			}
-		}
-	}
-
-	/// <summary>
-	/// 水下迷宫
-	/// </summary>
-	public static void MazeUnderLake()
-	{
-		int lakeSurfaceY = (int)(Main.maxTilesY * 0.88);
-		int lakeCenterX = (int)(Main.maxTilesX * 0.4);
-		lakeSurfaceY += CheckWaterSurfaceDown(lakeCenterX, lakeSurfaceY);
-		int xBoundLeft = (int)(Main.maxTilesX * 0.34f);
-		int xBoundRight = (int)(Main.maxTilesX * 0.64f);
-		lakeCenterX = (int)(Main.maxTilesX * 0.5);
-		int lakeBottomYHalfX = (int)(Main.maxTilesY * 0.88);
-		lakeBottomYHalfX += CheckSpaceDown(lakeCenterX, lakeBottomYHalfX);
-		float halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
-
-		// Random seed Points
-		int seedCount = 120;
-		Point size = new Point((int)(Main.maxTilesX * 0.3f), (int)(halfHeight / 0.6f));
-		List<(int X, int Y)> seeds = MazeUnderLake_GenerateRandomSeeds(size, seedCount);
-
-		for (int x = xBoundLeft; x < xBoundRight; x++)
-		{
-			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
-			halfHeight += GetPerlinPixeG(x, 60) * 16f;
-			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
-			if (x >= xBoundRight - 30)
-			{
-				float valueH = MathF.Pow((30 + x - xBoundRight) / 6f, 2);
-				halfHeight += valueH;
-				thick += valueH;
-			}
-			for (int y = 0; y < halfHeight; y++)
-			{
-				float value = 0;
-				if (y >= halfHeight - thick)
-				{
-					value += (thick - (halfHeight - y)) / (float)thick;
-				}
-
-				// Exist a projection. SeedMap is not TileMap.
-				var tile = SafeGetTile(x, lakeBottomYHalfX - y);
-				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
-				{
-					if (!tile.HasTile)
-					{
-						tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
-						tile.HasTile = true;
-					}
-				}
-			}
-		}
-		float middleSeedPosX = (xBoundRight - xBoundLeft) / 2f;
-		float minDis = 200;
-		Vector2 centerSeed = Vector2.zeroVector;
-		foreach (var seed in seeds)
-		{
-			Vector2 check = new Vector2(seed.X, seed.Y);
-			Vector2 toCenter = check - new Vector2(middleSeedPosX, 60);
-			if (toCenter.Length() < minDis)
-			{
-				minDis = toCenter.Length();
-				centerSeed = check;
-			}
-		}
-		CircleTile(new Vector2(xBoundLeft + centerSeed.X, lakeBottomYHalfX - centerSeed.Y), 10, ModContent.TileType<OldMoss>());
 	}
 
 	/// <summary>

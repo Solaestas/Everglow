@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
 
@@ -22,7 +23,8 @@ public class ResetKelpCurtain : ModItem
 	public override bool CanUseItem(Player player)
 	{
 		KelpCurtainBiome.StratumBoundCurve.Clear();
-		YggdrasilWorldGeneration.ClearRectangleArea(20, (int)(Main.maxTilesY * 0.75f), Main.maxTilesX - 20, (int)(Main.maxTilesY * 0.9f));
+		ClearRectangleAreaExclude(20, (int)(Main.maxTilesY * 0.75f), Main.maxTilesX - 20, (int)(Main.maxTilesY * 0.9f), ModContent.TileType<StoneScaleWood>());
+
 		KelpCurtainGeneration.BuildKelpCurtain();
 
 		// Point mouseTile = Main.MouseWorld.ToTileCoordinates();
@@ -34,6 +36,21 @@ public class ResetKelpCurtain : ModItem
 		// OldMousePos = mouseTile;
 		// YggdrasilWorldGeneration.GenerateStalactite(Main.MouseWorld / 16f, 8, Main.rand.NextFloat(9, 42), ModContent.TileType<StoneScaleWood>());
 		return false;
+	}
+
+	public static void ClearRectangleAreaExclude(int x0, int y0, int x1, int y1, int excludeType)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				if (tile.TileType != excludeType)
+				{
+					tile.ClearEverything();
+				}
+			}
+		}
 	}
 
 	public override bool? UseItem(Player player)
