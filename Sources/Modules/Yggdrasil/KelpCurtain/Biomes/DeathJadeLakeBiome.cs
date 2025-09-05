@@ -1,4 +1,5 @@
 using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.Water;
 using Everglow.Yggdrasil.WorldGeneration;
 
@@ -7,6 +8,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Biomes;
 public class DeathJadeLakeBiome : ModBiome
 {
 	public float LiquidSurfaceY = 0;
+
+	public Dictionary<int, int> RightBoundOfACertainY = [];
 
 	public void GetLiquidSurfaceY()
 	{
@@ -20,6 +23,27 @@ public class DeathJadeLakeBiome : ModBiome
 				LiquidSurfaceY = (checkY + j) * 16f + 16 - tile.LiquidAmount / 16f; // LiquidAmount 0 ~255
 				break;
 			}
+		}
+		RightBoundOfACertainY = [];
+		checkY = (int)(LiquidSurfaceY / 16f);
+		for (int y = 0; y < 200; y++)
+		{
+			int checkBoundY = checkY + y;
+			int valueX = checkX;
+			for (int x = checkX; x < Main.maxTilesX * 0.8f; x++)
+			{
+				var tileBound = YggdrasilWorldGeneration.SafeGetTile(x, checkBoundY);
+				if(tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
+				{
+					valueX = x;
+					break;
+				}
+			}
+			if (RightBoundOfACertainY.ContainsKey(checkBoundY))
+			{
+				RightBoundOfACertainY.Remove(checkBoundY);
+			}
+			RightBoundOfACertainY.Add(checkBoundY, valueX + 3);
 		}
 	}
 

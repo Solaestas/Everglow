@@ -1,14 +1,10 @@
-using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
-using Everglow.Yggdrasil.WorldGeneration;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.IRProbe;
 
 public class IRProbe_Normal : ModTile, ISceneTile
 {
@@ -23,7 +19,7 @@ public class IRProbe_Normal : ModTile, ISceneTile
 		TileObjectData.newTile.AnchorBottom = AnchorData.Empty; // Clear out existing bottom anchor inherited from Style1x1 temporarily so that we don't have to set it to empty in each of the alternates.
 
 		// To reduce code repetition, we'll use the same AnchorData value multiple times. This works because the tile is as tall as it is wide.
-		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 0);
+		var SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 0);
 
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
 		TileObjectData.newAlternate.Origin = Point16.Zero;
@@ -79,7 +75,7 @@ public class IRProbe_Normal : ModTile, ISceneTile
 				noneRot = true;
 				break;
 		}
-		IRProbe_Normal_Laser laser = new IRProbe_Normal_Laser { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var laser = new IRProbe_Normal_Laser { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 		laser.Style = 0;
 		laser.NoneRotation = noneRot;
 		laser.StartRotation = rot;
@@ -90,7 +86,7 @@ public class IRProbe_Normal : ModTile, ISceneTile
 	{
 		var tile = Main.tile[i, j];
 		int style = tile.TileFrameX / 18;
-		Rectangle frame = new Rectangle(24, 0, 24, 24);
+		var frame = new Rectangle(24, 0, 24, 24);
 		switch (style)
 		{
 			case 0:
@@ -110,7 +106,7 @@ public class IRProbe_Normal : ModTile, ISceneTile
 				break;
 		}
 
-		Vector2 zero = new Vector2(Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.zeroVector;

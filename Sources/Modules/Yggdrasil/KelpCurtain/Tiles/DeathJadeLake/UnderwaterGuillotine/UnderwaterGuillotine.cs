@@ -2,6 +2,7 @@ using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.LightningMechanism;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -16,7 +17,7 @@ public class UnderwaterGuillotine : ShapeDataTile
 		DustType = ModContent.DustType<UnderwaterGuillotineDust>();
 		TotalWidth = 8;
 		TotalHeight = 3;
-		Main.tileSolid[Type] = true;
+		Main.tileSolid[Type] = false;
 		Main.tileBlendAll[Type] = true;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = false;
@@ -53,7 +54,7 @@ public class UnderwaterGuillotine : ShapeDataTile
 				}
 			}
 		}
-		var projectile = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, true, Main.LocalPlayer), topLeft.ToWorldCoordinates(), Vector2.zeroVector, ModContent.ProjectileType<UnderwaterGuillotine_Projectile>(), 1000, 5, Main.myPlayer);
+		var projectile = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_PlayerOrWires(i, j, true, Main.LocalPlayer), (topLeft + new Point(4, 0)).ToWorldCoordinates(), Vector2.zeroVector, ModContent.ProjectileType<UnderwaterGuillotine_Projectile>(), 1000, 5, Main.myPlayer);
 		UnderwaterGuillotine_Projectile uGP0 = projectile.ModProjectile as UnderwaterGuillotine_Projectile;
 		if (uGP0 != null)
 		{
@@ -84,5 +85,18 @@ public class UnderwaterGuillotine : ShapeDataTile
 				}
 			}
 		}
+	}
+
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		Tile tile = Main.tile[i, j];
+		Vector2 zero = new Vector2(Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.zeroVector;
+		}
+		Texture2D tex = ModAsset.UnderwaterGuillotine.Value;
+		spriteBatch.Draw(tex, new Point(i, j).ToWorldCoordinates() - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Lighting.GetColor(i, j), 0, new Vector2(8), 1f, SpriteEffects.None, 0);
+		base.PostDraw(i, j, spriteBatch);
 	}
 }

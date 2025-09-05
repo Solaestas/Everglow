@@ -436,6 +436,114 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
+	/// Fill liquids by given area:(x0:left, y0:top, x1:right, y1:bottom)
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void PlaceRectangleAreaOfLiquid(int x0, int y0, int x1, int y1, int type)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				if (ChestSafe(x, y))
+				{
+					tile.liquid = (byte)type;
+					tile.LiquidAmount = 255;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Fill tiles by given area:(center and half side length);type = -1 to kill tiles.
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void PlaceSquareAreaOfBlock(Point point, int halfSideRange, int type)
+	{
+		Point startPoint = point - new Point(halfSideRange, halfSideRange);
+		for (int x = 0; x <= halfSideRange * 2; x += 1)
+		{
+			for (int y = 0; y <= halfSideRange * 2; y += 1)
+			{
+				Point check = startPoint + new Point(x, y);
+				Tile tile = SafeGetTile(check);
+				if (ChestSafe(check.X, check.Y))
+				{
+					if(type >= 0)
+					{
+						tile.TileType = (ushort)type;
+						tile.HasTile = true;
+					}
+					else
+					{
+						tile.HasTile = false;
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Fill liquids by given area:(center and half side length);type = -1 to kill tiles.
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void PlaceSquareAreaOfLiquid(Point point, int halfSideRange, int type)
+	{
+		Point startPoint = point - new Point(halfSideRange, halfSideRange);
+		for (int x = 0; x <= halfSideRange * 2; x += 1)
+		{
+			for (int y = 0; y <= halfSideRange * 2; y += 1)
+			{
+				Point check = startPoint + new Point(x, y);
+				Tile tile = SafeGetTile(check);
+				if (ChestSafe(check.X, check.Y))
+				{
+					tile.liquid = (byte)type;
+					tile.LiquidAmount = 255;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Fill walls by given area:(center and half side length)
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="type"></param>
+	public static void PlaceSquareAreaOfWall(Point point, int halfSideRange, int type)
+	{
+		Point startPoint = point - new Point(halfSideRange, halfSideRange);
+		for (int x = 0; x <= halfSideRange * 2; x += 1)
+		{
+			for (int y = 0; y <= halfSideRange * 2; y += 1)
+			{
+				Point check = startPoint + new Point(x, y);
+				Tile tile = SafeGetTile(check);
+				if (ChestSafe(check.X, check.Y))
+				{
+					tile.wall = (ushort)type;
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// Fill walls by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
@@ -499,6 +607,47 @@ public class YggdrasilWorldGeneration : ModSystem
 			}
 		}
 		SmoothTile(x0, y0, x1, y1);
+	}
+
+	/// <summary>
+	/// Clear tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	public static void KillRectangleAreaOfLiquid(int x0, int y0, int x1, int y1)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				tile.LiquidAmount = 0;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Clear tiles by given area:(x0:left, y0:top, x1:right, y1:bottom)
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	public static void KillRectangleAreaOfWire(int x0, int y0, int x1, int y1)
+	{
+		for (int x = x0; x <= x1; x += 1)
+		{
+			for (int y = y0; y <= y1; y += 1)
+			{
+				Tile tile = SafeGetTile(x, y);
+				tile.RedWire = false;
+				tile.GreenWire = false;
+				tile.BlueWire = false;
+				tile.YellowWire = false;
+			}
+		}
 	}
 
 	/// <summary>
@@ -1926,7 +2075,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			foreach (var pos in visited)
 			{
 				Tile tile = SafeGetTile(pos);
-				tile.LiquidType = 0;
+				tile.LiquidType = (byte)type;
 				tile.LiquidAmount = 255;
 			}
 		}

@@ -1,6 +1,6 @@
 using Everglow.Commons.VFX.Scene;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.IRProbe;
 
 [Pipeline(typeof(WCSPipeline))]
 
@@ -12,6 +12,14 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	public int Style;
 	public bool AnyPlayerCollision = false;
 	public bool NoneRotation;
+
+	/// <summary>
+	/// Allow to make a custon logic for the behaviors of laser.
+	/// </summary>
+	public delegate void ScanningLogic(IRProbe_Normal_Laser laser);
+
+	public event ScanningLogic LaserScan;
+
 	private int length;
 
 	public override void OnSpawn()
@@ -47,10 +55,15 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	public override void Update()
 	{
 		bool oldPlayerHit = AnyPlayerCollision;
-		position = originTile.ToWorldCoordinates() + new Vector2(0, -8).RotatedBy(Rotation);
+		position = originTile.ToWorldCoordinates();
 		if(!NoneRotation)
 		{
-			Rotation = StartRotation;
+			position += new Vector2(0, -8).RotatedBy(Rotation);
+		}
+		Rotation = StartRotation;
+		LaserScan?.Invoke(this);
+		if (!NoneRotation)
+		{
 			Vector2 collisionUnit = new Vector2(0, -8).RotatedBy(Rotation);
 			int count = 0;
 			for (int step = 1; step < 1000; step++)
@@ -62,7 +75,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 					break;
 				}
 				Vector2 pos = position + step * collisionUnit - new Vector2(4);
-				Rectangle collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
+				var collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
 				bool playerCollision = false;
 				foreach (var player in Main.player)
 				{
@@ -88,7 +101,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 			length = 0;
 			AnyPlayerCollision = false;
 			Vector2 pos = position - new Vector2(4);
-			Rectangle collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
+			var collisionRectangle = new Rectangle((int)pos.X, (int)pos.Y, 8, 8);
 			bool playerCollision = false;
 			foreach (var player in Main.player)
 			{
@@ -117,9 +130,13 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	{
 		var frame = new Rectangle(0, 74, 16, 16);
 		var laserColor = new Color(GetColor().X, GetColor().Y, GetColor().Z, 0) * 0.2f;
+		if (Main.LocalPlayer.GetModPlayer<VisionPlayer>().IR_Vision)
+		{
+			laserColor = new Color(GetColor().X, GetColor().Y, GetColor().Z, 0);
+		}
 		if (NoneRotation)
 		{
-			if(!AnyPlayerCollision)
+			if (!AnyPlayerCollision)
 			{
 				frame = new Rectangle(0, 120, 72, 22);
 				float subRot = Rotation + MathHelper.PiOver4;
@@ -189,5 +206,29 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 			bars.Add(stepPos + collisionUnit - collisionUnit_T, laserColor, new Vector3((frame.X + frame.Width) / (float)texture.Width, (frame.Y + frame.Height) / (float)texture.Height, 0));
 		}
 		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
+	}
+
+	public override void Kill()
+	{
+		UnregisterCustomLogic(LaserScan);
+		base.Kill();
+	}
+
+	/// <summary>
+	/// Allow you register a custom logic.
+	/// </summary>
+	/// <param name="customLogic"></param>
+	public void RegisterCustomLogic(ScanningLogic customLogic)
+	{
+		LaserScan += customLogic;
+	}
+
+	/// <summary>
+	/// Unregister a custom logic.
+	/// </summary>
+	/// <param name="customLogic"></param>
+	public void UnregisterCustomLogic(ScanningLogic customLogic)
+	{
+		LaserScan -= customLogic;
 	}
 }
