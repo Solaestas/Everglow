@@ -1,14 +1,16 @@
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
-public class YggdrasilCyatheaWood : ModItem
+public class NoctilucentFluoriteLump_Item : ModItem
 {
 	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.CyatheaWood>());
-		Item.width = 24;
-		Item.height = 22;
+		Item.DefaultToPlaceableTile(ModContent.TileType<NoctilucentFluoriteLump>());
+		Item.width = 20;
+		Item.height = 20;
 		Item.rare = ItemRarityID.White;
 	}
 }

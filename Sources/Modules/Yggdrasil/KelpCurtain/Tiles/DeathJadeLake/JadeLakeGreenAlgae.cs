@@ -21,7 +21,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 		TileObjectData.addTile(Type);
 		DustType = ModContent.DustType<JadeLakeGreenAlgaeDust>();
 
-		AddMapEntry(new Color(99, 25, 16));
+		AddMapEntry(new Color(33, 96, 24));
 		HitSound = SoundID.Grass;
 	}
 
