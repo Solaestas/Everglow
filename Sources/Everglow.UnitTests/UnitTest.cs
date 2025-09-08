@@ -16,7 +16,6 @@ public class UnitTest
 	{
 		// Prevent TypeInitializer throwing exception
 		Program.SavePath = string.Empty;
-		Main.player[0] = new Player();
 	}
 
 	[TestMethod]
