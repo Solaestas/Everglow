@@ -7,11 +7,12 @@ public class LichenSlimeStarPipeline : Pipeline
 		effect = ModAsset.LichenSlimeStar;
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_LichenSlimeStar.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D lightness = Commons.ModAsset.StarSlash.Value;
 		Ins.Batch.BindTexture<Vertex2D>(lightness);
@@ -25,10 +26,12 @@ public class LichenSlimeStarPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(LichenSlimeStarPipeline))]
 public class LichenSlimeStar : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -36,7 +39,11 @@ public class LichenSlimeStar : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public LichenSlimeStar() { }
+
+	public LichenSlimeStar()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -53,7 +60,10 @@ public class LichenSlimeStar : Visual
 		scale *= 0.98f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		if (Collision.SolidCollision(position + new Vector2(velocity.X, 0), 0, 0))
 		{
 			velocity.X *= -0.4f;
@@ -81,21 +91,21 @@ public class LichenSlimeStar : Visual
 		Color lightColor = new Color(0.7f, 1f, 0.4f, 0);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + new Vector2(-25 * scale, -25) * scale,lightColor, new Vector3(0, 0, 0)),
-			new Vertex2D(position + new Vector2(-25 * scale, 25) * scale,lightColor, new Vector3(0, 1, 0)),
-			new Vertex2D(position + new Vector2(25 * scale, -25) * scale,lightColor, new Vector3(1, 0, 0)),
+			new Vertex2D(position + new Vector2(-25 * scale, -25) * scale, lightColor, new Vector3(0, 0, 0)),
+			new Vertex2D(position + new Vector2(-25 * scale, 25) * scale, lightColor, new Vector3(0, 1, 0)),
+			new Vertex2D(position + new Vector2(25 * scale, -25) * scale, lightColor, new Vector3(1, 0, 0)),
 
-			new Vertex2D(position + new Vector2(25 * scale, -25) * scale,lightColor, new Vector3(1, 0, 0)),
-			new Vertex2D(position + new Vector2(-25 * scale, 25) * scale,lightColor, new Vector3(0, 1, 0)),
-			new Vertex2D(position + new Vector2(25 * scale, 25) * scale,lightColor, new Vector3(1, 1, 0)),
+			new Vertex2D(position + new Vector2(25 * scale, -25) * scale, lightColor, new Vector3(1, 0, 0)),
+			new Vertex2D(position + new Vector2(-25 * scale, 25) * scale, lightColor, new Vector3(0, 1, 0)),
+			new Vertex2D(position + new Vector2(25 * scale, 25) * scale, lightColor, new Vector3(1, 1, 0)),
 
-			new Vertex2D(position + new Vector2(-25, -25 * scale) * scale,lightColor, new Vector3(0, 1, 0)),
-			new Vertex2D(position + new Vector2(-25, 25 * scale) * scale,lightColor, new Vector3(1, 1, 0)),
-			new Vertex2D(position + new Vector2(25, -25 * scale) * scale,lightColor, new Vector3(0, 0, 0)),
+			new Vertex2D(position + new Vector2(-25, -25 * scale) * scale, lightColor, new Vector3(0, 1, 0)),
+			new Vertex2D(position + new Vector2(-25, 25 * scale) * scale, lightColor, new Vector3(1, 1, 0)),
+			new Vertex2D(position + new Vector2(25, -25 * scale) * scale, lightColor, new Vector3(0, 0, 0)),
 
-			new Vertex2D(position + new Vector2(25, -25 * scale) * scale,lightColor, new Vector3(0, 0, 0)),
-			new Vertex2D(position + new Vector2(-25, 25 * scale) * scale,lightColor, new Vector3(1, 1, 0)),
-			new Vertex2D(position + new Vector2(25, 25 * scale) * scale,lightColor, new Vector3(1, 0, 0))
+			new Vertex2D(position + new Vector2(25, -25 * scale) * scale, lightColor, new Vector3(0, 0, 0)),
+			new Vertex2D(position + new Vector2(-25, 25 * scale) * scale, lightColor, new Vector3(1, 1, 0)),
+			new Vertex2D(position + new Vector2(25, 25 * scale) * scale, lightColor, new Vector3(1, 0, 0)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);

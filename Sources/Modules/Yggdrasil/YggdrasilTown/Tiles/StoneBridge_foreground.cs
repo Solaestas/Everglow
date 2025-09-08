@@ -1,7 +1,8 @@
 using Everglow.Commons.VFX.Scene;
 using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.Common;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+
 [Pipeline(typeof(WCSPipeline))]
 public class StoneBridge_foreground : ForegroundVFX
 {
@@ -13,6 +14,7 @@ public class StoneBridge_foreground : ForegroundVFX
 		}
 		base.Update();
 	}
+
 	public override void OnSpawn()
 	{
 		texture = ModAsset.StoneBridge.Value;

@@ -13,9 +13,9 @@ public class KelpCurtainWaterStyle : ModWaterStyle
 
 	public override void LightColorMultiplier(ref float r, ref float g, ref float b)
 	{
-		r = 0.05f;
-		g = 0.6f;
-		b = 0.05f;
+		r = 0.85f;
+		g = 0.96f;
+		b = 1.85f;
 		base.LightColorMultiplier(ref r, ref g, ref b);
 	}
 

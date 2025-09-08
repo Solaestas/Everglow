@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.DataStructures;
 

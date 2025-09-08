@@ -1,3 +1,5 @@
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+
 namespace Everglow.Yggdrasil.KelpCurtain.Walls;
 
 public class DragonScaleWoodWall : ModWall
@@ -5,11 +7,7 @@ public class DragonScaleWoodWall : ModWall
 	public override void SetStaticDefaults()
 	{
 		Main.wallHouse[Type] = true;
-		DustType = DustID.WoodFurniture;
+		DustType = ModContent.DustType<DragonScaleWoodDust>();
 		AddMapEntry(new Color(32, 8, 0));
-	}
-	public override bool CanExplode(int i, int j)
-	{
-		return false;
 	}
 }

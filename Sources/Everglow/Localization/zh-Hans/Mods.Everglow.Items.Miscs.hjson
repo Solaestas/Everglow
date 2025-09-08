@@ -1,0 +1,24 @@
+StarSeed: {
+	DisplayName: Star Seed
+	Tooltip: ""
+}
+
+GoodNeighborCoin: {
+	DisplayName: Good Neighbor Coin
+	Tooltip: ""
+}
+
+JellyBallFat: {
+	DisplayName: Jelly Ball Fat
+	Tooltip: ""
+}
+
+StrongCorticalMembrane: {
+	DisplayName: Strong Cortical Membrane
+	Tooltip: ""
+}
+
+YggdrasilPlayerRoomDoorKey: {
+	DisplayName: Yggdrasil Player Room Door Key
+	Tooltip: ""
+}

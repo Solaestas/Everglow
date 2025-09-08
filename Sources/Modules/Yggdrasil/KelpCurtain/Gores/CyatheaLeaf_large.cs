@@ -4,7 +4,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Gores;
 
 public class CyatheaLeaf_large : ModGore
 {
-	public override string Texture => "Everglow/Yggdrasil/KelpCurtain/GoresCyatheaLeaf_large";
+	public override string Texture => ModAsset.CyatheaLeaf_large_Mod;
 
 	public override bool Update(Gore gore)
 	{

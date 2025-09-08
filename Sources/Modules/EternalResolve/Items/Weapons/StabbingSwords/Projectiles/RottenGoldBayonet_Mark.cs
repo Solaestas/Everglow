@@ -4,7 +4,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class RottenGoldBayonet_Mark : ModProjectile
     {
-		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 		public override void SetDefaults()
         {
 			Projectile.friendly = false;
@@ -18,7 +18,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void AI()
 		{
 			Projectile.velocity *= 0;
-            if (Main.npc[(int)Projectile.ai[1]].active)//Ëø¶¨Ä¿±ê
+            if (Main.npc[(int)Projectile.ai[1]].active)//é”å®šç›®æ ‡
             {
                 Projectile.Center = Main.npc[(int)Projectile.ai[1]].Center;
             }
@@ -48,7 +48,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					}
 				}
 			}
-			else if (Projectile.ai[0]==1)//ÖØ»÷µÄ±ê¼Ç
+			else if (Projectile.ai[0]==1)//é‡å‡»çš„æ ‡è®°
 			{
                 if (Projectile.timeLeft >80)
                     for (int i = 0; i < 2; i++)

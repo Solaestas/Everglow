@@ -1,7 +1,7 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Hooks;
+using Everglow.Commons.Physics.Colliders;
+using Everglow.Commons.Physics.DataStructures;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
@@ -110,7 +110,7 @@ public class ProjColliding : GlobalProjectile
 				{
 					if (tile is IHookable hookable)
 					{
-						var c = new CAABB(new AABB(self.position, self.Size));
+						var c = new AABBCollider2D(new AABB(self.position, self.Size));
 						if (tile.Collision(c))
 						{
 							hookable.SetHookPosition(self);

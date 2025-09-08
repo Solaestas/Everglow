@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Terraria.DataStructures;
 

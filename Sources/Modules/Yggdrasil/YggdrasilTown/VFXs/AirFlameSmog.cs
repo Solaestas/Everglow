@@ -1,4 +1,5 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
+
 public class AirFlameSmogPipeline : Pipeline
 {
 	public override void Load()
@@ -7,11 +8,12 @@ public class AirFlameSmogPipeline : Pipeline
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_perlin.Value);
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_AirFlameSmog.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
@@ -25,10 +27,12 @@ public class AirFlameSmogPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(AirFlameSmogPipeline))]
 public class AirFlameSmogDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -36,7 +40,11 @@ public class AirFlameSmogDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public AirFlameSmogDust() { }
+
+	public AirFlameSmogDust()
+	{
+	}
+
 	public override void Update()
 	{
 		position += velocity;
@@ -56,15 +64,19 @@ public class AirFlameSmogDust : Visual
 		}
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		float colorValue = scale * 0.1f;
-		if(maxTime - timer < 120)
+		if (maxTime - timer < 120)
 		{
 			colorValue *= (maxTime - timer) / 120f;
 		}
 		Lighting.AddLight(position, 0.0f, 0.4f * colorValue, 0.7f * colorValue);
 	}
+
 	public override void Draw()
 	{
 		float pocession = timer / maxTime;
@@ -72,11 +84,11 @@ public class AirFlameSmogDust : Visual
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner,new Color(0, 0,pocession), new Vector3(ai[0],timeValue,0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, 0)),
+			new Vertex2D(position + toCorner, new Color(0, 0, pocession), new Vector3(ai[0], timeValue, 0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession), new Vector3(ai[0], timeValue + 0.4f, 0)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession), new Vector3(ai[0] + 0.4f, timeValue, 0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1),new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession), new Vector3(ai[0] + 0.4f, timeValue, 0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1), new Color(1, 1, pocession), new Vector3(ai[0] + 0.4f, timeValue + 0.4f, 0)),
 		};
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

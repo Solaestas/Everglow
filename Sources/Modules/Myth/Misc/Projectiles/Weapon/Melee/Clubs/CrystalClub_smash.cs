@@ -1,3 +1,4 @@
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Dusts;
 

@@ -6,7 +6,7 @@ namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class TuskSlash : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	private Vector2 StartCenter;
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -64,7 +64,7 @@ public class TuskSlash : ModProjectile, IWarpProjectile
 				new Vertex2D(Projectile.Center + normalize - Main.screenPosition, shadow, new Vector3(1,0,0)),
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition,shadow, new Vector3(1,1,0))
 			};
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Color light = new Color(0.08f * lightColor.R / 255f, 0.02f * width / 10f * lightColor.G / 255f, 0.02f * width / 10f * lightColor.B / 255f, 0) * width * 0.25f;

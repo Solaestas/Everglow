@@ -1,3 +1,4 @@
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Myth.Common;
 using Terraria;
 using Terraria.Audio;

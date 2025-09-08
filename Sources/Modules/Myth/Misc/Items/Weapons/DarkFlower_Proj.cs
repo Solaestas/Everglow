@@ -1,17 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using Everglow.Common.VFX.CommonVFXDusts;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using ReLogic.Content;
-using Terraria;
-using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.ModLoader;
 namespace Everglow.Myth.Misc.Items.Weapons;
 
 public class DarkFlower_Proj : ModProjectile

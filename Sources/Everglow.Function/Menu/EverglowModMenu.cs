@@ -1,12 +1,12 @@
+using Everglow.Commons.Menu.Entities;
 using Everglow.Commons.Vertex;
-using Everglow.Sources.Menu.Entities;
-using Star = Everglow.Sources.Menu.Entities.Star;
+using Star = Everglow.Commons.Menu.Entities.Star;
 
 namespace Everglow.Commons.Menu;
 
 internal class EverglowModMenu : ModMenu
 {
-	public override int Music => MusicLoader.GetMusicSlot(ModIns.Mod, "Commons/Menu/Music/MenuMusic");
+	public override int Music => MusicLoader.GetMusicSlot(ModIns.Mod, ModAsset.MenuMusic_Path);
 
 	public List<Star> stars = new();
 

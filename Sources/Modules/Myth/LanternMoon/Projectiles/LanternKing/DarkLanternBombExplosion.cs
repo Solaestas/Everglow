@@ -1,4 +1,3 @@
-using Everglow.Commons.Weapons;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
 using Terraria.DataStructures;
 

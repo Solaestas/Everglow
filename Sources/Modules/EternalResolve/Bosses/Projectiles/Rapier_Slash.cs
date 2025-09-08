@@ -1,7 +1,3 @@
-using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords;
-using Terraria.ID;
-
 namespace Everglow.EternalResolve.Bosses.Projectiles
 {
 	public class Rapier_Slash : ModProjectile
