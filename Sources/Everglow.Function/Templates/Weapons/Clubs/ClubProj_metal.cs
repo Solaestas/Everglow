@@ -10,10 +10,11 @@ public abstract class ClubProj_metal : ClubProj
 	/// 反光强度，默认4
 	/// </summary>
 	public float ReflectStrength = 4f;
+
 	/// <summary>
 	/// 反光的底色(默认武器本身)
 	/// </summary>
-	public string ReflectTexturePath = "";
+	public string ReflectTexturePath = string.Empty;
 
 	public override void SetDef()
 	{
@@ -23,18 +24,23 @@ public abstract class ClubProj_metal : ClubProj
 
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -69,7 +75,7 @@ public abstract class ClubProj_metal : ClubProj
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		if (ReflectTexturePath != "")
+		if (ReflectTexturePath != string.Empty)
 		{
 			try
 			{

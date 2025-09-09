@@ -1,27 +1,32 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using Terraria.DataStructures;
+
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public abstract class ClubProj_Smash_metal : ClubProj_Smash
 {
 	public float ReflectStrength = 4f;
+
 	public override void DrawTrail2(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs2.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -62,4 +67,3 @@ public abstract class ClubProj_Smash_metal : ClubProj_Smash
 		Main.spriteBatch.Begin(sBS);
 	}
 }
-

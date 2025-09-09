@@ -33,47 +33,47 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	}
 
 	/// <summary>
-	/// 角速度
+	/// Angular velocity
 	/// </summary>
 	public float Omega = 0;
 
 	/// <summary>
-	/// 角加速度
+	/// Angular accleration
 	/// </summary>
 	public float Beta = 0.003f;
 
 	/// <summary>
-	/// 最大角速度(受近战攻速影响)
+	/// Max angular velocity, affected by player.meleespeed. You should NOT modify this in most cases.
 	/// </summary>
 	public float MaxOmega = 0.3f;
 
 	/// <summary>
-	/// 伤害半径
+	/// Damage radiu;
 	/// </summary>
 	public float HitLength = 32f;
 
 	/// <summary>
-	/// 扭曲强度
+	/// Warp magnitude
 	/// </summary>
 	public float WarpValue = 0.6f;
 
 	/// <summary>
-	/// 命中敌人后对于角速度的削减率(会根据敌人的击退抗性而再次降低)
+	/// The decrease amount of angular velocity while hit a target, associates with target.knownBackResist.
 	/// </summary>
 	public float StrikeOmegaDecrease = 0.9f;
 
 	/// <summary>
-	/// 命中敌人后最低剩余角速度(默认40%,即0.4)
+	/// The minimun of the angular velocity flat when hitting a extemely-high-knownBackResist target.(Default to 0.4f, means that it will lost 60% of angular velocity when hitting a target.)
 	/// </summary>
 	public float MinStrikeOmegaDecrease = 0.4f;
 
 	/// <summary>
-	/// 内部音效播放计时器
+	/// A timer, you can modify it for playing audios.
 	/// </summary>
 	public float AudioTimer = 3.14159f;
 
 	/// <summary>
-	/// 内部参数，用来计算伤害
+	/// Actually an internal parameter for calculating damage.
 	/// </summary>
 	public int DamageStartValue = 0;
 
@@ -227,7 +227,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
-			float alp = Omega / 0.4f *0.5f;
+			float alp = Omega / 0.4f * 0.5f;
 			var color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.1f * Omega, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		}
@@ -242,7 +242,6 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public virtual void DrawTrail()
 	{
-		
 		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)

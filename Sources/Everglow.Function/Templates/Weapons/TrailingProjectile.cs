@@ -29,59 +29,72 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		TrailShader = ModAsset.Trailing.Value;
 		SetDef();
 	}
+
 	public virtual void SetDef()
 	{
-
 	}
+
 	/// <summary>
-	/// Negative before projectile nominal killed(when projectile hit tile, hit enemies...), positive after.Substrate 1 by every frame. 
+	/// Negative before projectile nominal killed(when projectile hit tile, hit enemies...), positive after.Substrate 1 by every frame.
 	/// </summary>
 	public int TimeTokill = -1;
+
 	/// <summary>
 	/// Update every frame(1/60s), add by 1.
 	/// </summary>
 	public int Timer = 0;
+
 	/// <summary>
 	/// The color of trailing track.
 	/// </summary>
 	public Color TrailColor;
+
 	/// <summary>
 	/// If true, the trailing track will not influenced by environment light.
 	/// </summary>
 	public bool SelfLuminous;
+
 	/// <summary>
 	/// The width of trailing track.
 	/// </summary>
 	public float TrailWidth;
+
 	/// <summary>
 	/// The value of warp strength.
 	/// </summary>
 	public float WarpStrength = 1f;
+
 	/// <summary>
 	/// The first texture of a trailing track.
 	/// </summary>
 	public Texture2D TrailTexture;
+
 	/// <summary>
 	/// The second texture of a trailing track. Reserved for custom trail.
 	/// </summary>
 	public Texture2D TrailTextureBlack;
+
 	/// <summary>
 	/// The shader use to trail, parameter "uTransform" should be contained.
 	/// </summary>
 	public Effect TrailShader;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
+
 	public override void AI()
 	{
 		Timer++;
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		if (TimeTokill >= 0 && TimeTokill <= 2)
+		{
 			Projectile.Kill();
+		}
+
 		TimeTokill--;
 		if (TimeTokill < 0)
 		{
-
 		}
 		else
 		{
@@ -89,20 +102,24 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			return;
 		}
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		KillMainStructure();
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		KillMainStructure();
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		KillMainStructure();
 		Projectile.tileCollide = false;
 		return false;
 	}
+
 	public virtual void KillMainStructure()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
@@ -113,10 +130,11 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		}
 		TimeTokill = ProjectileID.Sets.TrailCacheLength[Projectile.type];
 	}
+
 	public virtual void Explosion()
 	{
-
 	}
+
 	/// <summary>
 	/// Reserved for possible use.
 	/// </summary>
@@ -126,17 +144,22 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
@@ -174,32 +197,46 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
 		if (bars3.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public virtual void DrawTrail()
 	{
 		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
@@ -245,15 +282,24 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
 		if (bars3.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public float GetCurvatureRadius(Vector2 p0, Vector2 p1, Vector2 p2)
 	{
 		Vector2 v1 = p1 - p0;
@@ -264,6 +310,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		float radius = length1 * length1 * length2 / (2 * cross + 0.0001f);
 		return radius;
 	}
+
 	public float GetCurvatureRadius(Vector2 v1, Vector2 v2)
 	{
 		float cross = v1.X * v2.Y - v1.Y * v2.X;
@@ -272,8 +319,9 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		float radius = length1 * length1 * length2 / (2 * cross + 0.0001f);
 		return radius;
 	}
+
 	/// <summary>
-	/// To make the trail more smooth, we convey this 0~1 parameter to shader. 
+	/// To make the trail more smooth, we convey this 0~1 parameter to shader.
 	/// </summary>
 	/// <returns></returns>
 	public virtual float TrailWidthFunction(float factor)
@@ -286,6 +334,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		}
 		return MathF.Pow(MathF.Cos(factor / 5f * MathHelper.PiOver2), 3);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
@@ -295,11 +344,13 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		}
 		return false;
 	}
+
 	public virtual void DrawSelf()
 	{
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
@@ -308,17 +359,22 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		var bars = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
@@ -326,7 +382,10 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		for (int i = 1; i < SmoothTrail.Count; ++i)
 		{
 			if (SmoothTrail[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			var normalDir = SmoothTrail[i - 1] - SmoothTrail[i];
 			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
 			if (mulFac > 1f)
@@ -336,7 +395,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float widthZ = TrailWidthFunction(factor);
 			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, 0.1f * WarpStrength, 1);
-
 
 			float x0 = factor * 1.3f + (float)(Main.time * 0.03f);
 			Vector2 drawPos = SmoothTrail[i] - Main.screenPosition + halfSize;
@@ -349,10 +407,18 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			bars3.Add(new Vertex2D(drawPos, c0, new Vector3(x0, 0.5f, widthZ)));
 		}
 		if (bars.Count > 3)
+		{
 			spriteBatch.Draw(TrailTexture, bars, PrimitiveType.TriangleStrip);
+		}
+
 		if (bars2.Count > 3)
+		{
 			spriteBatch.Draw(TrailTexture, bars2, PrimitiveType.TriangleStrip);
+		}
+
 		if (bars3.Count > 3)
+		{
 			spriteBatch.Draw(TrailTexture, bars3, PrimitiveType.TriangleStrip);
+		}
 	}
 }
