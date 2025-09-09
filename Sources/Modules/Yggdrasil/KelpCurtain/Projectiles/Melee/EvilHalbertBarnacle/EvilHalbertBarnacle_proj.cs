@@ -18,9 +18,11 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 
 	public Vector2 TargetVel;
 
+	public int State = 0;
+
 	public override void SetDef()
 	{
-		maxAttackType = 4;
+		maxAttackType = 5;
 		trailLength = 20;
 		longHandle = true;
 		AutoEnd = true;
@@ -42,6 +44,15 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 	public override void AI()
 	{
 		base.AI();
+		Player player = Main.player[Projectile.owner];
+		if (player.ownedProjectileCounts[ModContent.ProjectileType<EvilHalbertBarnacle_proj_shuttle>()] <= 0)
+		{
+			State = 0;
+		}
+		else
+		{
+			State = 1;
+		}
 		if (!NoTrail)
 		{
 			CurrentFade = CurrentFade * 0.5f + 0.5f;
@@ -75,7 +86,38 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 		}
 		else
 		{
-			base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
+			if (diagonal == default)
+			{
+				diagonal = new Vector4(0, 1, 1, 0);
+			}
+			if (drawScale == default)
+			{
+				drawScale = new Vector2(0, 1);
+				if (longHandle)
+				{
+					drawScale = new Vector2(-0.6f, 1);
+				}
+				drawScale *= drawScaleFactor;
+			}
+			Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
+			if (State == 1)
+			{
+				tex = ModAsset.EvilHalbertBarnacle_proj_released.Value;
+			}
+			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
+
+			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+			DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+			if (glowTexture != null)
+			{
+				DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+			}
+
+			spriteBatch.End();
+			spriteBatch.Begin(sBS);
 		}
 	}
 
@@ -96,7 +138,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			{
 				NoTrail = true;
 				LockPlayerDir(Player);
-				float targetRot = -MathHelper.PiOver2 - Player.direction * 2f;
+				float targetRot = -MathHelper.PiOver2 - Projectile.spriteDirection * 2f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(162, targetRot, -1.2f), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
 				Omega = 0;
@@ -137,7 +179,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
 				Projectile.rotation = mainVec.ToRotation();
-				RotationTowardScreen = RotationTowardScreen * 0.75f + 0.6f * 0.25f * (-Player.direction);
+				RotationTowardScreen = RotationTowardScreen * 0.75f + 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
 			{
@@ -173,7 +215,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
 				Projectile.rotation = mainVec.ToRotation();
-				RotationTowardScreen = RotationTowardScreen * 0.75f - 0.6f * 0.25f * (-Player.direction);
+				RotationTowardScreen = RotationTowardScreen * 0.75f - 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
 			{
@@ -223,13 +265,12 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			if (timer < 4 * meleeTime)
 			{
 				NoWeapon = false;
-				NoTrail = true;
 				LockPlayerDir(Player);
-				mainVec = mainVec * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, 0, RotationTowardScreen, 1000) * 0.1f;
+				mainVec = mainVec * 0.6f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, 0, RotationTowardScreen, 1000) * 0.4f;
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
 				Projectile.rotation = mainVec.ToRotation();
-				RotationTowardScreen = RotationTowardScreen * 0.75f;
+				RotationTowardScreen = RotationTowardScreen * 0.75f - 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
 			{
@@ -248,6 +289,42 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
 				mainVec = Vector2Elipse(154, Projectile.rotation, 0, RotationTowardScreen, 1000);
+			}
+			if (timer > 36 * meleeTime)
+			{
+				NextAttackType();
+			}
+		}
+
+		if (attackType == 5)
+		{
+			if (timer < 4 * meleeTime)
+			{
+				NoTrail = true;
+				LockPlayerDir(Player);
+				mainVec = mainVec * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -0.8f, RotationTowardScreen, 1000) * 0.1f;
+				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
+				Projectile.rotation += Projectile.spriteDirection * Omega;
+				Projectile.rotation = mainVec.ToRotation();
+				RotationTowardScreen = RotationTowardScreen * 0.75f + 0.6f * 0.25f * (-Projectile.spriteDirection);
+			}
+			else if (timer < 42 * meleeTime)
+			{
+				if (timer > 12 * meleeTime)
+				{
+					NoTrail = false;
+				}
+				isAttacking = true;
+				if (timer < 12 * meleeTime)
+				{
+					Omega += 0.04f / meleeTime;
+				}
+				if (timer > 28 * meleeTime)
+				{
+					Omega *= 0.5f / MathF.Log(meleeTime * MathHelper.E);
+				}
+				Projectile.rotation += Projectile.spriteDirection * Omega;
+				mainVec = Vector2Elipse(154, Projectile.rotation, -0.8f, RotationTowardScreen, 1000);
 			}
 			if (timer > 36 * meleeTime)
 			{

@@ -42,7 +42,7 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction2(PSInput input) : COLOR0
 {
 	float3 coord = input.Texcoord;
-	float4 light = tex2D(uShapeTex, float2(coord.x, coord.y)); //主纹理
+	float4 light = tex2D(uShapeTex, coord.xy); //主纹理
 	float4 c = tex2D(uColorTex, float2(clamp(light.r, 0.03f, 0.97f), 0.5f));
 	c *= input.Color;
 	c.a = 0;
@@ -52,8 +52,8 @@ float4 PixelShaderFunction2(PSInput input) : COLOR0
 float4 PixelShaderFunction3(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 light = tex2D(uShapeTex, float2(coord.x, coord.y)); //主纹理
-	float4 c = tex2D(uColorTex, float2(clamp(light.r, 0.03f, 0.97f), 0.5f));
+	float4 light = tex2D(uShapeTex, coord.xy); //主纹理
+	float4 c = tex2D(uColorTex, float2(clamp(light.r, 0.01f, 0.99f), 0.5f));
     c *= input.Color;
 	c.a = 0;
     return c;
@@ -62,7 +62,7 @@ float4 PixelShaderFunction3(PSInput input) : COLOR0
 float4 PixelShaderFunction4(PSInput input) : COLOR0
 {
 	float3 coord = input.Texcoord;
-	float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //主纹理
+	float4 c = tex2D(uShapeTex, coord.xy); //主纹理
 	c.a = c.r;
 	c.r = 0;
 	c.g = 0;

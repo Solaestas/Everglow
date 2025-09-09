@@ -7,6 +7,8 @@ public class EvilHalbertBarnacle : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
 
+	public int State = 0;
+
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
@@ -36,12 +38,20 @@ public class EvilHalbertBarnacle : ModItem
 				{
 					Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<EvilHalbertBarnacle_proj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 				}
-				else// 右键
+				else
 				{
+					// Right Click
+					if (player.ownedProjectileCounts[ModContent.ProjectileType<EvilHalbertBarnacle_proj_shuttle>()] <= 0)
+					{
+						State = 1;
+						Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<EvilHalbertBarnacle_ShootShuttle>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
+					}
 				}
 			}
 			return false;
 		}
 		return base.CanUseItem(player);
 	}
+
+	public override bool AltFunctionUse(Player player) => true;
 }
