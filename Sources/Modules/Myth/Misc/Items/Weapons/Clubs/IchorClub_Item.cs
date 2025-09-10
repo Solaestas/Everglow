@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class IchorClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 47;
 		Item.value = 5000;

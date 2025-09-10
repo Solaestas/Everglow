@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class PalladiumClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 44;
 		Item.value = 2074;

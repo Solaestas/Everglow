@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class CrimsonClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 13;
 		Item.value = 174;

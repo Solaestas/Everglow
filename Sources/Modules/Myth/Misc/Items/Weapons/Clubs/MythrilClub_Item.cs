@@ -4,7 +4,7 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class MythrilClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 56;
 		Item.value = 2682;
