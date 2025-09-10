@@ -8,10 +8,12 @@ namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 public class DreamWeaver_Rain : TrailingProjectile
 {
 	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/DreamWeaver/DreamWeaverII";
+
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
 	}
+
 	public override void SetDef()
 	{
 		TrailColor = new Color(0, 0.4f, 1, 0f);
@@ -23,11 +25,14 @@ public class DreamWeaver_Rain : TrailingProjectile
 		TrailShader = Commons.ModAsset.Trailing.Value;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10800;
 	}
-	int breakTime = 200;
+
+	private int breakTime = 200;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		base.OnSpawn(source);
 	}
+
 	public override void AI()
 	{
 		base.AI();
@@ -89,17 +94,23 @@ public class DreamWeaver_Rain : TrailingProjectile
 			else
 			{
 				if (Projectile.extraUpdates == 2)
+				{
 					Projectile.extraUpdates = 1;
+				}
 			}
 		}
 		if (Projectile.timeLeft == 210)
+		{
 			Projectile.friendly = true;
+		}
 	}
+
 	public override void DrawSelf()
 	{
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
+
 	public override void KillMainStructure()
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
@@ -120,9 +131,9 @@ public class DreamWeaver_Rain : TrailingProjectile
 
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamWeaver_hit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.7f, 1.3f));
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-
 		base.OnHitNPC(target, hit, damageDone);
 	}
 }
