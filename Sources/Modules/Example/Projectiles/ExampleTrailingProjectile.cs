@@ -11,7 +11,8 @@ public class ExampleTrailingProjectile : TrailingProjectile
 	{
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
-		ProjectileID.Sets.TrailCacheLength[Type] = 30;
+		Projectile.tileCollide = false;
+		TrailLength = 30;
 	}
 
 	public override void Behaviors()
@@ -80,46 +81,63 @@ public class ExampleTrailingProjectile : TrailingProjectile
 		base.DrawSelf();
 	}
 
-	public new void DrawWarp(VFXBatch spriteBatch)
+	public override Color GetTrailColor(bool dark, Vector2 worldPos, int index, ref float factor)
 	{
-		if (SmoothedOldPos.Count <= 0)
+		Color drawColor = Color.White;
+		if (!dark)
 		{
-			return;
+			drawColor = GetColorFromWavelength(580 + 200 * Math.Sin(worldPos.X * 0.005f + worldPos.Y * 0.005f));
 		}
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		float width = TrailWidth;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothedOldPos.Count; ++i)
+		factor *= 5;
+		return drawColor;
+	}
+
+	public Color GetColorFromWavelength(double wavelength)
+	{
+		double r = 0, g = 0, b = 0;
+
+		if (wavelength >= 380 && wavelength < 440)
 		{
-			if (SmoothedOldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-			var normalDir = SmoothedOldPos[i - 1] - SmoothedOldPos[i];
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothedOldPos.Count * mulFac;
-			float widthZ = TrailWidthFunction(factor);
-			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, 0.1f * WarpStrength, 1);
-			float x0 = factor * 1.3f + (float)(Main.time * 0.03f);
-			Vector2 drawPos = SmoothedOldPos[i] - Main.screenPosition + halfSize;
-			bars.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
-			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars2.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
-			bars3.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars3.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
+			r = -(wavelength - 440) / (440 - 380);
+			g = 0;
+			b = 1;
 		}
-		if (bars.Count >= 2 && bars.Count >= 2 && bars.Count >= 3)
+		else if (wavelength >= 440 && wavelength < 490)
 		{
-			spriteBatch.Draw(TrailTexture, bars, PrimitiveType.TriangleStrip);
-			spriteBatch.Draw(TrailTexture, bars2, PrimitiveType.TriangleStrip);
-			spriteBatch.Draw(TrailTexture, bars3, PrimitiveType.TriangleStrip);
+			r = 0;
+			g = (wavelength - 440) / (490 - 440);
+			b = 1;
 		}
+		else if (wavelength >= 490 && wavelength < 510)
+		{
+			r = 0;
+			g = 1;
+			b = -(wavelength - 510) / (510 - 490);
+		}
+		else if (wavelength >= 510 && wavelength < 580)
+		{
+			r = (wavelength - 510) / (580 - 510);
+			g = 1;
+			b = 0;
+		}
+		else if (wavelength >= 580 && wavelength < 645)
+		{
+			r = 1;
+			g = -(wavelength - 645) / (645 - 580);
+			b = 0;
+		}
+		else if (wavelength >= 645 && wavelength <= 780)
+		{
+			r = 1;
+			g = 0;
+			b = 0;
+		}
+		else
+		{
+			r = 0;
+			g = 0;
+			b = 0;
+		}
+		return new Color((float)r, (float)g, (float)b, 0);
 	}
 }

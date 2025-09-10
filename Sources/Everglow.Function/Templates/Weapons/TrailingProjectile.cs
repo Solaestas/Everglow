@@ -1,3 +1,4 @@
+using System;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Utilities;
@@ -206,10 +207,10 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		CreateTrailVertex(bars0, bars1, bars2, true);
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect effect = TrailShader;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
@@ -248,53 +249,105 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		Main.spriteBatch.Begin(sBS);
 	}
 
+	/// <summary>
+	/// You can override it to modify the trail.
+	/// </summary>
+	/// <param name="bars0"></param>
+	/// <param name="bars1"></param>
+	/// <param name="bars2"></param>
+	/// <param name="dark"></param>
 	public virtual void CreateTrailVertex(List<Vertex2D> bars0, List<Vertex2D> bars1, List<Vertex2D> bars2, bool dark)
 	{
 		// If there is no any element here, return.
-		if (SmoothedOldPos.Count <= 0)
+		if (SmoothedOldPos.Count <= 0 || TrailLength <= 0)
 		{
 			return;
 		}
-		Color drawColor = Color.White;
+
+		// If dark, the Color.White will be proper.
 		for (int i = -1; i < SmoothedOldPos.Count; ++i)
 		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			// factor, among 0 to 1, usually for deciding the trail's texture.coord.X.
+			float mulFac = Timer / (float)TrailLength;
 			if (mulFac > 1f)
 			{
 				mulFac = 1f;
 			}
 			float factor = (i + 1) / (float)SmoothedOldPos.Count * mulFac;
+
 			float width = 0;
 			if (i >= 0)
 			{
 				width = TrailWidthFunction(factor);
 			}
-			factor *= 7;
+
+			// timeValue, animate the trail.
 			float timeValue = (float)Main.time * 0.06f;
 			Vector2 drawPos = Projectile.Center;
 			if (i >= 0)
 			{
 				drawPos = SmoothedOldPos[i];
 			}
-
-			if(!dark)
-			{
-				drawColor = TrailColor;
-				if (!SelfLuminous)
-				{
-					Color lightC = Lighting.GetColor((drawPos / 16f).ToPoint());
-					drawColor.R = (byte)(lightC.R * drawColor.R / 255f);
-					drawColor.G = (byte)(lightC.G * drawColor.G / 255f);
-					drawColor.B = (byte)(lightC.B * drawColor.B / 255f);
-				}
-			}
-			bars0.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawColor, new Vector3(factor + timeValue, 1, width));
-			bars0.Add(drawPos, drawColor, new Vector3(factor + timeValue, 0.5f, width));
-			bars1.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawColor, new Vector3(factor + timeValue, 0, width));
-			bars1.Add(drawPos, drawColor, new Vector3(factor + timeValue, 0.5f, width));
-			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawColor, new Vector3(factor + timeValue, 1, width));
-			bars2.Add(drawPos, drawColor, new Vector3(factor + timeValue, 0.5f, width));
+			Color drawColor = GetTrailColor(dark, drawPos, i, ref factor);
+			bars0.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 0, width));
+			bars0.Add(drawPos, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 1, width));
+			bars1.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 2, width));
+			bars1.Add(drawPos, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 3, width));
+			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 4, width));
+			bars2.Add(drawPos, drawColor, ModifyTrailTextureCoordinate(factor, timeValue, 5, width));
 		}
+	}
+
+	/// <summary>
+	/// Allow you modify the trailing coords.<br></br>
+	/// phase:0,1→bars0;<br></br>
+	/// phase:2,3→bars1;<br></br>
+	/// phase:4,5→bars2;<br></br>
+	/// </summary>
+	/// <param name="factor"></param>
+	/// <param name="timeValue"></param>
+	/// <param name="phase"></param>
+	/// <param name="widthValue"></param>
+	/// <returns></returns>
+	public Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor + timeValue;
+		float y = 1;
+		float z = widthValue;
+		if(phase == 2)
+		{
+			y = 0;
+		}
+		if(phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
+	}
+
+	/// <summary>
+	/// Get the color while adding trailing primitives.Allow adding custon logics for trail color.
+	/// </summary>
+	/// <param name="dark"></param>
+	/// <param name="worldPos"></param>
+	/// <param name="index"></param>
+	/// <param name="factor"></param>
+	/// <returns></returns>
+	public virtual Color GetTrailColor(bool dark, Vector2 worldPos, int index, ref float factor)
+	{
+		Color drawColor = Color.White;
+		if (!dark)
+		{
+			drawColor = TrailColor;
+			if (!SelfLuminous)
+			{
+				Color lightC = Lighting.GetColor(worldPos.ToTileCoordinates());
+				drawColor.R = (byte)(lightC.R * drawColor.R / 255f);
+				drawColor.G = (byte)(lightC.G * drawColor.G / 255f);
+				drawColor.B = (byte)(lightC.B * drawColor.B / 255f);
+			}
+		}
+		return drawColor;
 	}
 
 	/// <summary>
@@ -334,34 +387,44 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		{
 			return;
 		}
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		float width = TrailWidth;
 		var bars = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
 		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothedOldPos.Count; ++i)
+		for (int i = -1; i < SmoothedOldPos.Count; ++i)
 		{
-			if (SmoothedOldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-			var normalDir = SmoothedOldPos[i - 1] - SmoothedOldPos[i];
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
+			// factor, among 0 to 1, usually for deciding the trail's texture.coord.X.
+			float mulFac = Timer / (float)TrailLength;
 			if (mulFac > 1f)
 			{
 				mulFac = 1f;
 			}
-			float factor = i / (float)SmoothedOldPos.Count * mulFac;
-			float widthZ = TrailWidthFunction(factor);
-			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, 0.1f * WarpStrength, 1);
+			float factor = (i + 1) / (float)SmoothedOldPos.Count * mulFac;
+
+			float width = 0;
+			if (i >= 0)
+			{
+				width = TrailWidthFunction(factor);
+			}
+			var normalDir = Projectile.velocity;
+			if (i >= 1)
+			{
+				normalDir = SmoothedOldPos[i - 1] - SmoothedOldPos[i];
+			}
+			normalDir = normalDir.NormalizeSafe();
+			var c0 = new Color(1 - (normalDir.X + 25f) / 50f, 1 - (normalDir.Y + 25f) / 50f, WarpStrength, 1);
 			float x0 = factor * 1.3f + (float)(Main.time * 0.03f);
-			Vector2 drawPos = SmoothedOldPos[i] - Main.screenPosition + halfSize;
-			bars.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
-			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars2.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
-			bars3.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * width, c0, new Vector3(x0, 1, widthZ));
-			bars3.Add(drawPos, c0, new Vector3(x0, 0.5f, widthZ));
+			Vector2 drawPos = Projectile.Center;
+			if (i >= 0)
+			{
+				drawPos = SmoothedOldPos[i];
+			}
+			drawPos -= Main.screenPosition;
+			bars.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, c0, new Vector3(x0, 1, width));
+			bars.Add(drawPos, c0, new Vector3(x0, 0.5f, width));
+			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, c0, new Vector3(x0, 1, width));
+			bars2.Add(drawPos, c0, new Vector3(x0, 0.5f, width));
+			bars3.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, c0, new Vector3(x0, 1, width));
+			bars3.Add(drawPos, c0, new Vector3(x0, 0.5f, width));
 		}
 		if (bars.Count >= 2 && bars.Count >= 2 && bars.Count >= 3)
 		{
