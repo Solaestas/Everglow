@@ -6,7 +6,7 @@ namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class LanternFlow : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
@@ -134,10 +134,6 @@ public class LanternFlow : TrailingProjectile
 	public override void DrawTrail()
 	{
 		base.DrawTrail();
-	}
-
-	public override void DrawTrailDark()
-	{
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

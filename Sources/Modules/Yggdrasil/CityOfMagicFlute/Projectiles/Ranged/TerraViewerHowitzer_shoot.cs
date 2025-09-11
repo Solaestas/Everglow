@@ -33,18 +33,18 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 	public override void AI()
 	{
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		if (timeTokill >= 0 && timeTokill <= 2)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
 			Projectile.Kill();
 		}
 
-		if (timeTokill <= 15 && timeTokill > 0)
+		if (TimeAfterEntityDestroy <= 15 && TimeAfterEntityDestroy > 0)
 		{
 			Projectile.velocity = Projectile.oldVelocity;
 		}
 
-		timeTokill--;
-		if (timeTokill < 0)
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy < 0)
 		{
 			if (Projectile.timeLeft == 2310)
 			{
@@ -53,7 +53,7 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 		}
 		else
 		{
-			if (timeTokill < 10)
+			if (TimeAfterEntityDestroy < 10)
 			{
 				Projectile.damage = 0;
 				Projectile.friendly = false;
@@ -62,25 +62,26 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 		}
 		Projectile.hide = true;
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		behindNPCsAndTiles.Add(index);
 	}
 
-	public int timeTokill = -1;
+	public new int TimeAfterEntityDestroy = -1;
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
-		if (timeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<TerraViewerHowitzer_shoot_explosion>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, MathF.Sqrt(Projectile.ai[0]) * 3);
 		}
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 120).RotatedByRandom(6.283);
 		SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
-		timeTokill = 90;
+		TimeAfterEntityDestroy = 90;
 	}
 
 	public override void DrawTrail()
@@ -187,15 +188,11 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public override void DrawTrailDark()
-	{
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
 		Texture2D star = ModAsset.TerraViewerHowitzer_shoot.Value;
-		if (timeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, star.Size() / 2f, 1f, SpriteEffects.None, 0);
 		}

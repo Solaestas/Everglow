@@ -32,18 +32,18 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 	public override void AI()
 	{
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		if (timeTokill >= 0 && timeTokill <= 2)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
 			Projectile.Kill();
 		}
 
-		if (timeTokill <= 15 && timeTokill > 0)
+		if (TimeAfterEntityDestroy <= 15 && TimeAfterEntityDestroy > 0)
 		{
 			Projectile.velocity = Projectile.oldVelocity;
 		}
 
-		timeTokill--;
-		if (timeTokill < 0)
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy < 0)
 		{
 			if (Projectile.timeLeft == 2310)
 			{
@@ -52,7 +52,7 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 		}
 		else
 		{
-			if (timeTokill < 10)
+			if (TimeAfterEntityDestroy < 10)
 			{
 				Projectile.damage = 0;
 				Projectile.friendly = false;
@@ -71,17 +71,17 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 		behindNPCsAndTiles.Add(index);
 	}
 
-	public int timeTokill = -1;
+	public new int TimeAfterEntityDestroy = -1;
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
 		Projectile.friendly = false;
-		if (timeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<TerraViewerHowitzer_grenade_fall_explosion>(), Projectile.damage / 3, Projectile.knockBack * 0.4f, Projectile.owner, MathF.Sqrt(Projectile.ai[0]) * 3);
 		}
-		timeTokill = 90;
+		TimeAfterEntityDestroy = 90;
 	}
 
 	public override void DrawTrail()
@@ -188,15 +188,11 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public override void DrawTrailDark()
-	{
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
 		Texture2D star = ModAsset.TerraViewerHowitzer_grenade_fall.Value;
-		if (timeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			float light = Projectile.ai[0] * Projectile.ai[0] / 30000f;
 			Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, star.Size() / 2f, 1f, SpriteEffects.None, 0);

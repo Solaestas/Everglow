@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 public class LampFruitCurrent : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{	
 		Projectile.ranged = true;
 		Projectile.width = 20;
@@ -23,7 +23,7 @@ public class LampFruitCurrent : TrailingProjectile
 	}
 	public override void AI()
 	{
-		if(TimeTokill < 0)
+		if(TimeAfterEntityDestroy < 0)
 		{
 			Lighting.AddLight(Projectile.Center, new Vector3(1, 0.7f, 0.1f));
 			if(Main.rand.NextBool(5))
@@ -36,7 +36,7 @@ public class LampFruitCurrent : TrailingProjectile
 		}
 		else
 		{
-			Lighting.AddLight(Projectile.Center, new Vector3(1, 0.7f, 0.1f) * TimeTokill / 10f);
+			Lighting.AddLight(Projectile.Center, new Vector3(1, 0.7f, 0.1f) * TimeAfterEntityDestroy / 10f);
 		}
 		base.AI();
 	}
@@ -56,7 +56,7 @@ public class LampFruitCurrent : TrailingProjectile
 		}
 		base.OnHitNPC(target, hit, damageDone);
 	}
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for(int i = 0;i < 15;i++)
 		{
@@ -65,6 +65,6 @@ public class LampFruitCurrent : TrailingProjectile
 			dust.rotation = Main.rand.NextFloat(0.3f, 0.9f);
 			dust.velocity = Vector2.One.RotateRandom(6.283) * 3.4f;
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }

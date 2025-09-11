@@ -99,7 +99,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 	/// </summary>
 	private void ShootScoria()
 	{
-		// Shoot explosion
+		// Shoot DestroyEntityEffect
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_Explosion>(), 200, Projectile.knockBack, Projectile.owner);
 
 		// Shoot scoria

@@ -10,7 +10,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.TownNPCs;
 
 public class Betty_Apple : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 14;
 		Projectile.height = 14;
@@ -34,7 +34,7 @@ public class Betty_Apple : TrailingProjectile
 
 	public override void AI()
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			if (Projectile.velocity.Y <= 12)
 			{
@@ -52,13 +52,13 @@ public class Betty_Apple : TrailingProjectile
 		Projectile.velocity *= 0.99f;
 		Timer++;
 		Projectile.rotation += Projectile.ai[0];
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
 			Projectile.Kill();
 		}
 
-		TimeTokill--;
-		if (TimeTokill < 0)
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy < 0)
 		{
 		}
 		else
@@ -74,7 +74,7 @@ public class Betty_Apple : TrailingProjectile
 		Projectile.ai[0] = Main.rand.NextFloat(-0.15f, 0.15f);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for (int x = 0; x < 9; x++)
 		{
@@ -113,14 +113,14 @@ public class Betty_Apple : TrailingProjectile
 			Ins.VFXManager.Add(somg);
 		}
 		SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundMiss, Projectile.Center);
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Projectile.penetrate == 1)
 		{
-			KillMainStructure();
+			DestroyEntity();
 		}
 	}
 
@@ -128,9 +128,8 @@ public class Betty_Apple : TrailingProjectile
 	{
 		float value = (Projectile.timeLeft - 540) / 60f;
 		TrailColor = new Color(1, 0.3f, 1, 0f) * value * Projectile.ai[2];
-		DrawTrailDark();
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			Texture2D texture = ModAsset.Betty_Apple.Value;
 			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
@@ -201,83 +200,6 @@ public class Betty_Apple : TrailingProjectile
 		effect.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		if (bars.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
-
-		if (bars2.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		}
-
-		if (bars3.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-		}
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
-	}
-
-	public override void DrawTrailDark()
-	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
-		var smoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			smoothTrail.Add(smoothTrail_current[x]);
-		}
-		if (unSmoothPos.Count != 0)
-		{
-			smoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-		}
-
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = smoothTrail.Count - 1; i > 0; --i)
-		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)smoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.06f;
-
-			Vector2 drawPos = smoothTrail[i] + halfSize;
-			Color drawC = Color.White * 0.2f;
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
 		{

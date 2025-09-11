@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 public class CyanBullet : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.width = 20;
@@ -33,13 +33,13 @@ public class CyanBullet : TrailingProjectile
 
 	public override void AI()
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f));
 		}
 		else
 		{
-			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f) * TimeTokill / 7f);
+			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f) * TimeAfterEntityDestroy / 7f);
 		}
 		if (Projectile.timeLeft == 3540)
 		{
@@ -66,7 +66,7 @@ public class CyanBullet : TrailingProjectile
 		base.OnHitNPC(target, hit, damageDone);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(0.8f), Projectile.Center);
 		for (int i = 0; i < 5; i++)
@@ -86,6 +86,6 @@ public class CyanBullet : TrailingProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }

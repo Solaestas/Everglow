@@ -11,12 +11,12 @@ public class TuskCurse : TrailingProjectile
 		base.SetDefaults();
 	}
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		TrailColor = new Color(1, 0, 0, 0f);
 		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_2_black_thick.Value;
-		base.SetDef();
+		base.SetCustomDefaults();
 	}
 
 	public override void AI()
@@ -31,7 +31,7 @@ public class TuskCurse : TrailingProjectile
 	{
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
 		for (int h = 0; h < 20; h++)
@@ -42,12 +42,7 @@ public class TuskCurse : TrailingProjectile
 			dust.velocity = v3;
 		}
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<TuskBloodPool>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
-		base.KillMainStructure();
-	}
-
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
+		base.DestroyEntity();
 	}
 
 	public override void DrawSelf()
@@ -58,7 +53,7 @@ public class TuskCurse : TrailingProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);

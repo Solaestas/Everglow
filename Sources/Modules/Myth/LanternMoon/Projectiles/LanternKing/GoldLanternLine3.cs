@@ -8,7 +8,7 @@ public class GoldLanternLine3 : TrailingProjectile
 {
 	public override string Texture => "Everglow/" + ModAsset.GoldLaser_Path;
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
@@ -54,12 +54,7 @@ public class GoldLanternLine3 : TrailingProjectile
 		base.DrawTrail();
 	}
 
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
-	}
-
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for (int x = 0; x < 25; x++)
 		{
@@ -76,6 +71,6 @@ public class GoldLanternLine3 : TrailingProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }

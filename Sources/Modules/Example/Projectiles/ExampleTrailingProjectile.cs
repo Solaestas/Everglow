@@ -1,18 +1,17 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.Utilities;
-using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
 
 namespace Everglow.Example.Projectiles;
 
 public class ExampleTrailingProjectile : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
 		Projectile.tileCollide = false;
 		TrailLength = 30;
+		TrailBackgroundDarkness = 1;
 	}
 
 	public override void Behaviors()
@@ -28,42 +27,28 @@ public class ExampleTrailingProjectile : TrailingProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		KillMainStructure();
+		DestroyEntity();
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		KillMainStructure();
+		DestroyEntity();
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		KillMainStructure();
+		DestroyEntity();
 		Projectile.tileCollide = false;
 		return false;
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
-		Projectile.velocity = Projectile.oldVelocity;
-		Projectile.friendly = false;
-		if (TimeTokill < 0)
-		{
-			Explosion();
-		}
-		TimeTokill = ProjectileID.Sets.TrailCacheLength[Projectile.type];
+		base.DestroyEntity();
 	}
 
-	public override void Explosion()
+	public override void DestroyEntityEffect()
 	{
-	}
-
-	/// <summary>
-	/// Default to call this before DrawTrail.
-	/// </summary>
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
 	}
 
 	public override void DrawTrail()
@@ -81,15 +66,14 @@ public class ExampleTrailingProjectile : TrailingProjectile
 		base.DrawSelf();
 	}
 
-	public override Color GetTrailColor(bool dark, Vector2 worldPos, int index, ref float factor)
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		Color drawColor = Color.White;
-		if (!dark)
-		{
-			drawColor = GetColorFromWavelength(580 + 200 * Math.Sin(worldPos.X * 0.005f + worldPos.Y * 0.005f));
-		}
 		factor *= 5;
-		return drawColor;
+		if (style == 1)
+		{
+			return GetColorFromWavelength(580 + 200 * Math.Sin(worldPos.X * 0.005f + worldPos.Y * 0.005f));
+		}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
 
 	public Color GetColorFromWavelength(double wavelength)

@@ -21,8 +21,7 @@ public class Fae : TrailingProjectile
 
 	public int state = (int)State.Idle;
 
-
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 26;
 		Projectile.height = 26;
@@ -71,7 +70,6 @@ public class Fae : TrailingProjectile
 			Projectile.Kill();
 		}
 
-
 		timer++;
 		if (timer % 3 == 0)
 		{
@@ -103,7 +101,6 @@ public class Fae : TrailingProjectile
 
 	public void Idle()
 	{
-
 		var FaelanternProj = owner.ModProjectile as FaelanternProj;
 		var pos = new Vector2(FaelanternProj.FaelanternSkeleton.Skeleton.FindBone("bone6").WorldX, FaelanternProj.FaelanternSkeleton.Skeleton.FindBone("bone6").WorldY);
 		Vector2 ToPos = (pos - Projectile.Center).NormalizeSafe() * 0.5f;
@@ -116,7 +113,6 @@ public class Fae : TrailingProjectile
 			Projectile.velocity += new Vector2(0, -(float)Math.Cos(0.04f * timer)) * 0.25f;
 			ToPos = (pos - Projectile.Center).NormalizeSafe() * 5f;
 		}
-
 
 		Projectile.velocity = Vector2.Lerp(Projectile.velocity, ToPos, 0.2f);
 
@@ -151,7 +147,7 @@ public class Fae : TrailingProjectile
 		}
 	}
 
-	int i = 60;
+	private int i = 60;
 
 	public void Charm()
 	{
@@ -200,17 +196,22 @@ public class Fae : TrailingProjectile
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
@@ -256,11 +257,19 @@ public class Fae : TrailingProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
 		if (bars3.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -268,7 +277,6 @@ public class Fae : TrailingProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-
 		var size = new Vector2(Projectile.width, Projectile.height);
 		float point = 0;
 		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.position + size, Projectile.position, 50f, ref point))
@@ -278,5 +286,4 @@ public class Fae : TrailingProjectile
 
 		return false;
 	}
-
 }

@@ -14,7 +14,7 @@ public class DreamWeaver_Rain : TrailingProjectile
 		base.SetDefaults();
 	}
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		TrailColor = new Color(0, 0.4f, 1, 0f);
 		TrailWidth = 8f;
@@ -111,7 +111,7 @@ public class DreamWeaver_Rain : TrailingProjectile
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
 		for (int x = 0; x < 6; x++)
@@ -123,11 +123,11 @@ public class DreamWeaver_Rain : TrailingProjectile
 		}
 
 		Projectile.velocity = Projectile.oldVelocity;
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
-			Explosion();
+			DestroyEntityEffect();
 		}
-		TimeTokill = ProjectileID.Sets.TrailCacheLength[Projectile.type];
+		TimeAfterEntityDestroy = ProjectileID.Sets.TrailCacheLength[Projectile.type];
 
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamWeaver_hit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Main.rand.NextFloat(0.7f, 1.3f));
 	}

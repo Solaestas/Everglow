@@ -54,7 +54,7 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 	{
 		base.AI();
 
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			Projectile.velocity.Y += 0.5f;
 			Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Main.time * 0.16 + Projectile.whoAmI) * 0.03f);
@@ -128,7 +128,7 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		return target;
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		int n = 6;
 		Vector2 shootSpeed = new Vector2(0, Main.rand.NextFloat(4, 8)).RotatedByRandom(MathHelper.TwoPi);
@@ -136,8 +136,7 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootSpeed.RotatedBy(i / 6d * MathHelper.TwoPi) * 0.5f, ModContent.ProjectileType<BronzeLotusLamp_SubBlossom>(), 0, 0, Projectile.owner, 0);
 
-			//Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootSpeed.RotatedBy((i + 0.5f) / 6d * MathHelper.TwoPi) * 0.75f, ModContent.ProjectileType<BronzeLotusLamp_SubBlossom>(), 0, 0, Projectile.owner, 1);
-
+			// Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootSpeed.RotatedBy((i + 0.5f) / 6d * MathHelper.TwoPi) * 0.75f, ModContent.ProjectileType<BronzeLotusLamp_SubBlossom>(), 0, 0, Projectile.owner, 1);
 			for (int j = 0; j < 6; j++)
 			{
 				var lotusFlame = new CyanLotusFlameDust
@@ -156,32 +155,32 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 			}
 		}
 		Projectile.height = Projectile.width = (int)(15 * shootSpeed.Length());
-		base.KillMainStructure();
+		base.DestroyEntity();
 		Projectile.friendly = true;
 		Projectile.tileCollide = false;
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
-			KillMainStructure();
+			DestroyEntity();
 		}
 		return false;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
-			KillMainStructure();
+			DestroyEntity();
 		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			Texture2D texture = ModAsset.BronzeLotusLamp_Blossom.Value;
 			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
@@ -268,6 +267,4 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
-
-	public override void DrawTrailDark() => base.DrawTrailDark();
 }
