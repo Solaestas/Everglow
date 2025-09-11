@@ -14,24 +14,18 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		TrailWidth = 12f;
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
-
+		TrailLength = 20;
 		Projectile.width = 20;
 		Projectile.height = 20;
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		base.AI();
-		if (TimeAfterEntityDestroy < 0)
-		{
-			Projectile.velocity.Y += 0.5f;
-		}
+		Projectile.velocity.Y += 0.5f;
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		base.ModifyHitNPC(target, ref modifiers);
 		bool sporeZone = false;
 		foreach (var proj in Main.projectile)
 		{
@@ -50,7 +44,7 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		}
 	}
 
-	public override void DestroyEntity()
+	public override void DestroyEntityEffect()
 	{
 		for (int k = 0; k < 6; k++)
 		{
@@ -68,17 +62,6 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
-		base.DestroyEntity();
-	}
-
-	public override bool PreDraw(ref Color lightColor)
-	{
-		DrawTrail();
-		if (TimeAfterEntityDestroy <= 0)
-		{
-			DrawSelf();
-		}
-		return false;
 	}
 
 	public override void DrawSelf()
@@ -87,6 +70,4 @@ public class WoodlandWraithStaff_BloodStream : TrailingProjectile
 		var color = Color.Lerp(Color.White, Lighting.GetColor(Projectile.Center.ToTileCoordinates()), MathF.Sqrt(Timer / GlowTime));
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
 	}
-
-	public override void DrawTrail() => base.DrawTrail();
 }

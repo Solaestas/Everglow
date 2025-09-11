@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.Acytaea.Buffs;
 using Everglow.Myth.Acytaea.VFXs;
@@ -9,7 +10,7 @@ public class AcytaeaFlySword_2 : TrailingProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 32;
 		Projectile.height = 32;
@@ -19,40 +20,19 @@ public class AcytaeaFlySword_2 : TrailingProjectile
 		Projectile.ignoreWater = true;
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+
+		TrailLength = 20;
 		TrailWidth = 30f;
 		SelfLuminous = true;
-		SetCustomDefaults();
-	}
-
-	public override void SetCustomDefaults()
-	{
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
 		TrailTexture = Commons.ModAsset.Trail.Value;
 		TrailShader = Commons.ModAsset.Trailing.Value;
 		TrailColor = new Color(1f, 0, 0.4f, 0);
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		Timer++;
-
-		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
-		{
-			Projectile.Kill();
-		}
-
-		TimeAfterEntityDestroy--;
-		if (TimeAfterEntityDestroy < 0)
-		{
-			Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		}
-		else
-		{
-			Projectile.velocity *= 0f;
-			return;
-		}
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver4;
 	}
 
 	public override void DestroyEntityEffect()
@@ -106,34 +86,20 @@ public class AcytaeaFlySword_2 : TrailingProjectile
 		Projectile.position -= Projectile.velocity;
 	}
 
-	public override bool PreDraw(ref Color lightColor)
-	{
-		DrawTrail();
-		return false;
-	}
-
-	public override void DrawTrail()
-	{
-		base.DrawTrail();
-	}
-
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		target.AddBuff(ModContent.BuffType<AcytaeaInferno>(), 450);
 		base.OnHitPlayer(target, info);
 	}
 
-	private void CheckFrame()
-	{
-	}
-
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = TimeAfterEntityDestroy / 60f - 0.2f;
 		if (TimeAfterEntityDestroy < 0)
 		{
@@ -148,15 +114,15 @@ public class AcytaeaFlySword_2 : TrailingProjectile
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		Texture2D tex = ModAsset.AcytaeaFlySword_red.Value;
 		Rectangle projFrame = new Rectangle(0, 0, 80, 80);
-		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, new Color(255, 0, 215, 255), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(tex, Projectile.Center, projFrame, new Color(255, 0, 215, 255), Projectile.rotation, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		if (Projectile.timeLeft < 570 && TimeAfterEntityDestroy < 0)
+		Main.spriteBatch.Begin(sBS);
+		if (Timer > 30 && TimeAfterEntityDestroy < 0)
 		{
 			Texture2D tex2 = ModAsset.AcytaeaSword_projectile_highLight.Value;
-			Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, projFrame, new Color(255, 0, 215, 255) * ((570 - Projectile.timeLeft) / 5f), Projectile.rotation + MathHelper.PiOver4, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(tex2, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0) * ((570 - Projectile.timeLeft) / 10f), Projectile.rotation + MathHelper.PiOver4, tex2.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, projFrame, new Color(255, 0, 215, 255) * ((570 - Projectile.timeLeft) / 5f), Projectile.rotation, new Vector2(40), Projectile.scale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(tex2, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0) * ((570 - Projectile.timeLeft) / 10f), Projectile.rotation, tex2.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 		}
 	}
 }

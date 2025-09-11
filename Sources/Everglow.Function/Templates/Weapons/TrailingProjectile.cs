@@ -135,8 +135,6 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		}
 		Behaviors();
 		SmoothTrail();
-		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-
 		TimeAfterEntityDestroy--;
 		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
@@ -233,11 +231,11 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		while (darknessRemainder > 0)
 		{
 			float darkValue = 1;
-			if(darknessRemainder < 1f)
+			if (darknessRemainder < 1f)
 			{
 				darkValue = darknessRemainder;
 			}
-			CreateTrailVertex(bars0, bars1, bars2, 0,default, darkValue);
+			CreateTrailVertex(bars0, bars1, bars2, 0, default, darkValue);
 			if (bars0.Count >= 2 && bars1.Count >= 2 && bars2.Count >= 2)
 			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars0.ToArray(), 0, bars0.Count - 2);
@@ -246,7 +244,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			}
 			darknessRemainder -= 1f;
 			countSafe++;
-			if(countSafe > 100)
+			if (countSafe > 100)
 			{
 				break;
 			}
@@ -338,7 +336,7 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	public virtual Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
 		Color drawColor = Color.White;
-		if(style == 0)
+		if (style == 0)
 		{
 			drawColor *= extraValue0;
 		}
@@ -421,7 +419,12 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	public virtual void DrawSelf()
 	{
 		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
+		Color color = TrailColor;
+		if (!SelfLuminous)
+		{
+			color = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+		}
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, color, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
 
 	public virtual void DrawWarp(VFXBatch spriteBatch)
