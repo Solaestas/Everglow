@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Weapons.Clubs;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PalladiumClub : ClubProj_metal
+public class PalladiumClub : ClubProj_Metal
 {
 	public override void SetDef()
 	{

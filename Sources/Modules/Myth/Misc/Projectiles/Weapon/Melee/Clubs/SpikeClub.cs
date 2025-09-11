@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Weapons.Clubs;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class SpikeClub : ClubProj_metal
+public class SpikeClub : ClubProj_Metal
 {
 	public override void SetDef()
 	{
@@ -81,10 +81,10 @@ public class SpikeClub : ClubProj_metal
 			return;
 		listVec = new List<Vector2>();
 		if (Main.rand.NextBool(2))
-			listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+			listVec.Add(TrailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
 		else
 		{
-			listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+			listVec.Add(TrailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
 		}
 	}
 	private void DeactivateMoon(ref List<Vector2> listVec)
@@ -101,14 +101,14 @@ public class SpikeClub : ClubProj_metal
 	}
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		if (TrailVecs.Count != 0)
+			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)

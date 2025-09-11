@@ -10,6 +10,6 @@ public class CrystalClub_Item : ClubItem
 		Item.value = 5000;
 		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrystalClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrystalClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrystalClub_smash>();
 	}
 }

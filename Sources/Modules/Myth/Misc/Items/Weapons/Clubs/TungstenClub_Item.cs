@@ -9,7 +9,7 @@ public class TungstenClub_Item : ClubItem
 		Item.damage = 9;
 		Item.value = 112;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.TungstenClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.TungstenClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.TungstenClub_smash>();
 	}
 	public override void AddRecipes()
 	{

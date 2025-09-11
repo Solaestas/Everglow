@@ -10,7 +10,7 @@ public class OrichalcumClub_Item : ClubItem
 		Item.value = 2717;
 		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.OrichalcumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

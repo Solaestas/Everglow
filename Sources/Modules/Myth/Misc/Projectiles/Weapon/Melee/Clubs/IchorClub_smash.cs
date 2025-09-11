@@ -6,7 +6,7 @@ using Everglow.Myth.Misc.Projectiles.Accessory;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class IchorClub_smash : ClubProj_Smash
+public class IchorClub_smash : ClubProjSmash
 {
 	public override string Texture => "Everglow/" + ModAsset.IchorClub_Path;
 

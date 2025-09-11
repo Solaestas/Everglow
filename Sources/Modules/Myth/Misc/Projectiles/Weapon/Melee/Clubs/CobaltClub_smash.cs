@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CobaltClub_smash : ClubProj_Smash_metal
+public class CobaltClub_smash : ClubProjSmash_Metal
 {
 	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
 	public override string TrailColorTex() => "Everglow/" + ModAsset.CobaltClub_light_Path;

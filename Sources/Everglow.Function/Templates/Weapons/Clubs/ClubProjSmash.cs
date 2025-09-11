@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProj_Smash : MeleeProj
+public abstract class ClubProjSmash : MeleeProj
 {
 	public override void SetDef()
 	{
@@ -252,7 +252,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
-				var somg = new Smog_club_front
+				var somg = new ClubSmog
 				{
 					velocity = newVelocity,
 					Active = true,
@@ -279,7 +279,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
-				var somg = new Smog_club_front
+				var somg = new ClubSmog
 				{
 					velocity = newVelocity,
 					Active = true,
@@ -383,7 +383,7 @@ public class SmashClubOwner : ModPlayer
 {
 	public override void PostUpdateMiscEffects()
 	{
-		if (ClubProj_Smash.OwnSmashClubPlayers.Contains(Player.whoAmI))
+		if (ClubProjSmash.OwnSmashClubPlayers.Contains(Player.whoAmI))
 		{
 			Player.maxFallSpeed += 10000f;
 		}

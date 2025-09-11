@@ -13,7 +13,7 @@ public abstract class ClubItem : ModItem
 
 	public int ProjType { get; set; } = default!;
 
-	public int ProjTypeSmash { get; set; } = default!;
+	public int ProjSmashType { get; set; } = default!;
 
 	public override void SetStaticDefaults()
 	{
@@ -55,7 +55,7 @@ public abstract class ClubItem : ModItem
 
 	public override bool AltFunctionUse(Player player) => CanDown(player);
 
-	public bool CanDown(Player player)
+	private static bool CanDown(Player player)
 	{
 		for (int h = 0; h < 7; h++)
 		{
@@ -92,7 +92,7 @@ public abstract class ClubItem : ModItem
 			}
 			return false;
 		}
-		int typeDown = ProjTypeSmash;
+		int typeDown = ProjSmashType;
 		if (typeDown > 0)
 		{
 			if (CanDown(player))

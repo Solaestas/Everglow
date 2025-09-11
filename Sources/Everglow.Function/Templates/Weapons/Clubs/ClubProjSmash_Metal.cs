@@ -4,7 +4,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProj_Smash_metal : ClubProj_Smash
+public abstract class ClubProjSmash_Metal : ClubProjSmash
 {
 	public float ReflectStrength = 4f;
 

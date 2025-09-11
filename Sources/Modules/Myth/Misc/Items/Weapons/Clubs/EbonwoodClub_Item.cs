@@ -9,7 +9,7 @@ public class EbonwoodClub_Item : ClubItem
 		Item.damage = 7;
 		Item.value = 75;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.EbonwoodClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.EbonwoodClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.EbonwoodClub_smash>();
 	}
 	public override void AddRecipes()
 	{

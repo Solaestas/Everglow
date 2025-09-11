@@ -10,7 +10,7 @@ public class CrimsonClub_Item : ClubItem
 		Item.value = 174;
 		Item.rare = ItemRarityID.Blue;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrimsonClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrimsonClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CrimsonClub_smash>();
 	}
 	public override void AddRecipes()
 	{

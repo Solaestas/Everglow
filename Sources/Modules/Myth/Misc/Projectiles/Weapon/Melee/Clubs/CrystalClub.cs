@@ -94,15 +94,15 @@ public class CrystalClub : ClubProj
 
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (TrailVecs.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;

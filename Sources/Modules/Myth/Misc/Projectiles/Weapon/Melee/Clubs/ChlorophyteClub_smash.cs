@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Weapons.Clubs;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class ChlorophyteClub_smash : ClubProj_Smash_metal
+public class ChlorophyteClub_smash : ClubProjSmash_Metal
 {
 	public override string Texture => "Everglow/" + ModAsset.ChlorophyteClub_Path;
 	public override void Smash(int level)

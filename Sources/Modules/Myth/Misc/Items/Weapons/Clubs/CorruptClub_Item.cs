@@ -10,7 +10,7 @@ public class CorruptClub_Item : ClubItem
 		Item.value = 169;
 		Item.rare = ItemRarityID.Blue;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CorruptClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CorruptClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.CorruptClub_smash>();
 	}
 	public override void AddRecipes()
 	{

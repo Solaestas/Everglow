@@ -10,7 +10,7 @@ public class StarDancer_Item : ClubItem
 		Item.value = 1114;
 		Item.rare = ItemRarityID.Blue;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer_smash>();
 	}
 	public override void AddRecipes()
 	{

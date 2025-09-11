@@ -4,7 +4,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CurseClub_smash : ClubProj_Smash
+public class CurseClub_smash : ClubProjSmash
 {
 	public override string Texture => "Everglow/" + ModAsset.CurseClub_Path;
 

@@ -25,7 +25,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 		Projectile.DamageType = DamageClass.Melee;
 		SetDef();
-		trailVecs = new Queue<Vector2>(trailLength + 1);
+		TrailVecs = new Queue<Vector2>(TrailLength + 1);
 	}
 
 	public virtual void SetDef()
@@ -35,78 +35,63 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	/// <summary>
 	/// Angular velocity
 	/// </summary>
-	public float Omega = 0;
+	public float Omega { get; private set; } = 0;
 
 	/// <summary>
 	/// Angular accleration
 	/// </summary>
-	public float Beta = 0.003f;
+	public float Beta { get; protected set; } = 0.003f;
 
 	/// <summary>
 	/// Max angular velocity, affected by player.meleespeed. You should NOT modify this in most cases.
 	/// </summary>
-	public float MaxOmega = 0.3f;
+	public float MaxOmega { get; protected set; } = 0.3f;
 
 	/// <summary>
 	/// Damage radiu;
 	/// </summary>
-	public float HitLength = 32f;
+	public float HitLength { get; protected set; } = 32f;
 
 	/// <summary>
 	/// Warp magnitude
 	/// </summary>
-	public float WarpValue = 0.6f;
+	public float WarpValue { get; protected set; } = 0.6f;
 
 	/// <summary>
 	/// The decrease amount of angular velocity while hit a target, associates with target.knownBackResist.
 	/// </summary>
-	public float StrikeOmegaDecrease = 0.9f;
+	public float StrikeOmegaDecrease { get; protected set; } = 0.9f;
 
 	/// <summary>
 	/// The minimun of the angular velocity flat when hitting a extemely-high-knownBackResist target.(Default to 0.4f, means that it will lost 60% of angular velocity when hitting a target.)
 	/// </summary>
-	public float MinStrikeOmegaDecrease = 0.4f;
+	public float MinStrikeOmegaDecrease { get; protected set; } = 0.4f;
 
 	/// <summary>
 	/// A timer, you can modify it for playing audios.
 	/// </summary>
-	public float AudioTimer = 3.14159f;
+	public float AudioTimer { get; private set; } = 3.14159f;
 
 	/// <summary>
 	/// Actually an internal parameter for calculating damage.
 	/// </summary>
-	public int DamageStartValue = 0;
+	public int DamageStartValue { get; private set; } = 0;
 
 	/// <summary>
-	/// 拖尾长度
+	/// Trail length
 	/// </summary>
-	public int trailLength = 10;
+	public int TrailLength { get; protected set; } = 10;
 
 	/// <summary>
-	/// 是否正在攻击
+	/// Trail vectors
 	/// </summary>
-	public bool isAttacking = false;
+	public Queue<Vector2> TrailVecs { get; private set; }
 
-	/// <summary>
-	/// 拖尾
-	/// </summary>
-	public Queue<Vector2> trailVecs;
+	public virtual BlendState TrailBlendState() => BlendState.NonPremultiplied;
 
-	public virtual BlendState TrailBlendState()
-	{
-		return BlendState.NonPremultiplied;
-	}
+	public virtual string TrailShapeTex() => ModAsset.Melee_Mod;
 
-	public virtual string TrailShapeTex()
-	{
-		return ModAsset.Melee_Mod;
-	}
-
-	public override void OnSpawn(IEntitySource source)
-	{
-		Omega = MaxOmega * 0.5f;
-		base.OnSpawn(source);
-	}
+	public override void OnSpawn(IEntitySource source) => Omega = MaxOmega * 0.5f;
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
@@ -186,10 +171,10 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 			}
 		}
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * MathF.Sqrt(Projectile.scale);
-		trailVecs.Enqueue(HitRange);
-		if (trailVecs.Count > trailLength)
+		TrailVecs.Enqueue(HitRange);
+		if (TrailVecs.Count > TrailLength)
 		{
-			trailVecs.Dequeue();
+			TrailVecs.Dequeue();
 		}
 
 		if (player.dead)
@@ -242,15 +227,15 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public virtual void DrawTrail()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (TrailVecs.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -301,15 +286,15 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (TrailVecs.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -417,22 +402,12 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		spriteBatch.Draw(ModContent.Request<Texture2D>(ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 
-	public virtual float TrailAlpha(float factor)
-	{
-		float w;
-		w = MathHelper.Lerp(0f, 1, factor);
-		return w;
-	}
+	public virtual float TrailAlpha(float factor) => MathHelper.Lerp(0f, 1, factor);
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * MathF.Sqrt(Projectile.scale);
-		if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f))
-		{
-			return true;
-		}
-
-		return false;
+		return CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f);
 	}
 
 	private void ProduceWaterRipples(Vector2 beamDims)

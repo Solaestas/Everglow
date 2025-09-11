@@ -4,7 +4,7 @@ using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class StarDancer_smash : ClubProj_Smash_metal
+public class StarDancer_smash : ClubProjSmash_Metal
 {
 	public override string TrailColorTex() => "Everglow/" + ModAsset.StarDancer_glow_Path;
 	public override string Texture => "Everglow/" + ModAsset.StarDancer_Path;

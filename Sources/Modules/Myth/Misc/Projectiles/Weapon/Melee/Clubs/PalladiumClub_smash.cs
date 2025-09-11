@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Weapons.Clubs;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PalladiumClub_smash : ClubProj_Smash_metal
+public class PalladiumClub_smash : ClubProjSmash_Metal
 {
 	public override string Texture => "Everglow/" + ModAsset.PalladiumClub_Path;
 	public override void Smash(int level)

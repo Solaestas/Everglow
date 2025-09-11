@@ -11,7 +11,7 @@ public class MeteorClub_Item : ClubItem
 		Item.value = 576;
 		Item.rare = ItemRarityID.Blue;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MeteorClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MeteorClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.MeteorClub_smash>();
 	}
 	public override void AddRecipes()
 	{
