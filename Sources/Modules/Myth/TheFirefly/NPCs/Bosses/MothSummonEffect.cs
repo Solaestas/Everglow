@@ -7,11 +7,11 @@ public class MothSummonEffect : TrailingProjectile
 {
 	public override string Texture => Commons.ModAsset.LightPoint_Mod;
 	public NPC Moth;
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.timeLeft = 600;
 		Projectile.tileCollide = false;
-		base.SetDef();
+		base.SetCustomDefaults();
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -43,17 +43,17 @@ public class MothSummonEffect : TrailingProjectile
 		}
 		Timer++;
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 			Projectile.Kill();
-		TimeTokill--;
-		if (TimeTokill < 0)
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy < 0)
 		{
 			if (Projectile.timeLeft < 500)
 			{
 				Vector2 toTarget = Moth.Center - Projectile.Center - Projectile.velocity;
 				if (toTarget.Length() < 35f)
 				{
-					KillMainStructure();
+					DestroyEntity();
 					CorruptMoth cMoth = Moth.ModNPC as CorruptMoth;
 					if (cMoth != null)
 					{
@@ -82,7 +82,7 @@ public class MothSummonEffect : TrailingProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
 			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);

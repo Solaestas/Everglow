@@ -9,7 +9,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 public class BrittleRockSlingshotStone : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.ranged = true;
 		Projectile.width = 16;
@@ -35,7 +35,7 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 
 	public override void AI()
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			if (Projectile.velocity.Y <= 12)
 			{
@@ -60,7 +60,7 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 		Projectile.ai[0] = Main.rand.NextFloat(-0.15f, 0.15f);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for (int x = 0; x < 3; x++)
 		{
@@ -94,14 +94,14 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 		{
 			SoundEngine.PlaySound(SoundID.NPCHit2.WithVolume(Projectile.ai[2]), Projectile.Center);
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (Projectile.penetrate == 1)
 		{
-			KillMainStructure();
+			DestroyEntity();
 		}
 	}
 
@@ -130,7 +130,7 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 		float value = (Projectile.timeLeft - 540) / 60f;
 		TrailColor = new Color(1, 0.3f, 1, 0f) * value * Projectile.ai[2];
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			Texture2D texture = ModAsset.RockElemental_Stonefragment.Value;
 			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
@@ -232,8 +232,6 @@ public class BrittleRockSlingshotStone : TrailingProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
-
-	public override void DrawTrailDark() => base.DrawTrailDark();
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) => base.Colliding(projHitbox, targetHitbox);
 }

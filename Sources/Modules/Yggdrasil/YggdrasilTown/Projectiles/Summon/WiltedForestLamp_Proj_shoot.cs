@@ -75,7 +75,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		float betaVel = Vector3.Cross(new Vector3(oldOldVel / 12f, 0), new Vector3(OldVel / 12f, 0)).Z;
 		betaVel = MathF.Asin(betaVel);
 		betaVel = omegaVel - betaVel;
-		if (TimeTokill <= 0 && Projectile.timeLeft < 11998)
+		if (TimeAfterEntityDestroy <= 0 && Projectile.timeLeft < 11998)
 		{
 			var dustVFX = new Leaf_VFX
 			{
@@ -93,9 +93,9 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			Ins.VFXManager.Add(dustVFX);
 		}
 		var colorLight = new Vector3(0.4f, 0.7f, 0.2f);
-		if(TimeTokill > 0)
+		if(TimeAfterEntityDestroy > 0)
 		{
-			colorLight *= TimeTokill / 40f;
+			colorLight *= TimeAfterEntityDestroy / 40f;
 		}
 		Lighting.AddLight(Projectile.Center, colorLight);
 		base.AI();
@@ -104,7 +104,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			DrawSelf();
 		}
@@ -272,11 +272,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public override void DrawTrailDark()
-	{
-	}
-
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for (int i = 0; i < 18; i++)
 		{
@@ -284,6 +280,6 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			dust.velocity = Projectile.velocity.RotateRandom(0.4) * Main.rand.NextFloat(0.7f, 1.1f);
 			dust.scale = Main.rand.NextFloat(0.3f, 1.1f);
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }

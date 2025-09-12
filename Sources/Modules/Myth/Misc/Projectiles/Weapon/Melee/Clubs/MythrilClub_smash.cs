@@ -3,7 +3,7 @@ using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MythrilClub_smash : ClubProj_Smash_metal
+public class MythrilClub_smash : ClubProjSmash_Metal
 {
 	public override string Texture => "Everglow/" + ModAsset.MythrilClub_Path;
 

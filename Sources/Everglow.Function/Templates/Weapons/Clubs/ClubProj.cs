@@ -24,89 +24,76 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 
 		Projectile.DamageType = DamageClass.Melee;
-		SetDef();
-		trailVecs = new Queue<Vector2>(trailLength + 1);
+		SetCustomDefaults();
+		TrailVecs = new Queue<Vector2>(TrailLength + 1);
 	}
 
-	public virtual void SetDef()
+	public virtual void SetCustomDefaults()
 	{
 	}
 
 	/// <summary>
-	/// 角速度
+	/// Angular velocity
 	/// </summary>
-	public float Omega = 0;
+	public float Omega { get; private set; } = 0;
 
 	/// <summary>
-	/// 角加速度
+	/// Angular accleration
 	/// </summary>
-	public float Beta = 0.003f;
+	public float Beta { get; protected set; } = 0.003f;
 
 	/// <summary>
-	/// 最大角速度(受近战攻速影响)
+	/// Max angular velocity, affected by player.meleespeed. You should NOT modify this in most cases.
 	/// </summary>
-	public float MaxOmega = 0.3f;
+	public float MaxOmega { get; protected set; } = 0.3f;
 
 	/// <summary>
-	/// 伤害半径
+	/// Damage radiu;
 	/// </summary>
-	public float HitLength = 32f;
+	public float HitLength { get; protected set; } = 32f;
 
 	/// <summary>
-	/// 扭曲强度
+	/// Warp magnitude
 	/// </summary>
-	public float WarpValue = 0.6f;
+	public float WarpValue { get; protected set; } = 0.6f;
 
 	/// <summary>
-	/// 命中敌人后对于角速度的削减率(会根据敌人的击退抗性而再次降低)
+	/// The decrease amount of angular velocity while hit a target, associates with target.knownBackResist.
 	/// </summary>
-	public float StrikeOmegaDecrease = 0.9f;
+	public float StrikeOmegaDecrease { get; protected set; } = 0.9f;
 
 	/// <summary>
-	/// 命中敌人后最低剩余角速度(默认40%,即0.4)
+	/// The minimun of the angular velocity flat when hitting a extemely-high-knownBackResist target.(Default to 0.4f, means that it will lost 60% of angular velocity when hitting a target.)
 	/// </summary>
-	public float MinStrikeOmegaDecrease = 0.4f;
+	public float MinStrikeOmegaDecrease { get; protected set; } = 0.4f;
 
 	/// <summary>
-	/// 内部音效播放计时器
+	/// A timer, you can modify it for playing audios.
 	/// </summary>
-	public float AudioTimer = 3.14159f;
+	public float AudioTimer { get; private set; } = 3.14159f;
 
 	/// <summary>
-	/// 内部参数，用来计算伤害
+	/// Actually an internal parameter for calculating damage.
 	/// </summary>
-	public int DamageStartValue = 0;
+	public int DamageStartValue { get; private set; } = 0;
 
 	/// <summary>
-	/// 拖尾长度
+	/// Trail length
 	/// </summary>
-	public int trailLength = 10;
+	public int TrailLength { get; protected set; } = 10;
 
 	/// <summary>
-	/// 是否正在攻击
+	/// Trail vectors
 	/// </summary>
-	public bool isAttacking = false;
+	public Queue<Vector2> TrailVecs { get; private set; }
 
-	/// <summary>
-	/// 拖尾
-	/// </summary>
-	public Queue<Vector2> trailVecs;
+	public virtual BlendState TrailBlendState() => BlendState.NonPremultiplied;
 
-	public virtual BlendState TrailBlendState()
-	{
-		return BlendState.NonPremultiplied;
-	}
+	public virtual string TrailShapeTex() => ModAsset.Melee_Mod;
 
-	public virtual string TrailShapeTex()
-	{
-		return ModAsset.Melee_Mod;
-	}
+	public virtual float TrailAlpha(float factor) => MathHelper.Lerp(0f, 1, factor);
 
-	public override void OnSpawn(IEntitySource source)
-	{
-		Omega = MaxOmega * 0.5f;
-		base.OnSpawn(source);
-	}
+	public override void OnSpawn(IEntitySource source) => Omega = MaxOmega * 0.5f;
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
@@ -116,9 +103,8 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		float ShakeStrength = Omega;
 		Omega *= power;
 		modifiers.FinalDamage /= power;
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
+		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(MathHelper.TwoPi);
 		modifiers.Knockback *= Omega * 3;
-		base.ModifyHitNPC(target, ref modifiers);
 	}
 
 	public virtual void UpdateSound()
@@ -186,10 +172,10 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 			}
 		}
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * MathF.Sqrt(Projectile.scale);
-		trailVecs.Enqueue(HitRange);
-		if (trailVecs.Count > trailLength)
+		TrailVecs.Enqueue(HitRange);
+		if (TrailVecs.Count > TrailLength)
 		{
-			trailVecs.Dequeue();
+			TrailVecs.Dequeue();
 		}
 
 		if (player.dead)
@@ -227,7 +213,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		for (int i = 0; i < 5; i++)
 		{
-			float alp = Omega / 0.4f *0.5f;
+			float alp = Omega / 0.4f * 0.5f;
 			var color2 = new Color((int)(lightColor.R * (5 - i) / 5f * alp), (int)(lightColor.G * (5 - i) / 5f * alp), (int)(lightColor.B * (5 - i) / 5f * alp), (int)(lightColor.A * (5 - i) / 5f * alp));
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color2, Projectile.rotation - i * 0.1f * Omega, texture.Size() / 2f, Projectile.scale * Projectile.scale, effects, 0f);
 		}
@@ -240,60 +226,86 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 	}
 
-	public virtual void DrawTrail()
+	protected List<Vector2> SmoothVectors(IEnumerable<Vector2> vectors)
 	{
-		
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		List<Vector2> smoothedTrailVecs = GraphicsUtils.CatmullRom(vectors);
+		var smoothedTrail = smoothedTrailVecs[..^1];
+		if (vectors.Any())
 		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			smoothedTrail.Add(vectors.Last());
 		}
 
-		int length = SmoothTrail.Count;
+		int length = smoothedTrail.Count;
 		if (length <= 3)
+		{
+			return null;
+		}
+
+		return smoothedTrail;
+	}
+
+	protected virtual float TrailWFunc(Vector2 trailVector, float factor)
+	{
+		float w = 1 - Math.Abs((trailVector.X * 0.5f + trailVector.Y * 0.5f) / trailVector.Length());
+		float w2 = MathF.Sqrt(TrailAlpha(factor));
+		w *= w2 * w;
+		return w;
+	}
+
+	protected List<Vertex2D> CreateTrailVertices(float paramA = 0.1f, float paramB = 0.1f, bool wFunc = true, Color? trailColor = null)
+	{
+		var smoothedTrail = SmoothVectors(TrailVecs);
+		if (smoothedTrail == null)
+		{
+			return null;
+		}
+
+		var color = trailColor ?? Color.White;
+		var length = smoothedTrail.Count;
+		var vertices = new List<Vertex2D>();
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = wFunc ? TrailAlpha(factor) : TrailWFunc(smoothedTrail[i], factor);
+			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * paramA * Projectile.scale, color, new Vector3(factor, 1, 0f)));
+			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
+		}
+		vertices.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+		vertices.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
+		for (int i = 0; i < length; i++)
+		{
+			float factor = i / (length - 1f);
+			float w = wFunc ? TrailAlpha(factor) : TrailWFunc(smoothedTrail[i], factor);
+			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * paramB * Projectile.scale, color, new Vector3(factor, 1, 0f)));
+			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
+		}
+
+		return vertices;
+	}
+
+	public virtual void DrawTrail()
+	{
+		var bars = CreateTrailVertices();
+		if (bars == null)
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
-
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = TrailAlpha(factor);
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = TrailAlpha(factor);
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
-		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+		lightColor.W = 0.7f * Omega;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModAsset.ClubTrail.Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
-		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
-		MeleeTrail.Parameters["Light"].SetValue(lightColor);
-		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
+		Effect clubTrailEffect = ModAsset.ClubTrail.Value;
+		clubTrailEffect.Parameters["uTransform"].SetValue(model * projection);
+		clubTrailEffect.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
+		clubTrailEffect.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
+		clubTrailEffect.Parameters["Light"].SetValue(lightColor);
+		clubTrailEffect.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -302,15 +314,15 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (TrailVecs.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -418,22 +430,10 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		spriteBatch.Draw(ModContent.Request<Texture2D>(ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 
-	public virtual float TrailAlpha(float factor)
-	{
-		float w;
-		w = MathHelper.Lerp(0f, 1, factor);
-		return w;
-	}
-
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * MathF.Sqrt(Projectile.scale);
-		if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f))
-		{
-			return true;
-		}
-
-		return false;
+		return CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center - HitRange, Projectile.Center + HitRange, 2 * HitLength / 32f * Omega / 0.3f);
 	}
 
 	private void ProduceWaterRipples(Vector2 beamDims)

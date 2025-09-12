@@ -7,7 +7,7 @@ namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class ExplosiveLantern : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
@@ -31,25 +31,31 @@ public class ExplosiveLantern : TrailingProjectile
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
 		TrailShader = ModAsset.TrailingDissolve.Value;
 	}
+
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color?(new Color(1f, 1f, 1f, 0.5f));
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		base.OnHitPlayer(target, info);
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
+
 	public override void AI()
 	{
 		base.AI();
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return base.PreDraw(ref lightColor);
 	}
+
 	public override void DrawSelf()
 	{
 		var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -60,13 +66,17 @@ public class ExplosiveLantern : TrailingProjectile
 			Projectile.frame += 1;
 		}
 		if (Projectile.frame > 3)
+		{
 			Projectile.frame = 0;
+		}
+
 		float timeValue = (float)Main.time * 0.03f;
-		var colorT = new Color(1f *  (float)(Math.Sin(timeValue) + 2) / 3f, 1f *  (float)(Math.Sin(timeValue) + 2) / 3f, 1f *  (float)(Math.Sin(timeValue) + 2) / 3f, 0.5f *  (float)(Math.Sin(timeValue) + 2) / 3f);
+		var colorT = new Color(1f * (float)(Math.Sin(timeValue) + 2) / 3f, 1f * (float)(Math.Sin(timeValue) + 2) / 3f, 1f * (float)(Math.Sin(timeValue) + 2) / 3f, 0.5f * (float)(Math.Sin(timeValue) + 2) / 3f);
 
 		Main.spriteBatch.Draw(texture2D, Projectile.Center - Main.screenPosition, null, colorT, Projectile.rotation, texture2D.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 1f);
 		Main.spriteBatch.Draw(ModAsset.LanternFire.Value, Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, 30 * Projectile.frame, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 	}
+
 	public override void DrawTrail()
 	{
 		float velocityValue = Math.Clamp(1.2f - Projectile.velocity.Length() / 4f, 0f, 1.2f);
@@ -79,17 +89,22 @@ public class ExplosiveLantern : TrailingProjectile
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
@@ -133,16 +148,25 @@ public class ExplosiveLantern : TrailingProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
 		if (bars3.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
-	public override void KillMainStructure()
+
+	public override void DestroyEntity()
 	{
 		var gore2 = new FloatLanternGore3
 		{
@@ -150,7 +174,7 @@ public class ExplosiveLantern : TrailingProjectile
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = Projectile.Center
+			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore2);
 		var gore3 = new FloatLanternGore4
@@ -159,7 +183,7 @@ public class ExplosiveLantern : TrailingProjectile
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = Projectile.Center
+			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore3);
 		var gore4 = new FloatLanternGore5
@@ -168,7 +192,7 @@ public class ExplosiveLantern : TrailingProjectile
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = Projectile.Center
+			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore4);
 		var gore5 = new FloatLanternGore6
@@ -177,7 +201,7 @@ public class ExplosiveLantern : TrailingProjectile
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = Projectile.Center
+			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore5);
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
@@ -185,10 +209,6 @@ public class ExplosiveLantern : TrailingProjectile
 		var p = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), Projectile.damage, Projectile.knockBack);
 		p.friendly = Projectile.friendly;
 		p.hostile = Projectile.hostile;
-		base.KillMainStructure();
-	}
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
+		base.DestroyEntity();
 	}
 }

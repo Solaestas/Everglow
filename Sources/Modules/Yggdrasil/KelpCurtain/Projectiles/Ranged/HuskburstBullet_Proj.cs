@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
 public class HuskburstBullet_Proj : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
@@ -61,7 +61,7 @@ public class HuskburstBullet_Proj : TrailingProjectile
 		base.OnHitNPC(target, hit, damageDone);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(0.8f), Projectile.Center);
 		var vel = Projectile.velocity.RotatedByRandom(MathHelper.TwoPi);
@@ -72,6 +72,6 @@ public class HuskburstBullet_Proj : TrailingProjectile
 			dust.velocity = Projectile.velocity.RotatedByRandom(MathHelper.TwoPi) * 0.3f;
 			dust.scale = 1.5f;
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }

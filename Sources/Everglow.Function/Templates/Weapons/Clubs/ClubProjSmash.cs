@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
-using Everglow.Commons.MEAC.Enums;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
@@ -8,7 +7,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProj_Smash : MeleeProj
+public abstract class ClubProjSmash : MeleeProj
 {
 	public override void SetDef()
 	{
@@ -32,7 +31,7 @@ public abstract class ClubProj_Smash : MeleeProj
 		longHandle = false;
 		maxAttackType = 2;
 		trailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		AutoEnd = false;
 		selfWarp = false;
 	}
@@ -122,7 +121,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				Point bottomPos = player.Bottom.ToTileCoordinates();
 				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
+				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
 				{
 					if (timer <= 70)
 					{
@@ -253,7 +252,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
-				var somg = new Smog_club_front
+				var somg = new ClubSmog
 				{
 					velocity = newVelocity,
 					Active = true,
@@ -280,7 +279,7 @@ public abstract class ClubProj_Smash : MeleeProj
 				{
 					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
-				var somg = new Smog_club_front
+				var somg = new ClubSmog
 				{
 					velocity = newVelocity,
 					Active = true,
@@ -384,7 +383,7 @@ public class SmashClubOwner : ModPlayer
 {
 	public override void PostUpdateMiscEffects()
 	{
-		if (ClubProj_Smash.OwnSmashClubPlayers.Contains(Player.whoAmI))
+		if (ClubProjSmash.OwnSmashClubPlayers.Contains(Player.whoAmI))
 		{
 			Player.maxFallSpeed += 10000f;
 		}
