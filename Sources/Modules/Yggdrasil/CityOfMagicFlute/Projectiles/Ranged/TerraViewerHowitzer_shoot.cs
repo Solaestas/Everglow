@@ -23,7 +23,13 @@ public class TerraViewerHowitzer_shoot : TrailingProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.penetrate = 10;
 		Projectile.extraUpdates = 2;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
+
 		TrailLength = 30;
+		TrailTexture = Commons.ModAsset.Trail_4.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_4_black.Value;
+		TrailBackgroundDarkness = 0.3f;
+		TrailColor = new Color(0.5f, 0.9f, 0.9f, 0);
 	}
 
 	public override void Behaviors()

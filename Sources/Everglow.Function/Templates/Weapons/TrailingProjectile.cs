@@ -266,6 +266,8 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
 		}
 		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
 

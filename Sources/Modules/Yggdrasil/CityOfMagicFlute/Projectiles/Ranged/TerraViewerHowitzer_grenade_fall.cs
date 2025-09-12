@@ -23,6 +23,7 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 		TrailLength = 20;
 		TrailTexture = Commons.ModAsset.Trail_12.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_4_black.Value;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
 	}
 
 	public override void Behaviors()

@@ -66,6 +66,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 		TrailLength = 15;
 		TrailColor = new Color(0.7f, 0.1f, 0f, 0);
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
+		TrailBackgroundDarkness = 0.5f;
 		SelfLuminous = true;
 		TargetWhoAmI = -1;
 	}
@@ -269,7 +270,21 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 
-	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor - timeValue * 0.2f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
+	}
 
 	public override void OnKill(int timeLeft)
 	{
