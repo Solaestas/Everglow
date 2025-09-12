@@ -23,6 +23,7 @@ public class ExampleTrailingProjectile : TrailingProjectile
 		Vector2 toTarget = targetPos - Projectile.Center - Projectile.velocity;
 		toTarget = toTarget.NormalizeSafe() * 45f;
 		Projectile.velocity = Projectile.velocity * 0.85f + toTarget * 0.15f;
+		Projectile.rotation = Projectile.velocity.ToRotationSafe();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

@@ -1,4 +1,3 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Terraria.DataStructures;
 
@@ -17,6 +16,7 @@ public class Glow_Fall : TrailingProjectile
 		TrailColor = new Color(0, 0.7f, 1f, 0);
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
 		SelfLuminous = true;
+		TrailLength = 50;
 		TrailWidth = 20f;
 		Projectile.extraUpdates = 2;
 		Projectile.friendly = true;
@@ -26,13 +26,8 @@ public class Glow_Fall : TrailingProjectile
 		Projectile.tileCollide = false;
 	}
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	public override void Behaviors()
 	{
-	}
-
-	public override void AI()
-	{
-		base.AI();
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver4;
 		if (TimeAfterEntityDestroy < 0)
 		{
@@ -43,11 +38,11 @@ public class Glow_Fall : TrailingProjectile
 				d0.velocity = Projectile.velocity * Main.rand.NextFloat(0.01f, 0.04f);
 			}
 		}
-		if(TimeAfterEntityDestroy < 80 && TimeAfterEntityDestroy > 0)
+		if (TimeAfterEntityDestroy < 80 && TimeAfterEntityDestroy > 0)
 		{
 			TrailColor = Color.Lerp(new Color(0, 0.7f, 1f, 0), Color.Transparent, 1 - TimeAfterEntityDestroy / 80f);
 		}
-		if(Projectile.Center.Y > Projectile.ai[2])
+		if (Projectile.Center.Y > Projectile.ai[2])
 		{
 			Projectile.tileCollide = true;
 		}
@@ -74,7 +69,7 @@ public class Glow_Fall : TrailingProjectile
 		base.DrawTrail();
 	}
 
-	public override void DestroyEntity()
+	public override void DestroyEntityEffect()
 	{
 		TimeAfterEntityDestroy = ProjectileID.Sets.TrailCacheLength[Projectile.type];
 		Projectile.velocity = Projectile.oldVelocity;

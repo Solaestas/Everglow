@@ -22,10 +22,11 @@ public class LanternFlow : TrailingProjectile
 		TrailLength = 400;
 		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
 		TrailColor = new Color(1f, 0.2f, 0f, 0f) * 0.3f;
+		TrailBackgroundDarkness = 0.3f;
 		TrailWidth = 240f;
 		SelfLuminous = true;
 		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
 		WarpStrength = 1f;
 	}
 
@@ -53,7 +54,7 @@ public class LanternFlow : TrailingProjectile
 		}
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		if (OwnerNPC == null)
 		{
@@ -73,8 +74,6 @@ public class LanternFlow : TrailingProjectile
 			Projectile.active = false;
 			return;
 		}
-
-		base.AI();
 		Vector2 toOwner = OwnerNPC.Center - Projectile.Center;
 		if (Projectile.timeLeft > 507)
 		{
@@ -93,28 +92,30 @@ public class LanternFlow : TrailingProjectile
 			}
 			if (Projectile.timeLeft < 220)
 			{
-				TrailColor = TrailColor * 0.99f;
+				TrailColor *= 0.99f;
+				TrailBackgroundDarkness *= 0.98f;
 				WarpStrength *= 0.98f;
 			}
 		}
 		if (Projectile.timeLeft < 580)
 		{
-			for (int i = 0; i < Projectile.oldPos.Length / 60; i++)
+			for (int i = 0; i < SmoothedOldPos.Count / 240; i++)
 			{
-				int checkOldPosIndex = Main.rand.Next(5, (int)MathF.Min(598 - Projectile.timeLeft, Projectile.oldPos.Length - 2));
+				int checkOldPosIndex = Main.rand.Next(5, (int)MathF.Min(Timer - 2, SmoothedOldPos.Count - 2));
+				checkOldPosIndex = Math.Clamp(checkOldPosIndex, 0, SmoothedOldPos.Count - 1);
 				float mulScale = Main.rand.NextFloat(0.5f, 1.2f);
 				if (Projectile.timeLeft < 120f)
 				{
 					mulScale *= Projectile.timeLeft / 120f;
 				}
-				Vector2 addPos = new Vector2(Main.rand.NextFloat(0f, 90f), 0).RotateRandom(6.283);
+				Vector2 addPos = new Vector2(Main.rand.NextFloat(0f, 90f), 0).RotateRandom(MathHelper.TwoPi);
 				var gore2 = new LanternFlow_lantern
 				{
 					Active = true,
 					Visible = true,
-					velocity = -Vector2.Normalize(Projectile.oldPos[checkOldPosIndex] - Projectile.oldPos[checkOldPosIndex - 1]) * mulScale * 6 - addPos * 0.01f,
+					velocity = -Vector2.Normalize(SmoothedOldPos.ToArray()[checkOldPosIndex] - SmoothedOldPos.ToArray()[checkOldPosIndex - 1]) * mulScale * 6 - addPos * 0.01f,
 					scale = mulScale,
-					position = Projectile.oldPos[checkOldPosIndex] + addPos,
+					position = SmoothedOldPos.ToArray()[checkOldPosIndex] + addPos,
 					npcOwner = OwnerNPC,
 				};
 				Ins.VFXManager.Add(gore2);
@@ -127,13 +128,34 @@ public class LanternFlow : TrailingProjectile
 		return base.PreDraw(ref lightColor);
 	}
 
-	public override void DrawSelf()
-	{
-	}
-
 	public override void DrawTrail()
 	{
 		base.DrawTrail();
+	}
+
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
+	{
+		//if(style == 0)
+		//{
+		//	return new Color(0, 0, 0, 0);
+		//}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor * 4;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -146,9 +168,5 @@ public class LanternFlow : TrailingProjectile
 			}
 		}
 		return false;
-	}
-
-	public override void OnHitPlayer(Player target, Player.HurtInfo info)
-	{
 	}
 }

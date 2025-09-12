@@ -44,7 +44,7 @@ public class PylonStonePostProj_crimson : TrailingProjectile
 
 	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
 	{
-		float x = factor + timeValue;
+		float x = factor + timeValue * 0.1f;
 		float y = 1;
 		float z = widthValue;
 		if (phase == 2)
@@ -135,6 +135,8 @@ public class PylonStonePostProj_crimson : TrailingProjectile
 	// Main.spriteBatch.End();
 	// Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	// }
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+
 	public override void DrawSelf()
 	{
 		var texDark = ModAsset.MothMiddleBullet_dark.Value;

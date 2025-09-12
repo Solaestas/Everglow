@@ -23,9 +23,11 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 		Projectile.ignoreWater = true;
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
+
+		SelfLuminous = false;
 		TrailColor = new Color(1, 1, 1, 0f);
 		TrailWidth = 30f;
-		SelfLuminous = false;
+		TrailLength = 30;
 		TrailTexture = ModAsset.Trail.Value;
 		TrailTextureBlack = ModAsset.Trail_black.Value;
 		TrailShader = ModAsset.Trailing.Value;
@@ -42,9 +44,10 @@ public abstract class TrailingProjectile : ModProjectile, IWarpProjectile_warpSt
 	/// ignoreWater = true;<br></br>
 	/// friendly = true;<br></br>
 	/// penetrate = -1;<br></br><br></br>
+	/// SelfLuminous = false;<br></br>
 	/// TrailColor = new Color(1, 1, 1, 0f);<br></br>
 	/// TrailWidth = 30f;<br></br>
-	/// SelfLuminous = false;<br></br>
+	/// TrailLength = 30;<br></br>
 	/// TrailTexture = ModAsset.Trail.Value;<br></br>
 	/// TrailTextureBlack = ModAsset.Trail_black.Value;<br></br>
 	/// TrailShader = ModAsset.Trailing.Value;<br></br>

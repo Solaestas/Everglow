@@ -15,7 +15,6 @@ public class MothMiddleBullet : TrailingProjectile
 		TrailColor = new Color(0.1f, 0.4f, 0.9f, 0);
 		TrailTexture = Commons.ModAsset.Trail_6.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_0_black.Value;
-		base.SetCustomDefaults();
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -23,41 +22,24 @@ public class MothMiddleBullet : TrailingProjectile
 		base.OnSpawn(source);
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		Projectile.rotation = Projectile.velocity.ToRotation();
-
-		Timer++;
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
+		if (Projectile.timeLeft > 300 && Projectile.timeLeft < 1500)
 		{
-			Projectile.Kill();
-		}
-
-		TimeAfterEntityDestroy--;
-		if (TimeAfterEntityDestroy < 0)
-		{
-			if (Projectile.timeLeft > 300 && Projectile.timeLeft < 1500)
+			Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
+			Vector2 toPlayer = player.Center - Projectile.Center - Projectile.velocity;
+			if (toPlayer.Length() > 200)
 			{
-				Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
-				Vector2 toPlayer = player.Center - Projectile.Center - Projectile.velocity;
-				if (toPlayer.Length() > 200)
-				{
-					Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(toPlayer) * 8f, 0.005f + 0.0025f * MathF.Sin((float)Main.time * 0.015f + Projectile.whoAmI) + Projectile.ai[0]);
-				}
+				Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Normalize(toPlayer) * 8f, 0.005f + 0.0025f * MathF.Sin((float)Main.time * 0.015f + Projectile.whoAmI) + Projectile.ai[0]);
 			}
-			if (Projectile.timeLeft < 200)
-			{
-				DestroyEntity();
-			}
-			GenerateFire(1);
-			GenerateSpark(2);
 		}
-		else
+		if (Projectile.timeLeft < 200)
 		{
-			Projectile.velocity *= 0f;
-			return;
+			DestroyEntity();
 		}
+		GenerateFire(1);
+		GenerateSpark(2);
 	}
 
 	public void GenerateFire(int Frequency)
@@ -205,9 +187,12 @@ public class MothMiddleBullet : TrailingProjectile
 		return false;
 	}
 
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
 	public override void DestroyEntityEffect()
 	{
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<MothBulletExplosion>(), 50, 3, Projectile.owner, 10f);
-		base.DestroyEntityEffect();
 	}
 }
