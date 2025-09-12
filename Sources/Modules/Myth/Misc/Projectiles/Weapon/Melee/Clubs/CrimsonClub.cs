@@ -1,14 +1,13 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CrimsonClub : ClubProj_Metal
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ReflectStrength = 3f;
-		ReflectTexturePath = "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/CrimsonClub_light";
+		ReflectTexturePath = ModAsset.CobaltClub_light_Mod;
 	}
+
 	public override void AI()
 	{
 		base.AI();
@@ -24,13 +23,17 @@ public class CrimsonClub : ClubProj_Metal
 			GenerateDust();
 		}
 	}
+
 	private void GenerateDust()
 	{
 		var v0 = new Vector2(1, 1);
 		v0 *= Main.rand.NextFloat(Main.rand.NextFloat(1, HitLength), HitLength);
 		v0.X *= Projectile.spriteDirection;
 		if (Main.rand.NextBool(2))
+		{
 			v0 *= -1;
+		}
+
 		v0 = v0.RotatedBy(Projectile.rotation);
 		float Speed = Math.Min(Omega, 0.28f);
 		var dust = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Blood, -v0.Y * Speed, v0.X * Speed, 0, default, Main.rand.NextFloat(0.8f, 1.4f));

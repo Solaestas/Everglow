@@ -1,10 +1,8 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class PlatinumClub : ClubProj_Metal
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ReflectStrength = 8f;
 	}

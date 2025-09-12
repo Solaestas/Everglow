@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
-using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
@@ -16,81 +15,42 @@ public abstract class ClubProj_Metal : ClubProj
 	/// </summary>
 	public string ReflectTexturePath = string.Empty;
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Beta = 0.0024f;
 		MaxOmega = 0.27f;
 	}
 
+	protected override float TrailWFunc(Vector2 trailVector, float factor) => base.TrailWFunc(trailVector, factor) * ReflectStrength;
+
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (TrailVecs.Count != 0)
-		{
-			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		var bars = CreateTrailVertices(wFunc: true);
+		if (bars == null)
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
-
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.1f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
-		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+		lightColor.W = 0.7f * Omega;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModAsset.MetalClubTrail.Value;
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		Texture2D projTexture = ReflectTexturePath != string.Empty
+			? ModContent.Request<Texture2D>(ReflectTexturePath).Value
+			: (Texture2D)ModContent.Request<Texture2D>(Texture);
+
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
+
+		Effect clubTrailEffect = ModAsset.MetalClubTrail.Value;
+		clubTrailEffect.Parameters["uTransform"].SetValue(model * projection);
+		clubTrailEffect.Parameters["tex1"].SetValue(projTexture);
+		clubTrailEffect.Parameters["Light"].SetValue(lightColor);
+		clubTrailEffect.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
+
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
-		MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-		if (ReflectTexturePath != string.Empty)
-		{
-			try
-			{
-				MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(ReflectTexturePath).Value);
-			}
-			catch
-			{
-				MeleeTrail.Parameters["tex1"].SetValue((Texture2D)ModContent.Request<Texture2D>(Texture));
-			}
-		}
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
-		MeleeTrail.Parameters["Light"].SetValue(lightColor);
-		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
-
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);

@@ -1,13 +1,11 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class TitaniumClub : ClubProj_Metal
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ReflectStrength = 5f;
-		ReflectTexturePath = "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/TitaniumClub_light";
+		ReflectTexturePath = ModAsset.TitaniumClub_light_Mod;
 		Beta = 0.0062f;
 		MaxOmega = 0.468f;
 	}

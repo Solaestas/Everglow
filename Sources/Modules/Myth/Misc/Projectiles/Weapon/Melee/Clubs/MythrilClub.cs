@@ -1,14 +1,12 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MythrilClub : ClubProj_Metal
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.43f;
-		ReflectTexturePath = "Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/MythrilClub_light";
+		ReflectTexturePath = ModAsset.MythrilClub_light_Mod;
 		ReflectStrength = 2f;
 	}
 }
