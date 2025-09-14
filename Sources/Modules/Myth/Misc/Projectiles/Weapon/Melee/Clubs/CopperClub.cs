@@ -1,5 +1,5 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CopperClub : ClubProj_Metal
+public class CopperClub : ClubProj_Reflect
 {
 }

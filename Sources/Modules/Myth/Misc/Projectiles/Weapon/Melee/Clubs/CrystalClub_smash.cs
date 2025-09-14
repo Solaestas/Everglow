@@ -3,7 +3,7 @@ using Everglow.Myth.Misc.Dusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CrystalClub_smash : ClubProjSmash_Metal
+public class CrystalClub_smash : ClubProjSmash_Reflect
 {
 	public override void SetDef()
 	{

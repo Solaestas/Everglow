@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class OrichalcumClub_smash : ClubProjSmash_Metal
+public class OrichalcumClub_smash : ClubProjSmash_Reflect
 {
 	public override string Texture => ModAsset.OrichalcumClub_Mod;
 

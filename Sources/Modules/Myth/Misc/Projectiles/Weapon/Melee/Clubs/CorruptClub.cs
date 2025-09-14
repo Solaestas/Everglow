@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CorruptClub : ClubProj_Metal
+public class CorruptClub : ClubProj_Reflect
 {
 	public override void AI()
 	{

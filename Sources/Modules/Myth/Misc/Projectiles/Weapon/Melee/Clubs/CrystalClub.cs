@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CrystalClub : ClubProj_Metal
+public class CrystalClub : ClubProj_Reflect
 {
 	private int flyClubCooling = 0;
 

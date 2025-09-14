@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CobaltClub : ClubProj_Metal
+public class CobaltClub : ClubProj_Reflect
 {
 	public override void SetCustomDefaults()
 	{

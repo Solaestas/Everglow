@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class SpikeClub : ClubProj_Metal
+public class SpikeClub : ClubProj_Reflect
 {
 	private List<Vector2> moonBladeI = [];
 	private List<Vector2> moonBladeII = [];

@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CobaltClub_smash : ClubProjSmash_Metal
+public class CobaltClub_smash : ClubProjSmash_Reflect
 {
 	public override string Texture => ModAsset.CobaltClub_Mod;
 

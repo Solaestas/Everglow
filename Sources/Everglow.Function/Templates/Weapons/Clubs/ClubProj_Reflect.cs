@@ -3,7 +3,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProj_Metal : ClubProj
+public abstract class ClubProj_Reflect : ClubProj
 {
 	/// <summary>
 	/// 反光强度，默认4
