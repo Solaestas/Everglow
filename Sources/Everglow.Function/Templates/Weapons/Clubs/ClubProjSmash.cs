@@ -9,6 +9,22 @@ namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public abstract class ClubProjSmash : MeleeProj
 {
+	private static readonly List<int> ownSmashClubPlayers = [];
+
+	public static IReadOnlyCollection<int> OwnSmashClubPlayers => ownSmashClubPlayers;
+
+	protected Player Owner => Main.player[Projectile.owner];
+
+	protected float Omega { get; private set; } = 0;
+
+	protected bool Crash { get; private set; } = false;
+
+	protected int FixedDirection { get; private set; } = 1;
+
+	protected Vector2 StopPoint { get; private set; } = Vector2.Zero;
+
+	protected Queue<Vector2> SmashTrailVecs { get; private set; } = new Queue<Vector2>();
+
 	public override void SetDef()
 	{
 		Projectile.aiStyle = -1;
@@ -36,69 +52,46 @@ public abstract class ClubProjSmash : MeleeProj
 		selfWarp = false;
 	}
 
-	public bool Crash = false;
-	public int FixedDirection = 1;
-	public Vector2 StopPoint = Vector2.Zero;
-	public Queue<Vector2> trailVecs2 = new Queue<Vector2>();
-	public float Omega = 0;
+	public override string TrailShapeTex() => ModAsset.Melee_Mod;
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-	}
+	public override string TrailColorTex() => Texture;
 
-	public override string TrailShapeTex()
-	{
-		return ModAsset.Melee_Mod;
-	}
+	public override float TrailAlpha(float factor) => base.TrailAlpha(factor) * 1.15f;
 
-	public override string TrailColorTex()
-	{
-		return Texture;
-	}
-
-	public override float TrailAlpha(float factor)
-	{
-		return base.TrailAlpha(factor) * 1.15f;
-	}
-
-	public override BlendState TrailBlendState()
-	{
-		return BlendState.NonPremultiplied;
-	}
+	public override BlendState TrailBlendState() => BlendState.NonPremultiplied;
 
 	public override void End()
 	{
-		Player player = Main.player[Projectile.owner];
-		player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
-		player.fullRotation = 0;
-		player.legRotation = 0;
-		player.legPosition = Vector2.Zero;
+		Owner.legFrame = new Rectangle(0, 0, Owner.legFrame.Width, Owner.legFrame.Height);
+		Owner.fullRotation = 0;
+		Owner.legRotation = 0;
+		Owner.legPosition = Vector2.Zero;
 		Projectile.Kill();
-		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+		Owner.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		OwnSmashClubPlayers.Add(Projectile.owner);
+		ownSmashClubPlayers.Add(Projectile.owner);
 	}
 
 	public override void AI()
 	{
-		Player player = Main.player[Projectile.owner];
 		base.AI();
-		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-		Tplayer.HideLeg = true;
+
+		TestPlayerDrawer modPlayer = Owner.GetModPlayer<TestPlayerDrawer>();
+		modPlayer.HideLeg = true;
 		useTrail = true;
-		float timeMul = 1 / player.meleeSpeed;
+		float timeMul = 1 / Owner.meleeSpeed;
 		if (attackType == 0)
 		{
 			if (timer < 14 * timeMul)// 前摇
 			{
 				useTrail = false;
-				LockPlayerDir(player);
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				LockPlayerDir(Owner);
+				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(14 * timeMul))
@@ -112,16 +105,16 @@ public abstract class ClubProjSmash : MeleeProj
 				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
 
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
-				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
-				player.legRotation = -player.fullRotation;
+				Owner.fullRotationOrigin = new Vector2(10, 42);
+				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.legRotation = -Owner.fullRotation;
 			}
-			if (player.gravDir == 1)
+			if (Owner.gravDir == 1)
 			{
-				Point bottomPos = player.Bottom.ToTileCoordinates();
+				Point bottomPos = Owner.Bottom.ToTileCoordinates();
 				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-				if (Collision.SolidCollision(player.BottomLeft, player.width, 64) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, -16)) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+				if (Collision.SolidCollision(Owner.BottomLeft, Owner.width, 64) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, -16)) || ((Owner.waterWalk || Owner.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !Owner.wet))
 				{
 					if (timer <= 70)
 					{
@@ -133,9 +126,9 @@ public abstract class ClubProjSmash : MeleeProj
 					}
 				}
 			}
-			if (player.gravDir == -1)
+			if (Owner.gravDir == -1)
 			{
-				if (Collision.SolidCollision(player.TopLeft - new Vector2(0, 64), player.width, 80))
+				if (Collision.SolidCollision(Owner.TopLeft - new Vector2(0, 64), Owner.width, 80))
 				{
 					if (timer <= 70)
 					{
@@ -149,25 +142,25 @@ public abstract class ClubProjSmash : MeleeProj
 			}
 			if (timer > 25 * timeMul)
 			{
-				player.velocity.Y += player.gravDir;
-				LockPlayerDir(player);
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				Owner.velocity.Y += Owner.gravDir;
+				LockPlayerDir(Owner);
+				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 		}
 		if (attackType == 1)
 		{
-			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 14).RotatedByRandom(6.283);
-			player.direction = FixedDirection;
+			Owner.direction = FixedDirection;
 			if (timer < 8 * timeMul)// 前摇
 			{
 				useTrail = false;
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
@@ -181,11 +174,11 @@ public abstract class ClubProjSmash : MeleeProj
 				Omega *= 0.98f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 1.16f;
-				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * player.direction;
+				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * Owner.direction;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
-				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
-				player.legRotation = -player.fullRotation;
+				Owner.fullRotationOrigin = new Vector2(10, 42);
+				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.legRotation = -Owner.fullRotation;
 			}
 			if (timer > 100 * timeMul)
 			{
@@ -195,15 +188,15 @@ public abstract class ClubProjSmash : MeleeProj
 		}// 强
 		if (attackType == 2)
 		{
-			ScreenShaker Gsplayer = player.GetModPlayer<ScreenShaker>();
+			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
-			player.direction = FixedDirection;
+			Owner.direction = FixedDirection;
 			if (timer < 8 * timeMul)// 前摇
 			{
 				useTrail = false;
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
+				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
@@ -217,11 +210,11 @@ public abstract class ClubProjSmash : MeleeProj
 				Omega *= 0.95f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 0.4f + timer / 71f;
-				float phi = (-1.2f + timer / 50f) * player.direction;
+				float phi = (-1.2f + timer / 50f) * Owner.direction;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
-				player.fullRotationOrigin = new Vector2(10, 42);
-				player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * player.direction;
-				player.legRotation = -player.fullRotation;
+				Owner.fullRotationOrigin = new Vector2(10, 42);
+				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.legRotation = -Owner.fullRotation;
 			}
 			if (timer > 50 * timeMul)
 			{
@@ -229,16 +222,16 @@ public abstract class ClubProjSmash : MeleeProj
 				Projectile.Kill();
 			}
 		}// 弱
-		trailVecs2.Enqueue(mainVec + Projectile.Center);
-		if (trailVecs2.Count > trailLength)
+
+		SmashTrailVecs.Enqueue(mainVec + Projectile.Center);
+		if (SmashTrailVecs.Count > trailLength)
 		{
-			trailVecs2.Dequeue();
+			SmashTrailVecs.Dequeue();
 		}
 	}
 
 	public virtual void Smash(int level)
 	{
-		Player player = Main.player[Projectile.owner];
 		if (level == 1)// 强
 		{
 			SoundEngine.PlaySound(SoundID.Research);
@@ -246,11 +239,11 @@ public abstract class ClubProjSmash : MeleeProj
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
-				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if (player.gravDir == -1)
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = Owner.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if (Owner.gravDir == -1)
 				{
-					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+					pos = Owner.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
 				var somg = new ClubSmog
 				{
@@ -273,11 +266,11 @@ public abstract class ClubProjSmash : MeleeProj
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
-				Vector2 pos = player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if (player.gravDir == -1)
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = Owner.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if (Owner.gravDir == -1)
 				{
-					pos = player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+					pos = Owner.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
 				var somg = new ClubSmog
 				{
@@ -292,73 +285,52 @@ public abstract class ClubProjSmash : MeleeProj
 				Ins.VFXManager.Add(somg);
 			}
 		}
-		StopPoint = player.Bottom;
+		StopPoint = Owner.Bottom;
 		Crash = true;
 		timer = 0;
 
-		FixedDirection = player.direction;
-	}
-
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
-	{
-		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
+		FixedDirection = Owner.direction;
 	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawTrail2(lightColor);
+		DrawSmashTrail(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
 		return false;
 	}
 
-	public virtual void DrawTrail2(Color color)
+	public virtual void DrawSmashTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs2.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		if (SmashTrailVecs.Smooth(out var smoothedTrail))
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
+		var length = smoothedTrail.Count;
 		var bars = new List<Vertex2D>();
-
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
 			float w = TrailAlpha(factor);
-			Color c0 = Color.White;
-			if (i == 0)
-			{
-				c0 = Color.Transparent;
-			}
+			Color c0 = i == 0 ? Color.Transparent : Color.White;
+
 			bars.Add(new Vertex2D(Projectile.Center, c0, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(smoothedTrail[i], c0, new Vector3(factor, 0, w)));
 		}
+
+		var vColor = color.ToVector4();
+		vColor.W *= 0.1f;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-
 		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		var vColor = color.ToVector4();
-		vColor.W *= 0.1f;
 		MeleeTrail.Parameters["Light"].SetValue(vColor);
 		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
@@ -369,23 +341,7 @@ public abstract class ClubProjSmash : MeleeProj
 
 	public override void OnKill(int timeLeft)
 	{
-		Player player = Main.player[Projectile.owner];
-		player.fullRotation = 0;
-		while (OwnSmashClubPlayers.Remove(Projectile.owner))
-		{
-		}
-	}
-
-	public static List<int> OwnSmashClubPlayers = new List<int>();
-}
-
-public class SmashClubOwner : ModPlayer
-{
-	public override void PostUpdateMiscEffects()
-	{
-		if (ClubProjSmash.OwnSmashClubPlayers.Contains(Player.whoAmI))
-		{
-			Player.maxFallSpeed += 10000f;
-		}
+		Owner.fullRotation = 0;
+		ownSmashClubPlayers.RemoveAll(p => p == Projectile.owner);
 	}
 }

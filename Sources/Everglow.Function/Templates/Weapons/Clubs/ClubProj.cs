@@ -226,24 +226,6 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 	}
 
-	protected List<Vector2> SmoothVectors(IEnumerable<Vector2> vectors)
-	{
-		List<Vector2> smoothedTrailVecs = GraphicsUtils.CatmullRom(vectors);
-		var smoothedTrail = smoothedTrailVecs[..^1];
-		if (vectors.Any())
-		{
-			smoothedTrail.Add(vectors.Last());
-		}
-
-		int length = smoothedTrail.Count;
-		if (length <= 3)
-		{
-			return null;
-		}
-
-		return smoothedTrail;
-	}
-
 	protected virtual float TrailWFunc(Vector2 trailVector, float factor)
 	{
 		float w = 1 - Math.Abs((trailVector.X * 0.5f + trailVector.Y * 0.5f) / trailVector.Length());
@@ -254,8 +236,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	protected List<Vertex2D> CreateTrailVertices(float paramA = 0.1f, float paramB = 0.1f, bool wFunc = true, Color? trailColor = null)
 	{
-		var smoothedTrail = SmoothVectors(TrailVecs);
-		if (smoothedTrail == null)
+		if (!TrailVecs.Smooth(out var smoothedTrail))
 		{
 			return null;
 		}

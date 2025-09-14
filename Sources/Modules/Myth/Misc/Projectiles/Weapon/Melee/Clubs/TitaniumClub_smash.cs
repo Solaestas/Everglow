@@ -1,12 +1,10 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class TitaniumClub_smash : ClubProjSmash_Metal
 {
-	public override string Texture => "Everglow/" + ModAsset.TitaniumClub_Path;
+	public override string Texture => ModAsset.TitaniumClub_Mod;
 
-	public override string TrailColorTex() => "Everglow/" + ModAsset.TitaniumClub_light_Path;
+	public override string TrailColorTex() => ModAsset.TitaniumClub_light_Mod;
 
 	public override void SetDef()
 	{
@@ -16,14 +14,13 @@ public class TitaniumClub_smash : ClubProjSmash_Metal
 
 	public override void Smash(int level)
 	{
-		Player player = Main.player[Projectile.owner];
 		if (level == 0)
 		{
 			for (int x = 0; x < 6; x++)
 			{
-				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 14f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
-				Projectile p0 = Projectile.NewProjectileDirect(null, player.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 18, 0, player.whoAmI, 72);
-				if (player.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
+				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 14f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(null, Owner.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 18, 0, Owner.whoAmI, 72);
+				if (Owner.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
 				{
 					break;
 				}
@@ -36,7 +33,7 @@ public class TitaniumClub_smash : ClubProjSmash_Metal
 					{
 						if (projectile.owner == Projectile.owner)
 						{
-							Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 12f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+							Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 12f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 							projectile.velocity = v0;
 							Titanium_Fragment tF = projectile.ModProjectile as Titanium_Fragment;
 							if (tF != null)
@@ -48,24 +45,24 @@ public class TitaniumClub_smash : ClubProjSmash_Metal
 				}
 			}
 
-			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<TitaniumClub_smash_explosion>(), 0, 0, player.whoAmI, 20, 0, player.gravDir);
+			Projectile.NewProjectileDirect(null, Owner.gravDir == 1 ? Owner.Bottom : Owner.Top, Vector2.zeroVector, ModContent.ProjectileType<TitaniumClub_smash_explosion>(), 0, 0, Owner.whoAmI, 20, 0, Owner.gravDir);
 		}
 		if (level == 1)
 		{
 			for (int x = 0; x < 12; x++)
 			{
-				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 24f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
-				Projectile p0 = Projectile.NewProjectileDirect(null, player.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 13, 0, player.whoAmI, 144);
-				if (player.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
+				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 24f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(null, Owner.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 13, 0, Owner.whoAmI, 144);
+				if (Owner.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
 				{
 					break;
 				}
 			}
 			for (int x = 0; x < 12; x++)
 			{
-				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 24f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
-				Projectile p0 = Projectile.NewProjectileDirect(null, player.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 13, 0, player.whoAmI, 72);
-				if (player.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
+				Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 24f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(null, Owner.Center, v0, ModContent.ProjectileType<Titanium_Fragment>(), Projectile.damage / 13, 0, Owner.whoAmI, 72);
+				if (Owner.ownedProjectileCounts[ModContent.ProjectileType<Titanium_Fragment>()] > 120)
 				{
 					break;
 				}
@@ -78,7 +75,7 @@ public class TitaniumClub_smash : ClubProjSmash_Metal
 					{
 						if (projectile.owner == Projectile.owner)
 						{
-							Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 12f) * player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f)) * projectile.ai[0] / 90f;
+							Vector2 v0 = new Vector2(0, -Main.rand.NextFloat(7, 12f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f)) * projectile.ai[0] / 90f;
 							projectile.velocity = v0;
 							Titanium_Fragment tF = projectile.ModProjectile as Titanium_Fragment;
 							if (tF != null)
@@ -90,7 +87,7 @@ public class TitaniumClub_smash : ClubProjSmash_Metal
 				}
 			}
 
-			Projectile.NewProjectileDirect(null, player.gravDir == 1 ? player.Bottom : player.Top, Vector2.zeroVector, ModContent.ProjectileType<TitaniumClub_smash_explosion>(), 0, 0, player.whoAmI, 30, 0, player.gravDir);
+			Projectile.NewProjectileDirect(null, Owner.gravDir == 1 ? Owner.Bottom : Owner.Top, Vector2.zeroVector, ModContent.ProjectileType<TitaniumClub_smash_explosion>(), 0, 0, Owner.whoAmI, 30, 0, Owner.gravDir);
 		}
 		base.Smash(level);
 	}

@@ -1,10 +1,8 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class AdamantiteClub_smash : ClubProjSmash_Metal
 {
-	public override string Texture => "Everglow/" + ModAsset.AdamantiteClub_Path;
+	public override string Texture => ModAsset.AdamantiteClub_Mod;
 
 	public override void Smash(int level)
 	{

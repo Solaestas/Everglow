@@ -6,28 +6,16 @@ namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 public abstract class ClubProjSmash_Metal : ClubProjSmash
 {
-	public float ReflectStrength = 4f;
+	public float ReflectStrength { get; protected set; } = 4f;
 
-	public override void DrawTrail2(Color color)
+	public override void DrawSmashTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs2.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		if (SmashTrailVecs.Smooth(out var trail))
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
+		var length = trail.Count;
 		var bars = new List<Vertex2D>();
 
 		for (int i = 0; i < length; i++)
@@ -37,28 +25,24 @@ public abstract class ClubProjSmash_Metal : ClubProjSmash
 			float w = 1 - Math.Abs((trailSelfPos.X * 0.5f + trailSelfPos.Y * 0.5f) / trailSelfPos.Length());
 			float w2 = MathF.Sqrt(TrailAlpha(factor));
 			w *= w2 * w;
-			Color c0 = Color.White;
-			if (i == 0)
-			{
-				c0 = Color.Transparent;
-			}
+			Color c0 = i == 0 ? Color.Transparent : Color.White;
 			bars.Add(new Vertex2D(Projectile.Center, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w * ReflectStrength)));
 		}
 
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		var vColor = color.ToVector4();
+		vColor.W *= 0.15f;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-
 		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		var vColor = color.ToVector4();
-		vColor.W *= 0.15f;
 		MeleeTrail.Parameters["Light"].SetValue(vColor);
 		MeleeTrail.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
 
