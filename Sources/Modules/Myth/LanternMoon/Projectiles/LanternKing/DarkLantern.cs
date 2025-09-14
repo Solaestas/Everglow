@@ -1,4 +1,3 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.Gores;
 using Terraria.DataStructures;
@@ -29,7 +28,7 @@ public class DarkLantern : TrailingProjectile
 		SelfLuminous = true;
 		TrailTexture = Commons.ModAsset.Trail_1.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
-		TrailShader = ModAsset.TrailingDissolve.Value;
+		//TrailShader = ModAsset.TrailingDissolve.Value;
 	}
 
 	public override Color? GetAlpha(Color lightColor)
@@ -100,10 +99,8 @@ public class DarkLantern : TrailingProjectile
 		Projectile.frame = Main.rand.Next(4);
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		base.AI();
-
 		startTimer += 1;
 		shootTimer -= 1;
 		if (shootTimer == 0)
@@ -149,11 +146,6 @@ public class DarkLantern : TrailingProjectile
 		}
 	}
 
-	public override bool PreDraw(ref Color lightColor)
-	{
-		return base.PreDraw(ref lightColor);
-	}
-
 	public override void DrawSelf()
 	{
 		var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -175,8 +167,20 @@ public class DarkLantern : TrailingProjectile
 		Main.spriteBatch.Draw(ModAsset.LanternFire.Value, Projectile.Center - Main.screenPosition, new Rectangle?(new Rectangle(0, 30 * Projectile.frame, 20, 30)), colorT, 0, new Vector2(10, 15), Projectile.scale * 0.5f, SpriteEffects.None, 1f);
 	}
 
-	public override void DrawTrail()
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		base.DrawTrail();
+		if (style == 1)
+		{
+			float value = index / (float)SmoothedOldPos.Count;
+			return Color.Lerp(TrailColor, new Color(0.5f, 0, 0.1f, 0), value);
+		}
+		if (style == 0)
+		{
+			float value = index / (float)SmoothedOldPos.Count;
+			return Color.Lerp(Color.Transparent, Color.White, value);
+		}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
 }

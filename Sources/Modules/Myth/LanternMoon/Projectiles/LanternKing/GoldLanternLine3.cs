@@ -3,17 +3,17 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-// 直接丢出去不会拐弯
+// Move linearly, not curve.
 public class GoldLanternLine3 : TrailingProjectile
 {
-	public override string Texture => "Everglow/" + ModAsset.GoldLaser_Path;
+	public override string Texture => ModAsset.GoldLaser_Mod;
 
 	public override void SetCustomDefaults()
 	{
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
-		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
-		TrailColor = new Color(1, 0.65f, 0, 0f);
-		TrailWidth = 2f;
+		TrailLength = 40;
+		TrailColor = new Color(1, 0.35f, 0, 0f);
+		TrailWidth = 4f;
+		TrailBackgroundDarkness = 0.1f;
 		SelfLuminous = true;
 		TrailTexture = Commons.ModAsset.Trail.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
@@ -23,10 +23,9 @@ public class GoldLanternLine3 : TrailingProjectile
 		Projectile.friendly = false;
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * TrailWidth / 7f);
-		base.AI();
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -43,18 +42,18 @@ public class GoldLanternLine3 : TrailingProjectile
 			width *= Projectile.timeLeft / 150f;
 		}
 		width *= 1 + (MathF.Sin((float)Main.time * 0.23f + Projectile.whoAmI) + 0.5f) * 0.7f;
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), MathHelper.PiOver2, star.Size() / 2f, width / 4.5f, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), 0, star.Size() / 2f, new Vector2(3f, width / 4.5f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), MathHelper.PiOver2, star.Size() / 2f, new Vector2(width / 3.5f, 0.5f), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), 0, star.Size() / 2f, new Vector2(width / 3.5f, 0.5f), SpriteEffects.None, 0);
+
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 	}
 
-	public override void DrawTrail()
-	{
-		base.DrawTrail();
-	}
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 
-	public override void DestroyEntity()
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
+	public override void DestroyEntityEffect()
 	{
 		for (int x = 0; x < 25; x++)
 		{
@@ -71,6 +70,5 @@ public class GoldLanternLine3 : TrailingProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.DestroyEntity();
 	}
 }

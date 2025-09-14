@@ -111,7 +111,6 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 	public override void DrawSelf()
 	{
 		Texture2D star = ModAsset.TerraViewerHowitzer_grenade_fall.Value;
-		float light = Projectile.ai[0] * Projectile.ai[0] / 30000f;
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition - Projectile.velocity, null, TrailColor, Projectile.rotation, star.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
 }

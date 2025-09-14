@@ -34,8 +34,7 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 30;
 
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 21;
+		TrailLength = 21;
 		TrailColor = new Color(0, 1f, 0.96f, 0f);
 		TrailWidth = 20f;
 		SelfLuminous = true;
@@ -49,54 +48,45 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		targetWhoAmI = FindTarget(Projectile.Center);
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		base.AI();
+		Projectile.velocity.Y += 0.5f;
+		Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Main.time * 0.16 + Projectile.whoAmI) * 0.03f);
+		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 8;
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
-		if (TimeAfterEntityDestroy <= 0)
+		float size = Main.rand.NextFloat(0.1f, 0.96f);
+		var lotusFlame = new CyanLotusFlameDust
 		{
-			Projectile.velocity.Y += 0.5f;
-			Projectile.velocity = Projectile.velocity.RotatedBy(Math.Sin(Main.time * 0.16 + Projectile.whoAmI) * 0.03f);
-			Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 8;
-			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-
-			float size = Main.rand.NextFloat(0.1f, 0.96f);
-			var lotusFlame = new CyanLotusFlameDust
+			Velocity = new Vector2(0, Main.rand.NextFloat(0.3f, 1f)).RotatedByRandom(MathHelper.TwoPi),
+			Active = true,
+			Visible = true,
+			Position = Projectile.Center,
+			MaxTime = Main.rand.Next(24, 36),
+			Scale = 14f * size,
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			Frame = Main.rand.Next(3),
+			ai = new float[] { Main.rand.NextFloat(-0.8f, 0.8f) },
+		};
+		Ins.VFXManager.Add(lotusFlame);
+		if (HasTarget)
+		{
+			if (!Target.active || Target.friendly || !Target.CanBeChasedBy())
 			{
-				Velocity = new Vector2(0, Main.rand.NextFloat(0.3f, 1f)).RotatedByRandom(MathHelper.TwoPi),
-				Active = true,
-				Visible = true,
-				Position = Projectile.Center,
-				MaxTime = Main.rand.Next(24, 36),
-				Scale = 14f * size,
-				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-				Frame = Main.rand.Next(3),
-				ai = new float[] { Main.rand.NextFloat(-0.8f, 0.8f) },
-			};
-			Ins.VFXManager.Add(lotusFlame);
-			if (HasTarget)
-			{
-				if (!Target.active || Target.friendly || !Target.CanBeChasedBy())
-				{
-					targetWhoAmI = -1;
-					return;
-				}
-				else
-				{
-					var targetPos = HasTarget ? Main.npc[targetWhoAmI].Center : Vector2.Zero;
-					var targetVel = Vector2.Normalize(targetPos - Projectile.Center) * 10f;
-					Projectile.velocity = (targetVel + Projectile.velocity * 10) / 11f;
-				}
+				targetWhoAmI = -1;
+				return;
 			}
 			else
 			{
-				// If there is no target after spawned, search target by projectile center.
-				targetWhoAmI = FindTarget(Projectile.Center);
+				var targetPos = HasTarget ? Main.npc[targetWhoAmI].Center : Vector2.Zero;
+				var targetVel = Vector2.Normalize(targetPos - Projectile.Center) * 10f;
+				Projectile.velocity = (targetVel + Projectile.velocity * 10) / 11f;
 			}
 		}
 		else
 		{
-			Projectile.velocity *= 0.1f;
+			// If there is no target after spawned, search target by projectile center.
+			targetWhoAmI = FindTarget(Projectile.Center);
 		}
 	}
 
@@ -127,15 +117,13 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 		return target;
 	}
 
-	public override void DestroyEntity()
+	public override void DestroyEntityEffect()
 	{
 		int n = 6;
 		Vector2 shootSpeed = new Vector2(0, Main.rand.NextFloat(4, 8)).RotatedByRandom(MathHelper.TwoPi);
 		for (int i = 0; i < n; i++)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootSpeed.RotatedBy(i / 6d * MathHelper.TwoPi) * 0.5f, ModContent.ProjectileType<BronzeLotusLamp_SubBlossom>(), 0, 0, Projectile.owner, 0);
-
-			// Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, shootSpeed.RotatedBy((i + 0.5f) / 6d * MathHelper.TwoPi) * 0.75f, ModContent.ProjectileType<BronzeLotusLamp_SubBlossom>(), 0, 0, Projectile.owner, 1);
 			for (int j = 0; j < 6; j++)
 			{
 				var lotusFlame = new CyanLotusFlameDust
@@ -154,39 +142,13 @@ public class BronzeLotusLamp_Blossom : TrailingProjectile
 			}
 		}
 		Projectile.height = Projectile.width = (int)(15 * shootSpeed.Length());
-		base.DestroyEntity();
-		Projectile.friendly = true;
-		Projectile.tileCollide = false;
 	}
 
-	public override bool OnTileCollide(Vector2 oldVelocity)
+	public override void DrawSelf()
 	{
-		if (TimeAfterEntityDestroy < 0)
-		{
-			DestroyEntity();
-		}
-		return false;
-	}
-
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		if (TimeAfterEntityDestroy < 0)
-		{
-			DestroyEntity();
-		}
-	}
-
-	public override bool PreDraw(ref Color lightColor)
-	{
-		DrawTrail();
-		if (TimeAfterEntityDestroy <= 0)
-		{
-			Texture2D texture = ModAsset.BronzeLotusLamp_Blossom.Value;
-			Vector2 drawCenter = Projectile.Center - Main.screenPosition;
-			lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
-			Main.EntitySpriteDraw(texture, drawCenter, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
-		}
-		return false;
+		Texture2D texture = ModAsset.BronzeLotusLamp_Blossom.Value;
+		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
+		Main.EntitySpriteDraw(texture, drawCenter, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 	}
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
