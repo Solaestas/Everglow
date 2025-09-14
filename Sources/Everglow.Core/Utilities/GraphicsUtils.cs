@@ -1,10 +1,24 @@
 using Everglow.Commons.DataStructures;
 using Terraria;
+using Terraria.Graphics;
 
 namespace Everglow.Commons.Utilities;
 
 public static class GraphicsUtils
 {
+	public static Matrix ScreenProjectionMatrix => Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+
+	public static Matrix ScreenTranslationMatrix => Matrix.CreateTranslation(new(-Main.screenPosition, 0));
+
+	public static Matrix ScreenMatrix => ScreenTranslationMatrix * ScreenProjectionMatrix;
+
+	/// <summary>
+	/// Transforming world coordinates into screen coordinates before applying the <see cref="SpriteViewMatrix.TransformationMatrix"/>.
+	/// </summary>
+	/// <param name="spriteViewMatrix"></param>
+	/// <returns></returns>
+	public static Matrix TransformationMatrix_WorldToScreen(this SpriteViewMatrix spriteViewMatrix) => spriteViewMatrix.TransformationMatrix * ScreenMatrix;
+
 	public static void Begin(this SpriteBatch spriteBatch, SpriteBatchState state)
 	{
 		spriteBatch.Begin(
