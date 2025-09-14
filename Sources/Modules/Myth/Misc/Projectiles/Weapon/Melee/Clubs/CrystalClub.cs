@@ -8,7 +8,7 @@ public class CrystalClub : ClubProj_Reflect
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
-		WarpValue = 0.3f;
+		WarpValue = 0.03f;
 		ReflectStrength = 1.2f;
 	}
 

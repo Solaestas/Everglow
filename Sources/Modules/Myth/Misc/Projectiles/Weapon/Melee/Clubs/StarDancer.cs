@@ -8,7 +8,7 @@ public class StarDancer : ClubProj_Reflect
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
-		WarpValue = 0.5f;
+		WarpValue = 0.05f;
 		ReflectStrength = 1.2f;
 	}
 

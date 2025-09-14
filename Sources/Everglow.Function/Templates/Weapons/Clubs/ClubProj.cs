@@ -55,7 +55,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	/// <summary>
 	/// Warp magnitude
 	/// </summary>
-	public float WarpValue { get; protected set; } = 0.6f;
+	public float WarpValue { get; protected set; } = 0.06f;
 
 	/// <summary>
 	/// The decrease amount of angular velocity while hit a target, associates with target.knownBackResist.
@@ -295,24 +295,12 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(TrailVecs.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (TrailVecs.Count != 0)
-		{
-			SmoothTrail.Add(TrailVecs.ToArray()[TrailVecs.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		if (!TrailVecs.Smooth(out var trail))
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
+		var length = trail.Count;
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < length; i++)
 		{
@@ -408,7 +396,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega * WarpValue, 0, 1), new Vector3(factor, 0, 1)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>(ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModAsset.Melee_Warp.Value, bars, PrimitiveType.TriangleStrip);
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

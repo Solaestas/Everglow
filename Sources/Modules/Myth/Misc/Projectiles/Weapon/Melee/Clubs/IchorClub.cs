@@ -14,7 +14,7 @@ public class IchorClub : ClubProj
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
 		vfxTimer = 0;
-		WarpValue = 0.3f;
+		WarpValue = 0.03f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
