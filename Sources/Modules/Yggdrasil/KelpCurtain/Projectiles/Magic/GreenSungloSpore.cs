@@ -2,7 +2,9 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Bosses.KingJellyBall;
 using Terraria;
+using static Terraria.ModLoader.BackupIO;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
@@ -31,6 +33,14 @@ public class GreenSungloSpore : TrailingProjectile
 
 	public override void OnKill(int timeLeft)
 	{
+		foreach (Projectile p in Main.projectile)
+		{
+			if (p.type == ModContent.ProjectileType<GreenSungloThorns>() && p.owner == Projectile.owner)
+			{
+				p.Kill();
+			}
+		}
+
 		int tileX = ((int)Projectile.Center.X) / 16;
 		int tileY = ((int)Projectile.Center.Y) / 16;
 		do
@@ -45,8 +55,8 @@ public class GreenSungloSpore : TrailingProjectile
 		{
 		}
 
-		Vector2 pos = new Vector2(tileX * 16, tileY * 16 + 16);
-		Projectile.NewProjectileDirect(null, pos, Vector2.Zero, ModContent.ProjectileType<GreenSungloThorns>(), 0, 0, Projectile.owner);
+		Vector2 pos = new Vector2(tileX * 16, tileY * 16);
+		Projectile.NewProjectileDirect(null, pos, Vector2.Zero, ModContent.ProjectileType<GreenSungloThorns>(), Projectile.damage, 0, Projectile.owner);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -187,6 +197,7 @@ public class GreenSungloSpore : TrailingProjectile
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
 			Color drawC = Color.White;
 			factor *= 1.5f;
+
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
@@ -194,6 +205,7 @@ public class GreenSungloSpore : TrailingProjectile
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
+
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
