@@ -24,6 +24,8 @@ internal class GreenSungloThorns : ModProjectile
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.hide = true;
+		Projectile.usesLocalNPCImmunity = true;
+		Projectile.localNPCHitCooldown = 30;
 	}
 
 	internal Vector2[] Position = new Vector2[900];
@@ -60,7 +62,7 @@ internal class GreenSungloThorns : ModProjectile
 		UpdateMoving();
 		if (t < 550)
 		{
-			t += 2;
+			t += 3.75f;
 		}
 		if (Projectile.timeLeft <= 2)
 		{
@@ -252,7 +254,7 @@ internal class GreenSungloThorns : ModProjectile
 		}
 	}
 
-	private int t;
+	private float t=1f;
 	private float a = Main.rand.NextFloat(2.5f, 3.5f);
 	private float b = Main.rand.NextFloat(2.5f, 3.5f);
 
@@ -273,6 +275,8 @@ internal class GreenSungloThorns : ModProjectile
 			Vector2 pos2 = new Vector2(MathF.Cos((i + 1) * 0.01f * 2 - 3) * (MathF.Sqrt((i + 1) * 0.01f) - a) * 0.25f, -i * 0.01f - 1) * 25;
 			Vector2 normal = MathUtils.NormalizeSafe(pos - pos2).RotatedBy(MathF.PI * 0.5f);
 			float y = (float)(-i / 320f);
+			float process = MathF.Min(1, (t - i) / t * 5f);
+			Width = 15f * process;
 			thorn1.Add(new Vertex2D(Projectile.Center + pos + normal * Width - Main.screenPosition + Vector2.UnitY * 48, Color.Green, new Vector3(0, y % 1 + 1, Width)));
 			thorn1.Add(new Vertex2D(Projectile.Center + pos - normal * Width - Main.screenPosition + Vector2.UnitY * 48, Color.Green, new Vector3(1, y % 1 + 1, Width)));
 		}
@@ -290,6 +294,8 @@ internal class GreenSungloThorns : ModProjectile
 			Vector2 pos2 = new Vector2(-MathF.Cos((i + 1) * 0.01f * 2 - 3) * (MathF.Sqrt((i + 1) * 0.01f) - b) * 0.25f, -i * 0.01f - 1) * 25;
 			Vector2 normal = MathUtils.NormalizeSafe(pos - pos2).RotatedBy(MathF.PI * 0.5f);
 			float y = (float)(-i / 320f);
+			float process = MathF.Min(1, (t - i) / t * 5f);
+			Width = 15f * process;
 			thorn2.Add(new Vertex2D(Projectile.Center + pos + normal * Width - Main.screenPosition + Vector2.UnitY * 48, Color.White, new Vector3(0, y % 1 + 1, Width)));
 			thorn2.Add(new Vertex2D(Projectile.Center + pos - normal * Width - Main.screenPosition + Vector2.UnitY * 48, Color.White, new Vector3(1, y % 1 + 1, Width)));
 		}
@@ -300,6 +306,7 @@ internal class GreenSungloThorns : ModProjectile
 		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, thorn2.ToArray(), 0, thorn2.Count - 2);
 		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
