@@ -6,32 +6,22 @@ namespace Everglow.Myth.TheTusk.Projectiles;
 
 public class TuskCurse : TrailingProjectile
 {
-	public override void SetDefaults()
-	{
-		base.SetDefaults();
-	}
-
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		TrailColor = new Color(1, 0, 0, 0f);
 		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_2_black_thick.Value;
-		base.SetDef();
+		base.SetCustomDefaults();
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		base.AI();
 		Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
 		Projectile.velocity *= 0.98f;
 		Projectile.velocity.Y += 0.4f;
 	}
 
-	public override void OnKill(int timeLeft)
-	{
-	}
-
-	public override void KillMainStructure()
+	public override void DestroyEntityEffect()
 	{
 		SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, Projectile.Center);
 		for (int h = 0; h < 20; h++)
@@ -42,27 +32,30 @@ public class TuskCurse : TrailingProjectile
 			dust.velocity = v3;
 		}
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<TuskBloodPool>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
-		base.KillMainStructure();
-	}
-
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
 	}
 
 	public override void DrawSelf()
 	{
-		base.DrawSelf();
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Color lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
 	}
 
-	public override bool PreDraw(ref Color lightColor)
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
 	{
-		DrawTrail();
-		if (TimeTokill <= 0)
+		float x = factor - timeValue * 1f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
 		{
-			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.rotation, texMain.Size() / 2f, 1f, SpriteEffects.None, 0);
+			y = 0;
 		}
-		return false;
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
 	}
 }

@@ -1,10 +1,5 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class TungstenClub : ClubProj_metal
+public class TungstenClub : ClubProj_Reflect
 {
-	public override void SetDef()
-	{
-	}
 }

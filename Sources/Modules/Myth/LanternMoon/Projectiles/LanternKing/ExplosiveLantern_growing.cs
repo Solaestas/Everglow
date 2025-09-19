@@ -2,7 +2,9 @@ using Everglow.Myth.LanternMoon.Gores;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+
 using static Everglow.Myth.Common.MythUtils;
+
 public class ExplosiveLantern_growing : ModNPC
 {
 	public override void SetDefaults()
@@ -17,17 +19,21 @@ public class ExplosiveLantern_growing : ModNPC
 		NPC.noGravity = true;
 		NPC.dontCountMe = true;
 	}
+
 	public int timer = 0;
 	public int MaxTimer = 0;
+
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color(1f, 1f, 1f, 0.5f);
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		Explosion();
 		base.OnHitPlayer(target, info);
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		timer = 0;
@@ -35,6 +41,7 @@ public class ExplosiveLantern_growing : ModNPC
 		NPC.ai[0] = Main.rand.NextFloat(0.06f, 0.08f) / 10f;
 		MaxTimer = Main.rand.Next(175, 300);
 	}
+
 	public override void AI()
 	{
 		NPC.TargetClosest();
@@ -48,7 +55,7 @@ public class ExplosiveLantern_growing : ModNPC
 				NPC.height += 1;
 			}
 		}
-		if(NPC.scale >= 0.8f && timer < MaxTimer - 60)
+		if (NPC.scale >= 0.8f && timer < MaxTimer - 60)
 		{
 			NPC.velocity.Y += 0.1f;
 			if (NPC.velocity.Length() > NPC.scale * 5)
@@ -60,15 +67,16 @@ public class ExplosiveLantern_growing : ModNPC
 		{
 			NPC.velocity *= 0.95f;
 		}
-		if(NPC.collideX || NPC.collideY)
+		if (NPC.collideX || NPC.collideY)
 		{
 			Explosion();
 		}
-		if(timer > MaxTimer)
+		if (timer > MaxTimer)
 		{
 			Explosion();
 		}
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -101,10 +109,12 @@ public class ExplosiveLantern_growing : ModNPC
 		DrawTexCircle(maxDistance * MathF.Pow(value, 0.2f), 22 * value + 22, new Color(0.75f, 0.05f, 0.0f, 0), NPC.Center - Main.screenPosition, Commons.ModAsset.Trail_0.Value, Main.time / 17);
 		return false;
 	}
+
 	public override void OnKill()
 	{
 		Explosion();
 	}
+
 	public void Explosion()
 	{
 		var gore2 = new FloatLanternGore3
@@ -113,7 +123,7 @@ public class ExplosiveLantern_growing : ModNPC
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = NPC.Center
+			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore2);
 		var gore3 = new FloatLanternGore4
@@ -122,7 +132,7 @@ public class ExplosiveLantern_growing : ModNPC
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = NPC.Center
+			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore3);
 		var gore4 = new FloatLanternGore5
@@ -131,7 +141,7 @@ public class ExplosiveLantern_growing : ModNPC
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = NPC.Center
+			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore4);
 		var gore5 = new FloatLanternGore6
@@ -140,12 +150,12 @@ public class ExplosiveLantern_growing : ModNPC
 			Visible = true,
 			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 			noGravity = false,
-			position = NPC.Center
+			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore5);
 		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
-		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5,NPC.target,3);
+		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5, NPC.target, 3);
 		p.friendly = false;
 		p.hostile = true;
 		NPC.active = false;

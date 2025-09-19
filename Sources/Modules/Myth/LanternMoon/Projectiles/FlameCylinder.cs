@@ -1,14 +1,16 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Newtonsoft.Json.Linq;
 
 namespace Everglow.Myth.LanternMoon.Projectiles;
 
 public class FlameCylinder : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 400;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+
+		TrailLength = 400;
 		TrailColor = new Color(1, 0.65f, 0, 0f);
 		TrailWidth = 120f;
 		SelfLuminous = true;
@@ -19,93 +21,62 @@ public class FlameCylinder : TrailingProjectile
 		Projectile.hostile = true;
 		Projectile.friendly = false;
 		Projectile.extraUpdates = 3;
+		WarpStrength = 8f;
 	}
-	public override void AI()
+
+	public override void Behaviors()
 	{
-		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
 		Projectile.velocity *= 0.984f;
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * TrailWidth / 7f);
-		base.AI();
-	}
-	public override bool PreDraw(ref Color lightColor)
-	{
-		return base.PreDraw(ref lightColor);
-	}
-	public override void DrawSelf()
-	{
-	}
-	public override void DrawTrail()
-	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		if (Projectile.timeLeft < 120)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-			unSmoothPos.Add(Projectile.oldPos[i]);
+			WarpStrength = Projectile.timeLeft / 120f;
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (unSmoothPos.Count != 0)
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+	}
 
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
+	{
+		if(style == 0)
 		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
+			float value0 = index / (float)SmoothedOldPos.Count;
+			value0 = MathF.Sin(value0 * MathHelper.Pi);
+			Color drawC = Color.Lerp(Color.Transparent, Color.White, value0);
+			if (Projectile.timeLeft < 120)
 			{
-				mulFac = 1f;
+				drawC = Color.Lerp(Color.Transparent, drawC, Projectile.timeLeft / 120f);
 			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = -(float)Main.timeForVisualEffects * 0.005f;
-			factor += timeValue;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			float value0 = (1 - i / (float)SmoothTrail.Count);
-			Color drawC = new Color(value0, value0 * value0 * 0.7f, value0 * value0 * value0 * 0.2f, 0);
-			
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + 0.4f + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + 0.4f + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + 0.2f + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + 0.2f + timeValue, 0.5f, width)));
+			return drawC;
 		}
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		if (bars2.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		if (bars3.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
+		if (style == 1)
+		{
+			float value0 = 1 - index / (float)SmoothedOldPos.Count;
+			Color drawC = new Color(value0, value0 * value0 * 0.7f, value0 * value0 * value0 * 0.2f, 0);
+			if (Projectile.timeLeft < 120)
+			{
+				drawC = Color.Lerp(Color.Transparent, drawC, Projectile.timeLeft / 120f);
+			}
+			return drawC;
+		}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
-	public override void DrawTrailDark()
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
 	{
-		base.DrawTrailDark();
+		float x = factor - timeValue * 0.1f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
 	}
-	public override void KillMainStructure()
+
+	public override void DestroyEntityEffect()
 	{
 		for (int x = 0; x < 25; x++)
 		{
@@ -118,10 +89,9 @@ public class FlameCylinder : TrailingProjectile
 				maxTime = Main.rand.Next(57, 255),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(8f, 17.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0 }
+				ai = new float[] { 0 },
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.KillMainStructure();
 	}
 }

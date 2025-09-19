@@ -1,4 +1,4 @@
-﻿sampler2D uImage : register(s0);
+sampler2D uImage : register(s0);
 sampler2D uImage1 : register(s1);
 
 float4x4 uTransform;
@@ -21,7 +21,6 @@ PSInput VertexShaderFunction(VSInput input)
 {
     PSInput output;
     output.Color = input.Color;
-
     output.Texcoord = input.Texcoord;
     output.Pos = mul(float4(input.Pos, 0, 1), uTransform);
     return output;
