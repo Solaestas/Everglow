@@ -5,7 +5,7 @@ namespace Everglow.Food.Items.Weapons;
 
 public class CheeseYoyo : YoyoItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 24;
 		Item.value = Item.sellPrice(0, 0, 2, 0);
