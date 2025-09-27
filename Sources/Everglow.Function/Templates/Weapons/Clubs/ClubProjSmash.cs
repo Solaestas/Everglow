@@ -301,7 +301,7 @@ public abstract class ClubProjSmash : MeleeProj
 
 	public virtual void DrawSmashTrail(Color color)
 	{
-		if (SmashTrailVecs.Smooth(out var smoothedTrail))
+		if (!SmashTrailVecs.Smooth(out var smoothedTrail))
 		{
 			return;
 		}

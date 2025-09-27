@@ -10,7 +10,7 @@ public abstract class ClubProjSmash_Reflect : ClubProjSmash
 
 	public override void DrawSmashTrail(Color color)
 	{
-		if (SmashTrailVecs.Smooth(out var trail))
+		if (!SmashTrailVecs.Smooth(out var trail))
 		{
 			return;
 		}

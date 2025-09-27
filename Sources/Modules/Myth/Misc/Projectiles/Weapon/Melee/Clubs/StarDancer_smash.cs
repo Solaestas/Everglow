@@ -125,7 +125,7 @@ public class StarDancer_smash : ClubProjSmash_Reflect
 
 	public override void DrawSmashTrail(Color color)
 	{
-		if (SmashTrailVecs.Smooth(out var smoothedTrail))
+		if (!SmashTrailVecs.Smooth(out var smoothedTrail))
 		{
 			return;
 		}

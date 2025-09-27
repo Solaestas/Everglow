@@ -136,7 +136,7 @@ public class CurseClub_smash : ClubProjSmash
 	{
 		base.DrawSmashTrail(color);
 
-		if (SmashTrailVecs.Smooth(out var smoothedTrail))
+		if (!SmashTrailVecs.Smooth(out var smoothedTrail))
 		{
 			return;
 		}
