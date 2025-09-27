@@ -1,4 +1,3 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Terraria.DataStructures;
@@ -7,7 +6,7 @@ namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class LanternFlow : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
@@ -20,22 +19,24 @@ public class LanternFlow : TrailingProjectile
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
-
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 400;
-		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
+		TrailLength = 400;
 		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
 		TrailColor = new Color(1f, 0.2f, 0f, 0f) * 0.3f;
+		TrailBackgroundDarkness = 0.3f;
 		TrailWidth = 240f;
 		SelfLuminous = true;
 		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
 		WarpStrength = 1f;
 	}
+
 	public NPC OwnerNPC;
+
 	public override Color? GetAlpha(Color lightColor)
 	{
 		return new Color?(new Color(1f, 1f, 1f, 0.5f));
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		if (OwnerNPC == null)
@@ -52,7 +53,8 @@ public class LanternFlow : TrailingProjectile
 			}
 		}
 	}
-	public override void AI()
+
+	public override void Behaviors()
 	{
 		if (OwnerNPC == null)
 		{
@@ -72,8 +74,6 @@ public class LanternFlow : TrailingProjectile
 			Projectile.active = false;
 			return;
 		}
-
-		base.AI();
 		Vector2 toOwner = OwnerNPC.Center - Projectile.Center;
 		if (Projectile.timeLeft > 507)
 		{
@@ -92,111 +92,72 @@ public class LanternFlow : TrailingProjectile
 			}
 			if (Projectile.timeLeft < 220)
 			{
-				TrailColor = TrailColor * 0.99f;
+				TrailColor *= 0.99f;
+				TrailBackgroundDarkness *= 0.98f;
 				WarpStrength *= 0.98f;
 			}
 		}
 		if (Projectile.timeLeft < 580)
 		{
-			for (int i = 0; i < Projectile.oldPos.Length / 60; i++)
+			for (int i = 0; i < SmoothedOldPos.Count / 240; i++)
 			{
-				int checkOldPosIndex = Main.rand.Next(5, (int)MathF.Min(598 - Projectile.timeLeft, Projectile.oldPos.Length - 2));
+				int checkOldPosIndex = Main.rand.Next(5, (int)MathF.Min(Timer - 2, SmoothedOldPos.Count - 2));
+				checkOldPosIndex = Math.Clamp(checkOldPosIndex, 0, SmoothedOldPos.Count - 1);
 				float mulScale = Main.rand.NextFloat(0.5f, 1.2f);
 				if (Projectile.timeLeft < 120f)
 				{
 					mulScale *= Projectile.timeLeft / 120f;
 				}
-				Vector2 addPos = new Vector2(Main.rand.NextFloat(0f, 90f), 0).RotateRandom(6.283);
+				Vector2 addPos = new Vector2(Main.rand.NextFloat(0f, 90f), 0).RotateRandom(MathHelper.TwoPi);
 				var gore2 = new LanternFlow_lantern
 				{
 					Active = true,
 					Visible = true,
-					velocity = -Vector2.Normalize(Projectile.oldPos[checkOldPosIndex] - Projectile.oldPos[checkOldPosIndex - 1]) * mulScale * 6 - addPos * 0.01f,
+					velocity = -Vector2.Normalize(SmoothedOldPos.ToArray()[checkOldPosIndex] - SmoothedOldPos.ToArray()[checkOldPosIndex - 1]) * mulScale * 6 - addPos * 0.01f,
 					scale = mulScale,
-					position = Projectile.oldPos[checkOldPosIndex] + addPos,
-					npcOwner = OwnerNPC
+					position = SmoothedOldPos.ToArray()[checkOldPosIndex] + addPos,
+					npcOwner = OwnerNPC,
 				};
 				Ins.VFXManager.Add(gore2);
 			}
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return base.PreDraw(ref lightColor);
 	}
-	public override void DrawSelf()
-	{
 
-	}
 	public override void DrawTrail()
 	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (unSmoothPos.Count != 0)
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
-		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.0005f;
-			factor *= 3f;
-			factor += timeValue;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = TrailColor;
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		if (bars2.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		if (bars3.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		base.DrawTrail();
 	}
-	public override void DrawTrailDark()
+
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		base.DrawTrailDark();
+		//if(style == 0)
+		//{
+		//	return new Color(0, 0, 0, 0);
+		//}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor * 4;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
+	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		for (int i = 50; i < Projectile.oldPos.Count(); i++)
@@ -207,8 +168,5 @@ public class LanternFlow : TrailingProjectile
 			}
 		}
 		return false;
-	}
-	public override void OnHitPlayer(Player target, Player.HurtInfo info)
-	{
 	}
 }

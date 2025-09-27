@@ -4,12 +4,12 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class RichMahoganyClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 6;
 		Item.value = 64;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.RichMahoganyClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.RichMahoganyClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.RichMahoganyClub_smash>();
 	}
 	public override void AddRecipes()
 	{
