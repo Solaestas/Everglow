@@ -27,8 +27,8 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 		Projectile.width = 80;
 		Projectile.height = 80;
 		longHandle = false;
-		maxAttackType = 0;
-		trailLength = 20;
+		MaxAttackType = 0;
+		MaxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		CanIgnoreTile = true;
 		AutoEnd = false;
@@ -80,8 +80,8 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 		Attack();
 		Projectile.Center = Owner.Center;
 		Projectile.spriteDirection = -Owner.direction;
-		timer++;
-		if (!isAttacking)
+		Timer++;
+		if (!IsAttacking)
 		{
 			if (!isRightClick)
 			{
@@ -100,17 +100,17 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 				}
 			}
 		}
-		if (useTrail)
+		if (UseTrail)
 		{
-			trailVecs.Enqueue(mainVec);
-			if (trailVecs.Count > trailLength)
+			SlashTrail.Enqueue(MainAxisDirection);
+			if (SlashTrail.Count > MaxSlashTrailLength)
 			{
-				trailVecs.Dequeue();
+				SlashTrail.Dequeue();
 			}
 		}
 		else
 		{
-			trailVecs.Clear();
+			SlashTrail.Clear();
 		}
 		if (CanLongLeftClick)
 		{
@@ -124,56 +124,56 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 			}
 		}
 
-		useTrail = true;
-		if (attackType == 0)
+		UseTrail = true;
+		if (CurrantAttackType == 0)
 		{
-			if (timer < 16)// 前摇
+			if (Timer < 16)// 前摇
 			{
-				useTrail = false;
+				UseTrail = false;
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(170, targetRot, 2f), 0.7f);
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
-			if (timer == 20)
+			if (Timer == 20)
 			{
 				Projectile.friendly = true;
 				AttSound(SoundID.Item1);
 			}
 
-			if (timer >= 16 && timer < 30)
+			if (Timer >= 16 && Timer < 30)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.03f;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
 			}
 
-			if (timer >= 30 && timer < 40)
+			if (Timer >= 30 && Timer < 40)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.2f;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
 				GenerateVFX();
 			}
 
-			if (timer >= 40 && timer < 50)
+			if (Timer >= 40 && Timer < 50)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.4f;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
 				GenerateVFX();
 			}
-			if (timer >= 50 && timer < 60)
+			if (Timer >= 50 && Timer < 60)
 			{
 				Projectile.friendly = false;
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.01f;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
 			}
-			if (timer >= 60 && timer < 80)
+			if (Timer >= 60 && Timer < 80)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.005f;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 1.2f, 0);
 			}
 		}
 	}
@@ -213,12 +213,12 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(0)) * Main.GameViewMatrix.TransformationMatrix;
-		float dissolveDuration = (80 - timer) / 20f;
-		if (timer < 16)
+		float dissolveDuration = (80 - Timer) / 20f;
+		if (Timer < 16)
 		{
-			dissolveDuration = timer / 16f;
+			dissolveDuration = Timer / 16f;
 		}
-		if (timer < 60 && timer > 16)
+		if (Timer < 60 && Timer > 16)
 		{
 			dissolveDuration = 1.2f;
 		}
@@ -246,7 +246,7 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 		Texture2D tex = Terraria.GameContent.TextureAssets.Projectile[Projectile.type].Value;
 		Vector2 drawCenter = Projectile.Center - Main.screenPosition;
 
-		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + MainAxisDirection * drawScale.X, drawCenter + MainAxisDirection * drawScale.Y);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -254,15 +254,15 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (SlashTrail.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -286,8 +286,8 @@ public class AcytaeaSword_projectile_TownNPC : MeleeProj
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		bars.Add(new Vertex2D(Projectile.Center + MainAxisDirection * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + MainAxisDirection * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);

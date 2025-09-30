@@ -45,11 +45,10 @@ public abstract class ClubProjSmash : MeleeProj
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		longHandle = false;
-		maxAttackType = 2;
-		trailLength = 20;
+		MaxAttackType = 2;
+		MaxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		AutoEnd = false;
-		selfWarp = false;
 	}
 
 	public override string TrailShapeTex() => ModAsset.Melee_Mod;
@@ -81,32 +80,32 @@ public abstract class ClubProjSmash : MeleeProj
 
 		TestPlayerDrawer modPlayer = Owner.GetModPlayer<TestPlayerDrawer>();
 		modPlayer.HideLeg = true;
-		useTrail = true;
+		UseTrail = true;
 		float timeMul = 1 / Owner.meleeSpeed;
-		if (attackType == 0)
+		if (CurrantAttackType == 0)
 		{
-			if (timer < 14 * timeMul)// 前摇
+			if (Timer < 14 * timeMul)// 前摇
 			{
-				useTrail = false;
+				UseTrail = false;
 				LockPlayerDir(Owner);
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
+				MainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
-			if (timer == (int)(14 * timeMul))
+			if (Timer == (int)(14 * timeMul))
 			{
 				AttSound(SoundID.Item1);
 			}
 
-			if (timer > 14 * timeMul && timer < 35 * timeMul)
+			if (Timer > 14 * timeMul && Timer < 35 * timeMul)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
 
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
 				Owner.fullRotationOrigin = new Vector2(10, 42);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.fullRotation = MathF.Sin((Timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
 				Owner.legRotation = -Owner.fullRotation;
 			}
 			if (Owner.gravDir == 1)
@@ -116,11 +115,11 @@ public abstract class ClubProjSmash : MeleeProj
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
 				if (Collision.SolidCollision(Owner.BottomLeft, Owner.width, 64) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, -16)) || ((Owner.waterWalk || Owner.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !Owner.wet))
 				{
-					if (timer <= 70)
+					if (Timer <= 70)
 					{
 						Smash(0);
 					}
-					if (timer > 70)
+					if (Timer > 70)
 					{
 						Smash(1);
 					}
@@ -130,101 +129,101 @@ public abstract class ClubProjSmash : MeleeProj
 			{
 				if (Collision.SolidCollision(Owner.TopLeft - new Vector2(0, 64), Owner.width, 80))
 				{
-					if (timer <= 70)
+					if (Timer <= 70)
 					{
 						Smash(0);
 					}
-					if (timer > 70)
+					if (Timer > 70)
 					{
 						Smash(1);
 					}
 				}
 			}
-			if (timer > 25 * timeMul)
+			if (Timer > 25 * timeMul)
 			{
 				Owner.velocity.Y += Owner.gravDir;
 				LockPlayerDir(Owner);
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
+				MainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
 		}
-		if (attackType == 1)
+		if (CurrantAttackType == 1)
 		{
 			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 14).RotatedByRandom(6.283);
 			Owner.direction = FixedDirection;
-			if (timer < 8 * timeMul)// 前摇
+			if (Timer < 8 * timeMul)// 前摇
 			{
-				useTrail = false;
+				UseTrail = false;
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
+				MainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
-			if (timer == (int)(2 * timeMul))
+			if (Timer == (int)(2 * timeMul))
 			{
 				AttSound(SoundID.Item1);
 			}
 
-			if (timer > 8 * timeMul && timer < 90 * timeMul)
+			if (Timer > 8 * timeMul && Timer < 90 * timeMul)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Omega *= 0.98f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 1.16f;
-				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * Owner.direction;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
+				float phi = MathF.Sin((90 - Timer) * (90 - Timer) / 1000f) * Owner.direction;
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
 				Owner.fullRotationOrigin = new Vector2(10, 42);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.fullRotation = MathF.Sin((Timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
 				Owner.legRotation = -Owner.fullRotation;
 			}
-			if (timer > 100 * timeMul)
+			if (Timer > 100 * timeMul)
 			{
 				End();
 				Projectile.Kill();
 			}
 		}// 强
-		if (attackType == 2)
+		if (CurrantAttackType == 2)
 		{
 			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
 			Owner.direction = FixedDirection;
-			if (timer < 8 * timeMul)// 前摇
+			if (Timer < 8 * timeMul)// 前摇
 			{
-				useTrail = false;
+				UseTrail = false;
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainVec += Projectile.DirectionFrom(Owner.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
+				MainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
-			if (timer == (int)(2 * timeMul))
+			if (Timer == (int)(2 * timeMul))
 			{
 				AttSound(SoundID.Item1);
 			}
 
-			if (timer > 8 * timeMul && timer < 40 * timeMul)
+			if (Timer > 8 * timeMul && Timer < 40 * timeMul)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Omega *= 0.95f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
-				float theta = 0.4f + timer / 71f;
-				float phi = (-1.2f + timer / 50f) * Owner.direction;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
+				float theta = 0.4f + Timer / 71f;
+				float phi = (-1.2f + Timer / 50f) * Owner.direction;
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
 				Owner.fullRotationOrigin = new Vector2(10, 42);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+				Owner.fullRotation = MathF.Sin((Timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
 				Owner.legRotation = -Owner.fullRotation;
 			}
-			if (timer > 50 * timeMul)
+			if (Timer > 50 * timeMul)
 			{
 				End();
 				Projectile.Kill();
 			}
 		}// 弱
 
-		SmashTrailVecs.Enqueue(mainVec + Projectile.Center);
-		if (SmashTrailVecs.Count > trailLength)
+		SmashTrailVecs.Enqueue(MainAxisDirection + Projectile.Center);
+		if (SmashTrailVecs.Count > MaxSlashTrailLength)
 		{
 			SmashTrailVecs.Dequeue();
 		}
@@ -235,7 +234,7 @@ public abstract class ClubProjSmash : MeleeProj
 		if (level == 1)// 强
 		{
 			SoundEngine.PlaySound(SoundID.Research);
-			attackType = 1;
+			CurrantAttackType = 1;
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
 			{
@@ -262,7 +261,7 @@ public abstract class ClubProjSmash : MeleeProj
 		if (level == 0)// 弱
 		{
 			SoundEngine.PlaySound(SoundID.DrumFloorTom);
-			attackType = 2;
+			CurrantAttackType = 2;
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
@@ -287,7 +286,7 @@ public abstract class ClubProjSmash : MeleeProj
 		}
 		StopPoint = Owner.Bottom;
 		Crash = true;
-		timer = 0;
+		Timer = 0;
 
 		FixedDirection = Owner.direction;
 	}

@@ -25,8 +25,8 @@ public class AcytaeaSword_projectile : MeleeProj
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		longHandle = false;
-		maxAttackType = 0;
-		trailLength = 20;
+		MaxAttackType = 0;
+		MaxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 	}
@@ -68,43 +68,43 @@ public class AcytaeaSword_projectile : MeleeProj
 		base.AI();
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
-		useTrail = true;
+		UseTrail = true;
 		float timeMul = 1 / player.meleeSpeed;
-		if (attackType == 0)
+		if (CurrantAttackType == 0)
 		{
-			if (timer < 3 * timeMul)// 前摇
+			if (Timer < 3 * timeMul)// 前摇
 			{
-				useTrail = false;
+				UseTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 + player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(170, targetRot, 2f), 0.7f);
+				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = MainAxisDirection.ToRotation();
 			}
-			if (timer == (int)(20 * timeMul))
+			if (Timer == (int)(20 * timeMul))
 			{
 				AttSound(SoundID.Item1);
 			}
 
-			if (timer > 3 * timeMul && timer < 30 * timeMul)
+			if (Timer > 3 * timeMul && Timer < 30 * timeMul)
 			{
-				isAttacking = true;
+				IsAttacking = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.25f / timeMul;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 0.6f);
-				if (timer < 24 * timeMul)
+				MainAxisDirection = Vector2Elipse(190, Projectile.rotation, 0.6f);
+				if (Timer < 24 * timeMul)
 				{
 					GenerateVFX();
 				}
 				else
 				{
-					if (Main.rand.Next((int)(60 * timeMul)) < (30 * timeMul - timer) * 10)
+					if (Main.rand.Next((int)(60 * timeMul)) < (30 * timeMul - Timer) * 10)
 					{
 						GenerateVFX();
 					}
 				}
 			}
 
-			if (timer > 60 * timeMul)
+			if (Timer > 60 * timeMul)
 			{
 				player.fullRotation = 0;
 				player.legRotation = 0;
@@ -124,7 +124,7 @@ public class AcytaeaSword_projectile : MeleeProj
 		times *= 3;
 		for (int x = 0; x < times; x++)
 		{
-			Vector2 newVec = mainVec;
+			Vector2 newVec = MainAxisDirection;
 			newVec *= player.gravDir;
 			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2 * player.gravDir);
 			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 0.9f);
@@ -155,15 +155,15 @@ public class AcytaeaSword_projectile : MeleeProj
 
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
+		if (SlashTrail.Count != 0)
 		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -187,8 +187,8 @@ public class AcytaeaSword_projectile : MeleeProj
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		bars.Add(new Vertex2D(Projectile.Center + MainAxisDirection * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + MainAxisDirection * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
