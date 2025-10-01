@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee.EvilHalbertBarnacle;
 
@@ -72,43 +71,12 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 			{
 				if (Collision.SolidCollision(Projectile.position + Projectile.velocity.NormalizeSafe() * v * 5, Projectile.width, Projectile.height))
 				{
-					Projectile.Center += Projectile.velocity.NormalizeSafe() * v * 5;
+					Projectile.Center = Projectile.Center + Projectile.velocity.NormalizeSafe() * v * 5;
 					Projectile.velocity *= 0;
 					State = 1;
 					Power = 100;
 					Timer = 0;
-					for (int i = 0; i < 16; ++i)
-					{
-						Vector2 vel = new Vector2(0, 1).RotateRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 1.15f) * 15f;
-						var dust = new BarnacleTissueDust
-						{
-							velocity = vel,
-							Active = true,
-							Visible = true,
-							position = Projectile.Center + Projectile.velocity * 5,
-							maxTime = Main.rand.Next(20, 30),
-							scale = Main.rand.NextFloat(8f, 45f),
-							rotation = Main.rand.NextFloat(6.283f),
-							ai = new float[] { Main.rand.NextFloat(6f, 8f), Main.rand.NextFloat(1f) },
-						};
-						Ins.VFXManager.Add(dust);
-					}
-					for (int i = 0; i < 6; ++i)
-					{
-						Vector2 vel = new Vector2(0, 1).RotateRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 1.15f) * 35f;
-						var dust = new BarnacleTissueDust
-						{
-							velocity = vel,
-							Active = true,
-							Visible = true,
-							position = Projectile.Center + Projectile.velocity * 5,
-							maxTime = Main.rand.Next(10, 26),
-							scale = Main.rand.NextFloat(60f, 150f),
-							rotation = Main.rand.NextFloat(6.283f),
-							ai = new float[] { Main.rand.NextFloat(6f, 8f), Main.rand.NextFloat(1f) },
-						};
-						Ins.VFXManager.Add(dust);
-					}
+					CollideEffect();
 					break;
 				}
 			}
@@ -233,6 +201,42 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(0.7f, 0.4f, 0.3f) * Power / 70f);
 	}
 
+	public void CollideEffect()
+	{
+		for (int i = 0; i < 16; ++i)
+		{
+			Vector2 vel = new Vector2(0, 1).RotateRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 1.15f) * 15f;
+			var dust = new BarnacleTissueDust
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + Projectile.velocity * 5,
+				maxTime = Main.rand.Next(20, 30),
+				scale = Main.rand.NextFloat(8f, 45f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(6f, 8f), Main.rand.NextFloat(1f) },
+			};
+			Ins.VFXManager.Add(dust);
+		}
+		for (int i = 0; i < 6; ++i)
+		{
+			Vector2 vel = new Vector2(0, 1).RotateRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 1.15f) * 35f;
+			var dust = new BarnacleTissueDust
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + Projectile.velocity * 5,
+				maxTime = Main.rand.Next(10, 26),
+				scale = Main.rand.NextFloat(60f, 150f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(6f, 8f), Main.rand.NextFloat(1f) },
+			};
+			Ins.VFXManager.Add(dust);
+		}
+	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float length = Projectile.velocity.Length() / 4f;
@@ -259,6 +263,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 			State = 1;
 			Power = 100;
 			Timer = 0;
+			CollideEffect();
 		}
 	}
 
