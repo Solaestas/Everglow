@@ -265,6 +265,12 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		}
 	}
 
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		ScreenShake();
+		base.OnHitNPC(target, hit, damageDone);
+	}
+
 	public virtual void Attack()
 	{
 	}
@@ -274,7 +280,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		return false;
 	}
 
-	private void ProduceWaterRipples(Vector2 beamDims)
+	public virtual void ProduceWaterRipples(Vector2 beamDims)
 	{
 		var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
 		float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
@@ -292,10 +298,9 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
 	}
 
-	public void ScreenShake(int time)
+	public void ScreenShake()
 	{
-		// 震屏没写
-		// Main.player[projectile.owner].GetModPlayer<EffectPlayer>().screenShake = time;
+		ShakerManager.AddShaker(Player.Center + MainAxisDirection, new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30);
 	}
 
 	public void NextAttackType()
