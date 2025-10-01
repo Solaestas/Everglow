@@ -2,7 +2,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
-internal class ToothKnife : MeleeProj, IWarpProjectile
+public class ToothKnife : MeleeProj, IWarpProjectile
 {
 	public override void SetDef()
 	{

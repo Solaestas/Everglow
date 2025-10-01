@@ -257,6 +257,7 @@ public class PalladiumClub_small : ModProjectile, IWarpProjectile
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 			return;
+		float warpValue = Omega * 0.1f;
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < length; i++)
@@ -281,23 +282,23 @@ public class PalladiumClub_small : ModProjectile, IWarpProjectile
 			{
 				var MidValue = (1 - dir) / (1 - dir + dir1);
 				var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, warpValue, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 			}
 			if (dir1 - dir > 0.5)
 			{
 				var MidValue = (1 - dir1) / (1 - dir1 + dir);
 				var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(1, warpValue, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + MidPoint * Projectile.scale * 1.1f, new Color(0, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 			}
 
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega, 0, 1), new Vector3(factor, 1, 1)));
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 		}
 		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
 		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
@@ -323,23 +324,23 @@ public class PalladiumClub_small : ModProjectile, IWarpProjectile
 			{
 				var MidValue = (1 - dir) / (1 - dir + dir1);
 				var MidPoint = MidValue * trail[i] + (1 - MidValue) * trail[i - 1];
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, warpValue, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 			}
 			if (dir1 - dir > 0.5)
 			{
 				var MidValue = (1 - dir1) / (1 - dir1 + dir);
 				var MidPoint = MidValue * trail[i - 1] + (1 - MidValue) * trail[i];
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, Omega, 0, 1), new Vector3(factor, 0, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, Omega, 0, 1), new Vector3(factor, 1, 1)));
-				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, Omega, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(1, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(1, warpValue, 0, 1), new Vector3(factor, 0, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(0, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+				bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - MidPoint * Projectile.scale * 1.1f, new Color(0, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 			}
 
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, Omega, 0, 1), new Vector3(factor, 1, 1)));
-			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, new Color(dir, warpValue, 0, 1), new Vector3(factor, 1, 1)));
+			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, warpValue, 0, 1), new Vector3(factor, 0, 1)));
 		}
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);

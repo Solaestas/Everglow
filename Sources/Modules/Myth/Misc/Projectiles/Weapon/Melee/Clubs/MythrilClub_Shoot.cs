@@ -1,13 +1,11 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
-using Terraria.Audio;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
-namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -20,17 +18,19 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 6;
 	}
+
 	public override bool ShouldUpdatePosition()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 	}
 
 	public override void PostDraw(Color lightColor)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -47,6 +47,7 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (Projectile.timeLeft > 200)
@@ -63,6 +64,7 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 
 		return false;
 	}
+
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -81,6 +83,7 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -89,7 +92,6 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 		c0.R = 0;
 		for (int h = 0; h < radius / 2; h += 1)
 		{
-
 			c0.R = (byte)(h / radius * 2 * 255);
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 0, 0)));
@@ -99,8 +101,11 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (Projectile.timeLeft > 200)
@@ -110,17 +115,24 @@ public class MythrilClub_Shoot : ModProjectile, IWarpProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
+		{
 			colorV *= Projectile.ai[0] / 10f;
+		}
+
 		Texture2D t = Commons.ModAsset.Trail.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.04f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 	}

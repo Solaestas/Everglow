@@ -7,7 +7,7 @@ using Terraria.Audio;
 
 namespace Everglow.Food.Projectiles;
 
-public class FryingPan : MeleeProj, IWarpProjectile
+public class FryingPan : MeleeProj
 {
 	public override void SetDef()
 	{

@@ -6,7 +6,7 @@ using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
-public class MossySpellArray : NoTextureProjectile, IWarpProjectile
+public class MossySpellArray : NoTextureProjectile
 {
 	public override void SetDefaults()
 	{
@@ -242,9 +242,5 @@ public class MossySpellArray : NoTextureProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		Main.graphics.GraphicsDevice.Textures[0] = oldTex;
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
 	}
 }

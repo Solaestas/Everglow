@@ -98,7 +98,7 @@ public class RipplingWave : ModProjectile, IWarpProjectile
 
 		Texture2D t = Commons.ModAsset.Trail.Value;
 
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 12f * Projectile.ai[0], 6 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.1f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 6f * Projectile.ai[0], 4 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.1f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 12f * Projectile.ai[0], 6 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.01f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 6f * Projectile.ai[0], 4 * (1 - value) * Projectile.ai[0], new Color(colorV, colorV * 0.01f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 }

@@ -187,7 +187,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		Texture2D t = Commons.ModAsset.Trail.Value;
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 68f, 22 * (1 - value), new Color(colorV, colorV * 0.06f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 68f, 22 * (1 - value), new Color(colorV, colorV * 0.006f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

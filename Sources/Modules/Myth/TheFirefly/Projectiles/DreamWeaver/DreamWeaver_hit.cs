@@ -122,7 +122,7 @@ public class DreamWeaver_hit : ModProjectile, IWarpProjectile
 			width = Projectile.timeLeft;
 		}
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.09f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.009f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

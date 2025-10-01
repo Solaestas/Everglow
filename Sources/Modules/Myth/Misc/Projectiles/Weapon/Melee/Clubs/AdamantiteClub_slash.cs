@@ -116,7 +116,7 @@ public class AdamantiteClub_slash : ModProjectile, IWarpProjectile
 		Color alphaColor = Color.White;
 		alphaColor.A = 0;
 		alphaColor.R = (byte)((rotation + Math.PI) % 6.283 / 6.283 * 255);
-		alphaColor.G = 50;
+		alphaColor.G = 5;
 		List<Vertex2D> bars = new List<Vertex2D>
 		{
 			new Vertex2D(start - normalize, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0.3f, 0)),

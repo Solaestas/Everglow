@@ -1,4 +1,3 @@
-using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;

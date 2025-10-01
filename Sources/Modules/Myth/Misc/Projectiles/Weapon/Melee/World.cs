@@ -1,10 +1,9 @@
 using Everglow.Myth.Common;
-using Terraria;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
-class World : ModProjectile, IWarpProjectile
+public class World : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -38,11 +37,12 @@ class World : ModProjectile, IWarpProjectile
 	internal int Aimtimer = 0;
 	internal int[] HasNOHitV = new int[200];
 	internal float Omega = 0;
+
 	private void UpdateOldWidth(ref float[] value)
 	{
 		value[0] = Math.Clamp((OldMouseWorldV[2] - OldMouseWorldV[4]).Length() / 6f - 6f, 0, 32);
-		value[1] = Math.Clamp((OldMouseWorldV[3] - OldMouseWorldV[5]).Length() / 6f - 6f, 0, 32);//记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
-		if (SecFrame > 0)//第二帧需要特殊处理
+		value[1] = Math.Clamp((OldMouseWorldV[3] - OldMouseWorldV[5]).Length() / 6f - 6f, 0, 32); // 记录数据模板,这里记录撕裂宽度(由鼠标速度决定）
+		if (SecFrame > 0)// 第二帧需要特殊处理
 		{
 			value[0] = 0;
 			value[1] = 0;
@@ -60,65 +60,86 @@ class World : ModProjectile, IWarpProjectile
 		timer++;
 		Player player = Main.player[Projectile.owner];
 		if ((player.controlUseItem || Projectile.ai[0] > 0) && player.HeldItem.type == ModContent.ItemType<Items.Weapons.World>())
+		{
 			Projectile.timeLeft = 60;
+		}
 
 		Projectile.Center = player.Center;
 
 		if (CatchPos == Vector2.Zero)
+		{
 			CatchPos = Main.MouseWorld;
+		}
+
 		CatchPos = Main.MouseWorld * 0.75f + CatchPos * 0.25f;
 		if (Mode == 1 && timer >= Aimtimer && (player.controlUseItem || Projectile.ai[0] > 0))
 		{
 			if (Projectile.ai[0] > 0)
+			{
 				Projectile.ai[0] -= 1;
+			}
+
 			Aimtimer = Main.rand.Next(3, 9);
 			float range = Main.rand.NextFloat(420f, 600f);
 			CrackPoint = Main.MouseWorld + Vector2.Normalize(Main.MouseWorld - CrackPoint).RotatedBy(Main.rand.NextFloat(Main.rand.NextFloat(Main.rand.NextFloat(-0.5f, -0.2f), 0.2f), 0.5f)) * range;
 			if (Projectile.ai[0] <= 0)
+			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/Knife").WithPitchOffset(Main.rand.NextFloat(0.7f, 1f) - MathF.Min(timer / 15f, 1f)).WithVolumeScale(range / 600f), Projectile.Center);
+			}
+
 			timer = 0;
 		}
-		OldMouseWorld[0] = Main.MouseWorld;//记录数据模板,这里记录鼠标坐标
+		OldMouseWorld[0] = Main.MouseWorld; // 记录数据模板,这里记录鼠标坐标
 		if (Mode == 1)
+		{
 			OldMouseWorld[0] = CrackPoint;
+		}
+
 		for (int f = OldMouseWorld.Length - 1; f > 0; f--)
 		{
 			OldMouseWorld[f] = OldMouseWorld[f - 1];
 		}
-		if (OldMouseWorld[2] != Vector2.Zero)//第二帧需要特殊处理
+		if (OldMouseWorld[2] != Vector2.Zero)// 第二帧需要特殊处理
 		{
 			OldMouseWorldII[0] = (Main.MouseWorld + OldMouseWorld[2]) / 2f;
 			if (Mode == 1)
+			{
 				OldMouseWorldII[0] = (CrackPoint + OldMouseWorld[2]) / 2f;
-		}//记录数据模板,这里取中点,为了平滑
+			}
+		}// 记录数据模板,这里取中点,为了平滑
 		for (int f = OldMouseWorldII.Length - 1; f > 0; f--)
 		{
 			OldMouseWorldII[f] = OldMouseWorldII[f - 1];
 		}
 
-		OldMouseWorldIII[0] = OldMouseWorldII[0];//记录数据模板,这里记录鼠标坐标
-		if (OldMouseWorldII[2] != Vector2.Zero)//第二帧需要特殊处理
-			OldMouseWorldIII[1] = (OldMouseWorldII[1] + OldMouseWorldII[2] + OldMouseWorld[2]) / 3f;//记录数据模板,这里取重心,为了平滑
+		OldMouseWorldIII[0] = OldMouseWorldII[0]; // 记录数据模板,这里记录鼠标坐标
+		if (OldMouseWorldII[2] != Vector2.Zero)// 第二帧需要特殊处理
+		{
+			OldMouseWorldIII[1] = (OldMouseWorldII[1] + OldMouseWorldII[2] + OldMouseWorld[2]) / 3f; // 记录数据模板,这里取重心,为了平滑
+		}
+
 		for (int f = OldMouseWorldIII.Length - 1; f > 1; f -= 2)
 		{
 			OldMouseWorldIII[f] = OldMouseWorldIII[f - 2];
 			OldMouseWorldIII[f - 1] = OldMouseWorldIII[f - 3];
 		}
 
-		if (OldMouseWorldIII[1] != Vector2.Zero)//第二帧需要特殊处理
+		if (OldMouseWorldIII[1] != Vector2.Zero)// 第二帧需要特殊处理
 		{
-			OldMouseWorldIV[0] = (Main.MouseWorld + OldMouseWorldIII[1]) / 2f;//记录数据模板,这里在取了一次重心的重心曲线上取中点,再次平滑
+			OldMouseWorldIV[0] = (Main.MouseWorld + OldMouseWorldIII[1]) / 2f; // 记录数据模板,这里在取了一次重心的重心曲线上取中点,再次平滑
 			if (Mode == 1)
+			{
 				OldMouseWorldIV[0] = (CrackPoint + OldMouseWorldIII[1]) / 2f;
+			}
 		}
 		for (int f = OldMouseWorldIV.Length - 1; f > 0; f--)
 		{
 			OldMouseWorldIV[f] = OldMouseWorldIV[f - 1];
 		}
-		if (OldMouseWorldIV[2] != Vector2.Zero)//第二帧需要特殊处理
+		if (OldMouseWorldIV[2] != Vector2.Zero)// 第二帧需要特殊处理
 		{
-			OldMouseWorldV[0] = OldMouseWorldIV[0];//记录数据模板,这里记录鼠标坐标
-			OldMouseWorldV[1] = (OldMouseWorldIV[1] + OldMouseWorldIV[2] + OldMouseWorldIII[1]) / 3f;//记录数据模板,这里取重心,为了平滑
+			OldMouseWorldV[0] = OldMouseWorldIV[0]; // 记录数据模板,这里记录鼠标坐标
+			OldMouseWorldV[1] = (OldMouseWorldIV[1] + OldMouseWorldIV[2] + OldMouseWorldIII[1]) / 3f; // 记录数据模板,这里取重心,为了平滑
 		}
 		for (int f = 239; f > 1; f -= 2)
 		{
@@ -128,15 +149,15 @@ class World : ModProjectile, IWarpProjectile
 
 		Vector2 ArrowToMouse = Main.MouseWorld - player.Center;
 		if (Mode == 1)
+		{
 			ArrowToMouse = CrackPoint - player.Center;
+		}
 
-
-		OldRotation[0] = (float)Math.Atan2(ArrowToMouse.Y, ArrowToMouse.X);//记录数据模板,这里记录旋转角度
+		OldRotation[0] = (float)Math.Atan2(ArrowToMouse.Y, ArrowToMouse.X); // 记录数据模板,这里记录旋转角度
 		for (int f = OldRotation.Length - 1; f > 0; f--)
 		{
 			OldRotation[f] = OldRotation[f - 1];
 		}
-
 
 		UpdateOldWidth(ref OldWidth);
 		UpdateOldWidth(ref OldWidthII);
@@ -144,10 +165,11 @@ class World : ModProjectile, IWarpProjectile
 		UpdateOldWidth(ref OldWidthIV);
 		UpdateOldWidth(ref OldWidthV);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
@@ -174,30 +196,39 @@ class World : ModProjectile, IWarpProjectile
 			{
 				Projectile.rotation += Omega;
 				if (Omega < 0.02f)
+				{
 					Omega += 0.002f;
+				}
 			}
 		}
 
 		float Kvec = Math.Clamp((60 - Projectile.timeLeft) / 30f, 0, 1);
 		Kvec = (float)Math.Sqrt(Kvec);
 		if (player.controlUseItem || Projectile.ai[0] > 0)
+		{
 			Kvec = 0;
+		}
 		else
 		{
 			Kcolor = 1;
 		}
 		if (Projectile.timeLeft < 15)
+		{
 			Kcolor *= Projectile.timeLeft * Projectile.timeLeft / 225f;
+		}
+
 		float R0 = lightC.R / 255f * Kcolor;
 		float G0 = lightC.G / 255f * Kcolor;
 		float B0 = lightC.B / 255f * Kcolor;
 		float A0 = lightC.A / 255f * Kcolor;
 		float AimRot = 2f;
 		if (player.direction == -1)
+		{
 			AimRot = 1.14f;
+		}
 
 		var trueC = new Color(R0, G0, B0, A0);
-		Vector2 DrawPos = OldMouseWorldV[1] * (1 - Kvec) + (player.Center + new Vector2(-24 * player.direction, 0)) * Kvec;//滑动到玩家
+		Vector2 DrawPos = OldMouseWorldV[1] * (1 - Kvec) + (player.Center + new Vector2(-24 * player.direction, 0)) * Kvec; // 滑动到玩家
 		float TrueRot = Projectile.rotation * (1 - Kvec) + AimRot * Kvec;
 		Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
 		Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
@@ -206,7 +237,6 @@ class World : ModProjectile, IWarpProjectile
 		Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 1, 0)));
 		Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength / 2f, -KnifeLength / 2f).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(0, 0, 0)));
 		Knife.Add(new Vertex2D(DrawPos + new Vector2(StartLength + KnifeLength, 0).RotatedBy(TrueRot) - Main.screenPosition, trueC, new Vector3(1, 0, 0)));
-
 
 		Main.graphics.GraphicsDevice.Textures[0] = MainKnife;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Knife.ToArray(), 0, Knife.Count / 3);
@@ -223,21 +253,39 @@ class World : ModProjectile, IWarpProjectile
 			var barsII = new List<Vertex2D>();
 			float colorS = 254f / 255f;
 			if (k > 0)
+			{
 				colorS = 54f / 255f;
+			}
+
 			for (int i = 1; i < 240; ++i)
 			{
 				float width = OldWidth[i] * Math.Clamp((i - 1) / 4f, 0, 1);
 				if (k == 1)
+				{
 					width = OldWidthII[i] * Math.Clamp((i - 1) / 4f, 0, 1);
+				}
+
 				if (k == 2)
+				{
 					width = OldWidthIII[i] * Math.Clamp((i - 1) / 4f, 0, 1);
+				}
+
 				if (k == 3)
+				{
 					width = OldWidthIV[i] * Math.Clamp((i - 1) / 4f, 0, 1);
+				}
+
 				if (k == 4)
+				{
 					width = OldWidthV[i] * Math.Clamp((i - 1) / 4f, 0, 1);
+				}
+
 				width *= Projectile.timeLeft / 60f;
 				if (OldMouseWorldV[i] == Vector2.Zero)
+				{
 					break;
+				}
+
 				var normalDir = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
 
 				normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -245,7 +293,9 @@ class World : ModProjectile, IWarpProjectile
 				var w = MathHelper.Lerp(1f, 0.05f, factor);
 				Vector2 zero = Vector2.Zero;
 				if (k > 0)
+				{
 					zero = new Vector2(8, 6).RotatedBy(k * Math.PI / 2.5d) * Math.Clamp(i / 15f, 0, 1);
+				}
 				else
 				{
 					if ((OldMouseWorldV[i] - OldMouseWorldV[i - 1]).Length() > 5)
@@ -283,7 +333,10 @@ class World : ModProjectile, IWarpProjectile
 								HasNOHitV[v] = 8;
 								float Damk = Math.Clamp(width / 12f, 0.1f, 15f);
 								if (Mode == 0)
+								{
 									Damk = Math.Clamp(width / 6f, 0.1f, 15f);
+								}
+
 								int Dam = (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f) * Damk);
 								bool Crit = Main.rand.Next(100) < player.GetCritChance(DamageClass.Generic) + player.GetCritChance(DamageClass.Melee) + 15 + width * 1.5f;
 								NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
@@ -301,14 +354,18 @@ class World : ModProjectile, IWarpProjectile
 									player.addDPS(Dam - Main.npc[v].defDefense);
 								}
 								if (Mode == 1)
+								{
 									Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 12f, 0, 1f), 0f);
+								}
 								else
 								{
 									Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Main.npc[v].Center, Vector2.Zero, ModContent.ProjectileType<WorldHit>(), 0, Projectile.knockBack, Projectile.owner, Math.Clamp(width / 4f, 0, 1f), 0f);
 								}
 							}
 							if (HasNOHitV[v] > 0)
+							{
 								HasNOHitV[v]--;
+							}
 						}
 					}
 					barsII.Add(new Vertex2D(OldMouseWorldV[i] + zero + normalDir * Math.Clamp(width * 1.6f, 0, 72) - Main.screenPosition, new Color(255, 255, 255, 255), new Vector3(Math.Clamp(factor, 0, 1), 1, w)));
@@ -359,26 +416,27 @@ class World : ModProjectile, IWarpProjectile
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, VxII.ToArray(), 0, VxII.Count / 3);
 			}
 			Texture2D t = ModAsset.VisualTextures_World.Value;
-			;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		//Texture2D glow = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/World_glow");
-		//Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, glow.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-
+		// Texture2D glow = MythContent.QuickTexture("Misc/Projectiles/Weapon/Melee/World_glow");
+		// Main.spriteBatch.Draw(glow, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 0), Projectile.rotation, glow.Size() / 2f, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < 240; ++i)
 		{
 			float width = OldWidth[i] * OldWidth[i] * Math.Clamp((i - 1) / 4f, 0, 1) * 0.3f;
 			if (OldMouseWorldV[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			var normalDir = OldMouseWorldV[i - 1] - OldMouseWorldV[i];
 
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
@@ -388,7 +446,10 @@ class World : ModProjectile, IWarpProjectile
 			Vector2 DeltaV0 = OldMouseWorldV[i] - OldMouseWorldV[i - 1];
 			float d = DeltaV0.ToRotation() + 3.14f + 1.57f;
 			if (d > 6.28f)
+			{
 				d -= 6.28f;
+			}
+
 			float dir = d / MathHelper.TwoPi;
 			Vector2 DeltaV1 = DeltaV0;
 			float dir1 = dir;
@@ -397,12 +458,14 @@ class World : ModProjectile, IWarpProjectile
 				DeltaV1 = OldMouseWorldV[i - 1] - OldMouseWorldV[i - 2];
 				float d1 = DeltaV1.ToRotation() + 3.14f + 1.57f;
 				if (d1 > 6.28f)
+				{
 					d1 -= 6.28f;
+				}
+
 				dir1 = d1 / MathHelper.TwoPi;
 			}
 
-
-			float strength = width / 30f;
+			float strength = width / 300f;
 			if (dir - dir1 > 0.5)
 			{
 				var MidValue = (1 - dir) / (1 - dir + dir1);

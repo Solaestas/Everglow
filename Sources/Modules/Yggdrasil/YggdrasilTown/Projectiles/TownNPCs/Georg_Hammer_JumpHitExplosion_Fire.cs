@@ -118,7 +118,7 @@ public class Georg_Hammer_JumpHitExplosion_Fire : ModProjectile, IWarpProjectile
             width = Projectile.timeLeft;
         }
 
-        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 34 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 34 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.06f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

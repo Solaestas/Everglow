@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
-public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使用IWarpProjectile
+public class CrystalStormII : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -28,11 +28,13 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Projectile.ai[0] = Main.rand.NextFloat(0f, 1f);
 		Projectile.position.Y -= 15f;
 	}
+
 	public override void AI()
 	{
 		float mulScale = 1f;
@@ -107,30 +109,30 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
-			float MulColor = 1f;
+			float mulColor = 1f;
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			if (i == 1)
-				MulColor = 0f;
+				mulColor = 0f;
 			if (i >= 2)
 			{
 				var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					MulColor = 0f;
+					mulColor = 0f;
 			}
 			if (i < Projectile.oldPos.Length - 1)
 			{
 				var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					MulColor = 0f;
+					mulColor = 0f;
 			}
 			var factor = i / (float)TrueL;
 			float x0 = factor * Mulfactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
 			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 			var factorII = factor;
 			factor = (i + 1) / (float)TrueL;
 			var x1 = factor * Mulfactor - (float)(Main.timeForVisualEffects / 15d) + 100000;
@@ -139,10 +141,10 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 			{
 				float DeltaValue = 1 - x0;
 				var factorIII = factorII * x0 + factor * DeltaValue;
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 0, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
 			}
 		}
 		Texture2D t = Commons.ModAsset.Trail_6.Value;
@@ -176,37 +178,37 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
 				break;
-			float MulColor = 1f;
+			float mulColor = 1f;
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			if (i == 1)
-				MulColor = 0f;
+				mulColor = 0f;
 			if (i >= 2)
 			{
 				var normalDirII = Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					MulColor = 0f;
+					mulColor = 0f;
 			}
 			if (i < Projectile.oldPos.Length - 1)
 			{
 				var normalDirII = Projectile.oldPos[i] - Projectile.oldPos[i + 1];
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
-					MulColor = 0f;
+					mulColor = 0f;
 			}
 
 			float k0 = (float)Math.Atan2(normalDir.Y, normalDir.X);
 			k0 += 3.14f + 1.57f;
 			if (k0 > 6.28f)
 				k0 -= 6.28f;
-			var c0 = new Color(k0, 0.4f, 0, 0);
+			var c0 = new Color(k0, 0.04f * mulColor, 0, 0);
 
 			var factor = i / (float)TrueL;
 			float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
 			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 			var factorII = factor;
 			factor = (i + 1) / (float)TrueL;
 			var x1 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
@@ -215,10 +217,10 @@ public class CrystalStormII : ModProjectile, IWarpProjectile//将接口改为使
 			{
 				float DeltaValue = 1 - x0;
 				var factorIII = factorII * x0 + factor * DeltaValue;
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 0, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(13f) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
 			}
 		}
 		Texture2D t = ModAsset.FogTraceLight.Value;
