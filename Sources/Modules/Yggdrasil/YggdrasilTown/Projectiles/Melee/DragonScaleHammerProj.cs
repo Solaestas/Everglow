@@ -7,8 +7,8 @@ public class DragonScaleHammerProj : MeleeProj
 	{
 		Projectile.height = 20;
 		Projectile.width = 20;
-		MaxAttackType = 4;
-		MaxSlashTrailLength = 20;
+		maxAttackType = 4;
+		maxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		longHandle = true;
 		Projectile.scale *= 1.1f;
@@ -24,14 +24,14 @@ public class DragonScaleHammerProj : MeleeProj
 
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
-		if (SlashTrail.Count != 0)
-			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
+		if (slashTrail.Count != 0)
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
@@ -92,34 +92,34 @@ public class DragonScaleHammerProj : MeleeProj
 		Player player = Main.player[Projectile.owner];
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
-		UseTrail = true;
+		useSlash = true;
 		float timeMul = 1f - GetMeleeSpeed(player) / 100f;
 
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
-			float timeValue = Timer - 30;
-			if (Timer < 30)//前摇
+			float timeValue = timer - 30;
+			if (timer < 30)//前摇
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
 				Vector2 elipse = Vector2Elipse(110, targetRot, 2 * player.direction, 0);
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, elipse, 0.1f);
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, elipse, 0.1f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 24)
+			if (timer == 24)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
-			if (Timer > 30 && Timer < 70)
+			if (timer > 30 && timer < 70)
 			{
-				IsAttacking = true;
+				canHit = true;
 
 				timeValue = timeValue / 20f;
 				Projectile.rotation += Projectile.spriteDirection * 0.085f * timeValue * timeValue;
-				MainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0.6f, 0f);
+				mainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0.6f, 0f);
 			}
 
-			if (Timer > 70 + 20 * timeMul)
+			if (timer > 70 + 20 * timeMul)
 			{
 				player.fullRotation = 0;
 				player.legRotation = 0;
@@ -135,60 +135,60 @@ public class DragonScaleHammerProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 1)
+		if (currantAttackType == 1)
 		{
-			if (Timer < 30)//前摇
+			if (timer < 30)//前摇
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 + player.direction * 0.5f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(120, targetRot, 1.3f), 0.1f);
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, 1.3f), 0.1f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 20)
+			if (timer == 20)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.5f));
-			if (Timer > 30 && Timer < 80)
+			if (timer > 30 && timer < 80)
 			{
-				IsAttacking = true;
-				float timeValue = Timer - 30;
+				canHit = true;
+				float timeValue = timer - 30;
 				timeValue = timeValue / 30f;
 				Projectile.rotation += Projectile.spriteDirection * 0.095f * timeValue * timeValue;
-				MainAxisDirection = Vector2Elipse(140 + timeValue * 0.7f, Projectile.rotation, 1.3f,- 0.4f * player.direction);
+				mainAxisDirection = Vector2Elipse(140 + timeValue * 0.7f, Projectile.rotation, 1.3f,- 0.4f * player.direction);
 			}
-			if (Timer > 80 + 20 * timeMul)
+			if (timer > 80 + 20 * timeMul)
 				NextAttackType();
-			float BodyRotation = (float)Math.Sin((Timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
+			float BodyRotation = (float)Math.Sin((timer - 30) / 40d * Math.PI) * 0.2f * player.direction * player.gravDir;
 			player.fullRotation = BodyRotation;
 			player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 			player.legRotation = -BodyRotation;
 			player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 			Tplayer.HeadRotation = -BodyRotation;
 		}
-		if (CurrantAttackType == 2)
+		if (currantAttackType == 2)
 		{
-			float timeValue = Timer - 30;
+			float timeValue = timer - 30;
 			float BodyRotation = 0;
-			if (Timer < 30)//前摇
+			if (timer < 30)//前摇
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.7f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, targetRot.ToRotationVector2() * 100, 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, targetRot.ToRotationVector2() * 100, 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				BodyRotation = (float)timeValue * 0.012f * player.direction * player.gravDir;
 			}
-			if (Timer > 30 && Timer < 50)
+			if (timer > 30 && timer < 50)
 			{
-				IsAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.14f;
-				MainAxisDirection = Projectile.rotation.ToRotationVector2() * 130;
+				mainAxisDirection = Projectile.rotation.ToRotationVector2() * 130;
 
 				BodyRotation = (float)timeValue * 0.024f * player.direction * player.gravDir;
 
 			}
-			if (Timer < 50)
+			if (timer < 50)
 			{
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
@@ -196,35 +196,35 @@ public class DragonScaleHammerProj : MeleeProj
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 				Tplayer.HeadRotation = -BodyRotation;
 			}
-			if (Timer == 20)
+			if (timer == 20)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.2f));
-			if (Timer > 50 + 25 * timeMul)
+			if (timer > 50 + 25 * timeMul)
 				NextAttackType();
 		}
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
-			float timeValue = Timer - 70;
+			float timeValue = timer - 70;
 			float BodyRotation = 0;
-			if (Timer < 30)//前摇
+			if (timer < 30)//前摇
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = MathHelper.PiOver2 - player.direction * 0.57f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, targetRot.ToRotationVector2() * 100, 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, targetRot.ToRotationVector2() * 100, 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				BodyRotation = (float)timeValue * 0.012f * player.direction * player.gravDir;
 			}
-			if (Timer > 30 && Timer < 70)
+			if (timer > 30 && timer < 70)
 			{
-				IsAttacking = true;
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.14f * timeValue * timeValue / 800f;
-				MainAxisDirection = Projectile.rotation.ToRotationVector2() * 130;
+				mainAxisDirection = Projectile.rotation.ToRotationVector2() * 130;
 
 				BodyRotation = -(float)timeValue * 0.024f * player.direction * player.gravDir;
 
 			}
-			if (Timer < 70)
+			if (timer < 70)
 			{
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
@@ -232,43 +232,43 @@ public class DragonScaleHammerProj : MeleeProj
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 				Tplayer.HeadRotation = -BodyRotation;
 			}
-			if (Timer == 20)
+			if (timer == 20)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.2f));
-			if (Timer > 70 + 25 * timeMul)
+			if (timer > 70 + 25 * timeMul)
 				NextAttackType();
 		}
-		if (CurrantAttackType == 4)
+		if (currantAttackType == 4)
 		{
-			float timeValue = (Timer - 30) / 40f;
+			float timeValue = (timer - 30) / 40f;
 			float BodyRotation = 0;
-			if (Timer < 30)//前摇
+			if (timer < 30)//前摇
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = - MathHelper.PiOver2 - player.direction * 1.6f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, targetRot.ToRotationVector2() * 120, 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, targetRot.ToRotationVector2() * 120, 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer > 30 && Timer < 80)
+			if (timer > 30 && timer < 80)
 			{
-				IsAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.17f * timeValue * timeValue * timeValue;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(130, Projectile.rotation, 0f), 0.4f);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(130, Projectile.rotation, 0f), 0.4f);
 
 			}
-			if (Timer < 80)
+			if (timer < 80)
 			{
-				BodyRotation = (float)Math.Sin((Timer - 10) / 50d * Math.PI) * -0.7f * player.direction * player.gravDir;
+				BodyRotation = (float)Math.Sin((timer - 10) / 50d * Math.PI) * -0.7f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 				Tplayer.HeadRotation = -BodyRotation;
 			}
-			if (Timer == 32)
+			if (timer == 32)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.6f));
-			if (Timer >80 + 25 * timeMul)
+			if (timer >80 + 25 * timeMul)
 				NextAttackType();
 		}
 	}

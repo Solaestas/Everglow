@@ -52,7 +52,7 @@ public class FryingPanItem : ModItem
 					Projectile proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<FryingPan>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
 					proj.scale *= Item.scale;
 					(proj.ModProjectile as MeleeProj).isRightClick = true; // 指定为右键
-					(proj.ModProjectile as MeleeProj).CurrantAttackType = 100; // 切换到弹幕的蓄力斩攻击方式
+					(proj.ModProjectile as MeleeProj).currantAttackType = 100; // 切换到弹幕的蓄力斩攻击方式
 				}
 				if (player.altFunctionUse != 2)
 				{

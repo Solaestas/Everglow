@@ -8,8 +8,8 @@ public class ShadowEulogistProj : MeleeProj
 	public override string Texture => ModAsset.ShadowEulogist_Mod;
 	public override void SetDef()
 	{
-		MaxAttackType = 1;
-		MaxSlashTrailLength = 7;
+		maxAttackType = 1;
+		maxSlashTrailLength = 7;
 		Projectile.hide = true;
 		//shadertype = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		Projectile.scale *= 1.0f;
@@ -49,73 +49,73 @@ public class ShadowEulogistProj : MeleeProj
         disFromPlayer = 20;
 		//drawScaleFactor = 10.1f;
 		Player player = Main.player[Projectile.owner];
-        UseTrail = true;
+        useSlash = true;
         
-        if (CurrantAttackType == 0)
+        if (currantAttackType == 0)
         {
-            if (Timer < 20)//前摇
+            if (timer < 20)//前摇
             {
-                UseTrail = false;
+                useSlash = false;
                 LockPlayerDir(player);
                 float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-                MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(140, targetRot, -1.2f), 0.1f);
-                MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-                Projectile.rotation = MainAxisDirection.ToRotation();
+                mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(140, targetRot, -1.2f), 0.1f);
+                mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+                Projectile.rotation = mainAxisDirection.ToRotation();
             }
-            if (Timer == 20)
+            if (timer == 20)
                 AttSound(SoundID.Item1);
-            if (Timer > 20 && Timer < 40)
+            if (timer > 20 && timer < 40)
             {
-                IsAttacking = true;
+                canHit = true;
                 Projectile.rotation += Projectile.spriteDirection * 0.3f;
-                MainAxisDirection = Vector2Elipse(160, Projectile.rotation, -1.2f);
+                mainAxisDirection = Vector2Elipse(160, Projectile.rotation, -1.2f);
             }
-			if(Timer==40)
+			if(timer==40)
 			{
-				UseTrail = false;
+				useSlash = false;
                 AttSound(SoundID.Item1);
                 float targetRot = +MathHelper.PiOver2 + player.direction * 0.5f;
-                MainAxisDirection = Vector2Elipse(140, targetRot, 0f);
-				Projectile.rotation = MainAxisDirection.ToRotation();
+                mainAxisDirection = Vector2Elipse(140, targetRot, 0f);
+				Projectile.rotation = mainAxisDirection.ToRotation();
             }
-            if (Timer > 40 && Timer < 50)
+            if (timer > 40 && timer < 50)
             {
-                IsAttacking = true;
+                canHit = true;
                 Projectile.rotation -= Projectile.spriteDirection * 0.6f;
-                MainAxisDirection = Vector2Elipse(140, Projectile.rotation, 0f);
+                mainAxisDirection = Vector2Elipse(140, Projectile.rotation, 0f);
             }
-            if (Timer > 60)
+            if (timer > 60)
             {
                 NextAttackType();
             }
         }
 
-        if (CurrantAttackType == 1)
+        if (currantAttackType == 1)
         {
-            if (Timer < 30)//前摇
+            if (timer < 30)//前摇
             {
-                UseTrail = false;
+                useSlash = false;
                 LockPlayerDir(player);
                 float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-                MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(100, targetRot, 0.6f), 0.1f);
-                MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-                Projectile.rotation = MainAxisDirection.ToRotation();
+                mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, 0.6f), 0.1f);
+                mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+                Projectile.rotation = mainAxisDirection.ToRotation();
             }
-            if (Timer == 20)
+            if (timer == 20)
                 AttSound(SoundID.Item1);
-            if (Timer > 30 && Timer < 45)
+            if (timer > 30 && timer < 45)
             {
-                IsAttacking = true;
+                canHit = true;
                 Projectile.rotation += Projectile.spriteDirection * 0.4f;
-                MainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0.6f);
+                mainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0.6f);
             }
-            if (Timer > 50)
+            if (timer > 50)
             {
                 NextAttackType();
             }
         }
 
-        if (IsAttacking)
+        if (canHit)
 		{
 			for (int i = 0; i < 2; i++)
 			{

@@ -11,12 +11,12 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 {
 	public override void SetDef()
 	{
-		MaxAttackType = 4;
-		MaxSlashTrailLength = 20;
+		maxAttackType = 4;
+		maxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
-		AutoEnd = false;
-		CanLongLeftClick = true;
-		ClickMaxtimer = 240;
+		autoEnd = false;
+		canLongLeftClick = true;
+		maxClickTimer = 240;
 	}
 	public override string TrailShapeTex()
 	{
@@ -46,25 +46,25 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	{
 		DrawTrail(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
-		if (Timer < 60 && CurrantAttackType == 3)
+		if (timer < 60 && currantAttackType == 3)
 		{
-			float value = Timer;
+			float value = timer;
 			value /= 4f;
-			value = Math.Min(value, (60 - Timer) * 0.3f) / 5;
+			value = Math.Min(value, (60 - timer) * 0.3f) / 5;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + MainAxisDirection.RotatedBy(Projectile.spriteDirection*0.175f) * 0.4f;
-			Lighting.AddLight(Projectile.Center+ MainAxisDirection * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value*10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection*0.175f) * 0.4f;
+			Lighting.AddLight(Projectile.Center+ mainAxisDirection * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value*10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
-		if (Timer < 60 && CurrantAttackType == 4)
+		if (timer < 60 && currantAttackType == 4)
 		{
-			float value = Timer;
+			float value = timer;
 			value /= 4f;
-			value = Math.Min(value, (60 - Timer) * 0.3f) / 3;
+			value = Math.Min(value, (60 - timer) * 0.3f) / 3;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + MainAxisDirection.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.35f;
-			Lighting.AddLight(Projectile.Center + MainAxisDirection * 0.35f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.35f;
+			Lighting.AddLight(Projectile.Center + mainAxisDirection * 0.35f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
@@ -82,7 +82,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 		}
 
-		UseTrail = true;
+		useSlash = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -113,37 +113,37 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			}
 		}
 
-		if (CurrantAttackType <= 2)
+		if (currantAttackType <= 2)
 		{
 
-			if (Timer < 30)
+			if (timer < 30)
 			{
 				Projectile.ai[0] = GetAngToMouse();
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(90, targetRot, -0.75f, Projectile.ai[0]), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(90, targetRot, -0.75f, Projectile.ai[0]), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 30 && Timer < 45)
+			if (timer > 30 && timer < 45)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.0f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.0f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.35f;
-				MainAxisDirection = Vector2Elipse(100, Projectile.rotation, -0.75f, Projectile.ai[0]);
+				mainAxisDirection = Vector2Elipse(100, Projectile.rotation, -0.75f, Projectile.ai[0]);
 			}
-			if (Timer > 50)
+			if (timer > 50)
 				NextAttackType();
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -151,46 +151,46 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
-			if (Timer < 60)
+			if (timer < 60)
 			{
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(120, targetRot, 0, 0, 1000), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, 0, 0, 1000), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 
-			if (Timer % 10 == 0 && Timer > 60)
+			if (timer % 10 == 0 && timer > 60)
 			{
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 60 && Timer < 90)
+			if (timer > 60 && timer < 90)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.0f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.0f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.425f;
-				MainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0, 0, 1000);
+				mainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0, 0, 1000);
 			}
-			if (Timer > 100)
+			if (timer > 100)
 			{
 				NextAttackType();
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
 				player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 				Tplayer.HeadRotation = -BodyRotation;
 			}
-			if (Timer % 2 == 0 && Timer >= 60 && Main.rand.NextBool(4))
+			if (timer % 2 == 0 && timer >= 60 && Main.rand.NextBool(4))
 			{
-				Vector2 pos = player.Center + MainAxisDirection * Main.rand.NextFloat(0.15f, 0.25f);
-				Vector2 v = MainAxisDirection * Main.rand.NextFloat(0.01f, 0.015f);
+				Vector2 pos = player.Center + mainAxisDirection * Main.rand.NextFloat(0.15f, 0.25f);
+				Vector2 v = mainAxisDirection * Main.rand.NextFloat(0.01f, 0.015f);
 				int type = Main.rand.Next(567, 572);
 
 				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, v, type, Projectile.damage / 4, Projectile.knockBack * 0.25f, Projectile.owner);
@@ -198,41 +198,41 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			}
 
 		}
-		if (CurrantAttackType == 4)
+		if (currantAttackType == 4)
 		{
 			float BodyRotation;
-			if (Timer < 60)
+			if (timer < 60)
 			{
-				CanIgnoreTile = true;
-				UseTrail = false;
+				ignoreTile = true;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(120, targetRot, -1.2f), 0.1f );
-				MainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, -1.2f), 0.1f );
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 
 			}
 
-			if (Timer == 65)
+			if (timer == 65)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleePowerSwing_Mod));
-			if (Timer > 60 )
+			if (timer > 60 )
 			{
-				IsAttacking = true;
+				canHit = true;
 				drawScaleFactor = 0.6f;
-				if (Timer < 75 )
+				if (timer < 75 )
 				{
-					IsAttacking = true;
-					MainAxisDirection = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
+					canHit = true;
+					mainAxisDirection = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
 					Projectile.rotation += Projectile.spriteDirection * 0.42f ;
 				}
 
-				BodyRotation = (float)Math.Sin((Timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;
+				BodyRotation = (float)Math.Sin((timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;
 
 			}
 			else
 			{
 				Vector2 ToMouseWorld = Main.MouseWorld - player.Top;
-				BodyRotation = -Timer * player.direction * 0.003f * player.gravDir;
+				BodyRotation = -timer * player.direction * 0.003f * player.gravDir;
 			}
 			player.fullRotation = BodyRotation;
 			player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
@@ -240,16 +240,16 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 			Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
 
-			if (Timer > 90 )
+			if (timer > 90 )
 			{
 				End();
 			}
 		}
-		if (IsAttacking)
+		if (canHit)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + MainAxisDirection * Main.rand.NextFloat(0.5f, 1.25f), 100, 100, ModContent.DustType<YggdrasilCyatheaLeafDust>(), 0, 0, 0, default, Main.rand.NextFloat(1f, 2f));
+				Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainAxisDirection * Main.rand.NextFloat(0.5f, 1.25f), 100, 100, ModContent.DustType<YggdrasilCyatheaLeafDust>(), 0, 0, 0, default, Main.rand.NextFloat(1f, 2f));
 				d.velocity += player.velocity * 0.5f + Main.rand.NextVector2Unit() * 3;
 				d.noGravity = true;
 			}
@@ -258,14 +258,14 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SlashTrail.ToList());//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
-		if (SlashTrail.Count != 0)
-			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
+		if (slashTrail.Count != 0)
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
@@ -296,7 +296,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 		Effect MeleeTrail = Commons.ModAsset.MeleeTrailFade.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		float k0 = Timer / 80f + 0.1f;
+		float k0 = timer / 80f + 0.1f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
@@ -335,7 +335,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 
-		if (CurrantAttackType == 4)
+		if (currantAttackType == 4)
 		{
 			modifiers.FinalDamage *= 2f;
 

@@ -12,75 +12,75 @@ namespace Everglow.Commons.MEAC;
 public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjectile
 {
 	/// <summary>
-	/// The currant attack style. range from 0 to MaxAttackType - 1(include).<br></br>
+	/// The currant attack style. range from 0 to (<see cref="maxAttackType"/> - 1) (include).<br></br>
 	/// If you do not override the style swithcing logic, this value loops inside the range, adding by 1 after a entire attack.
 	/// </summary>
-	public int CurrantAttackType = 0;
+	public int currantAttackType = 0;
 
 	/// <summary>
-	/// Determine the range of CurrantAttackType.
+	/// Determine the range of <see cref="currantAttackType"/>.
 	/// </summary>
-	public int MaxAttackType = 3;
+	public int maxAttackType = 3;
 
 	/// <summary>
 	/// The tip of the weapon projectile compare with player.
 	/// </summary>
-	public Vector2 MainAxisDirection;
+	public Vector2 mainAxisDirection;
 
 	/// <summary>
-	/// The queue of old positions, it always updates by accumulating expired MainAxisDirection.
+	/// The queue of old positions, it always updates by accumulating expired <see cref="mainAxisDirection"/>.
 	/// </summary>
-	public Queue<Vector2> SlashTrail;
+	public Queue<Vector2> slashTrail;
 
 	/// <summary>
-	/// Determine the max length of SlashTrail.
+	/// Determine the max length of <see cref="slashTrail"/>.
 	/// </summary>
-	public int MaxSlashTrailLength = 40;
+	public int maxSlashTrailLength = 40;
 
 	/// <summary>
 	/// Local variable, running the animation of weapon attacking.
 	/// </summary>
-	public int Timer = 0;
+	public int timer = 0;
 
 	/// <summary>
-	/// Be true to allow hurting.
+	/// Be true to allow hitting.
 	/// </summary>
-	public bool IsAttacking = false;
+	public bool canHit = false;
 
 	/// <summary>
 	/// Be false to disable the slash effect.
 	/// </summary>
-	public bool UseTrail = true;
+	public bool useSlash = true;
 
 	/// <summary>
 	/// 断开左键是否自动结束攻击
 	/// </summary>
-	public bool AutoEnd = true;
+	public bool autoEnd = true;
 
 	/// <summary>
-	/// 绑定AutoEnd参数,用于判定上次攻击结束前是否按下鼠标左键从而实现连击
+	/// 绑定AutoEnd参数, 用于判定上次攻击结束前是否按下鼠标左键从而实现连击
 	/// </summary>
-	public bool HasContinueLeftClick = false;
+	public bool hasContinueLeftClick = false;
 
 	/// <summary>
 	/// 允许长按左键?(一般情况用来做重击)
 	/// </summary>
-	public bool CanLongLeftClick = false;
+	public bool canLongLeftClick = false;
 
 	/// <summary>
-	/// 绑定CanLongLeftClick,用于判定重击
+	/// 绑定<see cref="canLongLeftClick"/>, 用于判定重击
 	/// </summary>
-	public int Clicktimer = 0;
+	public int clickTimer = 0;
 
 	/// <summary>
-	/// 绑定CanLongLeftClick,用于判定重击所需要的蓄力时长
+	/// 绑定<see cref="canLongLeftClick"/>, 用于判定重击所需要的蓄力时长
 	/// </summary>
-	public int ClickMaxtimer = 90;
+	public int maxClickTimer = 90;
 
 	/// <summary>
 	/// 能否穿墙攻击敌人
 	/// </summary>
-	public bool CanIgnoreTile = false;
+	public bool ignoreTile = false;
 
 	/// <summary>
 	/// 是否为长柄武器
@@ -111,7 +111,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Projectile.localNPCHitCooldown = 15;
 		Projectile.DamageType = DamageClass.Melee;
 		SetDef();
-		SlashTrail = new Queue<Vector2>(MaxSlashTrailLength + 1);
+		slashTrail = new Queue<Vector2>(maxSlashTrailLength + 1);
 	}
 
 	public virtual void SetDef()
@@ -126,7 +126,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		get
 		{
-			Vector2 vec = MainAxisDirection;
+			Vector2 vec = mainAxisDirection;
 			if (Player.gravDir == -1)
 			{
 				vec.Y *= -1;
@@ -175,14 +175,14 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 	public override void SendExtraAI(BinaryWriter writer)
 	{
-		writer.WriteVector2(MainAxisDirection);
+		writer.WriteVector2(mainAxisDirection);
 		writer.Write(disFromPlayer);
 		writer.Write(Projectile.spriteDirection);
 	}
 
 	public override void ReceiveExtraAI(BinaryReader reader)
 	{
-		MainAxisDirection = reader.ReadVector2();
+		mainAxisDirection = reader.ReadVector2();
 		disFromPlayer = reader.ReadSingle();
 		Projectile.spriteDirection = reader.ReadInt32();
 	}
@@ -202,18 +202,18 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		Player.ListenMouseWorld();
 		Player.heldProj = Projectile.whoAmI;
 		Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = true;
-		Projectile.Center = Player.Center + Utils.SafeNormalize(MainAxisDirection, Vector2.One) * disFromPlayer;
-		IsAttacking = false;
-		Projectile.ownerHitCheck = !CanIgnoreTile;
+		Projectile.Center = Player.Center + Utils.SafeNormalize(mainAxisDirection, Vector2.One) * disFromPlayer;
+		canHit = false;
+		Projectile.ownerHitCheck = !ignoreTile;
 		Projectile.timeLeft++;
-		Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, MainAxisDirection.ToRotation() - 1.57f);
+		Player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, mainAxisDirection.ToRotation() - 1.57f);
 		Attack();
-		Timer++;
-		if (!IsAttacking)
+		timer++;
+		if (!canHit)
 		{
 			if (!isRightClick)
 			{
-				bool IsEnd = AutoEnd ? !Player.controlUseItem || Player.dead : Player.dead;
+				bool IsEnd = autoEnd ? !Player.controlUseItem || Player.dead : Player.dead;
 				if (IsEnd)
 				{
 					End();
@@ -221,46 +221,46 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 			}
 			else
 			{
-				bool IsEnd = AutoEnd ? !Player.controlUseTile || Player.dead : Player.dead;
+				bool IsEnd = autoEnd ? !Player.controlUseTile || Player.dead : Player.dead;
 				if (IsEnd)
 				{
 					End();
 				}
 			}
 		}
-		if (!HasContinueLeftClick && Timer > 15) // 大于1/60s即判定为下一击继续
+		if (!hasContinueLeftClick && timer > 15) // 大于1/60s即判定为下一击继续
 		{
 			if (Main.mouseLeft)
 			{
-				HasContinueLeftClick = true;
+				hasContinueLeftClick = true;
 			}
 		}
-		if (IsAttacking)
+		if (canHit)
 		{
 			Player.direction = Projectile.spriteDirection;
 		}
 
-		if (UseTrail)
+		if (useSlash)
 		{
-			SlashTrail.Enqueue(MainAxisDirection);
-			if (SlashTrail.Count > MaxSlashTrailLength)
+			slashTrail.Enqueue(mainAxisDirection);
+			if (slashTrail.Count > maxSlashTrailLength)
 			{
-				SlashTrail.Dequeue();
+				slashTrail.Dequeue();
 			}
 		}
 		else // 清空！
 		{
-			SlashTrail.Clear();
+			slashTrail.Clear();
 		}
-		if (CanLongLeftClick)
+		if (canLongLeftClick)
 		{
 			if (Main.mouseLeft)
 			{
-				Clicktimer++;
+				clickTimer++;
 			}
 			else
 			{
-				Clicktimer = 0;
+				clickTimer = 0;
 			}
 		}
 	}
@@ -284,9 +284,9 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
 		float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
-		Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(MainAxisDirection.ToRotation());
+		Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(mainAxisDirection.ToRotation());
 		Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
-		shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, MainAxisDirection.ToRotation());
+		shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainAxisDirection.ToRotation());
 	}
 
 	public override void CutTiles()
@@ -294,27 +294,27 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
 		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
 		Vector2 beamStartPos = Projectile.Center;
-		Vector2 beamEndPos = beamStartPos + MainAxisDirection;
+		Vector2 beamEndPos = beamStartPos + mainAxisDirection;
 		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
 	}
 
 	public void ScreenShake()
 	{
-		ShakerManager.AddShaker(Player.Center + MainAxisDirection, new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30);
+		ShakerManager.AddShaker(Player.Center + mainAxisDirection, new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30);
 	}
 
 	public void NextAttackType()
 	{
-		if (!IsAttacking && !AutoEnd)
+		if (!canHit && !autoEnd)
 		{
-			if (Clicktimer >= ClickMaxtimer)
+			if (clickTimer >= maxClickTimer)
 			{
 				LeftLongThump();
 				End();
 			}
 			if (!isRightClick)
 			{
-				if (!HasContinueLeftClick || Player.dead)
+				if (!hasContinueLeftClick || Player.dead)
 				{
 					Player player = Main.player[Projectile.owner];
 					End();
@@ -331,12 +331,12 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 				}
 			}
 		}
-		HasContinueLeftClick = false;
-		Timer = 0;
-		CurrantAttackType++;
-		if (CurrantAttackType > MaxAttackType)
+		hasContinueLeftClick = false;
+		timer = 0;
+		currantAttackType++;
+		if (currantAttackType > maxAttackType)
 		{
-			CurrantAttackType = 0;
+			currantAttackType = 0;
 		}
 	}
 
@@ -360,7 +360,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		return IsAttacking
+		return canHit
 			&& Collision.CheckAABBvLineCollision2(
 				targetHitbox.TopLeft(),
 				targetHitbox.Size(),
@@ -372,7 +372,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 	{
 		DrawTrail(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
-		ProduceWaterRipples(new Vector2(MainAxisDirection.Length(), 30));
+		ProduceWaterRipples(new Vector2(mainAxisDirection.Length(), 30));
 		return false;
 	}
 
@@ -398,10 +398,10 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + MainAxisDirection * drawScale.X, drawCenter + MainAxisDirection * drawScale.Y);
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 		if (glowTexture != null)
 		{
-			DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + MainAxisDirection * drawScale.X, drawCenter + MainAxisDirection * drawScale.Y);
+			DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 		}
 
 		spriteBatch.End();
@@ -442,7 +442,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 	public virtual void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -450,13 +450,13 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		if (SlashTrail.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			Vector2 vec = SlashTrail.ToArray()[SlashTrail.Count - 1];
+			Vector2 vec = slashTrail.ToArray()[slashTrail.Count - 1];
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		Vector2 center = Projectile.Center - Vector2.Normalize(MainAxisDirection) * disFromPlayer;
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainAxisDirection) * disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 		{
@@ -500,7 +500,7 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 	public virtual void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
@@ -508,13 +508,13 @@ public abstract class MeleeProj : ModProjectile, IWarpProjectile, IBloomProjecti
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		if (SlashTrail.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			Vector2 vec = SlashTrail.ToArray()[SlashTrail.Count - 1];
+			Vector2 vec = slashTrail.ToArray()[slashTrail.Count - 1];
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		Vector2 center = Projectile.Center - Vector2.Normalize(MainAxisDirection) * disFromPlayer;
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainAxisDirection) * disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 		{

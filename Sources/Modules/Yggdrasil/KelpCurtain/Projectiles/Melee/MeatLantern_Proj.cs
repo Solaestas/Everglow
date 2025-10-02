@@ -8,12 +8,12 @@ public class MeatLantern_Proj : MeleeProj
 {
 	public override void SetDef()
 	{
-		MaxAttackType = 3;
-		MaxSlashTrailLength = 20;
+		maxAttackType = 3;
+		maxSlashTrailLength = 20;
 		longHandle = true;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
-		AutoEnd = false;
-		CanLongLeftClick = true;
+		autoEnd = false;
+		canLongLeftClick = true;
 	}
 
 	public override string TrailColorTex()
@@ -51,7 +51,7 @@ public class MeatLantern_Proj : MeleeProj
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + MainAxisDirection * drawScale.X, drawCenter + MainAxisDirection * drawScale.Y);
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
@@ -67,7 +67,7 @@ public class MeatLantern_Proj : MeleeProj
 		Vector2 mainVectorI = drawVector.RotatedBy(theta * -Projectile.spriteDirection) * MathF.Cos(theta);
 		Vector2 mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * -Projectile.spriteDirection) * MathF.Sin(theta);
 
-		if (CurrantAttackType == 1 || CurrantAttackType == 3)
+		if (currantAttackType == 1 || currantAttackType == 3)
 		{
 			mainVectorI = drawVector.RotatedBy(theta * +Projectile.spriteDirection) * MathF.Cos(theta);
 			mainVectorJ = drawVector.RotatedBy((theta - MathHelper.PiOver2) * +Projectile.spriteDirection) * MathF.Sin(theta);
@@ -96,7 +96,7 @@ public class MeatLantern_Proj : MeleeProj
 
 		}
 
-		UseTrail = true;
+		useSlash = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -127,36 +127,36 @@ public class MeatLantern_Proj : MeleeProj
 			}
 		}
 
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			float rot = player.direction;
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 20 && Timer < 35)
+			if (timer > 20 && timer < 35)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.36f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.36f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.25f;
-				MainAxisDirection = Vector2Elipse(75, Projectile.rotation, -0.75f, rot);
+				mainAxisDirection = Vector2Elipse(75, Projectile.rotation, -0.75f, rot);
 			}
-			if (Timer > 40)
+			if (timer > 40)
 				NextAttackType();
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -164,36 +164,36 @@ public class MeatLantern_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 1)
+		if (currantAttackType == 1)
 		{
 			float rot = -player.direction;
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 20 && Timer < 35)
+			if (timer > 20 && timer < 35)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.36f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.36f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.25f;
-				MainAxisDirection = Vector2Elipse(75, Projectile.rotation, -0.75f, rot);
+				mainAxisDirection = Vector2Elipse(75, Projectile.rotation, -0.75f, rot);
 			}
-			if (Timer > 40)
+			if (timer > 40)
 				NextAttackType();
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -201,32 +201,32 @@ public class MeatLantern_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 2)
+		if (currantAttackType == 2)
 		{
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(60, targetRot, -1.2f), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(60, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
-			if (Timer % 10 == 8 && Timer > 30)
+			if (timer % 10 == 8 && timer > 30)
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
-			if (Timer > 20 && Timer < 75)
+			if (timer > 20 && timer < 75)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.36f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.36f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.4f;
-				MainAxisDirection = Vector2Elipse(90, Projectile.rotation, -1.2f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(90, Projectile.rotation, -1.2f, 0, 1000);
 			}
-			if (Timer > 80)
+			if (timer > 80)
 			{
 				if (player.statLife <= player.statLifeMax2 * 0.5f)
 				{
@@ -237,9 +237,9 @@ public class MeatLantern_Proj : MeleeProj
 					End();
 				}
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -247,46 +247,46 @@ public class MeatLantern_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
 			float rot = -player.direction;
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 2.5f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(80, targetRot, 0, rot), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(80, targetRot, 0, rot), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 20 && Timer < 30)
+			if (timer > 20 && timer < 30)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.36f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.36f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.2f;
-				MainAxisDirection = Vector2Elipse(80, Projectile.rotation, 0, rot);
+				mainAxisDirection = Vector2Elipse(80, Projectile.rotation, 0, rot);
 			}
-			if (Timer > 60 && Timer < 80)
+			if (timer > 60 && timer < 80)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.36f, 0.36f, 0.24f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.36f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.15f;
-				MainAxisDirection = Vector2Elipse(80, Projectile.rotation, 0, rot);
+				mainAxisDirection = Vector2Elipse(80, Projectile.rotation, 0, rot);
 			}
-			if (Timer > 80)
+			if (timer > 80)
 			{
 				NextAttackType();
 			}
 
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -294,9 +294,9 @@ public class MeatLantern_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (IsAttacking)
+		if (canHit)
 		{
-			Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + MainAxisDirection * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
+			Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainAxisDirection * Main.rand.NextFloat(0.3f, 1f), 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
 			d.velocity += player.velocity * 0.3f + Main.rand.NextVector2Unit() * 2;
 			d.noGravity = true;
 		}
@@ -304,14 +304,14 @@ public class MeatLantern_Proj : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SlashTrail.ToList());//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
-		if (SlashTrail.Count != 0)
-			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
+		if (slashTrail.Count != 0)
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
@@ -342,7 +342,7 @@ public class MeatLantern_Proj : MeleeProj
 		Effect MeleeTrail = Commons.ModAsset.MeleeTrailFade.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		float k0 = Timer / 80f + 0.1f;
+		float k0 = timer / 80f + 0.1f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
@@ -370,7 +370,7 @@ public class MeatLantern_Proj : MeleeProj
 	{
 		Player player = Main.player[Projectile.owner];
 
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
 			player.HealLife(15);
 		}

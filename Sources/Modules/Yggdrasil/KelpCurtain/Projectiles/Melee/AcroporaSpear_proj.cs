@@ -6,12 +6,12 @@ public class AcroporaSpear_proj : MeleeProj
 {
 	public override void SetDef()
 	{
-		MaxAttackType = 3;
-		MaxSlashTrailLength = 20;
+		maxAttackType = 3;
+		maxSlashTrailLength = 20;
 		longHandle = true;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
-		AutoEnd = false;
-		CanLongLeftClick = true;
+		autoEnd = false;
+		canLongLeftClick = true;
 	}
 
 	public override string TrailShapeTex()
@@ -26,7 +26,7 @@ public class AcroporaSpear_proj : MeleeProj
 
 	public override float TrailAlpha(float factor)
 	{
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
 			return base.TrailAlpha(factor) * 1.5f;
 		}
@@ -49,7 +49,7 @@ public class AcroporaSpear_proj : MeleeProj
 		// 伤害倍率
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		float ShakeStrength = 0.2f;
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			modifiers.FinalDamage *= 1.4f;
 			ShakeStrength = 1f;
@@ -67,7 +67,7 @@ public class AcroporaSpear_proj : MeleeProj
 		{
 		}
 
-		UseTrail = true;
+		useSlash = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -106,17 +106,17 @@ public class AcroporaSpear_proj : MeleeProj
 			}
 		}
 
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
-			int t = Timer;
+			int t = timer;
 			if (t < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.8f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Player.DirectionTo(MouseWorld_WithoutGravDir) * 150, 0.2f);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Player.DirectionTo(MouseWorld_WithoutGravDir) * 150, 0.2f);
 				disFromPlayer = MathHelper.Lerp(disFromPlayer, -30, 0.2f);
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (t >= 20 && t < 40)
 			{
@@ -125,7 +125,7 @@ public class AcroporaSpear_proj : MeleeProj
 					SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 					if (Main.myPlayer == Projectile.owner)
 					{
-						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(MainAxisDirection) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainAxisDirection) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
 					}
 				}
 				if (t == 26)
@@ -133,7 +133,7 @@ public class AcroporaSpear_proj : MeleeProj
 					SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 					if (Main.myPlayer == Projectile.owner)
 					{
-						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(MainAxisDirection).RotatedBy(0.3) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainAxisDirection).RotatedBy(0.3) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
 					}
 				}
 				if (t == 32)
@@ -141,48 +141,48 @@ public class AcroporaSpear_proj : MeleeProj
 					SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 					if (Main.myPlayer == Projectile.owner)
 					{
-						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(MainAxisDirection).RotatedBy(-0.3) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
+						Projectile.NewProjectile(Player.GetSource_FromAI(), Projectile.Center, Vector2.Normalize(mainAxisDirection).RotatedBy(-0.3) * 20, ModContent.ProjectileType<AcroporaThumpEff>(), Projectile.damage, 0, Projectile.owner);
 					}
 				}
 				if (t < 24)
 				{
 					disFromPlayer += 60;
-					IsAttacking = true;
+					canHit = true;
 				}
 				else if (t < 26)
 				{
 					disFromPlayer -= 90;
-					IsAttacking = false;
+					canHit = false;
 				}
 				else if (t < 30)
 				{
 					disFromPlayer += 60;
-					IsAttacking = true;
+					canHit = true;
 				}
 				else if (t < 32)
 				{
 					disFromPlayer -= 90;
-					IsAttacking = false;
+					canHit = false;
 				}
 				else if (t < 34)
 				{
 					disFromPlayer += 60;
-					IsAttacking = true;
+					canHit = true;
 				}
 				else if (t < 36)
 				{
 					disFromPlayer -= 90;
-					IsAttacking = false;
+					canHit = false;
 				}
 				else if (t < 40)
 				{
 					disFromPlayer += 60;
-					IsAttacking = true;
+					canHit = true;
 				}
 				else
 				{
 					disFromPlayer -= 36;
-					IsAttacking = false;
+					canHit = false;
 				}
 			}
 			if (t > 40)
@@ -190,9 +190,9 @@ public class AcroporaSpear_proj : MeleeProj
 				disFromPlayer = 6;
 				NextAttackType();
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.3f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.3f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -200,38 +200,38 @@ public class AcroporaSpear_proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
 			}
 		}
-		if (CurrantAttackType == 1)
+		if (currantAttackType == 1)
 		{
 			float rot = 0.45f * player.direction;
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(180, targetRot, -1.2f, rot), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f, rot), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
 
-			if (Timer > 20 && Timer < 35)
+			if (timer > 20 && timer < 35)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.24f, 0.36f, 0f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.36f, 0f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.4f;
-				MainAxisDirection = Vector2Elipse(220, Projectile.rotation, -1.2f, rot);
+				mainAxisDirection = Vector2Elipse(220, Projectile.rotation, -1.2f, rot);
 			}
-			if (Timer > 40)
+			if (timer > 40)
 			{
 				NextAttackType();
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -239,41 +239,41 @@ public class AcroporaSpear_proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 2)
+		if (currantAttackType == 2)
 		{
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
-			if (Timer % 10 == 8 && Timer > 30)
+			if (timer % 10 == 8 && timer > 30)
 			{
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			}
 
-			if (Timer > 20 && Timer < 75)
+			if (timer > 20 && timer < 75)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.24f, 0.36f, 0f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.36f, 0f);
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.4f;
-				MainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 			}
-			if (Timer > 80)
+			if (timer > 80)
 			{
 				NextAttackType();
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -281,41 +281,41 @@ public class AcroporaSpear_proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (CurrantAttackType == 3)
+		if (currantAttackType == 3)
 		{
-			if (Timer < 20)
+			if (timer < 20)
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
-				MainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (Timer == 8)
+			if (timer == 8)
 			{
 				AttSound(new SoundStyle(
 			Commons.ModAsset.TrueMeleeSwing_Mod));
 			}
-			if (Timer % 10 == 8 && Timer > 30)
+			if (timer % 10 == 8 && timer > 30)
 			{
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 			}
 
-			if (Timer > 20 && Timer < 75)
+			if (timer > 20 && timer < 75)
 			{
-				Lighting.AddLight(Projectile.Center + MainAxisDirection, 0.24f, 0.06f, 0f);
-				IsAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.06f, 0f);
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.4f;
-				MainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 			}
-			if (Timer > 70)
+			if (timer > 70)
 			{
 				NextAttackType();
 			}
-			else if (Timer > 1)
+			else if (timer > 1)
 			{
-				float BodyRotation = (float)Math.Sin((Timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
+				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
 				player.fullRotation = BodyRotation;
 				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 				player.legRotation = -BodyRotation;
@@ -328,15 +328,15 @@ public class AcroporaSpear_proj : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
-		if (SlashTrail.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -371,7 +371,7 @@ public class AcroporaSpear_proj : MeleeProj
 		Effect MeleeTrail = Commons.ModAsset.MeleeTrailFade.Value; // MeleeTrailFade should be moved to Everglow.Function -> MEAC -> Effects, instead of Modules -> MEAC -> Effects, or find another way. ~Setnour6
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.Acropora_RedColor.Value;
-		float k0 = Timer / 80f + 0.3f;
+		float k0 = timer / 80f + 0.3f;
 		MeleeTrail.Parameters["FadeValue"].SetValue(MathF.Sqrt(k0 * 1.2f));
 		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.Acropora_TexBlood.Value);
 		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();

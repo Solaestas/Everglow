@@ -49,7 +49,7 @@ public class ScaleWingBlade : ModItem
 				else// 右键
 				{
 					var proj = Projectile.NewProjectileDirect(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<ScaleWingBladeProj>(), player.GetWeaponDamage(Item), Item.knockBack, player.whoAmI);
-					(proj.ModProjectile as MeleeProj).CurrantAttackType = 100;
+					(proj.ModProjectile as MeleeProj).currantAttackType = 100;
 					(proj.ModProjectile as MeleeProj).isRightClick = true;
 					proj.netUpdate2 = true;
 				}

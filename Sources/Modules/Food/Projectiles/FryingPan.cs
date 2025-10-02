@@ -14,9 +14,9 @@ public class FryingPan : MeleeProj
 		Projectile.width = 60;
 		Projectile.height = 20;
 
-		MaxAttackType = 0; // 循环攻击方式的总数
+		maxAttackType = 0; // 循环攻击方式的总数
 
-		MaxSlashTrailLength = 10; // 拖尾的长度
+		maxSlashTrailLength = 10; // 拖尾的长度
 
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 
@@ -36,7 +36,7 @@ public class FryingPan : MeleeProj
 	// 一定程度上决定拖尾的亮度/不透明度
 	public override float TrailAlpha(float factor)
 	{
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			return base.TrailAlpha(factor) * 1.2f;
 		}
@@ -65,7 +65,7 @@ public class FryingPan : MeleeProj
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		drawScale.Y = 1.3f;
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			drawScale = new Vector2(-0.4f, 1.4f);
 		}
@@ -76,7 +76,7 @@ public class FryingPan : MeleeProj
 	{
 		// 调整各个攻击方式的伤害倍率等等
 		// ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-		if (CurrantAttackType == 100)
+		if (currantAttackType == 100)
 		{
 			modifiers.FinalDamage *= 1.85f;
 			modifiers.Knockback *= 2;
@@ -93,31 +93,31 @@ public class FryingPan : MeleeProj
 
 	public override void Attack()
 	{
-		UseTrail = true;
-		if (CurrantAttackType == 100)// 右键长按蓄力斩的写法。因为不在循环内，所以这个type数值可以随便写，由Item切换到这个CurrantAttackType
+		useSlash = true;
+		if (currantAttackType == 100)// 右键长按蓄力斩的写法。因为不在循环内，所以这个type数值可以随便写，由Item切换到这个CurrantAttackType
 		{
 			int chargeTime1 = 30;
 			int chargeTime2 = 60;
 			int chargeTime3 = 90;
 
-			if (Timer < 10000)// 蓄力中
+			if (timer < 10000)// 蓄力中
 			{
-				UseTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 
 				Projectile.ai[0] = GetAngToMouse(); // 获取往鼠标的方向
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
-				MainAxisDirection = Vector2.Lerp(MainAxisDirection, Vector2Elipse(77, targetRot, 0f, Projectile.ai[0], 1000), 0.2f);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(77, targetRot, 0f, Projectile.ai[0], 1000), 0.2f);
 
-				Projectile.rotation = MainAxisDirection.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 
 				// 向内的粒子效果
 				for (int x = 0; x < 2; x++)
 				{
 					Vector2 r = Main.rand.NextVector2Unit();
-					float dis1 = MathHelper.Clamp(chargeTime1 - Timer, 0, chargeTime1) * 4;
-					float dis2 = MathHelper.Clamp(chargeTime2 - Timer, 0, chargeTime2) * 4;
-					float dis3 = MathHelper.Clamp(chargeTime3 - Timer, 0, chargeTime3) * 4;
+					float dis1 = MathHelper.Clamp(chargeTime1 - timer, 0, chargeTime1) * 4;
+					float dis2 = MathHelper.Clamp(chargeTime2 - timer, 0, chargeTime2) * 4;
+					float dis3 = MathHelper.Clamp(chargeTime3 - timer, 0, chargeTime3) * 4;
 					Dust d1 = Dust.NewDustDirect(Projectile.Center + r * dis1, 10, 10, ModContent.DustType<BlackPanDust>(), 0, 0, 100, new Color(0, Projectile.owner, 20), 0.8f);
 					d1.alpha = 255;
 
@@ -131,56 +131,56 @@ public class FryingPan : MeleeProj
 			SoundStyle sound = SoundID.Item4;
 			sound.Volume *= 0.4f;
 
-			if (Timer == chargeTime1)// 蓄力完成时
+			if (timer == chargeTime1)// 蓄力完成时
 			{
 				// 播放音效。
 				SoundEngine.PlaySound(sound, Projectile.Center);
 			}
 
-			if (Timer == chargeTime2)
+			if (timer == chargeTime2)
 			{
 				SoundEngine.PlaySound(sound, Projectile.Center);
 			}
 
-			if (Timer == chargeTime3)
+			if (timer == chargeTime3)
 			{
 				SoundEngine.PlaySound(sound, Projectile.Center);
 			}
 
-			if (!Player.controlUseTile && Timer >= chargeTime1 && Timer < 10000)// 松开右键，且蓄力已经完成时
+			if (!Player.controlUseTile && timer >= chargeTime1 && timer < 10000)// 松开右键，且蓄力已经完成时
 			{
 				// 进入攻击状态
 				state1 = true;
 
-				if (Timer >= chargeTime2)
+				if (timer >= chargeTime2)
 				{
 					state2 = true;
 				}
 
-				if (Timer >= chargeTime3)
+				if (timer >= chargeTime3)
 				{
 					state3 = true;
 				}
 
-				Timer = 10000;
+				timer = 10000;
 				SoundEngine.PlaySound(SoundID.Item1);
 			}
 
-			if (Timer >= 10000)// 开始挥动攻击
+			if (timer >= 10000)// 开始挥动攻击
 			{
-				IsAttacking = true;
+				canHit = true;
 
 				if (state1 == true)
 				{
-					if (Timer < 10015)
+					if (timer < 10015)
 					{
-						IsAttacking = true;
-						MainAxisDirection = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
+						canHit = true;
+						mainAxisDirection = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
 						Projectile.rotation += Projectile.spriteDirection * 0.35f;
 					}
 					if (!state2)
 					{
-						if (Timer >= 10020)
+						if (timer >= 10020)
 						{
 							Projectile.friendly = false;
 							state1 = false;
@@ -191,26 +191,26 @@ public class FryingPan : MeleeProj
 
 				if (state2 == true)
 				{
-					if (Timer > 10015 && Timer < 10020)
+					if (timer > 10015 && timer < 10020)
 					{
-						UseTrail = false;
+						useSlash = false;
 					}
 
-					if (Timer == 10020)
+					if (timer == 10020)
 					{
 						SoundEngine.PlaySound(SoundID.Item1);
 					}
 
-					if (Timer >= 10020 && Timer < 10035)
+					if (timer >= 10020 && timer < 10035)
 					{
-						UseTrail = true;
-						IsAttacking = true;
-						MainAxisDirection = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
+						useSlash = true;
+						canHit = true;
+						mainAxisDirection = Vector2Elipse(77, Projectile.rotation, 0f, Projectile.ai[0]);
 						Projectile.rotation += Projectile.spriteDirection * -0.35f;
 					}
 					if (!state3)
 					{
-						if (Timer >= 10040)
+						if (timer >= 10040)
 						{
 							Projectile.friendly = false;
 							state1 = false;
@@ -222,24 +222,24 @@ public class FryingPan : MeleeProj
 
 				if (state3 == true)
 				{
-					if (Timer > 10040 && Timer < 10050)
+					if (timer > 10040 && timer < 10050)
 					{
-						UseTrail = false;
+						useSlash = false;
 					}
 
-					if (Timer == 10050)
+					if (timer == 10050)
 					{
 						SoundEngine.PlaySound(SoundID.Item1);
 					}
 
-					if (Timer >= 10050 && Timer < 10075)
+					if (timer >= 10050 && timer < 10075)
 					{
-						UseTrail = true;
-						IsAttacking = true;
+						useSlash = true;
+						canHit = true;
 						Projectile.rotation += Projectile.spriteDirection * 0.25f;
-						MainAxisDirection = Vector2Elipse(120, Projectile.rotation, -1.2f, Projectile.ai[0]);
+						mainAxisDirection = Vector2Elipse(120, Projectile.rotation, -1.2f, Projectile.ai[0]);
 					}
-					if (Timer >= 10080)
+					if (timer >= 10080)
 					{
 						Projectile.friendly = false;
 						state1 = false;
@@ -250,7 +250,7 @@ public class FryingPan : MeleeProj
 				}
 			}
 		}
-		if (IsAttacking)
+		if (canHit)
 		{
 			// 攻击时的粒子之类的
 		}
@@ -259,9 +259,9 @@ public class FryingPan : MeleeProj
 	private void PlayerAnimation(Player player)
 	{
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
-		int overTimer = Timer - 10000;
+		int overTimer = timer - 10000;
 		float YDevideX = MathF.Abs(vToMouse.X) / (vToMouse.Length() + 0.001f);
-		if (Timer > 10000)
+		if (timer > 10000)
 		{
 			if (overTimer < 24)
 			{
@@ -290,7 +290,7 @@ public class FryingPan : MeleeProj
 		}
 		else
 		{
-			float BodyRotation = (float)Math.Sin(-Math.Min(Timer * 0.5f, 45) / 90d * Math.PI) * 0.3f * player.direction * player.gravDir * YDevideX;
+			float BodyRotation = (float)Math.Sin(-Math.Min(timer * 0.5f, 45) / 90d * Math.PI) * 0.3f * player.direction * player.gravDir * YDevideX;
 			player.fullRotation = BodyRotation;
 			player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
 			player.legRotation = -BodyRotation;
@@ -312,16 +312,16 @@ public class FryingPan : MeleeProj
 
 	public override void AI()
 	{
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			Projectile.tileCollide = true;
 			Projectile.ignoreWater = false;
-			IsAttacking = true;
+			canHit = true;
 			longHandle = true;
 			Player player = Main.player[Projectile.owner];
 			Projectile.Center += Projectile.velocity;
-			UseTrail = true;
-			Timer++;
+			useSlash = true;
+			timer++;
 			if (Projectile.rotation - OldSoundRot > 6.283)
 			{
 				OldSoundRot = Projectile.rotation;
@@ -371,14 +371,14 @@ public class FryingPan : MeleeProj
 			//    }
 			// }
 			Projectile.rotation += 0.1f * Projectile.spriteDirection;
-			MainAxisDirection = Projectile.rotation.ToRotationVector2() * 58;
+			mainAxisDirection = Projectile.rotation.ToRotationVector2() * 58;
 			if (Projectile.timeLeft <= 2980)
 			{
 				float mulVelocity = Math.Min((2960 - Projectile.timeLeft) / 16f, 16f);
 				Projectile.velocity = Projectile.velocity * 0.8f + Vector2.Normalize(player.Center - Projectile.velocity - Projectile.Center) * mulVelocity;
 
 				Projectile.rotation += mulVelocity / 12f * Projectile.spriteDirection;
-				MainAxisDirection = Projectile.rotation.ToRotationVector2() * 58;
+				mainAxisDirection = Projectile.rotation.ToRotationVector2() * 58;
 				if ((player.Center - Projectile.Center).Length() < 32)
 				{
 					Projectile.timeLeft = 0;
@@ -389,17 +389,17 @@ public class FryingPan : MeleeProj
 				Projectile.tileCollide = false;
 			}
 
-			if (UseTrail)
+			if (useSlash)
 			{
-				SlashTrail.Enqueue(MainAxisDirection);
-				if (SlashTrail.Count > MaxSlashTrailLength)
+				slashTrail.Enqueue(mainAxisDirection);
+				if (slashTrail.Count > maxSlashTrailLength)
 				{
-					SlashTrail.Dequeue();
+					slashTrail.Dequeue();
 				}
 			}
 			else// 清空！
 			{
-				SlashTrail.Clear();
+				slashTrail.Clear();
 			}
 		}
 		else
@@ -411,15 +411,15 @@ public class FryingPan : MeleeProj
 
 	public override void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(SlashTrail.ToList()); // 平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (SlashTrail.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			SmoothTrail.Add(SlashTrail.ToArray()[SlashTrail.Count - 1]);
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 		}
 
 		int length = SmoothTrail.Count;
@@ -486,7 +486,7 @@ public class FryingPan : MeleeProj
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
 			if (Projectile.timeLeft > 2960)
@@ -508,7 +508,7 @@ public class FryingPan : MeleeProj
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
 			if (Projectile.timeLeft > 2960)
@@ -532,7 +532,7 @@ public class FryingPan : MeleeProj
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
 		SoundEngine.PlaySound(new SoundStyle("Everglow/Food/Sounds/Pan1").WithVolumeScale(0.3f).WithPitchOffset(1f), Projectile.Center);
-		if (CurrantAttackType == 0)
+		if (currantAttackType == 0)
 		{
 			if (Projectile.timeLeft > 2960)
 			{
