@@ -1,8 +1,6 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class ShadewoodClub_smash : ClubProj_Smash
+public class ShadewoodClub_smash : ClubProjSmash
 {
-	public override string Texture => "Everglow/" + ModAsset.ShadewoodClub_Path;
+	public override string Texture => ModAsset.ShadewoodClub_Mod;
 }

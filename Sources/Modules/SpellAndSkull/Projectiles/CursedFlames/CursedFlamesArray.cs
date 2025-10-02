@@ -4,7 +4,7 @@ using Everglow.Commons.VFX;
 
 namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 
-internal class CursedFlamesArray : ModProjectile, IWarpProjectile
+public class CursedFlamesArray : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -17,10 +17,12 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -31,13 +33,17 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (timer < 30)
+			{
 				timer++;
+			}
 		}
 		else
 		{
 			timer--;
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -47,8 +53,10 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		Projectile.rotation = player.fullRotation;
 
 		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-		//GenerateVFX(12, new Vector2(0, timer * 1.45f).RotatedByRandom(6.283));
+
+		// GenerateVFX(12, new Vector2(0, timer * 1.45f).RotatedByRandom(6.283));
 	}
+
 	public void GenerateVFX(int Frequency, Vector2 ringPos)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -62,11 +70,12 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = player.Center + ringPos + ringPos,
 				maxTime = Main.rand.Next(18, 40),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) * ringPos.Length() / 30f }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(4f, 12f) * ringPos.Length() / 30f },
 			};
 			Ins.VFXManager.Add(cf);
 		}
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		behindNPCs.Add(index);
@@ -131,6 +140,7 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	private static void DrawTexCircle(VFXBatch sb, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -145,8 +155,11 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 
 		if (circle.Count > 0)
+		{
 			sb.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
 		float Wid = 3f;
@@ -198,6 +211,6 @@ internal class CursedFlamesArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(sb, timer * 1.2f, 52, new Color(64, 7, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_2_thick.Value, Main.timeForVisualEffects / 17);
 	}
 }

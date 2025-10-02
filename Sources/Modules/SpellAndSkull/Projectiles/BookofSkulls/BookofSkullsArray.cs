@@ -2,9 +2,10 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+
 namespace Everglow.SpellAndSkull.Projectiles.BookofSkulls;
 
-internal class BookofSkullsArray : ModProjectile, IWarpProjectile
+public class BookofSkullsArray : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -16,10 +17,12 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 10000;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -30,13 +33,17 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (timer < 30)
+			{
 				timer++;
+			}
 		}
 		else
 		{
 			timer--;
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -46,8 +53,6 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		Projectile.rotation = player.fullRotation;
 
 		ringPos = ringPos * 0.9f + new Vector2(-12 * player.direction, -24 * player.gravDir) * 0.1f;
-
-
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -93,7 +98,6 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 		DrawTexLine(Point5, Point6, c2, c2, Water);
 		DrawTexLine(Point6, Point4, c2, c2, Water);
 	}
-
 
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
@@ -145,6 +149,6 @@ internal class BookofSkullsArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 7, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 }

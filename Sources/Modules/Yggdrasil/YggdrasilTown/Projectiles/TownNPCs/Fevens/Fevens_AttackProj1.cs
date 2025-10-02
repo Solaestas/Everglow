@@ -284,7 +284,7 @@ public class Fevens_AttackProj1 : ModProjectile, IWarpProjectile
                 colorValue0 -= 6.28f;
             }
 
-            var c0 = new Color(colorValue0, 0.4f * colorValueG * MulColor, 0, 0);
+            var c0 = new Color(colorValue0, 0.04f * colorValueG * MulColor, 0, 0);
 
             var factor = i / (float)trueLength;
             float x0 = factor * 1.3f - (float)(Main.time / 15d) + 100000;

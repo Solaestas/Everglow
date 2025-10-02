@@ -73,7 +73,7 @@ public class CursedFlameBrust : ModProjectile, IWarpProjectile
 			width = Projectile.timeLeft;
 		}
 
-		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		MythUtils.DrawTexCircle_Warp(spriteBatch, value * 27 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.06f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

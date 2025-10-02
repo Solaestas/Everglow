@@ -1,5 +1,4 @@
 using Everglow.Commons.MEAC;
-using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Terraria.DataStructures;
@@ -10,6 +9,7 @@ namespace Everglow.SpellAndSkull.Projectiles.MagnetSphere;
 public class MagnetSphereHit : ModProjectile, IWarpProjectile
 {
 	public override bool CloneNewInstances => false;
+
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()
@@ -27,6 +27,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 		Projectile.localNPCHitCooldown = 6;
 		Projectile.DamageType = DamageClass.Magic;
 	}
+
 	public void GenerateVFXExpolode(int Frequency, float mulVelocity = 1f)
 	{
 		for (int g = 0; g < Frequency * 3; g++)
@@ -39,7 +40,7 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 				Visible = true,
 				maxTime = Main.rand.Next(54, 180),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
-				position = Projectile.Center - vel * 3
+				position = Projectile.Center - vel * 3,
 			};
 			Ins.VFXManager.Add(me);
 		}
@@ -53,33 +54,42 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 				Visible = true,
 				maxTime = Main.rand.Next(54, 180),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.01f, 0.01f), Main.rand.NextFloat(1.6f, 2f) * mulVelocity },
-				position = Projectile.Center - vel * 3
+				position = Projectile.Center - vel * 3,
 			};
 			Ins.VFXManager.Add(me);
 		}
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		GenerateVFXExpolode(4, 0.6f);
 	}
+
 	public override void AI()
 	{
 		Projectile.velocity *= 0.95f;
 
 		if (Projectile.timeLeft <= 198)
+		{
 			Projectile.friendly = false;
+		}
+
 		float LightS = Projectile.timeLeft / 2f - 95f;
 		if (LightS > 0)
+		{
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0, LightS * 0.83f, LightS * 0.8f);
+		}
 
 		Projectile.velocity *= 0;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D Shadow = ModAsset.CursedHitLight.Value;
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Main.spriteBatch.Draw(Shadow, Projectile.Center - Main.screenPosition, null, new Color(0, 199, 129, 0) * dark, 0, Shadow.Size() / 2f, 2.2f * Projectile.ai[0] / 15f * dark, SpriteEffects.None, 0);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Shadow = ModAsset.CursedHit.Value;
@@ -91,10 +101,16 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 
 		float value = (480 - Projectile.timeLeft * 2.4f) / Projectile.timeLeft * 1.4f;
 		if (value < 0)
+		{
 			value = 0;
+		}
+
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
+		{
 			colorV *= Projectile.ai[0] / 10f;
+		}
+
 		Texture2D t = Commons.ModAsset.Wave.Value;
 		DrawTexCircle(value * 7 * Projectile.ai[0], 10 * value * value, new Color(0, colorV, colorV * 0.7f, 0f), Projectile.Center - Main.screenPosition, t);
 
@@ -103,34 +119,23 @@ public class MagnetSphereHit : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
-	{
-		var circle = new List<Vertex2D>();
-
-		for (int h = 0; h < radius / 2; h += 1)
-		{
-			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(h * 2 / radius, 0, 0)));
-		}
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
-		if (circle.Count > 2)
-			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
-	}
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
+		{
 			colorV *= Projectile.ai[0] / 10f;
+		}
+
 		Texture2D t = Commons.ModAsset.Trail.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 12 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 1.4f * value
-			, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_Warp(spriteBatch, MathF.Sqrt(value) * 12 * Projectile.ai[0], width * 2, new Color(colorV, colorV * 0.14f * value,
+			colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 }

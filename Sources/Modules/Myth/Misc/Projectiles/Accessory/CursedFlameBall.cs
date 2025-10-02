@@ -287,7 +287,7 @@ public class CursedFlameBall : ModProjectile, IWarpProjectile
 				k0 -= 6.28f;
 			}
 
-			Color c0 = new Color(k0, 0.2f * MulColor, 0, 0) * MulByTimeLeft;
+			Color c0 = new Color(k0, 0.02f * MulColor, 0, 0) * MulByTimeLeft;
 
 			var factor = i / (float)TrueL;
 			float x0 = factor * 1.3f - (float)(Main.time / 15d) + 100000;

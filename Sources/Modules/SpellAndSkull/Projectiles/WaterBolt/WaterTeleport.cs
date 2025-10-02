@@ -4,9 +4,10 @@ using Everglow.Commons.VFX;
 using Everglow.SpellAndSkull.Buffs;
 using Everglow.SpellAndSkull.Dusts;
 using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+
 namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
-internal class WaterTeleport : ModProjectile, IWarpProjectile
+public class WaterTeleport : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -25,7 +26,10 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		Vector2 AIM0 = player.Center + new Vector2(0, 12 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-60 * player.direction, 30).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction);
 		if (player.itemTime > 0 && player.active)
+		{
 			AIM0 = player.Center + new Vector2(player.direction * -12, -24 * player.gravDir * (float)(0.2 + Math.Sin(Main.timeForVisualEffects / 18d) / 2d)) + new Vector2(-120 * player.direction, 60).RotatedBy((Projectile.ai[0] - 1) / 4.5 * Math.PI * player.direction);
+		}
+
 		Projectile.Center = Projectile.Center * (-Projectile.ai[0] / 50f + 0.97f) + AIM0 * (Projectile.ai[0] / 50f + 0.03f);
 		Projectile.spriteDirection = player.direction;
 		Projectile.velocity *= 0;
@@ -33,13 +37,17 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (timer < 30)
+			{
 				timer++;
+			}
 		}
 		else
 		{
 			timer--;
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 
 		if (Main.mouseRight && Main.mouseRightRelease)
@@ -117,11 +125,15 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 	{
 		Projectile.hide = false;
 		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
-		//DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
+
+		// DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
 		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(0, 0.45f, 1f, 0));
 		Main.spriteBatch.Draw(ModAsset.WaterTeleport.Value, Projectile.Center - Main.screenPosition, null, new Color(0, 30, 255, 0), 0, new Vector2(34), timer / 30f, SpriteEffects.None, 0);
 		if ((Main.MouseWorld - Projectile.Center).Length() < 30)
+		{
 			Utils.DrawBorderString(Main.spriteBatch, Projectile.ai[0].ToString(), Projectile.Center - Main.screenPosition, Color.AliceBlue);
+		}
+
 		return false;
 	}
 
@@ -134,8 +146,6 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 		DrawTexCircle(Size, (40 - Size) * timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
 		DrawTexCircle(SizeII, (40 - SizeII) * timer / 30f, c0, Projectile.Center - Main.screenPosition, tex, Main.timeForVisualEffects / 17);
 	}
-
-
 
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
@@ -163,18 +173,18 @@ internal class WaterTeleport : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-
 		float Size = (float)((Main.timeForVisualEffects / 2d + Projectile.ai[0] * 4) % 40d);
 		float SizeII = (float)((Main.timeForVisualEffects / 2d + 20 + Projectile.ai[0] * 4) % 40d);
-		DrawTexCircle(spriteBatch, Size, (40 - Size) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
-		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * timer / 30f, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, Size, (40 - Size) * timer / 30f, new Color(64, 7, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, SizeII, (40 - SizeII) * timer / 30f, new Color(64, 7, 255, 0), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 
 	public override void OnKill(int timeLeft)
 	{
 		if (timer < 1)
+		{
 			return;
-
+		}
 
 		float k1 = 0.3f;
 		float k2 = 8;

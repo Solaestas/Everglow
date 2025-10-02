@@ -67,7 +67,7 @@ public class BombShakeWave : ModProjectile, IWarpProjectile
 		float width = 60;
 		if (Projectile.timeLeft < 60)
 			width = Projectile.timeLeft;
-		DrawWarpTexCircle_VFXBatch(sb, value * value * 450, width * 3, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 200f);
-		DrawWarpTexCircle_VFXBatch(sb, 150 + MathF.Sqrt(value) * 40, 180, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 200f);
+		DrawWarpTexCircle_VFXBatch(sb, value * value * 450, width * 3, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 2000f);
+		DrawWarpTexCircle_VFXBatch(sb, 150 + MathF.Sqrt(value) * 40, 180, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 2000f);
 	}
 }

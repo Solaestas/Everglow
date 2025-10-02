@@ -4,12 +4,12 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class PlatinumClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 11;
 		Item.value = 147;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PlatinumClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PlatinumClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PlatinumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

@@ -112,7 +112,7 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		float width = 15;
 		if (Projectile.timeLeft < 15)
 			width = Projectile.timeLeft;
-		DrawWarpTexCircle_VFXBatch(sb, value * value * 80 + 90, width * 8, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 400f);
+		DrawWarpTexCircle_VFXBatch(sb, value * value * 80 + 90, width * 8, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 4000f);
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{

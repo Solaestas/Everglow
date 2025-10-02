@@ -498,7 +498,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 				Color alphaColor = Color;
 				alphaColor.A = 0;
 				alphaColor.R = (byte)((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
-				alphaColor.G = DarkDraw[f].Color.A;
+				alphaColor.G = (byte)(DarkDraw[f].Color.A * 0.1f);
 				var bars = new List<Vertex2D>
 				{
 					new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -522,7 +522,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Color alphaColor = Color;
 			alphaColor.A = 0;
 			alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
-			alphaColor.G = 200;
+			alphaColor.G = 20;
 			var bars = new List<Vertex2D>
 			{
 				new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),

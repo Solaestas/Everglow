@@ -141,6 +141,6 @@ public class TrueDeathSickleHit : ModProjectile, IWarpProjectile
             return;
         }
 
-        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 27 * Projectile.ai[0], width * 4, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 27 * Projectile.ai[0], width * 4, new Color(colorV, colorV * 0.02f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
     }
 }

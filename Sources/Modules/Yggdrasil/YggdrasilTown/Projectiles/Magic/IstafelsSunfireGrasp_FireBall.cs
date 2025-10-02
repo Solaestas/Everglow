@@ -1,4 +1,3 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Yggdrasil.YggdrasilTown.Buffs;
@@ -45,10 +44,8 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 		set => Projectile.ai[0] = value;
 	}
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
-
 		Projectile.width = 40;
 		Projectile.height = 40;
 
@@ -66,10 +63,11 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 		Projectile.localNPCHitCooldown = 10;
 		Projectile.usesLocalNPCImmunity = true;
 
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
+		TrailLength = 15;
 		TrailColor = new Color(0.7f, 0.1f, 0f, 0);
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
-		SelfLuminous = false;
+		TrailBackgroundDarkness = 0.5f;
+		SelfLuminous = true;
 		TargetWhoAmI = -1;
 	}
 
@@ -99,7 +97,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 	/// </summary>
 	private void ShootScoria()
 	{
-		// Shoot explosion
+		// Shoot DestroyEntityEffect
 		Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<IstafelsSunfireGrasp_Explosion>(), 200, Projectile.knockBack, Projectile.owner);
 
 		// Shoot scoria
@@ -113,9 +111,11 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		// Trailing proj ai
-		Timer++;
+		base.AI();
+	}
 
+	public override void Behaviors()
+	{
 		Lighting.AddLight(Projectile.Center, 1.8f, 0.8f, 0f);
 		if (Actived)
 		{
@@ -190,27 +190,14 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 			if (BuildUpProgress > 0.5f)
 			{
-				// Generate dusts
-				// This lava drop look also well.
-				// But I have a better idea.
 				if (Main.rand.NextBool(26))
 				{
-					// var randomInHitBox = Projectile.position + new Vector2(Main.rand.NextFloat(Projectile.width), Main.rand.NextFloat(Projectile.height * 0.5f, Projectile.height));
-					// var generatePos = Vector2.Lerp(randomInHitBox, Projectile.Center, 0.75f);
-					// Gore gore = Gore.NewGoreDirect(generatePos, Projectile.velocity, GoreID.LavaDrip);
-					// gore.frame = 7;
-					// gore.scale = Main.rand.NextFloat(0.4f, 1.2f);
-					// gore.velocity.X *= 0.1f;
-					// gore.velocity.Y = 0;
-					// gore.velocity += Projectile.velocity;
-					// gore.position -= gore.AABBRectangle.Size() * 0.5f;
 					var dust = Dust.NewDustDirect(Projectile.Center, 0, 0, ModContent.DustType<IstafelsSunfireDrop_glimmer>());
 					dust.customData = Projectile;
 					dust.velocity = new Vector2(0, 1).RotatedByRandom(0.4f);
 				}
 
 				// Shoot projectile to target
-				
 			}
 			if (Timer % 120 == 0)
 			{
@@ -278,90 +265,25 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 	public override void DrawTrail()
 	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
+		base.DrawTrail();
+	}
 
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			SmoothTrail.Add(smoothTrail_current[x]);
-		}
-		if (unSmoothPos.Count != 0)
-		{
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-		}
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor - timeValue * 0.2f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
 		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = 1;
-			float timeValue = (float)-Main.timeForVisualEffects * 0.005f;
-			factor += timeValue;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = TrailColor;
-			float lengthFade = 1f;
-			if (i > SmoothTrail.Count - 20f)
-			{
-				lengthFade = (SmoothTrail.Count - i - 1) / 20f;
-			}
-			if (i < 3f)
-			{
-				lengthFade *= i / 3f;
-			}
-			drawC *= lengthFade;
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue + 0.6f, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue + 0.6f, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue + 0.8f, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue + 0.8f, 0.5f, width)));
+			y = 0;
 		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		if (bars.Count > 3)
+		if (phase % 2 == 1)
 		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			y = 0.5f;
 		}
-
-		if (bars2.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		}
-
-		if (bars3.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-		}
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		return new Vector3(x, y, z);
 	}
 
 	public override void OnKill(int timeLeft)
@@ -393,7 +315,7 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 			Vector2 dirOuter = (dirMiddle - Projectile.velocity.NormalizeSafe() * 0.15f).NormalizeSafe();
 
 			var colorInner = new Color(-dirInner.X * 0.5f + 0.5f, -dirInner.Y * 0.5f + 0.5f, 0, 0);
-			var colorMiddle = new Color(-dirMiddle.X * 0.5f + 0.5f, -dirMiddle.Y * 0.5f + 0.5f, fade * 0.5f * Main.GameViewMatrix.Zoom.X, 0);
+			var colorMiddle = new Color(-dirMiddle.X * 0.5f + 0.5f, -dirMiddle.Y * 0.5f + 0.5f, fade * 0.05f * Main.GameViewMatrix.Zoom.X, 0);
 			var colorOuter = new Color(-dirOuter.X * 0.5f + 0.5f, -dirOuter.Y * 0.5f + 0.5f, 0, 0);
 
 			bars.Add(drawPos + radiusMiddle, colorMiddle, new Vector3(timeValue, i / 50f, 1));
@@ -401,12 +323,6 @@ public class IstafelsSunfireGrasp_FireBall : TrailingProjectile, IWarpProjectile
 
 			bars2.Add(drawPos + radiusMiddle, colorMiddle, new Vector3(timeValue, i / 50f, 1));
 			bars2.Add(drawPos + radiusOuter, colorOuter, new Vector3(timeValue - 0.15f, i / 50f, 1));
-
-			// bars.Add(drawPos + radiusMiddle, colorMiddle, new Vector3(i / 50f - timeValue, 0, timeValue));
-			// bars.Add(drawPos + radiusInner, colorInner, new Vector3(i / 50f - timeValue, 0, timeValue + 0.3f));
-
-			// bars2.Add(drawPos + radiusOuter, colorOuter, new Vector3(i / 50f - timeValue, 0, timeValue - 0.3f));
-			// bars2.Add(drawPos + radiusMiddle, colorMiddle, new Vector3(i / 50f - timeValue, 0, timeValue));
 		}
 		if (bars.Count > 2)
 		{

@@ -200,7 +200,7 @@ public class TitaniumClub_smash_explosion : ModProjectile, IWarpProjectile
 		float timeValue = (200 - Projectile.timeLeft) / 200f;
 		timeValue = MathF.Pow(timeValue, 0.5f);
 
-		DrawTexCircle_VFXBatch(spriteBatch, timeValue * 24 * Projectile.ai[0], 17 * Projectile.ai[0], new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, timeValue * 24 * Projectile.ai[0], 17 * Projectile.ai[0], new Color(colorV, colorV * 0.04f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

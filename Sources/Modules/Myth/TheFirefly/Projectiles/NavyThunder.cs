@@ -17,6 +17,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 		Projectile.DamageType = DamageClass.Magic;
 	}
+
 	public override void AI()
 	{
 		ref float ai0 = ref Projectile.ai[0];
@@ -112,7 +113,7 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Player player = Main.player[Projectile.owner];
 		player.heldProj = Projectile.whoAmI;
 		Vector2 toProjectile = Projectile.Center - player.MountedCenter;
-		
+
 		if (player.controlUseItem)
 		{
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(toProjectile.Y, toProjectile.X) - Math.PI / 2d));
@@ -126,10 +127,14 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 		Color drawColor = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16.0));
 		SpriteEffects effect = SpriteEffects.None;
 		if (player.direction == 1)
+		{
 			effect = SpriteEffects.FlipHorizontally;
+		}
+
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, drawRect, drawColor, Projectile.rotation, drawRect.Size() / 2f, 1f, effect, 0);
 		Main.spriteBatch.Draw(texMainG, Projectile.Center - Main.screenPosition, drawRect, new Color(255, 255, 255, 0), Projectile.rotation, drawRect.Size() / 2f, 1f, effect, 0);
 	}
+
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -146,7 +151,10 @@ internal class NavyThunder : ModProjectile, IWarpProjectile
 
 		SpriteEffects effect = SpriteEffects.None;
 		if (player.direction == 1)
+		{
 			effect = SpriteEffects.FlipHorizontally;
-		sb.Draw(texMainG, Projectile.Center - Main.screenPosition, drawRect, new Color(0.3f, 0.3f, 0.2f, 0), Projectile.rotation, drawRect.Size() / 2f, 1f, effect);
+		}
+
+		sb.Draw(texMainG, Projectile.Center - Main.screenPosition, drawRect, new Color(0.3f, 0.03f, 0.2f, 0), Projectile.rotation, drawRect.Size() / 2f, 1f, effect);
 	}
 }

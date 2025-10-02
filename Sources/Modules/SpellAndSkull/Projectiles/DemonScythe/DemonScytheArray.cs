@@ -1,9 +1,10 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+
 namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
-internal class DemonScytheArray : ModProjectile, IWarpProjectile
+public class DemonScytheArray : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -16,10 +17,12 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Magic;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -30,13 +33,17 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (timer < 30)
+			{
 				timer++;
+			}
 		}
 		else
 		{
 			timer--;
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -108,14 +115,16 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radius, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radius, 0, 0)));
 		}
-		//circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-		//circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+
+		// circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+		// circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	private static void DrawTexMoon(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -124,10 +133,13 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radius, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(h / radius * Math.PI * 0.27 + addRot), color, new Vector3(h * 0.2f / radius, 0, 0)));
 		}
-		//circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
-		//circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
+
+		// circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0.5f, 1, 0)));
+		// circle.Add(new Vertex2D(center + new Vector2(0, radius + width).RotatedBy(addRot), color, new Vector3(0.5f, 0, 0)));
 		if (circle.Count > 0)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
 
 	public static void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
@@ -152,14 +164,5 @@ internal class DemonScytheArray : ModProjectile, IWarpProjectile
 
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-
-		Player player = Main.player[Projectile.owner];
-		//DrawTexCircle(timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
-		DrawTexMoon(spriteBatch, timer * 1.4f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
-		DrawTexMoon(spriteBatch, timer * 0.65f, 35, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition + new Vector2(0, timer * 0.8f).RotatedBy(-Main.timeForVisualEffects / 36), ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }

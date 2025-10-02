@@ -7,6 +7,7 @@ namespace Everglow.Ocean.Projectiles.Weapons;
 public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/TsunamiShark/TsunamiShark_proj";
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 10;
@@ -16,11 +17,12 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 208;
 		Projectile.extraUpdates = 6;
-		Projectile.penetrate= -1;
+		Projectile.penetrate = -1;
 	}
+
 	public override void AI()
 	{
-		if(Projectile.timeLeft < 200)
+		if (Projectile.timeLeft < 200)
 		{
 			Projectile.friendly = false;
 		}
@@ -33,14 +35,16 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 			Lighting.AddLight(Projectile.Center + radious, 0, valueLight * valueLight, valueLight);
 		}
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		bool checkCenter(Vector2 pos)
+		bool CheckCenter(Vector2 pos)
 		{
 			return (pos - projHitbox.Center()).Length() < (208 - Projectile.timeLeft) * 16;
 		}
-		return checkCenter(targetHitbox.TopLeft()) || checkCenter(targetHitbox.TopRight()) || checkCenter(targetHitbox.BottomLeft()) || checkCenter(targetHitbox.BottomRight());
+		return CheckCenter(targetHitbox.TopLeft()) || CheckCenter(targetHitbox.TopRight()) || CheckCenter(targetHitbox.BottomLeft()) || CheckCenter(targetHitbox.BottomRight());
 	}
+
 	private static void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -67,8 +71,11 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	private static void DrawTexRing_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double rotation, float process)
 	{
 		var ring = new List<Vertex2D>();
@@ -89,8 +96,11 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 			ring.Add(new Vertex2D(center + radialHalfWidth, Color.Transparent, new Vector3(xProcession, 0.6f - coordYProcession * 0.3f + process, 0)));
 		}
 		if (ring.Count > 2)
+		{
 			spriteBatch.Draw(tex, ring, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float value = (208 - Projectile.timeLeft) / 208f;
@@ -99,13 +109,17 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 		Texture2D t = ModAsset.HiveCyberNoise.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.Default, SamplerState.PointWrap, RasterizerState.CullNone);
-		DrawTexRing_VFXBatch(Ins.Batch, value * 231, width, new Color(colorV * 0.4f, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)(Main.time) * 0.01f + Projectile.whoAmI * 2.45396f);
+		DrawTexRing_VFXBatch(Ins.Batch, value * 231, width, new Color(colorV * 0.4f, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)Main.time * 0.01f + Projectile.whoAmI * 2.45396f);
 		Ins.Batch.End();
 
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (208 - Projectile.timeLeft) / 208f;
@@ -114,8 +128,10 @@ public class TsunamiShark_missile_hit : ModProjectile, IWarpProjectile
 		Texture2D t = ModAsset.HiveCyberNoiseThicker.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 231, width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 231, width, new Color(colorV, colorV * 0.07f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

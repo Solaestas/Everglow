@@ -13,14 +13,15 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 
 	public override string Texture => Commons.ModAsset.Point_Mod;
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
+		TrailLength = 20;
 		TrailColor = new Color(1, 1, 1, 0f);
+		TrailBackgroundDarkness = 0.5f;
 		TrailWidth = 20f;
 		TrailTexture = Commons.ModAsset.Trail_8.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
+		WarpStrength = 0.3f;
 		SelfLuminous = false;
 		Projectile.magic = true;
 	}
@@ -50,16 +51,16 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 		Timer = 0;
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		if (MotherProj == default || !MotherProj.active || MotherProj.type != ModContent.ProjectileType<IstafelsSunfireGrasp_FireBall>())
 		{
 			Projectile.active = false;
 			return;
 		}
+		Projectile.rotation = Projectile.velocity.ToRotationSafe();
 		if (Timer < 60)
 		{
-			Timer++;
 			Projectile.Center = MotherProj.Center + (Projectile.velocity + MotherProj.velocity).NormalizeSafe() * MotherProj.width * 0.2f - Projectile.velocity;
 			return;
 		}
@@ -83,9 +84,9 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 				Ins.VFXManager.Add(drop);
 			}
 		}
-		if(Timer > 60)
+		if (Timer > 60)
 		{
-			if(Main.rand.NextBool(12))
+			if (Main.rand.NextBool(12))
 			{
 				Vector2 afterVelocity = Projectile.velocity * Main.rand.NextFloat(0.4f, 1);
 				float mulScale = Main.rand.NextFloat(4f, 8f);
@@ -109,18 +110,6 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 				Projectile.velocity = Projectile.velocity * 0.9f + direction * 0.1f * 12f;
 			}
 		}
-		base.AI();
-	}
-
-	public override bool PreDraw(ref Color lightColor)
-	{
-		DrawTrailDark();
-		DrawTrail();
-		if (TimeTokill <= 0)
-		{
-			DrawSelf();
-		}
-		return false;
 	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
@@ -148,174 +137,29 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 		}
 	}
 
-	public override void DrawTrail()
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		if(style == 1)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			SmoothTrail.Add(smoothTrail_current[x]);
-		}
-		if (unSmoothPos.Count != 0)
-		{
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-		}
-
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
-		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.0005f;
-			factor += timeValue;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
 			Color drawC;
-			if (i < 6)
+			if (index < 6)
 			{
-				drawC = Color.Lerp(new Color(1f, 0.8f, 0.05f, 0), new Color(1f, 0.2f, 0f, 0), i / 6f);
+				drawC = Color.Lerp(new Color(1f, 0.8f, 0.05f, 0), new Color(1f, 0.2f, 0f, 0), index / 6f);
 			}
-			else if (i is >= 6 and < 12)
+			else if (index is >= 6 and < 12)
 			{
-				drawC = Color.Lerp(new Color(1f, 0.2f, 0f, 0), new Color(0f, 0f, 0f, 0), (i - 6) / 6f);
+				drawC = Color.Lerp(new Color(1f, 0.2f, 0f, 0), new Color(0f, 0f, 0f, 0), (index - 6) / 6f);
 			}
 			else
 			{
 				drawC = new Color(0, 0, 0, 0);
 			}
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			return drawC;
 		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		if (bars.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
-
-		if (bars2.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		}
-
-		if (bars3.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-		}
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
 
-	public override void DrawTrailDark()
-	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
-		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			SmoothTrail.Add(smoothTrail_current[x]);
-		}
-		if (unSmoothPos.Count != 0)
-		{
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-		}
-
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = SmoothTrail.Count - 1; i > 0; --i)
-		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.06f;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = Color.White * 0.4f;
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
-		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTextureBlack;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		if (bars.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
-
-		if (bars2.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		}
-
-		if (bars3.Count > 3)
-		{
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-		}
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
-	}
-
-	public override void KillMainStructure()
+	public override void DestroyEntityEffect()
 	{
 		for (int i = 0; i < 8; i++)
 		{
@@ -334,8 +178,5 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 			};
 			Ins.VFXManager.Add(drop);
 		}
-		base.KillMainStructure();
 	}
-
-	public override void OnKill(int timeLeft) => base.OnKill(timeLeft);
 }

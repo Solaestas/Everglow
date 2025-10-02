@@ -408,8 +408,8 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		float time = (float)(Main.time * 0.03);
 		Color alphaColor = Color;
 		alphaColor.A = 0;
-		alphaColor.R = (byte)((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
-		alphaColor.G = 120;
+		alphaColor.R = (byte)(((Projectile.velocity.ToRotation() + Math.PI * 3) % MathHelper.TwoPi) / MathHelper.TwoPi * 255);
+		alphaColor.G = 12;
 
 		var bars = new List<Vertex2D>
 		{
