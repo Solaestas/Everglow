@@ -3,7 +3,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.LanternMoon.Projectiles;
 
-internal class RedLanternMeteor : TrailingProjectile
+public class RedLanternMeteor : TrailingProjectile
 {
 	public override void SetCustomDefaults()
 	{
