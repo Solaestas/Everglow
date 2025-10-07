@@ -48,8 +48,24 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// </summary>
 	public bool LengthAdjustable = true;
 
+	/// <summary>
+	/// 重写该方法来重新对HangingTile属性赋值，
+	/// 默认值：
+	/// MaxCableLength = 60;
+	/// SingleLampMass = 8;
+	/// RopeUnitMass = 0.5f;
+	/// MaxWireStyle = 2;
+	/// Elasticity = 150;
+	/// LengthAdjustable = true;
+	/// 重写 SetStaticDefaults()时，请在其中调用我。
+	/// </summary>
+	public virtual void InitHanging()
+	{
+	}
+
 	public override void SetStaticDefaults()
 	{
+		InitHanging();
 		Main.tileFrameImportant[Type] = true;
 		TileID.Sets.BlocksWaterDrawingBehindSelf[Type] = true;
 
@@ -322,7 +338,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 
 	public override void MouseOver(int i, int j)
 	{
-		if(LengthAdjustable)
+		if (LengthAdjustable)
 		{
 			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
 			{
