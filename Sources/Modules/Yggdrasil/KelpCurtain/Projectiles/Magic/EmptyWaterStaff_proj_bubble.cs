@@ -34,7 +34,7 @@ public class EmptyWaterStaff_proj_bubble : ModProjectile, IWarpProjectile_warpSt
 		{
 			Target = Main.npc[(int)Projectile.ai[0]];
 			Projectile.velocity = new Vector2(0, -2);
-			if(Projectile.wet)
+			if (Projectile.wet)
 			{
 				Projectile.timeLeft = 360;
 			}
@@ -52,7 +52,7 @@ public class EmptyWaterStaff_proj_bubble : ModProjectile, IWarpProjectile_warpSt
 		{
 			if (Timer > 5)
 			{
-				if(Projectile.timeLeft > 2)
+				if (Projectile.timeLeft > 2)
 				{
 					Projectile.timeLeft = 1;
 				}
@@ -67,7 +67,7 @@ public class EmptyWaterStaff_proj_bubble : ModProjectile, IWarpProjectile_warpSt
 		{
 			BubbleScale = CalculateTargetScale();
 		}
-		if(Timer == 20)
+		if (Timer == 20)
 		{
 			Vector2 oldCenter = Projectile.Center;
 			Projectile.width = Projectile.height = (int)(BubbleScale * 1.6f);
@@ -78,11 +78,11 @@ public class EmptyWaterStaff_proj_bubble : ModProjectile, IWarpProjectile_warpSt
 		targetToProj /= 30f;
 		Target.velocity += targetToProj;
 		Target.velocity *= 0.95f;
-		if(Collision.IsWorldPointSolid(Target.Top + new Vector2(0, -4)) || (Target.collideY && !Collision.IsWorldPointSolid(Target.Bottom + new Vector2(0, 2))))
+		if (Collision.IsWorldPointSolid(Target.Top + new Vector2(0, -4)) || (Target.collideY && !Collision.IsWorldPointSolid(Target.Bottom + new Vector2(0, 2))))
 		{
 			Projectile.velocity.Y *= 0;
 		}
-		if(Projectile.timeLeft == 1)
+		if (Projectile.timeLeft == 1)
 		{
 			Projectile.friendly = true;
 		}
@@ -198,7 +198,34 @@ public class EmptyWaterStaff_proj_bubble : ModProjectile, IWarpProjectile_warpSt
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+
+		//Vector2 sunDir = GetSunPos() - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
+		//sunDir = sunDir.NormalizeSafe();
+		Vector2 spotPos = Projectile.Center + new Vector2(-1, -1) * BubbleScale * 0.5f;
+		Texture2D highlightSpot = Commons.ModAsset.LightPoint2.Value;
+		Color highlightColor2 = Lighting.GetColor(spotPos.ToTileCoordinates(), new Color(1f, 1f, 1f, 0)) * 2;
+		highlightColor2.A = 0;
+		Main.EntitySpriteDraw(highlightSpot, spotPos - Main.screenPosition, null, highlightColor2, 0, highlightSpot.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		return false;
+	}
+
+	public Vector2 GetSunPos()
+	{
+		float HalfMaxTime = Main.dayTime ? 27000 : 16200;
+		float bgTop = -Main.screenPosition.Y / (float)(Main.worldSurface * 16.0 - 600.0) * 200f;
+		float value = 1 - (float)Main.time / HalfMaxTime;
+		float StarX = (1 - value) * Main.screenWidth / 2f - 100 * value;
+		float t = value * value;
+		float StarY = bgTop + t * 250f + 180;
+		if (Main.LocalPlayer != null)
+		{
+			if (Main.LocalPlayer.gravDir == -1)
+			{
+				return new Vector2(StarX, Main.screenHeight - StarY);
+			}
+		}
+
+		return new Vector2(StarX, StarY);
 	}
 
 	public Color GetColorFromWavelength(double wavelength)

@@ -259,27 +259,4 @@ public class ForestRainVineTwoTile : HangingTile
 		// 比如可以结合上一次位置，判断到底是正转还是反转
 		return tangent1;
 	}
-
-	/// <summary>
-	/// 右键点击藤曼节点调整长度
-	/// </summary>
-	/// <param name="i">横坐标</param>
-	/// <param name="j">纵坐标</param>
-	/// <returns></returns>
-	public override bool RightClick(int i, int j)
-	{
-		if (LengthAdjustable)
-		{
-			// 旋转
-			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
-			{
-				HangingTileLengthAdjustingSystem vfx = new HangingTileLengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
-				Ins.VFXManager.Add(vfx);
-				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
-			}
-		}
-		return base.RightClick(i, j);
-	}
 }

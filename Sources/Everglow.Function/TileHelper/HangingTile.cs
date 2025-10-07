@@ -1,8 +1,4 @@
-using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.MassSpringSystem;
-using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
-using Everglow.Commons.VFX.Pipelines;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
@@ -84,7 +80,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public Dictionary<Point, Rope> RopesOfAllThisTileInTheWorld = new Dictionary<Point, Rope>();
 
 	/// <summary>
-	/// Winch position and rope
+	/// Current Player who is handling with the HangingTile at Point.
 	/// </summary>
 	public Dictionary<Point, Player> ChainPlayer = new Dictionary<Point, Player>();
 
@@ -196,11 +192,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
-	{
-		base.DrawEffects(i, j, spriteBatch, ref drawData);
-	}
-
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		Rope rope;
@@ -214,7 +205,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public string BulbTexturePath;
 
 	/// <summary>
-	/// 绘制挂物
+	/// Paint the hanging chains.
 	/// </summary>
 	/// <param name="rope"></param>
 	/// <param name="pos"></param>
@@ -332,7 +323,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 鼠标划过点位
+	/// A mousePos-player Dictionary to prevent generating multiple VFX.
 	/// </summary>
 	public Dictionary<Player, Point> MouseOverPoint = new Dictionary<Player, Point>();
 
@@ -345,7 +336,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 				MouseOverPoint.Add(Main.LocalPlayer, new Point(i, j));
 				if (Main.LocalPlayer.HeldItem.createTile == Type)
 				{
-					HangingTileLengthAdjustingSystem vfx = new HangingTileLengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
+					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
 					Ins.VFXManager.Add(vfx);
 				}
 			}
@@ -370,7 +361,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 			Tile tile = Main.tile[i, j];
 			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
 			{
-				HangingTileLengthAdjustingSystem vfx = new HangingTileLengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
+				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
 				Ins.VFXManager.Add(vfx);
 				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
 				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
@@ -383,315 +374,5 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	{
 		Tile tile = Main.tile[i, j];
 		tile.TileFrameY = 18;
-	}
-}
-
-[Pipeline(typeof(WCSPipeline))]
-public class HangingTileLengthAdjustingSystem : Visual
-{
-	public override CodeLayer DrawLayer => CodeLayer.PreDrawFilter;
-
-	public Texture2D Texture;
-	public Point FixPoint;
-	public int Style;
-	public float StartFrameY60;
-	public Vector2 StartRotation;
-	public float AccumulateRotation;
-	public Vector2 OldRotation;
-
-	public override void OnSpawn()
-	{
-		StartRotation = Utils.SafeNormalize(FixPoint.ToWorldCoordinates() - Main.MouseWorld, new Vector2(0, -1));
-		OldRotation = StartRotation;
-		AccumulateRotation = 0;
-		Texture = ModAsset.TileBlock.Value;
-	}
-
-	public override void Update()
-	{
-		Player player = Main.LocalPlayer;
-		int i = FixPoint.X;
-		int j = FixPoint.Y;
-		if (i < 20 || i > Main.maxTilesX - 20)
-		{
-			if (j < 20 || j > Main.maxTilesY - 20)
-			{
-				Active = false;
-				return;
-			}
-		}
-		Tile tile = Main.tile[i, j];
-		HangingTile hangingTile = TileLoader.GetTile(tile.type) as HangingTile;
-		if (hangingTile == null)
-		{
-			Active = false;
-			return;
-		}
-		if (hangingTile.ChainPlayer.ContainsKey(FixPoint))
-		{
-			Player player2;
-			hangingTile.ChainPlayer.TryGetValue(FixPoint, out player2);
-			if (player2 != player)
-			{
-				KillMe(hangingTile, player);
-				return;
-			}
-		}
-		if (player.HeldItem.createTile != tile.TileType)
-		{
-			KillMe(hangingTile, player);
-			return;
-		}
-		if ((Main.MouseWorld - FixPoint.ToWorldCoordinates()).Length() > 400)
-		{
-			KillMe(hangingTile, player);
-			return;
-		}
-		if (Style == 0)
-		{
-			int x = (int)(Main.MouseWorld.X / 16f);
-			int y = (int)(Main.MouseWorld.Y / 16f);
-			if (x != FixPoint.X || y != FixPoint.Y)
-			{
-				Active = false;
-				if (hangingTile.MouseOverPoint.ContainsKey(player))
-				{
-					hangingTile.MouseOverPoint.Remove(player);
-				}
-				return;
-			}
-		}
-		if (Style == 1)
-		{
-			if (!hangingTile.ChainPlayer.ContainsKey(FixPoint))
-			{
-				KillMe(hangingTile, player);
-				return;
-			}
-			if (!hangingTile.ChainPlayer.ContainsKey(FixPoint))
-			{
-				KillMe(hangingTile, player);
-				return;
-			}
-			float addAccRot = MathF.Asin(-Vector3.Cross(new Vector3(Utils.SafeNormalize(FixPoint.ToWorldCoordinates() - Main.MouseWorld, new Vector2(0, -1)), 0), new Vector3(OldRotation, 0)).Z);
-			AccumulateRotation += addAccRot;
-			OldRotation = Utils.SafeNormalize(FixPoint.ToWorldCoordinates() - Main.MouseWorld, new Vector2(0, -1));
-			float nowFrameY = StartFrameY60 / 60f + AccumulateRotation * 2;
-			if (nowFrameY < 1)
-			{
-				AccumulateRotation -= addAccRot;
-			}
-			if (nowFrameY > hangingTile.MaxCableLength - 1)
-			{
-				AccumulateRotation -= addAccRot;
-			}
-			bool endChain = false;
-			if (nowFrameY < 2)
-			{
-				endChain = true;
-			}
-			if (nowFrameY > hangingTile.MaxCableLength - 2)
-			{
-				endChain = true;
-			}
-			if (tile.TileFrameY != (short)Math.Clamp(nowFrameY, 1, hangingTile.MaxCableLength - 1))
-			{
-				if (!endChain)
-				{
-					SoundEngine.PlaySound(SoundID.Unlock.WithVolume(0.5f), FixPoint.ToWorldCoordinates());
-				}
-				tile.TileFrameY = (short)Math.Clamp(nowFrameY, 1, hangingTile.MaxCableLength - 1);
-			}
-
-			int x = (int)(Main.MouseWorld.X / 16f);
-			int y = (int)(Main.MouseWorld.Y / 16f);
-			if (Main.mouseRight && Main.mouseRightRelease && (x != FixPoint.X || y != FixPoint.Y))
-			{
-				KillMe(hangingTile, player);
-				return;
-			}
-		}
-		base.Update();
-	}
-
-	public void KillMe(HangingTile hangingTile, Player owner)
-	{
-		Active = false;
-		if (hangingTile.MouseOverPoint.ContainsKey(owner))
-		{
-			hangingTile.MouseOverPoint.Remove(owner);
-		}
-		if (hangingTile.ChainPlayer.ContainsKey(FixPoint))
-		{
-			hangingTile.ChainPlayer.Remove(FixPoint);
-		}
-	}
-
-	public override void Draw()
-	{
-		int i = FixPoint.X;
-		int j = FixPoint.Y;
-		if (i < 20 || i > Main.maxTilesX - 20)
-		{
-			if (j < 20 || j > Main.maxTilesY - 20)
-			{
-				Active = false;
-				return;
-			}
-		}
-		Player player = Main.LocalPlayer;
-		Tile tile = Main.tile[i, j];
-		HangingTile hangingTile = TileLoader.GetTile(tile.type) as HangingTile;
-		if (hangingTile == null)
-		{
-			Active = false;
-			return;
-		}
-		Color drawColor = Color.Lerp(new Color(0.75f, 0.75f, 1f, 0.5f), new Color(0.85f, 0.85f, 0.75f, 0.5f), MathF.Sin((float)Main.timeForVisualEffects * 0.08f) * 0.5f + 0.5f);
-		Color origDrawColor = drawColor;
-		if (Style == 1)
-		{
-			float nowFrameY = StartFrameY60 / 60f + AccumulateRotation * 2;
-			if (nowFrameY < 5)
-			{
-				drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (5 - nowFrameY) / 4f);
-			}
-			if (nowFrameY > hangingTile.MaxCableLength - 5)
-			{
-				drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (nowFrameY - (hangingTile.MaxCableLength - 5)) / 4f);
-			}
-		}
-
-		// 不同种类物块标红
-		if (player.HeldItem.createTile != tile.type)
-		{
-			drawColor = new Color(1f, 0, 0, 0.5f);
-			Main.instance.MouseText("Different Type Error", ItemRarityID.Red);
-		}
-		Ins.Batch.BindTexture<Vertex2D>(Texture);
-
-		Vector2 rotCenter = FixPoint.ToWorldCoordinates();
-		Vector2 cut = -Utils.SafeNormalize(rotCenter - Main.MouseWorld, new Vector2(0, -1));
-		if (hangingTile.RopesOfAllThisTileInTheWorld.ContainsKey(FixPoint))
-		{
-			if (Style == 1)
-			{
-				float maxCos = 0;
-				int maxK = 0;
-				for (int k = -10; k < 10; k++)
-				{
-					Vector2 cut2 = new Vector2(0, -1).RotatedBy(k / 20f * MathHelper.TwoPi);
-					float cosValue = Vector2.Dot(cut, cut2);
-					if (cosValue > maxCos)
-					{
-						maxCos = cosValue;
-						maxK = k;
-					}
-					Color newDrawColor = origDrawColor;
-					float thisFrameY = StartFrameY60 / 60f + (AccumulateRotation + k / 20f * MathHelper.TwoPi) * 2;
-					if (thisFrameY < 5)
-					{
-						newDrawColor = Color.Lerp(origDrawColor, new Color(1f, 0f, 0f, 0.8f), (5 - thisFrameY) / 4f);
-					}
-					if (thisFrameY > hangingTile.MaxCableLength - 5)
-					{
-						newDrawColor = Color.Lerp(origDrawColor, new Color(1f, 0f, 0f, 0.8f), (thisFrameY - (hangingTile.MaxCableLength - 5)) / 4f);
-					}
-					DrawLine(rotCenter + cut2 * 15, rotCenter + cut2 * 20, 1.5f, newDrawColor);
-				}
-				Vector2 cut3 = new Vector2(0, -1).RotatedBy(maxK / 20f * MathHelper.TwoPi);
-				DrawLine(rotCenter + cut3 * 12, rotCenter + cut3 * 26, 2, drawColor);
-				if ((Main.MouseWorld - rotCenter).Length() > 240)
-				{
-					for (int k = -10; k < 10; k++)
-					{
-						Vector2 cut4 = cut.RotatedBy((k - 0.5f) * 0.04f);
-						Vector2 cut5 = cut.RotatedBy((k + 0.5f) * 0.04f);
-						float colorValue = ((Main.MouseWorld - rotCenter).Length() - 240f) / 160f;
-						Color newDrawColor = origDrawColor;
-						newDrawColor = Color.Lerp(origDrawColor, new Color(1f, 0f, 0f, 0.8f), colorValue);
-						colorValue *= (100f - k * k) / 100f;
-						DrawLine(rotCenter + cut4 * 390f, rotCenter + cut5 * 390f, 2f, newDrawColor * colorValue * 2);
-					}
-					Main.instance.MouseText("Drag out of circle to cancel", ItemRarityID.White);
-				}
-			}
-		}
-		DrawBlockBound(FixPoint.X, FixPoint.Y, drawColor, AccumulateRotation);
-	}
-
-	public void DrawBlockBound(int i, int j, Color color, float rotation)
-	{
-		Vector2 pos = new Vector2(i, j) * 16 + new Vector2(8);
-		List<Vertex2D> bars = new List<Vertex2D>()
-		{
-			new Vertex2D(pos + new Vector2(-8, -8).RotatedBy(rotation), color, new Vector3(0, 0, 0)),
-			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
-
-			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
-			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos + new Vector2(8, 8).RotatedBy(rotation), color, new Vector3(1, 1, 0)),
-		};
-
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
-	}
-
-	public void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color)
-	{
-		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
-		List<Vertex2D> bars = new List<Vertex2D>()
-		{
-			new Vertex2D(pos1 + normal, color, new Vector3(0, 0, 0)),
-			new Vertex2D(pos2 + normal, color, new Vector3(0.1f, 0, 0)),
-			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
-
-			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
-			new Vertex2D(pos2 + normal, color, new Vector3(0.1f, 0, 0)),
-			new Vertex2D(pos2 - normal, color, new Vector3(0.1f, 1, 0)),
-		};
-
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleList);
-	}
-}
-
-public class HangingTileUpdate : ModSystem
-{
-	/// <summary>
-	/// 物块质点系统
-	/// </summary>
-	public static MassSpringSystem HangingTileMassSpringSystem = new MassSpringSystem();
-	public static EulerSolver HangingTileEulerSolver = new EulerSolver(8);
-	public static PBDSolver HangingTilePBDSolver = new PBDSolver(8);
-
-	public override void PostUpdateEverything()
-	{
-		HangingTileMassSpringSystem = new MassSpringSystem();
-		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
-		{
-			foreach (var rope in HangingTile.RopesOfAllThisTileInTheWorld.Values)
-			{
-				HangingTileMassSpringSystem.AddMassSpringMesh(rope);
-			}
-		}
-		HangingTileEulerSolver.Step(HangingTileMassSpringSystem, 1);
-	}
-
-	public override void OnWorldLoad()
-	{
-		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
-		{
-			HangingTile.RopesOfAllThisTileInTheWorld.Clear();
-		}
-		base.OnWorldLoad();
-	}
-
-	public override void OnWorldUnload()
-	{
-		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
-		{
-			HangingTile.RopesOfAllThisTileInTheWorld.Clear();
-		}
-		base.OnWorldUnload();
 	}
 }
