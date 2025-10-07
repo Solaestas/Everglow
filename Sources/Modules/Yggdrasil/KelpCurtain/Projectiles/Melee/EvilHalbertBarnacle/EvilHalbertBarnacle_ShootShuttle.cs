@@ -56,7 +56,7 @@ public class EvilHalbertBarnacle_ShootShuttle : ModProjectile
 			Projectile.Center = player.MountedCenter + Projectile.velocity * 120;
 			if (Timer > 3 && Main.mouseRightRelease)
 			{
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 45f, Projectile.velocity * 75, ModContent.ProjectileType<EvilHalbertBarnacle_proj_shuttle>(), Projectile.damage, 2.4f, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - Projectile.velocity * 85f, Projectile.velocity * 75, ModContent.ProjectileType<EvilHalbertBarnacle_proj_shuttle>(), Projectile.damage, 2.4f, Projectile.owner);
 				Projectile.timeLeft = 20;
 				OffsetVel = -Projectile.velocity.RotatedByRandom(0.3f) * 35;
 				for (int i = 0; i < 18; ++i)

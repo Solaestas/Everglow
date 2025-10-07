@@ -1,8 +1,5 @@
-using System.Threading;
-using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.Buffs;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
-using Spine;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Melee;
@@ -13,15 +10,17 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	{
 		maxAttackType = 4;
 		trailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		AutoEnd = false;
 		CanLongLeftClick = true;
 		ClickMaxtimer = 240;
 	}
+
 	public override string TrailShapeTex()
 	{
 		return Commons.ModAsset.Melee_Mod;
 	}
+
 	public override string TrailColorTex()
 	{
 		return ModAsset.BladeOfGreenMoss_Color_Mod;
@@ -31,10 +30,12 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	{
 		return base.TrailAlpha(factor) * 2f;
 	}
+
 	public override BlendState TrailBlendState()
 	{
 		return BlendState.AlphaBlend;
 	}
+
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		glowTexture = ModAsset.BladeOfGreenMoss_glow.Value;
@@ -52,8 +53,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			value /= 4f;
 			value = Math.Min(value, (60 - timer) * 0.3f) / 5;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + mainVec.RotatedBy(Projectile.spriteDirection*0.175f) * 0.4f;
-			Lighting.AddLight(Projectile.Center+ mainVec * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value*10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainVec.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.4f;
+			Lighting.AddLight(Projectile.Center + mainVec * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
@@ -71,7 +72,6 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 		return false;
 	}
 
-
 	public override void Attack()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -79,7 +79,6 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 		Tplayer.HideLeg = true;
 		if (Main.myPlayer == Projectile.owner && Main.mouseRight && Main.mouseRightRelease)
 		{
-
 		}
 
 		useTrail = true;
@@ -91,12 +90,16 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			if (player.direction == -1)
 			{
 				if (AddHeadRotation >= 0.57f && AddHeadRotation < 2)
+				{
 					AddHeadRotation = 0.57f;
+				}
 			}
 			else
 			{
 				if (AddHeadRotation <= -0.57f)
+				{
 					AddHeadRotation = -0.57f;
+				}
 			}
 		}
 		else
@@ -104,18 +107,21 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			if (player.direction == -1)
 			{
 				if (AddHeadRotation >= 2 && AddHeadRotation < 5.71f)
+				{
 					AddHeadRotation = 5.71f;
+				}
 			}
 			else
 			{
 				if (AddHeadRotation >= 0.57f)
+				{
 					AddHeadRotation = 0.57f;
+				}
 			}
 		}
 
 		if (attackType <= 2)
 		{
-
 			if (timer < 30)
 			{
 				Projectile.ai[0] = GetAngToMouse();
@@ -140,7 +146,9 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				mainVec = Vector2Elipse(100, Projectile.rotation, -0.75f, Projectile.ai[0]);
 			}
 			if (timer > 50)
+			{
 				NextAttackType();
+			}
 			else if (timer > 1)
 			{
 				float BodyRotation = (float)Math.Sin((timer - 10) / 30d * Math.PI) * 0.2f * player.direction * player.gravDir;
@@ -194,9 +202,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				int type = Main.rand.Next(567, 572);
 
 				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, v, type, Projectile.damage / 4, Projectile.knockBack * 0.25f, Projectile.owner);
-				p.timeLeft = (int)(p.timeLeft *1.5f);
+				p.timeLeft = (int)(p.timeLeft * 1.5f);
 			}
-
 		}
 		if (attackType == 4)
 		{
@@ -207,27 +214,28 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				useTrail = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(120, targetRot, -1.2f), 0.1f );
+				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(120, targetRot, -1.2f), 0.1f);
 				mainVec += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainVec.ToRotation();
-
 			}
 
 			if (timer == 65)
+			{
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleePowerSwing_Mod));
-			if (timer > 60 )
+			}
+
+			if (timer > 60)
 			{
 				isAttacking = true;
 				drawScaleFactor = 0.6f;
-				if (timer < 75 )
+				if (timer < 75)
 				{
 					isAttacking = true;
 					mainVec = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
-					Projectile.rotation += Projectile.spriteDirection * 0.42f ;
+					Projectile.rotation += Projectile.spriteDirection * 0.42f;
 				}
 
 				BodyRotation = (float)Math.Sin((timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;
-
 			}
 			else
 			{
@@ -240,7 +248,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			player.legPosition = (new Vector2(player.Hitbox.Width / 2f, player.Hitbox.Height) - player.fullRotationOrigin).RotatedBy(-BodyRotation);
 			Tplayer.HeadRotation = -BodyRotation + AddHeadRotation;
 
-			if (timer > 90 )
+			if (timer > 90)
 			{
 				End();
 			}
@@ -255,21 +263,27 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			}
 		}
 	}
+
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -305,8 +319,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
 	}
+
 	public override void End()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -320,9 +334,9 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-
 		Player player = Main.player[Projectile.owner];
 		player.AddBuff(ModContent.BuffType<MossCover>(), 180);
 		if (Main.rand.NextBool(8))
@@ -332,17 +346,14 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 		base.OnHitNPC(target, hit, damageDone);
 	}
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-
 		if (attackType == 4)
 		{
 			modifiers.FinalDamage *= 2f;
 
 			target.AddBuff(BuffID.Poisoned, 420);
-
 		}
-
 	}
 }
-

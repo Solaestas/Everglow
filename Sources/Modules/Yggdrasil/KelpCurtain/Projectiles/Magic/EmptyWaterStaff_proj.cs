@@ -2,68 +2,94 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Bosses.KingJellyBall;
-using Terraria;
-using static Terraria.ModLoader.BackupIO;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Magic;
 
-public class GreenSungloSpore : TrailingProjectile
+public class EmptyWaterStaff_proj : TrailingProjectile
 {
 	public override void SetDef()
 	{
-		TrailColor = new Color(0.475f, 1f, 0.475f, 0f);
-		TrailWidth = 25f;
-		TrailTexture = Commons.ModAsset.Trail_2.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 25;
+		TrailColor = new Color(0.85f, 0.75f, 0.65f, 0f);
+		TrailWidth = 12f;
+		TrailTexture = Commons.ModAsset.Trail_8.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_8_black.Value;
+		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 20;
 
+		Projectile.DamageType = DamageClass.Magic;
 		Projectile.width = 20;
 		Projectile.height = 20;
-
-		Projectile.friendly = false;
-		Projectile.hostile = false;
+		ProjTrailColor.colorList.Add((new Color(15, 231, 255, 0), 0));
+		ProjTrailColor.colorList.Add((new Color(63, 181, 255, 0), 0.4f));
+		ProjTrailColor.colorList.Add((new Color(69, 112, 255, 0), 0.8f));
+		ProjTrailColor.colorList.Add((new Color(36, 46, 76, 0), 1f));
 	}
+
+	public GradientColor ProjTrailColor = new();
 
 	public override void AI()
 	{
-		Projectile.velocity.Y += 0.25f;
 		base.AI();
-	}
-
-	public override void OnKill(int timeLeft)
-	{
-		foreach (Projectile p in Main.projectile)
+		if (Main.rand.NextBool(4))
 		{
-			if (p.type == ModContent.ProjectileType<GreenSungloThorns>() && p.owner == Projectile.owner)
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity;
+			var dust = new EmptyWaterStaff_BubbleBreak
 			{
-				p.Kill();
-			}
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(60, 90),
+				scale = Main.rand.NextFloat(3f, 5f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
+			};
+			Ins.VFXManager.Add(dust);
 		}
-
-		int tileX = ((int)Projectile.Center.X) / 16;
-		int tileY = ((int)Projectile.Center.Y) / 16;
-		do
-		{
-			tileY -= 3;
-		}
-		while (WorldGen.SolidTile2(tileX, tileY) || WorldGen.SolidTile2(tileX, tileY + 1) || WorldGen.SolidTile2(tileX, tileY + 2));
-
-		for (; tileY < Main.maxTilesY - 10
-			&& (Main.tile[tileX, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null || Main.tile[tileX - 1, tileY + 3] == null
-			|| !WorldGen.SolidTile2(tileX, tileY + 3) || !WorldGen.SolidTile2(tileX - 1, tileY + 3) || !WorldGen.SolidTile2(tileX - 1, tileY + 3)); tileY++)
-		{
-		}
-
-		Vector2 pos = new Vector2(tileX * 16, tileY * 16);
-		Projectile.NewProjectileDirect(null, pos, Vector2.Zero, ModContent.ProjectileType<GreenSungloThorns>(), Projectile.damage, 0, Projectile.owner);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		base.ModifyHitNPC(target, ref modifiers);
-		modifiers.FinalDamage *= 0;
-		modifiers.HideCombatText();
+		bool safe = true;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj is not null && proj.active && proj.type == ModContent.ProjectileType<EmptyWaterStaff_proj_bubble>())
+			{
+				EmptyWaterStaff_proj_bubble eWS = proj.ModProjectile as EmptyWaterStaff_proj_bubble;
+				if (eWS is not null)
+				{
+					if (eWS.Target == target)
+					{
+						safe = false;
+						break;
+					}
+				}
+			}
+		}
+		if (safe)
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<EmptyWaterStaff_proj_bubble>(), Projectile.damage, 0, Projectile.owner, target.whoAmI);
+		}
+	}
+
+	public override void KillMainStructure()
+	{
+		for (int i = 0; i < 12; i++)
+		{
+			Vector2 vel = new Vector2(0, Main.rand.NextFloat(5.6f, 8.4f)).RotatedByRandom(MathHelper.TwoPi);
+			var dust = new EmptyWaterStaff_BubbleBreak
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = Projectile.Center,
+				maxTime = Main.rand.Next(60, 120),
+				scale = Main.rand.NextFloat(3f, 5f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
+			};
+			Ins.VFXManager.Add(dust);
+		}
+		base.KillMainStructure();
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -72,10 +98,16 @@ public class GreenSungloSpore : TrailingProjectile
 		DrawTrail();
 		if (TimeTokill <= 0)
 		{
-			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, lightColor, Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 0.5f, texMain.Size() / 2f, 0.8f, SpriteEffects.None, 0);
+			DrawSelf();
 		}
 		return false;
+	}
+
+	public override void DrawSelf()
+	{
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		var color = new Color(1f, 1f, 1f, 0);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
 	}
 
 	public override void DrawTrail()
@@ -114,10 +146,10 @@ public class GreenSungloSpore : TrailingProjectile
 			}
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.075f;
+			float timeValue = (float)Main.time * 0.06f;
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = TrailColor;
+			Color drawC = ProjTrailColor.GetColor(i / (float)SmoothTrail.Count);
 			factor *= 1.5f;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
@@ -192,12 +224,11 @@ public class GreenSungloSpore : TrailingProjectile
 			}
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.075f;
+			float timeValue = (float)Main.time * 0.06f;
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
 			Color drawC = Color.White;
 			factor *= 1.5f;
-
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 0, width)));
@@ -205,7 +236,6 @@ public class GreenSungloSpore : TrailingProjectile
 			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(-factor * 2 + timeValue, 1, width)));
 			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(-factor * 2 + timeValue, 0.5f, width)));
 		}
-
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
