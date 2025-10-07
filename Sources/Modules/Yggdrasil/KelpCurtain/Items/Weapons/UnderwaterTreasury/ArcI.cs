@@ -26,7 +26,7 @@ public class ArcI : ModItem
 		Item.noUseGraphic = true;
 		Item.useStyle = ItemUseStyleID.Shoot;
 		Item.UseSound = SoundID.Item40;
-		Item.useTime = Item.useAnimation = 35;
+		Item.useTime = Item.useAnimation = 17;
 		Item.noMelee = true;
 
 		Item.rare = ItemRarityID.Orange;

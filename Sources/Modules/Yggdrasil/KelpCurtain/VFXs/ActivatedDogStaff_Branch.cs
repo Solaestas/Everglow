@@ -28,10 +28,6 @@ public class ActivatedDogStaff_Branch : Visual
 		{
 			Fade *= 0.9f;
 		}
-		if (ParentEneity is null)
-		{
-			return;
-		}
 
 		Vector2 toTarget = ParentEneity.Center - Position;
 		float distanceValue = toTarget.Length();
@@ -48,8 +44,6 @@ public class ActivatedDogStaff_Branch : Visual
 
 		Position += Velocity;
 		Rotation += MathF.Sin(ai[0]) * 0.05f;
-
-		Position += Velocity;
 	}
 
 	public override void Draw()

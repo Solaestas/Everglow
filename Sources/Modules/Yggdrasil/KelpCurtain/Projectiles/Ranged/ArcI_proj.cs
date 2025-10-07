@@ -44,7 +44,6 @@ public class ArcI_proj : ModProjectile
 			overridedamage = -1;
 		}
 		Projectile.hide = true;
-		Shoot();
 		base.OnSpawn(source);
 	}
 
@@ -93,7 +92,7 @@ public class ArcI_proj : ModProjectile
 
 	private void Shoot()
 	{
-		var toMuzzle = new Vector2(-12, -4 * Projectile.spriteDirection);
+		var toMuzzle = new Vector2(12, -4 * Projectile.spriteDirection);
 		toMuzzle = toMuzzle.RotatedBy(Projectile.rotation);
 		Player player = Main.player[Projectile.owner];
 		Vector2 toMouse = OwnerMouseWorld - Projectile.Center;

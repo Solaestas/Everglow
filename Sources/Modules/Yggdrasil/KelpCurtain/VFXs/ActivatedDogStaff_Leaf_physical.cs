@@ -3,11 +3,10 @@ using Terraria.Map;
 namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class ActivatedDogStaff_Leaf : Visual
+public class ActivatedDogStaff_Leaf_physical : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;
 
-	public Projectile ParentEneity;
 	public Vector2 Position;
 	public Vector2 Velocity;
 	public float[] ai;
@@ -33,22 +32,9 @@ public class ActivatedDogStaff_Leaf : Visual
 			Velocity *= 0.9f;
 			Velocity.Y += 0.10f;
 		}
-		if (ParentEneity is null)
-		{
-			return;
-		}
 
-		Vector2 toTarget = ParentEneity.Center - Position;
-		float distanceValue = toTarget.Length();
-		float power = 25f / (distanceValue + 1f);
-		float vortexEyeRadius = ParentEneity.timeLeft;
-		if (ParentEneity.active == false || (ParentEneity.Center - Position).Length() > 100)
-		{
-			vortexEyeRadius = 1;
-		}
-		float deviate = vortexEyeRadius / (distanceValue + 1f) * MathHelper.PiOver2;
-		Vector2 acclerate = toTarget.NormalizeSafe().RotatedBy(deviate) * power;
-		Velocity *= 0.9f;
+		Vector2 acclerate = new Vector2(Main.windSpeedCurrent * 0.05f, 0.1f);
+		Velocity *= 0.95f;
 		Velocity += acclerate;
 
 		Position += Velocity;

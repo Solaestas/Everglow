@@ -1,6 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
+using Terraria.Utilities;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
@@ -21,24 +23,30 @@ public class ArcI_Current : ModProjectile
 	public override void SetDefaults()
 	{
 		Projectile.timeLeft = 60;
-		Projectile.extraUpdates = 4;
+		Projectile.extraUpdates = 2;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.friendly = true;
 		Projectile.width = 30;
 		Projectile.height = 30;
 		Projectile.tileCollide = false;
+		Projectile.hide = true;
 	}
 
 	public override string Texture => Commons.ModAsset.Trail_10_black_Mod;
 
+	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
+	{
+		overPlayers.Add(index);
+	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
 			if (proj is not null && proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<ArcI_proj>())
 			{
-				if((proj.Center - Projectile.Center).Length() < 60)
+				if ((proj.Center - Projectile.Center).Length() < 60)
 				{
 					ParentProj = proj;
 					break;
@@ -51,20 +59,53 @@ public class ArcI_Current : ModProjectile
 	public override void AI()
 	{
 		Timer++;
-		if(Timer < 2)
+		if (Timer < 2)
 		{
 			return;
 		}
 		if (ParentProj is not null && ParentProj.active)
 		{
-			Projectile.Center = ParentProj.Center;
+			var toMuzzle = new Vector2(12, -4 * ParentProj.spriteDirection);
+			toMuzzle = toMuzzle.RotatedBy(ParentProj.rotation);
+			Projectile.Center = ParentProj.Center + toMuzzle;
 		}
 		if (Target is not null && Target.active)
 		{
 			TargetCenter = Target.Center;
+			if (Timer == 2)
+			{
+				for (int k = 0; k < 12; k++)
+				{
+					var branch = new LightningDust_Trail
+					{
+						velocity = new Vector2(0, Main.rand.NextFloat(1, 10)).RotatedByRandom(Math.PI * 2),
+						Active = true,
+						Visible = true,
+						position = TargetCenter,
+						maxTime = Main.rand.Next(30, 40),
+						scale = Main.rand.Next(10, 16),
+						ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
+					};
+					Ins.VFXManager.Add(branch);
+				}
+				for (int k = 0; k < 60; k++)
+				{
+					var branch = new LightningDust_Trail
+					{
+						velocity = new Vector2(0, Main.rand.NextFloat(3, 6)).RotatedByRandom(Math.PI * 2),
+						Active = true,
+						Visible = true,
+						position = TargetCenter,
+						maxTime = Main.rand.Next(18, 25),
+						scale = Main.rand.Next(4, 6),
+						ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
+					};
+					Ins.VFXManager.Add(branch);
+				}
+			}
 		}
 		GenerateLightningWay();
-		if(Projectile.timeLeft < 50)
+		if (Projectile.timeLeft < 57)
 		{
 			Projectile.friendly = false;
 		}
@@ -86,7 +127,7 @@ public class ArcI_Current : ModProjectile
 			Vector2 randomVec = totalDirection.RotatedBy(MathHelper.PiOver2) * GetRandomValueMove(k) * Timer / 8f;
 			moveStep += randomVec;
 			cursorLightning += moveStep;
-			if((TargetCenter - cursorLightning).Length() < 24)
+			if ((TargetCenter - cursorLightning).Length() < 24)
 			{
 				break;
 			}
@@ -107,7 +148,7 @@ public class ArcI_Current : ModProjectile
 		{
 			LightningWay[k] += totalDirection.RotatedBy(MathHelper.PiOver2 + GetRandomValueMove(k) * 0.5f) * GetRandomValueMove(k);
 		}
-		if(ToParent != Vector2.One)
+		if (ToParent != Vector2.One)
 		{
 			for (int k = 0; k < LightningWay.Count(); k++)
 			{
@@ -137,7 +178,7 @@ public class ArcI_Current : ModProjectile
 		foreach (var pos in LightningWay)
 		{
 			Rectangle rectangle = new Rectangle((int)pos.X - 12, (int)pos.Y - 12, 24, 24);
-			if(rectangle.Intersects(targetHitbox))
+			if (rectangle.Intersects(targetHitbox))
 			{
 				return true;
 			}
@@ -157,12 +198,12 @@ public class ArcI_Current : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if(LightningWay.Count <= 2)
+		if (LightningWay.Count <= 2)
 		{
 			return false;
 		}
 		List<Vertex2D> bars = new List<Vertex2D>();
-		
+
 		float width = Projectile.timeLeft / 60f;
 		width = MathF.Pow(width, 2);
 		float value = Timer / 60f;
@@ -178,7 +219,7 @@ public class ArcI_Current : ModProjectile
 		for (int k = 0; k < LightningWay.Count(); k++)
 		{
 			Vector2 dir = Vector2.One;
-			if(k < LightningWay.Count() - 1)
+			if (k < LightningWay.Count() - 1)
 			{
 				dir = LightningWay[k + 1] - LightningWay[k];
 			}
@@ -194,7 +235,7 @@ public class ArcI_Current : ModProjectile
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		if(bars.Count > 2)
+		if (bars.Count > 2)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_10.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

@@ -34,12 +34,12 @@ public class Wither_Activated_Dog_Summon : ModProjectile
 		{
 			var leaf = new ActivatedDogStaff_Leaf
 			{
-				velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
+				Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
-				maxTime = Main.rand.Next(70, 120),
-				scale = Main.rand.Next(8, 10),
+				Position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(70, 120),
+				Scale = Main.rand.Next(8, 10),
 				ParentEneity = Projectile,
 				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
 			};
@@ -76,12 +76,12 @@ public class Wither_Activated_Dog_Summon : ModProjectile
 		{
 			var leaf = new ActivatedDogStaff_Leaf
 			{
-				velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
+				Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
-				maxTime = Main.rand.Next(70, 120),
-				scale = Main.rand.Next(8, 10),
+				Position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(70, 120),
+				Scale = Main.rand.Next(8, 10),
 				ParentEneity = Projectile,
 				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
 			};
@@ -116,31 +116,57 @@ public class Wither_Activated_Dog_Summon : ModProjectile
 		float maxRange = 40f;
 		for (int k = 0; k < 30; k++)
 		{
-			var leaf = new ActivatedDogStaff_Leaf
+			var leaf = new ActivatedDogStaff_Leaf_physical
 			{
-				velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
+				Velocity = new Vector2(0, Main.rand.NextFloat(7, 12)).RotatedByRandom(Math.PI * 2),
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
-				maxTime = Main.rand.Next(70, 120),
-				scale = Main.rand.Next(8, 10),
-				ParentEneity = Projectile,
+				Position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(70, 120),
+				Scale = Main.rand.Next(8, 10),
 				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
 			};
 			Ins.VFXManager.Add(leaf);
 		}
 		for (int k = 0; k < 10; k++)
 		{
-			var branch = new ActivatedDogStaff_Branch
+			var branch = new ActivatedDogStaff_Branch_physical
 			{
-				Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2) + Projectile.velocity,
+				Velocity = new Vector2(0, Main.rand.NextFloat(7, 12)).RotatedByRandom(Math.PI * 2),
 				Active = true,
 				Visible = true,
 				Position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
 				MaxTime = Main.rand.Next(70, 120),
 				Scale = Main.rand.Next(18, 30),
-				ParentEneity = Projectile,
 				Frame = Main.rand.Next(5),
+				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
+			};
+			Ins.VFXManager.Add(branch);
+		}
+		for (int k = 0; k < 10; k++)
+		{
+			var branch = new ActivatedDogStaff_green_Dust_Trail
+			{
+				velocity = new Vector2(0, Main.rand.NextFloat(7, 12)).RotatedByRandom(Math.PI * 2),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
+				maxTime = Main.rand.Next(70, 120),
+				scale = Main.rand.Next(18, 30),
+				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
+			};
+			Ins.VFXManager.Add(branch);
+		}
+		for (int k = 0; k < 30; k++)
+		{
+			var branch = new ActivatedDogStaff_green_Dust_Trail
+			{
+				velocity = new Vector2(0, Main.rand.NextFloat(4, 8)).RotatedByRandom(Math.PI * 2),
+				Active = true,
+				Visible = true,
+				position = Projectile.Center + new Vector2(0, Main.rand.NextFloat(minRange, maxRange)).RotatedByRandom(MathHelper.TwoPi),
+				maxTime = Main.rand.Next(35, 50),
+				scale = Main.rand.Next(6, 12),
 				ai = new float[] { Main.rand.NextFloat(1f, 8f), Projectile.timeLeft },
 			};
 			Ins.VFXManager.Add(branch);
