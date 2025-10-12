@@ -1,4 +1,6 @@
 using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Commons.Utilities;
+using Spine;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
@@ -12,15 +14,13 @@ namespace Everglow.Commons.TileHelper;
 /// </summary>
 public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 {
-	public override string Texture => "Everglow/Commons/TileHelper/HangingWinch";
-
 	/// <summary>
 	/// Max cable length : default 60
 	/// </summary>
 	public int MaxCableLength = 60;
 
 	/// <summary>
-	/// Lamp item mass : default 8
+	/// Lamp joint mass : default 8
 	/// </summary>
 	public float SingleLampMass = 8;
 
@@ -30,14 +30,19 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public float RopeUnitMass = 0.5f;
 
 	/// <summary>
-	/// Max style counts when hit wire.
-	/// </summary>
-	public int MaxWireStyle = 2;
-
-	/// <summary>
 	/// Elasticity of cable : default 150
 	/// </summary>
 	public float Elasticity = 150;
+
+	/// <summary>
+	/// The distance between joints.
+	/// </summary>
+	public float UnitLength = 6f;
+
+	/// <summary>
+	/// Max style counts when hit wire.
+	/// </summary>
+	public int MaxWireStyle = 2;
 
 	/// <summary>
 	/// Allow rotating joint to adjust length : default true
@@ -45,15 +50,50 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public bool LengthAdjustable = true;
 
 	/// <summary>
-	/// 重写该方法来重新对HangingTile属性赋值，
-	/// 默认值：
-	/// MaxCableLength = 60;
-	/// SingleLampMass = 8;
-	/// RopeUnitMass = 0.5f;
-	/// MaxWireStyle = 2;
-	/// Elasticity = 150;
-	/// LengthAdjustable = true;
-	/// 重写 SetStaticDefaults()时，请在其中调用我。
+	/// If true, player can press "up" when passing the rope to grasp.
+	/// </summary>
+	public bool CanGrasp = false;
+
+	/// <summary>
+	///  Be valid only when CanGrasp is true.
+	/// </summary>
+	public const float GraspDetectRange = 48f;
+
+	/// <summary>
+	/// Winch position and rope.<br></br>
+	/// 1 point contains 1 rope at most.
+	/// </summary>
+	public Dictionary<Point, Rope> RopesOfAllThisTileInTheWorld = new Dictionary<Point, Rope>();
+
+	/// <summary>
+	/// Current Player who is handling with the HangingTile winched at a certain Point.<br></br>
+	/// 1 winch can be modified by only 1 player simultanrously.
+	/// </summary>
+	public Dictionary<Point, Player> ChainPlayer = new Dictionary<Point, Player>();
+
+	/// <summary>
+	/// A mousePos-player Dictionary to prevent generating multiple knob VFX.<br></br>
+	/// 1 winch can display more than 1 knob VFXs in multi-player mode.
+	/// </summary>
+	public Dictionary<Player, Point> MouseOverPoint = new Dictionary<Player, Point>();
+
+	/// <summary>
+	/// Current Player who grasping the rope of HangingTile winched at a certain Point.<br></br>
+	/// Be valid only when CanGrasp is true.<br></br>
+	/// 1 rope can be grasped by more than 1 players.
+	/// </summary>
+	public Dictionary<Point, Player> RopeGraspingPlayer = new Dictionary<Point, Player>();
+
+	/// <summary>
+	/// Override to customize the values.<br></br>
+	/// defaults:<br></br>
+	/// MaxCableLength = 60;<br></br>
+	/// SingleLampMass = 8;<br></br>
+	/// RopeUnitMass = 0.5f;<br></br>
+	/// MaxWireStyle = 2;<br></br>
+	/// Elasticity = 150;<br></br>
+	/// LengthAdjustable = true;<br></br>
+	/// CanGrasp = false;
 	/// </summary>
 	public virtual void InitHanging()
 	{
@@ -61,7 +101,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 
 	public override void SetStaticDefaults()
 	{
-		InitHanging();
 		Main.tileFrameImportant[Type] = true;
 		TileID.Sets.BlocksWaterDrawingBehindSelf[Type] = true;
 
@@ -72,17 +111,8 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		TileObjectData.newTile.UsesCustomCanPlace = true;
 
 		AddMapEntry(new Color(59, 67, 67));
+		InitHanging();
 	}
-
-	/// <summary>
-	/// Winch position and rope
-	/// </summary>
-	public Dictionary<Point, Rope> RopesOfAllThisTileInTheWorld = new Dictionary<Point, Rope>();
-
-	/// <summary>
-	/// Current Player who is handling with the HangingTile at Point.
-	/// </summary>
-	public Dictionary<Point, Player> ChainPlayer = new Dictionary<Point, Player>();
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
@@ -91,22 +121,14 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
 	}
 
-	public override void HitWire(int i, int j)
+	public override void PlaceInWorld(int i, int j, Item item)
 	{
 		Tile tile = Main.tile[i, j];
-		tile.TileFrameX += 18;
-		if (tile.TileFrameX > 54)
-		{
-			tile.TileFrameX = 0;
-			tile.TileFrameY += 18;
-		}
-		int style = tile.TileFrameX / 18 + (tile.TileFrameY / 18) * 4;
-		MaxWireStyle = Math.Min(MaxWireStyle, 16);
-		if (style >= MaxWireStyle)
-		{
-			tile.TileFrameX = 0;
-			tile.TileFrameY = 0;
-		}
+		tile.TileFrameY = 18;
+	}
+
+	public override void HitWire(int i, int j)
+	{
 		base.HitWire(i, j);
 	}
 
@@ -120,7 +142,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 靠近时根据TE挂绳
+	/// Add rope by TileEntity when approaching.
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
@@ -135,14 +157,202 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 挂上绳子
+	/// It should not check the grasping logic of players in any drawing function.
+	/// </summary>
+	public virtual void CheckPlayerGrasp(Point pos)
+	{
+		Rope rope;
+		RopesOfAllThisTileInTheWorld.TryGetValue(pos, out rope);
+		if (rope is null)
+		{
+			return;
+		}
+		bool isPlayerGrasping = RopeGraspingPlayer.ContainsKey(pos);
+		var masses = rope.Masses;
+		var vineEndPosition = masses[^1].Position;
+		Player graspPlayer = null;
+		if (!isPlayerGrasping)
+		{
+			// Check player who try to grasp the rope.
+			foreach (Player player in Main.player)
+			{
+				if (player != null && player.active && !player.mount.Active /*player should not have a mount when grasping*/ && player.controlUp &&
+					Vector2.Distance(player.Center, vineEndPosition) <= GraspDetectRange)
+				{
+					if (!RopeGraspingPlayer.ContainsKey(pos) && !RopeGraspingPlayer.ContainsValue(player))
+					{
+						graspPlayer = player;
+						AddPlayerToRope(player, rope, pos);
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			graspPlayer = RopeGraspingPlayer[pos];
+		}
+		if (graspPlayer is null)
+		{
+			return;
+		}
+		UpdateGraspingPlayer(graspPlayer, rope, pos);
+
+		if(!RopeGraspingPlayer.ContainsKey(pos) || RopeGraspingPlayer[pos] != graspPlayer)
+		{
+			return;
+		}
+
+		// Check Remove Player
+		if (graspPlayer is null || !graspPlayer.active || graspPlayer.controlJump || graspPlayer.mount.Active)
+		{
+			RemovePlayerFromRope(graspPlayer, rope, pos);
+		}
+	}
+
+	/// <summary>
+	/// Move the player.<br/>
+	/// Animate the player.<br/>
+	/// Swing the rope.<br/>
+	/// Check switch rope.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="rope"></param>
+	/// <param name="pos"></param>
+	public void UpdateGraspingPlayer(Player player, Rope rope, Point pos)
+	{
+		var masses = rope.Masses;
+		var vineEndPosition = masses[^1].Position;
+
+		// Player Kinematics
+		player.Center = vineEndPosition;
+		player.velocity *= 0;
+		player.gravity *= 0;
+
+		// Player Animation
+		float rot = 0;
+		if (masses.Length > 2)
+		{
+			rot = (masses[^2].Position - masses[^1].Position).ToRotation() + MathHelper.PiOver2;
+		}
+		player.fullRotation = rot;
+		player.SetCompositeArmBack(true, Player.CompositeArmStretchAmount.Full, MathHelper.Pi);
+		if (!player.controlUseItem && !player.controlUseTile)
+		{
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rot);
+		}
+
+		// Swing
+		Vector2 ropeDir = (masses[0].Position - masses[^1].Position).NormalizeSafe();
+		Vector2 pushDir = ropeDir.RotatedBy(MathHelper.PiOver2);
+		if (player.controlLeft && ropeDir.X < 0.6f)
+		{
+			PushRope(ref rope, -pushDir * 4);
+		}
+		if (player.controlRight && ropeDir.X > -0.6f)
+		{
+			PushRope(ref rope, pushDir * 4);
+		}
+
+		// Switch Ropes
+		if (player.controlDown)
+		{
+			CheckSwitchRope(player, rope, pos);
+		}
+	}
+
+	public void CheckSwitchRope(Player player, Rope rope, Point pos)
+	{
+		float minDistance = GraspDetectRange + 10;
+		Rope targetRope = null;
+		foreach (var rope_new in RopesOfAllThisTileInTheWorld.Values)
+		{
+			// Exclude the current rope.
+			if (RopesOfAllThisTileInTheWorld[pos] == rope_new)
+			{
+				continue;
+			}
+			Vector2 ropeTipPos = rope_new.Masses.Last().Position;
+			Vector2 playerToTip = ropeTipPos - player.Center;
+			if (playerToTip.Length() < minDistance)
+			{
+				minDistance = playerToTip.Length();
+				targetRope = rope_new;
+			}
+		}
+		if(targetRope is null)
+		{
+			return;
+		}
+
+		Point targetPoint = RopesOfAllThisTileInTheWorld.FirstOrDefault(kv => kv.Value == targetRope).Key;
+		RemovePlayerFromRope(player, rope, pos);
+		AddPlayerToRope(player, targetRope, targetPoint);
+	}
+
+	public void AddPlayerToRope(Player player, Rope rope, Point tilePos)
+	{
+		HangingTile_Player hTP = player.GetModPlayer<HangingTile_Player>();
+		if (hTP is null)
+		{
+			return;
+		}
+		if (hTP.SwitchVineCoolTimer > 0)
+		{
+			return;
+		}
+		hTP.SwitchVineCoolTimer = 3;
+		RopeGraspingPlayer.Add(tilePos, player);
+		PushRope(ref rope, player.velocity * 12f);
+	}
+
+	public void RemovePlayerFromRope(Player player, Rope rope, Point tilePos)
+	{
+		HangingTile_Player hTP = player.GetModPlayer<HangingTile_Player>();
+		if (hTP is null)
+		{
+			return;
+		}
+		if(hTP.SwitchVineCoolTimer > 0)
+		{
+			return;
+		}
+		var masses = rope.Masses;
+		RopeGraspingPlayer.Remove(tilePos);
+		player.gravity = Player.defaultGravity;
+		Vector2 finalVel = masses[^1].Velocity * 3;
+		player.velocity = finalVel;
+		PushRope(ref rope, -finalVel * 16f);
+		player.fullRotation = 0f;
+	}
+
+	/// <summary>
+	/// Apply a force to the whole rope.
+	/// </summary>
+	/// <param name="rope"></param>
+	/// <param name="force"></param>
+	public void PushRope(ref Rope rope, Vector2 force)
+	{
+		var masses = rope.Masses;
+		for (int i = 0; i < masses.Length; i++)
+		{
+			float value = i / (float)masses.Length;
+			rope.ApplyForceSpecial(i, value * force);
+		}
+	}
+
+	/// <summary>
+	/// Add the rope.
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
 	/// <param name="rope"></param>
 	public virtual void AddRope(int i, int j)
 	{
-		Rope rope = ConnectRope(i, j);
+		Tile tile = Main.tile[i, j];
+		int counts = MaxCableLength;
+		int restCount = tile.TileFrameY;
+		Rope rope = Rope.CreateWithHangHead(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount, UnitLength);
 		if (rope == null)
 		{
 			return;
@@ -151,7 +361,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		var masses = rope.Masses;
 		RopesOfAllThisTileInTheWorld.Add(new Point(i, j), rope);
 		TryGetCableEntityAs(i, j, out CableEneity cableEneity);
 		if (cableEneity == null)
@@ -162,23 +371,60 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	}
 
 	/// <summary>
-	/// 挂绳
+	/// Highlight a knob which can adjust the rope.
 	/// </summary>
 	/// <param name="i"></param>
 	/// <param name="j"></param>
-	/// <param name="i2"></param>
-	/// <param name="j2"></param>
-	/// <returns></returns>
-	public virtual Rope ConnectRope(int i, int j)
+	public override void MouseOver(int i, int j)
 	{
-		Tile tile = Main.tile[i, j];
-		int counts = MaxCableLength;
-		int restCount = tile.TileFrameY;
-		Rope rope = Rope.CreateWithHangHead(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
-		return rope;
+		if (LengthAdjustable)
+		{
+			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
+			{
+				MouseOverPoint.Add(Main.LocalPlayer, new Point(i, j));
+				if (Main.LocalPlayer.HeldItem.createTile == Type)
+				{
+					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
+					Ins.VFXManager.Add(vfx);
+				}
+			}
+			else if (MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
+			{
+				MouseOverPoint.Remove(Main.LocalPlayer);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Right click to enable a knob for adjusting cable's length.
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <returns></returns>
+	public override bool RightClick(int i, int j)
+	{
+		if (LengthAdjustable)
+		{
+			Tile tile = Main.tile[i, j];
+			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
+			{
+				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
+				Ins.VFXManager.Add(vfx);
+				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
+				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
+			}
+		}
+		return base.RightClick(i, j);
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		DrawWinch(i, j, spriteBatch);
+		TileFluentDrawManager.AddFluentPoint(this, i, j);
+		return false;
+	}
+
+	public virtual void DrawWinch(int i, int j, SpriteBatch spriteBatch)
 	{
 		Color lightColor = Lighting.GetColor(i, j);
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -187,9 +433,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 			zero = Vector2.Zero;
 		}
 		spriteBatch.Draw(ModAsset.HangingWinch.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(0, 0, 16, 16), lightColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
-
-		TileFluentDrawManager.AddFluentPoint(this, i, j);
-		return false;
 	}
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
@@ -199,10 +442,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		if (rope != null)
 		{
 			DrawCable(rope, pos, spriteBatch, tileDrawing);
+			if (CanGrasp && !Main.gamePaused)
+			{
+				CheckPlayerGrasp(pos);
+			}
 		}
 	}
-
-	public string BulbTexturePath;
 
 	/// <summary>
 	/// Paint the hanging chains.
@@ -223,9 +468,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		var tile = Main.tile[pos];
 		ushort type = tile.TileType;
 		int paint = Main.tile[pos].TileColor;
-		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(BulbTexturePath, type, 1, paint, tileDrawing);
+		string originalPath = @Texture;
+		string[] pathSegments = originalPath.Split("/");
+		string trimmedTexturePath = Path.Combine(pathSegments.Skip(1).ToArray());
+		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(trimmedTexturePath, type, 1, paint, tileDrawing);
+		tex ??= (Texture2D)ModContent.Request<Texture2D>(Texture);
 
-		// 获取发绳端物块信息
 		var masses = rope.Masses;
 		for (int i = 0; i < masses.Length; i++)
 		{
@@ -285,15 +533,31 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 				toNextMass = thisMass.Position - passedMass.Position;
 			}
 			Vector2 drawPos = thisMass.Position - Main.screenPosition;
-			if (i < masses.Length - 1)
-			{
-				spriteBatch.Draw(tex, drawPos, new Rectangle(8 * (i % 4), 0, 8, 10), tileLight, toNextMass.ToRotation() - MathHelper.PiOver2, new Vector2(4f, 0), 1f, SpriteEffects.None, 0);
-			}
-			else
-			{
-				spriteBatch.Draw(tex, drawPos, new Rectangle(0, 12, 32, 40), tileLight, toNextMass.ToRotation() - MathHelper.PiOver2, new Vector2(16f, 0), 1f, SpriteEffects.None, 0);
-				Lighting.AddLight(drawPos + Main.screenPosition, new Vector3(0.8f, 0.8f, 0.2f));
-			}
+			DrawRopeUnit(spriteBatch, tex, drawPos, pos, rope, i, toNextMass.ToRotation() - MathHelper.PiOver2, tileLight);
+		}
+	}
+
+	/// <summary>
+	/// Custom draw.
+	/// </summary>
+	/// <param name="spriteBatch"></param>
+	/// <param name="texture"></param>
+	/// <param name="drawPos">Screen Position</param>
+	/// <param name="rope"></param>
+	/// <param name="index"></param>
+	/// <param name="rotation"></param>
+	public virtual void DrawRopeUnit(SpriteBatch spriteBatch, Texture2D texture, Vector2 drawPos, Point tilePos, Rope rope, int index, float rotation, Color tileLight)
+	{
+		var masses = rope.Masses;
+		Rectangle frame = new Rectangle(8 * (index % 4), 0, 8, 10);
+		if (index < masses.Length - 1)
+		{
+			spriteBatch.Draw(texture, drawPos, frame, tileLight, rotation, new Vector2(4f, 0), 1f, SpriteEffects.None, 0);
+		}
+		else
+		{
+			spriteBatch.Draw(texture, drawPos, new Rectangle(0, 12, 32, 40), tileLight, rotation, new Vector2(16f, 0), 1f, SpriteEffects.None, 0);
+			Lighting.AddLight(drawPos + Main.screenPosition, new Vector3(0.8f, 0.8f, 0.2f));
 		}
 	}
 
@@ -320,59 +584,5 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 
 		entity = null;
 		return false;
-	}
-
-	/// <summary>
-	/// A mousePos-player Dictionary to prevent generating multiple VFX.
-	/// </summary>
-	public Dictionary<Player, Point> MouseOverPoint = new Dictionary<Player, Point>();
-
-	public override void MouseOver(int i, int j)
-	{
-		if (LengthAdjustable)
-		{
-			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
-			{
-				MouseOverPoint.Add(Main.LocalPlayer, new Point(i, j));
-				if (Main.LocalPlayer.HeldItem.createTile == Type)
-				{
-					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
-					Ins.VFXManager.Add(vfx);
-				}
-			}
-			else if (MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
-			{
-				MouseOverPoint.Remove(Main.LocalPlayer);
-			}
-		}
-	}
-
-	/// <summary>
-	/// Right click to adjust cable length.
-	/// </summary>
-	/// <param name="i"></param>
-	/// <param name="j"></param>
-	/// <returns></returns>
-	public override bool RightClick(int i, int j)
-	{
-		if (LengthAdjustable)
-		{
-			// 旋转
-			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
-			{
-				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
-				Ins.VFXManager.Add(vfx);
-				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
-			}
-		}
-		return base.RightClick(i, j);
-	}
-
-	public override void PlaceInWorld(int i, int j, Item item)
-	{
-		Tile tile = Main.tile[i, j];
-		tile.TileFrameY = 18;
 	}
 }
