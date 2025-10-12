@@ -50,10 +50,10 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		}
 
 		// identify the player.
-		if (hangingTile.ChainPlayer.ContainsKey(FixPoint))
+		if (hangingTile.KnobAdjustingPlayers.ContainsKey(FixPoint))
 		{
 			Player player2;
-			hangingTile.ChainPlayer.TryGetValue(FixPoint, out player2);
+			hangingTile.KnobAdjustingPlayers.TryGetValue(FixPoint, out player2);
 			if (player2 != player)
 			{
 				Active = false;
@@ -105,21 +105,21 @@ public class HangingTile_LengthAdjustingSystem : Visual
 			if (x != FixPoint.X || y != FixPoint.Y)
 			{
 				Active = false;
-				if (hangingTile.MouseOverPoint.ContainsKey(player))
+				if (hangingTile.MouseOverWinchPlayers.ContainsKey(player))
 				{
-					hangingTile.MouseOverPoint.Remove(player);
+					hangingTile.MouseOverWinchPlayers.Remove(player);
 				}
 				return;
 			}
 		}
 		if (Style == 1)
 		{
-			if (!hangingTile.ChainPlayer.ContainsKey(FixPoint))
+			if (!hangingTile.KnobAdjustingPlayers.ContainsKey(FixPoint))
 			{
 				EndAdjustment();
 				return;
 			}
-			if (!hangingTile.ChainPlayer.ContainsKey(FixPoint))
+			if (!hangingTile.KnobAdjustingPlayers.ContainsKey(FixPoint))
 			{
 				EndAdjustment();
 				return;
@@ -212,13 +212,13 @@ public class HangingTile_LengthAdjustingSystem : Visual
 	public void Kill(HangingTile hangingTile, Player owner)
 	{
 		Active = false;
-		if (hangingTile.MouseOverPoint.ContainsKey(owner))
+		if (hangingTile.MouseOverWinchPlayers.ContainsKey(owner))
 		{
-			hangingTile.MouseOverPoint.Remove(owner);
+			hangingTile.MouseOverWinchPlayers.Remove(owner);
 		}
-		if (hangingTile.ChainPlayer.ContainsKey(FixPoint))
+		if (hangingTile.KnobAdjustingPlayers.ContainsKey(FixPoint))
 		{
-			hangingTile.ChainPlayer.Remove(FixPoint);
+			hangingTile.KnobAdjustingPlayers.Remove(FixPoint);
 		}
 	}
 

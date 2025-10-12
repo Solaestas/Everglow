@@ -40,6 +40,11 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public float UnitLength = 6f;
 
 	/// <summary>
+	///  Be valid only when CanGrasp is true.
+	/// </summary>
+	public float GraspDetectRange = 48f;
+
+	/// <summary>
 	/// Max style counts when hit wire.
 	/// </summary>
 	public int MaxWireStyle = 2;
@@ -55,11 +60,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	public bool CanGrasp = false;
 
 	/// <summary>
-	///  Be valid only when CanGrasp is true.
-	/// </summary>
-	public const float GraspDetectRange = 48f;
-
-	/// <summary>
 	/// Winch position and rope.<br></br>
 	/// 1 point contains 1 rope at most.
 	/// </summary>
@@ -69,20 +69,20 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// Current Player who is handling with the HangingTile winched at a certain Point.<br></br>
 	/// 1 winch can be modified by only 1 player simultanrously.
 	/// </summary>
-	public Dictionary<Point, Player> ChainPlayer = new Dictionary<Point, Player>();
+	public Dictionary<Point, Player> KnobAdjustingPlayers = new Dictionary<Point, Player>();
 
 	/// <summary>
 	/// A mousePos-player Dictionary to prevent generating multiple knob VFX.<br></br>
 	/// 1 winch can display more than 1 knob VFXs in multi-player mode.
 	/// </summary>
-	public Dictionary<Player, Point> MouseOverPoint = new Dictionary<Player, Point>();
+	public Dictionary<Player, Point> MouseOverWinchPlayers = new Dictionary<Player, Point>();
 
 	/// <summary>
 	/// Current Player who grasping the rope of HangingTile winched at a certain Point.<br></br>
 	/// Be valid only when CanGrasp is true.<br></br>
 	/// 1 rope can be grasped by more than 1 players.
 	/// </summary>
-	public Dictionary<Point, Player> RopeGraspingPlayer = new Dictionary<Point, Player>();
+	public static Dictionary<Point, Player> RopeGraspingPlayer = new Dictionary<Point, Player>();
 
 	/// <summary>
 	/// Override to customize the values.<br></br>
@@ -167,31 +167,11 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		bool isPlayerGrasping = RopeGraspingPlayer.ContainsKey(pos);
-		var masses = rope.Masses;
-		var vineEndPosition = masses[^1].Position;
-		Player graspPlayer = null;
-		if (!isPlayerGrasping)
+		if (!RopeGraspingPlayer.ContainsKey(pos))
 		{
-			// Check player who try to grasp the rope.
-			foreach (Player player in Main.player)
-			{
-				if (player != null && player.active && !player.mount.Active /*player should not have a mount when grasping*/ && player.controlUp &&
-					Vector2.Distance(player.Center, vineEndPosition) <= GraspDetectRange)
-				{
-					if (!RopeGraspingPlayer.ContainsKey(pos) && !RopeGraspingPlayer.ContainsValue(player))
-					{
-						graspPlayer = player;
-						AddPlayerToRope(player, rope, pos);
-						break;
-					}
-				}
-			}
+			return;
 		}
-		else
-		{
-			graspPlayer = RopeGraspingPlayer[pos];
-		}
+		Player graspPlayer = RopeGraspingPlayer[pos];
 		if (graspPlayer is null)
 		{
 			return;
@@ -265,10 +245,14 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	{
 		float minDistance = GraspDetectRange + 10;
 		Rope targetRope = null;
+		//foreach (var hangingTile in TileLoader.tiles.OfType<HangingTile>())
+		//{
+
+		//}
 		foreach (var rope_new in RopesOfAllThisTileInTheWorld.Values)
 		{
 			// Exclude the current rope.
-			if (RopesOfAllThisTileInTheWorld[pos] == rope_new)
+			if (RopesOfAllThisTileInTheWorld.ContainsKey(pos) && RopesOfAllThisTileInTheWorld[pos] == rope_new)
 			{
 				continue;
 			}
@@ -280,7 +264,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 				targetRope = rope_new;
 			}
 		}
-		if(targetRope is null)
+		if (targetRope is null)
 		{
 			return;
 		}
@@ -301,7 +285,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		hTP.SwitchVineCoolTimer = 3;
+		hTP.SwitchVineCoolTimer = 30;
 		RopeGraspingPlayer.Add(tilePos, player);
 		PushRope(ref rope, player.velocity * 12f);
 	}
@@ -379,18 +363,18 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	{
 		if (LengthAdjustable)
 		{
-			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
+			if (!MouseOverWinchPlayers.ContainsKey(Main.LocalPlayer))
 			{
-				MouseOverPoint.Add(Main.LocalPlayer, new Point(i, j));
+				MouseOverWinchPlayers.Add(Main.LocalPlayer, new Point(i, j));
 				if (Main.LocalPlayer.HeldItem.createTile == Type)
 				{
 					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
 					Ins.VFXManager.Add(vfx);
 				}
 			}
-			else if (MouseOverPoint[Main.LocalPlayer] != new Point(i, j))
+			else if (MouseOverWinchPlayers[Main.LocalPlayer] != new Point(i, j))
 			{
-				MouseOverPoint.Remove(Main.LocalPlayer);
+				MouseOverWinchPlayers.Remove(Main.LocalPlayer);
 			}
 		}
 	}
@@ -406,12 +390,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		if (LengthAdjustable)
 		{
 			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
+			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !KnobAdjustingPlayers.ContainsKey(new Point(i, j)))
 			{
 				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
 				Ins.VFXManager.Add(vfx);
 				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
+				KnobAdjustingPlayers.Add(new Point(i, j), Main.LocalPlayer);
 			}
 		}
 		return base.RightClick(i, j);

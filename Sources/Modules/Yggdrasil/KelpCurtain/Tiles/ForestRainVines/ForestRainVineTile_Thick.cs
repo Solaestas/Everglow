@@ -44,15 +44,15 @@ public class ForestRainVineTile_Thick : HangingTile
 			zero = Vector2.Zero;
 		}
 		Texture2D tex = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Rectangle frame = new Rectangle(0, 0, 24, 14);
-		spriteBatch.Draw(tex, new Vector2(i, j) * 16 - Main.screenPosition + zero, frame, lightColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+		Rectangle frame = new Rectangle(0, 0, 24, 16);
+		spriteBatch.Draw(tex, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-4, 0), frame, lightColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 	}
 
 	public override void DrawRopeUnit(SpriteBatch spriteBatch, Texture2D texture, Vector2 drawPos, Point tilePos, Rope rope, int index, float rotation, Color tileLight)
 	{
 		var masses = rope.Masses;
 		Rectangle frame;
-		Vector2 offset = new Vector2(4, 0);
+		Vector2 offset = new Vector2(0, 0);
 		drawPos += offset;
 		if (index <= masses.Length - 6)
 		{
