@@ -191,7 +191,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	public bool HasContinueUsing()
 	{
 		Player player = Main.player[Projectile.owner];
-		if (player.controlUseItem && !player.dead)
+		if (player.controlUseItem && player.active && !player.dead)
 		{
 			if (player.HeldItem.shoot == Projectile.type)
 			{
