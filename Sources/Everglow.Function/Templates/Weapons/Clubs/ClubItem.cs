@@ -11,9 +11,15 @@ public abstract class ClubItem : ModItem
 {
 	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
 
-	public int ProjType { get; set; } = default!;
+	/// <summary>
+	/// Type of projectile used for normal attack.
+	/// </summary>
+	public int ProjType { get; set; }
 
-	public int ProjSmashType { get; set; } = default!;
+	/// <summary>
+	/// Type of projectile used for smash down attack.
+	/// </summary>
+	public int ProjSmashType { get; set; }
 
 	public override void SetStaticDefaults()
 	{
@@ -45,6 +51,11 @@ public abstract class ClubItem : ModItem
 		Item.shoot = ProjType;
 	}
 
+	/// <summary>
+	/// This is where you set all your item's stat, such as width, damage, knockback, etc.
+	/// <br/>Also special properties of club weapon: <see cref="ProjType"/> and <see cref="ProjSmashType"/>.
+	/// <para/>Called after <see cref="SetDefaults"/>. The native <see cref="SetDefaults"/> has been marked as <c>sealed</c> for better protection.
+	/// </summary>
 	public virtual void SetCustomDefaults()
 	{
 	}
@@ -53,9 +64,9 @@ public abstract class ClubItem : ModItem
 
 	public override bool MeleePrefix() => true;
 
-	public override bool AltFunctionUse(Player player) => CanDown(player);
+	public override bool AltFunctionUse(Player player) => ProjSmashType > ProjectileID.None && CanSmashDown(player);
 
-	private static bool CanDown(Player player)
+	private static bool CanSmashDown(Player player)
 	{
 		for (int h = 0; h < 7; h++)
 		{
@@ -86,55 +97,35 @@ public abstract class ClubItem : ModItem
 	{
 		if (player.altFunctionUse != 2)
 		{
+			// Left click: Hold and rotate.
 			if (player.ownedProjectileCounts[type] < 1)
 			{
 				Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-			}
-			return false;
-		}
-		int typeDown = ProjSmashType;
-		if (typeDown > 0)
-		{
-			if (CanDown(player))
-			{
-				if (player.ownedProjectileCounts[typeDown] < 1 && Main.mouseLeftRelease)
-				{
-					player.mount.Dismount(player);
-					var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, typeDown, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
-					p.scale = Item.scale;
-
-					// 查重
-					if (player.ownedProjectileCounts[type] >= 1)
-					{
-						foreach (Projectile proj in Main.projectile)
-						{
-							if (proj != null && proj.active)
-							{
-								if (proj.owner == player.whoAmI && proj.type == type)
-								{
-									proj.Kill();
-								}
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				if (player.ownedProjectileCounts[type] + player.ownedProjectileCounts[typeDown] < 1)
-				{
-					var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-					p.scale = Item.scale;
-				}
 			}
 		}
 		else
 		{
-			if (player.ownedProjectileCounts[type] < 1)
+			// Right click: Smash down.
+			if (player.ownedProjectileCounts[ProjSmashType] < 1 && Main.mouseLeftRelease)
 			{
-				Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+				player.mount.Dismount(player);
+				var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, ProjSmashType, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
+				p.scale = Item.scale;
+
+				// Kill duplicate.
+				if (player.ownedProjectileCounts[type] >= 1)
+				{
+					foreach (Projectile proj in Main.projectile)
+					{
+						if (proj.active && proj.owner == player.whoAmI && proj.type == type)
+						{
+							proj.Kill();
+						}
+					}
+				}
 			}
 		}
+
 		return false;
 	}
 }
