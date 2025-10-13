@@ -6,14 +6,14 @@ namespace Everglow.Commons.Templates.Weapons.Clubs;
 public abstract class ClubProj_Reflect : ClubProj
 {
 	/// <summary>
-	/// 反光强度，默认4
+	/// Reflection Strength. Default to <c>4f</c>.
 	/// </summary>
-	public float ReflectStrength = 4f;
+	public float ReflectStrength { get; protected set; } = 4f;
 
 	/// <summary>
-	/// 反光的底色(默认武器本身)
+	/// Reflection texture.
 	/// </summary>
-	public string ReflectTexturePath = string.Empty;
+	public string ReflectTexture { get; protected set; } = string.Empty;
 
 	public override void SetCustomDefaults()
 	{
@@ -21,11 +21,11 @@ public abstract class ClubProj_Reflect : ClubProj
 		MaxOmega = 0.27f;
 	}
 
-	protected override float TrailWFunc(Vector2 trailVector, float factor) => base.TrailWFunc(trailVector, factor) * ReflectStrength;
+	protected override float SpecialTrailAlpha(Vector2 trailVector, float factor) => base.SpecialTrailAlpha(trailVector, factor) * ReflectStrength;
 
 	public override void PostPreDraw()
 	{
-		var bars = CreateTrailVertices(wFunc: true);
+		var bars = CreateTrailVertices(useSpecialAplha: true);
 		if (bars == null)
 		{
 			return;
@@ -36,8 +36,8 @@ public abstract class ClubProj_Reflect : ClubProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Texture2D projTexture = ReflectTexturePath != string.Empty
-			? ModContent.Request<Texture2D>(ReflectTexturePath).Value
+		Texture2D projTexture = ReflectTexture != string.Empty
+			? ModContent.Request<Texture2D>(ReflectTexture).Value
 			: (Texture2D)ModContent.Request<Texture2D>(Texture);
 
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;

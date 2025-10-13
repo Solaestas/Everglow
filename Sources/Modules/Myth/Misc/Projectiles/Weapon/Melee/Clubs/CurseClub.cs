@@ -134,7 +134,7 @@ public class CurseClub : ClubProj
 	{
 		float fade = Omega * 2f + 0.2f;
 		var color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade);
-		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, wFunc: true, trailColor: color2);
+		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, useSpecialAplha: true, trailColor: color2);
 		if(bars == null)
 		{
 			return;

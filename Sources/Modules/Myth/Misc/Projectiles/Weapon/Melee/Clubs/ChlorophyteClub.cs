@@ -9,7 +9,7 @@ public class ChlorophyteClub : ClubProj_Reflect
 		Beta = 0.0066f;
 		MaxOmega = 0.471f;
 		ReflectStrength = 3f;
-		ReflectTexturePath = ModAsset.ChlorophyteClub_light_Mod;
+		ReflectTexture = ModAsset.ChlorophyteClub_light_Mod;
 	}
 
 	public override void AI()

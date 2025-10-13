@@ -5,7 +5,7 @@ public class CrimsonClub : ClubProj_Reflect
 	public override void SetCustomDefaults()
 	{
 		ReflectStrength = 3f;
-		ReflectTexturePath = ModAsset.CobaltClub_light_Mod;
+		ReflectTexture = ModAsset.CobaltClub_light_Mod;
 	}
 
 	public override void AI()

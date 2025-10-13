@@ -80,7 +80,7 @@ public class IchorClub : ClubProj
 	{
 		float fade = Omega * 2f + 0.2f;
 		var color2 = new Color(fade, Math.Min(fade * 0.4f, 0.6f), 0, 0);
-		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, wFunc: true, trailColor: color2);
+		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, useSpecialAplha: true, trailColor: color2);
 		if (bars == null)
 		{
 			return;

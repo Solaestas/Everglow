@@ -97,7 +97,7 @@ public class StarDancer : ClubProj_Reflect
 
 	public override void PostPreDraw()
 	{
-		var bars = CreateTrailVertices(wFunc: true);
+		var bars = CreateTrailVertices(useSpecialAplha: true);
 		if (bars == null)
 		{
 			return;

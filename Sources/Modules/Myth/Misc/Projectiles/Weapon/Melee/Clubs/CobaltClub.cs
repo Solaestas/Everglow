@@ -6,7 +6,7 @@ public class CobaltClub : ClubProj_Reflect
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.4f;
-		ReflectTexturePath = ModAsset.CobaltClub_light_Mod;
+		ReflectTexture = ModAsset.CobaltClub_light_Mod;
 		ReflectStrength = 2f;
 	}
 }

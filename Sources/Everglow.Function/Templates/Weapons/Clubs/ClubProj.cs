@@ -91,7 +91,26 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public virtual string TrailShapeTex() => ModAsset.Melee_Mod;
 
+	/// <summary>
+	/// Normal alpha value calculation of trail
+	/// </summary>
+	/// <param name="factor"></param>
+	/// <returns></returns>
 	public virtual float TrailAlpha(float factor) => MathHelper.Lerp(0f, 1, factor);
+
+	/// <summary>
+	/// Special alpha value calculation of trail
+	/// </summary>
+	/// <param name="trailVector"></param>
+	/// <param name="factor"></param>
+	/// <returns></returns>
+	protected virtual float SpecialTrailAlpha(Vector2 trailVector, float factor)
+	{
+		float w = 1 - Math.Abs((trailVector.X * 0.5f + trailVector.Y * 0.5f) / trailVector.Length());
+		float w2 = MathF.Sqrt(TrailAlpha(factor));
+		w *= w2 * w;
+		return w;
+	}
 
 	public override void OnSpawn(IEntitySource source) => Omega = MaxOmega * 0.5f;
 
@@ -226,15 +245,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 	}
 
-	protected virtual float TrailWFunc(Vector2 trailVector, float factor)
-	{
-		float w = 1 - Math.Abs((trailVector.X * 0.5f + trailVector.Y * 0.5f) / trailVector.Length());
-		float w2 = MathF.Sqrt(TrailAlpha(factor));
-		w *= w2 * w;
-		return w;
-	}
-
-	protected List<Vertex2D> CreateTrailVertices(float paramA = 0.1f, float paramB = 0.1f, bool wFunc = true, Color? trailColor = null)
+	protected List<Vertex2D> CreateTrailVertices(float paramA = 0.1f, float paramB = 0.1f, bool useSpecialAplha = true, Color? trailColor = null)
 	{
 		if (!TrailVecs.Smooth(out var smoothedTrail))
 		{
@@ -247,7 +258,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = wFunc ? TrailAlpha(factor) : TrailWFunc(smoothedTrail[i], factor);
+			float w = useSpecialAplha ? TrailAlpha(factor) : SpecialTrailAlpha(smoothedTrail[i], factor);
 			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * paramA * Projectile.scale, color, new Vector3(factor, 1, 0f)));
 			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
 		}
@@ -256,7 +267,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = wFunc ? TrailAlpha(factor) : TrailWFunc(smoothedTrail[i], factor);
+			float w = useSpecialAplha ? TrailAlpha(factor) : SpecialTrailAlpha(smoothedTrail[i], factor);
 			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * paramB * Projectile.scale, color, new Vector3(factor, 1, 0f)));
 			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
 		}

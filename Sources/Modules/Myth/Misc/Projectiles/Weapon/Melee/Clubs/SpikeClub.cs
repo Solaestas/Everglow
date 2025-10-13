@@ -127,7 +127,7 @@ public class SpikeClub : ClubProj_Reflect
 
 	public override void PostPreDraw()
 	{
-		var bars = CreateTrailVertices(0.7f, 0.6f, wFunc: true);
+		var bars = CreateTrailVertices(0.7f, 0.6f, useSpecialAplha: true);
 		if (bars == null)
 		{
 			return;

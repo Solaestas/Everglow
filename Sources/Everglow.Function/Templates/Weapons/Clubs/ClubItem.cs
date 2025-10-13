@@ -14,12 +14,12 @@ public abstract class ClubItem : ModItem
 	/// <summary>
 	/// Type of projectile used for normal attack.
 	/// </summary>
-	public int ProjType { get; set; }
+	public int ProjType { get; protected set; }
 
 	/// <summary>
 	/// Type of projectile used for smash down attack.
 	/// </summary>
-	public int ProjSmashType { get; set; }
+	public int ProjSmashType { get; protected set; }
 
 	public override void SetStaticDefaults()
 	{

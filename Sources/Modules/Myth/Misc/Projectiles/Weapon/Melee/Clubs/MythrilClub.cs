@@ -6,7 +6,7 @@ public class MythrilClub : ClubProj_Reflect
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.43f;
-		ReflectTexturePath = ModAsset.MythrilClub_light_Mod;
+		ReflectTexture = ModAsset.MythrilClub_light_Mod;
 		ReflectStrength = 2f;
 	}
 }
