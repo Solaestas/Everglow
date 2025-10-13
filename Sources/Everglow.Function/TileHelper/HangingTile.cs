@@ -245,6 +245,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		{
 			CheckSwitchRope(player, rope, pos);
 		}
+
+		// Collision
+		if(Collision.SolidCollision(player.position, player.width, player.height))
+		{
+			RemovePlayerFromRope(player, rope, pos);
+		}
 	}
 
 	public void CheckSwitchRope(Player player, Rope rope, Point pos)
