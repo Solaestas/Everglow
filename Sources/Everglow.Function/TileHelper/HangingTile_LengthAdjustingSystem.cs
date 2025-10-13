@@ -4,16 +4,37 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Terraria.Audio;
+using static Spine.SkeletonBinary;
 
 namespace Everglow.Commons.TileHelper;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
 public class HangingTile_LengthAdjustingSystem : Visual
 {
+	public struct DrawStack
+	{
+		public Texture2D Texture;
+
+		public IEnumerable<Vertex2D> Vertices;
+
+		public PrimitiveType PType;
+
+		public DrawStack(Texture2D texture, IEnumerable<Vertex2D> vertices, PrimitiveType pType)
+		{
+			Texture = texture;
+			Vertices = vertices;
+			PType = pType;
+		}
+	}
+
 	public override CodeLayer DrawLayer => CodeLayer.PreDrawFilter;
 
 	public Point FixPoint;
 
+	/// <summary>
+	/// 0: mouse over;<br/>
+	/// 1: full system.
+	/// </summary>
 	public int Style;
 	public int Timer = 0;
 	public int TimeToKill = -1;
@@ -24,6 +45,13 @@ public class HangingTile_LengthAdjustingSystem : Visual
 
 	public Vector2 OldMouseDirection = new Vector2(0, -1);
 	public Queue<float> OldRotatedSpeeds = new Queue<float>();
+
+	/// <summary>
+	/// Allow custon drawing styles.
+	/// </summary>
+	public delegate void CustomDrawPanel(HangingTile_LengthAdjustingSystem hangingAdj, Player player, Color color, ref Queue<DrawStack> drawStacks);
+
+	public event CustomDrawPanel CustomPanel;
 
 	public override void OnSpawn()
 	{
@@ -244,20 +272,17 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		}
 		Color drawColor = Color.Lerp(new Color(0.75f, 0.75f, 1f, 0.5f), new Color(0.85f, 0.85f, 0.75f, 0.5f), MathF.Sin((float)Main.timeForVisualEffects * 0.08f) * 0.5f + 0.5f);
 		Color origDrawColor = drawColor;
-		if (Style == 1)
+		float nowFrameY = StartFrameY60 / 60f + HandleRotation * 2;
+		if (nowFrameY < 5)
 		{
-			float nowFrameY = StartFrameY60 / 60f + HandleRotation * 2;
-			if (nowFrameY < 5)
-			{
-				drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (5 - nowFrameY) / 4f);
-			}
-			if (nowFrameY > hangingTile.MaxCableLength - 5)
-			{
-				drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (nowFrameY - (hangingTile.MaxCableLength - 5)) / 4f);
-			}
+			drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (5 - nowFrameY) / 4f);
+		}
+		if (nowFrameY > hangingTile.MaxCableLength - 5)
+		{
+			drawColor = Color.Lerp(drawColor, new Color(1f, 0f, 0f, 0.8f), (nowFrameY - (hangingTile.MaxCableLength - 5)) / 4f);
 		}
 
-		// 不同种类物块标红
+		// If your HeldItem doesn't match with the tile type, it turns red.
 		if (player.HeldItem.createTile != tile.type)
 		{
 			drawColor = new Color(1f, 0, 0, 0.5f);
@@ -271,243 +296,26 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		{
 			if (Style == 1)
 			{
-				DrawBackgroundPanel(i, j, Color.White * 0.5f);
-				float maxCos = 0;
-				int maxK = 0;
-
-				// Calculate the bloom effect of calibration tails.
-				for (int k = -10; k < 10; k++)
+				Queue<DrawStack> drawStacks = new Queue<DrawStack>();
+				CustomPanel?.Invoke(this, player, origDrawColor, ref drawStacks);
+				while(drawStacks.Count > 0)
 				{
-					Vector2 cut2 = new Vector2(0, -1).RotatedBy(k / 20f * MathHelper.TwoPi);
-					float cosValue = Vector2.Dot(cut, cut2);
-					if (cosValue > maxCos)
-					{
-						maxCos = cosValue;
-						maxK = k;
-					}
+					DrawStack currentDS = drawStacks.Dequeue();
+					Ins.Batch.Draw(currentDS.Texture, currentDS.Vertices, currentDS.PType);
 				}
-
-				// Draw calibration tails.
-				Color newDrawColor = origDrawColor;
-				float nowFrameY = StartFrameY60 / 60f + HandleRotation * 2;
-				if (nowFrameY < 5)
-				{
-					newDrawColor = Color.Lerp(origDrawColor, new Color(1f, 0f, 0f, 0.8f), (5 - nowFrameY) / 4f);
-				}
-				if (nowFrameY > hangingTile.MaxCableLength - 5)
-				{
-					newDrawColor = Color.Lerp(origDrawColor, new Color(1f, 0f, 0f, 0.8f), (nowFrameY - (hangingTile.MaxCableLength - 5)) / 4f);
-				}
-				float tK = 12f;
-				if (TimeToKill > 0)
-				{
-					tK = TimeToKill;
-				}
-				float fade = Math.Min(Timer, tK) / 12f;
-				for (int k = -10; k < 10; k++)
-				{
-					Vector2 cut2 = new Vector2(0, -1).RotatedBy(k / 20f * MathHelper.TwoPi);
-					float cosValue = Vector2.Dot(cut, cut2);
-
-					if (k == maxK)
-					{
-						DrawLine_Black(rotCenter + cut2 * (4 * PanelRange - 12), rotCenter + cut2 * (4 * PanelRange + 36), 16);
-						DrawLine(rotCenter + cut2 * (4 * PanelRange - 12), rotCenter + cut2 * (4 * PanelRange + 36), 16, newDrawColor * fade, 1f);
-					}
-					else
-					{
-						DrawLine(rotCenter + cut2 * 4 * PanelRange, rotCenter + cut2 * (4 * PanelRange + 24), 12, newDrawColor * fade, cosValue);
-					}
-				}
-
-				// Draw bound.
-				DrawBound(origDrawColor, player);
-				DrawDirectionRing(FixPoint.X, FixPoint.Y, drawColor, HandleRotation - MathHelper.PiOver2);
 			}
 		}
 		DrawBlockBound(FixPoint.X, FixPoint.Y, drawColor, HandleRotation);
 	}
 
-	public void DrawBound(Color color, Player player)
+	public void RegisterCustomPanelDrawing(CustomDrawPanel customDrawing)
 	{
-		Vector2 rotCenter = FixPoint.ToWorldCoordinates();
-		if ((player.MouseWorld() - rotCenter).Length() > 240)
-		{
-			Vector2 cut3 = (player.MouseWorld() - rotCenter).NormalizeSafe();
-			float colorValue = ((player.MouseWorld() - rotCenter).Length() - 240f) / 160f;
-			colorValue = Math.Min(colorValue, 1);
-			Color newDrawColor = Color.Lerp(color, new Color(1f, 0f, 0f, 0f), colorValue);
-			newDrawColor.A = 0;
-			float colorFade = 1f;
-			if(TimeToKill > 0)
-			{
-				colorFade = TimeToKill / 12f;
-			}
-			Color backgroundColor = Color.White * 0.6f * colorFade;
-			newDrawColor *= colorFade;
-			Main.instance.MouseText("Drag out of circle to cancel", ItemRarityID.White);
-
-			List<Vertex2D> bars_left = new List<Vertex2D>();
-			List<Vertex2D> bars_right = new List<Vertex2D>();
-
-			List<Vertex2D> bars_left_black = new List<Vertex2D>();
-			List<Vertex2D> bars_right_black = new List<Vertex2D>();
-			for (int k = 0; k < 30; k++)
-			{
-				float xCoord = (colorValue - k / 30f) * 0.8f;
-				xCoord = Math.Clamp(xCoord, 0, 1);
-				bars_left_black.Add(rotCenter + cut3.RotatedBy(k / 30f) * 400f, backgroundColor, new Vector3(xCoord, 0.5f, 0));
-				bars_left_black.Add(rotCenter + cut3.RotatedBy(k / 30f) * 350f, backgroundColor, new Vector3(xCoord, 0.8f, 0));
-
-				bars_right_black.Add(rotCenter + cut3.RotatedBy(-k / 30f) * 400f, backgroundColor, new Vector3(xCoord, 0.5f, 0));
-				bars_right_black.Add(rotCenter + cut3.RotatedBy(-k / 30f) * 350f, backgroundColor, new Vector3(xCoord, 0.8f, 0));
-
-				bars_left.Add(rotCenter + cut3.RotatedBy(k / 30f) * 400f, newDrawColor, new Vector3(xCoord, 0.5f, 0));
-				bars_left.Add(rotCenter + cut3.RotatedBy(k / 30f) * 350f, newDrawColor, new Vector3(xCoord, 0.8f, 0));
-
-				bars_right.Add(rotCenter + cut3.RotatedBy(-k / 30f) * 400f, newDrawColor, new Vector3(xCoord, 0.5f, 0));
-				bars_right.Add(rotCenter + cut3.RotatedBy(-k / 30f) * 350f, newDrawColor, new Vector3(xCoord, 0.8f, 0));
-			}
-			Ins.Batch.Draw(ModAsset.SparkDark.Value, bars_left_black, PrimitiveType.TriangleStrip);
-			Ins.Batch.Draw(ModAsset.SparkDark.Value, bars_right_black, PrimitiveType.TriangleStrip);
-
-			Ins.Batch.Draw(ModAsset.SparkLight.Value, bars_left, PrimitiveType.TriangleStrip);
-			Ins.Batch.Draw(ModAsset.SparkLight.Value, bars_right, PrimitiveType.TriangleStrip);
-
-			List<Vertex2D> text_bars = new List<Vertex2D>();
-			Color textColor = Color.White;
-			for (int k = -30; k < 30; k++)
-			{
-				float xCoord = -k / 15f;
-				float fade = (30 * colorValue - Math.Abs(k)) / 15f;
-				fade = Math.Clamp(fade, 0f, 1f);
-				fade = MathF.Sin(fade);
-				text_bars.Add(rotCenter + cut3.RotatedBy(k / 30f) * 420f, textColor * fade * colorFade, new Vector3(xCoord, 1f, 0));
-				text_bars.Add(rotCenter + cut3.RotatedBy(k / 30f) * 400f, textColor * fade * colorFade, new Vector3(xCoord, 0f, 0));
-			}
-			Ins.Batch.Draw(ModAsset.HangingExit.Value, text_bars, PrimitiveType.TriangleStrip);
-		}
+		CustomPanel += customDrawing;
 	}
 
-	public void DrawDirectionRing(int i, int j, Color color, float rotation)
+	/// <param name="customDrawing"></param>
+	public void UnregisterCustomPanelDrawing(CustomDrawPanel customDrawing)
 	{
-		color.A = 0;
-		Vector2 pos = new Vector2(i, j) * 16 + new Vector2(8);
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int k = 0; k <= 60; k++)
-		{
-			bars.Add(pos + new Vector2(0, PanelRange * 24).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.5f, k / 15f, 0));
-			bars.Add(pos + new Vector2(0, PanelRange * 0).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.3f, k / 15f, 0));
-		}
-		Ins.Batch.Draw(ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
-		bars = new List<Vertex2D>();
-		for (int k = 0; k <= 60; k++)
-		{
-			bars.Add(pos + new Vector2(0, PanelRange * 12).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.5f, k / 30f, 0));
-			bars.Add(pos + new Vector2(0, PanelRange * 0).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.3f, k / 30f, 0));
-		}
-		Ins.Batch.Draw(ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
-		bars = new List<Vertex2D>();
-		for (int k = 0; k <= 60; k++)
-		{
-			bars.Add(pos + new Vector2(0, PanelRange * 22).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.5f, k / 60f, 0));
-			bars.Add(pos + new Vector2(0, PanelRange * 12).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.3f, k / 60f, 0));
-		}
-		Ins.Batch.Draw(ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
-		bars = new List<Vertex2D>();
-		for (int k = 0; k <= 60; k++)
-		{
-			bars.Add(pos + new Vector2(0, PanelRange * 26).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.5f, 0.5f, 0));
-			bars.Add(pos + new Vector2(0, PanelRange * 24).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(0.5f, 0.5f, 0));
-		}
-		Ins.Batch.Draw(ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip);
-	}
-
-	public void DrawBackgroundPanel(int i, int j, Color color)
-	{
-		Vector2 pos = new Vector2(i, j) * 16 + new Vector2(8);
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int k = 0; k <= 60; k++)
-		{
-			bars.Add(pos + new Vector2(0, PanelRange * 70).RotatedBy(k / 60f * MathHelper.TwoPi), color, new Vector3(k / 60f, 0, 0));
-			bars.Add(pos + new Vector2(0, PanelRange * 0).RotatedBy(k / 60f * MathHelper.TwoPi), color, new Vector3(k / 60f, 0.5f, 0));
-		}
-		Ins.Batch.Draw(ModAsset.Trail_7_black.Value, bars, PrimitiveType.TriangleStrip);
-	}
-
-	public void DrawBlockBound(int i, int j, Color color, float rotation)
-	{
-		Vector2 pos = new Vector2(i, j) * 16 + new Vector2(8);
-		List<Vertex2D> bars = new List<Vertex2D>()
-		{
-			new Vertex2D(pos + new Vector2(-8, -8).RotatedBy(rotation), color, new Vector3(0, 0, 0)),
-			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
-
-			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
-			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos + new Vector2(8, 8).RotatedBy(rotation), color, new Vector3(1, 1, 0)),
-		};
-
-		Ins.Batch.Draw(ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList);
-	}
-
-	public void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color, float highlight = 0)
-	{
-		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
-		List<Vertex2D> bars = new List<Vertex2D>()
-		{
-			new Vertex2D(pos1 + normal, color, new Vector3(0, 0, 0)),
-			new Vertex2D(pos2 + normal, color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
-
-			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
-			new Vertex2D(pos2 + normal, color, new Vector3(1, 0, 0)),
-			new Vertex2D(pos2 - normal, color, new Vector3(1, 1, 0)),
-		};
-
-		Ins.Batch.Draw(ModAsset.SquarePiece.Value, bars, PrimitiveType.TriangleList);
-
-		if (highlight > 0)
-		{
-			Color bloomColor = color * highlight;
-			bloomColor.A = 0;
-			bars = new List<Vertex2D>()
-			{
-				 new Vertex2D(pos1 + normal, bloomColor, new Vector3(0, 0, 0)),
-				 new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
-				 new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
-
-				 new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
-				 new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
-				 new Vertex2D(pos2 - normal, bloomColor, new Vector3(1, 1, 0)),
-			};
-
-			Ins.Batch.Draw(ModAsset.SquareBloom.Value, bars, PrimitiveType.TriangleList);
-		}
-	}
-
-	public void DrawLine_Black(Vector2 pos1, Vector2 pos2, float width)
-	{
-		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
-		Color bloomColor = Color.White;
-		float tK = 12f;
-		if(TimeToKill > 0)
-		{
-			tK = TimeToKill;
-		}
-		float fade = Math.Min(Timer, tK) / 12f;
-		bloomColor *= fade;
-		List<Vertex2D> bars = new List<Vertex2D>()
-		{
-			new Vertex2D(pos1 + normal, bloomColor, new Vector3(0, 0, 0)),
-			new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
-			new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
-
-			new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
-			new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
-			new Vertex2D(pos2 - normal, bloomColor, new Vector3(1, 1, 0)),
-		};
-		Ins.Batch.Draw(ModAsset.SquareBloom_black.Value, bars, PrimitiveType.TriangleList);
+		CustomPanel -= customDrawing;
 	}
 }

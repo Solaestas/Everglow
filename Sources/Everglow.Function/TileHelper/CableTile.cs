@@ -48,6 +48,11 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 	/// </summary>
 	public float Elasticity = 60;
 
+	/// <summary>
+	/// How far should start drawing the rope in an area out of screen .
+	/// </summary>
+	public float DrawOffScreenRange = 1200f;
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
