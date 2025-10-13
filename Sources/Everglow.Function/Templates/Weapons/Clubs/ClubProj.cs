@@ -299,7 +299,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		{
 			return;
 		}
-		float warpFactor = WarpValue * 0.1f;
+		float warpFactor = WarpValue;
 		var length = trail.Count;
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < length; i++)
