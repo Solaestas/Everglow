@@ -308,6 +308,23 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		DrawBlockBound(FixPoint.X, FixPoint.Y, drawColor, HandleRotation);
 	}
 
+	public void DrawBlockBound(int i, int j, Color color, float rotation)
+	{
+		Vector2 pos = new Vector2(i, j) * 16 + new Vector2(8);
+		List<Vertex2D> bars = new List<Vertex2D>()
+		{
+			new Vertex2D(pos + new Vector2(-8, -8).RotatedBy(rotation), color, new Vector3(0, 0, 0)),
+			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
+
+			new Vertex2D(pos + new Vector2(-8, 8).RotatedBy(rotation), color, new Vector3(0, 1, 0)),
+			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos + new Vector2(8, 8).RotatedBy(rotation), color, new Vector3(1, 1, 0)),
+		};
+
+		Ins.Batch.Draw(ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList);
+	}
+
 	public void RegisterCustomPanelDrawing(CustomDrawPanel customDrawing)
 	{
 		CustomPanel += customDrawing;
