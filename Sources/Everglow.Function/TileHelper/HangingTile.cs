@@ -400,18 +400,19 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <param name="j"></param>
 	public override void MouseOver(int i, int j)
 	{
-		if (LengthAdjustable)
+		Point point = new Point(i, j);
+		if (LengthAdjustable && !RopeGraspingPlayer.ContainsKey(point))
 		{
 			if (!MouseOverWinchPlayers.ContainsKey(Main.LocalPlayer))
 			{
-				MouseOverWinchPlayers.Add(Main.LocalPlayer, new Point(i, j));
+				MouseOverWinchPlayers.Add(Main.LocalPlayer, point);
 				if (Main.LocalPlayer.HeldItem.createTile == Type)
 				{
-					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 0 };
+					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 0 };
 					Ins.VFXManager.Add(vfx);
 				}
 			}
-			else if (MouseOverWinchPlayers[Main.LocalPlayer] != new Point(i, j))
+			else if (MouseOverWinchPlayers[Main.LocalPlayer] != point)
 			{
 				MouseOverWinchPlayers.Remove(Main.LocalPlayer);
 			}
@@ -426,16 +427,17 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <returns></returns>
 	public override bool RightClick(int i, int j)
 	{
-		if (LengthAdjustable)
+		Point point = new Point(i, j);
+		if (LengthAdjustable && !RopeGraspingPlayer.ContainsKey(point))
 		{
 			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !KnobAdjustingPlayers.ContainsKey(new Point(i, j)))
+			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !KnobAdjustingPlayers.ContainsKey(point))
 			{
-				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
+				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
 				vfx.RegisterCustomPanelDrawing(DrawDefaultPanel);
 				Ins.VFXManager.Add(vfx);
 				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				KnobAdjustingPlayers.Add(new Point(i, j), Main.LocalPlayer);
+				KnobAdjustingPlayers.Add(point, Main.LocalPlayer);
 			}
 		}
 		return base.RightClick(i, j);

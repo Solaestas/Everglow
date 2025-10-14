@@ -38,6 +38,10 @@ public class HangingTile_Player : ModPlayer
 		}
 	}
 
+	/// <summary>
+	/// 抓住hanging绳索，当玩家抓时，遍历hanging中所有绳索的点，去抓住那个满足范围内的绳索，
+	/// 前提是它当前不在调整状态
+	/// </summary>
 	public void GraspHangingTile()
 	{
 		if (!Player.mount.Active && Player.controlUp && !HangingTile.RopeGraspingPlayer.ContainsValue(Player))
@@ -46,8 +50,14 @@ public class HangingTile_Player : ModPlayer
 			{
 				if (hangingTile.CanGrasp)
 				{
-					foreach (var rope in hangingTile.RopesOfAllThisTileInTheWorld.Values)
+					foreach (var point in hangingTile.RopesOfAllThisTileInTheWorld.Keys)
 					{
+						// 点在调整不能抓
+						if (hangingTile.KnobAdjustingPlayers.ContainsKey(point))
+						{
+							continue;
+						}
+						var rope = hangingTile.RopesOfAllThisTileInTheWorld[point];
 						Vector2 tipPos = rope.Masses.Last().Position;
 						if (Vector2.Distance(Player.Center, tipPos) <= hangingTile.GraspDetectRange)
 						{
