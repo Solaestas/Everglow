@@ -84,7 +84,7 @@ public class PearShapedNeedle_Needle : ModProjectile
 				Visible = true,
 				Position = EndPosition,
 				MaxTime = Main.rand.NextFloat(25f, 35f),
-				Rotation = 0,
+				Rotation = vel.ToRotation(),
 			};
 			Ins.VFXManager.Add(dust);
 		}

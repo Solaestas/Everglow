@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
@@ -37,6 +38,7 @@ public class IntroductiontoThermalElectricity_Ball : ModProjectile
 
 	public void HitTarget()
 	{
+		SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);
 		TimeToKill = TimeToKillMax;
 		for (int k = 0; k < 40; k++)
 		{

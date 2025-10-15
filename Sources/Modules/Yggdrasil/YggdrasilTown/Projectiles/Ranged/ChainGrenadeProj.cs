@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
@@ -17,6 +18,7 @@ public class ChainGrenadeProj : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.width = 12;
 		Projectile.height = 12;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 		Timer = 0;
 	}
 
@@ -99,6 +101,7 @@ public class ChainGrenadeProj : ModProjectile
 			Projectile proj = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, Main.rand.NextFloat(4, 12)).RotatedByRandom(MathHelper.TwoPi), ModContent.ProjectileType<ChainGrenadeSub_Proj>(), (int)(Projectile.damage * 0.6f), Projectile.knockBack, Projectile.owner);
 			proj.timeLeft = Main.rand.Next(14, 30);
 		}
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact, Projectile.Center);
 		base.OnKill(timeLeft);
 	}
 

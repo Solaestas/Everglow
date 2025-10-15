@@ -27,7 +27,7 @@ public class PearShapedNeedle_HitStar : Visual
 		drawColor.A = 0;
 		float scale = 0.25f;
 		Texture2D tex = Commons.ModAsset.StarSlash.Value;
-		Ins.Batch.Draw(tex, Position, null, drawColor, 0, tex.Size() * 0.5f, new Vector2(timeValue, 1f) * scale, SpriteEffects.None);
-		Ins.Batch.Draw(tex, Position, null, drawColor, MathHelper.PiOver2, tex.Size() * 0.5f, new Vector2(timeValue, 2f) * scale, SpriteEffects.None);
+		Ins.Batch.Draw(tex, Position, null, drawColor, Rotation, tex.Size() * 0.5f, new Vector2(timeValue, 1f) * scale, SpriteEffects.None);
+		Ins.Batch.Draw(tex, Position, null, drawColor, Rotation + MathHelper.PiOver2, tex.Size() * 0.5f, new Vector2(timeValue, 1.5f) * scale, SpriteEffects.None);
 	}
 }

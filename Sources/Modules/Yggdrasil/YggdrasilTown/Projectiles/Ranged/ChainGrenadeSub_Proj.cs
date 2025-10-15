@@ -1,3 +1,4 @@
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
@@ -17,6 +18,7 @@ public class ChainGrenadeSub_Proj : ModProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.width = 12;
 		Projectile.height = 12;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 		Timer = 0;
 	}
 
@@ -93,6 +95,7 @@ public class ChainGrenadeSub_Proj : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
+		SoundEngine.PlaySound(SoundID.DD2_GoblinBomb.WithVolume(0.5f), Projectile.Center);
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<ChainGrenadeSub_ProjExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 		base.OnKill(timeLeft);
 	}

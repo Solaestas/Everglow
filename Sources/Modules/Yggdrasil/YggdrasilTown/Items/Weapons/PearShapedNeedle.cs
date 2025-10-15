@@ -22,7 +22,6 @@ public class PearShapedNeedle : ModItem
 		Item.knockBack = 2.5f;
 
 		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.UseSound = SoundID.Item20;
 		Item.useTime = Item.useAnimation = 12;
 		Item.noUseGraphic = true;
 		Item.noMelee = true;

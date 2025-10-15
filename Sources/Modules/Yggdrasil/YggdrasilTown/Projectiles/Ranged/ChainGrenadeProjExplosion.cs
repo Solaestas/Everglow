@@ -14,7 +14,7 @@ public class ChainGrenadeProjExplosion : ModProjectile, IWarpProjectile
 		Projectile.width = 160;
 		Projectile.height = 160;
 		Projectile.friendly = true;
-		Projectile.hostile = false;
+		Projectile.hostile = true;
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = -1;
 		Projectile.timeLeft = 200;
@@ -23,7 +23,7 @@ public class ChainGrenadeProjExplosion : ModProjectile, IWarpProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 20;
 		Projectile.DamageType = DamageClass.Ranged;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 		Timer = 0;
 	}
 

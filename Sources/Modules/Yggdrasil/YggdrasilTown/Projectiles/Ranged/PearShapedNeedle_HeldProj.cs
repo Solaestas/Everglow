@@ -1,10 +1,15 @@
 using Everglow.Commons.Templates.Weapons;
+using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 public class PearShapedNeedle_HeldProj : HandholdProjectile
 {
 	public float Timer = 0;
+
+	public float MinChargeTime = 60;
+
+	public float PrepareChargeAnimationPerNeedle = 3;
 
 	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.RangedProjectiles;
 
@@ -17,6 +22,11 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 	public override void AI()
 	{
 		Timer++;
+		float preparedTime = 13 * PrepareChargeAnimationPerNeedle;
+		if(Timer % 3 == 0 && Timer >= 3 && Timer <= preparedTime)
+		{
+			SoundEngine.PlaySound(22, Projectile.Center);
+		}
 		base.AI();
 	}
 
@@ -77,16 +87,20 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 	public float GetDistance(int k)
 	{
 		k = Math.Abs(k);
-		float needlePhase = Timer - k * 12;
+		float needlePhase = Timer - k * PrepareChargeAnimationPerNeedle;
 		if (needlePhase < 0)
 		{
 			return -1;
 		}
-		float distance = needlePhase * 6;
+		float distance = needlePhase * 18;
 		float maxDis = 30 + 5 * MathF.Sin(Timer * 0.1f + (k % 2) * 0.1f + k);
 		if (k % 2 == 0)
 		{
 			maxDis += 10;
+		}
+		if (!NeedleReady(k))
+		{
+			maxDis *= 0.5f;
 		}
 		if (distance > maxDis)
 		{
@@ -99,9 +113,10 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 	{
 		k = Math.Abs(k);
 		float shineValue = 0;
-		if (Timer > 156)
+		float preparedTime = 13 * PrepareChargeAnimationPerNeedle;
+		if (Timer > preparedTime)
 		{
-			shineValue = (Timer - 156) / 24f * 13f;
+			shineValue = (Timer - preparedTime) / (MinChargeTime - preparedTime) * 13f;
 			shineValue = 3 - (k - shineValue);
 			shineValue = Math.Max(shineValue, 0) / 3f;
 		}
@@ -117,11 +132,14 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 	{
 		Texture2D needle = ModAsset.PearShapedNeedle_Needle.Value;
 		Texture2D needle_bloom = ModAsset.PearShapedNeedle_shine.Value;
+		Texture2D needleReflect = ModAsset.PearShapedNeedle_Needle_reflection.Value;
+		Texture2D needleReflectStar = ModAsset.PearShapedNeedle_shine_star.Value;
 		float kAngle = 0.14f;
 		Vector2 drawPos = GetNeedleWorldPos(k);
 		Color lightColor = Lighting.GetColor(drawPos.ToTileCoordinates());
 		drawPos -= Main.screenPosition;
-		Main.EntitySpriteDraw(needle, drawPos, null, lightColor, Projectile.rotation + k * kAngle, needle.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		float rotation = Projectile.rotation + k * kAngle;
+		Main.EntitySpriteDraw(needle, drawPos, null, lightColor, rotation, needle.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 
 		float shineValue = GetShineValue(k);
 		if (shineValue > 0)
@@ -129,8 +147,25 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 			Color shineColor = lightColor;
 			shineColor.A = 0;
 			shineColor *= shineValue;
-			Main.EntitySpriteDraw(needle_bloom, drawPos, null, shineColor, Projectile.rotation + k * kAngle, needle_bloom.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(needle_bloom, drawPos, null, shineColor, rotation, needle_bloom.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		}
+
+		float reflect = GetReflectValue(rotation);
+		Color reflectColor = lightColor * reflect;
+		reflectColor.A = 0;
+		Main.EntitySpriteDraw(needleReflect, drawPos, null, reflectColor, rotation, needleReflect.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		if(reflect > 0.5f)
+		{
+			Vector2 addPos = new Vector2(7, -7).RotatedBy(rotation);
+			Main.EntitySpriteDraw(needleReflectStar, drawPos + addPos, null, reflectColor * 2, 0, needleReflectStar.Size() * 0.5f, (reflect - 0.5f) * 3f, SpriteEffects.None, 0);
+		}
+	}
+
+	public float GetReflectValue(float rotation)
+	{
+		float reflect = (MathF.Sin(rotation * 2 + MathHelper.PiOver4) + 1) * 0.5f;
+		reflect = MathF.Pow(reflect, 2);
+		return reflect;
 	}
 
 	public override void OnKill(int timeLeft)
@@ -141,10 +176,12 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 
 	public bool NeedleReady(int k)
 	{
+		k = Math.Abs(k);
 		float shineValue = 0;
-		if (Timer > 156)
+		float preparedTime = 13 * PrepareChargeAnimationPerNeedle;
+		if (Timer > preparedTime)
 		{
-			shineValue = (Timer - 156) / 24f * 13f;
+			shineValue = (Timer - preparedTime) / (MinChargeTime - preparedTime) * 13f;
 			shineValue = 3 - (k - shineValue);
 			shineValue = Math.Max(shineValue, 0) / 3f;
 		}
@@ -168,16 +205,22 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 
 	public void ReleaseNeedles()
 	{
+		bool succeed = false;
 		for (int k = 0; k < 13; k++)
 		{
 			if (NeedleReady(k))
 			{
+				succeed = true;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GetNeedleWorldPos(k), GetReleaseVel(k).NormalizeSafe(), ModContent.ProjectileType<PearShapedNeedle_Needle>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 				if (k > 0)
 				{
 					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GetNeedleWorldPos(-k), GetReleaseVel(-k).NormalizeSafe(), ModContent.ProjectileType<PearShapedNeedle_Needle>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 				}
 			}
+		}
+		if(succeed)
+		{
+			SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryShot, Projectile.Center);
 		}
 	}
 }
