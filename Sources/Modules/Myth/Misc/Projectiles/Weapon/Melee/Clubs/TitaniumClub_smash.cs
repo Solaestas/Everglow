@@ -9,7 +9,6 @@ public class TitaniumClub_smash : ClubProjSmash_Reflective
 	public override void SetDef()
 	{
 		ReflectionStrength = 5f;
-		base.SetDef();
 	}
 
 	public override void Smash(int level)

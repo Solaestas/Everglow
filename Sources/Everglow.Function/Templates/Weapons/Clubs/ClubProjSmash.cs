@@ -25,30 +25,35 @@ public abstract class ClubProjSmash : MeleeProj
 
 	protected Queue<Vector2> SmashTrailVecs { get; private set; } = new Queue<Vector2>();
 
-	public override void SetDef()
+	public override void SetDefaults()
 	{
+		Projectile.width = 80;
+		Projectile.height = 80;
+		Projectile.scale = 1f;
+
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 300;
 		Projectile.extraUpdates = 1;
-		Projectile.scale = 1f;
+
 		Projectile.hostile = false;
 		Projectile.friendly = true;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
+
 		Projectile.penetrate = -1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 15;
 		Projectile.DamageType = DamageClass.Melee;
 
-		Projectile.width = 80;
-		Projectile.height = 80;
-		Projectile.tileCollide = false;
-		Projectile.friendly = true;
 		longHandle = false;
 		maxAttackType = 2;
 		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		shaderType = MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		autoEnd = false;
+
+		SetDef();
+
+		slashTrail = new Queue<Vector2>(maxSlashTrailLength + 1);
 	}
 
 	public override string TrailShapeTex() => ModAsset.Melee_Mod;

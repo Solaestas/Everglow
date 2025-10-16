@@ -8,7 +8,6 @@ public class CrystalClub_smash : ClubProjSmash_Reflective
 	public override void SetDef()
 	{
 		ReflectionStrength = 8f;
-		base.SetDef();
 	}
 
 	public override string Texture => ModAsset.CrystalClub_Mod;
