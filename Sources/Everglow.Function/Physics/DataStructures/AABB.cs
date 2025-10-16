@@ -1,7 +1,8 @@
-using Everglow.Commons.Physics.Abstracts;
-
 namespace Everglow.Commons.Physics.DataStructures;
 
+/// <summary>
+/// Axis-Aligned Bounding Box
+/// </summary>
 [DebuggerDisplay("Position = ({Position.X}, {Position.Y}) Size = ({Size.X}, {Size.Y})")]
 public struct AABB
 {
@@ -204,5 +205,14 @@ public struct AABB
 	public override string ToString()
 	{
 		return $"({position.X}, {position.Y}, {size.X}, {size.Y})";
+	}
+
+	public static implicit operator Rectangle(AABB aabb)
+	{
+		return new(
+		(int)aabb.position.X,
+		(int)aabb.position.Y,
+		(int)aabb.size.X,
+		(int)aabb.size.Y);
 	}
 }
