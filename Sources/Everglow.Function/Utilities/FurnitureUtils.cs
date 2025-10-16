@@ -47,8 +47,7 @@ public static class FurnitureUtils
 		var tile = Main.tile[pos];
 		var tileData = TileObjectData.GetTileData(tile.type, 0);
 
-		if (!TileDrawing.IsVisible(tile) || tileData is null)
-			return;
+		if (!TileDrawing.IsVisible(tile) || tileData is null) return;
 
 		// 油漆
 		Texture2D tex = tileDrawing.GetTileDrawTexture(tile, pos.X, pos.Y);
