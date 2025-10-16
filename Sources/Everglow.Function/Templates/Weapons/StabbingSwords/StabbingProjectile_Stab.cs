@@ -1,3 +1,4 @@
+using Everglow.Commons.Collider;
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;

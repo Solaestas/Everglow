@@ -1,3 +1,4 @@
+using Everglow.Commons.Collider;
 using Everglow.Commons.Physics.Abstracts;
 using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
@@ -19,7 +20,7 @@ public class EdgeCollider2D : ICollider2D
 
 	public Vector2 Position { get => edge.begin; set => edge.begin = value; }
 
-	public AABB AABB => edge.ToAABB();
+	public Physics.DataStructures.AABB AABB => edge.ToAABB();
 
 	public Vector2 Begin { get => edge.begin; set => edge.begin = value; }
 
