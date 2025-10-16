@@ -1,3 +1,4 @@
+using Everglow.Commons.MEAC.Enums;
 using Everglow.Myth.Acytaea.Buffs;
 using Everglow.Myth.Acytaea.NPCs;
 using Everglow.Myth.Acytaea.VFXs;
@@ -28,7 +29,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 		longHandle = false;
 		maxAttackType = 1;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		trailVecs = new Queue<Vector2>(trailLength + 1);
 	}
 	public int attackType = 0;
@@ -40,7 +41,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 	public int OwnerNPC = -1;
 	public bool useTrail = true;
 	public bool longHandle = false;
-	public string shadertype = "Trail0";
+	public MeleeTrailShaderType shaderType = MeleeTrailShaderType.ArcBladeAutoTransparent;
 	public override void OnSpawn(IEntitySource source)
 	{
 		int index = (int)Projectile.ai[0];
@@ -215,7 +216,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 	}
 	public string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public string TrailColorTex()
 	{
@@ -303,7 +304,7 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 	public void End()
 	{
@@ -410,13 +411,13 @@ public class AcytaeaSword_projectile_Boss : ModProjectile, IWarpProjectile, IBlo
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes[shaderType.ToString()].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();

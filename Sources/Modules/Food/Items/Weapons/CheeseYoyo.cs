@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Yoyos;
+using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Food.Projectiles;
 
 namespace Everglow.Food.Items.Weapons;

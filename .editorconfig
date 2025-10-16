@@ -21,6 +21,11 @@ dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent
 dotnet_style_qualification_for_method = false:silent
 dotnet_style_qualification_for_event = false:silent
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+dotnet_style_prefer_auto_properties = true:silent
 
 # c# 文件
 [*.cs]
@@ -369,3 +374,6 @@ dotnet_diagnostic.SA1117.severity = none
 
 # SA1407: Arithmetic expressions should declare precedence
 dotnet_diagnostic.SA1407.severity = none
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_prefer_system_threading_lock = true:suggestion
+dotnet_diagnostic.SA1124.severity = none

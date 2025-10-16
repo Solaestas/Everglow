@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 
 float4x4 uTransform;
 float uTime;
@@ -30,7 +30,8 @@ PSInput VertexShaderFunction(VSInput input)
 
 float4 PixelShaderFunction(float3 coords : TEXCOORD0, PSInput input) : COLOR0
 {
-	float4 BackG = tex2D(uImage0, float2(coords.x - floor(coords.x), saturate(coords.y)));
+	float cy = clamp(coords.y, 0.01, 0.99);
+	float4 BackG = tex2D(uImage0, float2(coords.x - floor(coords.x), cy /*saturate(coords.y)*/));
 	BackG.rgba *= input.Color.rgba;
 	return BackG;
 }

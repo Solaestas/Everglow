@@ -1,0 +1,67 @@
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+
+public class AgedGreenCourtBrick : ModTile
+{
+	public override void SetStaticDefaults()
+	{
+		Main.tileSolid[Type] = true;
+		Main.tileMergeDirt[Type] = true;
+		Main.tileBlockLight[Type] = true;
+		DustType = ModContent.DustType<GreenCourtBrickDust>();
+		AddMapEntry(new Color(73, 82, 76));
+	}
+
+	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		Tile tile = Main.tile[i, j];
+		if (tile.Slope != SlopeType.Solid || tile.halfBrick())
+		{
+			return true;
+		}
+		var texture = ModContent.Request<Texture2D>(Texture).Value;
+		var offsetScreen = new Vector2(Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			offsetScreen = Vector2.Zero;
+		}
+		if (!Ins.VisualQuality.High)
+		{
+			Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
+			Rectangle frame = new Rectangle((i % 12) * 16, 180 + (j % 12) * 16, 16, 16);
+			spriteBatch.Draw(texture, drawPos, frame, Lighting.GetColor(i, j), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			Rectangle frameSide = new Rectangle(tile.TileFrameX, tile.TileFrameY + 90, 16, 16);
+			spriteBatch.Draw(texture, drawPos, frameSide, Lighting.GetColor(i, j), 0, frameSide.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		}
+		else
+		{
+			Vector2 drawPos = new Point(i, j).ToWorldCoordinates() - Main.screenPosition + offsetScreen;
+			Color lightColor = Lighting.GetColor(i, j);
+			for (int x = 0; x < 3; x++)
+			{
+				for (int y = 0; y < 3; y++)
+				{
+					Rectangle frame = new Rectangle((i % 12) * 16 + x * 6, 180 + (j % 12) * 16 + y * 6, 6, 6);
+					Vector2 offset = new Vector2(x, y) * 6;
+					if (x == 2)
+					{
+						frame.Width = 4;
+					}
+					if (y == 2)
+					{
+						frame.Height = 4;
+					}
+
+					Color offsetColor = Lighting.GetColor(i + x - 1, j + y - 1);
+					Color drawColor = Color.Lerp(offsetColor, lightColor, 0.5f);
+					spriteBatch.Draw(texture, drawPos + offset - new Vector2(8), frame, drawColor, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+				}
+			}
+			Rectangle frameSide = new Rectangle(tile.TileFrameX, tile.TileFrameY + 90, 16, 16);
+			spriteBatch.Draw(texture, drawPos, frameSide, Lighting.GetColor(i, j), 0, frameSide.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		}
+
+		return false;
+	}
+}

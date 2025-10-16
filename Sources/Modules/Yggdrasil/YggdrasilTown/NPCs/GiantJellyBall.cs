@@ -1,6 +1,10 @@
+using Everglow.Commons.CustomTiles;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 
@@ -126,6 +130,22 @@ public class GiantJellyBall : ModNPC
 								if (v0.Length() < 120)
 								{
 									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+							if (npc.type == ModContent.NPCType<JellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 60)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.25f;
+								}
+							}
+							if (npc.type == ModContent.NPCType<KingJellyBall.KingJellyBall>())
+							{
+								Vector2 v0 = NPC.Center - npc.Center;
+								if (v0.Length() < 360)
+								{
+									NPC.velocity += Vector2.Normalize(v0) * 0.35f;
 								}
 							}
 						}
@@ -303,6 +323,6 @@ public class GiantJellyBall : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		// TODO 掉落物
+		npcLoot.Add(ItemDropRule.ByCondition(new JellyBallNoneDerivativeCondition(), ModContent.ItemType<JellyBallCube>(), 1, 3, 5));
 	}
 }

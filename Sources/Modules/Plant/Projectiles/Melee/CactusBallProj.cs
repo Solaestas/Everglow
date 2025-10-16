@@ -285,12 +285,12 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 
 	public virtual string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 
 	public virtual string TrailColorTex()
 	{
-		return "Everglow/MEAC/Images/TestColor";
+		return Commons.ModAsset.MEAC_Color1_Mod;
 	}
 
 	public virtual float TrailAlpha(float factor)

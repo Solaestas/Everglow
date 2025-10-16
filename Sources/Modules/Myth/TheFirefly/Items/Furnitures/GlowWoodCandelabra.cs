@@ -5,24 +5,26 @@ namespace Everglow.Myth.TheFirefly.Items.Furnitures;
 
 public class GlowWoodCandelabra : ModItem
 {
-	public override void SetStaticDefaults()
-	{
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-	}
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-	public override void SetDefaults()
-	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodCandelabra>());
-		Item.width = 30;
-		Item.height = 30;
-	}
+    public override void SetStaticDefaults()
+    {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
-	public override void AddRecipes()
-	{
-		Recipe recipe = CreateRecipe();
-		recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 5);
-		recipe.AddIngredient(ModContent.ItemType<GlowWoodTorch>(), 3);
-		recipe.AddTile(TileID.WorkBenches);
-		recipe.Register();
-	}
+    public override void SetDefaults()
+    {
+        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Furnitures.GlowWoodCandelabra>());
+        Item.width = 30;
+        Item.height = 30;
+    }
+
+    public override void AddRecipes()
+    {
+        Recipe recipe = CreateRecipe();
+        recipe.AddIngredient(ModContent.ItemType<GlowWood>(), 5);
+        recipe.AddIngredient(ModContent.ItemType<GlowWoodTorch>(), 3);
+        recipe.AddTile(TileID.WorkBenches);
+        recipe.Register();
+    }
 }

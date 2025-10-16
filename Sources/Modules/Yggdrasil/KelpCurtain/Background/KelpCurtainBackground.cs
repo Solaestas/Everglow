@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.Common.BackgroundManager;
+using Everglow.Yggdrasil.KelpCurtain.Biomes;
 using SubworldLibrary;
-using Terraria.Graphics.Light;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Background;
 
@@ -8,6 +8,7 @@ public class KelpCurtainBackground : ModSystem
 {
 	public Vector2 BiomeCenter = new Vector2(9000, 157000);
 	public bool ZoneKelp = false;
+
 	/// <summary>
 	/// 初始化
 	/// </summary>
@@ -21,14 +22,15 @@ public class KelpCurtainBackground : ModSystem
 
 	public override void PostUpdatePlayers()
 	{
-		var KelpCurtainBiome = new KelpCurtainBiome();
-		ZoneKelp = KelpCurtainBiome.IsBiomeActive(Main.LocalPlayer);
+		ZoneKelp = Main.LocalPlayer.InModBiome<KelpCurtainBiome>();
 	}
+
 	public float alpha = 0f;
-	public override void PostUpdateEverything()//开启地下背景
+
+	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
-		if (BiomeActive() && Main.BackgroundEnabled)
+		if (Main.LocalPlayer.InModBiome<KelpCurtainBiome>() && Main.BackgroundEnabled)
 		{
 			if (alpha < 1)
 			{
@@ -39,7 +41,6 @@ public class KelpCurtainBackground : ModSystem
 				alpha = 1;
 				Ins.HookManager.Disable(TerrariaFunction.DrawBackground);
 			}
-
 		}
 		else
 		{
@@ -54,20 +55,6 @@ public class KelpCurtainBackground : ModSystem
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
 	}
-	/// <summary>
-	/// 判定是否开启地形
-	/// </summary>
-	/// <returns></returns>
-	public static bool BiomeActive()
-	{
-
-		if (Main.screenPosition.Y > 148000 && Main.screenPosition.Y < 170700)
-		{
-			if (SubworldSystem.IsActive<YggdrasilWorld>())
-				return true;
-		}
-		return false;
-	}
 
 	private void DrawFarBG(Color baseColor)
 	{
@@ -76,13 +63,24 @@ public class KelpCurtainBackground : ModSystem
 		var texC0 = ModAsset.KelpCurtainMiddleClose.Value;
 		var texC1 = ModAsset.KelpCurtainMiddle.Value;
 		var texC2 = ModAsset.KelpCurtainFar.Value;
-
-		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, 148000, 173375, true, true);
-		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, 148000, 173375, false, false);
-		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, 148000, 173375, false, false);
+		int minY = (int)(Main.maxTilesY * 0.72f * 16);
+		int maxY = (int)(Main.maxTilesY * 0.9f * 16);
+		BackgroundManager.QuickDrawBG(texSky, GetDrawRect(texSky.Size(), 0f), baseColor, minY, maxY, true, true);
+		BackgroundManager.QuickDrawBG(texC2, GetDrawRect(texC2.Size(), 0.10f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texC1, GetDrawRect(texC1.Size(), 0.15f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texC0, GetDrawRect(texC1.Size(), 0.25f), baseColor, minY, maxY, false, false);
+		BackgroundManager.QuickDrawBG(texClose, GetDrawRect(texClose.Size(), 0.35f), baseColor, minY, maxY, false, false);
+		DrawSubBiomeBackground();
 	}
+
+	public void DrawSubBiomeBackground()
+	{
+		if (Main.LocalPlayer.InModBiome<DeathJadeLakeBiome>())
+		{
+			DeathJadeLakeBackground.DrawBackground();
+		}
+	}
+
 	/// <summary>
 	/// 获取绘制矩形
 	/// </summary>
@@ -109,7 +107,10 @@ public class KelpCurtainBackground : ModSystem
 	private void DrawBackground()
 	{
 		if (alpha <= 0)
+		{
 			return;
+		}
+
 		Color baseColor = Color.White * alpha;
 		DrawFarBG(baseColor);
 	}

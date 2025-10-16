@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.TheFirefly.Dusts;
 using Terraria.Audio;
 using Terraria.DataStructures;

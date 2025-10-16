@@ -2,7 +2,7 @@ using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts.Slingshots;
 using Newtonsoft.Json.Linq;
 using Terraria.Audio;
-using Everglow.Commons.Weapons.Slingshots;
+using Everglow.Commons.Templates.Weapons.Slingshots;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
@@ -104,7 +104,7 @@ public abstract class GemAmmo : SlingshotAmmo
 
 		if (bars.Count > 2)
 		{
-			Texture2D t = ModAsset.EShoot.Value;
+			Texture2D t = Commons.ModAsset.Trail_1.Value;
 			Main.graphics.GraphicsDevice.Textures[0] = t;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}

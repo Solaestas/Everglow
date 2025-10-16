@@ -1,0 +1,20 @@
+
+skeleton.png
+size: 177,150
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+images/FaelanternProj0
+  rotate: true
+  xy: 2, 2
+  size: 146, 147
+  orig: 148, 148
+  offset: 1, 0
+  index: -1
+images/Faelanternpit
+  rotate: true
+  xy: 151, 22
+  size: 126, 24
+  orig: 148, 148
+  offset: 14, 2
+  index: -1

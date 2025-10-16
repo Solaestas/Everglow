@@ -7,11 +7,12 @@ public class LichenSlimeSplashPipeline : Pipeline
 		effect = ModAsset.LichenSlimeSplash;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uIlluminationThreshold"].SetValue(0.99f);
 		effect.Parameters["uIlluminationThresholdII"].SetValue(0.05f);
@@ -27,10 +28,12 @@ public class LichenSlimeSplashPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(LichenSlimeSplashPipeline))]
 public class LichenSlimeSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -39,19 +42,28 @@ public class LichenSlimeSplash : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public LichenSlimeSplash() { }
+
+	public LichenSlimeSplash()
+	{
+	}
 
 	public override void Update()
 	{
 		position += velocity * 0.001f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.04f * scale * 0.1f);
 		velocity = velocity.RotatedBy(ai[1]);
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		scale += 0.4f;
 		if (Collision.SolidCollision(position, 0, 0))
 		{
@@ -86,7 +98,10 @@ public class LichenSlimeSplash : Visual
 		float fx = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
+		{
 			return;
+		}
+
 		var bars = new Vertex2D[len * 2 - 1];
 		for (int i = 1; i < len; i++)
 		{

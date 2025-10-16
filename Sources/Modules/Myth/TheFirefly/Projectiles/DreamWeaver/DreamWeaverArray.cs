@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 
 namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 

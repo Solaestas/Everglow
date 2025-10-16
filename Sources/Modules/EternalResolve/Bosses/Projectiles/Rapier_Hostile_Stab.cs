@@ -1,8 +1,8 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -48,7 +48,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
 		public float MaxLength = 1f;
-		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 		public override void SetDefaults()
 		{
 			Projectile.width = 10;
@@ -67,7 +67,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public int ToKill = 120;
 		public override void OnSpawn(IEntitySource source)
 		{
-			SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/swordswing");
+			SoundStyle ss = new SoundStyle(Commons.ModAsset.SwordSwing_Mod);
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 

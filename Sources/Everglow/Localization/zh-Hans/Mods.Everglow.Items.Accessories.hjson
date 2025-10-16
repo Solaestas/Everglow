@@ -1,0 +1,404 @@
+StaminaItem: {
+	DisplayName: Stamina Item
+	Tooltip: ""
+}
+
+EnergyBand: {
+	DisplayName: Energy Band
+	Tooltip: ""
+}
+
+BloodGlucoseMonitor: {
+	DisplayName: Blood Glucose Monitor
+	Tooltip: ""
+}
+
+OsmoticPressureMonitor: {
+	DisplayName: Osmotic Pressure Monitor
+	Tooltip: ""
+}
+
+PlayerPenetrationTest: {
+	DisplayName: Player Penetration Test
+	Tooltip: ""
+}
+
+BurningFrozenHeart: {
+	DisplayName: Burning Frozen Heart
+	Tooltip: ""
+}
+
+PearlOfCyan: {
+	DisplayName: Pearl Of Cyan
+	Tooltip: ""
+}
+
+SnowPineLockBox: {
+	DisplayName: Snow Pine Lock Box
+	Tooltip: ""
+}
+
+TuskLace: {
+	DisplayName: Tusk Lace
+	Tooltip: ""
+}
+
+FireflyBorageBadge: {
+	DisplayName: Firefly Borage Badge
+	Tooltip: ""
+}
+
+MothEye: {
+	DisplayName: Moth Eye
+	Tooltip: ""
+}
+
+BlueflowerBra: {
+	DisplayName: Blueflower Bra
+	Tooltip: ""
+}
+
+BlueflowerCap: {
+	DisplayName: Blueflower Cap
+	Tooltip: ""
+}
+
+BlueGel: {
+	DisplayName: Blue Gel
+	Tooltip: ""
+}
+
+CorruptEye: {
+	DisplayName: Corrupt Eye
+	Tooltip: ""
+}
+
+DukeTooth: {
+	DisplayName: Duke Tooth
+	Tooltip: ""
+}
+
+GoldLiquidPupil: {
+	DisplayName: Gold Liquid Pupil
+	Tooltip: ""
+}
+
+GreenGel: {
+	DisplayName: Green Gel
+	Tooltip: ""
+}
+
+JungleVitamin: {
+	DisplayName: Jungle Vitamin
+	Tooltip: ""
+}
+
+Odd8Ring: {
+	DisplayName: Odd8 Ring
+	Tooltip: ""
+}
+
+RedGel: {
+	DisplayName: Red Gel
+	Tooltip: ""
+}
+
+SilverWing: {
+	DisplayName: Silver Wing
+	Tooltip: ""
+}
+
+WalnutClip: {
+	DisplayName: Walnut Clip
+	Tooltip: ""
+}
+
+BlueTorchFlower: {
+	DisplayName: Blue Torch Flower
+	Tooltip: ""
+}
+
+CyanBranch: {
+	DisplayName: Cyan Branch
+	Tooltip: ""
+}
+
+CyanPedal: {
+	DisplayName: Cyan Pedal
+	Tooltip: ""
+}
+
+DarkHat: {
+	DisplayName: Dark Hat
+	Tooltip: ""
+}
+
+GoldRound: {
+	DisplayName: Gold Round
+	Tooltip: ""
+}
+
+HotPinkCrown: {
+	DisplayName: Hot Pink Crown
+	Tooltip: ""
+}
+
+LightPurplePen: {
+	DisplayName: Light Purple Pen
+	Tooltip: ""
+}
+
+ManyWhiteFlower: {
+	DisplayName: Many White Flower
+	Tooltip: ""
+}
+
+OrangeCrown: {
+	DisplayName: Orange Crown
+	Tooltip: ""
+}
+
+OrangeStick: {
+	DisplayName: Orange Stick
+	Tooltip: ""
+}
+
+PinkFourPedal: {
+	DisplayName: Pink Four Pedal
+	Tooltip: ""
+}
+
+PurpleBall: {
+	DisplayName: Purple Ball
+	Tooltip: ""
+}
+
+PurpleReedHalo: {
+	DisplayName: Purple Reed Halo
+	Tooltip: ""
+}
+
+RedTriangle: {
+	DisplayName: Red Triangle
+	Tooltip: ""
+}
+
+SilverCupFlower: {
+	DisplayName: Silver Cup Flower
+	Tooltip: ""
+}
+
+ThreeColorCrown: {
+	DisplayName: Three Color Crown
+	Tooltip: ""
+}
+
+WhiteCrown: {
+	DisplayName: White Crown
+	Tooltip: ""
+}
+
+WhitePedal: {
+	DisplayName: White Pedal
+	Tooltip: ""
+}
+
+WhiteWoodFlower: {
+	DisplayName: White Wood Flower
+	Tooltip: ""
+}
+
+YellowBellFlower: {
+	DisplayName: Yellow Bell Flower
+	Tooltip: ""
+}
+
+CrystalSkull: {
+	DisplayName: Crystal Skull
+	Tooltip: ""
+}
+
+AnemoShell: {
+	DisplayName: Anemo Shell
+	Tooltip: ""
+}
+
+BloodTearCrystalCrown: {
+	DisplayName: Blood Tear Crystal Crown
+	Tooltip: ""
+}
+
+CelesteStoneWaistPendant: {
+	DisplayName: Celeste Stone Waist Pendant
+	Tooltip: ""
+}
+
+CelticSeal: {
+	DisplayName: Celtic Seal
+	Tooltip: ""
+}
+
+ConcealSpell: {
+	DisplayName: Conceal Spell
+	Tooltip: ""
+}
+
+CyanVineRing: {
+	DisplayName: Cyan Vine Ring
+	Tooltip: ""
+}
+
+ForsakenBoots: {
+	DisplayName: Forsaken Boots
+	Tooltip: ""
+}
+
+FragmentsOfWreckage: {
+	DisplayName: Fragments Of Wreckage
+	Tooltip: ""
+}
+
+FuneraryGoods: {
+	DisplayName: Funerary Goods
+	Tooltip: ""
+}
+
+FurnaceIronGloves: {
+	DisplayName: Furnace Iron Gloves
+	Tooltip: ""
+}
+
+IstafelsSunfireGrasp: {
+	DisplayName: Istafels Sunfire Grasp
+	Tooltip: ""
+}
+
+JellyBallInhibitor: {
+	DisplayName: Jelly Ball Inhibitor
+	Tooltip: ""
+}
+
+LampWoodPollenBottle: {
+	DisplayName: Lamp Wood Pollen Bottle
+	Tooltip: ""
+}
+
+ManaThermalPipeline: {
+	DisplayName: Mana Thermal Pipeline
+	Tooltip: ""
+}
+
+RecoveryBand: {
+	DisplayName: Recovery Band
+	Tooltip: ""
+}
+
+RingOfMatter: {
+	DisplayName: Ring Of Matter
+	Tooltip: ""
+}
+
+ShacklesBall: {
+	DisplayName: Shackles Ball
+	Tooltip: ""
+}
+
+SkullCollection: {
+	DisplayName: Skull Collection
+	Tooltip: ""
+}
+
+SpicyShield: {
+	DisplayName: Spicy Shield
+	Tooltip: ""
+}
+
+TelescopicPlatformAlpha: {
+	DisplayName: Telescopic Platform Alpha
+	Tooltip: ""
+}
+
+TelescopicPlatformBeta: {
+	DisplayName: Telescopic Platform Beta
+	Tooltip: ""
+}
+
+HeatEmblem: {
+	DisplayName: Heat Emblem
+	Tooltip: ""
+}
+
+HotAirBalloon: {
+	DisplayName: Hot Air Balloon
+	Tooltip: ""
+}
+
+MelterGear: {
+	DisplayName: Melter Gear
+	Tooltip: ""
+}
+
+MoltenCore: {
+	DisplayName: Molten Core
+	Tooltip: ""
+}
+
+ThermalConductor: {
+	DisplayName: Thermal Conductor
+	Tooltip: ""
+}
+
+AntiCorrosiveSole: {
+	DisplayName: Anti Corrosive Sole
+	Tooltip: ""
+}
+
+CorrodedPearl: {
+	DisplayName: Corroded Pearl
+	Tooltip: ""
+}
+
+EmptyFowlbeast: {
+	DisplayName: Empty Fowlbeast
+	Tooltip: ""
+}
+
+ForestMino: {
+	DisplayName: Forest Mino
+	Tooltip: ""
+}
+
+GuppyShell: {
+	DisplayName: Guppy Shell
+	Tooltip: ""
+}
+
+HardenedWitherbarkHeart: {
+	DisplayName: Hardened Witherbark Heart
+	Tooltip: ""
+}
+
+LivingWoodplate: {
+	DisplayName: Living Woodplate
+	Tooltip: ""
+}
+
+OrfeoBoots: {
+	DisplayName: Orfeo Boots
+	Tooltip: ""
+}
+
+RadialCarapace: {
+	DisplayName: Radial Carapace
+	Tooltip: ""
+}
+
+TheGreenSolar: {
+	DisplayName: The Green Solar
+	Tooltip: ""
+}
+
+ThornTurtleShell: {
+	DisplayName: Thorn Turtle Shell
+	Tooltip: ""
+}

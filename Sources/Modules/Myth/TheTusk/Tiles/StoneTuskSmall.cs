@@ -1,4 +1,3 @@
-using Everglow.Myth.TheTusk.Items;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -34,7 +33,7 @@ public class StoneTuskSmall : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.StoneTusk>(), 2);
+		yield return new Item(ModContent.ItemType<Items.Materials.StoneTusk>(), 2);
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{

@@ -7,7 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class AdamantiteClub_round_slash : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	private Vector2 StartCenter;
 	private Vector2 StartStickCenter;
 	public Projectile StickProjectile;
@@ -93,7 +93,7 @@ public class AdamantiteClub_round_slash : ModProjectile, IWarpProjectile
 				new Vertex2D(Projectile.Center + normalize - Main.screenPosition + deltaPos, shadow, new Vector3(1,0,0)),
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition + deltaPos,shadow, new Vector3(1,1,0))
 			};
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		float mulColor = width / 10f;

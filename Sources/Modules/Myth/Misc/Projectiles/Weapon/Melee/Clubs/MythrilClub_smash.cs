@@ -1,3 +1,4 @@
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;

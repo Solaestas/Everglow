@@ -1,4 +1,3 @@
-using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords;
 
 namespace Everglow.EternalResolve.Bosses.Projectiles

@@ -1,25 +1,28 @@
-using Everglow.Commons.DataStructures;
-using Everglow.Commons.Vertex;
-using Terraria.GameContent;
+using Everglow.Commons.DeveloperContent.Items;
 using Spine;
 
 namespace Everglow.Commons.Skeleton2D;
 
 public class Skeleton2D
 {
+	public static bool ShowSkeleton => Main.LocalPlayer.HeldItem.type == ModContent.ItemType<SkeletonSight>();
+
 	private Atlas atlas;
 	private Skeleton skeleton;
-	private AnimationState animation_state;
+	private AnimationState animationState;
 
-	public Skeleton Skeleton { get { return skeleton; } }
+	// Mark this to public if it's necessary to access the atlas directly
+	private Atlas Atlas => atlas;
 
-	public AnimationState AnimationState { get { return animation_state; } }
+	public Skeleton Skeleton => skeleton;
+
+	public AnimationState AnimationState => animationState;
 
 	public Skeleton2D(Skeleton skeleton, Atlas atlas, AnimationState state)
 	{
 		this.skeleton = skeleton;
 		this.atlas = atlas;
-		this.animation_state = state;
+		this.animationState = state;
 	}
 
 	// public Dictionary<string, Animation> Animations { get; set; }
@@ -29,10 +32,8 @@ public class Skeleton2D
 	/// </summary>
 	public Vector2 Position
 	{
-		get
-		{
-			return new Vector2(skeleton.X, skeleton.Y);
-		}
+		get => new Vector2(skeleton.X, skeleton.Y);
+
 		set
 		{
 			skeleton.X = value.X;
@@ -46,10 +47,8 @@ public class Skeleton2D
 	/// </summary>
 	public float Rotation
 	{
-		get
-		{
-			return skeleton.RootBone.Rotation / MathUtils.RadDeg;
-		}
+		get => skeleton.RootBone.Rotation / MathUtils.RadDeg;
+
 		set
 		{
 			skeleton.RootBone.Rotation = value * MathUtils.RadDeg;
@@ -57,29 +56,27 @@ public class Skeleton2D
 		}
 	}
 
-	
-
 	public void PlayAnimation(int trackIndex, string name, float time)
 	{
-		animation_state.SetAnimation(trackIndex, name, false);
-		animation_state.Update(time);
-		//var animation = Animations[name];
-		//foreach (var boneTimeline in animation.BonesTimeline)
-		//{
-		//	foreach (var track in boneTimeline.Tracks)
-		//	{
-		//		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
-		//		cur?.Interpolate(time, next);
-		//	}
-		//}
+		animationState.SetAnimation(trackIndex, name, false);
+		animationState.Update(time);
 
-		//foreach (var slotTimeline in animation.SlotsTimeline)
-		//{
-		//	foreach (var track in slotTimeline.Tracks)
-		//	{
-		//		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
-		//		cur?.Interpolate(time, next);
-		//	}
-		//}
+		// var animation = Animations[name];
+		// foreach (var boneTimeline in animation.BonesTimeline)
+		// {
+		// 	foreach (var track in boneTimeline.Tracks)
+		// 	{
+		// 		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
+		// 		cur?.Interpolate(time, next);
+		// 	}
+		// }
+		// foreach (var slotTimeline in animation.SlotsTimeline)
+		// {
+		// 	foreach (var track in slotTimeline.Tracks)
+		// 	{
+		// 		track.LocateKeyFrames(time, out IKeyFrame cur, out IKeyFrame next);
+		// 		cur?.Interpolate(time, next);
+		// 	}
+		// }
 	}
 }

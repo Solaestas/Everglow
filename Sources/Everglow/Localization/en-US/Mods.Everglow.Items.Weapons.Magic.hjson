@@ -1,0 +1,192 @@
+CyanAmberStaff: {
+	DisplayName: Cyan Amber Staff
+}
+
+FeatheredStaff: {
+	DisplayName: Feathered Staff
+	Tooltip: Enchanted glimmering feather fins.
+}
+
+MossySpell: {
+	DisplayName: Mossy Spell
+	Tooltip:
+		'''
+		Drop a barrage shaped like moss downward at the mouse position
+		25% chance to inflict Poisoned for 5 seconds
+		'''
+}
+
+HandholdItem: {
+	DisplayName: Handhold Item
+	Tooltip: ""
+}
+
+CreamChocolateCupStaff: {
+	DisplayName: Cream Chocolate Cup Staff
+	Tooltip: ""
+}
+
+FrostBomb: {
+	DisplayName: Frost Bomb
+	Tooltip: ""
+}
+
+ToothMagicBall: {
+	DisplayName: Tooth Magic Ball
+	Tooltip: ""
+}
+
+DreamWeaver: {
+	DisplayName: Dream Weaver
+	Tooltip: ""
+}
+
+DustOfCorrupt: {
+	DisplayName: Dust Of Corrupt
+	Tooltip: ""
+}
+
+FlowLightMissile: {
+	DisplayName: Flow Light Missile
+	Tooltip: ""
+}
+
+GlowBeadGun: {
+	DisplayName: Glow Bead Gun
+	Tooltip: ""
+}
+
+NavyThunder: {
+	DisplayName: Navy Thunder
+	Tooltip: ""
+}
+
+LilyHarp: {
+	DisplayName: Lily Harp
+	Tooltip: ""
+}
+
+BoneFeatherMagic: {
+	DisplayName: Bone Feather Magic
+	Tooltip: ""
+}
+
+DarkFlower: {
+	DisplayName: Dark Flower
+	Tooltip: ""
+}
+
+FeatherMagic: {
+	DisplayName: Feather Magic
+	Tooltip: ""
+}
+
+FireFeatherMagic: {
+	DisplayName: Fire Feather Magic
+	Tooltip: ""
+}
+
+FreezeFeatherMagic: {
+	DisplayName: Freeze Feather Magic
+	Tooltip: ""
+}
+
+ThunderFlower: {
+	DisplayName: Thunder Flower
+	Tooltip: ""
+}
+
+LanternBombRemoteControl: {
+	DisplayName: Lantern Bomb Remote Control
+	Tooltip: ""
+}
+
+AmberMagicOrb: {
+	DisplayName: Amber Magic Orb
+	Tooltip: ""
+}
+
+BloodySwamp: {
+	DisplayName: Bloody Swamp
+	Tooltip: ""
+}
+
+HexaCrystalStaff: {
+	DisplayName: Hexa Crystal Staff
+	Tooltip: ""
+}
+
+MagicOfLightAndShadow: {
+	DisplayName: Magic Of Light And Shadow
+	Tooltip: ""
+}
+
+NightfireStaff: {
+	DisplayName: Nightfire Staff
+	Tooltip: ""
+}
+
+RockQuake: {
+	DisplayName: Rock Quake
+	Tooltip: ""
+}
+
+SmeltingStaff: {
+	DisplayName: Smelting Staff
+	Tooltip: ""
+}
+
+YggdrasilAmberLaser: {
+	DisplayName: Yggdrasil Amber Laser
+	Tooltip: ""
+}
+
+EyeOfAnabiosis: {
+	DisplayName: Eye Of Anabiosis
+	Tooltip: ""
+}
+
+FlurryingBlades: {
+	DisplayName: Flurrying Blades
+	Tooltip: ""
+}
+
+VitalizedRocks: {
+	DisplayName: Vitalized Rocks
+	Tooltip: ""
+}
+
+BronzeLotusLamp: {
+	DisplayName: Bronze Lotus Lamp
+	Tooltip: ""
+}
+
+LightBeamStaff: {
+	DisplayName: Light Beam Staff
+	Tooltip: ""
+}
+
+CyanVineStaff: {
+	DisplayName: Cyan Vine Staff
+	Tooltip: ""
+}
+
+AncientSyringe: {
+	DisplayName: Ancient Syringe
+	Tooltip: ""
+}
+
+BacterialAgent: {
+	DisplayName: Bacterial Agent
+	Tooltip: ""
+}
+
+DevilHeartStaff: {
+	DisplayName: Devil Heart Staff
+	Tooltip: ""
+}
+
+SightOfTile: {
+	DisplayName: Sight Of Tile
+	Tooltip: ""
+}

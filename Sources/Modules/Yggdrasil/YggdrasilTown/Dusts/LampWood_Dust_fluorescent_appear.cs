@@ -8,7 +8,7 @@ public class LampWood_Dust_fluorescent_appear : ModDust
 		dust.frame = new Rectangle(0, 0, 8, 8);
 		dust.alpha = 0;
 		dust.scale = 0;
-		dust.rotation = dust.scale * 0.3f;//用旋转角度存尺寸极值
+		dust.rotation = dust.scale * 0.3f; // 用旋转角度存尺寸极值
 	}
 
 	public override bool Update(Dust dust)
@@ -21,7 +21,9 @@ public class LampWood_Dust_fluorescent_appear : ModDust
 		dust.scale = (float)Math.Sin(dust.alpha / 255d * Math.PI) * dust.rotation;
 		Lighting.AddLight(dust.position, 0.46f * dust.scale, 0.2955f * dust.scale, 0);
 		if (dust.alpha > 254)
+		{
 			dust.active = false;
+		}
 
 		return false;
 	}

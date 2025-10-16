@@ -1,7 +1,7 @@
 using Everglow.Commons.FeatureFlags;
 using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.Dusts;
-using Everglow.Myth.TheFirefly.Items.BossDrop;
+using Everglow.Myth.TheFirefly.Items.BossDrops;
 using Everglow.Myth.TheFirefly.Items.Weapons;
 using Everglow.Myth.TheFirefly.Projectiles;
 using Everglow.Myth.TheFirefly.VFXs;

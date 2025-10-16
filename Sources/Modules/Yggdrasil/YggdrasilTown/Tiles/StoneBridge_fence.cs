@@ -1,7 +1,8 @@
 using Everglow.Commons.VFX.Scene;
 using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.Common;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
+
 [Pipeline(typeof(WCSPipeline))]
 public class StoneBridge_fence : BackgroundVFX
 {
@@ -9,6 +10,7 @@ public class StoneBridge_fence : BackgroundVFX
 	{
 		texture = ModAsset.StoneBridge_fence.Value;
 	}
+
 	public override void Update()
 	{
 		if (!SubworldSystem.IsActive<YggdrasilWorld>())
@@ -17,6 +19,7 @@ public class StoneBridge_fence : BackgroundVFX
 		}
 		base.Update();
 	}
+
 	public override void Draw()
 	{
 		base.Draw();

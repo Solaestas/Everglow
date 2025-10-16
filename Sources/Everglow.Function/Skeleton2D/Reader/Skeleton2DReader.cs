@@ -235,7 +235,7 @@ public class Skeleton2DReader
 		using var sr_atlas = new StreamReader(ms_atlas);
 
 		// Using empty dir string here because we do not support multiple layers
-		Atlas atlas = new Atlas(sr_atlas, "", new XnaTextureLoader(atlasTexture));
+		Atlas atlas = new Atlas(sr_atlas, string.Empty, new XnaTextureLoader(atlasTexture));
 
 		using var ms_json = new MemoryStream(jsonData);
 		using var sr_json = new StreamReader(ms_json);

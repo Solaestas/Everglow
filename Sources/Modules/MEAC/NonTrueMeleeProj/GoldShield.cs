@@ -1,22 +1,12 @@
-using System;
 using Everglow.Commons.Enums;
 using Everglow.Commons.MEAC;
-using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Commons.Weapons.StabbingSwords;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Mono.Cecil;
 using ReLogic.Content;
-using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Localization;
-using Terraria.UI;
-using static Terraria.Localization.NetworkText;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -46,17 +36,17 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		if (Main.netMode != NetmodeID.Server)
 		{
 			Ins.HookManager.AddHook(CodeLayer.PostDrawDusts, RenderCanvasOfShield);
+			Ins.MainThread.AddTask(() =>
+			{
+				AllocateRenderTarget(DrawSize);
+			});
+			Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
+			{
+				BlackAreaSwap?.Dispose();
+				BlackAreaOrig?.Dispose();
+				AllocateRenderTarget(size);
+			}, "Realloc RenderTarget");
 		}
-		Ins.MainThread.AddTask(() =>
-		{
-			AllocateRenderTarget(DrawSize);
-		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
-		{
-			BlackAreaSwap?.Dispose();
-			BlackAreaOrig?.Dispose();
-			AllocateRenderTarget(size);
-		}, "Realloc RenderTarget");
 	}
 	private void AllocateRenderTarget(Vector2 size)
 	{

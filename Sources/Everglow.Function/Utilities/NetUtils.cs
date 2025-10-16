@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.Utilities;
+namespace Everglow.Commons.Utilities;
 
 public static class NetUtils
 {

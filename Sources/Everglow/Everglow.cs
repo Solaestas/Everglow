@@ -3,14 +3,11 @@ using Everglow.Commons;
 using Everglow.Commons.Hooks;
 using Everglow.Commons.Interfaces;
 using Everglow.Commons.Modules;
-using Everglow.Commons.Network.PacketHandle;
+using Everglow.Commons.Netcode;
 using Everglow.Commons.ObjectPool;
 using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX;
-using log4net;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 
@@ -18,8 +15,6 @@ namespace Everglow;
 
 public class Everglow : Mod
 {
-	private PacketResolver m_packetResolver;
-
 	public override void Load()
 	{
 		ModIns.Mod = this;
@@ -27,20 +22,23 @@ public class Everglow : Mod
 		AddServices();
 		AddContents();
 		ShakeTreeTweak.Load();
-		m_packetResolver = new PacketResolver(this);
+		ModIns.PacketResolver = new PacketResolver(this);
 	}
 
 	private void AddServices()
 	{
 		Ins.Begin();
 		Ins.Add(Logger);
-		Ins.Add(Main.instance.GraphicsDevice);
-		Ins.Add(Main.spriteBatch);
+		if(!Main.dedServ)
+		{
+			Ins.Add(Main.instance.GraphicsDevice);
+			Ins.Add(Main.spriteBatch);
+		}
 		Ins.Add<IVisualQualityController, VisualQualityController>();
 		Ins.Add<ModuleManager>();
 		Ins.Add<IHookManager, HookManager>();
 		Ins.Add<IMainThreadContext, MainThreadContext>();
-		if (Main.netMode != NetmodeID.Server)
+		if (!Main.dedServ)
 		{
 			Ins.Add<RenderTargetPool>();
 			Ins.Add<IVFXManager, VFXManager>();
@@ -96,13 +94,10 @@ public class Everglow : Mod
 	public override void Unload()
 	{
 		ModIns.Unload();
-		m_packetResolver = null;
+		ModIns.PacketResolver = null;
 		ModIns.Mod = null;
 		Ins.Clear();
 	}
 
-	public override void HandlePacket(BinaryReader reader, int whoAmI)
-	{
-		m_packetResolver.Resolve(reader, whoAmI);
-	}
+	public override void HandlePacket(BinaryReader reader, int whoAmI) => ModIns.PacketResolver.Resolve(reader, whoAmI);
 }

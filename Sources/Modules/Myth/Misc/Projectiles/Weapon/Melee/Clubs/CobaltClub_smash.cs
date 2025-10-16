@@ -1,3 +1,4 @@
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Terraria.DataStructures;
 

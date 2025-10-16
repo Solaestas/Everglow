@@ -1,9 +1,16 @@
+using System.Data;
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.WorldBuilding;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -109,13 +116,13 @@ public class RockElemental : ModNPC
 
 	private Vector2 targetVel;
 
-	private static Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
-	private static Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
+	private static Terraria.WorldBuilding.Conditions.NotNull _cachedConditions_notNull = new Terraria.WorldBuilding.Conditions.NotNull();
+	private static Terraria.WorldBuilding.Conditions.IsSolid _cachedConditions_solid = new Terraria.WorldBuilding.Conditions.IsSolid();
 
 	public override void AI()
 	{
 		Player player = Main.player[NPC.target];
-		if (NPC.frame.Y <= 360)
+		if(NPC.frame.Y <= 360)
 		{
 			Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f));
 		}
@@ -139,7 +146,7 @@ public class RockElemental : ModNPC
 					if (WorldUtils.Find(NPC.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(10), _cachedConditions_notNull, _cachedConditions_solid), out var _))
 					{
 						float length = NPC.velocity.Length();
-						NPC.velocity -= 0.5f * Vector2.UnitY;
+						NPC.velocity -= 0.5f*Vector2.UnitY;
 						NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
 					}
 					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
@@ -317,7 +324,7 @@ public class RockElemental : ModNPC
 							RockElemental_ThrowingStone.MyOwner = NPC;
 						}
 					}
-					if (NPC.ai[0] < 380 && NPC.ai[0] > 260)
+					if(NPC.ai[0] < 380 && NPC.ai[0] > 260)
 					{
 						float value = MathF.Sin((NPC.ai[0] - 260 / 120f) * MathHelper.Pi) * 4;
 						Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f) * value);
@@ -587,7 +594,6 @@ public class RockElemental : ModNPC
 	}
 
 	private int collidetimer = 0;
-
 	/// <summary>
 	/// 碰撞
 	/// </summary>
@@ -636,7 +642,7 @@ public class RockElemental : ModNPC
 		if (collidetimer > 1)
 		{
 			NPC.noTileCollide = true;
-			NPC.velocity = -2 * Vector2.UnitY;
+			NPC.velocity = -2*Vector2.UnitY;
 		}
 		else
 		{
@@ -937,5 +943,6 @@ public class RockElemental : ModNPC
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
+		npcLoot.Add(ItemDropRule.OneFromOptions(1, ModContent.ItemType<BrittleRockSlingshot>(), ModContent.ItemType<HyperockSpear>(), ModContent.ItemType<VitalizedRocks>()));
 	}
 }

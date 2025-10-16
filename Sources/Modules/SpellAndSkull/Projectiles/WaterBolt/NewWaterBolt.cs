@@ -1,7 +1,7 @@
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Commons.Weapons;
 using Everglow.SpellAndSkull.Dusts;
 using Terraria.Audio;
 

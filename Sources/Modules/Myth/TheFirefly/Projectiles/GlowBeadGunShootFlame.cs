@@ -2,7 +2,8 @@ namespace Everglow.Myth.TheFirefly.Projectiles;
 
 public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProjectile
 {
-	public override string Texture => "Everglow/Myth/TheFirefly/Projectiles/GlowBeadGunTex/GlowBeadGunOff";
+	public override string Texture => ModAsset.GlowBeadGunOff_Mod;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;

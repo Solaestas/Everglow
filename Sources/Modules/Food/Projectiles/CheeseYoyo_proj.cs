@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Yoyos;
+using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Food.Dusts;
 using Terraria.GameContent;
 

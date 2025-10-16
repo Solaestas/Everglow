@@ -1,0 +1,103 @@
+ArmorPiercingBlasterProj: {
+	DisplayName: Armor Piercing Blaster Proj
+}
+
+ArmorPiercingBlasterProjExplosion: {
+	DisplayName: Armor Piercing Blaster Proj Explosion
+}
+
+BrittleRockSlingshotStone_Explosion: {
+	DisplayName: Brittle Rock Slingshot Stone_ Explosion
+}
+
+Caltrop: {
+	DisplayName: Caltrop
+}
+
+CaterpillarJuiceArrow: {
+	DisplayName: Caterpillar Juice Arrow
+}
+
+CyanVineThrowingSpear_Proj: {
+	DisplayName: Cyan Vine Throwing Spear_ Proj
+}
+
+GunOfAvariceAutoReload: {
+	DisplayName: Gun Of Avarice Auto Reload
+}
+
+GunOfAvariceManualReload: {
+	DisplayName: Gun Of Avarice Manual Reload
+}
+
+KissOfCthulhu_Projectile: {
+	DisplayName: Kiss Of Cthulhu_ Projectile
+}
+
+LightArrow: {
+	DisplayName: Light Arrow
+}
+
+LightBullet: {
+	DisplayName: Light Bullet
+}
+
+LightStartEffect_arrow: {
+	DisplayName: Light Start Effect_arrow
+}
+
+LightStartEffect_bullet: {
+	DisplayName: Light Start Effect_bullet
+}
+
+NehemothBullet: {
+	DisplayName: Nehemoth Bullet
+}
+
+RockArrow: {
+	DisplayName: Rock Arrow
+}
+
+RockExplosion_friendly: {
+	DisplayName: Rock Explosion_friendly
+}
+
+StoneJavelinProjectile: {
+	DisplayName: Stone Javelin Projectile
+}
+
+CyatheaArrow_proj: {
+	DisplayName: Cyathea Arrow_proj
+}
+
+CyatheaArrow_spike: {
+	DisplayName: Cyathea Arrow_spike
+}
+
+GreenThornLauncher_Proj: {
+	DisplayName: Green Thorn Launcher_ Proj
+}
+
+GreenThornLauncher_SubProj: {
+	DisplayName: Green Thorn Launcher_ Sub Proj
+}
+
+TerraViewerHowitzer_grenade_fall_explosion: {
+	DisplayName: Terra Viewer Howitzer_grenade_fall_explosion
+}
+
+TerraViewerHowitzer_proj: {
+	DisplayName: Terra Viewer Howitzer_proj
+}
+
+TerraViewerHowitzer_proj_flame: {
+	DisplayName: Terra Viewer Howitzer_proj_flame
+}
+
+TerraViewerHowitzer_proj_flame_blue: {
+	DisplayName: Terra Viewer Howitzer_proj_flame_blue
+}
+
+TerraViewerHowitzer_shoot_explosion: {
+	DisplayName: Terra Viewer Howitzer_shoot_explosion
+}

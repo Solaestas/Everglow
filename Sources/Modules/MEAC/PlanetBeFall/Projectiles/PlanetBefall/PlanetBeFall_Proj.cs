@@ -21,7 +21,7 @@ namespace Everglow.MEAC.PlanetBeFall.Projectiles.PlanetBefall
 			model = ObjReader.LoadFile(ModAsset.PlanetBeFallModel_Mod);
 			IIIDTexture = ModAsset.PlanetBeFallTexture.Value;
 			NormalTexture = ModAsset.PlanetBeFallTexture.Value;
-			MaterialTexture = TextureAssets.MagicPixel.Value;
+			MaterialTexture = TextureAssets.MagicPixel?.Value;
 			EmissionTexture = ModAsset.PlanetBeFallEmission.Value;
 			bloom = new BloomParams
 			{
