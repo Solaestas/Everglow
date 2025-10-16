@@ -258,7 +258,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = useSpecialAplha ? TrailAlpha(factor) : SpecialTrailAlpha(smoothedTrail[i], factor);
+			float w = useSpecialAplha ? SpecialTrailAlpha(smoothedTrail[i], factor) : TrailAlpha(factor);
 			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * paramA * Projectile.scale, color, new Vector3(factor, 1, 0f)));
 			vertices.Add(new Vertex2D(Projectile.Center + smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
 		}
@@ -267,7 +267,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = useSpecialAplha ? TrailAlpha(factor) : SpecialTrailAlpha(smoothedTrail[i], factor);
+			float w = useSpecialAplha ? SpecialTrailAlpha(smoothedTrail[i], factor) : TrailAlpha(factor);
 			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * paramB * Projectile.scale, color, new Vector3(factor, 1, 0f)));
 			vertices.Add(new Vertex2D(Projectile.Center - smoothedTrail[i] * Projectile.scale, color, new Vector3(factor, 0, w)));
 		}
