@@ -1,5 +1,4 @@
 using Everglow.Myth.Acytaea.Buffs;
-using Everglow.Myth.Acytaea.NPCs;
 using Everglow.Myth.Acytaea.VFXs;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
@@ -28,25 +27,30 @@ public class AcytaeaSword_projectile : MeleeProj
 		longHandle = false;
 		maxAttackType = 0;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		AutoEnd = false;
 	}
+
 	public override string TrailShapeTex()
 	{
-		return "Everglow/Commons/Textures/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
+
 	public override string TrailColorTex()
 	{
 		return "Everglow/Myth/Acytaea/Projectiles/Acytaea_meleeColor";
 	}
+
 	public override float TrailAlpha(float factor)
 	{
 		return base.TrailAlpha(factor) * 1.15f;
 	}
+
 	public override BlendState TrailBlendState()
 	{
 		return BlendState.NonPremultiplied;
 	}
+
 	public override void End()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -57,6 +61,7 @@ public class AcytaeaSword_projectile : MeleeProj
 		Projectile.Kill();
 		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -67,7 +72,7 @@ public class AcytaeaSword_projectile : MeleeProj
 		float timeMul = 1 / player.meleeSpeed;
 		if (attackType == 0)
 		{
-			if (timer < 3 * timeMul)//前摇
+			if (timer < 3 * timeMul)// 前摇
 			{
 				useTrail = false;
 				LockPlayerDir(player);
@@ -77,7 +82,10 @@ public class AcytaeaSword_projectile : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
+			{
 				AttSound(SoundID.Item1);
+			}
+
 			if (timer > 3 * timeMul && timer < 30 * timeMul)
 			{
 				isAttacking = true;
@@ -104,6 +112,7 @@ public class AcytaeaSword_projectile : MeleeProj
 			}
 		}
 	}
+
 	private void GenerateVFX()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -127,35 +136,42 @@ public class AcytaeaSword_projectile : MeleeProj
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) },
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
 	}
+
 	public override void OnKill(int timeLeft)
 	{
-
 	}
+
 	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
 	{
 		drawScale = new Vector2(-0.1f, 1.02f);
 		glowTexture = ModAsset.Acytaea_sword_Item_glow.Value;
 		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
 	}
+
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -178,18 +194,19 @@ public class AcytaeaSword_projectile : MeleeProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = ModContent.Request<Effect>("Everglow/MEAC/Effects/MeleeTrail", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
+		// Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-		MeleeTrail.CurrentTechnique.Passes[shadertype].Apply();
+		MeleeTrail.CurrentTechnique.Passes[ShaderTypeName].Apply();
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		for (int x = 0; x < 25; x++)
@@ -204,7 +221,7 @@ public class AcytaeaSword_projectile : MeleeProj
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) },
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}

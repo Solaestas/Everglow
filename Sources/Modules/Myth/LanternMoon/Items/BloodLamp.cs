@@ -24,10 +24,6 @@ public class BloodLamp : ModItem
 	}
 	public override bool? UseItem(Player player)
 	{
-		//if(Main.dayTime)
-		//{
-		//    return false;
-		//}
 		for (int x = 0; x < Main.maxProjectiles; x++)
 		{
 			if (Main.projectile[x].type == ModContent.ProjectileType<BloodLampProj>() && Main.projectile[x].active)
@@ -40,6 +36,7 @@ public class BloodLamp : ModItem
 			LanternMoon.OnLanternMoon = true;
 			LanternMoon.Point = 0;
 			LanternMoon.WavePoint = 0;
+			LanternMoon.Wave = 0;
 			var messageColor = new Color(175, 75, 255);
 			Color messageColor1 = Color.PaleGreen;
 			Main.NewText(Language.GetTextValue("Lantern Moon is raising..."), messageColor1);

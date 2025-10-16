@@ -3,15 +3,18 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.Scene;
+
 [Pipeline(typeof(WCSPipeline))]
 public abstract class BackgroundVFX : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
+
 	public Vector2 position;
 	public Texture2D texture;
 	public Point originTile;
 	public int originType;
 	public int direction = 1;
+
 	public override void Update()
 	{
 		if (originTile.X > 0 && originTile.X < Main.maxTilesX)
@@ -29,39 +32,45 @@ public abstract class BackgroundVFX : Visual
 							{
 								Active = false;
 								SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+								return;
 							}
 						}
 						else
 						{
 							Active = false;
 							SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+							return;
 						}
 					}
 					else
 					{
 						Active = false;
 						SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+						return;
 					}
 				}
 				else
 				{
 					Active = false;
 					SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+					return;
 				}
 			}
 			else
 			{
 				Active = false;
 				SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+				return;
 			}
 		}
 		else
 		{
 			Active = false;
 			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+			return;
 		}
-		Vector2 checkPos = position + texture.Size() / 2;
-		if (VFXManager.InScreen(checkPos, Math.Max(texture.Width, texture.Height + 200)))
+		Vector2 checkPos = position;
+		if (VFXManager.InScreen(checkPos, 500))
 		{
 			Visible = true;
 		}
@@ -69,8 +78,10 @@ public abstract class BackgroundVFX : Visual
 		{
 			Active = false;
 			SceneVFXSystem.TilePointHasScene[(originTile.X, originTile.Y)] = false;
+			return;
 		}
 	}
+
 	public override void Draw()
 	{
 		Color lightColor0 = Lighting.GetColor((int)position.X / 16, (int)position.Y / 16);
@@ -82,20 +93,20 @@ public abstract class BackgroundVFX : Visual
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position, lightColor0, new Vector3(0, 0, 0)),
-			new Vertex2D(position + new Vector2(texture.Width, 0),lightColor1, new Vector3(1, 0, 0)),
+			new Vertex2D(position + new Vector2(texture.Width, 0), lightColor1, new Vector3(1, 0, 0)),
 
-			new Vertex2D(position + new Vector2(0, texture.Height),lightColor2, new Vector3(0, 1, 0)),
-			new Vertex2D(position + new Vector2(texture.Width, texture.Height),lightColor3, new Vector3(1, 1, 0))
+			new Vertex2D(position + new Vector2(0, texture.Height), lightColor2, new Vector3(0, 1, 0)),
+			new Vertex2D(position + new Vector2(texture.Width, texture.Height), lightColor3, new Vector3(1, 1, 0)),
 		};
 		if (direction < 0)
 		{
 			bars = new List<Vertex2D>()
 			{
 				new Vertex2D(position, lightColor0, new Vector3(1, 0, 0)),
-				new Vertex2D(position + new Vector2(texture.Width, 0),lightColor1, new Vector3(0, 0, 0)),
+				new Vertex2D(position + new Vector2(texture.Width, 0), lightColor1, new Vector3(0, 0, 0)),
 
-				new Vertex2D(position + new Vector2(0, texture.Height),lightColor2, new Vector3(1, 1, 0)),
-				new Vertex2D(position + new Vector2(texture.Width, texture.Height),lightColor3, new Vector3(0, 1, 0))
+				new Vertex2D(position + new Vector2(0, texture.Height), lightColor2, new Vector3(1, 1, 0)),
+				new Vertex2D(position + new Vector2(texture.Width, texture.Height), lightColor3, new Vector3(0, 1, 0)),
 			};
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

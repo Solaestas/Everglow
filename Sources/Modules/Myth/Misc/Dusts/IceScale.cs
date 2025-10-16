@@ -1,5 +1,3 @@
-using Everglow.Commons.Weapons.Yoyos;
-
 namespace Everglow.Myth.Misc.Dusts;
 
 public class IceScale : ModDust

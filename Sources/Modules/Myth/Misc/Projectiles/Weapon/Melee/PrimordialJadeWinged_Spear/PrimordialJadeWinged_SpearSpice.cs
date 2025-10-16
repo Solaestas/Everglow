@@ -1,3 +1,5 @@
+using Everglow.Commons.DataStructures;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
 
 public class PrimordialJadeWinged_SpearSpice : ModProjectile
@@ -23,8 +25,8 @@ public class PrimordialJadeWinged_SpearSpice : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		var Vx = new List<Vertex2D>();
-		Vector2 Vbase = Projectile.Center + new Vector2(0, 8 * player.gravDir);
+		var bars = new List<Vertex2D>();
+		Vector2 drawRoot = Projectile.Center + new Vector2(0, 8 * player.gravDir);
 		var v0 = new Vector2(0, -1);
 		var v0T = new Vector2(1, 0);
 		float length = Projectile.ai[0];
@@ -33,20 +35,19 @@ public class PrimordialJadeWinged_SpearSpice : ModProjectile
 		v0 = v0.RotatedBy(Projectile.rotation);
 		v0T = v0T.RotatedBy(Projectile.rotation);
 
-		Color ct = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
-		ct.A = 180;
 		var cp = new Color(200, 200, 200, 200);
 		float fadeG = Math.Clamp((Projectile.timeLeft - 10) / 24f + 0.12f, 0, 1f);
 
-		Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-		Vx.Add(new Vertex2D(Vbase + (v0 + v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
-		Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2, cp, new Vector3(1, 0, 0)));
+		bars.Add(new Vertex2D(drawRoot + (v0 + v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1, fadeG, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
 
-		Vx.Add(new Vertex2D(Vbase + v0 * 2, cp, new Vector3(1, 0, 0)));
-		Vx.Add(new Vertex2D(Vbase + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
-		Vx.Add(new Vertex2D(Vbase + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2, cp, new Vector3(1, 0, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, fadeG, 0)));
+		bars.Add(new Vertex2D(drawRoot + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cp, new Vector3(1 - fadeG, 0, 0)));
 
 		Texture2D t = ModAsset.PrimordialJadeWinged_SpearSpice.Value;
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect dissolve = Commons.ModAsset.Dissolve.Value;
@@ -65,9 +66,27 @@ public class PrimordialJadeWinged_SpearSpice : ModProjectile
 		dissolve.Parameters["uNoiseXY"].SetValue(new Vector2(Projectile.ai[1], Projectile.ai[2]));
 		dissolve.CurrentTechnique.Passes[0].Apply();
 		Main.graphics.GraphicsDevice.Textures[0] = t;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, Vx.ToArray(), 0, Vx.Count / 3);
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		drawRoot -= Main.screenPosition;
+		bars = new List<Vertex2D>();
+		float heatGreenDuration = (Projectile.timeLeft - 90) / 30f;
+		var cHeat = new Color(MathF.Pow(heatGreenDuration, 3), MathF.Pow(heatGreenDuration, 0.4f), MathF.Pow(heatGreenDuration , 0.6f), heatGreenDuration);
+		bars.Add(new Vertex2D(drawRoot + v0 * 2, cHeat, new Vector3(1, 0, 0)));
+		bars.Add(new Vertex2D(drawRoot + (v0 + v0T) * fadeG + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1, fadeG, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1 - fadeG, fadeG, 0)));
+
+		bars.Add(new Vertex2D(drawRoot + v0 * 2, cHeat, new Vector3(1, 0, 0)));
+		bars.Add(new Vertex2D(drawRoot + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1 - fadeG, fadeG, 0)));
+		bars.Add(new Vertex2D(drawRoot + (v0 - v0T) * fadeG + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1 - fadeG, 0, 0)));
+
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.PrimordialJadeWinged_SpearSpice_highlight.Value;
+		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 	public override void AI()

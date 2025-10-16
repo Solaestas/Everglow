@@ -1,35 +1,10 @@
 namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 
-public class JellyBallGelSplashPipeline : Pipeline
-{
-	public override void Load()
-	{
-		effect = ModAsset.JellyBallGelSplash;
-
-	}
-	public override void BeginRender()
-	{
-		var effect = this.effect.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_cell.Value);
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D FlameColor = ModAsset.HeatMap_JellyBallGelSplash.Value;
-		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointClamp, RasterizerState.CullNone);
-		effect.CurrentTechnique.Passes[0].Apply();
-	}
-
-	public override void EndRender()
-	{
-		Ins.Batch.End();
-	}
-}
 [Pipeline(typeof(JellyBallGelSplashPipeline))]
 public class JellyBallGelSplash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -38,18 +13,39 @@ public class JellyBallGelSplash : Visual
 	public float maxTime;
 	public float scale;
 	public float alpha;
-	public JellyBallGelSplash() { }
+
+	public JellyBallGelSplash()
+	{
+	}
 
 	public override void Update()
 	{
+		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
+		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
+		{
+			timer = maxTime;
+			Active = false;
+			return;
+		}
 		position += velocity * 0.001f;
 		oldPos.Add(position);
 		if (oldPos.Count > 15)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		velocity.Y += 0.14f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		scale += 0.4f;
 		if (Collision.SolidCollision(position, 0, 0))
@@ -88,7 +84,10 @@ public class JellyBallGelSplash : Visual
 		float pocession = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
+		{
 			return;
+		}
+
 		var bars = new Vertex2D[len * 2 - 1];
 		for (int i = 1; i < len; i++)
 		{

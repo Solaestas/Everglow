@@ -8,6 +8,7 @@ public class CyatheaWood : ModTile
 	{
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
+		Main.tileNoSunLight[Type] = true;
 		Main.tileBlockLight[Type] = true;
 		DustType = ModContent.DustType<YggdrasilCyatheaTrunkDust>();
 		AddMapEntry(new Color(96, 72, 42));

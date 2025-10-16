@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.Whips;
+using Everglow.Commons.Templates.Weapons.Whips;
 using Everglow.Food.Projectiles;
 
 namespace Everglow.Food.Items.Weapons;

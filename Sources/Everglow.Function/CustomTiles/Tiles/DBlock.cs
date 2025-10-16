@@ -1,6 +1,7 @@
-using Everglow.Commons.CustomTiles.Collide;
-using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.CustomTiles.EntityColliding;
+using Everglow.Commons.Physics.Abstracts;
+using Everglow.Commons.Physics.Colliders;
+using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
@@ -22,7 +23,7 @@ public abstract class DBlock : CustomTile, IGrabbable, IHookable
 	}
 	public override Color MapColor => new(255, 255, 255, 255);
 	public AABB AABB => new(position, size);
-	public override Collider Collider => new CAABB(new AABB(position, size));
+	public override ICollider2D Collider => new AABBCollider2D(new AABB(position, size));
 	public override Direction MoveCollision(AABB aabb, ref Vector2 velocity, ref Vector2 move, bool ignorePlats = false)
 	{
 		AABB collider = AABB;

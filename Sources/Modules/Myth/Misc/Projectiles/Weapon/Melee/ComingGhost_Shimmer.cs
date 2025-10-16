@@ -6,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
 public class ComingGhost_Shimmer : ModProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	public override void OnSpawn(IEntitySource source)
 	{
 		//Projectile.ai[1] = Main.player[Projectile.owner].direction;

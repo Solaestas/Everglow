@@ -26,6 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 4;
 			Projectile.aiStyle = -1;
+			ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 12800;
 		}
 		public int timeToKill = 0;
 		public int targetNPC = -1;
@@ -248,7 +249,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				new Vertex2D(endCenter + normalize - Main.screenPosition, shadow, new Vector3(coordY,0,0)),
 				new Vertex2D(endCenter - normalize - Main.screenPosition,shadow, new Vector3(coordY,1,0))
 			};
-				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
+				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 				if (bars.Count > 3)
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}

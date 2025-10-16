@@ -1,9 +1,11 @@
 using Everglow.Commons.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class Acytaea_ShineStar : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
+
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
@@ -19,8 +21,8 @@ public class Acytaea_ShineStar : ModProjectile
 
 		Projectile.width = 40;
 		Projectile.height = 40;
-
 	}
+
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
@@ -30,6 +32,7 @@ public class Acytaea_ShineStar : ModProjectile
 	{
 		return false;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		float value = Projectile.timeLeft / 60f;
@@ -41,7 +44,7 @@ public class Acytaea_ShineStar : ModProjectile
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(255, 0, 0, 0), Projectile.timeLeft * 0.02f + MathHelper.PiOver2, star.Size() / 2f, newScale, SpriteEffects.None, 0);
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float range = (60 - Projectile.timeLeft) / 60f;
 		range = MathF.Sqrt(range);
 		range *= 120f;

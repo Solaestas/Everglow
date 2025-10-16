@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -5,7 +6,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class SpikeClubSlash : ModProjectile, IWarpProjectile
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 	private Vector2 StartCenter;
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -53,6 +54,7 @@ public class SpikeClubSlash : ModProjectile, IWarpProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float value0 = (120 - Projectile.timeLeft) / 120f;
@@ -68,7 +70,7 @@ public class SpikeClubSlash : ModProjectile, IWarpProjectile
 				new Vertex2D(Projectile.Center + normalize - Main.screenPosition, shadow, new Vector3(1,0,0)),
 				new Vertex2D(Projectile.Center - normalize - Main.screenPosition,shadow, new Vector3(1,1,0))
 			};
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Color light = new Color(0.08f * lightColor.R / 255f, 0.08f * width / 10f * lightColor.G / 255f, 0.1f * width / 10f * lightColor.B / 255f, 0) * width * 0.25f;
@@ -90,7 +92,7 @@ public class SpikeClubSlash : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 	public void DrawWarp(VFXBatch sb)

@@ -2,6 +2,8 @@ using Everglow.Myth.Common;
 using Everglow.Myth.Misc.Dusts.Slingshots;
 using Terraria;
 using Terraria.Audio;
+using Everglow.Commons.Templates.Weapons.Slingshots;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
 public class GlowSporeBead : SlingshotAmmo

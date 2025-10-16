@@ -22,8 +22,6 @@ internal class DarknessOfNightPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModContent.Request<Effect>("Everglow/Myth/Misc/Projectiles/Weapon/Ranged/Slingshots/AmbiguousNightEffects/DarknessOfNightFlame", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
-		effect.Value.Parameters["uPowder"].SetValue(ModAsset.NoiseSand.Value);
 	}
 	public override void BeginRender()
 	{
@@ -31,6 +29,8 @@ internal class DarknessOfNightPipeline : Pipeline
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
+		effect.Parameters["uPowder"].SetValue(ModAsset.NoiseSand.Value);
 		Texture2D FlameColor = ModAsset.DarknessOfNight_Color.Value;
 		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;

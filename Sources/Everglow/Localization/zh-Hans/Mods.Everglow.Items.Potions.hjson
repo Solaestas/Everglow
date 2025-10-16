@@ -1,0 +1,19 @@
+EnergyDrink: {
+	DisplayName: Energy Drink
+	Tooltip: ""
+}
+
+ShadowPotion: {
+	DisplayName: Shadow Potion
+	Tooltip: ""
+}
+
+GuidePotion: {
+	DisplayName: Guide Potion
+	Tooltip: ""
+}
+
+RayPotion: {
+	DisplayName: Ray Potion
+	Tooltip: ""
+}

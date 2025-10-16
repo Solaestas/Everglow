@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons;
+using Everglow.Commons.Templates.Weapons;
 using Terraria.Audio;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;

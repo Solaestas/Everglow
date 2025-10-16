@@ -1,22 +1,12 @@
-using System;
 using Everglow.Commons.Enums;
 using Everglow.Commons.MEAC;
-using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Commons.Weapons.StabbingSwords;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Mono.Cecil;
 using ReLogic.Content;
-using ReLogic.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Localization;
-using Terraria.UI;
-using static Terraria.Localization.NetworkText;
 
 namespace Everglow.MEAC.NonTrueMeleeProj;
 
@@ -46,17 +36,17 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		if (Main.netMode != NetmodeID.Server)
 		{
 			Ins.HookManager.AddHook(CodeLayer.PostDrawDusts, RenderCanvasOfShield);
+			Ins.MainThread.AddTask(() =>
+			{
+				AllocateRenderTarget(DrawSize);
+			});
+			Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
+			{
+				BlackAreaSwap?.Dispose();
+				BlackAreaOrig?.Dispose();
+				AllocateRenderTarget(size);
+			}, "Realloc RenderTarget");
 		}
-		Ins.MainThread.AddTask(() =>
-		{
-			AllocateRenderTarget(DrawSize);
-		});
-		Ins.HookManager.AddHook(CodeLayer.ResolutionChanged, (Vector2 size) =>
-		{
-			BlackAreaSwap?.Dispose();
-			BlackAreaOrig?.Dispose();
-			AllocateRenderTarget(size);
-		}, "Realloc RenderTarget");
 	}
 	private void AllocateRenderTarget(Vector2 size)
 	{
@@ -313,7 +303,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0, -12), null, new Color(255, 255, 255, 0), Projectile.rotation, new Vector2(tex.Width / 2f, tex.Height / 2f), 1, SpriteEffects.None, 0);
 		if (Ins.VisualQuality.High)
 		{
-			Effect Post = ModAsset.Effects_Post.Value;
+			Effect Post = ModAsset.Post_xnb.Value;
 			Texture2D shieldTexture = ShieldTexture;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -338,7 +328,7 @@ public class GoldShield : ModProjectile, IWarpProjectile
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			Effect Post = ModAsset.Effects_Post.Value;
+			Effect Post = ModAsset.Post_xnb.Value;
 			Post.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.003));
 			Post.CurrentTechnique.Passes[0].Apply();
 

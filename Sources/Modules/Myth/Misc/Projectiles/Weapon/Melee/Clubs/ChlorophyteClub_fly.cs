@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
@@ -73,17 +71,14 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 	}
 	public string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-		float ShakeStrength = Omega * 0.4f;
 		Omega *= power;
 		modifiers.FinalDamage /= power;
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
 		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
@@ -339,7 +334,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 	public float TrailAlpha(float factor)
 	{

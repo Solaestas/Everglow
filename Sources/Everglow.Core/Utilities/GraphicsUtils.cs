@@ -1,9 +1,24 @@
 using Everglow.Commons.DataStructures;
+using Terraria;
+using Terraria.Graphics;
 
 namespace Everglow.Commons.Utilities;
 
 public static class GraphicsUtils
 {
+	public static Matrix ScreenProjectionMatrix => Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+
+	public static Matrix ScreenTranslationMatrix => Matrix.CreateTranslation(new(-Main.screenPosition, 0));
+
+	public static Matrix ScreenMatrix => ScreenTranslationMatrix * ScreenProjectionMatrix;
+
+	/// <summary>
+	/// Transforming world coordinates into screen coordinates before applying the <see cref="SpriteViewMatrix.TransformationMatrix"/>.
+	/// </summary>
+	/// <param name="spriteViewMatrix"></param>
+	/// <returns></returns>
+	public static Matrix TransformationMatrix_WorldToScreen(this SpriteViewMatrix spriteViewMatrix) => spriteViewMatrix.TransformationMatrix * ScreenMatrix;
+
 	public static void Begin(this SpriteBatch spriteBatch, SpriteBatchState state)
 	{
 		spriteBatch.Begin(
@@ -16,17 +31,38 @@ public static class GraphicsUtils
 			state.TransformMatrix);
 	}
 
+	public static SpriteBatchState? GetState(this SpriteBatch spriteBatch)
+	{
+		if (!spriteBatch.beginCalled)
+		{
+			return null;
+		}
+		return new SpriteBatchState(
+			spriteBatch.sortMode,
+			spriteBatch.blendState,
+			spriteBatch.samplerState,
+			spriteBatch.depthStencilState,
+			spriteBatch.rasterizerState,
+			spriteBatch.transformMatrix,
+			spriteBatch.customEffect);
+	}
+
 	/// <summary>
 	/// 根据输入点的List获得一个使用CatmullRom样条平滑过后的路径
 	/// </summary>
-	/// <param name="origPath"> </param>
-	/// <param name="precision"> null : 根据角度差自动适配取点个数， not null ：最少为2 </param>
-	/// <returns> </returns>
+	/// <param name="origPath"></param>
+	/// <param name="precision">
+	/// null : 根据角度差自动适配取点个数<br/>
+	/// not null ：最少为2
+	/// </param>
+	/// <returns></returns>
 	public static List<Vector2> CatmullRom(IEnumerable<Vector2> origPath, int? precision = null)
 	{
 		int count = origPath.Count();
 		if (count <= 2)
+		{
 			return origPath.ToList();
+		}
 
 		var path = new Vector2[count + 2];
 		var it = origPath.GetEnumerator();
@@ -74,19 +110,53 @@ public static class GraphicsUtils
 		return result;
 	}
 
-	public static SpriteBatchState? GetState(this SpriteBatch spriteBatch)
+	/// <summary>
+	/// 根据输入点的List获得一条贝塞尔曲线
+	/// </summary>
+	/// <param name="origPath"></param>
+	/// <param name="precision">最少为2 ,不建议超过100</param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentOutOfRangeException">If input contains element that <see cref="float.IsNaN(float)"/> or <see cref="float.IsInfinity(float)"/></exception>
+	public static List<Vector2> BezierCurve(IEnumerable<Vector2> origPath, int precision = 10)
 	{
-		if (!spriteBatch.beginCalled)
+		int count = origPath.Count() - 1;
+		if (count <= 2)
 		{
-			return null;
+			return origPath.ToList();
 		}
-		return new SpriteBatchState(
-			spriteBatch.sortMode,
-			spriteBatch.blendState,
-			spriteBatch.samplerState,
-			spriteBatch.depthStencilState,
-			spriteBatch.rasterizerState,
-			spriteBatch.transformMatrix,
-			spriteBatch.customEffect);
+		if (precision < 2)
+		{
+			precision = 2;
+		}
+
+		float factor = 1.00f / (precision * count);
+		List<Vector2> result = [];
+		var p = origPath.ToArray();
+		for (float t = 0; t < 1.0f; t += factor)
+		{
+			result.Add(GetBezierPoint(t, p));
+		}
+
+		return result;
+	}
+
+	private static Vector2 GetBezierPoint(float t, Vector2[] p)
+	{
+		int n = p.Length - 1;
+		float u = 1 - t;
+
+		Vector2 result = Vector2.Zero;
+
+		for (int i = 0; i < n; i++)
+		{
+			var current = p[i];
+			if (float.IsNaN(current.X) || float.IsNaN(current.Y) || float.IsInfinity(current.X) || float.IsInfinity(current.Y))
+			{
+				throw new ArgumentOutOfRangeException(nameof(p), "Bezier curve points cannot contain NaN or Infinity values.");
+			}
+
+			result += current * MathF.Pow(u, n - i) * MathF.Pow(t, i) * MathUtils.Combination(n, i);
+		}
+		return result;
 	}
 }

@@ -24,7 +24,7 @@ public class BloomPipeline : PostPipeline
 			blurScreenSwap?.Dispose();
 			AllocateRenderTarget(size);
 		}, "Realloc RenderTarget");
-		effect = ModAsset.VFX_Bloom;
+		effect = ModAsset.Bloom;
 	}
 
 	private void AllocateRenderTarget(Vector2 blurSize)

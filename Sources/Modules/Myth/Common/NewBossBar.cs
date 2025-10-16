@@ -1,4 +1,4 @@
-using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk;
+using Everglow.Myth.TheTusk.NPCs.BloodTusk;
 
 namespace Everglow.Myth.Common;
 

@@ -22,7 +22,8 @@
 		<Solaestas-TextFile Remove="Physics\Everglow.Commons.Physics.PBEngine\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<Reference Include="$(MSBuildThisFileDirectory)\..\..\Libraries\*.dll" />
 		<PackageReference Include="MathNet.Numerics" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
 	</ItemGroup>
 </Project>

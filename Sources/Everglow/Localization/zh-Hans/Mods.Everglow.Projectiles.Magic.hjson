@@ -1,0 +1,195 @@
+AmberBall: {
+	DisplayName: Amber Ball
+}
+
+AmberLiquidProj: {
+	DisplayName: Amber Liquid Proj
+}
+
+AmberLiquidProj_Explosion: {
+	DisplayName: Amber Liquid Proj_ Explosion
+}
+
+BloodySwamp_area: {
+	DisplayName: Bloody Swamp_area
+}
+
+BloodySwamp_shoot: {
+	DisplayName: Bloody Swamp_shoot
+}
+
+BloodySwamp_shoot_area: {
+	DisplayName: Bloody Swamp_shoot_area
+}
+
+BronzeLotusLamp_Flame: {
+	DisplayName: Bronze Lotus Lamp_ Flame
+}
+
+BronzeLotusLamp_SubBlossom: {
+	DisplayName: Bronze Lotus Lamp_ Sub Blossom
+}
+
+BronzeLotusLamp_weapon: {
+	DisplayName: Bronze Lotus Lamp_weapon
+}
+
+CyanVineStaff_proj: {
+	DisplayName: Cyan Vine Staff_proj
+}
+
+CyanVineStaff_proj_Explosion: {
+	DisplayName: Cyan Vine Staff_proj_ Explosion
+}
+
+CyanVineStaff_proj_shoot: {
+	DisplayName: Cyan Vine Staff_proj_shoot
+}
+
+EyeOfAnabiosis_MagicCircleFront: {
+	DisplayName: Eye Of Anabiosis_ Magic Circle Front
+}
+
+EyeOfAnabiosis_MagicCircleBack: {
+	DisplayName: Eye Of Anabiosis_ Magic Circle Back
+}
+
+EyeOfAnabiosis_Matrix: {
+	DisplayName: Eye Of Anabiosis_ Matrix
+}
+
+EyeOfAnabiosis_Projectile: {
+	DisplayName: Eye Of Anabiosis_ Projectile
+}
+
+EyeOfAnabiosis_Weapon: {
+	DisplayName: Eye Of Anabiosis_ Weapon
+}
+
+FeatheredStaff: {
+	DisplayName: Feathered Staff
+}
+
+FeatheredStaff_break: {
+	DisplayName: Feathered Staff_break
+}
+
+FeatheredStaff_staff: {
+	DisplayName: Feathered Staff_staff
+}
+
+HexaCrystalStaff_Proj: {
+	DisplayName: Hexa Crystal Staff_ Proj
+}
+
+HexaCrystalStaff_ProjExplosion: {
+	DisplayName: Hexa Crystal Staff_ Proj Explosion
+}
+
+HexaCrystalStaff_SubProj: {
+	DisplayName: Hexa Crystal Staff_ Sub Proj
+}
+
+IstafelsSunfireGrasp_Explosion: {
+	DisplayName: Istafels Sunfire Grasp_ Explosion
+}
+
+IstafelsSunfireGrasp_Scoria: {
+	DisplayName: Istafels Sunfire Grasp_ Scoria
+}
+
+IstafelsSunfireGrasp_SkillVFX: {
+	DisplayName: Istafels Sunfire Grasp_ SkillVFX
+}
+
+LightBeam: {
+	DisplayName: Light Beam
+}
+
+LightStartEffect_beam: {
+	DisplayName: Light Start Effect_beam
+}
+
+MagicOfLightAndShadow_Proj: {
+	DisplayName: Magic Of Light And Shadow_ Proj
+}
+
+MeltingFireExplode: {
+	DisplayName: Melting Fire Explode
+}
+
+MeltingFireRing: {
+	DisplayName: Melting Fire Ring
+}
+
+NightfireStaff_Projectile: {
+	DisplayName: Nightfire Staff_ Projectile
+}
+
+RockQuake_Proj: {
+	DisplayName: Rock Quake_ Proj
+}
+
+VitalizedRocksProj: {
+	DisplayName: Vitalized Rocks Proj
+}
+
+VitalizedRocksProj_Explosion: {
+	DisplayName: Vitalized Rocks Proj_ Explosion
+}
+
+VitalizedRocksStone: {
+	DisplayName: Vitalized Rocks Stone
+}
+
+VitalizedRocksStone_small: {
+	DisplayName: Vitalized Rocks Stone_small
+}
+
+WindBladeBallHit: {
+	DisplayName: Wind Blade Ball Hit
+}
+
+YggdrasilAmberLaser_crystal: {
+	DisplayName: Yggdrasil Amber Laser_crystal
+}
+
+YggdrasilMoonBlade_friendly: {
+	DisplayName: Yggdrasil Moon Blade_friendly
+}
+
+YggdrasilSlashBall: {
+	DisplayName: Yggdrasil Slash Ball
+}
+
+DevilHeartStaff_proj_Kill: {
+	DisplayName: Devil Heart Staff_proj_ Kill
+}
+
+LichensPycnidium: {
+	DisplayName: Lichens Pycnidium
+}
+
+MossySpell_proj: {
+	DisplayName: Mossy Spell_proj
+}
+
+Pycnidium_explosion: {
+	DisplayName: Pycnidium_explosion
+}
+
+AncientSyringe_Proj: {
+	DisplayName: Ancient Syringe_ Proj
+}
+
+BacterialAgent_Explosion: {
+	DisplayName: Bacterial Agent_ Explosion
+}
+
+BacterialAgent_Proj: {
+	DisplayName: Bacterial Agent_ Proj
+}
+
+HandheldCircularSaw_Proj: {
+	DisplayName: Handheld Circular Saw_ Proj
+}

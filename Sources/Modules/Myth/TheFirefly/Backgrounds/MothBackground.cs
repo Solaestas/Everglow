@@ -1,4 +1,3 @@
-using Everglow.Myth.Common;
 using Everglow.Myth.TheFirefly.NPCs.Bosses;
 using Everglow.Myth.TheFirefly.WorldGeneration;
 using SubworldLibrary;
@@ -7,7 +6,7 @@ namespace Everglow.Myth.TheFirefly.Backgrounds;
 
 public class MothBackground : ModSystem
 {
-	//加了个环境光，但还要调整下不然看上去很怪
+	// 加了个环境光，但还要调整下不然看上去很怪
 	public readonly Vector3 ambient = new Vector3(0.001f, 0.001f, 0.05f);
 
 	public List<GHang> GPos = new List<GHang>();
@@ -16,11 +15,7 @@ public class MothBackground : ModSystem
 
 	private float backgroundAlpha = 0f;
 
-	private float luminance = 1f;//发光物亮度，boss战时变暗
-
-	private List<Rope> ropes = new List<Rope>();
-
-	private RopeManager ropeManager;
+	private float luminance = 1f; // 发光物亮度，boss战时变暗
 
 	/// <summary>
 	/// 初始化
@@ -33,6 +28,7 @@ public class MothBackground : ModSystem
 			Terraria.Graphics.Light.On_TileLightScanner.GetTileLight += TileLightScanner_GetTileLight;
 		}
 	}
+
 	/// <summary>
 	/// 荧光悬挂物的数据结构
 	/// </summary>
@@ -54,6 +50,7 @@ public class MothBackground : ModSystem
 			Type = type;
 		}
 	}
+
 	/// <summary>
 	/// 环境光的钩子
 	/// </summary>
@@ -67,14 +64,16 @@ public class MothBackground : ModSystem
 		orig(self, x, y, out outputColor);
 		outputColor += ambient;
 	}
-	public override void PostUpdateEverything()//开启地下背景
+
+	public override void PostUpdateEverything()// 开启地下背景
 	{
 		const float increase = 0.02f;
 		if (GlowingFlowerLandActive() && Main.BackgroundEnabled)
 		{
-			ropeManager?.Update(0.5f);
 			if (backgroundAlpha < 1)
+			{
 				backgroundAlpha += increase;
+			}
 			else
 			{
 				backgroundAlpha = 1;
@@ -93,15 +92,20 @@ public class MothBackground : ModSystem
 			}
 			Ins.HookManager.Enable(TerrariaFunction.DrawBackground);
 		}
-		if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)//发光物体在boss战时变暗
+		if (NPC.CountNPCS(ModContent.NPCType<CorruptMoth>()) > 0)// 发光物体在boss战时变暗
+		{
 			luminance = MathHelper.Lerp(luminance, 0.1f, 0.02f);
+		}
 		else
 		{
 			luminance = MathHelper.Lerp(luminance, 1, 0.02f);
 			if (luminance == 1)
+			{
 				CorruptMoth.CorruptMothNPC = null;
+			}
 		}
 	}
+
 	/// <summary>
 	/// 判定是否开启地形
 	/// </summary>
@@ -110,6 +114,7 @@ public class MothBackground : ModSystem
 	{
 		return SubworldSystem.IsActive<MothWorld>();
 	}
+
 	/// <summary>
 	/// 判定是否开启高级背景
 	/// </summary>
@@ -117,13 +122,15 @@ public class MothBackground : ModSystem
 	public static bool GlowingFlowerLandActive()
 	{
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
-		var BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16);//读取地形信息
-		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter;//距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
+		var BiomeCenter = new Vector2(mothLand.fireflyCenterX * 16, (mothLand.fireflyCenterY - 20) * 16); // 读取地形信息
+		Vector2 v0 = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f - BiomeCenter; // 距离中心Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) / 2f
 		v0.Y *= 1.35f;
-		v0.X *= 0.9f;//近似于椭圆形，所以xy坐标变换
+		v0.X *= 0.9f; // 近似于椭圆形，所以xy坐标变换
+
 		// TODO World
 		return v0.Length() < 2200 && SubworldSystem.IsActive<MothWorld>();
 	}
+
 	/// <summary>
 	/// 获取荧光悬挂物点位
 	/// </summary>
@@ -141,11 +148,14 @@ public class MothBackground : ModSystem
 				{
 					ref var pixel = ref pixelRow[x];
 					if (pixel.R == 255)
+					{
 						GPos.Add(new GHang(new Vector2(x * 10, y * 10), pixel.G / 4f + 2, pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+					}
 				}
 			}
 		});
 	}
+
 	/// <summary>
 	/// 获取第二层荧光悬挂物点位
 	/// </summary>
@@ -163,18 +173,24 @@ public class MothBackground : ModSystem
 				{
 					ref var pixel = ref pixelRow[x];
 					if (pixel.R == 255)
+					{
 						GPosSec.Add(new GHang(new Vector2(x * 10, y * 4.2f), pixel.G / 4f + 2, pixel.B / 255f + 0.5f, Main.rand.Next(5)));
+					}
 				}
 			}
 		});
 	}
+
 	/// <summary>
 	/// 绘制荧光
 	/// </summary>
 	private void DrawGlow(Vector2 texSize, float MoveStep)
 	{
 		if (GPos.Count <= 1)
+		{
 			GetGlowPos("GlosPos");
+		}
+
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
 		Vector2 sampleTopleft = Vector2.Zero;
 		Vector2 sampleCenter = sampleTopleft + texSize / 2;
@@ -204,13 +220,17 @@ public class MothBackground : ModSystem
 			}
 		}
 	}
+
 	/// <summary>
 	/// 绘制第二层荧光
 	/// </summary>
 	private void DrawGlowSec(Vector2 texSize, float MoveStep)
 	{
 		if (GPosSec.Count <= 1)
+		{
 			GetGlowPosSec("GlowHangingMiddlePosition");
+		}
+
 		MothLand mothLand = ModContent.GetInstance<MothLand>();
 		Vector2 sampleTopleft = Vector2.Zero;
 		Vector2 sampleCenter = sampleTopleft + texSize / 2;
@@ -240,6 +260,7 @@ public class MothBackground : ModSystem
 			}
 		}
 	}
+
 	/// <summary>
 	/// 获取绘制矩形
 	/// </summary>
@@ -265,15 +286,7 @@ public class MothBackground : ModSystem
 		}
 		return new Rectangle(RX, RY, (int)screenSize.X, (int)screenSize.Y);
 	}
-	/// <summary>
-	/// 绳子的图片坐标转到近景纹理下的坐标
-	/// </summary>
-	/// <returns> </returns>
-	private Vector2 ImageSpaceToCloseTextureSpace(Vector2 posIS, Vector2 texSize)
-	{
-		Vector2 mappedIS = posIS + new Vector2(0, 465);
-		return mappedIS / texSize;
-	}
+
 	private void DrawFarBG(Color baseColor)
 	{
 		var texSky = ModAsset.FireflySky.Value;
@@ -283,7 +296,7 @@ public class MothBackground : ModSystem
 		var texMidClose = ModAsset.FireflyMidClose.Value;
 		var texClose = ModAsset.FireflyClose.Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Vector2 ScreenCen = new Vector2(Main.screenWidth, Main.screenHeight) / 2f;
 		Vector2 DrawPos = ScreenCen;
 		Main.spriteBatch.Draw(texSky, DrawPos, GetDrawRect(texSky.Size(), 0, true), baseColor, 0,
@@ -299,6 +312,7 @@ public class MothBackground : ModSystem
 			 ScreenCen, 1f, SpriteEffects.None, 0);
 		DrawGlow(texClose.Size(), 0.25f);
 	}
+
 	private void DrawCloseBG(Color baseColor)
 	{
 		var texClose = ModAsset.FireflyClose.Value;
@@ -307,80 +321,28 @@ public class MothBackground : ModSystem
 		targetSourceRect.X += 150;
 		Main.spriteBatch.Draw(texClose, Vector2.Zero, targetSourceRect, baseColor);
 		Main.spriteBatch.End();
-		ropeManager.luminance = luminance;
-		ropeManager.Draw();
 
-		//便于合批，顶点绘制分开处置
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D VineTexture = ModAsset.Dark.Value;
-		for (int i = 0; i < ropes.Count; i++)
-		{
-			var branch = new List<Vertex2D>();
-
-			for (int j = 0; j < ropes[i].mass.Length; j++)
-			{
-				var mass = ropes[i].mass[j];
-				var vector = new Vector2(0, 1);
-				if (j > 0)
-					vector = mass.position - ropes[i].mass[j - 1].position;
-				vector = Vector2.Normalize(vector);
-				var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
-				Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
-
-				float width = ropes[i].mass.Length - j;
-
-				//通过顶点绘制枝条
-				branch.Add(new Vertex2D(posSS + vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
-				branch.Add(new Vertex2D(posSS - vector.RotatedBy(Math.PI / 2d) * width, Color.White, Vector3.Zero));
-			}
-			Main.graphics.GraphicsDevice.Textures[0] = VineTexture;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, branch.ToArray(), 0, branch.Count - 2);
-		}
-		Main.spriteBatch.End();
-
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D dropTexture = ModAsset.Drop.Value;
-		for (int i = 0; i < ropes.Count; i++)
-		{
-			for (int j = 1; j < ropes[i].mass.Length; j++)
-			{
-				var mass = ropes[i].mass[j];
-				float scale = 1f + j / 7f;
-				Vector2 vector = mass.position - ropes[i].mass[j - 1].position;
-				float rotation = vector.ToRotation() - MathHelper.PiOver2;
-				Color color = GetLuminace(new Color(0, 0.15f * j, 0.2f * j, 0.1f * j) * backgroundAlpha * 5);
-
-				var pos = ImageSpaceToCloseTextureSpace(mass.position, texClose.Size());
-
-				// 直接绘制在相对于近景贴图的坐标，只要近景位置正确，悬挂位置就正确
-				Vector2 posSS = -targetSourceRect.TopLeft() + texClose.Size() * pos;
-				Main.spriteBatch.Draw(dropTexture, posSS, null, color, rotation, dropTexture.Size() / 2f, scale, SpriteEffects.None, 0);
-			}
-		}
-		Main.spriteBatch.End();
-
+		// 便于合批，顶点绘制分开处置
 		var texCloseII = ModAsset.FireflyClose2.Value;
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Rectangle rvcII = GetDrawRect(texCloseII.Size(), 0.57f, false);
-		rvcII.Y -= 300;
+		rvcII.Y += -300;
 		rvcII.X += 300;
-		Color colorCloseII = GetLuminace(Color.White * backgroundAlpha);
 		float UpY = rvcII.Y / (float)texCloseII.Height;
 		float DownY = (rvcII.Y + rvcII.Height) / (float)texCloseII.Height;
 		var CloseII = new List<Vertex2D>
 		{
-			new Vertex2D(new Vector2(0, 0), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(0, 0), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, 0), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(0, Main.screenHeight), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
 
-			new Vertex2D(new Vector2(0, Main.screenHeight), colorCloseII, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, 0), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
-			new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), colorCloseII, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0))
+			new Vertex2D(new Vector2(0, Main.screenHeight), baseColor, new Vector3(rvcII.X / (float)texCloseII.Width, DownY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, 0), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, UpY, 0)),
+			new Vertex2D(new Vector2(Main.screenWidth, Main.screenHeight), baseColor, new Vector3((rvcII.X + rvcII.Width) / (float)texCloseII.Width, DownY, 0)),
 		};
-		Effect bgW =  ModAsset.BackgroundWrap.Value;
+		Effect bgW = ModAsset.BackgroundWrap.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		bgW.Parameters["uTransform"].SetValue(projection);
-		bgW.Parameters["uTime"].SetValue(0.34f);
 		bgW.CurrentTechnique.Passes[0].Apply();
 
 		if (CloseII.Count > 2)
@@ -392,40 +354,31 @@ public class MothBackground : ModSystem
 		if (DownY > 1)
 		{
 			float DrawY = (1 - UpY) / (DownY - UpY) * Main.screenHeight - 5;
-			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), colorCloseII);
+			Main.spriteBatch.Draw(texCloseII, new Rectangle(0, (int)DrawY, Main.screenWidth, Main.screenHeight - (int)DrawY), new Rectangle(1000, 1100, 1, 1), baseColor);
 		}
 
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	/// <summary>
 	/// 当然是绘制主体啦
 	/// </summary>
 	private void DrawBackground()
 	{
-		if(backgroundAlpha > 0)
+		if (backgroundAlpha > 0)
 		{
-			if (ropeManager is null)
-			{
-				ropeManager = new RopeManager(1, 1, new Color(11, 9, 25));
-				var mothLand = ModContent.GetInstance<MothLand>();
-
-				ropes = ropeManager.LoadRope("Everglow/Myth/TheFirefly/Backgrounds/TreeRope",
-					null,
-					Vector2.Zero,
-					() => Vector2.Zero);
-			}
-
 			Color baseColor = Color.White * backgroundAlpha;
 			DrawFarBG(baseColor);
 			DrawCloseBG(baseColor);
 		}
-		if(Main.spriteBatch.beginCalled)
+		if (Main.spriteBatch.beginCalled)
 		{
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		}
 	}
+
 	private Color GetLuminace(Color color)
 	{
 		if (luminance != 1)

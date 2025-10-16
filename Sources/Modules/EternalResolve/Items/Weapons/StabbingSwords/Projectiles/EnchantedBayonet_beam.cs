@@ -6,7 +6,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
 	public class EnchantedBayonet_beam : ModProjectile
 	{
-		public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 		public override void SetDefaults()
 		{
 			Projectile.width = 10;

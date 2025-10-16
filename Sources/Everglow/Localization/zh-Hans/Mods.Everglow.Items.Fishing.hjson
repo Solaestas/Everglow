@@ -1,0 +1,34 @@
+GlowingFirefly: {
+	DisplayName: Glowing Firefly
+	Tooltip: ""
+}
+
+DimmyFish: {
+	DisplayName: Dimmy Fish
+	Tooltip: ""
+}
+
+Filefish: {
+	DisplayName: Filefish
+	Tooltip: ""
+}
+
+GrassCarp: {
+	DisplayName: Grass Carp
+	Tooltip: ""
+}
+
+GuidyFish: {
+	DisplayName: Guidy Fish
+	Tooltip: ""
+}
+
+ThermostatRod: {
+	DisplayName: Thermostat Rod
+	Tooltip: ""
+}
+
+TwilightRod: {
+	DisplayName: Twilight Rod
+	Tooltip: ""
+}

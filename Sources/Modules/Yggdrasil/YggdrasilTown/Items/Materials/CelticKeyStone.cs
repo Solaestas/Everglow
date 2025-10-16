@@ -1,0 +1,15 @@
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
+
+public class CelticKeyStone : ModItem
+{
+    // TODO:有凯尔特纹的石砖轮
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Materials;
+
+    // TODO:有凯尔特纹的石砖轮
+    public override void SetDefaults()
+    {
+        Item.width = 36;
+        Item.height = 34;
+        Item.maxStack = Item.CommonMaxStack;
+    }
+}

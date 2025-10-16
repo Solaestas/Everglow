@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.Yoyos;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using Terraria.GameContent;

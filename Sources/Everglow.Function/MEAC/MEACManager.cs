@@ -1,3 +1,4 @@
+using Everglow.Commons.Enums;
 using Terraria.Graphics.Effects;
 using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
@@ -14,8 +15,8 @@ internal class MEACManager : ILoadable
 		if (!Main.dedServ)
 		{
 			var hookManager = Ins.HookManager;
-			hookManager.AddHook(Enums.CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
-			hookManager.AddHook(Enums.CodeLayer.PreDrawFilter, FilterManager_EndCapture);
+			hookManager.AddHook(CodeLayer.ResolutionChanged, Main_OnResolutionChanged);
+			hookManager.AddHook(CodeLayer.PreDrawFilter, FilterManager_EndCapture);
 			ScreenWarp = ModAsset.ScreenWarp.Value;
 			ModIns.OnUnload += () =>
 			{
@@ -138,8 +139,8 @@ internal class MEACManager : ILoadable
             graphicsDevice.Textures[1] = Main.screenTargetSwap;
             graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            ScreenWarp.CurrentTechnique.Passes[0].Apply();
-            ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
+			ScreenWarp.CurrentTechnique.Passes[0].Apply();
             Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
             Main.spriteBatch.End();
         }
@@ -154,8 +155,8 @@ internal class MEACManager : ILoadable
 			graphicsDevice.Textures[1] = Main.screenTargetSwap;
 			graphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			ScreenWarp.Parameters["strength"].SetValue(0.25f);//扭曲程度
 			ScreenWarp.CurrentTechnique.Passes[1].Apply();
-			ScreenWarp.Parameters["strength"].SetValue(0.025f);//扭曲程度
 			Main.spriteBatch.Draw(screen, Vector2.Zero, Color.White);
 			Main.spriteBatch.End();
 		}

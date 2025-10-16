@@ -1,5 +1,6 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
+using MathNet.Numerics.Distributions;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
@@ -10,6 +11,7 @@ public class ElectricCurrentPipeline : Pipeline
 		effect = ModAsset.ElectricCurrent;
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_electricCurrent.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -29,10 +31,12 @@ public class ElectricCurrentPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(ElectricCurrentPipeline))]
 public class ElectricCurrent : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -40,107 +44,123 @@ public class ElectricCurrent : Visual
 	public float timer;
 	public float maxTime;
 	public float scale;
-	public ElectricCurrent() { }
+
+	public ElectricCurrent()
+	{
+	}
 
 	public override void Update()
 	{
-		UpdateInside();
+		timer++;
+		if (timer > maxTime)
+		{
+			Active = false;
+			return;
+		}
+		if(timer < 2)
+		{
+			for(int i = 0;i < 16;i++)
+			{
+				UpdateInside();
+			}
+		}
 		UpdateInside();
 	}
+
 	private void UpdateInside()
 	{
 		if (position.X <= 720 || position.X >= Main.maxTilesX * 16 - 720)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		if (position.Y <= 720 || position.Y >= Main.maxTilesY * 16 - 720)
 		{
 			timer = maxTime;
+			Active = false;
+			return;
 		}
 		oldPos.Add(position);
 
-		for(int x = 0;x < oldPos.Count;x++)
+		for (int x = 0; x < oldPos.Count; x++)
 		{
 			oldPos[x] += new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(6.283);
 		}
-		timer++;
-		if (timer > maxTime)
-			Active = false;
-		if (Collision.SolidCollision(position, 0, 0))
-		{
-			if (velocity.Length() > 1)
-			{
-				//This like a chemical reaction intermediate.We can't add new Visual in Ins.Update.
-				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 140f;
-			}
-			velocity *= 0;
-			scale *= 0.9f;
-		}
-		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
-		{
-			position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / (scale * scale) * 108f) * Main.rand.NextFloat(0.75f, 1.25f);
-			timer -= 0.4f;
-			Vector2 newPosX = position + new Vector2(velocity.X, 0);
-			if (Main.tile[(int)(newPosX.X / 16f), (int)(newPosX.Y / 16f)].LiquidAmount <= 0)
-			{
-				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
-				velocity.X *= -1;
-				position += velocity * 2;
-			}
 
-			Vector2 newPosY = position + new Vector2(0, velocity.Y);
-			if (Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount <= 0 || newPosY.Y % 16 > Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount / 16f)
-			{
-				Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
-				d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
-				velocity.Y *= -1;
-				position += velocity * 2;
-			}
-		}
-		else
-		{
-			position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / scale * 12f) * Main.rand.NextFloat(0.75f, 1.25f);
-		}
+		// if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
+		// {
+		// position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / (scale * scale) * 108f) * Main.rand.NextFloat(0.75f, 1.25f);
+		// timer -= 0.4f;
+		// Vector2 newPosX = position + new Vector2(velocity.X, 0);
+		// if (Main.tile[(int)(newPosX.X / 16f), (int)(newPosX.Y / 16f)].LiquidAmount <= 0)
+		// {
+		// Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+		// d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
+		// velocity.X *= -1;
+		// position += velocity * 2;
+		// }
+
+		// Vector2 newPosY = position + new Vector2(0, velocity.Y);
+		// if (Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount <= 0 || newPosY.Y % 16 > Main.tile[(int)(newPosY.X / 16f), (int)(newPosY.Y / 16f)].LiquidAmount / 16f)
+		// {
+		// Dust d = Dust.NewDustDirect(position - velocity * 1f, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+		// d.scale = Main.rand.NextFloat(0.85f, 1.15f) * scale / 300f;
+		// velocity.Y *= -1;
+		// position += velocity * 2;
+		// }
+		// }
+		// else
+		// {
+		// position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / scale * 12f) * Main.rand.NextFloat(0.75f, 1.25f);
+		// }
+		position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / scale * 12f) * Main.rand.NextFloat(0.75f, 1.25f);
 		float pocession = 1 - timer / maxTime;
 		float c = pocession * scale * 0.04f;
 		Lighting.AddLight(position, c * 0.7f, c * 0.7f, c * 0.9f);
-		velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f) / scale * 48f * ai[2]);
+		velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f) / scale * 12f + ai[2]);
 	}
+
 	public override void Draw()
 	{
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float pocession = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
-		var bars = new Vertex2D[len * 2 - 1];
+
+		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
 
 			Vector2 normal2 = oldPos[i] - oldPos[i - 1];
-			if(i < len - 1)
+			if (i < len - 1)
 			{
 				normal2 = oldPos[i + 1] - oldPos[i];
 			}
-			normal = (normal + normal2);
+			normal = normal + normal2;
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 
-
 			float k = i / (float)len;
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.3f));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(3.4f + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.7f));
+			bars.Add(oldPos[i] + normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.3f));
+			bars.Add(oldPos[i] - normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(3.4f + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.7f));
 		}
-		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
+		if(bars.Count < 2)
+		{
+			bars.Add(position, Color.Transparent, Vector3.zero);
+			bars.Add(position, Color.Transparent, Vector3.zero);
+
+			bars.Add(position, Color.Transparent, Vector3.zero);
+			bars.Add(position, Color.Transparent, Vector3.zero);
+		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }
+
 [Pipeline(typeof(ElectricCurrentPipeline))]
 public class ElectricCurrentDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public List<Vector2> oldPos = new List<Vector2>();
 	public Vector2 position;
 	public Vector2 velocity;
@@ -148,13 +168,17 @@ public class ElectricCurrentDust : Visual
 	public float timer;
 	public float maxTime;
 	public float scale;
-	public ElectricCurrentDust() { }
+
+	public ElectricCurrentDust()
+	{
+	}
 
 	public override void Update()
 	{
 		UpdateInside();
 		UpdateInside();
 	}
+
 	private void UpdateInside()
 	{
 		if (position.X <= 720 || position.X >= Main.maxTilesX * 16 - 720)
@@ -167,18 +191,24 @@ public class ElectricCurrentDust : Visual
 		}
 		oldPos.Add(position);
 		if (oldPos.Count > 6)
+		{
 			oldPos.RemoveAt(0);
+		}
+
 		for (int x = 0; x < oldPos.Count; x++)
 		{
 			oldPos[x] += new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(6.283);
 		}
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= 0;
-			scale *= 0.9f;	
+			scale *= 0.9f;
 		}
 		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
 		{
@@ -208,13 +238,17 @@ public class ElectricCurrentDust : Visual
 		Lighting.AddLight(position, c * 0.7f, c * 0.7f, c * 0.9f);
 		velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f) / scale * 48f * ai[2]);
 	}
+
 	public override void Draw()
 	{
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
 		float pocession = timer / maxTime;
 		int len = pos.Length;
 		if (len <= 2)
+		{
 			return;
+		}
+
 		var bars = new Vertex2D[len * 2 - 1];
 		for (int i = 1; i < len; i++)
 		{
@@ -225,9 +259,8 @@ public class ElectricCurrentDust : Visual
 			{
 				normal2 = oldPos[i + 1] - oldPos[i];
 			}
-			normal = (normal + normal2);
+			normal = normal + normal2;
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-
 
 			float k = i / (float)len;
 			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.3f));

@@ -190,10 +190,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModAsset.StoneColorII.Value;
 				efS.Parameters["Str"].SetValue(0.1f);
 				efS.Parameters["uTime"].SetValue((float)(-Projectile.timeLeft * 0.004));
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>(ModAsset.StonePostLight_Mod, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None, 0);
@@ -206,10 +206,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModAsset.StoneColorII.Value;
 				efS.Parameters["Str"].SetValue(0.08f);
 				efS.Parameters["uTime"].SetValue((float)(-Projectile.timeLeft * 0.004));
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>(ModAsset.StonePostLight_Mod, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), new Vector2(0.1f, 1f), SpriteEffects.None, 0);
@@ -222,11 +222,11 @@ public class StonePost : ModProjectile, IWarpProjectile
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-				Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColorII", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+				Effect efS = ModAsset.StoneColorII.Value;
 				efS.Parameters["Str"].SetValue(0.1f);
 				efS.Parameters["uTime"].SetValue((float)(Projectile.timeLeft * 0.004 + 0.7));
 
-				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/StonePostLight", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+				efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>(ModAsset.StonePostLight_Mod, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 				efS.CurrentTechnique.Passes[0].Apply();
 
 				Main.spriteBatch.Draw(FaceBackGGlow, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), new Vector2(0.9f, 1f), SpriteEffects.None, 0);
@@ -299,9 +299,9 @@ public class StonePost : ModProjectile, IWarpProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-			Effect efS = ModContent.Request<Effect>("Everglow/MEAC/Effects/StoneColor", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Effect efS = ModAsset.StoneColor.Value;
 			efS.Parameters["Str"].SetValue(glowStrength);
-			efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>("Everglow/MEAC/Images/img_color", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
+			efS.Parameters["tex0"].SetValue(ModContent.Request<Texture2D>(Commons.ModAsset.MEAC_Color2_Mod, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 			efS.CurrentTechnique.Passes[0].Apply();
 
 			Main.spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None, 0);
