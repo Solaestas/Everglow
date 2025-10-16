@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
+using Everglow.Commons.Collider;
 
 namespace Everglow.Commons.Utilities;
 
@@ -272,7 +273,7 @@ public static class CollisionUtils
             result = or.Y - aabb.Height / 2 <= circle.radius;
             if (result)
             {
-                dir = flipY ? Direction.Top : Direction.Bottom;
+                dir = flipY ? Direction.Up : Direction.Down;
             }
 
             return result;

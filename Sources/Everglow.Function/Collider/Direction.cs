@@ -9,8 +9,8 @@ public enum Direction : byte
 	Right = 4,
 	Down = 8,
 	In = 16,
-	UpLeft = Up | Left,
-	UpRight = Up | Right,
-	DownLeft = Down | Left,
-	DownRight = Down | Right,
+	TopLeft = Up | Left,
+	TopRight = Up | Right,
+	BottomLeft = Down | Left,
+	BottomRight = Down | Right,
 }

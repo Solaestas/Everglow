@@ -1,3 +1,5 @@
+using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.Collider;
@@ -66,7 +68,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		}
 
 		float tMin = Math.Max(txMin, tyMin), tMax = Math.Min(txMax, tyMax);
-		if ((0 <= tMin && tMin <= 1) && tMin <= tMax)
+		if ((tMin >= 0 && tMin <= 1) && tMin <= tMax)
 		{
 			if (txMin < tyMin)
 			{

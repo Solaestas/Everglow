@@ -1,3 +1,5 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.Collider;
 
 public interface IEntityCollider<T> : IBox

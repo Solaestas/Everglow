@@ -1,5 +1,7 @@
 using System.Reflection;
 using Everglow.Commons.Hooks;
+using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Utilities;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 

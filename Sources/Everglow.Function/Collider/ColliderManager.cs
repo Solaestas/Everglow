@@ -1,4 +1,5 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Physics.DataStructures;
 
 namespace Everglow.Commons.Collider;
 

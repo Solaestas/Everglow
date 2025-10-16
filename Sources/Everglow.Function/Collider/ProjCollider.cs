@@ -1,3 +1,5 @@
+using Everglow.Commons.Physics.DataStructures;
+
 namespace Everglow.Commons.Collider;
 
 public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
