@@ -1,13 +1,13 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MeteorClub : ClubProj_Reflect
+public class MeteorClub : ClubProj_Reflective
 {
 	public override void SetCustomDefaults()
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
 		WarpValue = 0.05f;
-		ReflectStrength = 1.2f;
+		ReflectionStrength = 1.2f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

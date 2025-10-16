@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PalladiumClub_smash : ClubProjSmash_Reflect
+public class PalladiumClub_smash : ClubProjSmash_Reflective
 {
 	public override string Texture => ModAsset.PalladiumClub_Mod;
 

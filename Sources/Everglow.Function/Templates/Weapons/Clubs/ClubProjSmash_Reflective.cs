@@ -4,9 +4,9 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProjSmash_Reflect : ClubProjSmash
+public abstract class ClubProjSmash_Reflective : ClubProjSmash
 {
-	public float ReflectStrength { get; protected set; } = 4f;
+	public float ReflectionStrength { get; protected set; } = 4f;
 
 	public override void DrawSmashTrail(Color color)
 	{
@@ -27,7 +27,7 @@ public abstract class ClubProjSmash_Reflect : ClubProjSmash
 			w *= w2 * w;
 			Color c0 = i == 0 ? Color.Transparent : Color.White;
 			bars.Add(new Vertex2D(Projectile.Center, c0, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w * ReflectStrength)));
+			bars.Add(new Vertex2D(trail[i], c0, new Vector3(factor, 0, w * ReflectionStrength)));
 		}
 
 		var vColor = color.ToVector4();

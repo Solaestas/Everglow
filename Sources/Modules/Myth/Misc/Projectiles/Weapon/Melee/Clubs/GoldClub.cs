@@ -1,5 +1,5 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class GoldClub : ClubProj_Reflect
+public class GoldClub : ClubProj_Reflective
 {
 }

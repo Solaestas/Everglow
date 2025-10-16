@@ -1,9 +1,9 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PlatinumClub : ClubProj_Reflect
+public class PlatinumClub : ClubProj_Reflective
 {
 	public override void SetCustomDefaults()
 	{
-		ReflectStrength = 8f;
+		ReflectionStrength = 8f;
 	}
 }

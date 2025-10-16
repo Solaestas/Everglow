@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class ChlorophyteClub : ClubProj_Reflect
+public class ChlorophyteClub : ClubProj_Reflective
 {
 	private int flyClubCooling = 0;
 
@@ -8,8 +8,8 @@ public class ChlorophyteClub : ClubProj_Reflect
 	{
 		Beta = 0.0066f;
 		MaxOmega = 0.471f;
-		ReflectStrength = 3f;
-		ReflectTexture = ModAsset.ChlorophyteClub_light_Mod;
+		ReflectionStrength = 3f;
+		ReflectionTexture = ModAsset.ChlorophyteClub_light_Mod;
 	}
 
 	public override void AI()

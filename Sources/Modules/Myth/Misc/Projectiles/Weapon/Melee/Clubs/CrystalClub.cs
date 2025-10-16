@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CrystalClub : ClubProj_Reflect
+public class CrystalClub : ClubProj_Reflective
 {
 	private int flyClubCooling = 0;
 
@@ -9,7 +9,7 @@ public class CrystalClub : ClubProj_Reflect
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
 		WarpValue = 0.03f;
-		ReflectStrength = 1.2f;
+		ReflectionStrength = 1.2f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

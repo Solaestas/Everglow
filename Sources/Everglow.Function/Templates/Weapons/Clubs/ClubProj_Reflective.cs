@@ -3,17 +3,17 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public abstract class ClubProj_Reflect : ClubProj
+public abstract class ClubProj_Reflective : ClubProj
 {
 	/// <summary>
 	/// Reflection Strength. Default to <c>4f</c>.
 	/// </summary>
-	public float ReflectStrength { get; protected set; } = 4f;
+	public float ReflectionStrength { get; protected set; } = 4f;
 
 	/// <summary>
 	/// Reflection texture.
 	/// </summary>
-	public string ReflectTexture { get; protected set; } = string.Empty;
+	public string ReflectionTexture { get; protected set; } = string.Empty;
 
 	public override void SetCustomDefaults()
 	{
@@ -21,7 +21,7 @@ public abstract class ClubProj_Reflect : ClubProj
 		MaxOmega = 0.27f;
 	}
 
-	protected override float SpecialTrailAlpha(Vector2 trailVector, float factor) => base.SpecialTrailAlpha(trailVector, factor) * ReflectStrength;
+	protected override float SpecialTrailAlpha(Vector2 trailVector, float factor) => base.SpecialTrailAlpha(trailVector, factor) * ReflectionStrength;
 
 	public override void PostPreDraw()
 	{
@@ -36,8 +36,8 @@ public abstract class ClubProj_Reflect : ClubProj
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Texture2D projTexture = ReflectTexture != string.Empty
-			? ModContent.Request<Texture2D>(ReflectTexture).Value
+		Texture2D projTexture = ReflectionTexture != string.Empty
+			? ModContent.Request<Texture2D>(ReflectionTexture).Value
 			: (Texture2D)ModContent.Request<Texture2D>(Texture);
 
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;

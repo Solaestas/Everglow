@@ -1,11 +1,11 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CrimsonClub : ClubProj_Reflect
+public class CrimsonClub : ClubProj_Reflective
 {
 	public override void SetCustomDefaults()
 	{
-		ReflectStrength = 3f;
-		ReflectTexture = ModAsset.CobaltClub_light_Mod;
+		ReflectionStrength = 3f;
+		ReflectionTexture = ModAsset.CobaltClub_light_Mod;
 	}
 
 	public override void AI()

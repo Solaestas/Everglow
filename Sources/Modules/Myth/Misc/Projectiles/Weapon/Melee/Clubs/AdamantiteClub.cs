@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class AdamantiteClub : ClubProj_Reflect
+public class AdamantiteClub : ClubProj_Reflective
 {
 	public override void SetCustomDefaults()
 	{

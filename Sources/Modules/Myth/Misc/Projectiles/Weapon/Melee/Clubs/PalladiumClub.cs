@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PalladiumClub : ClubProj_Reflect
+public class PalladiumClub : ClubProj_Reflective
 {
 	public override void SetCustomDefaults()
 	{

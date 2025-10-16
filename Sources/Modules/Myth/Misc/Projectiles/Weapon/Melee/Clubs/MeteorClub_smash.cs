@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MeteorClub_smash : ClubProjSmash_Reflect
+public class MeteorClub_smash : ClubProjSmash_Reflective
 {
 	public override string TrailColorTex() => ModAsset.MeteorClub_glow_Mod;
 
