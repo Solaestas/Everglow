@@ -102,7 +102,6 @@ public class BluishGiantGentian_small : ModTile, ITileFluentlyDrawn
 
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
-		{
 			return;
 
 		int paint = Main.tile[tilePos].TileColor;
