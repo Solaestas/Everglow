@@ -168,7 +168,7 @@ public static class CollisionUtils
 		bool result = false;
 		if (new Edge(aabb.TopLeft, aabb.TopRight).Intersect(edge))
 		{
-			it.Current = Direction.Top;
+			it.Current = Direction.Up;
 			if (!it.MoveNext())
 			{
 				return true;
@@ -188,7 +188,7 @@ public static class CollisionUtils
 		}
 		if (new Edge(aabb.BottomRight, aabb.BottomLeft).Intersect(edge))
 		{
-			it.Current = Direction.Bottom;
+			it.Current = Direction.Down;
 			if (!it.MoveNext())
 			{
 				return true;
