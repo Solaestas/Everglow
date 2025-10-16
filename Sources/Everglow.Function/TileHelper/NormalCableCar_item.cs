@@ -1,5 +1,3 @@
-using Everglow.Commons.CustomTiles;
-
 namespace Everglow.Commons.TileHelper;
 
 /// <summary>
@@ -32,9 +30,9 @@ public class NormalCableCar_item : ModItem
 			{
 				var checkPoint = mouseWorldTile + new Point(i, j);
 				Tile tile = Main.tile[checkPoint];
-				if(tile.TileType == ModContent.TileType<CableCarJoint>())
+				if (tile.TileType == ModContent.TileType<CableCarJoint>())
 				{
-					TileSystem.Instance.AddTile(new NormalCableCar() { Position = checkPoint.ToWorldCoordinates(), size = new Vector2(80, 80), Direction = -1, Active = true });
+					//TileSystem.Instance.AddTile(new NormalCableCar() { Position = checkPoint.ToWorldCoordinates(), size = new Vector2(80, 80), Direction = -1, Active = true });
 				}
 			}
 		}

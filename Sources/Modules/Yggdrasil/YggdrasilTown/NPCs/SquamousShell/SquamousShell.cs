@@ -1,5 +1,4 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Skeleton2D;
 using Everglow.Commons.Skeleton2D.Reader;
@@ -11,7 +10,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
 using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Bosses.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -96,7 +94,7 @@ public class SquamousShell : ModNPC
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		var data = Mod.GetFileBytes(ModAsset.monsterj_Path);
-		if(!Main.dedServ)
+		if (!Main.dedServ)
 		{
 			if (SquamousShellSkeleton == null)
 			{
@@ -222,7 +220,7 @@ public class SquamousShell : ModNPC
 		Player target = Main.player[NPC.target];
 
 		// if target no stand in solid top.
-		if (!TileCollisionUtils.PlatformCollision(target.Bottom) && !TileCollisionUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position,target.width, target.height + 48))
+		if (!TileCollisionUtils.PlatformCollision(target.Bottom) && !TileCollisionUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position, target.width, target.height + 48))
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(NextAttack()));
 			yield break;
