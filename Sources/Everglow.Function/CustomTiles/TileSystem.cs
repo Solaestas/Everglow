@@ -4,6 +4,8 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.Abstracts;
 using Everglow.Commons.Physics.Colliders;
 using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Utilities;
+using MonoMod.Cil;
 
 namespace Everglow.Commons.CustomTiles;
 
@@ -29,6 +31,7 @@ public class TileSystem
 		On_Collision.TileCollision += Collision_TileCollision;
 		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
 		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
+		On_Collision.StepUp += Collision_StepUp;
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
@@ -87,7 +90,9 @@ public class TileSystem
 		foreach (var c in _tiles)
 		{
 			if (c.Collision(collider))
+			{
 				return true;
+			}
 		}
 		return false;
 	}
@@ -145,7 +150,9 @@ public class TileSystem
 		{
 			Direction info;
 			if ((info = tile.MoveCollision(aabb, ref velocity, ref move, true)) != Direction.None)
+			{
 				flag = true;
+			}
 		}
 		EnableCollisionHook = false;
 		aabb.position += Terraria.Collision.TileCollision(aabb.position, move, (int)aabb.size.X, (int)aabb.size.Y, fallthrough);
@@ -210,15 +217,75 @@ public class TileSystem
 	private bool Collision_SolidCollision_Vector2_int_int(On_Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
 	{
 		if (!Enable || !EnableCollisionHook)
+		{
 			return orig(Position, Width, Height);
+		}
+
 		return orig(Position, Width, Height) || Collision(new AABBCollider2D(new AABB(Position.X, Position.Y, Width, Height)));
 	}
 
 	private bool Collision_SolidCollision_Vector2_int_int_bool(On_Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
 	{
 		if (!Enable || !EnableCollisionHook)
+		{
 			return orig(Position, Width, Height, acceptTopSurfaces);
+		}
+
 		return orig(Position, Width, Height, acceptTopSurfaces) || Collision(new AABBCollider2D(new AABB(Position.X, Position.Y, Width, Height)));
+	}
+
+	private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
+	{
+		orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
+		if (Enable && EnableCollisionHook)
+		{
+			CustomTileStepUp(ref position, ref velocity, width, height, ref gfxOffY, gravDir);
+		}
+	}
+
+	private static void CustomTileStepUp(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float gfxOffY, int gravDir = 1)
+	{
+		float ascendValue = 0;
+		if (Instance is null || MathF.Abs(velocity.X) < 1e-5)
+		{
+			return;
+		}
+		float maxAscend = 18;
+		AABB entityBoxNow = new AABB(position, new Vector2(width, height));
+		AABB entityBoxNext = new AABB(position + velocity, new Vector2(width, height));
+		if (gravDir == 1)
+		{
+			foreach (var cTile in Instance.Tiles)
+			{
+				AABB cTileBox = cTile.Collider.AABB;
+				if (cTileBox.Intersect(entityBoxNext) && !cTileBox.Intersect(entityBoxNow) && cTileBox.Top > entityBoxNext.Bottom - maxAscend && entityBoxNext.Bottom - cTileBox.Top > ascendValue)
+				{
+					ascendValue = entityBoxNext.Bottom - cTileBox.Top;
+				}
+			}
+			if (ascendValue > 0)
+			{
+				position.Y -= ascendValue;
+				gfxOffY += ascendValue;
+			}
+		}
+		else
+		{
+			// up-side-down
+			foreach (var cTile in Instance.Tiles)
+			{
+				AABB cTileBox = cTile.Collider.AABB;
+				if (cTileBox.Intersect(entityBoxNext) && !cTileBox.Intersect(entityBoxNow) && cTileBox.Bottom < entityBoxNext.Top + maxAscend && cTileBox.Bottom - entityBoxNext.Top > ascendValue)
+				{
+					ascendValue = cTileBox.Bottom - entityBoxNext.Top;
+				}
+			}
+			if (ascendValue > 0)
+			{
+				position.Y += ascendValue;
+				gfxOffY -= ascendValue;
+			}
+		}
 	}
 
 	private Vector2 Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
@@ -228,7 +295,9 @@ public class TileSystem
 		{
 			var rect = new AABB(Position.X, Position.Y, Width, Height);
 			if (MoveCollision(ref rect, ref result, fallThrough))
+			{
 				return rect.position - Position;
+			}
 		}
 		return result;
 	}

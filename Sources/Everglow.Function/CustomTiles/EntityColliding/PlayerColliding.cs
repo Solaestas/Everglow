@@ -7,7 +7,9 @@ namespace Everglow.Commons.CustomTiles.EntityColliding;
 public class PlayerColliding : ModPlayer
 {
 	public PlayerHandler handler;
+
 	public override bool CloneNewInstances => true;
+
 	public override bool IsCloneable => true;
 
 	public override void Load()
@@ -39,14 +41,15 @@ public class PlayerColliding : ModPlayer
 		jumpSpeed = speed;
 	}
 
-	//阻止玩家自动吸附
+	// 阻止玩家自动吸附
 	public void ResetAttach()
 	{
 		if (handler.attachDir != Direction.Bottom)
+		{
 			return;
-
-		Player.position.Y -= Player.gfxOffY;
-		Player.gfxOffY = 0;
+		}
+		//Player.position.Y -= Player.gfxOffY;
+		//Player.gfxOffY = 0;
 	}
 
 	public static void Player_JumpMovement(On_Player.orig_JumpMovement orig, Player self)
@@ -55,9 +58,15 @@ public class PlayerColliding : ModPlayer
 		if (player.jumpTime > 0)
 		{
 			if (self.jump != 0)
+			{
 				self.jump = 0;
+			}
+
 			if (!self.controlJump)
+			{
 				player.jumpTime = 1;
+			}
+
 			self.velocity.Y = player.jumpSpeed;
 			player.jumpTime--;
 		}
@@ -74,7 +83,7 @@ public class PlayerColliding : ModPlayer
 		TileSystem.EnableCollisionHook = false;
 		var player = self.GetModPlayer<PlayerColliding>();
 		player.ResetAttach();
-		player.handler.position = self.position;//记录位置，否则会把传送当成位移
+		player.handler.position = self.position; // 记录位置，否则会把传送当成位移
 		orig(self, fallThrough, ignorePlats);
 		self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
 		TileSystem.EnableCollisionHook = true;
@@ -91,7 +100,7 @@ public class PlayerColliding : ModPlayer
 		TileSystem.EnableCollisionHook = false;
 		var player = self.GetModPlayer<PlayerColliding>();
 		player.ResetAttach();
-		player.handler.position = self.position;//记录位置，否则会把传送当成位移
+		player.handler.position = self.position; // 记录位置，否则会把传送当成位移
 		orig(self, fallThrough, ignorePlats);
 		self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
 		TileSystem.EnableCollisionHook = true;
@@ -108,7 +117,7 @@ public class PlayerColliding : ModPlayer
 		TileSystem.EnableCollisionHook = false;
 		var player = self.GetModPlayer<PlayerColliding>();
 		player.ResetAttach();
-		player.handler.position = self.position;//记录位置，否则会把传送当成位移
+		player.handler.position = self.position; // 记录位置，否则会把传送当成位移
 		orig(self, fallThrough, ignorePlats);
 		self.GetModPlayer<PlayerColliding>().handler.Update(ignorePlats || fallThrough);
 		TileSystem.EnableCollisionHook = true;
@@ -128,7 +137,9 @@ public class PlayerColliding : ModPlayer
 		var skipControlCheck = cursor.DefineLabel();
 		var skipSetFlag = cursor.DefineLabel();
 		if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStfld<Player>("sliding")))
+		{
 			throw new HookException("Player_WallslideMovement_IL");
+		}
 
 		cursor.Emit(OpCodes.Ldarg_0);
 		cursor.EmitDelegate((Player player) =>
@@ -143,7 +154,10 @@ public class PlayerColliding : ModPlayer
 		cursor.MarkLabel(skipSetFlag);
 
 		if (!cursor.TryGotoNext(MoveType.After, ins => ins.MatchStloc(0) && ins.Previous.MatchLdcI4(0)))
+		{
 			throw new HookException("Player_WallslideMovement_IL");
+		}
+
 		cursor.MarkLabel(skipControlCheck);
 	}
 

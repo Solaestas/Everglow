@@ -9,7 +9,7 @@ public enum AttachType
 
 	Stand,
 
-	Grab
+	Grab,
 }
 
 public abstract class EntityHandler
@@ -31,7 +31,8 @@ public abstract class EntityHandler
 	public AABB HitBox => new(position, GetEntity().Size);
 }
 
-public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Entity
+public abstract class EntityHandler<TEntity> : EntityHandler
+	where TEntity : Entity
 {
 	private TEntity entity;
 
@@ -52,13 +53,16 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 	public virtual Direction Ground => Direction.Bottom;
 
 	public virtual void OnCollision(CustomTile tile, Direction dir, ref CustomTile newAttach)
-	{ }
+	{
+	}
 
 	public virtual void OnAttach()
-	{ }
+	{
+	}
 
 	public virtual void OnLeave()
-	{ }
+	{
+	}
 
 	public virtual void Update(bool ignorePlats = false)
 	{
@@ -69,12 +73,15 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 			return;
 		}
 
-		Vector2 move = entity.position - position + extraVelocity;//计算获得物块推动的强制位移
-		trueVelocity = entity.velocity + extraVelocity;//当前帧实体速度的变化
+		Vector2 move = entity.position - position + extraVelocity; // 计算获得物块推动的强制位移
+		trueVelocity = entity.velocity + extraVelocity; // 当前帧实体速度的变化
 
 		CustomTile newAttach = null;
 		if (attachTile != null && !attachTile.Active)
+		{
 			attachTile = null;
+		}
+
 		foreach (var (tile, dir) in TileSystem.Instance.MoveCollision(this, move, ignorePlats))
 		{
 			OnCollision(tile, dir, ref newAttach);
@@ -86,7 +93,7 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 			}
 		}
 
-		//处理站在方块上
+		// 处理站在方块上
 		if (newAttach == null)
 		{
 			if (attachTile != null)
@@ -114,10 +121,12 @@ public abstract class EntityHandler<TEntity> : EntityHandler where TEntity : Ent
 			newAttach.Stand(this, false);
 		}
 
-		//同步位置
+		// 同步位置
 		entity.position = position;
 		entity.velocity = trueVelocity - extraVelocity;
 		if (attachTile != null)
+		{
 			OnAttach();
+		}
 	}
 }
