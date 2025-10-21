@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <Modules>
+    </Modules>
+    <DefineConstants>$(DefineConstants);$(Modules)</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ModuleReference Include="$(Modules.Split(';'))" />
+    <ProjectReference Include="@(ModuleReference-&gt;'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
+  </ItemGroup>
+</Project>

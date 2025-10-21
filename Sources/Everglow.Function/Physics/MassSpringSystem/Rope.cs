@@ -96,17 +96,17 @@ public class Rope : IMassSpringMesh
 	/// <param name="elasticity"> </param>
 	/// <param name="mass"> </param>
 	/// <returns> </returns>
-	public static Rope CreateWithHangHead(Vector2 start, int count, float elasticity, float mass, float headMass, int restCount = 0)
+	public static Rope CreateWithHangHead(Vector2 start, int count, float elasticity, float mass, float headMass, int disableCount = 0, float restJointDistance = 6)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
 		{
-			int posY = i - restCount;
-			if (posY < 0)
+			int phasePos = i - disableCount;
+			if (phasePos < 0)
 			{
-				posY = 0;
+				phasePos = 0;
 			}
-			var position = start + new Vector2(0, mass * 10 * posY);
+			var position = start + new Vector2(0, restJointDistance * phasePos);
 			var m = rope._masses[i] = new Mass(mass, position, i == 0);
 			if (i == count - 1)
 			{
@@ -116,7 +116,7 @@ public class Rope : IMassSpringMesh
 			{
 				var prev = rope._masses[i - 1];
 				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
-					6, elasticity);
+					restJointDistance, elasticity);
 			}
 		}
 		return rope;

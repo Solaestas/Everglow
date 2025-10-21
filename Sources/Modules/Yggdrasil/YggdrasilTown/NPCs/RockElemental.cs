@@ -122,7 +122,7 @@ public class RockElemental : ModNPC
 	public override void AI()
 	{
 		Player player = Main.player[NPC.target];
-		if(NPC.frame.Y <= 360)
+		if (NPC.frame.Y <= 360)
 		{
 			Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f));
 		}
@@ -146,7 +146,7 @@ public class RockElemental : ModNPC
 					if (WorldUtils.Find(NPC.Center.ToTileCoordinates(), Searches.Chain(new Searches.Down(10), _cachedConditions_notNull, _cachedConditions_solid), out var _))
 					{
 						float length = NPC.velocity.Length();
-						NPC.velocity -= 0.5f*Vector2.UnitY;
+						NPC.velocity -= 0.5f * Vector2.UnitY;
 						NPC.velocity = Vector2.Normalize(NPC.velocity) * length;
 					}
 					NPC.rotation = Math.Clamp(NPC.velocity.X * 0.15f, -1f, 1f);
@@ -324,7 +324,7 @@ public class RockElemental : ModNPC
 							RockElemental_ThrowingStone.MyOwner = NPC;
 						}
 					}
-					if(NPC.ai[0] < 380 && NPC.ai[0] > 260)
+					if (NPC.ai[0] < 380 && NPC.ai[0] > 260)
 					{
 						float value = MathF.Sin((NPC.ai[0] - 260 / 120f) * MathHelper.Pi) * 4;
 						Lighting.AddLight(NPC.Center, new Vector3(0.5f, 0.1f, 0.8f) * value);
@@ -594,6 +594,7 @@ public class RockElemental : ModNPC
 	}
 
 	private int collidetimer = 0;
+
 	/// <summary>
 	/// 碰撞
 	/// </summary>
@@ -642,7 +643,7 @@ public class RockElemental : ModNPC
 		if (collidetimer > 1)
 		{
 			NPC.noTileCollide = true;
-			NPC.velocity = -2*Vector2.UnitY;
+			NPC.velocity = -2 * Vector2.UnitY;
 		}
 		else
 		{

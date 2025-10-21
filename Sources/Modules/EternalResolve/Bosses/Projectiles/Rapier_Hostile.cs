@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Terraria.Audio;

@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Collider;
 
 namespace Everglow.Minortopography.Common.Elevator.Tiles;
 
@@ -41,7 +41,7 @@ public class PineWinch : ModTile
 					return;
 			}
 		}
-		foreach (var dTile in TileSystem.Instance.GetTiles<PineTreeLiftTile>())
+		foreach (var dTile in ColliderManager.Instance.OfType<PineTreeLiftTile>())
 		{
 			Vector2 dTileCenter = dTile.Center;
 			float dPosY = Math.Abs(dTileCenter.Y / 16f - j);
@@ -62,7 +62,7 @@ public class PineWinch : ModTile
 			}
 			if(hasLift)
 			{
-				dTile.Kill();
+				dTile.Active = false;
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class PineWinch : ModTile
 						return;
 				}
 			}
-			foreach (var dTile in TileSystem.Instance.GetTiles<PineTreeLiftTile>())
+			foreach (var dTile in ColliderManager.Instance.OfType<PineTreeLiftTile>())
 			{
 				Vector2 dTileCenter = dTile.Center;
 				float dPosY = Math.Abs(dTileCenter.Y / 16f - j);
@@ -103,7 +103,7 @@ public class PineWinch : ModTile
 			}
 			if (!hasLift)
 			{
-				TileSystem.Instance.AddTile(new PineTreeLiftTile() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
+				ColliderManager.Instance.Add(new PineTreeLiftTile() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
 				thisTile.TileFrameX = 1;
 			}
 		}

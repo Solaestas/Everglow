@@ -1,3 +1,4 @@
+using Everglow.Commons.Collider;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities.BuffHelpers;
 using Terraria.DataStructures;

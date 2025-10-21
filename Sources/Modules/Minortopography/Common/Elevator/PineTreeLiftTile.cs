@@ -1,12 +1,10 @@
-using Everglow.Commons.CustomTiles;
-using Everglow.Commons.CustomTiles.Tiles;
-using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Collider;
 using Everglow.Commons.Vertex;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 
 namespace Everglow.Minortopography.Common.Elevator;
 
-internal class PineTreeLiftTile : DBlock
+internal class PineTreeLiftTile : BoxEntity
 {
 	/// <summary>
 	/// 接下来运行的方向
@@ -38,37 +36,35 @@ internal class PineTreeLiftTile : DBlock
 	/// </summary>
 	internal bool CheckDefault = false;
 
-	public override void OnCollision(AABB aabb, Direction dir)
-	{
-	}
-
+	public Vector2 Center => Position + Size * 0.5f;
 	public override void AI()
 	{
 		if (!CheckDefault)
 		{
-			StartCoordY = position.Y;
+			MapColor = new Color(122, 91, 79);
+			StartCoordY = Position.Y;
 			CheckDefault = true;
 		}
-		size = new Vector2(96, 17);
+		Size = new Vector2(96, 17);
 
 		// 电梯平台的半宽度
 		if (PauseTime > 0)
 		{
 			// 停机减速
 			PauseTime--;
-			velocity *= 0.9f;
-			if (velocity.Length() < 0.01f)
+			Velocity *= 0.9f;
+			if (Velocity.Length() < 0.01f)
 			{
-				velocity *= 0;
+				Velocity *= 0;
 			}
 		}
 		else
 		{
 			// 开机加速
 			PauseTime = 0;
-			if (velocity.Length() < 2f)
+			if (Velocity.Length() < 2f)
 			{
-				velocity.Y += 0.1f * RunningDirection;
+				Velocity += new Vector2(0, 0.1f * RunningDirection);
 			}
 
 			AccelerateTimeLeft--;
@@ -90,7 +86,7 @@ internal class PineTreeLiftTile : DBlock
 		}
 
 		// 停机时间检测
-		if (Math.Abs(velocity.Y) <= 0.2f)
+		if (Math.Abs(Velocity.Y) <= 0.2f)
 		{
 			DetentionTime++;
 
@@ -107,7 +103,7 @@ internal class PineTreeLiftTile : DBlock
 		}
 
 		// 位置太高需要重启
-		if (position.Y < StartCoordY - 1)
+		if (Position.Y < StartCoordY - 1)
 		{
 			if (PauseTime == 0 && AccelerateTimeLeft == 0)
 			{
@@ -170,14 +166,12 @@ internal class PineTreeLiftTile : DBlock
 		AccelerateTimeLeft = 60;
 	}
 
-	public override Color MapColor => new Color(122, 91, 79);
-
 	public override void Draw()
 	{
-		if (position.X / 16f < Main.maxTilesX - 28 && position.Y / 16f < Main.maxTilesY - 28 && position.X / 16f > 28 && position.Y / 16f > 28)
+		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
 			Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);
-			Main.spriteBatch.Draw(ModAsset.PineLiftTile.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), drawc);
+			Main.spriteBatch.Draw(ModAsset.PineLiftTile.Value, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), drawc);
 
 			Texture2D liftCable = ModAsset.VineRope.Value;
 
@@ -187,15 +181,15 @@ internal class PineTreeLiftTile : DBlock
 			var bars = new List<Vertex2D>();
 			for (int f = 0; f < 1000; f++)
 			{
-				Color drawcRope = Lighting.GetColor((int)(position.X / 16f) + 2, (int)((position.Y - f * 12) / 16f) - 7);
+				Color drawcRope = Lighting.GetColor((int)(Position.X / 16f) + 2, (int)((Position.Y - f * 12) / 16f) - 7);
 
 				bars.Add(new Vertex2D(Center - Main.screenPosition + new Vector2(-4, -125 - f * 12), drawcRope, new Vector3(0, f % 2, 0)));
 				bars.Add(new Vertex2D(Center - Main.screenPosition + new Vector2(4, -125 - f * 12), drawcRope, new Vector3(1, f % 2, 0)));
 
 				int dx = 1;
-				if ((int)(position.X / 16f) + 2 + dx < Main.maxTilesX - 28 && (int)((position.Y - f * 12) / 16f) - 7 < Main.maxTilesY - 28 && (int)(position.X / 16f) + 2 + dx > 28 && (int)((position.Y - f * 12) / 16f) - 7 > 28)
+				if ((int)(Position.X / 16f) + 2 + dx < Main.maxTilesX - 28 && (int)((Position.Y - f * 12) / 16f) - 7 < Main.maxTilesY - 28 && (int)(Position.X / 16f) + 2 + dx > 28 && (int)((Position.Y - f * 12) / 16f) - 7 > 28)
 				{
-					Tile tile0 = Main.tile[(int)(position.X / 16f) + 2 + dx, Math.Max((int)((position.Y - f * 12) / 16f) - 7, 20)];
+					Tile tile0 = Main.tile[(int)(Position.X / 16f) + 2 + dx, Math.Max((int)((Position.Y - f * 12) / 16f) - 7, 20)];
 					if (tile0.TileType == ModContent.TileType<PineWinch>() && tile0.HasTile)
 					{
 						break;
@@ -203,7 +197,7 @@ internal class PineTreeLiftTile : DBlock
 				}
 				if (f == 999)
 				{
-					Kill();
+					Active = false;
 					return;
 				}
 			}
