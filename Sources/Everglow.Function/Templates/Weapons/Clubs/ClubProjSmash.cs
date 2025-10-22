@@ -25,8 +25,14 @@ public abstract class ClubProjSmash : MeleeProj
 
 	protected Queue<Vector2> SmashTrailVecs { get; private set; } = new Queue<Vector2>();
 
+	/// <summary>
+	/// Represents whether the club projectile can reflecting. Default to <c>false</c>.
+	/// </summary>
 	public bool EnableReflection { get; protected set; } = false;
 
+	/// <summary>
+	/// Reflection strength. Default to <c>4f</c>.
+	/// </summary>
 	public float ReflectionStrength { get; protected set; } = 4f;
 
 	public override void SetDefaults()

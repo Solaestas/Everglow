@@ -108,7 +108,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	}
 
 	/// <summary>
-	/// Reflection Strength. Default to <c>4f</c>.
+	/// Reflection strength. Default to <c>4f</c>.
 	/// </summary>
 	public float ReflectionStrength { get; protected set; } = 4f;
 
