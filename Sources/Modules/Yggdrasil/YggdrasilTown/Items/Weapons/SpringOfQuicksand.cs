@@ -30,13 +30,13 @@ public class SpringOfQuicksand : ModItem
         Item.rare = ItemRarityID.Green;
         Item.value = 14400;
 
-        Item.shoot = ModContent.ProjectileType<RockQuake_Proj>();
+        Item.shoot = ModContent.ProjectileType<SpringOfQuicksand_Sandflow>();
         Item.shootSpeed = 8;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
-        Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
-        return false;
+		Projectile.NewProjectile(source, position, velocity * 1.5f, type, damage, knockback, player.whoAmI);
+		return false;
     }
 }
