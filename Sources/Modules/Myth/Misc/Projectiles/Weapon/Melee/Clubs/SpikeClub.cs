@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class SpikeClub : ClubProj_Reflective
+public class SpikeClub : ClubProj
 {
 	private List<Vector2> moonBladeI = [];
 	private List<Vector2> moonBladeII = [];
@@ -14,6 +14,7 @@ public class SpikeClub : ClubProj_Reflective
 
 	public override void SetCustomDefaults()
 	{
+		EnableReflection = true;
 		HitLength = 32f;
 		ReflectionStrength = 6f;
 	}

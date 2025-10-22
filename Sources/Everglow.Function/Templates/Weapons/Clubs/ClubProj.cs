@@ -32,6 +32,8 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	{
 	}
 
+	private bool enableReflection = false;
+
 	/// <summary>
 	/// Angular velocity
 	/// </summary>
@@ -87,6 +89,34 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 	/// </summary>
 	public Queue<Vector2> TrailVecs { get; private set; }
 
+	/// <summary>
+	/// Represents whether the club projectile can reflecting. Default to <c>false</c>.
+	/// <para/> Set this to <c>true</c> will also set <see cref="Beta"/> and <see cref="MaxOmega"/> to corresponding default values.
+	/// </summary>
+	public bool EnableReflection
+	{
+		get => enableReflection;
+		protected set
+		{
+			enableReflection = value;
+			if (value)
+			{
+				Beta = MaxOmega == 0.003f ? 0.0024f : Beta;
+				MaxOmega = MaxOmega == 0.3f ? 0.27f : MaxOmega;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Reflection Strength. Default to <c>4f</c>.
+	/// </summary>
+	public float ReflectionStrength { get; protected set; } = 4f;
+
+	/// <summary>
+	/// Reflection texture. Default to <see cref="string.Empty"/>.
+	/// </summary>
+	public string ReflectionTexture { get; protected set; } = string.Empty;
+
 	public virtual BlendState TrailBlendState() => BlendState.NonPremultiplied;
 
 	public virtual string TrailShapeTex() => ModAsset.Melee_Mod;
@@ -109,6 +139,12 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		float w = 1 - Math.Abs((trailVector.X * 0.5f + trailVector.Y * 0.5f) / trailVector.Length());
 		float w2 = MathF.Sqrt(TrailAlpha(factor));
 		w *= w2 * w;
+
+		if (EnableReflection)
+		{
+			w *= ReflectionStrength;
+		}
+
 		return w;
 	}
 
@@ -243,6 +279,38 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 
 	public virtual void PostPreDraw()
 	{
+		if (EnableReflection)
+		{
+			var bars = CreateTrailVertices(useSpecialAplha: true);
+			if (bars == null)
+			{
+				return;
+			}
+
+			var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
+			lightColor.W = 0.7f * Omega;
+			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+
+			Texture2D projTexture = ReflectionTexture != string.Empty
+				? ModContent.Request<Texture2D>(ReflectionTexture).Value
+				: (Texture2D)ModContent.Request<Texture2D>(Texture);
+
+			SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
+
+			Effect clubTrailEffect = ModAsset.MetalClubTrail.Value;
+			clubTrailEffect.Parameters["uTransform"].SetValue(model * projection);
+			clubTrailEffect.Parameters["tex1"].SetValue(projTexture);
+			clubTrailEffect.Parameters["Light"].SetValue(lightColor);
+			clubTrailEffect.CurrentTechnique.Passes["TrailByOrigTex"].Apply();
+
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.spriteBatch.End();
+			Main.spriteBatch.Begin(sBS);
+		}
 	}
 
 	protected List<Vertex2D> CreateTrailVertices(float paramA = 0.1f, float paramB = 0.1f, bool useSpecialAplha = true, Color? trailColor = null)

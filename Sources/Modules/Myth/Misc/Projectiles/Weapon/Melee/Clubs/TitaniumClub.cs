@@ -1,9 +1,10 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class TitaniumClub : ClubProj_Reflective
+public class TitaniumClub : ClubProj
 {
 	public override void SetCustomDefaults()
 	{
+		EnableReflection = true;
 		ReflectionStrength = 5f;
 		ReflectionTexture = ModAsset.TitaniumClub_light_Mod;
 		Beta = 0.0062f;

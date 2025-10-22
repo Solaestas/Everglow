@@ -1,7 +1,12 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CorruptClub : ClubProj_Reflective
+public class CorruptClub : ClubProj
 {
+	public override void SetCustomDefaults()
+	{
+		EnableReflection = true;
+	}
+
 	public override void AI()
 	{
 		base.AI();
