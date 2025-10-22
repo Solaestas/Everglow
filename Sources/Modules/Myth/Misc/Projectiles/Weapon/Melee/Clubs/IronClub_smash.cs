@@ -1,6 +1,11 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class IronClub_smash : ClubProjSmash_Reflective
+public class IronClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.IronClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 }

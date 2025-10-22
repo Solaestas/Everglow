@@ -2,9 +2,14 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CobaltClub_smash : ClubProjSmash_Reflective
+public class CobaltClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.CobaltClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 
 	public override string TrailColorTex() => ModAsset.CobaltClub_light_Mod;
 

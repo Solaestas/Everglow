@@ -2,11 +2,16 @@ using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class StarDancer_smash : ClubProjSmash_Reflective
+public class StarDancer_smash : ClubProjSmash
 {
-	public override string TrailColorTex() => ModAsset.StarDancer_glow_Mod;
-
 	public override string Texture => ModAsset.StarDancer_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
+
+	public override string TrailColorTex() => ModAsset.StarDancer_glow_Mod;
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

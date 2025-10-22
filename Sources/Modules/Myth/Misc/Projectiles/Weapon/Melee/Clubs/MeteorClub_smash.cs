@@ -1,10 +1,15 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MeteorClub_smash : ClubProjSmash_Reflective
+public class MeteorClub_smash : ClubProjSmash
 {
-	public override string TrailColorTex() => ModAsset.MeteorClub_glow_Mod;
-
 	public override string Texture => ModAsset.MeteorClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
+
+	public override string TrailColorTex() => ModAsset.MeteorClub_glow_Mod;
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{

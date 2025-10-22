@@ -1,8 +1,13 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class SpikeClub_smash : ClubProjSmash_Reflective
+public class SpikeClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.SpikeClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{

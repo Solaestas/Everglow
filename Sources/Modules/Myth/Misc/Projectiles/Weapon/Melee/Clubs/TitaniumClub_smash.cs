@@ -1,6 +1,6 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class TitaniumClub_smash : ClubProjSmash_Reflective
+public class TitaniumClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.TitaniumClub_Mod;
 
@@ -8,6 +8,7 @@ public class TitaniumClub_smash : ClubProjSmash_Reflective
 
 	public override void SetDef()
 	{
+		EnableReflection = true;
 		ReflectionStrength = 5f;
 	}
 

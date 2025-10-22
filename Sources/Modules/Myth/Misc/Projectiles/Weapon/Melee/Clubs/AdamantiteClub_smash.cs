@@ -1,8 +1,13 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class AdamantiteClub_smash : ClubProjSmash_Reflective
+public class AdamantiteClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.AdamantiteClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 
 	public override void Smash(int level)
 	{

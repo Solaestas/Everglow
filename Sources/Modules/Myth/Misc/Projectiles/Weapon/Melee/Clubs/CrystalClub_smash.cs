@@ -3,10 +3,11 @@ using Everglow.Myth.Misc.Dusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CrystalClub_smash : ClubProjSmash_Reflective
+public class CrystalClub_smash : ClubProjSmash
 {
 	public override void SetDef()
 	{
+		EnableReflection = true;
 		ReflectionStrength = 8f;
 	}
 

@@ -2,9 +2,14 @@ using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MythrilClub_smash : ClubProjSmash_Reflective
+public class MythrilClub_smash : ClubProjSmash
 {
 	public override string Texture => ModAsset.MythrilClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 
 	public override string TrailColorTex() => ModAsset.MythrilClub_light_Mod;
 

@@ -25,6 +25,10 @@ public abstract class ClubProjSmash : MeleeProj
 
 	protected Queue<Vector2> SmashTrailVecs { get; private set; } = new Queue<Vector2>();
 
+	public bool EnableReflection { get; protected set; } = false;
+
+	public float ReflectionStrength { get; protected set; } = 4f;
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 80;
@@ -315,7 +319,21 @@ public abstract class ClubProjSmash : MeleeProj
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = TrailAlpha(factor);
+
+			float w;
+			if (!EnableReflection)
+			{
+				w = TrailAlpha(factor);
+			}
+			else
+			{
+				Vector2 trailSelfPos = smoothedTrail[i] - Projectile.Center;
+				w = 1 - Math.Abs((trailSelfPos.X * 0.5f + trailSelfPos.Y * 0.5f) / trailSelfPos.Length());
+				float w2 = MathF.Sqrt(TrailAlpha(factor));
+				w *= w2 * w;
+				w *= ReflectionStrength;
+			}
+
 			Color c0 = i == 0 ? Color.Transparent : Color.White;
 
 			bars.Add(new Vertex2D(Projectile.Center, c0, new Vector3(factor, 1, 0f)));
@@ -323,16 +341,21 @@ public abstract class ClubProjSmash : MeleeProj
 		}
 
 		var vColor = color.ToVector4();
-		vColor.W *= 0.1f;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		if (!EnableReflection)
+		{
+			vColor.W *= 0.1f;
+		}
+		else
+		{
+			vColor.W *= 0.15f;
+		}
 
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 
 		Effect MeleeTrail = ModAsset.ClubTrail.Value;
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
+		MeleeTrail.Parameters["uTransform"].SetValue(Main.GameViewMatrix.TransformationMatrix_WorldToScreen());
 		MeleeTrail.Parameters["tex0"].SetValue(ModAsset.Noise_flame_0.Value);
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.Parameters["Light"].SetValue(vColor);
