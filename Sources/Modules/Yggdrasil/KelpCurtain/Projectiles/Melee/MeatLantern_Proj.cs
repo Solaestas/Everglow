@@ -129,11 +129,11 @@ public class MeatLantern_Proj : MeleeProj
 
 		if (attackType == 0)
 		{
+			LockPlayerDir(Player);
 			float rot = player.direction;
 			if (timer < 20)
 			{
 				useTrail = false;
-				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
@@ -166,11 +166,11 @@ public class MeatLantern_Proj : MeleeProj
 		}
 		if (attackType == 1)
 		{
+			LockPlayerDir(Player);
 			float rot = -player.direction;
 			if (timer < 20)
 			{
 				useTrail = false;
-				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(60, targetRot, -0.75f, rot), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
@@ -203,10 +203,10 @@ public class MeatLantern_Proj : MeleeProj
 		}
 		if (attackType == 2)
 		{
+			LockPlayerDir(Player);
 			if (timer < 20)
 			{
 				useTrail = false;
-				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 + Player.direction * 1.2f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(60, targetRot, -1.2f), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
@@ -249,11 +249,11 @@ public class MeatLantern_Proj : MeleeProj
 		}
 		if (attackType == 3)
 		{
+			LockPlayerDir(Player);
 			float rot = -player.direction;
 			if (timer < 20)
 			{
 				useTrail = false;
-				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 2.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, targetRot, 0, rot), 0.15f);
 				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
