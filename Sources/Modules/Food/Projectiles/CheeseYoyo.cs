@@ -1,10 +1,9 @@
 using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Food.Dusts;
-using Terraria.GameContent;
 
 namespace Everglow.Food.Projectiles;
 
-public class CheeseYoyo_proj : YoyoProjectile
+public class CheeseYoyo : YoyoProjectile
 {
 	public override void SetCustomDefaults()
 	{

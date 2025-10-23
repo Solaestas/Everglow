@@ -79,7 +79,7 @@ public abstract class YoyoProjectile : ModProjectile
 		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 10f;
 	}
 
-	public override void SetDefaults()
+	public sealed override void SetDefaults()
 	{
 		Projectile.friendly = true;
 		Projectile.hostile = false;
@@ -160,11 +160,10 @@ public abstract class YoyoProjectile : ModProjectile
 	public override void AI()
 	{
 		YoyoAI();
-		ExtraAI();
 	}
 
 	/// <summary>
-	/// Reading base._ before overriding.
+	/// Apply the bounce effect and counterweight/yoyo glove effect on hit.
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="hit"></param>
@@ -173,7 +172,6 @@ public abstract class YoyoProjectile : ModProjectile
 	{
 		ModifyOnHitBounce(target, hit, damageDone);
 		ModifyCounterWeightAndYoyoGloveEffect(target.Center, Projectile.damage, Projectile.knockBack);
-		base.OnHitNPC(target, hit, damageDone);
 	}
 
 	public virtual void ModifyOnHitBounce(NPC target, NPC.HitInfo hit, int damageDone)
@@ -482,14 +480,10 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.rotation += RotationalSpeed;
 	}
 
-	public virtual void ExtraAI()
-	{
-	}
-
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawYoyo_String();
-		return base.PreDraw(ref lightColor);
+		return true;
 	}
 
 	/// <summary>

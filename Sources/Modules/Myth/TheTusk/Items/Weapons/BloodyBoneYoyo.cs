@@ -1,36 +1,14 @@
-using Terraria.GameContent.Creative;
-using Terraria.Localization;
+using Everglow.Commons.Templates.Weapons.Yoyos;
 
 namespace Everglow.Myth.TheTusk.Items.Weapons;
 
-public class BloodyBoneYoyo : ModItem
+public class BloodyBoneYoyo : YoyoItem
 {
-	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
-
-	public override void SetStaticDefaults()
+	public override void SetCustomDefaults()
 	{
-		ItemID.Sets.Yoyo[Item.type] = true;
-		ItemID.Sets.GamepadExtraRange[Item.type] = 15;
-		ItemID.Sets.GamepadSmartQuickReach[Item.type] = true;
-		CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-		ItemID.Sets.Yoyo[Item.type] = true;
-	}
-	public override void SetDefaults()
-	{
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.width = 24;
-		Item.height = 24;
-		Item.noUseGraphic = true;
-		Item.UseSound = SoundID.Item1;
-		Item.DamageType = DamageClass.Melee;
-		Item.channel = true;
 		Item.shoot = ModContent.ProjectileType<Projectiles.Weapon.BloodyBoneYoyo>();
-		Item.useAnimation = 5;
-		Item.useTime = 14;
-		Item.shootSpeed = 0f;
 		Item.knockBack = 0.2f;
 		Item.damage = 24;
-		Item.noMelee = true;
 		Item.value = Item.sellPrice(0, 0, 2, 0);
 		Item.rare = ItemRarityID.Green;
 	}

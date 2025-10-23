@@ -9,7 +9,7 @@ public class BloodyBoneYoyo : YoyoProjectile
 	{
 		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 60;
 		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 7;
-		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 120;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 320;
 	}
 
 	public struct Tentacle
@@ -176,10 +176,9 @@ public class BloodyBoneYoyo : YoyoProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		tentacles = new List<Tentacle>();
-		base.OnSpawn(source);
 	}
 
-	public override void ExtraAI()
+	public override void PostAI()
 	{
 		if (Projectile.oldPosition != Vector2.Zero)
 		{

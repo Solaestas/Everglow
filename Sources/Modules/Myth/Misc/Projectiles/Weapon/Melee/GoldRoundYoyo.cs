@@ -2,7 +2,6 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
@@ -30,10 +29,9 @@ public class GoldRoundYoyo : YoyoProjectile
 		trailWidth = 18f;
 		hitCounter = 0;
 		Power = 0;
-		base.OnSpawn(source);
 	}
 
-	public override void AI()
+	public override void PostAI()
 	{
 		Player player = Main.player[Projectile.owner];
 		if (Power > 400)
@@ -42,51 +40,37 @@ public class GoldRoundYoyo : YoyoProjectile
 
 			foreach (NPC npc in Main.npc)
 			{
-				if (Main.rand.NextBool(60))
+				if (Main.rand.NextBool(60)
+					&& npc != null && npc.active && !npc.dontTakeDamage && !npc.friendly
+					&& player.ownedProjectileCounts[ModContent.ProjectileType<FocusRay>()] < 5
+					&& (Projectile.Center - npc.Center).Length() < 120)
 				{
-					if (npc != null && npc.active)
+					var checkNPCList = new List<int>();
+					foreach (Projectile proj in Main.projectile)
 					{
-						if (!npc.dontTakeDamage && !npc.friendly)
+						if (proj != null && proj.active)
 						{
-							if (player.ownedProjectileCounts[ModContent.ProjectileType<FocusRay>()] < 5)
+							if (proj.owner == Projectile.owner)
 							{
-								float distance = (Projectile.Center - npc.Center).Length();
-								if (distance < 120)
+								if (proj.type == ModContent.ProjectileType<FocusRay>())
 								{
-									List<int> checkNPCList = new List<int>();
-									foreach (Projectile proj in Main.projectile)
+									FocusRay fcR0 = proj.ModProjectile as FocusRay;
+									if (fcR0 != null)
 									{
-										if (proj != null && proj.active)
-										{
-											if (proj.owner == Projectile.owner)
-											{
-												if (proj.type == ModContent.ProjectileType<FocusRay>())
-												{
-													FocusRay fcR0 = proj.ModProjectile as FocusRay;
-													if (fcR0 != null)
-													{
-														checkNPCList.Add(fcR0.StickTarget.whoAmI);
-													}
-												}
-											}
-										}
-									}
-									if (!checkNPCList.Contains(npc.whoAmI))
-									{
-										Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<FocusRay>(), Projectile.damage * 2, 0, Projectile.owner);
-										FocusRay fcR = p0.ModProjectile as FocusRay;
-										if (fcR != null)
-										{
-											fcR.StickTarget = npc;
-											fcR.Yoyo = Projectile;
-										}
+										checkNPCList.Add(fcR0.StickTarget.whoAmI);
 									}
 								}
 							}
-							else
-							{
-								break;
-							}
+						}
+					}
+					if (!checkNPCList.Contains(npc.whoAmI))
+					{
+						Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), npc.Center, Vector2.zeroVector, ModContent.ProjectileType<FocusRay>(), Projectile.damage * 2, 0, Projectile.owner);
+						FocusRay fcR = p0.ModProjectile as FocusRay;
+						if (fcR != null)
+						{
+							fcR.StickTarget = npc;
+							fcR.Yoyo = Projectile;
 						}
 					}
 				}
@@ -115,7 +99,6 @@ public class GoldRoundYoyo : YoyoProjectile
 			ai = new float[] { 0, 0 },
 		};
 		Ins.VFXManager.Add(spark);
-		base.AI();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
