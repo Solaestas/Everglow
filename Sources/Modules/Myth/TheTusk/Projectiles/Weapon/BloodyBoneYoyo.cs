@@ -7,9 +7,9 @@ public class BloodyBoneYoyo : YoyoProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		MaxStaySeconds = 60;
-		Acceleration = 7;
-		MaxRopeLength = 120;
+		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 60;
+		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 7;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 120;
 	}
 
 	public struct Tentacle

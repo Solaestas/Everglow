@@ -11,32 +11,35 @@ namespace Everglow.Commons.Templates.Weapons.Yoyos;
 public abstract class YoyoProjectile : ModProjectile
 {
 	/// <summary>
-	/// Inverse factor for rebound speed when hitting an NPC. Higher values reduce bounce velocity.
-	/// <br/>Default to 4f.
-	/// </summary>
-	public float Weight { get; protected set; }
-
-	/// <summary>
 	/// Maximum seconds the yoyo will remain deployed before returning.
 	/// Set less than 0 for infinite lifetime.
 	/// <br/>Default to -1f.
+	/// <para/> Set <see cref="ProjectileID.Sets.YoyosLifeTimeMultiplier"/> to change.
 	/// </summary>
-	public float MaxStaySeconds { get; protected set; }
+	public float YoyosLifeTimeMultiplier => ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type];
 
 	/// <summary>
 	/// Maximum string length. Default to 200f.
+	/// <para/> Set <see cref="ProjectileID.Sets.YoyosMaximumRange"/> to change.
 	/// </summary>
-	public float MaxRopeLength { get; protected set; }
+	public float YoyosMaximumRange => ProjectileID.Sets.YoyosMaximumRange[Projectile.type];
 
 	/// <summary>
-	/// Acceleration used by the yoyo when moving toward the target position. Default to 14f.
+	/// Acceleration used by the yoyo when moving toward the target position. Default to 10f.
+	/// <para/> Set <see cref="ProjectileID.Sets.YoyosTopSpeed"/> to change.
 	/// </summary>
-	public float Acceleration { get; protected set; }
+	public float YoyosTopSpeed => ProjectileID.Sets.YoyosTopSpeed[Projectile.type];
 
 	/// <summary>
 	/// Angular velocity applied to the yoyo's rotation each tick. Default to 0.45f.
 	/// </summary>
-	public float RotatedSpeed { get; protected set; }
+	public float RotationalSpeed { get; protected set; }
+
+	/// <summary>
+	/// Inverse factor for rebound speed when hitting an NPC. Higher values reduce bounce velocity.
+	/// <br/>Default to 4f.
+	/// </summary>
+	public float Weight { get; protected set; }
 
 	/// <summary>
 	/// Points that form the rendered yoyo string (from player to yoyo). Use <see cref="GenerateYoyo_String"/> to populate.
@@ -55,6 +58,7 @@ public abstract class YoyoProjectile : ModProjectile
 
 	/// <summary>
 	/// Used to control the behavior of the yoyo over time. Not always time in seconds.
+	/// <br/> Make difference between yoyo projectiles by adding different values per tick.
 	/// </summary>
 	public ref float DeployTimer => ref Projectile.localAI[0];
 
@@ -87,10 +91,7 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.DamageType = DamageClass.MeleeNoSpeed;
 
-		MaxStaySeconds = -1f;
-		MaxRopeLength = 200;
-		Acceleration = 14f;
-		RotatedSpeed = 0.45f;
+		RotationalSpeed = 0.45f;
 		Weight = 4f;
 		SetCustomDefaults();
 	}
@@ -154,14 +155,6 @@ public abstract class YoyoProjectile : ModProjectile
 			cursor.EmitIsinst(typeof(YoyoProjectile));
 			cursor.EmitBrtrue(isYoyoProjLabel);
 		}
-	}
-
-	public override bool PreAI()
-	{
-		if (Projectile.ModProjectile is not null)
-		{
-		}
-		return base.PreAI();
 	}
 
 	public override void AI()
@@ -257,10 +250,7 @@ public abstract class YoyoProjectile : ModProjectile
 		}
 	}
 
-	public override bool OnTileCollide(Vector2 oldVelocity)
-	{
-		return false;
-	}
+	public override bool OnTileCollide(Vector2 oldVelocity) => false;
 
 	/// <summary>
 	/// Yoyo AI from vanilla. Based on vanilla <see cref="Projectile.AI_099_2"/>.
@@ -273,10 +263,9 @@ public abstract class YoyoProjectile : ModProjectile
 	public virtual void YoyoAI()
 	{
 		Player player = Main.player[Projectile.owner];
-		player.statDefense.AdditiveBonus += 1;
 
 		bool isSubYoyoProj = false; // Used for additional yoyos from Yoyo Glove.
-		float maxRange = MaxRopeLength;
+		float maxRange = YoyosMaximumRange;
 		for (int i = 0; i < Projectile.whoAmI; i++)
 		{
 			if (Main.projectile[i].active && Main.projectile[i].owner == Projectile.owner && Main.projectile[i].type == Projectile.type)
@@ -294,8 +283,8 @@ public abstract class YoyoProjectile : ModProjectile
 			}
 
 			float elapsedSeconds = DeployTimer / 60f;
-			elapsedSeconds /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
-			if (elapsedSeconds > MaxStaySeconds && MaxStaySeconds > 0)
+			elapsedSeconds /= (1f + player.meleeSpeed) / 2f;
+			if (elapsedSeconds > YoyosLifeTimeMultiplier && YoyosLifeTimeMultiplier > 0)
 			{
 				TargetX = -1f;
 			}
@@ -328,10 +317,10 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.timeLeft = 6;
 		if (player.yoyoString)
 		{
-			maxRange = MaxRopeLength * 1.25f + 30f;
+			maxRange = YoyosMaximumRange * 1.25f + 30f;
 		}
 		maxRange /= (1f + player.inverseMeleeSpeed * 3f) / 4f;
-		float topSpeed = Acceleration / ((1f + player.inverseMeleeSpeed * 3f) / 4f);
+		float topSpeed = YoyosTopSpeed / ((1f + player.inverseMeleeSpeed * 3f) / 4f);
 
 		float velocityLerpDivisor = MathF.Max(14f - topSpeed / 2f, 1.01f); // controls smoothing of velocity updates
 
@@ -490,7 +479,7 @@ public abstract class YoyoProjectile : ModProjectile
 				Projectile.velocity = (Projectile.velocity * (velocityLerpDivisor - 1f) + toOwner) / velocityLerpDivisor;
 			}
 		}
-		Projectile.rotation += RotatedSpeed;
+		Projectile.rotation += RotationalSpeed;
 	}
 
 	public virtual void ExtraAI()

@@ -10,10 +10,10 @@ public class GoldRoundYoyo : YoyoProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		MaxRopeLength = 380;
-		MaxStaySeconds = 120;
-		RotatedSpeed = 0.3f;
-		Acceleration = 20;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 380;
+		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 120;
+		RotationalSpeed = 0.3f;
+		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 20;
 	}
 
 	private float timer;

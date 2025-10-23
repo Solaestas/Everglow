@@ -8,7 +8,7 @@ public class CheeseYoyo_proj : YoyoProjectile
 {
 	public override void SetStaticDefaults()
 	{
-		RotatedSpeed = 0.3f;
+		RotationalSpeed = 0.3f;
 	}
 
 	public override void AI()

@@ -4,11 +4,11 @@ namespace Everglow.Example.Test;
 
 public class ExampleEverglowYoyo_Projectile : YoyoProjectile
 {
-	public override void SetCustomDefaults()
+	public override void SetStaticDefaults()
 	{
-		MaxStaySeconds = 35000000;
-		MaxRopeLength = 2500;
-		Acceleration = 15;
+		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 35000000;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 2500;
+		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 15;
 	}
 
 	public override void YoyoAI()
