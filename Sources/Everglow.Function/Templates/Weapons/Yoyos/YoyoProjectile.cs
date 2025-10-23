@@ -10,26 +10,58 @@ namespace Everglow.Commons.Templates.Weapons.Yoyos;
 
 public abstract class YoyoProjectile : ModProjectile
 {
+	/// <summary>
+	/// Inverse factor for rebound speed when hitting an NPC. Higher values reduce bounce velocity. 
+	/// <br/>Default to 4f.
+	/// </summary>
+	public float Weight { get; protected set; }
+
+	/// <summary>
+	/// Maximum seconds the yoyo will remain deployed before returning.
+	/// Set less than 0 for infinite lifetime.
+	/// <br/>Default to 3f.
+	/// </summary>
+	public float MaxStaySeconds { get; protected set; }
+
+	/// <summary>
+	/// Maximum string length. Default to 200f.
+	/// </summary>
+	public float MaxRopeLength { get; protected set; }
+
+	/// <summary>
+	/// Acceleration used by the yoyo when moving toward the target position. Default to 14f.
+	/// </summary>
+	public float Acceleration { get; protected set; }
+
+	/// <summary>
+	/// Angular velocity applied to the yoyo's rotation each tick. Default to 0.45f.
+	/// </summary>
+	public float RotatedSpeed { get; protected set; }
+
+	/// <summary>
+	/// Points that form the rendered yoyo string (from player to yoyo). Use <see cref="GenerateYoyo_String"/> to populate.
+	/// </summary>
+	public List<Vector2> YoyoStringPos { get; protected set; } = [];
+
 	public override void SetStaticDefaults()
 	{
 		// The following sets are only applicable to yoyo that use aiStyle 99.
 
 		// YoyosLifeTimeMultiplier is how long in seconds the yoyo will stay out before automatically returning to the player.
 		// Vanilla values range from 3f (Wood) to 16f (Chik), and defaults to -1f. Leaving as -1 will make the time infinite.
-		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 3.5f;
+		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = -1;
 
 		// YoyosMaximumRange is the maximum distance the yoyo sleep away from the player.
 		// Vanilla values range from 130f (Wood) to 400f (Terrarian), and defaults to 200f.
-		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 300f;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 200f;
 
 		// YoyosTopSpeed is top speed of the yoyo Projectile.
 		// Vanilla values range from 9f (Wood) to 17.5f (Terrarian), and defaults to 10f.
-		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 13f;
+		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 10f;
 	}
 
 	public override void SetDefaults()
 	{
-		// Projectile.CloneDefaults(549);
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = -1;
@@ -37,11 +69,9 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.height = 16;
 		Projectile.scale = 1f;
 
-		// Projectile.aiStyle = ProjAIStyleID.Yoyo;
 		Projectile.aiStyle = -1;
 		Projectile.DamageType = DamageClass.MeleeNoSpeed;
 
-		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 200f;
 		MaxStaySeconds = 3;
 		MaxRopeLength = 200;
 		Acceleration = 14f;
@@ -60,9 +90,9 @@ public abstract class YoyoProjectile : ModProjectile
 	}
 
 	/// <summary>
-	/// Modify the counterweight checking code inside Projectile.AI_099_1();
+	/// Injects IL to adjust the counterweight check inside Projectile.AI_099_1 so modded yoyo projectiles are handled.
 	/// </summary>
-	/// <param name="il"></param>
+	/// <param name="il">The IL context provided by MonoMod for the hook.</param>
 	private void ILHook_Projectile_Counterweight(ILContext il)
 	{
 		ILCursor cursor = new ILCursor(il);
@@ -118,36 +148,6 @@ public abstract class YoyoProjectile : ModProjectile
 		}
 		return base.PreAI();
 	}
-
-	/// <summary>
-	/// When hit npc, the speed of rebound inversely proportional to the value.default to 10.
-	/// </summary>
-	public float Weight;
-
-	/// <summary>
-	/// Yoyo exists after [this] seconds will be reuse.less than 0 to make yoyo exists enternal.default to 3.
-	/// </summary>
-	public float MaxStaySeconds;
-
-	/// <summary>
-	/// default to 200.
-	/// </summary>
-	public float MaxRopeLength;
-
-	/// <summary>
-	/// default to 14.
-	/// </summary>
-	public float Acceleration;
-
-	/// <summary>
-	/// default to 0.45f.
-	/// </summary>
-	public float RotatedSpeed;
-
-	/// <summary>
-	/// The yoyo string, a rope connect yoyo projectile with player's hand.
-	/// </summary>
-	public List<Vector2> YoyoStringPos = new List<Vector2>();
 
 	public override void AI()
 	{
