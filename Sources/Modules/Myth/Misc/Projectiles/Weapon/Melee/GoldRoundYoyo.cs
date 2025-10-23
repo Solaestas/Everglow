@@ -12,8 +12,12 @@ public class GoldRoundYoyo : YoyoProjectile
 	{
 		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 380;
 		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 120;
-		RotationalSpeed = 0.3f;
 		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 20;
+	}
+
+	public override void SetCustomDefaults()
+	{
+		RotationalSpeed = 0.3f;
 	}
 
 	private float timer;
@@ -152,11 +156,6 @@ public class GoldRoundYoyo : YoyoProjectile
 		base.OnHitNPC(target, hit, damageDone);
 	}
 
-	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-	{
-		return base.Colliding(projHitbox, targetHitbox);
-	}
-
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D texture = ModAsset.GoldRoundYoyoGlow.Value;
@@ -173,8 +172,6 @@ public class GoldRoundYoyo : YoyoProjectile
 		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), Projectile.scale, SpriteEffects.None, 0);
 		return false;
 	}
-
-	public override Color ModifyYoyoStringColor_PostVanillaRender(Color vanillaColor, Vector2 worldPos, float index, float stringCount) => base.ModifyYoyoStringColor_PostVanillaRender(vanillaColor, worldPos, index, stringCount);
 
 	public void DrawCorona()
 	{

@@ -231,11 +231,6 @@ public class BloodyBoneYoyo : YoyoProjectile
 		}
 	}
 
-	public override void DrawYoyo_String(Vector2 playerHeldPos = default)
-	{
-		base.DrawYoyo_String(playerHeldPos);
-	}
-
 	public override Color ModifyYoyoStringColor_PostVanillaRender(Color vanillaColor, Vector2 worldPos, float index, float stringCount)
 	{
 		float value = index / stringCount;

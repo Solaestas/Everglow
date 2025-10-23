@@ -6,14 +6,9 @@ namespace Everglow.Food.Projectiles;
 
 public class CheeseYoyo_proj : YoyoProjectile
 {
-	public override void SetStaticDefaults()
+	public override void SetCustomDefaults()
 	{
 		RotationalSpeed = 0.3f;
-	}
-
-	public override void AI()
-	{
-		base.AI();
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
