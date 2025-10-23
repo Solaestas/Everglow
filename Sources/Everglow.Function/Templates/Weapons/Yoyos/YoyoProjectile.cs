@@ -11,7 +11,7 @@ namespace Everglow.Commons.Templates.Weapons.Yoyos;
 public abstract class YoyoProjectile : ModProjectile
 {
 	/// <summary>
-	/// Inverse factor for rebound speed when hitting an NPC. Higher values reduce bounce velocity. 
+	/// Inverse factor for rebound speed when hitting an NPC. Higher values reduce bounce velocity.
 	/// <br/>Default to 4f.
 	/// </summary>
 	public float Weight { get; protected set; }
@@ -19,7 +19,7 @@ public abstract class YoyoProjectile : ModProjectile
 	/// <summary>
 	/// Maximum seconds the yoyo will remain deployed before returning.
 	/// Set less than 0 for infinite lifetime.
-	/// <br/>Default to 3f.
+	/// <br/>Default to -1f.
 	/// </summary>
 	public float MaxStaySeconds { get; protected set; }
 
@@ -42,6 +42,21 @@ public abstract class YoyoProjectile : ModProjectile
 	/// Points that form the rendered yoyo string (from player to yoyo). Use <see cref="GenerateYoyo_String"/> to populate.
 	/// </summary>
 	public List<Vector2> YoyoStringPos { get; protected set; } = [];
+
+	/// <summary>
+	/// Target X position (World Coordinate) for the yoyo to move toward. Set to -1 to return to player.
+	/// </summary>
+	public ref float TargetX => ref Projectile.ai[0];
+
+	/// <summary>
+	/// Target Y position (World Coordinate) for the yoyo to move toward.
+	/// </summary>
+	public ref float TargetY => ref Projectile.ai[1];
+
+	/// <summary>
+	/// Used to control the behavior of the yoyo over time. Not always time in seconds.
+	/// </summary>
+	public ref float DeployTimer => ref Projectile.localAI[0];
 
 	public override void SetStaticDefaults()
 	{
@@ -72,7 +87,7 @@ public abstract class YoyoProjectile : ModProjectile
 		Projectile.aiStyle = -1;
 		Projectile.DamageType = DamageClass.MeleeNoSpeed;
 
-		MaxStaySeconds = 3;
+		MaxStaySeconds = -1f;
 		MaxRopeLength = 200;
 		Acceleration = 14f;
 		RotatedSpeed = 0.45f;
@@ -248,7 +263,7 @@ public abstract class YoyoProjectile : ModProjectile
 	}
 
 	/// <summary>
-	/// Yoyo AI from vanilla.
+	/// Yoyo AI from vanilla. Based on vanilla <see cref="Projectile.AI_099_2"/>.
 	/// </summary>
 	/// <param name="index"></param>
 	/// <param name="seconds"></param>
@@ -259,28 +274,30 @@ public abstract class YoyoProjectile : ModProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		player.statDefense.AdditiveBonus += 1;
-		bool checkSelf = false;
-		float maxRopeDistance = MaxRopeLength;
+
+		bool isSubYoyoProj = false; // Used for additional yoyos from Yoyo Glove.
+		float maxRange = MaxRopeLength;
 		for (int i = 0; i < Projectile.whoAmI; i++)
 		{
 			if (Main.projectile[i].active && Main.projectile[i].owner == Projectile.owner && Main.projectile[i].type == Projectile.type)
 			{
-				checkSelf = true;
+				isSubYoyoProj = true;
 			}
 		}
+
 		if (Projectile.owner == Main.myPlayer)
 		{
-			Projectile.localAI[0] += 1f;
-			if (checkSelf)
+			DeployTimer += 1f;
+			if (isSubYoyoProj)
 			{
-				Projectile.localAI[0] += Main.rand.NextFloat(1.0f, 3.1f);
+				DeployTimer += Main.rand.NextFloat(1.0f, 3.1f);
 			}
 
-			float timerOfSecond = Projectile.localAI[0] / 60f;
-			timerOfSecond /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
-			if (timerOfSecond > MaxStaySeconds && MaxStaySeconds > 0)
+			float elapsedSeconds = DeployTimer / 60f;
+			elapsedSeconds /= (1f + player.GetAttackSpeed(DamageClass.Generic)) / 2f;
+			if (elapsedSeconds > MaxStaySeconds && MaxStaySeconds > 0)
 			{
-				Projectile.ai[0] = -1f;
+				TargetX = -1f;
 			}
 		}
 		if (player.dead)
@@ -288,11 +305,10 @@ public abstract class YoyoProjectile : ModProjectile
 			Projectile.Kill();
 			return;
 		}
-		if (!checkSelf)
+		if (!isSubYoyoProj)
 		{
 			player.heldProj = Projectile.whoAmI;
-			player.itemAnimation = 2;
-			player.itemTime = 2;
+			player.SetDummyItemTime(2);
 			if (Projectile.Center.X > player.Center.X)
 			{
 				player.ChangeDir(1);
@@ -308,154 +324,170 @@ public abstract class YoyoProjectile : ModProjectile
 		{
 			Projectile.Kill();
 		}
+
 		Projectile.timeLeft = 6;
 		if (player.yoyoString)
 		{
-			maxRopeDistance = MaxRopeLength * 1.25f + 30f;
+			maxRange = MaxRopeLength * 1.25f + 30f;
 		}
-		maxRopeDistance /= (1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f;
-		float num3 = Acceleration / ((1f + player.GetAttackSpeed(DamageClass.Generic) * 3f) / 4f);
-		float num4 = 14f - num3 / 2f;
-		float num5 = 5f + num3 / 2f;
-		if (checkSelf)
+		maxRange /= (1f + player.inverseMeleeSpeed * 3f) / 4f;
+		float topSpeed = Acceleration / ((1f + player.inverseMeleeSpeed * 3f) / 4f);
+
+		float velocityLerpDivisor = MathF.Max(14f - topSpeed / 2f, 1.01f); // controls smoothing of velocity updates
+
+		float accelThreshold = 5f + topSpeed / 2f;
+		if (isSubYoyoProj)
 		{
-			num5 += 20f;
+			accelThreshold += 20f;
 		}
-		if (Projectile.ai[0] >= 0f)
+
+		if (TargetX >= 0f)
 		{
-			if (Projectile.velocity.Length() > num3)
+			if (Projectile.velocity.Length() > topSpeed)
 			{
 				Projectile.velocity *= 0.98f;
 			}
 
-			bool flag3 = false;
-			bool flag4 = false;
-			Vector2 vector = player.Center - Projectile.Center;
-			if (vector.Length() > maxRopeDistance)
+			bool isBeyondRange = false;
+			bool isFarBeyondRange = false;
+			Vector2 vectorToPlayer = player.Center - Projectile.Center;
+			if (vectorToPlayer.Length() > maxRange)
 			{
-				flag3 = true;
-				if ((double)vector.Length() > maxRopeDistance * 1.3)
+				isBeyondRange = true;
+				if (vectorToPlayer.Length() > maxRange * 1.3)
 				{
-					flag4 = true;
+					isFarBeyondRange = true;
 				}
 			}
 			if (Projectile.owner == Main.myPlayer)
 			{
 				if (!player.channel || player.stoned || player.frozen)
 				{
-					Projectile.ai[0] = -1f;
-					Projectile.ai[1] = 0f;
+					TargetX = -1f;
+					TargetY = 0f;
 					Projectile.netUpdate = true;
 				}
 				else
 				{
-					Vector2 vector2 = Main.ReverseGravitySupport(Main.MouseScreen, 0f) + Main.screenPosition;
-					float x = vector2.X;
-					float y = vector2.Y;
-					Vector2 vector3 = new Vector2(x, y) - player.Center;
-					if (vector3.Length() > maxRopeDistance)
+					Vector2 targetWorld = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
+					float targetX = targetWorld.X;
+					float targetY = targetWorld.Y;
+					Vector2 offsetToPlayer = new Vector2(targetX, targetY) - player.Center;
+					if (offsetToPlayer.Length() > maxRange)
 					{
-						vector3.Normalize();
-						vector3 *= maxRopeDistance;
-						vector3 = player.Center + vector3;
-						x = vector3.X;
-						y = vector3.Y;
+						offsetToPlayer.Normalize();
+						offsetToPlayer *= maxRange;
+						offsetToPlayer = player.Center + offsetToPlayer;
+						targetX = offsetToPlayer.X;
+						targetY = offsetToPlayer.Y;
 					}
-					if (Projectile.ai[0] != x || Projectile.ai[1] != y)
+
+					if (TargetX != targetX || TargetY != targetY)
 					{
-						var value = new Vector2(x, y);
-						Vector2 vector4 = value - player.Center;
-						if (vector4.Length() > maxRopeDistance - 1f)
+						var clampedTarget = new Vector2(targetX, targetY);
+						Vector2 clampedOffset = clampedTarget - player.Center;
+						if (clampedOffset.Length() > maxRange - 1f)
 						{
-							vector4.Normalize();
-							vector4 *= maxRopeDistance - 1f;
-							value = player.Center + vector4;
-							x = value.X;
-							y = value.Y;
+							clampedOffset.Normalize();
+							clampedOffset *= maxRange - 1f;
+							clampedTarget = player.Center + clampedOffset;
+							targetX = clampedTarget.X;
+							targetY = clampedTarget.Y;
 						}
-						Projectile.ai[0] = x;
-						Projectile.ai[1] = y;
+						TargetX = targetX;
+						TargetY = targetY;
 						Projectile.netUpdate = true;
 					}
 				}
 			}
-			if (flag4 && Projectile.owner == Main.myPlayer)
+			if (isFarBeyondRange && Projectile.owner == Main.myPlayer)
 			{
-				Projectile.ai[0] = -1f;
+				TargetX = -1f;
 				Projectile.netUpdate = true;
 			}
-			if (Projectile.ai[0] >= 0f)
+			if (TargetX >= 0f)
 			{
-				if (flag3)
+				if (isBeyondRange)
 				{
-					num4 /= 2f;
-					num3 *= 2f;
+					velocityLerpDivisor /= 2f;
+					topSpeed *= 2f;
 					if (Projectile.Center.X > player.Center.X && Projectile.velocity.X > 0f)
 					{
-						Projectile.velocity.X = Projectile.velocity.X * 0.5f;
+						Projectile.velocity.X *= 0.5f;
 					}
 
 					if (Projectile.Center.Y > player.Center.Y && Projectile.velocity.Y > 0f)
 					{
-						Projectile.velocity.Y = Projectile.velocity.Y * 0.5f;
+						Projectile.velocity.Y *= 0.5f;
 					}
 
 					if (Projectile.Center.X < player.Center.X && Projectile.velocity.X > 0f)
 					{
-						Projectile.velocity.X = Projectile.velocity.X * 0.5f;
+						Projectile.velocity.X *= 0.5f;
 					}
 
 					if (Projectile.Center.Y < player.Center.Y && Projectile.velocity.Y > 0f)
 					{
-						Projectile.velocity.Y = Projectile.velocity.Y * 0.5f;
+						Projectile.velocity.Y *= 0.5f;
 					}
 				}
-				var value2 = new Vector2(Projectile.ai[0], Projectile.ai[1]);
-				Vector2 vector5 = value2 - Projectile.Center;
-				Projectile.velocity.Length();
-				if (vector5.Length() > num5)
+
+				Vector2 toTarget = new Vector2(TargetX, TargetY) - Projectile.Center;
+				if (isBeyondRange)
 				{
-					vector5.Normalize();
-					vector5 *= num3;
-					Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector5) / num4;
+					velocityLerpDivisor = 1f;
 				}
-				else if (checkSelf)
+
+				float distanceToTarget = toTarget.Length();
+				if (distanceToTarget > accelThreshold)
 				{
-					if ((double)Projectile.velocity.Length() < (double)num3 * 0.6)
+					toTarget.Normalize();
+					float computedSpeed = Math.Min(distanceToTarget / 2f, topSpeed);
+					if (isBeyondRange)
 					{
-						vector5 = Projectile.velocity;
-						vector5.Normalize();
-						vector5 *= num3 * 0.6f;
-						Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector5) / num4;
+						computedSpeed = Math.Min(computedSpeed, topSpeed / 2f);
+					}
+
+					toTarget *= computedSpeed;
+					Projectile.velocity = (Projectile.velocity * (velocityLerpDivisor - 1f) + toTarget) / velocityLerpDivisor;
+				}
+				else if (isSubYoyoProj)
+				{
+					if ((double)Projectile.velocity.Length() < (double)topSpeed * 0.6)
+					{
+						toTarget = Projectile.velocity;
+						toTarget.Normalize();
+						toTarget *= topSpeed * 0.6f;
+						Projectile.velocity = (Projectile.velocity * (velocityLerpDivisor - 1f) + toTarget) / velocityLerpDivisor;
 					}
 				}
 				else
 				{
 					Projectile.velocity *= 0.8f;
 				}
-				if (checkSelf && !flag3 && (double)Projectile.velocity.Length() < (double)num3 * 0.6)
+				if (isSubYoyoProj && !isBeyondRange && (double)Projectile.velocity.Length() < (double)topSpeed * 0.6)
 				{
 					Projectile.velocity.Normalize();
-					Projectile.velocity *= num3 * 0.6f;
+					Projectile.velocity *= topSpeed * 0.6f;
 				}
 			}
 		}
 		else
 		{
-			num4 *= 0.8f;
-			num3 *= 1.5f;
+			velocityLerpDivisor *= 0.8f;
+			topSpeed *= 1.5f;
 			Projectile.tileCollide = false;
-			Vector2 vector6 = player.position - Projectile.Center;
-			float num6 = vector6.Length();
-			if (num6 < num3 + 10f || num6 == 0f)
+			Vector2 toOwner = player.Center - Projectile.Center;
+			float distanceToOwner = toOwner.Length();
+			if (distanceToOwner < topSpeed + 10f || distanceToOwner == 0f || distanceToOwner > 2000f)
 			{
 				Projectile.Kill();
 			}
 			else
 			{
-				vector6.Normalize();
-				vector6 *= num3;
-				Projectile.velocity = (Projectile.velocity * (num4 - 1f) + vector6) / num4;
+				toOwner.Normalize();
+				toOwner *= topSpeed;
+				Projectile.velocity = (Projectile.velocity * (velocityLerpDivisor - 1f) + toOwner) / velocityLerpDivisor;
 			}
 		}
 		Projectile.rotation += RotatedSpeed;
