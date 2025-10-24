@@ -11,7 +11,7 @@ public class GreenRelicBrick_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<StoneCave_Scene>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<BloodChurch_Scene>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -22,25 +22,25 @@ public class GreenRelicBrick_Item : ModItem
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			Point point = Main.MouseWorld.ToTileCoordinates();
-			var checkTiles = YggdrasilWorldGeneration.BFSContinueTile(point,true, 1024);
+			var checkTiles = YggdrasilWorldGeneration.BFSContinueTile(point, true, 1024);
 			foreach (var tile in checkTiles)
 			{
-				//if (tile.TileType == TileID.GreenDungeonBrick)
-				//{
-				//	tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
-				//}
+				if (tile.TileType == TileID.GreenDungeonBrick)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+				}
 
-				//if (tile.WallType == WallID.GreenDungeonSlab)
-				//{
-				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
-				//}
-				//if (tile.WallType == WallID.GreenDungeon)
-				//{
-				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
-				//}
-				tile.wall = 0;
+				if (tile.WallType == WallID.GreenDungeonSlab)
+				{
+					tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
+				}
+				if (tile.WallType == WallID.GreenDungeon)
+				{
+					tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
+				}
+
+				// tile.wall = 0;
 			}
-			Main.NewText(checkTiles.Count);
 		}
 	}
 }

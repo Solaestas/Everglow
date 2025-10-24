@@ -4,7 +4,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
-public class StoneCave_Scene : ModTile, ISceneTile
+public class BloodChurch_Scene : ModTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -30,10 +30,12 @@ public class StoneCave_Scene : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		var scene_Close = new StoneCave_Scene_Close { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		var scene_Background = new StoneCave_Scene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		var scene_Far = new StoneCave_Scene_Far { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Close = new BloodChurch_Scene_Close { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Fountain = new BloodChurch_Scene_Fountain { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Background = new BloodChurch_Scene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Far = new BloodChurch_Scene_Far { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
 		Ins.VFXManager.Add(scene_Close);
+		Ins.VFXManager.Add(scene_Fountain);
 		Ins.VFXManager.Add(scene_Background);
 		Ins.VFXManager.Add(scene_Far);
 	}

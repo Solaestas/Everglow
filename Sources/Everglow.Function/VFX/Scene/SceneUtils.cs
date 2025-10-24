@@ -16,7 +16,7 @@ public class SceneUtils
 	/// <param name="bars"></param>
 	public static void DrawTileCover(int i, int j, Texture2D texture, float startCoordX, float startCoordY, List<Vertex2D> bars)
 	{
-		Vector2 drawPos0 = new Point(i, j).ToWorldCoordinates() + new Vector2(8);
+		Vector2 drawPos0 = new Point(i, j).ToWorldCoordinates() - new Vector2(8);
 		Vector2 drawPos1 = drawPos0 + new Vector2(16, 0);
 		Vector2 drawPos2 = drawPos0 + new Vector2(0, 16);
 		Vector2 drawPos3 = drawPos0 + new Vector2(16, 16);
