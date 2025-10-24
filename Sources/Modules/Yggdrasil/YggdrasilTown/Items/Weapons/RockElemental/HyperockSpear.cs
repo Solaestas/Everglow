@@ -1,10 +1,12 @@
-using Everglow.Yggdrasil.YggdrasilTown.Projectiles;
+using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.RockElemental;
 
 public class HyperockSpear : ModItem
 {
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeWeapons;
+
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Swing;
@@ -34,6 +36,8 @@ public class HyperockSpear : ModItem
 
 	public override void HoldItem(Player player)
 	{
+		player.ListenMouseWorld();
+
 		bool hasTarget = player.itemAnimation > 0;
 		foreach (Projectile proj in Main.projectile)
 		{

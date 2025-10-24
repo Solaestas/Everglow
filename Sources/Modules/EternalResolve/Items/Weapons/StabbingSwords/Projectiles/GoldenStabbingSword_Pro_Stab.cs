@@ -1,4 +1,5 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class GoldenStabbingSword_Pro_Stab : StabbingProjectile_Stab

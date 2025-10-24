@@ -10,7 +10,7 @@ public class RockSmogLinePipeline : Pipeline
 	{
 		effect = ModAsset.RockSmogLine;
 		effect.Value.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_flame_0.Value);
-		effect.Value.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
+		effect.Value.Parameters["uLine"].SetValue(Commons.ModAsset.TrailV.Value);
 	}
 
 	public override void BeginRender()

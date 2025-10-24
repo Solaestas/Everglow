@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;

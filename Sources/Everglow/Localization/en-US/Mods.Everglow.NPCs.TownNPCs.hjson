@@ -1,0 +1,27 @@
+CanteenMaid: {
+	DisplayName: Canteen Maid
+}
+
+Fevens: {
+	DisplayName: Fevens
+}
+
+Guard_of_YggdrasilTown: {
+	DisplayName: Guard_of_ Yggdrasil Town
+}
+
+Howard_Warden: {
+	DisplayName: Howard_ Warden
+}
+
+InnKeeper: {
+	DisplayName: Inn Keeper
+}
+
+Restauranteur: {
+	DisplayName: Restauranteur
+}
+
+TeahouseLady: {
+	DisplayName: Teahouse Lady
+}

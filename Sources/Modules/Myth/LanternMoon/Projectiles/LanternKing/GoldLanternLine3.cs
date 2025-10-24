@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 

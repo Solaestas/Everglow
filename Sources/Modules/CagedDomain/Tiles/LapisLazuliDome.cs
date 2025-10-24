@@ -2,6 +2,8 @@ using Everglow.CagedDomain.Dusts;
 using Everglow.CagedDomain.Items;
 using Everglow.Commons.TileHelper;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ObjectData;
 
 namespace Everglow.CagedDomain.Tiles
@@ -26,7 +28,8 @@ namespace Everglow.CagedDomain.Tiles
 			TileObjectData.newTile.CoordinateHeights[^1] = 20;
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.newTile.Origin = new(8, 6);
-			TileObjectData.newTile.AnchorBottom = new(Terraria.Enums.AnchorType.SolidTile, 3, 2);
+			TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.None, 0, 0);
+			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
 			TileObjectData.addTile(Type);
 
 			AddMapEntry(new Color(15, 80, 137));

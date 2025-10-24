@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.VFXs;
 using Terraria.Audio;

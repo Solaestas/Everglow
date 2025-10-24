@@ -1,0 +1,79 @@
+SquamousAirProj: {
+	DisplayName: Squamous Air Proj
+}
+
+SquamousDashEffect: {
+	DisplayName: Squamous Dash Effect
+}
+
+SquamousMoonBladePredict: {
+	DisplayName: Squamous Moon Blade Predict
+}
+
+SquamousRockExplosion: {
+	DisplayName: Squamous Rock Explosion
+}
+
+SquamousRockProj: {
+	DisplayName: Squamous Rock Proj
+}
+
+SquamousRockProj_small: {
+	DisplayName: Squamous Rock Proj_small
+}
+
+SquamousRockSpike: {
+	DisplayName: Squamous Rock Spike
+}
+
+SquamousRockSpike_Falling: {
+	DisplayName: Squamous Rock Spike_ Falling
+}
+
+SquamousRockSpike_Falling_Predict: {
+	DisplayName: Squamous Rock Spike_ Falling_ Predict
+}
+
+SquamousRollingStone: {
+	DisplayName: Squamous Rolling Stone
+}
+
+SquamousRollingStone_fly: {
+	DisplayName: Squamous Rolling Stone_fly
+}
+
+SquamousShell_shade: {
+	DisplayName: Squamous Shell_shade
+}
+
+Squamous_HitTile: {
+	DisplayName: Squamous_ Hit Tile
+}
+
+Squamous_Slash: {
+	DisplayName: Squamous_ Slash
+}
+
+YggdrasilMoonBlade: {
+	DisplayName: Yggdrasil Moon Blade
+}
+
+YggdrasilMoonBladeHit: {
+	DisplayName: Yggdrasil Moon Blade Hit
+}
+
+JellyBallCrystal: {
+	DisplayName: Jelly Ball Crystal
+}
+
+JellyBallElectricKill: {
+	DisplayName: Jelly Ball Electric Kill
+}
+
+JellyBallLifeAbsorb: {
+	DisplayName: Jelly Ball Life Absorb
+}
+
+JellyBall_Electric_Explosion: {
+	DisplayName: Jelly Ball_ Electric_ Explosion
+}

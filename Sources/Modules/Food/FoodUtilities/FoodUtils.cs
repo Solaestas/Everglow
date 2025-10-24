@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.FoodUtilities;
+namespace Everglow.Food.FoodUtilities;
 
 internal static class FoodUtils
 {
@@ -6,4 +6,6 @@ internal static class FoodUtils
 	{
 		return ((hours * 60 + minutes) * 60 + seconds) * 60 + frames;
 	}
+
+	public static readonly IReadOnlyCollection<int> VanillaFood = [ItemID.SpicyPepper, ItemID.BottledWater, ItemID.BottledHoney];
 }

@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles

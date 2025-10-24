@@ -37,8 +37,14 @@ namespace Everglow.Commons.IIID
 		}
 
 		public Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
-		public int RenderTargetSize = Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
-		public float rate = 2000F / Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
+
+		public int RenderTargetSize = Main.dedServ
+			? 0
+			: Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width) / 2;
+
+		public float rate = Main.dedServ
+			? 0
+			: 2000F / Math.Max(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width);
 
 		public Matrix DefaultPerspectiveMatrix()
 		{
@@ -65,25 +71,25 @@ namespace Everglow.Commons.IIID
 		/// 模型主要贴图
 		/// The Main Texture of Model
 		/// </summary>
-		public Texture2D IIIDTexture = TextureAssets.MagicPixel.Value;
+		public Texture2D IIIDTexture = TextureAssets.MagicPixel?.Value;
 
 		/// <summary>
 		/// 模型法线贴图
 		/// The Normal Texture of Model
 		/// </summary>
-		public Texture2D NormalTexture = TextureAssets.MagicPixel.Value;
+		public Texture2D NormalTexture = TextureAssets.MagicPixel?.Value;
 
 		/// <summary>
 		/// 模型材质贴图
 		/// The Material Texture of Model
 		/// </summary>
-		public Texture2D MaterialTexture = TextureAssets.MagicPixel.Value;
+		public Texture2D MaterialTexture = TextureAssets.MagicPixel?.Value;
 
 		/// <summary>
 		/// 模型自发光贴图
 		/// The Emission Texture of Model
 		/// </summary>
-		public Texture2D EmissionTexture = TextureAssets.MagicPixel.Value;
+		public Texture2D EmissionTexture = TextureAssets.MagicPixel?.Value;
 
 		/// <summary>
 		/// 模型运动矩阵(可以用于处理模型的透视和旋转，以及微调模型平移，但模型的大幅度复杂移动尽量在AI（）中处理)

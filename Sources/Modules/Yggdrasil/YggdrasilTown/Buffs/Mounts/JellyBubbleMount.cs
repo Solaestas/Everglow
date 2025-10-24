@@ -1,0 +1,20 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Mounts;
+
+namespace Everglow.Yggdrasil.YggdrasilTown.Buffs.Mounts;
+
+public class JellyBubbleMount : ModBuff
+{
+	public override string Texture => Commons.ModAsset.BuffTemplate_Mod;
+
+	public override void SetStaticDefaults()
+	{
+		Main.buffNoSave[Type] = true;
+		Main.buffNoTimeDisplay[Type] = true;
+	}
+
+	public override void Update(Player player, ref int buffIndex)
+	{
+		player.mount.SetMount(ModContent.MountType<JellyBubble>(), player);
+		player.buffTime[buffIndex] = 10;
+	}
+}

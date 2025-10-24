@@ -1,5 +1,3 @@
-using Everglow.Commons.Weapons;
-
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
 public class FloatLantern_style4 : ModProjectile

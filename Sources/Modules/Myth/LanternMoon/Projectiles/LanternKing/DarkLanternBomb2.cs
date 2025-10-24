@@ -1,4 +1,3 @@
-using Everglow.Commons.Weapons;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Terraria.Audio;
 using Terraria.DataStructures;

@@ -7,7 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class OrichalcumPedal_slash : ModProjectile, IWarpProjectile_warpStyle2
 {
-	public override string Texture => "Everglow/Commons/Weapons/StabbingSwords/StabbingProjectile";
+	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 
 	public override void SetDefaults()
 	{

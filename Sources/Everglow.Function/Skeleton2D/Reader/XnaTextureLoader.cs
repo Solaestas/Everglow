@@ -40,8 +40,8 @@ public class XnaTextureLoader : TextureLoader
 	public void Load(AtlasPage page, string path)
 	{
 		Texture2D texture = targetAtlas;
-		page.width = texture.Width;
-		page.height = texture.Height;
+		page.width = texture?.Width ?? 0;
+		page.height = texture?.Height ?? 0;
 
 		if (textureLayerSuffixes == null)
 		{

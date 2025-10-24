@@ -9,6 +9,7 @@ public class KelpMoss_large_fore : ForegroundVFX
 	{
 		texture = ModAsset.KelpMoss_large.Value;
 	}
+
 	public override void Update()
 	{
 		if (!SubworldSystem.IsActive<YggdrasilWorld>())
@@ -17,7 +18,7 @@ public class KelpMoss_large_fore : ForegroundVFX
 		}
 		for (int i = 0; i < wigglerRotations.Count; i++)
 		{
-			if(i >= wigglerOmegas.Count)
+			if (i >= wigglerOmegas.Count)
 			{
 				wigglerOmegas.Add(MathF.Sin(position.X + position.Y + i * 0.4f + (float)Main.time * 0.05f) * 0.03f);
 			}
@@ -37,20 +38,21 @@ public class KelpMoss_large_fore : ForegroundVFX
 	public List<float> wigglerRotations = new List<float>();
 	public List<float> wigglerOmegas = new List<float>();
 	public Vector2 unit = new Vector2(0, 1);
+
 	private static Color GetPosLight(Vector2 worldCoord)
 	{
 		return Lighting.GetColor((int)worldCoord.X / 16, (int)worldCoord.Y / 16);
 	}
+
 	public override void Draw()
 	{
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		Vector2 pos0 = position + unit.RotatedBy(startRotation + MathHelper.PiOver2) * scale;
 		Vector2 pos1 = position - unit.RotatedBy(startRotation + MathHelper.PiOver2) * scale;
 		Vector2 centerPos = position;
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(pos0, GetPosLight(pos0), new Vector3(0, 0, 1)),
-			new Vertex2D(pos1, GetPosLight(pos1), new Vector3(1, 0, 1))
+			new Vertex2D(pos1, GetPosLight(pos1), new Vector3(1, 0, 1)),
 		};
 		centerPos += unit.RotatedBy(startRotation) * 40;
 		for (int i = 0; i < wigglerRotations.Count; i++)
@@ -66,6 +68,6 @@ public class KelpMoss_large_fore : ForegroundVFX
 		Vector2 pos5 = centerPos - unit.RotatedBy(MathHelper.PiOver2) * scale;
 		bars.Add(pos4, GetPosLight(pos4), new Vector3(0, 1, 0));
 		bars.Add(pos5, GetPosLight(pos5), new Vector3(1, 1, 0));
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

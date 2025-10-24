@@ -1,5 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
+using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;

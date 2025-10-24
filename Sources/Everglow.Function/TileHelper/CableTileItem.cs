@@ -5,23 +5,28 @@ namespace Everglow.Commons.TileHelper;
 /// </summary>
 public abstract class CableTileItem : ModItem
 {
-	/// <summary>
-	/// 必填项,物块种类
-	/// </summary>
-	public virtual int TileType { get; set; }
+    /// <summary>
+    /// 必填项,物块种类
+    /// </summary>
+    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-	public override void SetDefaults()
-	{
-		Item.DefaultToPlaceableTile(TileType);
-	}
+    /// <summary>
+    /// 必填项,物块种类
+    /// </summary>
+    public virtual int TileType { get; set; }
 
-	public override bool? UseItem(Player player)
-	{
-		return base.UseItem(player);
-	}
+    public override void SetDefaults()
+    {
+        Item.DefaultToPlaceableTile(TileType);
+    }
 
-	public override bool AltFunctionUse(Player player)
-	{
-		return true;
-	}
+    public override bool? UseItem(Player player)
+    {
+        return base.UseItem(player);
+    }
+
+    public override bool AltFunctionUse(Player player)
+    {
+        return true;
+    }
 }
