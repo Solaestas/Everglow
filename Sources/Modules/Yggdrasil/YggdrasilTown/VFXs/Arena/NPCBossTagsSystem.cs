@@ -35,12 +35,12 @@ public class NPCBossTagsSystem : ForegroundVFX
 	public override void OnSpawn()
 	{
 		texture = ModAsset.NPCBossTagsSystem.Value;
-		OutScreenDistanceMax = 18000;
+		MaxDiatanceOutOfScreen = 18000;
 	}
 
 	public override void Update()
 	{
-		OutScreenDistanceMax = 18000;
+		MaxDiatanceOutOfScreen = 18000;
 		AnimationCoroutine.Update();
 		if (TargetBoss == null || !TargetBoss.active)
 		{

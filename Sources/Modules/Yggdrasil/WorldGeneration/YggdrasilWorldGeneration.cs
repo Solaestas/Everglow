@@ -1,6 +1,7 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.HurricaneMaze.Tiles;
+using Everglow.Yggdrasil.KelpCurtain.Projectiles.Summon;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -2079,5 +2080,48 @@ public class YggdrasilWorldGeneration : ModSystem
 				tile.LiquidAmount = 255;
 			}
 		}
+	}
+
+	public static List<Tile> BFSContinueTile(Point checkPoint, bool includeWall = false, int maxCount = 512)
+	{
+		int maxContinueCount = maxCount;
+		(int, int)[] directions =
+		{
+			(0, 1),
+			(1, 0),
+			(0, -1),
+			(-1, 0),
+		};
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(checkPoint);
+		List<Tile> visited = new List<Tile>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = YggdrasilWorldGeneration.SafeGetTile(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					(tile.HasTile || (includeWall && tile.WallType > 0)) && !visited.Contains(tile))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(tile);
+				}
+			}
+			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			{
+				break;
+			}
+		}
+		return visited;
 	}
 }
