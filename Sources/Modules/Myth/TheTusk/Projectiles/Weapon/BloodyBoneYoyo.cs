@@ -1,21 +1,17 @@
 using Everglow.Commons.Templates.Weapons.Yoyos;
-using Humanizer;
-using Terraria;
 using Terraria.DataStructures;
-using static Everglow.Myth.TheTusk.Projectiles.Weapon.BloodyBoneYoyo;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 public class BloodyBoneYoyo : YoyoProjectile
 {
-	public override void SetDefaults()
+	public override void SetStaticDefaults()
 	{
-
-		base.SetDefaults();
-		MaxStaySeconds = 60;
-		Acceleration = 7;
-		MaxRopeLength = 320;
+		ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 60;
+		ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 7;
+		ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 320;
 	}
+
 	public struct Tentacle
 	{
 		public List<Vector2> oldPos;
@@ -28,7 +24,11 @@ public class BloodyBoneYoyo : YoyoProjectile
 		public float ai2;
 		public float ai3;
 	}
+
 	public List<Tentacle> tentacles;
+
+	public bool TantacleHit = false;
+
 	public Tentacle UpdateTentacle(Tentacle tentacle)
 	{
 		if (tentacle.time < 75 && Projectile.ai[0] > 0)
@@ -36,11 +36,11 @@ public class BloodyBoneYoyo : YoyoProjectile
 			tentacle.oldPos.Add(tentacle.position);
 			float mulRot = (75 - tentacle.time) / 75f;
 			mulRot = MathF.Max(mulRot, 0);
-			tentacle.jointVel.Add(tentacle.velocity.RotatedBy(MathHelper.PiOver2 ) * 0.1f * mulRot * MathF.Sin(tentacle.time * 0.4f));
+			tentacle.jointVel.Add(tentacle.velocity.RotatedBy(MathHelper.PiOver2) * 0.1f * mulRot * MathF.Sin(tentacle.time * 0.4f));
 		}
 		if (tentacle.time > 75)
 		{
-			if(tentacle.oldPos.Count > 0)
+			if (tentacle.oldPos.Count > 0)
 			{
 				tentacle.oldPos.RemoveAt(0);
 				tentacle.jointVel.RemoveAt(0);
@@ -54,9 +54,9 @@ public class BloodyBoneYoyo : YoyoProjectile
 					float value = Math.Max(0, ((coilValue - 0.01f) - x) / coilValue);
 					tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
 				}
-			}		
+			}
 		}
-		else if(tentacle.oldPos.Count > Main.rand.Next(150 - (int)tentacle.time) * 2f)
+		else if (tentacle.oldPos.Count > Main.rand.Next(150 - (int)tentacle.time) * 2f)
 		{
 			tentacle.oldPos.RemoveAt(0);
 			tentacle.jointVel.RemoveAt(0);
@@ -71,12 +71,13 @@ public class BloodyBoneYoyo : YoyoProjectile
 				tentacle.oldPos[x] -= tentacle.oldPos[0] * value;
 			}
 		}
-		//收球的时候剧烈收回
+
+		// 收球的时候剧烈收回
 		if (Projectile.ai[0] <= 0)
 		{
-			for (int a = 0;a < 2;a++)
+			for (int a = 0; a < 2; a++)
 			{
-				if(tentacle.oldPos.Count > 0)
+				if (tentacle.oldPos.Count > 0)
 				{
 					tentacle.oldPos.RemoveAt(0);
 					tentacle.jointVel.RemoveAt(0);
@@ -101,54 +102,54 @@ public class BloodyBoneYoyo : YoyoProjectile
 			}
 		}
 		////碰撞
-		//for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
-		//{
-		//	if(tentacle.jointVel.Count > x)
-		//	{
-		//		if(Collision.SolidCollision(tentacle.oldPos[x] + tentacle.jointVel[x] + Projectile.Center, 1, 1))
-		//		{
-		//			tentacle.jointVel[x] -= Vector2.Normalize(tentacle.oldPos[x]);
-		//			tentacle.oldPos[x] += tentacle.jointVel[x];
+		// for (int x = tentacle.oldPos.Count - 1; x >= 0; x--)
+		// {
+		// if(tentacle.jointVel.Count > x)
+		// {
+		// if(Collision.SolidCollision(tentacle.oldPos[x] + tentacle.jointVel[x] + Projectile.Center, 1, 1))
+		// {
+		// tentacle.jointVel[x] -= Vector2.Normalize(tentacle.oldPos[x]);
+		// tentacle.oldPos[x] += tentacle.jointVel[x];
 
-		//		}
-		//		else if(Collision.SolidCollision(tentacle.oldPos[x] + Projectile.velocity + Projectile.Center, 1, 1))
-		//		{
-		//			tentacle.jointVel[x] -= Vector2.Normalize(Projectile.velocity) * 0.2f;
-		//			tentacle.oldPos[x] -= Projectile.velocity;
-		//		}
-		//		else
-		//		{
-		//			tentacle.oldPos[x] += tentacle.jointVel[x];
-		//			tentacle.jointVel[x] *= 0.95f;
-		//		}
-		//	}
-		//}
+		// }
+		// else if(Collision.SolidCollision(tentacle.oldPos[x] + Projectile.velocity + Projectile.Center, 1, 1))
+		// {
+		// tentacle.jointVel[x] -= Vector2.Normalize(Projectile.velocity) * 0.2f;
+		// tentacle.oldPos[x] -= Projectile.velocity;
+		// }
+		// else
+		// {
+		// tentacle.oldPos[x] += tentacle.jointVel[x];
+		// tentacle.jointVel[x] *= 0.95f;
+		// }
+		// }
+		// }
 		////牵拉
-		//for (int x = tentacle.oldPos.Count - 1; x >= 1; x--)
-		//{
-		//	if (tentacle.jointVel.Count > x)
-		//	{
-		//		Vector2 v0 = tentacle.oldPos[x - 1] + tentacle.jointVel[x - 1] - tentacle.oldPos[x] - tentacle.jointVel[x];
-		//		if (v0.Length() > 15)
-		//		{
-		//			Vector2 dragForce = Vector2.Normalize(v0) * (v0.Length() - 15) * 0.01f;
-		//			for (int y = x; y < tentacle.oldPos.Count - 1; y++)
-		//			{
-		//				tentacle.oldPos[x] += dragForce * Math.Max(0, (19.99f - x) / 20f);
-		//			}
-		//		}
-		//	}
-		//}
+		// for (int x = tentacle.oldPos.Count - 1; x >= 1; x--)
+		// {
+		// if (tentacle.jointVel.Count > x)
+		// {
+		// Vector2 v0 = tentacle.oldPos[x - 1] + tentacle.jointVel[x - 1] - tentacle.oldPos[x] - tentacle.jointVel[x];
+		// if (v0.Length() > 15)
+		// {
+		// Vector2 dragForce = Vector2.Normalize(v0) * (v0.Length() - 15) * 0.01f;
+		// for (int y = x; y < tentacle.oldPos.Count - 1; y++)
+		// {
+		// tentacle.oldPos[x] += dragForce * Math.Max(0, (19.99f - x) / 20f);
+		// }
+		// }
+		// }
+		// }
 		if (Collision.SolidCollision(tentacle.position + tentacle.velocity + Projectile.Center, 1, 1))
 		{
-			if(tentacle.time < 75)
+			if (tentacle.time < 75)
 			{
 				tentacle.time = 150 - tentacle.time;
 			}
 		}
 		tentacle.position += tentacle.velocity;
 		float maxRotVel = tentacle.time / 30f;
-		if(maxRotVel > 1)
+		if (maxRotVel > 1)
 		{
 			maxRotVel = 1;
 		}
@@ -159,24 +160,25 @@ public class BloodyBoneYoyo : YoyoProjectile
 		tentacle.ai1 *= 0.98f;
 		if (tentacle.time > 30)
 		{
-			if(tentacle.velocity.Length() > 0.1f)
+			if (tentacle.velocity.Length() > 0.1f)
 			{
 				tentacle.velocity *= 0.94f;
 			}
 		}
 		if (tentacle.time > 60)
 		{
-			//tentacle.velocity += Vector2.Normalize(-tentacle.velocity - tentacle.position);
+			// tentacle.velocity += Vector2.Normalize(-tentacle.velocity - tentacle.position);
 		}
 		tentacle.time++;
 		return tentacle;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		tentacles = new List<Tentacle>();
-		base.OnSpawn(source);
 	}
-	public override void AI()
+
+	public override void PostAI()
 	{
 		if (Projectile.oldPosition != Vector2.Zero)
 		{
@@ -190,9 +192,9 @@ public class BloodyBoneYoyo : YoyoProjectile
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(0.4f, 2.5f)).RotatedByRandom(Math.PI * 2d) * 0.5f;
 			}
 		}
-		if(Main.rand.NextBool(15) && tentacles.Count < 8)
+		if (Main.rand.NextBool(15) && tentacles.Count < 8)
 		{
-			Tentacle tentacle = new Tentacle();
+			Tentacle tentacle = default(Tentacle);
 			tentacle.oldPos = new List<Vector2>();
 			tentacle.jointVel = new List<Vector2>();
 			tentacle.time = 0;
@@ -213,177 +215,78 @@ public class BloodyBoneYoyo : YoyoProjectile
 				}
 			}
 		}
-
-		base.AI();
 	}
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
 
-	}
-	public override void DrawString(Vector2 to = default)
+	public override void ModifyOnHitBounce(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		Player player = Main.player[Projectile.owner];
-		Vector2 mountedCenter = player.MountedCenter;
-		Vector2 vector = mountedCenter;
-		vector.Y += player.gfxOffY;
-		if (to != default)
-			vector = to;
-		float num = Projectile.Center.X - vector.X;
-		float num2 = Projectile.Center.Y - vector.Y;
-		Math.Sqrt((double)(num * num + num2 * num2));
-		float rotation;
-		if (!Projectile.counterweight)
+		if(TantacleHit)
 		{
-			int num3 = -1;
-			if (Projectile.position.X + Projectile.width / 2 < player.position.X + player.width / 2)
-				num3 = 1;
-			num3 *= -1;
-			player.itemRotation = (float)Math.Atan2((double)(num2 * num3), (double)(num * num3));
+			TantacleHit = false;
+			Projectile.velocity += Vector2.Normalize(Projectile.Center - target.Center) / (Weight + 0.01f);
 		}
-		bool checkSelf = true;
-		if (num == 0f && num2 == 0f)
-			checkSelf = false;
 		else
 		{
-			float num4 = (float)Math.Sqrt((double)(num * num + num2 * num2));
-			num4 = 12f / num4;
-			num *= num4;
-			num2 *= num4;
-			vector.X -= num * 0.1f;
-			vector.Y -= num2 * 0.1f;
-			num = Projectile.position.X + Projectile.width * 0.5f - vector.X;
-			num2 = Projectile.position.Y + Projectile.height * 0.5f - vector.Y;
-		}
-		int count = 0;
-		while (checkSelf)
-		{
-			count++;
-			float num6 = (float)Math.Sqrt((double)(num * num + num2 * num2));
-			float num7 = num6;
-			if (float.IsNaN(num6) || float.IsNaN(num7))
-				checkSelf = false;
-			else
-			{
-				if (num6 < 4f)
-				{
-					checkSelf = false;
-				}
-				num6 = 1f / num6;
-				num *= num6;
-				num2 *= num6;
-				vector.X += num;
-				vector.Y += num2;
-				num = Projectile.position.X + Projectile.width * 0.5f - vector.X;
-				num2 = Projectile.position.Y + Projectile.height * 0.1f - vector.Y;
-				if (num7 > 12f)
-				{
-					float num8 = 0.3f;
-					float num9 = Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y);
-					if (num9 > 16f)
-						num9 = 16f;
-					num9 = 1f - num9 / 16f;
-					num8 *= num9;
-					num9 = num7 / 80f;
-					if (num9 > 1f)
-						num9 = 1f;
-					num8 *= num9;
-					if (num8 < 0f)
-						num8 = 0f;
-					num8 *= num9;
-					num8 *= 0.5f;
-					if (num2 > 0f)
-					{
-						num2 *= 1f + num8;
-						num *= 1f - num8;
-					}
-					else
-					{
-						num9 = Math.Abs(Projectile.velocity.X) / 3f;
-						if (num9 > 1f)
-							num9 = 1f;
-						num9 -= 0.5f;
-						num8 *= num9;
-						if (num8 > 0f)
-							num8 *= 2f;
-						num2 *= 1f + num8;
-						num *= 1f - num8;
-					}
-				}
-				rotation = (float)Math.Atan2((double)num2, (double)num) - 1.57f;
-				int stringColor = player.stringColor;
-				Color color = WorldGen.paintColor(stringColor);
-				if (color.R < 75)
-					color.R = 75;
-				if (color.G < 75)
-					color.G = 75;
-				if (color.B < 75)
-					color.B = 75;
-				if (stringColor == 13)
-					color = new Color(20, 20, 20);
-				else if (stringColor == 14 || stringColor == 0)
-				{
-					color = new Color(200, 200, 200);
-				}
-				else if (stringColor == 28)
-				{
-					color = new Color(163, 116, 91);
-				}
-				else if (stringColor == 27)
-				{
-					color = new Color(Main.DiscoR, Main.DiscoG, Main.DiscoB);
-				}
-				color.A = (byte)(color.A * 0.4f);
-				float num10 = 0.5f;
-				color = Lighting.GetColor((int)vector.X / 16, (int)(vector.Y / 16f), color);
-				color = new Color((byte)(color.R * num10), (byte)(color.G * num10), (byte)(color.B * num10), (byte)(color.A * num10));
-				Texture2D tex = ModAsset.BloodyBoneYoyo_line.Value;
-				if (count % 12 == 0)
-				{
-					Main.spriteBatch.Draw(tex, vector + new Vector2(0, 4) - Main.screenPosition, new Rectangle(3, 0, 2, 6), color, rotation + MathHelper.PiOver2, Vector2.One, new Vector2(1f, 1f), SpriteEffects.None, 0f);
-				}
-				else if (count % 12 == 6)
-				{
-					Main.spriteBatch.Draw(tex, vector + new Vector2(0, 4) - Main.screenPosition, new Rectangle(6, 0, 2, 6), color, rotation + MathHelper.PiOver2, Vector2.One, new Vector2(1f, 1f), SpriteEffects.None, 0f);
-				}
-				else
-				{
-					Main.spriteBatch.Draw(tex, vector + new Vector2(0, 4) - Main.screenPosition, new Rectangle(0, 0, 2, 6), color, rotation + MathHelper.PiOver2, Vector2.One, new Vector2(1f, 1f), SpriteEffects.None, 0f);
-				}
-			}
+			Projectile.velocity += Vector2.Normalize(Projectile.Center - target.Center) / (Weight + 0.01f) * 100f;
 		}
 	}
+
+	public override Color ModifyYoyoStringColor_PostVanillaRender(Color vanillaColor, Vector2 worldPos, float index, float stringCount)
+	{
+		float value = index / stringCount;
+		Color color = Color.Lerp(vanillaColor, new Color(0.9f, 0.3f, 0.2f, 1f), value);
+		color = Lighting.GetColor(worldPos.ToTileCoordinates(), color);
+		return color;
+	}
+
+	public override void DrawYoyo_String_Attachments(Vector2 drawPos, float rotation, Color color, float length, float index, float stringUnitCount)
+	{
+		Texture2D tex = ModAsset.BloodyBoneYoyo_line.Value;
+		color = Lighting.GetColor((drawPos + Main.screenPosition).ToTileCoordinates());
+		if (index % 4 == 0)
+		{
+			Main.spriteBatch.Draw(tex, drawPos, new Rectangle(3, 0, 2, 6), color, rotation + MathHelper.PiOver2, Vector2.One, new Vector2(1f, 1f), SpriteEffects.None, 0f);
+		}
+		else if (index % 4 == 2)
+		{
+			Main.spriteBatch.Draw(tex, drawPos, new Rectangle(6, 0, 2, 6), color, rotation - MathHelper.PiOver2, Vector2.One, new Vector2(1f, 1f), SpriteEffects.None, 0f);
+		}
+	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		foreach (Tentacle tentacle in tentacles)
 		{
-			foreach(Vector2 v0 in tentacle.oldPos)
+			foreach (Vector2 v0 in tentacle.oldPos)
 			{
 				Rectangle rectangle = new Rectangle((int)(Projectile.Center + v0).X - 4, (int)(Projectile.Center + v0).Y - 4, 8, 8);
 				if (targetHitbox.Intersects(rectangle))
 				{
+					TantacleHit = true;
 					return true;
 				}
 			}
 		}
+		TantacleHit = false;
 		return base.Colliding(projHitbox, targetHitbox);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
-		DrawString();
+		DrawYoyo_String();
 		List<Vertex2D> bars = new List<Vertex2D>();
-		foreach(Tentacle tentacle in tentacles)
+		foreach (Tentacle tentacle in tentacles)
 		{
-			for (int x = 0;x < tentacle.oldPos.Count;x++)
+			for (int x = 0; x < tentacle.oldPos.Count; x++)
 			{
 				Vector2 drawPos = tentacle.oldPos[x] + Projectile.Center;
 				Vector2 posLeft = Vector2.Normalize(tentacle.oldPos[x]).RotatedBy(MathHelper.PiOver2) * 5f;
-				if(x > 0)
+				if (x > 0)
 				{
 					posLeft = Vector2.Normalize(tentacle.oldPos[x] - tentacle.oldPos[x - 1]).RotatedBy(MathHelper.PiOver2) * 5f;
 				}
 				float factor = (x + 120 - tentacle.oldPos.Count) / 120f;
 				float width = 1f;
-				if(factor > 0.8f)
+				if (factor > 0.8f)
 				{
 					width = MathF.Sin((1 - factor) * 2.5f * MathF.PI);
 				}
@@ -397,7 +300,7 @@ public class BloodyBoneYoyo : YoyoProjectile
 				Color newLightColor = Lighting.GetColor(drawPos.ToTileCoordinates());
 				bars.Add(drawPos + posLeft, newLightColor, new Vector3(factor, 0, width));
 				bars.Add(drawPos - posLeft, newLightColor, new Vector3(factor, 1, width));
-				if(x == tentacle.oldPos.Count - 1)
+				if (x == tentacle.oldPos.Count - 1)
 				{
 					bars.Add(drawPos + posLeft, Color.Transparent, new Vector3(factor, 0, width));
 					bars.Add(drawPos - posLeft, Color.Transparent, new Vector3(factor, 1, width));
@@ -415,7 +318,10 @@ public class BloodyBoneYoyo : YoyoProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.BloodyBoneYoyo_tentacle.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return true;
