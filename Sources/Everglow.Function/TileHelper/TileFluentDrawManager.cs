@@ -27,7 +27,7 @@ public class TileFluentDrawManager : ModSystem
 			Ins.Logger.Warn("TileFluentDrawManager.AddFluentPoint should only be called for ModTile inheriting ITileFluentlyDrawn");
 			return;
 		}
-		if(_fluentTiles.Contains((modTile, new Point(i, j))))
+		if (_fluentTiles.Contains((modTile, new Point(i, j))))
 		{
 			return;
 		}
@@ -37,21 +37,26 @@ public class TileFluentDrawManager : ModSystem
 	public override void Load()
 	{
 		// 清除 cachedFluentTiles
-		On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) => {
-			orig.Invoke(self,solidLayer,forRenderTargets, intoRenderTargets);
+		On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) =>
+		{
+			orig.Invoke(self, solidLayer, forRenderTargets, intoRenderTargets);
 			bool flag = intoRenderTargets || Lighting.UpdateEveryFrame;
-			if (!solidLayer && flag) {
+			if (!solidLayer && flag)
+			{
 				_fluentTiles.Clear();
 			}
 		};
 
 		// 实际上插入到 TileDrawing.PostDrawTiles 的最后一个特殊绘制后，进行绘制
-		On_TileDrawing.DrawReverseVines += (orig, self) => {
+		On_TileDrawing.DrawReverseVines += (orig, self) =>
+		{
 			orig.Invoke(self);
 
 			Vector2 unscaledPosition = Main.Camera.UnscaledPosition;
-			foreach ((ModTile modTile, Point position) in _fluentTiles) {
-				if (modTile is ITileFluentlyDrawn tileFluent && modTile is not null) {
+			foreach ((ModTile modTile, Point position) in _fluentTiles)
+			{
+				if (modTile is ITileFluentlyDrawn tileFluent && modTile is not null)
+				{
 					tileFluent.FluentDraw(unscaledPosition, position, Main.spriteBatch, self);
 				}
 			}

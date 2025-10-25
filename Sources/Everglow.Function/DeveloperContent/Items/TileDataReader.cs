@@ -159,6 +159,12 @@ public class TileDataReaderSystem : Visual
 			datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
 		}
 
+		if(tile.WallType > 0)
+		{
+			datas += "\nWallType :" + tile.WallType;
+			datas += " " + WallID.Search.GetName(tile.WallType);
+		}
+
 		// datas += "\nSlope: " + tile.Slope;
 		datas += "\nColliding: " + Collision.IsWorldPointSolid(Main.MouseWorld);
 		return datas;

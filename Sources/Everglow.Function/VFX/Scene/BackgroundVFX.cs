@@ -14,6 +14,7 @@ public abstract class BackgroundVFX : Visual
 	public Point originTile;
 	public int originType;
 	public int direction = 1;
+	public float MaxDiatanceOutOfScreen = 500;
 
 	public override void Update()
 	{
@@ -70,7 +71,7 @@ public abstract class BackgroundVFX : Visual
 			return;
 		}
 		Vector2 checkPos = position;
-		if (VFXManager.InScreen(checkPos, 500))
+		if (VFXManager.InScreen(checkPos, MaxDiatanceOutOfScreen))
 		{
 			Visible = true;
 		}
@@ -89,7 +90,6 @@ public abstract class BackgroundVFX : Visual
 		Color lightColor2 = Lighting.GetColor((int)position.X / 16, (int)(position.Y + texture.Height) / 16);
 		Color lightColor3 = Lighting.GetColor((int)(position.X + texture.Width) / 16, (int)(position.Y + texture.Height) / 16);
 
-		Ins.Batch.BindTexture<Vertex2D>(texture);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
 			new Vertex2D(position, lightColor0, new Vector3(0, 0, 0)),
@@ -109,6 +109,6 @@ public abstract class BackgroundVFX : Visual
 				new Vertex2D(position + new Vector2(texture.Width, texture.Height), lightColor3, new Vector3(0, 1, 0)),
 			};
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }
