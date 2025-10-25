@@ -9,6 +9,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Liquids;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
@@ -16,6 +17,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;
+using ModLiquidLib.ModLoader;
 using ReLogic.Utilities;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
@@ -186,10 +188,10 @@ public class YggdrasilTownGeneration
 				}
 				if (y > center.Y + 30)
 				{
-					if (!tile.HasTile)
+					if (!tile.HasTile && tile.LiquidAmount == 0)
 					{
-						tile.TileType = (ushort)ModContent.TileType<DarkSludge>();
-						tile.HasTile = true;
+						tile.LiquidType = LiquidLoader.LiquidType<DarkSludgeLiquid>();
+						tile.LiquidAmount = byte.MaxValue;
 					}
 				}
 			}

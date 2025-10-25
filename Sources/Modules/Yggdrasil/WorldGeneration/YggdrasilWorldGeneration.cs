@@ -3,9 +3,11 @@ using Everglow.Yggdrasil.CorruptWormHive.Tiles;
 using Everglow.Yggdrasil.HurricaneMaze.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
+using Everglow.Yggdrasil.YggdrasilTown.Liquids;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
+using ModLiquidLib.ModLoader;
 using ReLogic.Utilities;
 using Terraria.IO;
 using Terraria.Utilities;
@@ -1563,8 +1565,8 @@ public class YggdrasilWorldGeneration : ModSystem
 
 							if (pixel.R == 31 && pixel.G == 26 && pixel.B == 45)// 黑淤泥
 							{
-								tile.TileType = (ushort)ModContent.TileType<DarkSludge>();
-								tile.HasTile = true;
+								tile.LiquidType = LiquidLoader.LiquidType<DarkSludgeLiquid>();
+								tile.LiquidAmount = byte.MaxValue;
 							}
 
 							// 苍苔蔓帘

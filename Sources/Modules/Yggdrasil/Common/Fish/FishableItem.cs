@@ -10,11 +10,14 @@ namespace Everglow.Yggdrasil.Common.Fish;
 /// 生成一个可以被钓鱼的物品
 /// </summary>
 /// <param name="item">物品 id</param>
-/// <param name="liquid">物品会在什么液体上生成</param>
+/// <param name="liquid">
+/// 物品会在什么液体上生成，原版液体使用 <c>LiquidID</c>，Mod 图块使用 <c>Type</c>
+/// </param>
 /// <param name="chance">物品每帧的生成概率</param>
 public class FishableItem(int item, int liquid, float chance)
 {
 	public int Item = item;
 	public int Liquid = liquid;
-	public float chance = chance;
+	public float Chance = chance;
+	public readonly bool IsModLiquid = liquid > 4;
 }
