@@ -6,6 +6,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
 public class StoneCave_Scene : ModTile, ISceneTile
 {
+	public override string Texture => ModAsset.GreenRelicBrick_Mod;
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileSolid[Type] = true;
@@ -30,9 +32,9 @@ public class StoneCave_Scene : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		var scene_Close = new StoneCave_Scene_Close { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		var scene_Background = new StoneCave_Scene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		var scene_Far = new StoneCave_Scene_Far { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Close.Value };
+		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Background.Value };
+		var scene_Far = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Far.Value };
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
 		Ins.VFXManager.Add(scene_Far);

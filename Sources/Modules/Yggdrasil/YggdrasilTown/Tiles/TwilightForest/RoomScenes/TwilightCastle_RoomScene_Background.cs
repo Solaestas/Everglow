@@ -3,13 +3,14 @@ using Everglow.Commons.VFX.Scene;
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
 [Pipeline(typeof(WCSPipeline))]
-public class BloodChurch_Scene_Close : BackgroundVFX
+public class TwilightCastle_RoomScene_Background : BackgroundVFX
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
+
+	public Point Offset = new Point(0, 0);
 
 	public override void OnSpawn()
 	{
-		texture = ModAsset.BloodChurch_Scene_Close.Value;
 	}
 
 	public override void Draw()

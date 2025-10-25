@@ -17,7 +17,6 @@ public class BloodChurch_Scene_Fountain : BackgroundVFX
 		List<Vertex2D> bars = new List<Vertex2D>();
 		SceneUtils.DrawMultiSceneTowardRightBottom(originTile.X + 17, originTile.Y + 10, texture, bars);
 		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
-		//DrawWaterFlow();
 	}
 
 	public void DrawWaterFlow()
