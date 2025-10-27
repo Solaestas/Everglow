@@ -30,7 +30,7 @@ public class LiftLamp : ModTile
 		int FrameX = 0;
 		foreach (var Dtile in ColliderManager.Instance.OfType<YggdrasilElevator>())
 		{
-			Vector2 Dc = Dtile.Center;
+			Vector2 Dc = Dtile.Box.Center;
 			if (Math.Abs(Dc.Y / 16f - j) < 4 && Main.tile[i, j].TileFrameY == 0 && Math.Abs(Dc.X / 16f - i) < Dtile.Size.X / 32f + 5)
 				FrameX = 32;
 		}
