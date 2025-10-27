@@ -64,7 +64,7 @@ public class NormalCableCar : BoxEntity
 		}
 		else
 		{
-			Active = false;
+			Kill();
 			return;
 		}
 		CheckMouseClick();

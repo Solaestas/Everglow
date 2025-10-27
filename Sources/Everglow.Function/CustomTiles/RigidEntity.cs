@@ -34,4 +34,9 @@ public abstract class RigidEntity
 		UpdatePosition();
 		AI();
 	}
+
+	public void Kill()
+	{
+		Active = false;
+	}
 }

@@ -62,7 +62,7 @@ public class PineWinch : ModTile
 			}
 			if(hasLift)
 			{
-				dTile.Active = false;
+				dTile.Kill();
 			}
 		}
 	}

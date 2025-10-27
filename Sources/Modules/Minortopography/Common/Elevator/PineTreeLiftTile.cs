@@ -200,7 +200,7 @@ internal class PineTreeLiftTile : BoxEntity
 				}
 				if (f == 999)
 				{
-					Active = false;
+					Kill();
 					return;
 				}
 			}

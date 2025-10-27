@@ -38,7 +38,7 @@ public class TuskWall : BoxEntity
 			BloodTusk bloodTusk = Tusk.ModNPC as BloodTusk;
 			if (!Tusk.active)
 			{
-				Active = false;
+				Kill();
 			}
 			if (Flip)
 			{
@@ -82,7 +82,7 @@ public class TuskWall : BoxEntity
 			else
 			{
 				Timer = 0;
-				Active = false;
+				Kill();
 			}
 		}
 		base.AI();

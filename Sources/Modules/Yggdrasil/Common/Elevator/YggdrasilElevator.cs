@@ -55,6 +55,8 @@ public class YggdrasilElevator : BoxEntity
 
 	public bool Initialized = false;
 
+	public override Color MapColor => new Color(122, 91, 79);
+
 	public void OnSpawn()
 	{
 		Size = new Vector2(96, 16);
@@ -144,11 +146,6 @@ public class YggdrasilElevator : BoxEntity
 				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
 				break;
 		}
-	}
-
-	public void Kill()
-	{
-		Active = false;
 	}
 
 	public void StopElevator(int time)
@@ -276,12 +273,5 @@ public class YggdrasilElevator : BoxEntity
 				}
 			}
 		}
-	}
-
-	public override Color MapColor => new Color(122, 91, 79);
-
-	public override void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
-	{
-		base.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
 	}
 }
