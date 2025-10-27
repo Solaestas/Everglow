@@ -3,7 +3,7 @@ using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.CustomTiles.DataStructures;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.Collider;
+using Everglow.Commons.CustomTiles;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 

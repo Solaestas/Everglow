@@ -5,7 +5,7 @@ using Everglow.Commons.Physics;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 using Terraria.DataStructures;
 using Newtonsoft.Json.Linq;
-using Everglow.Commons.Collider;
+using Everglow.Commons.CustomTiles;
 
 namespace Everglow.Minortopography.Common.Elevator;
 

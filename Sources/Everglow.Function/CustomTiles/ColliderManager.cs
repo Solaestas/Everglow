@@ -1,6 +1,6 @@
 using Everglow.Commons.Enums;
 
-namespace Everglow.Commons.Collider;
+namespace Everglow.Commons.CustomTiles;
 
 public class ColliderManager : ILoadable
 {

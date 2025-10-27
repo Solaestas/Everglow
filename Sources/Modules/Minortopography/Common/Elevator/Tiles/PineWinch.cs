@@ -1,4 +1,4 @@
-using Everglow.Commons.Collider;
+using Everglow.Commons.CustomTiles;
 
 namespace Everglow.Minortopography.Common.Elevator.Tiles;
 

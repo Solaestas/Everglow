@@ -1,6 +1,6 @@
 using Terraria.GameContent;
 
-namespace Everglow.Commons.Collider;
+namespace Everglow.Commons.CustomTiles;
 
 public class BoxEntity : RigidEntity, IBox, IHookable
 {
@@ -62,7 +62,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		}
 
 		float tMin = Math.Max(txMin, tyMin), tMax = Math.Min(txMax, tyMax);
-		if ((0 <= tMin && tMin <= 1) && tMin <= tMax)
+		if (0 <= tMin && tMin <= 1 && tMin <= tMax)
 		{
 			if (txMin < tyMin)
 			{

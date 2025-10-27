@@ -1,4 +1,4 @@
-namespace Everglow.Commons;
+namespace Everglow.Commons.TileHelper;
 
 public class WorldGenMisc
 {

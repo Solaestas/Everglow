@@ -1,4 +1,4 @@
-using Everglow.Commons.Collider;
+using Everglow.Commons.CustomTiles;
 using Everglow.Myth.TheTusk.NPCs.Bosses.BloodTusk_New.DTiles;
 using Terraria.Localization;
 

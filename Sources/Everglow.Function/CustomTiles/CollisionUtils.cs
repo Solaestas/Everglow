@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Everglow.Commons.Collider;
+namespace Everglow.Commons.CustomTiles;
 
 public static class CollisionUtils
 {

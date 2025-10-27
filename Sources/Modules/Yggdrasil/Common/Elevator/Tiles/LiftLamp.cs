@@ -1,4 +1,4 @@
-using Everglow.Commons.Collider;
+using Everglow.Commons.CustomTiles;
 using Terraria.Localization;
 using Terraria.ObjectData;
 

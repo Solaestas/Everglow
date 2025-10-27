@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Collider;
+namespace Everglow.Commons.CustomTiles;
 
 [DebuggerDisplay("position = ({position.X}, {position.Y}) size = ({size.X}, {size.Y})")]
 public struct AABB

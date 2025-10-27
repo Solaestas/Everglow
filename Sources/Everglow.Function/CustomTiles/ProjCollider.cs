@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Collider;
+namespace Everglow.Commons.CustomTiles;
 
 public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {
