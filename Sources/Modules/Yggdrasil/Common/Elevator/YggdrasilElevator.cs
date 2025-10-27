@@ -7,13 +7,22 @@ namespace Everglow.Yggdrasil.Common.Elevator;
 
 public class YggdrasilElevator : BoxEntity
 {
+	public enum State
+	{
+		Malfunction = -1,
+		Stop = 0,
+		NormalMove = 1,
+		Accelerating = 2,
+		Decelerating = 3,
+	}
+
 	/// <summary>
 	/// 1 for down, -1 for up.
 	/// </summary>
 	public int CurrentMoveDirection = 1;
 
 	/// <summary>
-	/// Next move direction, assign to CurrentMoveDirection when start acclerating.
+	/// Next move direction, assign to <see cref="CurrentMoveDirection"/> when start acclerating.
 	/// </summary>
 	public int NextMoveDirection = 1;
 
@@ -38,9 +47,10 @@ public class YggdrasilElevator : BoxEntity
 	public int DetentionTime = 0;
 
 	/// <summary>
-	/// MoveState: 0: Stop, 1: Normal Move, 2: Accelerating, 3: Decelerating, -1: Malfunction.
+	/// Move state.
+	/// <br/>Default to <see cref="State.Stop"/>.
 	/// </summary>
-	public int MoveState = 0;
+	public State MoveState = State.Stop;
 
 	public float CurrentSpeed = 0f;
 
@@ -78,7 +88,7 @@ public class YggdrasilElevator : BoxEntity
 		CheckState();
 		switch (MoveState)
 		{
-			case -1:
+			case State.Malfunction:
 				if(DetentionTime > 0)
 				{
 					DetentionTime--;
@@ -88,7 +98,7 @@ public class YggdrasilElevator : BoxEntity
 					DetentionTime = 0;
 				}
 				break;
-			case 0:
+			case State.Stop:
 				if (StopTimer > 0)
 				{
 					StopTimer--;
@@ -101,7 +111,7 @@ public class YggdrasilElevator : BoxEntity
 				}
 				Velocity *= 0;
 				break;
-			case 1:
+			case State.NormalMove:
 				CheckRunningDirection();
 				if(CurrentSpeed < 5)
 				{
@@ -109,7 +119,7 @@ public class YggdrasilElevator : BoxEntity
 				}
 				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
 				break;
-			case 2:
+			case State.Accelerating:
 				if (AccelerateTimer > 0)
 				{
 					AccelerateTimer--;
@@ -126,7 +136,7 @@ public class YggdrasilElevator : BoxEntity
 				}
 				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
 				break;
-			case 3:
+			case State.Decelerating:
 				if (DecelerateTimer > 0)
 				{
 					DecelerateTimer--;
@@ -157,29 +167,29 @@ public class YggdrasilElevator : BoxEntity
 	{
 		if (DetentionTime > 0)
 		{
-			MoveState = -1;
+			MoveState = State.Malfunction;
 			return;
 		}
 		if (StopTimer > 0)
 		{
-			MoveState = 0;
+			MoveState = State.Stop;
 			return;
 		}
 		if (AccelerateTimer > 0)
 		{
-			MoveState = 2;
+			MoveState = State.Accelerating;
 			return;
 		}
 		if (DecelerateTimer > 0)
 		{
-			MoveState = 3;
+			MoveState = State.Decelerating;
 			return;
 		}
-		MoveState = 1;
+		MoveState = State.NormalMove;
 	}
 
 	/// <summary>
-	/// Only update when MoveState == 1
+	/// Only update when <see cref="MoveState"/> is <see cref="State.NormalMove"/>.
 	/// </summary>
 	public void CheckRunningDirection()
 	{
