@@ -369,6 +369,7 @@ MigrationBackup/
 FodyWeavers.xsd
 *.sfk
 
+
 Effects/Compiler/logfile.txt
 logfile.txt
 Everglow.dll
