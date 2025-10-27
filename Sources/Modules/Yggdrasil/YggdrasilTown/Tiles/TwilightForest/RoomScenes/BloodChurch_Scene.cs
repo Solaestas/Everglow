@@ -32,13 +32,13 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_Close.Value };
+		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_0_Close.Value };
 		var scene_Fountain = new BloodChurch_Scene_Fountain { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_Background.Value };
-		var scene_Far = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_Far.Value };
+		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_3_Background.Value };
+		var scene_Far = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.BloodChurch_Scene_2_Far.Value };
 		Ins.VFXManager.Add(scene_Close);
-		Ins.VFXManager.Add(scene_Fountain);
-		Ins.VFXManager.Add(scene_Background);
 		Ins.VFXManager.Add(scene_Far);
+		Ins.VFXManager.Add(scene_Background);
+		Ins.VFXManager.Add(scene_Fountain);
 	}
 }

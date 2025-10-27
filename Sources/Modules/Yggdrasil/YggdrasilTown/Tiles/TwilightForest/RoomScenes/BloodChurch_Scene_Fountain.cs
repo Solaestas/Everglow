@@ -9,7 +9,7 @@ public class BloodChurch_Scene_Fountain : BackgroundVFX
 
 	public override void OnSpawn()
 	{
-		texture = ModAsset.BloodChurch_Scene_Fountain.Value;
+		texture = ModAsset.BloodChurch_Scene_1_Fountain.Value;
 	}
 
 	public override void Draw()

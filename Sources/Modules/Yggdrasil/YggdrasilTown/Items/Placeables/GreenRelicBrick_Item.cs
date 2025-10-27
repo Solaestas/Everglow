@@ -25,21 +25,21 @@ public class GreenRelicBrick_Item : ModItem
 			var checkTiles = YggdrasilWorldGeneration.BFSContinueTile(point, true, 1024);
 			foreach (var tile in checkTiles)
 			{
-				if (tile.TileType == TileID.GreenDungeonBrick)
-				{
-					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
-				}
+				//if (tile.TileType == TileID.GreenDungeonBrick)
+				//{
+				//	tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+				//}
 
-				if (tile.WallType == WallID.GreenDungeonSlab)
-				{
-					tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
-				}
-				if (tile.WallType == WallID.GreenDungeon)
-				{
-					tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
-				}
+				//if (tile.WallType == WallID.GreenDungeonSlab)
+				//{
+				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
+				//}
+				//if (tile.WallType == WallID.GreenDungeon)
+				//{
+				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
+				//}
 
-				// tile.wall = 0;
+				tile.wall = 0;
 			}
 		}
 	}
