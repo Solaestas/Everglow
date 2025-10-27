@@ -786,8 +786,8 @@ public class BloodTusk : ModNPC
 			 Gum_Middle, SubTusk3_2, SubTusk5_2, Tusk_Black, Tusk1, SubTusk0_2, SubTusk1_2,
 			 SubTusk6_2, SubTusk7_2, Gum_Bottom, Gum_Surface, SubTusk2_2, SubTusk4_2, Gum_Surface_Center,
 		};
-		TileSystem.Instance.AddTile(new TuskWall() { Position = new Vector2(1000 + Main.maxTilesX * 8, NPC.Center.Y - 760), size = new Vector2(194, 0), Active = true, Flip = false, Tusk = NPC, Timer = 3 });
-		TileSystem.Instance.AddTile(new TuskWall() { Position = new Vector2(-900 + Main.maxTilesX * 8, NPC.Center.Y - 760), size = new Vector2(194, 0), Active = true, Flip = true, Tusk = NPC, Timer = 3 });
+		ColliderManager.Instance.Add(new TuskWall() { Position = new Vector2(1000 + Main.maxTilesX * 8, NPC.Center.Y - 760), Size = new Vector2(194, 0), Active = true, Flip = false, Tusk = NPC, Timer = 3 });
+		ColliderManager.Instance.Add(new TuskWall() { Position = new Vector2(-900 + Main.maxTilesX * 8, NPC.Center.Y - 760), Size = new Vector2(194, 0), Active = true, Flip = true, Tusk = NPC, Timer = 3 });
 		for (int i = 0; i < 300; i++)
 		{
 			FadeValue_ToPhase2 = i / 300f;

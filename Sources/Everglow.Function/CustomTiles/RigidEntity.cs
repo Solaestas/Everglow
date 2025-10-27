@@ -1,3 +1,5 @@
+using Everglow.Commons.Physics.DataStructures;
+
 namespace Everglow.Commons.CustomTiles;
 
 public abstract class RigidEntity
@@ -7,6 +9,8 @@ public abstract class RigidEntity
 	public Vector2 Velocity { get; set; }
 
 	public bool Active { get; set; } = true;
+
+	public virtual Color MapColor => Color.White;
 
 	public virtual void AI() { }
 

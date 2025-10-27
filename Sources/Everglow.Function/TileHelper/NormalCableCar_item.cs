@@ -34,7 +34,7 @@ public class NormalCableCar_item : ModItem
 				Tile tile = Main.tile[checkPoint];
 				if(tile.TileType == ModContent.TileType<CableCarJoint>())
 				{
-					TileSystem.Instance.AddTile(new NormalCableCar() { Position = checkPoint.ToWorldCoordinates(), size = new Vector2(80, 80), Direction = -1, Active = true });
+					ColliderManager.Instance.Add(new NormalCableCar() { Position = checkPoint.ToWorldCoordinates(), Size = new Vector2(80, 80), Direction = -1, Active = true });
 				}
 			}
 		}

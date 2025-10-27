@@ -1,3 +1,5 @@
+using Everglow.Commons.Physics.DataStructures;
+
 namespace Everglow.Commons.CustomTiles;
 
 public interface IBox

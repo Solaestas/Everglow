@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Everglow.Commons.Physics.DataStructures;
 
 namespace Everglow.Commons.CustomTiles;
 

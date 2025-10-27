@@ -1,12 +1,11 @@
 using Everglow.Commons.CustomTiles;
-using Everglow.Commons.CustomTiles.Tiles;
 using Everglow.Commons.Physics.DataStructures;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
-public class YggdrasilElevator : DBlock
+public class YggdrasilElevator : BoxEntity
 {
 	/// <summary>
 	/// 接下来运行的方向
@@ -37,45 +36,38 @@ public class YggdrasilElevator : DBlock
 	/// </summary>
 	public bool CheckDefault = false;
 
-	public override void OnCollision(AABB aabb, Direction dir)
-	{
-		//此区域仅用作测试
-		//Main.NewText(StartCoordY);
-		//Main.NewText(DetentionTime, Color.Red);
-		//Main.NewText(AccelerateTimeLeft, Color.Green);
-		//Main.NewText(PauseTime, Color.Blue);
-	}
+	public Vector2 Center => Position + Size * 0.5f;
 
 	public override void AI()
 	{
 		if (!CheckDefault)
 		{
-			StartCoordY = position.Y;
+			StartCoordY = Position.Y;
 			CheckDefault = true;
 		}
 		//碰撞体积,高度要+1要不然会被吸走，紫幽可以试着修复这个Bug（<= 16高度就会被原版的物块吸附贯穿）
-		size = new Vector2(96, 17);
+		Size = new Vector2(96, 17);
 
 		Vector2 TileCenter = Center / 16f;
 		int TCX = (int)TileCenter.X;
 		int TCY = (int)TileCenter.Y;
 		//电梯平台的半宽度
-		int TCWidth = (int)(size.X / 32f);
+		int TCWidth = (int)(Size.X / 32f);
 
 		if (PauseTime > 0)
 		{
 			//停机减速
 			PauseTime--;
-			velocity *= 0.9f;
-			if (velocity.Length() < 0.01f)
-				velocity *= 0;
+			Velocity *= 0.9f;
+			if (Velocity.Length() < 0.01f)
+				Velocity *= 0;
 		}
 		else
 		{
 			//开机加速
 			PauseTime = 0;
-			if (velocity.Length() < 2f)
-				velocity.Y += 0.1f * RunningDirection;
+			if (Velocity.Length() < 2f)
+				Velocity += new Vector2(0, 0.1f * RunningDirection);
 			AccelerateTimeLeft--;
 		}
 		if (AccelerateTimeLeft > 0)
@@ -107,7 +99,7 @@ public class YggdrasilElevator : DBlock
 		if (PauseTime == 2)
 			CheckRunningDirection();
 		//停机时间检测
-		if (Math.Abs(velocity.Y) <= 0.2f)
+		if (Math.Abs(Velocity.Y) <= 0.2f)
 		{
 			DetentionTime++;
 			//停机太久,判定为卡死，重启
@@ -122,7 +114,7 @@ public class YggdrasilElevator : DBlock
 			DetentionTime = 0;
 		}
 		//位置太高需要重启
-		if (position.Y < StartCoordY - 1)
+		if (Position.Y < StartCoordY - 1)
 		{
 			if (PauseTime == 0 && AccelerateTimeLeft == 0)
 				PauseTime = 300;
@@ -134,7 +126,7 @@ public class YggdrasilElevator : DBlock
 		int TCX = (int)TileCenter.X;
 		int TCY = (int)TileCenter.Y;
 		//电梯平台的半宽度
-		int TCWidth = (int)(size.X / 32f);
+		int TCWidth = (int)(Size.X / 32f);
 		int Lamp = 0;
 		int distanceToWinch = 1000;
 		//向上1000格检索绞盘
@@ -191,14 +183,14 @@ public class YggdrasilElevator : DBlock
 	public override void Draw()
 	{
 		//绘制区完全不用管
-		if (position.X / 16f < Main.maxTilesX - 28 && position.Y / 16f < Main.maxTilesY - 28 && position.X / 16f > 28 && position.Y / 16f > 28)
+		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
 			Color drawc = Lighting.GetColor((int)(Center.X / 16f), (int)(Center.Y / 16f) - 3);
-			Main.spriteBatch.Draw(ModAsset.SkyTreeLift.Value, position - Main.screenPosition, new Rectangle(0, 0, (int)size.X, (int)size.Y), drawc);
+			Main.spriteBatch.Draw(ModAsset.SkyTreeLift.Value, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), drawc);
 			Texture2D LiftFramework = ModAsset.SkyTreeLiftShellLightOff.Value;
 
 			if (LampOn)
-				Lighting.AddLight((int)(position.X / 16f) + 1, (int)(position.Y / 16f) - 3, 1f, 0.8f, 0f);
+				Lighting.AddLight((int)(Position.X / 16f) + 1, (int)(Position.Y / 16f) - 3, 1f, 0.8f, 0f);
 
 			var drawcLampGlow = new Color(255, 255, 255, 0);
 
@@ -216,15 +208,15 @@ public class YggdrasilElevator : DBlock
 			var bars = new List<Vertex2D>();
 			for (int f = 0; f < 1000; f++)
 			{
-				Color drawcRope = Lighting.GetColor((int)(position.X / 16f) + 2, (int)((position.Y - f * 12) / 16f) - 7);
+				Color drawcRope = Lighting.GetColor((int)(Position.X / 16f) + 2, (int)((Position.Y - f * 12) / 16f) - 7);
 
 				bars.Add(new Vertex2D(Center - Main.screenPosition + new Vector2(-4, -125 - f * 12), drawcRope, new Vector3(0, f % 2, 0)));
 				bars.Add(new Vertex2D(Center - Main.screenPosition + new Vector2(4, -125 - f * 12), drawcRope, new Vector3(1, f % 2, 0)));
 
 				int dx = 1;
-				if ((int)(position.X / 16f) + 2 + dx < Main.maxTilesX - 28 && (int)((position.Y - f * 12) / 16f) - 7 < Main.maxTilesY - 28 && (int)(position.X / 16f) + 2 + dx > 28 && (int)((position.Y - f * 12) / 16f) - 7 > 28)
+				if ((int)(Position.X / 16f) + 2 + dx < Main.maxTilesX - 28 && (int)((Position.Y - f * 12) / 16f) - 7 < Main.maxTilesY - 28 && (int)(Position.X / 16f) + 2 + dx > 28 && (int)((Position.Y - f * 12) / 16f) - 7 > 28)
 				{
-					Tile tile0 = Main.tile[(int)(position.X / 16f) + 2 + dx, (int)((position.Y - f * 12) / 16f) - 7];
+					Tile tile0 = Main.tile[(int)(Position.X / 16f) + 2 + dx, (int)((Position.Y - f * 12) / 16f) - 7];
 					if (tile0.TileType == ModContent.TileType<Winch>() && tile0.HasTile)
 						break;
 				}

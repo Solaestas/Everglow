@@ -1,3 +1,4 @@
+using Everglow.Commons.Physics.DataStructures;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.CustomTiles;
@@ -86,7 +87,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 	{
 		var box = Box;
 		box.position -= Main.screenPosition;
-		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, box, Color.White);
+		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, box, MapColor);
 	}
 
 	public override void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
@@ -102,7 +103,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 				var destination = new Rectangle((int)position.X - 1, (int)position.Y - 1, 2, 2);
 				if (mapRect != null ? destination.Intersects(mapRect.Value) : true)
 				{
-					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, position, new Rectangle(0, 0, 1, 1), Color.White, 0, Vector2.Zero, mapScale, SpriteEffects.None, 0);
+					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, position, new Rectangle(0, 0, 1, 1), MapColor, 0, Vector2.Zero, mapScale, SpriteEffects.None, 0);
 				}
 			}
 		}
