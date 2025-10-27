@@ -66,7 +66,7 @@ public class ColliderManager : ILoadable
 
 	public bool Intersect(AABB aabb)
 	{
-		foreach(var entity in rigidbody)
+		foreach (var entity in rigidbody)
 		{
 			if (entity.Intersect(aabb))
 			{
@@ -82,6 +82,9 @@ public class ColliderManager : ILoadable
 		On_Collision.TileCollision += Collision_TileCollision;
 		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
 		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
+
+		// TODO: Step hook.
+		// On_Collision.StepUp += Collision_StepUp;
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
@@ -138,6 +141,58 @@ public class ColliderManager : ILoadable
 
 	private List<RigidEntity> rigidbody = new();
 
+	// TODO: StepHook, when player try to move on the CustomTile, it should be stepped to the top.
+	// private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
+	// {
+	// orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
+	// if (!Enable || !EnableHook)
+	// {
+	// CustomTileStepUp(ref position, ref velocity, width, height, ref gfxOffY, gravDir);
+	// }
+	// }
+
+	// private void CustomTileStepUp(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float gfxOffY, int gravDir = 1)
+	// {
+	// float ascendValue = 0;
+	// if (Instance is null || MathF.Abs(velocity.X) < 1e-5)
+	// {
+	// return;
+	// }
+	// float maxAscend = 20;
+	// AABB entityBoxNow = new AABB(position, new Vector2(width, height));
+	// AABB entityBoxNext = new AABB(position + velocity, new Vector2(width, height));
+	// if (gravDir == 1)
+	// {
+	// foreach (var customTile in rigidbody.OfType<BoxEntity>())
+	// {
+	// if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow) && customTile.Box.Top > entityBoxNext.Bottom - maxAscend && entityBoxNext.Bottom - customTile.Box.Top > ascendValue)
+	// {
+	// ascendValue = entityBoxNext.Bottom - customTile.Box.Top;
+	// }
+	// }
+	// if (ascendValue > 0)
+	// {
+	// position.Y -= ascendValue * 2;
+	// gfxOffY += ascendValue * 2;
+	// }
+	// }
+	// else
+	// {
+	// // up-side-down
+	// foreach (var customTile in rigidbody.OfType<BoxEntity>())
+	// {
+	// if (Intersect(entityBoxNext) && !Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && customTile.Box.Bottom - entityBoxNext.Top > ascendValue)
+	// {
+	// ascendValue = customTile.Box.Bottom - entityBoxNext.Top;
+	// }
+	// }
+	// if (ascendValue > 0)
+	// {
+	// position.Y += ascendValue;
+	// gfxOffY -= ascendValue;
+	// }
+	// }
+	// }
 	private void Collision_LaserScan(On_Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
 	{
 		if (!Enable || !EnableHook)
@@ -190,9 +245,9 @@ public class ColliderManager : ILoadable
 				Size = new Vector2(Width, Height),
 				Gravity = gravDir,
 			};
-			foreach(var entity in rigidbody)
+			foreach (var entity in rigidbody)
 			{
-				if(entity.Collision(box, stride, out var result))
+				if (entity.Collision(box, stride, out var result))
 				{
 					stride = result.Stride;
 				}
