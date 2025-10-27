@@ -2,6 +2,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
 using Everglow.Myth.TheFirefly.Buffs;
 using Everglow.Myth.TheFirefly.VFXs;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -54,7 +55,8 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(electric);
 		}
-		for (int g = 0; g < Frequency * 3; g++)
+
+		for (int g = 0; g < Frequency * 1.5f; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(20f, 30f)).RotatedByRandom(MathHelper.TwoPi);
 			var electric = new MothBallCurrent
@@ -68,6 +70,21 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 				ai = new float[] { 0, 0, 0 }
 			};
 			Ins.VFXManager.Add(electric);
+		}
+
+		// 生成分叉闪电
+		int totalLightnings = (int)(Frequency * 0.35);
+		float angleDivision = (float)(Math.PI * 2 / totalLightnings);
+		for (int g = 0; g < totalLightnings; g++)
+		{
+			float randScale = Main.rand.NextFloat(0.75f, 1.0f);
+			var lightning = new BranchedLightning(
+				150f * randScale, 
+				8f * randScale, 
+				Projectile.position, 
+				g * angleDivision + Main.rand.NextFloat(angleDivision),
+				45f * randScale);
+			Ins.VFXManager.Add(lightning);
 		}
 	}
 	public void GenerateSmog(int Frequency)
@@ -187,7 +204,7 @@ public class MothBallExplosion : ModProjectile, IWarpProjectile
 		float dark = Math.Max((Projectile.timeLeft - 150) / 50f, 0);
 		Color c = new Color(0.2f * MathF.Sqrt(1 - timeValue), 0.6f * (1 - timeValue) * (1 - timeValue), 3f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White * dark, 0, shadow.Size() / 2f, 2.2f * Projectile.ai[0] * 0.2f, SpriteEffects.None, 0);
-		Texture2D light = ModAsset.CursedHitStar.Value;
+		Texture2D light = Commons.ModAsset.StarSlash.Value;
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 0 + Projectile.ai[1], light.Size() / 2f, new Vector2(1f, dark * dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(light, Projectile.Center - Main.screenPosition, null, c, 1.57f + Projectile.ai[1], light.Size() / 2f, new Vector2(0.5f, dark) * Projectile.ai[0] * 0.08f, SpriteEffects.None, 0);
 		return false;

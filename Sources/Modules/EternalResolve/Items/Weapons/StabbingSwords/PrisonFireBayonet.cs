@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
@@ -13,7 +13,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 12;
 			Item.knockBack = 2.34f;
-			Item.rare = ItemRarityID.White;
+			Item.rare = ItemRarityID.Orange;
 			Item.value = Item.sellPrice(0, 1, 12, 0);
 			Item.shoot = ModContent.ProjectileType<PrisonFireBayonet_Pro>();
 			StabMulDamage = 4f;
@@ -23,7 +23,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		public override void AddRecipes()
 		{
 			CreateRecipe().
-				AddIngredient(ItemID.HellstoneBar, 17).
+				AddIngredient(ItemID.HellstoneBar, 16).
 				AddTile(TileID.Anvils).
 				Register();
 			base.AddRecipes();

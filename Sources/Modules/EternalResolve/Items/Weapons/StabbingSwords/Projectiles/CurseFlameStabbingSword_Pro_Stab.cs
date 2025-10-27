@@ -1,8 +1,8 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords;
-using Everglow.Commons.Weapons.StabbingSwords.VFX;
 using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
 
@@ -16,7 +16,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			base.SetDefaults();
 			TradeShade = 0.9f;
 			Shade = 0.9f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
@@ -171,8 +171,23 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 1f }
 				};
 				Ins.VFXManager.Add(fire);
+				Vector2 playerVel = Main.player[Projectile.owner].velocity;
+				Vector2 projVel = Projectile.velocity * 20;
+				float rot = Main.rand.NextFloat(-0.1f, 0.1f);
+				Vector2 vel = playerVel + projVel.RotatedBy(Main.rand.NextFloat(-0.05f, 0.05f)) * Main.rand.NextFloat(0.75f, 3.25f);
+				Vector2 pos = Projectile.Center + projVel.RotatedBy(rot) * Main.rand.NextFloat(1f, 2.5f);
+				var cf = new CursedFlame_flowDust
+				{
+					velocity = vel * 0.15f,
+					Active = true,
+					Visible = true,
+					position = pos,
+					maxTime = Main.rand.Next(12,42),
+					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), -rot * 0.02f, Main.rand.NextFloat(9.6f, 20f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				};
+				Ins.VFXManager.Add(cf);
 			}
-			for (int g = 0; g < Frequency * 2; g++)
+			for (int g = 0; g < Frequency * 7; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * Main.rand.NextFloat(12f);
 				var spark = new CurseFlameSparkDust

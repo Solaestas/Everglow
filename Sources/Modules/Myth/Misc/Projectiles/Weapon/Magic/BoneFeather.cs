@@ -1,6 +1,4 @@
-using Everglow.Commons.CustomTiles.Collide;
 using Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using static Everglow.Commons.Utilities.ProjectileUtils;
@@ -115,13 +113,8 @@ public class BoneFeather : StickNPCProjectile
 		if (Projectile.spriteDirection == -1)
 			spriteEffects = SpriteEffects.FlipHorizontally;
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-		int startY = frameHeight * Projectile.frame;
-		var sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
-		Vector2 origin = sourceRectangle.Size() / 2f;
-		float offsetX = 20f;
-		origin.X = Projectile.spriteDirection == 1 ? sourceRectangle.Width - offsetX : offsetX;
-		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, sourceRectangle, lightColor, Projectile.rotation, origin, Projectile.scale, spriteEffects, 0);
+
+		Main.EntitySpriteDraw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() * 0.5f, Projectile.scale, spriteEffects, 0);
 	}
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{

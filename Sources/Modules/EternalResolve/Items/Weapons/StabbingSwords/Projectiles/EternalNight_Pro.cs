@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -12,7 +12,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 8;
 			TradeShade = 0.8f;
 			Shade = 1;
-			FadeTradeShade = 0.7f;
+			FadeShade = 0.7f;
 			FadeScale = 0.7f;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.1f;
@@ -32,7 +32,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			base.OnHitNPC(target, hit, damageDone);
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
@@ -42,11 +42,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 				dust.noGravity = true;
 			}
-			base.AI();
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;

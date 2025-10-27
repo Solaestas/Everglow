@@ -14,8 +14,8 @@ public class MothShimmerScalePipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Noise_turtleCrack.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicWrap;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 
@@ -53,7 +53,14 @@ public class MothShimmerScaleDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.98f;
-		velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.012f * scale);
+		if (ai.Length >= 3)
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f) * ai[2];
+		}
+		else
+		{
+			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f);
+		}
 		scale *= 0.98f;
 		timer++;
 		if (timer > maxTime)

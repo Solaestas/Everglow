@@ -1,11 +1,22 @@
-﻿using Microsoft.Xna.Framework.Audio;
+using System.Reflection;
+using Everglow.Commons.Interfaces;
+using Everglow.Commons.Modules;
+using Microsoft.Xna.Framework.Audio;
 using Terraria.Audio;
 
 namespace Everglow.AssetReplace.SoundReplace;
 
 internal class PickItemSoundReplaceModule : IModule
 {
+	public PickItemSoundReplaceModule()
+	{
+		Code = GetType().Assembly;
+	}
 	public string Name => "Pick Item Sound Modify";
+
+	public Assembly Code { get; }
+
+	public bool Condition => true;
 
 	public void Load()
 	{
@@ -18,7 +29,7 @@ internal class PickItemSoundReplaceModule : IModule
 	private void PatchRightClick(Terraria.UI.On_ItemSlot.orig_RightClick_ItemArray_int_int orig, Item[] inv, int context, int slot)
 	{
 		_playOriginalSound = true;
-		if (ModContent.GetInstance<EverglowClientConfig>().ItemPickSoundReplace && Main.mouseRight && Main.stackSplit <= 1)
+		if (ModContent.GetInstance<AssetReplaceConfig>().ItemPickSoundReplace && Main.mouseRight && Main.stackSplit <= 1)
 		{
 			SoundStyle? customSoundStyle = null;
 
@@ -36,7 +47,7 @@ internal class PickItemSoundReplaceModule : IModule
 	private void PatchLeftClick(Terraria.UI.On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot)
 	{
 		_playOriginalSound = true;
-		if (ModContent.GetInstance<EverglowClientConfig>().ItemPickSoundReplace && Main.mouseLeft && Main.mouseLeftRelease)
+		if (ModContent.GetInstance<AssetReplaceConfig>().ItemPickSoundReplace && Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			SoundStyle? customSoundStyle = null;
 

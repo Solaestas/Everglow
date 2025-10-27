@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
 public class AmbiguousLine : ModProjectile
@@ -24,13 +22,11 @@ public class AmbiguousLine : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		foreach (var proj in Main.projectile)
 		{
-			if(proj.whoAmI > Projectile.whoAmI)
+			if (proj.whoAmI > Projectile.whoAmI)
 			{
 				if (proj.ai[0] == Projectile.ai[0])
 					DrawShadowLine(proj.Center - Main.screenPosition, Projectile.Center - Main.screenPosition, Projectile.scale * 5);
@@ -38,13 +34,13 @@ public class AmbiguousLine : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		
+
 		return false;
 	}
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D shadow = ModAsset.CursedHit.Value;
-		Texture2D blackHole = ModAsset.BlackHole_BlackHole.Value;
+		Texture2D blackHole = ModAsset.BlackHole_texture.Value;
 		Texture2D blue = ModAsset.CorruptLight.Value;
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, Color.White, 0, shadow.Size() / 2f, 0.4f * Projectile.scale, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(blackHole, Projectile.Center - Main.screenPosition, null, Color.White, 0, blackHole.Size() / 2f, 0.06f * MathF.Sqrt(Projectile.scale), SpriteEffects.None, 0);
@@ -59,7 +55,7 @@ public class AmbiguousLine : ModProjectile
 		vertex2Ds.Add(new Vertex2D(StartPos - Width, color, new Vector3(0, 1, 0)));
 		vertex2Ds.Add(new Vertex2D(EndPos + Width, color, new Vector3(1, 0, 0)));
 		vertex2Ds.Add(new Vertex2D(EndPos - Width, color, new Vector3(1, 1, 0)));
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/SlingshotTrailBlack");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.SlingshotTrailBlack.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 
 		color = new Color(255, 255, 255, 0);
@@ -70,7 +66,7 @@ public class AmbiguousLine : ModProjectile
 		vertex2Ds.Add(new Vertex2D(EndPos + Width, color, new Vector3(1, 0, 0)));
 		vertex2Ds.Add(new Vertex2D(EndPos - Width, color, new Vector3(1, 1, 0)));
 
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/ShadowTrail");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.ShadowTrail.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 
 		color = Color.White;
@@ -80,7 +76,7 @@ public class AmbiguousLine : ModProjectile
 		vertex2Ds.Add(new Vertex2D(StartPos - Width, color, new Vector3(0, 1, 0)));
 		vertex2Ds.Add(new Vertex2D(EndPos + Width, color, new Vector3(1, 0, 0)));
 		vertex2Ds.Add(new Vertex2D(EndPos - Width, color, new Vector3(1, 1, 0)));
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("Misc/Projectiles/Weapon/Ranged/Slingshots/Textures/ShadowTrailFlame");
+		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.ShadowTrailFlame.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 	}
 }

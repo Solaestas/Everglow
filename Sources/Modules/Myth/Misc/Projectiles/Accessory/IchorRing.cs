@@ -1,8 +1,4 @@
-using Everglow.Commons.Utilities;
-using Everglow.Myth.Common;
-using Everglow.Myth.MagicWeaponsReplace.Projectiles.GoldenShower;
-using Terraria;
-using Terraria.Audio;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Accessory;
@@ -19,7 +15,7 @@ public class IchorRing : ModProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, ModContent.ProjectileType<GoldenShowerBomb>(), 0, 0, Projectile.owner, 30f, Main.rand.NextFloat(6.283f));
+		//Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.One, ModContent.ProjectileType<GoldenShowerBomb>(), 0, 0, Projectile.owner, 10f, Main.rand.NextFloat(6.283f));
 	}
 	public override void AI()
 	{
@@ -30,6 +26,18 @@ public class IchorRing : ModProjectile
 		for (int x = 0; x < 5; x++)
 		{
 			GenerateDust();
+		}
+
+		if (Projectile.timeLeft < 120)
+		{
+			Energy -= 5f;
+		}
+		else
+		{
+			if (Energy < 600)
+			{
+				Energy += 15;
+			}
 		}
 		if (Projectile.timeLeft < 60)
 			Projectile.friendly = false;
@@ -44,262 +52,208 @@ public class IchorRing : ModProjectile
 		for (int x = 0; x < 2; x++)
 		{
 			Vector2 velocity = new Vector2(0, Main.rand.NextFloat(2f, 6f)).RotatedByRandom(6.283) - Projectile.velocity * 0.2f;
-			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<GoldenShowerII>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
+			var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + velocity * -2, velocity, ModContent.ProjectileType<IchorCurrent>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner, 3f/*If ai[0] equal to 3, another ai will be execute*/);
 			p.friendly = false;
 			p.CritChance = Projectile.CritChance;
 		}
 		target.AddBuff(BuffID.Ichor, 600);
 	}
-	private bool insertWithRing(Vector2 point1, Vector2 point2, float radius, float toleranceWidth)
+	private bool InsertWithRing(Vector2 point1, Vector2 point2, float radius, float toleranceWidth)
 	{
 		return Math.Abs((point1 - point2).Length() - radius) < toleranceWidth;
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if (insertWithRing(targetHitbox.BottomLeft(), Projectile.Center, Projectile.ai[0], 20))
+		if (InsertWithRing(targetHitbox.BottomLeft(), Projectile.Center, Projectile.ai[0], 20))
 			return true;
-		if (insertWithRing(targetHitbox.BottomRight(), Projectile.Center, Projectile.ai[0], 20))
+		if (InsertWithRing(targetHitbox.BottomRight(), Projectile.Center, Projectile.ai[0], 20))
 			return true;
-		if (insertWithRing(targetHitbox.TopLeft(), Projectile.Center, Projectile.ai[0], 20))
+		if (InsertWithRing(targetHitbox.TopLeft(), Projectile.Center, Projectile.ai[0], 20))
 			return true;
-		if (insertWithRing(targetHitbox.TopRight(), Projectile.Center, Projectile.ai[0], 20))
+		if (InsertWithRing(targetHitbox.TopRight(), Projectile.Center, Projectile.ai[0], 20))
 			return true;
 		return false;
 	}
-	private void GenerateDust()
+	public float Energy = 0;
+	public void DrawPowerEffect()
 	{
-		float rotation = Main.rand.NextFloat(MathF.PI * 2);
-		Vector2 v0 = new Vector2(0, Projectile.ai[0] * Main.rand.NextFloat(0.9f, 1f)).RotatedBy(rotation);
-		//Vector2 v1 = new Vector2(0, 1).RotatedBy(rotation);
-		float Speed = 0.08f;
-		var D = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
-		D.noGravity = true;
-		D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
-	}
-	private void DrawTexLiquidCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, int textureDrawTimes = 1, double addRot = 0)
-	{
-		var circle = new List<Vertex2D>();
-		for (int h = 0; h < radius / 2; h += 2)
+		Player player = Main.player[Projectile.owner];
+		Vector2 bulbPos = player.Center;
+		float energyValue = Energy / 600f;
+		energyValue = MathF.Pow(energyValue, 0.3f);
+		energyValue *= 12f / 5f;
+		Color c0 = new Color(1, 0.7f, 0, 0);
+		float timeValue = (float)Main.time * 0.009f;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		float accuracy = 16;
+		List<Vertex2D> bars2 = new List<Vertex2D>();
+		List<Vertex2D> bars3 = new List<Vertex2D>();
+		List<Vertex2D> bars4 = new List<Vertex2D>();
+		for (int x = 0; x < 9; x++)
 		{
-
-			float coordX = (h * 2 / radius * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
-			float nextCoordX = ((h + 2) * 2 / radius * textureDrawTimes + (float)Main.timeForVisualEffects * 0.02f) % 1f;
-			float OutWave = width * (1 + MathF.Sin(coordX * MathF.PI * 2) * 0.03f);
-			float InWave = width * (1 + MathF.Sin(-coordX * MathF.PI * 4) * 0.23f);
-			InWave = Math.Min(InWave, radius);
-			circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(coordX, 1, 0)));
-			circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy(h / radius * Math.PI * 4 + addRot), color, new Vector3(coordX, 0, 0)));
-			if (nextCoordX < coordX)
+			Vector2 addPos = Vector2.zeroVector;
+			Vector2 addVel = new Vector2(0, 4 * energyValue).RotatedBy(x / 9f * MathHelper.TwoPi - timeValue * 0.4f);
+			for (int t = 0; t <= accuracy; t++)
 			{
-				float midValue = (1 - coordX) / (nextCoordX + 1 - coordX);
-				OutWave = width;
-				InWave = width;
-				InWave = Math.Min(InWave, radius);
-				circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(1, 1, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(1, 0, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radius - InWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(0, 1, 0)));
-				circle.Add(new Vertex2D(center + new Vector2(0, radius + OutWave).RotatedBy((h + midValue) / radius * Math.PI * 4 + addRot), color, new Vector3(0, 0, 0)));
+				float factor = t / accuracy;
+				Vector2 velLeft = Vector2.Normalize(addVel.RotatedBy(MathHelper.PiOver2)) * 134 * energyValue;
+				if (t == 0)
+				{
+					bars2.Add(new Vertex2D(bulbPos + addPos, Color.White * 0, new Vector3(timeValue + factor * factor + MathF.Sin(x), 0.5f, factor)));
+					bars2.Add(new Vertex2D(bulbPos + addPos - velLeft, Color.White * 0, new Vector3(timeValue + factor * factor + MathF.Sin(x), 1, factor)));
+				}
+				bars2.Add(new Vertex2D(bulbPos + addPos, Color.White * (1 - factor), new Vector3(timeValue + factor * factor + MathF.Sin(x), 0.5f, factor)));
+				bars2.Add(new Vertex2D(bulbPos + addPos - velLeft, Color.White * (1 - factor), new Vector3(timeValue + factor * factor + MathF.Sin(x), 1, factor)));
+
+				if (t == 0)
+				{
+					bars.Add(new Vertex2D(bulbPos + addPos, c0 * 0, new Vector3(timeValue + factor * factor + MathF.Sin(x), 0.5f, factor)));
+					bars.Add(new Vertex2D(bulbPos + addPos - velLeft, c0 * 0, new Vector3(timeValue + factor * factor + MathF.Sin(x), 1, factor)));
+				}
+				bars.Add(new Vertex2D(bulbPos + addPos, c0 * (1 - factor) * (1 - factor), new Vector3(timeValue + factor * factor + MathF.Sin(x), 0.5f, factor)));
+				bars.Add(new Vertex2D(bulbPos + addPos - velLeft, c0 * (1 - factor) * (1 - factor), new Vector3(timeValue + factor * factor + MathF.Sin(x), 1, factor)));
+				addPos += addVel;
+				addVel = addVel.RotatedBy((1 - factor * factor * 1.2f) * 0.36f) * 1.08f;
 			}
 		}
-		float coordx = (float)Main.timeForVisualEffects * 0.02f % 1f;
-		float outWave = width * (1 + MathF.Sin(coordx * MathF.PI * 2) * 0.23f);
-		float inWave = width * (1 + MathF.Sin(-coordx * MathF.PI * 4) * 0.13f);
-		inWave = Math.Min(inWave, radius);
-
-		circle.Add(new Vertex2D(center + new Vector2(0, radius - inWave).RotatedBy(addRot), color, new Vector3(coordx, 1, 0)));
-		circle.Add(new Vertex2D(center + new Vector2(0, radius + outWave).RotatedBy(addRot), color, new Vector3(coordx, 0, 0)));
-
-		if (circle.Count > 0)
+		timeValue = (float)Main.time * 0.09f;
+		for (int x = 0; x < 45; x++)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = tex;
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
+			float factor = x / 44f;
+			Vector2 addPos = new Vector2(90 * energyValue, 0).RotatedBy(x / 44f * MathHelper.TwoPi);
+			float mulC = 1f;
+			if (x < 10)
+			{
+				mulC = x / 10f;
+			}
+			if (x >= 34)
+			{
+				mulC = (44 - x) / 10f;
+			}
+			bars3.Add(new Vertex2D(bulbPos + addPos, c0 * mulC, new Vector3(timeValue + factor * 5.6f, 0, 1)));
+			bars3.Add(new Vertex2D(bulbPos + addPos - Vector2.Normalize(addPos) * Math.Min(addPos.Length(), 40f), c0 * 0, new Vector3(timeValue + factor * 8f, 1, 1)));
+		}
+		for (int x = 0; x < 45; x++)
+		{
+			float factor = x / 44f;
+			Vector2 addPos = new Vector2(90 * energyValue, 0).RotatedBy(x / 44f * MathHelper.TwoPi + MathHelper.Pi);
+			float mulC = 1f;
+			if (x < 10)
+			{
+				mulC = x / 10f;
+			}
+			if (x >= 34)
+			{
+				mulC = (44 - x) / 10f;
+			}
+			bars3.Add(new Vertex2D(bulbPos + addPos, c0 * mulC, new Vector3(timeValue + factor * 5.6f, 0, 1)));
+			bars3.Add(new Vertex2D(bulbPos + addPos - Vector2.Normalize(addPos) * Math.Min(addPos.Length(), 40f), c0 * 0, new Vector3(timeValue + factor * 8f, 1, 1)));
+		}
+
+		for (int x = 0; x < 45; x++)
+		{
+			float factor = x / 44f;
+			Vector2 addPos = new Vector2(90 * energyValue, 0).RotatedBy(x / 44f * MathHelper.TwoPi);
+			float mulC = 1f;
+			if (x < 10)
+			{
+				mulC = x / 10f;
+			}
+			if (x >= 34)
+			{
+				mulC = (44 - x) / 10f;
+			}
+			bars4.Add(new Vertex2D(bulbPos + addPos, Color.White * mulC, new Vector3(timeValue + factor * 5.6f, 0, 1)));
+			bars4.Add(new Vertex2D(bulbPos + addPos - Vector2.Normalize(addPos) * Math.Min(addPos.Length(), 40f), Color.White * 0, new Vector3(timeValue + factor * 8f, 1, 1)));
+		}
+		for (int x = 0; x < 45; x++)
+		{
+			float factor = x / 44f;
+			Vector2 addPos = new Vector2(90 * energyValue, 0).RotatedBy(x / 44f * MathHelper.TwoPi + MathHelper.Pi);
+			float mulC = 1f;
+			if (x < 10)
+			{
+				mulC = x / 10f;
+			}
+			if (x >= 34)
+			{
+				mulC = (44 - x) / 10f;
+			}
+			bars4.Add(new Vertex2D(bulbPos + addPos, Color.White * mulC, new Vector3(timeValue + factor * 5.6f, 0, 1)));
+			bars4.Add(new Vertex2D(bulbPos + addPos - Vector2.Normalize(addPos) * Math.Min(addPos.Length(), 40f), Color.White * 0, new Vector3(timeValue + factor * 8f, 1, 1)));
+		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Effect effect = Commons.ModAsset.Trailing.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		effect.Parameters["uTransform"].SetValue(model * projection);
+		effect.CurrentTechnique.Passes[0].Apply();
+		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2_black.Value;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+		if (bars2.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2.Value;
+		if (bars.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5_black.Value;
+		if (bars4.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars4.ToArray(), 0, bars4.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars4.ToArray(), 0, bars4.Count - 2);
+		}
+		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
+		if (bars3.Count > 3)
+		{
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
+	private void GenerateDust()
+	{
+		float value = Main.rand.NextFloat(Energy) / 200f;
+		float energyValue = Energy / 600f;
+		energyValue = MathF.Pow(energyValue, 0.3f);
+		for (int x = 0; x < value; x++)
+		{
+			Vector2 v0 = new Vector2(0, Projectile.ai[0] * Main.rand.NextFloat(0.9f, 1.2f) * energyValue).RotatedByRandom(MathHelper.TwoPi);
+
+			float Speed = 0.08f;
+			var d = Dust.NewDustDirect(Projectile.Center + v0 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, -v0.Y * Speed, v0.X * Speed, 150, default, Main.rand.NextFloat(0.4f, 1.1f));
+			d.noGravity = true;
+			d.velocity = v0.RotatedBy(-2f) * Speed;
+			d.scale *= Energy / 600f;
+			if (Main.rand.NextBool(2))
+			{
+				var blood = new IchorDrop
+				{
+					velocity = v0.RotatedBy(-2f) * Speed,
+					Active = true,
+					Visible = true,
+					position = Projectile.Center + v0,
+					maxTime = Main.rand.Next(12, 24),
+					scale = Main.rand.NextFloat(6f, 14f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+				};
+				Ins.VFXManager.Add(blood);
+			}
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceShade5xDark");
-		float width = 40f;
-		if (Projectile.timeLeft < 120f)
-			width = Projectile.timeLeft / 3f;
-		DrawTexLiquidCircle(Projectile.ai[0] * 0.9f, width, new Color(255, 100, 100, 100), Projectile.Center - Main.screenPosition, tex, 5, Main.time * 0.05);
-		tex = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/FogTraceLight");
-		DrawTexLiquidCircle(Projectile.ai[0] * 0.9f, width, new Color(255, 190, 0, 0), Projectile.Center - Main.screenPosition, tex, 5, Main.time * 0.03);
-		if (!Main.gamePaused)
-		{
-			int randvalue = 10;
-			if (MoonBladeI.Count > 1)
-				randvalue *= 2;
-			if (MoonBladeII.Count > 1)
-				randvalue *= 2;
-			if (MoonBladeIII.Count > 1)
-				randvalue *= 2;
-			if (MoonBladeIV.Count > 1)
-				randvalue *= 2;
-			if (Main.rand.NextBool(randvalue))
-				ActivateMoon(ref MoonBladeI);
-			if (MoonBladeI.Count > 9 && timeI == 64)
-			{
-				if (Main.rand.Next(MoonBladeI.Count, 20) > 14)
-					timeI--;
-			}
-			if (timeI < 64)
-			{
-				timeI--;
-				if (timeI <= 0)
-				{
-					timeI = 64;
-					DeactivateMoon(ref MoonBladeI);
-				}
-			}
-
-			if (Main.rand.NextBool(randvalue))
-				ActivateMoon(ref MoonBladeII);
-			if (MoonBladeII.Count > 9 && timeII == 64)
-			{
-				if (Main.rand.Next(MoonBladeII.Count, 20) > 14)
-					timeII--;
-			}
-			if (timeII < 64)
-			{
-				timeII--;
-				if (timeII <= 0)
-				{
-					timeII = 64;
-					DeactivateMoon(ref MoonBladeII);
-				}
-			}
-
-			if (Main.rand.NextBool(randvalue))
-				ActivateMoon(ref MoonBladeIII);
-			if (MoonBladeIII.Count > 9 && timeIII == 64)
-			{
-				if (Main.rand.Next(MoonBladeIII.Count, 20) > 14)
-					timeIII--;
-			}
-			if (timeIII < 64)
-			{
-				timeIII--;
-				if (timeIII <= 0)
-				{
-					timeIII = 64;
-					DeactivateMoon(ref MoonBladeIII);
-				}
-			}
-			if (Main.rand.NextBool(randvalue))
-				ActivateMoon(ref MoonBladeIV);
-			if (MoonBladeIV.Count > 9 && timeIV == 64)
-			{
-				if (Main.rand.Next(MoonBladeIV.Count, 20) > 14)
-					timeIV--;
-			}
-			if (timeIV < 64)
-			{
-				timeIV--;
-				if (timeIV <= 0)
-				{
-					timeIV = 64;
-					DeactivateMoon(ref MoonBladeIV);
-				}
-			}
-
-			UpdateMoon(ref MoonBladeI);
-			UpdateMoon(ref MoonBladeIV);
-			UpdateMoon(ref MoonBladeIII);
-			UpdateMoon(ref MoonBladeIV);
-
-			UpdateMoon(ref MoonBladeI);
-			UpdateMoon(ref MoonBladeIV);
-			UpdateMoon(ref MoonBladeIII);
-			UpdateMoon(ref MoonBladeIV);
-		}
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		DrawMoon(MoonBladeI, timeI);
-		DrawMoon(MoonBladeII, timeII);
-		DrawMoon(MoonBladeIII, timeIII);
-		DrawMoon(MoonBladeIV, timeIV);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		DrawPowerEffect();
 		return false;
-	}
-	internal List<Vector2> MoonBladeI = new List<Vector2>();
-	internal List<Vector2> MoonBladeII = new List<Vector2>();
-	internal List<Vector2> MoonBladeIII = new List<Vector2>();
-	internal List<Vector2> MoonBladeIV = new List<Vector2>();
-	internal int timeI = 64;
-	internal int timeII = 64;
-	internal int timeIII = 64;
-	internal int timeIV = 64;
-	private void DrawMoon(List<Vector2> listVec, float timeLeft)
-	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(listVec.ToList());//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (listVec.Count != 0)
-			SmoothTrail.Add(listVec.ToArray()[listVec.Count - 1]);
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
-			return;
-
-		var bars = new List<Vertex2D>();
-		var light = new Color(1f, 1f, 1f, 1f);
-		light *= 2;
-		light.A /= 4;
-		light.G = (byte)(light.G * 0.8f);
-		light.B = 0;
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float delta = 1 - timeLeft / 64f * 0.45f;
-			float maxValue = 20f;
-			if (length < maxValue)
-				delta = delta * length / maxValue + (maxValue - length) / maxValue;
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
-		}
-		Main.graphics.GraphicsDevice.Textures[0] = MythContent.QuickTexture("MagicWeaponsReplace/Projectiles/WaterLineShade");
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-	}
-	private void UpdateMoon(ref List<Vector2> listVec)
-	{
-		if (listVec.Count > 0)
-		{
-			float value = 1;
-			if (listVec.Count > 6)
-				value = 6 / (float)listVec.Count;
-			Vector2 v0 = listVec[listVec.Count - 1];
-			Vector2 v1 = v0.SafeNormalize(Vector2.Zero);
-			listVec.Add(v1.RotatedBy(0.3f * value * 1.23f) * (v0.Length() * 0.96f + Projectile.ai[0] * 1.03f * 0.04f));
-			for (int f = 0; f < 2; f++)
-			{
-				Vector2 v2 = listVec[Main.rand.Next(listVec.Count - 1)].SafeNormalize(Vector2.Zero) * 1.05f;
-				v2 *= Projectile.ai[0] * Main.rand.NextFloat(0.9f, 1.0f);
-				float Speed = Math.Min(0.3f * value, 0.221f);
-				var D = Dust.NewDustDirect(Projectile.Center + v2 - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, DustID.Ichor, -v2.Y * Speed, v2.X * Speed, 150, default, Main.rand.NextFloat(0.5f, 1.2f));
-				v2 *= Main.rand.NextFloat(0.6f, 1f);
-				D.noGravity = true;
-				D.velocity = new Vector2(-v2.Y * Speed, v2.X * Speed);
-			}
-		}
-	}
-	private void ActivateMoon(ref List<Vector2> listVec)
-	{
-		if (Projectile.timeLeft < 100)
-			return;
-		if (listVec.Count > 0)
-			return;
-		listVec = new List<Vector2>
-		{
-			new Vector2(0, Projectile.ai[0]).RotatedByRandom(6.283) * Main.rand.NextFloat(0.95f, 1.45f)
-		};
-		SoundEngine.PlaySound(SoundID.Splash.WithPitchOffset(0.5f), Projectile.Center);
-	}
-	private void DeactivateMoon(ref List<Vector2> listVec)
-	{
-		listVec.Clear();
 	}
 }

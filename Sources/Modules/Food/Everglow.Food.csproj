@@ -1,4 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Dusts\CucumberDust.png" />
+    <None Remove="Dusts\PotatoDust.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Update="Dusts\TomatoDust.png">
+      <Pack>true</Pack>
+    </AdditionalFiles>
+  </ItemGroup>
 </Project>
     
     

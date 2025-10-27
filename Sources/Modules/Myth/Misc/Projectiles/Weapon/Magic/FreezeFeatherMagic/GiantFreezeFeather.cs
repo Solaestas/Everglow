@@ -22,7 +22,7 @@ public class GiantFreezeFeather : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 80;
 	}
-	internal int TimeTokill = -1;
+	public int TimeTokill = -1;
 	public override void AI()
 	{
 		if (TimeTokill >= 0 && TimeTokill <= 2)
@@ -232,7 +232,7 @@ public class GiantFreezeFeather : ModProjectile
 		}
 
 		Texture2D t = tex;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.Textures[0] = t;
 		if (bars.Count > 3)
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

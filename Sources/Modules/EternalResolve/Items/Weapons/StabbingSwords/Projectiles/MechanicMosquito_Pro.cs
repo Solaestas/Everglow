@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -12,7 +12,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.4f;
 			Shade = 0.5f;
-			FadeTradeShade = 0.6f;
+			FadeShade = 0.6f;
 			FadeScale = 1;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.1f;
@@ -21,7 +21,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
@@ -53,19 +53,27 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void AI()
 		{
-			Player player = Main.player[Projectile.owner];
-			int mosq = ModContent.ProjectileType<MechanicMosquito_Mosquito>();
-			if (ProjTarget != -1)
+			if(UpdateTimer % NormalExtraUpdates == 10)
 			{
-				if (Projectile.frameCounter % 15 == 0)
+				Player player = Main.player[Projectile.owner];
+				int mosq = ModContent.ProjectileType<MechanicMosquito_Mosquito>();
+				if (ProjTarget != -1)
 				{
-					if (player.ownedProjectileCounts[mosq] < 3)
+					if (Projectile.frameCounter % 15 == 0)
 					{
-						Vector2 vel2 = new Vector2(0, -8f).RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f));
-						Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, vel2, mosq, Projectile.damage, 0, Projectile.owner, Main.rand.NextFloat(6.283f));
+						if (player.ownedProjectileCounts[mosq] < 3)
+						{
+							Vector2 vel2 = new Vector2(0, -8f).RotatedBy(Main.rand.NextFloat(-0.2f, 0.2f));
+							Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center, vel2, mosq, Projectile.damage, 0, Projectile.owner, Main.rand.NextFloat(6.283f));
+						}
 					}
 				}
+				Projectile.frameCounter++;
 			}
+			base.AI();
+		}
+		public override void VisualParticle()
+		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, pos + vel, 0, 0))
@@ -73,8 +81,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Dust dust = Dust.NewDustDirect(pos, Projectile.width, Projectile.height, ModContent.DustType<MosquitoLight>(), 0, 0, 0, default, Main.rand.NextFloat(0.45f, 0.9f));
 				dust.velocity = vel;
 			}
-			Projectile.frameCounter++;
-			base.AI();
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{

@@ -1,7 +1,6 @@
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Terraria.Audio;
 using Terraria.ObjectData;
-using Everglow.Yggdrasil.Common;
-using Everglow.Yggdrasil.YggdrasilTown.Items;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 
@@ -22,10 +21,14 @@ public class CyanVineOreLarge : ModTile
 		DustType = ModContent.DustType<Dusts.CyanVine>();
 		AdjTiles = new int[] { Type };
 	}
+
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
 	{
 		if (fail)
+		{
 			return;
+		}
+
 		var ThisTile = Main.tile[i, j];
 		int X0 = i - ThisTile.TileFrameX / 18 + 1;
 		int Y0 = j - ThisTile.TileFrameY / 18 + 1;
@@ -37,21 +40,29 @@ public class CyanVineOreLarge : ModTile
 				if (tile.TileFrameX == x * 18 && tile.TileFrameY == y * 18)
 				{
 					if (tile.TileType == ModContent.TileType<CyanVineOreTile>() && tile.HasTile)
+					{
 						tile.HasTile = false;
+					}
 				}
 			}
 		}
 		SoundEngine.PlaySound(SoundID.NPCHit4, new Vector2(i * 16, j * 16));
 		int Times = Main.rand.Next(14, 21);
 		if (ThisTile.TileFrameX > 108)
+		{
 			Times = Main.rand.Next(7, 10);
+		}
+
 		for (int d = 0; d < Times; d++)
 		{
 			Item.NewItem(null, i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48, 16, 16, ModContent.ItemType<CyanVineOre>());
 		}
 		Times = 13;
 		if (ThisTile.TileFrameX > 108)
+		{
 			Times = 9;
+		}
+
 		for (int f = 0; f < Times; f++)
 		{
 			Vector2 vF = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
@@ -62,16 +73,21 @@ public class CyanVineOreLarge : ModTile
 			Dust.NewDust(new Vector2(i * 16 + Main.rand.Next(94) - 16, j * 16 + Main.rand.Next(64) - 48) + vF, 0, 0, DustID.WoodFurniture, vF.X, vF.Y);
 		}
 	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		return false;
 	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
 		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
+		{
 			zero = Vector2.Zero;
+		}
+
 		if (tile.TileFrameX % 108 == 36 && tile.TileFrameY == 54)
 		{
 			for (int x = -2; x < 4; x++)
@@ -79,7 +95,7 @@ public class CyanVineOreLarge : ModTile
 				for (int y = -5; y < 1; y++)
 				{
 					Color cTile = Lighting.GetColor(i + x, j + y);
-					Texture2D tex = YggdrasilContent.QuickTexture("YggdrasilTown/Tiles/CyanVine/CyanVineOreLarge");
+					Texture2D tex = ModAsset.CyanVineOreLarge.Value;
 					spriteBatch.Draw(tex, new Vector2((i + x) * 16, (j + y) * 16) - Main.screenPosition + zero, new Rectangle(x * 18 + tile.TileFrameX, y * 18 + tile.TileFrameY, 16, 18), cTile, 0, new Vector2(0), 1, SpriteEffects.None, 0);
 				}
 			}

@@ -35,7 +35,7 @@ public class StoneTusk : ModTile
 	}
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
 	{
-		yield return new Item(ModContent.ItemType<Items.StoneTusk>(), 3);
+		yield return new Item(ModContent.ItemType<Items.Materials.StoneTusk>(), 3);
 	}
 	public override void PlaceInWorld(int i, int j, Item item)
 	{

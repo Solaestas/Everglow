@@ -1,4 +1,5 @@
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -9,46 +10,78 @@ public class CyanOreBeetle : ModNPC
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 5;
-		YggdrasilTownNPC.RegisterMothLandNPC(Type);
+		NPCSpawnManager.RegisterNPC(Type);
+		NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.width = 54;
 		NPC.height = 42;
-		NPC.lifeMax = 120;
+		NPC.lifeMax = 50;
 		NPC.damage = 16;
-		NPC.defense = 12;
+		NPC.defense = 6;
 		NPC.friendly = false;
 		NPC.aiStyle = 3;
-		NPC.knockBackResist = 1f;
+		NPC.knockBackResist = 0.75f;
+		NPC.value = 30;
 		NPC.HitSound = SoundID.NPCHit4;
 		NPC.DeathSound = SoundID.NPCDeath4;
 	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
 		YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
 		if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+		{
 			return 0f;
+		}
+
 		return 3f;
 	}
+
 	public void Stop()
 	{
 		NPC.frame = new Rectangle(0, NPC.height * 4, NPC.width, NPC.height);
 		NPC.velocity.X *= 0;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
-		NPC.scale = Main.rand.NextFloat(0.85f, 1.15f);
+		int scale = Main.rand.Next(1, 100);
+		if (scale <= 50)
+		{
+			NPC.scale = 1;
+		}
+		else if (scale > 50 && scale <= 85)
+		{
+			NPC.scale = 1.25f;
+		}
+		else
+		{
+			NPC.scale = 1.5f;
+		}
 		NPC.lifeMax = (int)(NPC.lifeMax * NPC.scale);
 		NPC.life = NPC.lifeMax;
 	}
+
 	public override void AI()
 	{
 		NPC.TargetClosest();
 		Player player = Main.player[NPC.target];
-
+		if (NPC.Center.X > Main.maxTilesX * 16 - 320 || NPC.Center.X < 320)
+		{
+			NPC.active = false;
+		}
+		if (NPC.Center.Y > Main.maxTilesY * 16 - 320 || NPC.Center.Y < 320)
+		{
+			NPC.active = false;
+		}
 		if (Main.rand.NextBool(840) || (NPC.Center - player.Center).Length() > 400)
+		{
 			NPC.spriteDirection = Math.Sign((player.Center - NPC.Center).X);
+		}
+
 		NPC.localAI[0] += 1;
 		bool HasNearTile = false;
 		Vector2 Total = Vector2.Zero;
@@ -76,7 +109,6 @@ public class CyanOreBeetle : ModNPC
 				Total += v1 / 48f;
 			}
 			else
-
 			{
 				Total -= v1 / 48f;
 			}
@@ -86,17 +118,24 @@ public class CyanOreBeetle : ModNPC
 			if (NPC.localAI[0] % Math.Clamp((int)(12 - NPC.velocity.Length()), 1, 12) == 0)
 			{
 				if (NPC.frame.Y < 84)
+				{
 					NPC.frame.Y += 42;
+				}
 				else
 				{
 					NPC.frame.Y = 0;
 				}
 			}
-			if (Math.Abs(NPC.velocity.X) < 10 * NPC.scale)
-				NPC.velocity.X += NPC.spriteDirection * NPC.scale;
+			if (Math.Abs(NPC.velocity.X) < 4 * NPC.scale)
+			{
+				NPC.velocity.X += NPC.spriteDirection * NPC.scale * 0.2f;
+			}
+
 			NPC.rotation = (float)(Math.Atan2(Total.Y, Total.X) + Math.PI / 2d * 3);
 			if (NPC.velocity == NPC.oldVelocity)
+			{
 				NPC.velocity += new Vector2(0, -3).RotatedBy(NPC.rotation);
+			}
 		}
 		else
 		{
@@ -104,6 +143,7 @@ public class CyanOreBeetle : ModNPC
 			NPC.frame.Y = 126;
 		}
 	}
+
 	public override void OnKill()
 	{
 		Vector2 GoreVelocity = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.28d);
@@ -130,13 +170,14 @@ public class CyanOreBeetle : ModNPC
 		for (int f = 0; f < 13; f++)
 		{
 			Vector2 DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
-			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, ModContent.DustType<CyanVine>(), DustVelocity.X, DustVelocity.Y);
+			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, ModContent.DustType<Dusts.CyanVine>(), DustVelocity.X, DustVelocity.Y);
 			DustVelocity = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(6.28d);
 			Dust.NewDust(NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), 0, 0, DustID.WoodFurniture, DustVelocity.X, DustVelocity.Y);
 		}
 	}
+
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
-		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.CyanVineOre>(), 1, 1, 1));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CyanVineOre>(), 1, 1, 2));
 	}
 }

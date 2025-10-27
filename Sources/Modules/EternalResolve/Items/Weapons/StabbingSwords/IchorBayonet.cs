@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
@@ -11,7 +11,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			Item.damage = 44;
 			Item.knockBack = 1.87f;
-			Item.rare = ItemRarityID.Orange;
+			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 15, 27, 86);
 			Item.shoot = ModContent.ProjectileType<IchorBayonet_Pro>();
 			StabMulDamage = 4f;

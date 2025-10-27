@@ -1,5 +1,3 @@
-using Everglow.Myth.Common;
-using Terraria;
 using Terraria.GameContent.Shaders;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
@@ -73,17 +71,14 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 	}
 	public string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
 
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
-		float ShakeStrength = Omega * 0.4f;
 		Omega *= power;
 		modifiers.FinalDamage /= power;
-		Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12f * ShakeStrength, 100)).RotatedByRandom(6.283);
 		modifiers.Knockback *= Omega * 3;
 	}
 	public override void AI()
@@ -109,7 +104,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 				Projectile.velocity = vT0.SafeNormalize(Vector2.Zero) * 55;
 				Projectile.friendly = true;
 			}
-			if (Projectile.timeLeft == 558)
+			if (Projectile.timeLeft == 558 && Projectile.ai[0] == 0)
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ChlorophyteClub_VFX>(), Projectile.damage, Projectile.knockBack * 0.4f, Projectile.owner, Omega);
 			float value = (580 - Projectile.timeLeft) / 70f;
 			Lighting.AddLight(Projectile.Center, value * 2f, value * 6f, value);
@@ -218,15 +213,15 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w)));
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		Effect MeleeTrail = MythContent.QuickEffect("Misc/Projectiles/Weapon/Melee/Clubs/ClubTrail");
+		Effect MeleeTrail = Commons.ModAsset.ClubTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
-		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>("Everglow/Myth/Misc/Projectiles/Weapon/Melee/Clubs/ChlorophyteClub_light").Value);
+		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.ChlorophyteClub_light.Value);
 		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
 		lightColor.W = 0.7f * Omega;
 		if (Projectile.timeLeft > 550)
@@ -339,7 +334,7 @@ public class ChlorophyteClub_fly : ModProjectile, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition - trail[i] * Projectile.scale * 1.1f, new Color(dir, Omega, 0, 1), new Vector3(factor, 0, 1)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
 	public float TrailAlpha(float factor)
 	{

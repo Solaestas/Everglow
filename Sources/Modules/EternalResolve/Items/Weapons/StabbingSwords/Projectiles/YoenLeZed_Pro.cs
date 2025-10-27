@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Buffs;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -15,22 +15,27 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 6;
 			TradeShade = 0.2f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.74f;
+			FadeShade = 0.74f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
+		public override void VisualParticle()
+		{
+			GenerateVFX(1);
+			SplitVFX(2);
+		}
 		public override void AI()
 		{
 			base.AI();
-			GenerateVFX(1);
-			SplitVFX(2);
-
-			if (Main.timeForVisualEffects % 10 == 0)
+			if (UpdateTimer % Projectile.extraUpdates == 0)
 			{
-				SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				if (Main.timeForVisualEffects % 10 == 0)
+				{
+					SoundEngine.PlaySound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f), Projectile.Center);
+				}
 			}
 		}
 		public override void OnKill(int timeLeft)
@@ -43,7 +48,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public void GenerateVFX(int Frequency)
 		{
-			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
+			float mulVelocity = Main.rand.NextFloat(0.25f, 0.5f);
 			for (int g = 0; g < Frequency; g++)
 			{
 				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
@@ -86,7 +91,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * Projectile.timeLeft / TradeLength, 0.24f * Projectile.timeLeft / TradeLength, 0.3f * Projectile.timeLeft / TradeLength);
 			Player player = Main.player[Projectile.owner];
 			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;

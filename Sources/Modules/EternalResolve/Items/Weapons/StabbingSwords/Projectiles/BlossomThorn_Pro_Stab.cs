@@ -1,5 +1,5 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Terraria.Audio;
 
@@ -13,7 +13,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Color = new Color(209, 187, 107);
 			TradeShade = 0.7f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.44f;
+			FadeShade = 0.44f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.FeatureFlags;
+namespace Everglow.Commons.FeatureFlags;
 
 public static class CompileTimeFeatureFlags
 {

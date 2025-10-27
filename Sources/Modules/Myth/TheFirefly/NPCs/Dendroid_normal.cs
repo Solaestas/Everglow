@@ -1,5 +1,5 @@
-﻿using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -85,7 +85,7 @@ public class Dendroid_normal : ModNPC
 	}
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		spriteBatch.Draw(MythContent.QuickTexture("TheFirefly/NPCs/Dendroid_normal_glow"), NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 255, 255, 0), NPC.rotation, new Vector2(NPC.width, NPC.height) / 2f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+		spriteBatch.Draw(ModAsset.Dendroid_normal_glow.Value, NPC.Center - Main.screenPosition, NPC.frame, new Color(255, 255, 255, 0), NPC.rotation, new Vector2(NPC.width, NPC.height) / 2f, NPC.scale, NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 	}
 
 	public override void OnKill()

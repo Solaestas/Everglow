@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.Items;
+namespace Everglow.Food.Items;
 
 /// <summary>
 /// 食物类物品的基类，填写FoodInfo即可
@@ -10,6 +10,7 @@ public abstract class FoodBase : ModItem
 		get;
 	}
 }
+
 /// <summary>
 /// 饮料类物品的基类，填写DrinkInfo即可
 /// </summary>

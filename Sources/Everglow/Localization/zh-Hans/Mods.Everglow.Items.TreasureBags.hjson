@@ -1,0 +1,14 @@
+TuskTreasureBag: {
+	DisplayName: Tusk Treasure Bag
+	Tooltip: ""
+}
+
+CorruptMothTreasureBag: {
+	DisplayName: Corrupt Moth Treasure Bag
+	Tooltip: ""
+}
+
+SquamousShellTreasureBag: {
+	DisplayName: Squamous Shell Treasure Bag
+	Tooltip: ""
+}

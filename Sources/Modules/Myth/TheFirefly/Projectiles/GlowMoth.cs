@@ -344,7 +344,7 @@ public class GlowMoth : ModProjectile
 				break;
 
 			var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Texture2D Gtexture = MythContent.QuickTexture("TheFirefly/Projectiles/GlowMothGlow");
+			Texture2D Gtexture = ModAsset.GlowMothGlow.Value;
 			Vector2 DrawPos = Projectile.oldPos[i] + new Vector2(Projectile.width / 2f, Projectile.height / 2f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 			SpriteEffects sf = SpriteEffects.None;
 			float AddRotation = 0;

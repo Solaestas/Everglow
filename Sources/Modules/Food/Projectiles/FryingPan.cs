@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.MEAC.Enums;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -18,7 +19,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 
 		trailLength = 10;//拖尾的长度
 
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 
 		drawScaleFactor = 1f;
 
@@ -46,7 +47,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{
@@ -72,13 +73,14 @@ public class FryingPan : MeleeProj, IWarpProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		//调整各个攻击方式的伤害倍率等等
-		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
+		//ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 
 		if (attackType == 100)
 		{
 			modifiers.FinalDamage *= 1.85f;
 			modifiers.Knockback *= 2;
-			Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
+			//Gsplayer.FlyCamPosition = new Vector2(0, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 12, 150)).RotatedByRandom(6.283);
+			ShakerManager.AddShaker(UndirectedShakerInfo.Create(target.Center, Math.Min(target.Hitbox.Width * target.Hitbox.Height / 24, 50)));
 		}
 	}
 
@@ -429,7 +431,7 @@ public class FryingPan : MeleeProj, IWarpProjectile
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition + trail[i] * Projectile.scale * 1.1f, new Color(dir, w, 0, 1), new Vector3(factor, 0, w)));
 		}
 
-		spriteBatch.Draw(ModContent.Request<Texture2D>("Everglow/MEAC/Images/Warp").Value, bars, PrimitiveType.TriangleStrip);
+		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 		return;
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

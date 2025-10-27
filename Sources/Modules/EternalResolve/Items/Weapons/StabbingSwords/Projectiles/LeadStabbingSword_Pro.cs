@@ -1,4 +1,5 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
+
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
     public class LeadStabbingSword_Pro : StabbingProjectile
@@ -10,7 +11,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.4f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.44f;
+			FadeShade = 0.44f;
 			FadeScale = 1;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.4f;

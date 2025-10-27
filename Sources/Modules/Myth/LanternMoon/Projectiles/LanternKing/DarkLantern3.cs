@@ -16,7 +16,7 @@ public class DarkLantern3 : ModProjectile
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1.5f;
-
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
 	public override Color? GetAlpha(Color lightColor)
 	{

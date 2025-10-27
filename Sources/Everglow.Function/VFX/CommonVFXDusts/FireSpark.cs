@@ -18,8 +18,8 @@ public class FireSparkPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		Texture2D halo = Commons.ModAsset.Point.Value;
 		Ins.Batch.BindTexture<Vertex2D>(halo);
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearWrap, RasterizerState.CullNone);
+		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
 	public override void EndRender()
@@ -45,11 +45,13 @@ public class FireSparkDust : Visual
 		position += velocity;
 		if (position.X <= 320 || position.X >= Main.maxTilesX * 16 - 320)
 		{
-			timer = maxTime;
+			Active = false;
+			return;
 		}
 		if (position.Y <= 320 || position.Y >= Main.maxTilesY * 16 - 320)
 		{
-			timer = maxTime;
+			Active = false;
+			return;
 		}
 		velocity *= 0.98f;
 		velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.01f);

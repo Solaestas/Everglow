@@ -50,7 +50,10 @@ internal class StaffOfCorruptDust : ModProjectile
 		{
 			Projectile.timeLeft = 5;
 		}
-
+		else if(Projectile.timeLeft >= 5)
+		{
+			Projectile.timeLeft = 1;
+		}
 		Projectile.localAI[0] += 1;
 		if (Projectile.localAI[0] % 12 == 2)
 		{

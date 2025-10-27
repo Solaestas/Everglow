@@ -1,5 +1,5 @@
-﻿using Everglow.Myth.Common;
-using Everglow.Myth.TheFirefly.Items;
+using Everglow.Myth.Common;
+using Everglow.Myth.TheFirefly.Items.Materials;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -103,8 +103,8 @@ public class GlowingFirefly : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		if (NPC.spriteDirection == 1)
 			effects = SpriteEffects.FlipHorizontally;
-		Texture2D tx = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFirefly");
-		Texture2D tg = MythContent.QuickTexture("TheFirefly/NPCs/GlowingFireflyGlow");
+		Texture2D tx = ModAsset.NPCs_GlowingFirefly.Value;
+		Texture2D tg = ModAsset.GlowingFireflyGlow.Value;
 		var vector = new Vector2(tx.Width / 2f, tx.Height / (float)Main.npcFrameCount[NPC.type] / 2f);
 
 		Color color0 = Lighting.GetColor((int)(NPC.Center.X / 16d), (int)(NPC.Center.Y / 16d));

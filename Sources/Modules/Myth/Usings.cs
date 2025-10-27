@@ -5,3 +5,4 @@ global using Everglow.Commons.Vertex;
 global using Everglow.Commons.VFX;
 global using Everglow.Commons.VFX.Pipelines;
 global using Everglow.Commons.VFX.Visuals;
+global using Everglow.Commons.Templates.Weapons.Clubs;

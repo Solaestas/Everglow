@@ -1,11 +1,11 @@
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Commons.Weapons.StabbingSwords;
 using Terraria.GameContent;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class CurseFlameStabbingSword_Pro : StabbingProjectile
-    {
+	public class CurseFlameStabbingSword_Pro : StabbingProjectile
+	{
 		public override void SetDefaults()
 		{
 			Color = new Color(87, 224, 0);
@@ -13,65 +13,66 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 9;
 			TradeShade = 0.3f;
 			Shade = 0.6f;
-			FadeTradeShade = 0.9f;
+			FadeShade = 0.9f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.8f;
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
-			base.AI();
-			if (Main.rand.NextBool(2))
-				GenerateVFX(1);
-		}
-		public override void OnKill(int timeLeft)
-		{
-
-		}
-		public void GenerateVFX(int Frequency)
-		{
-			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-			for (int g = 0; g < Frequency; g++)
+			GenerateSpark();
+			if(!Main.rand.NextBool(3))
 			{
-				Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 2f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * 0.6f;
-				var fire = new CurseFlameDust
-				{
-					velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(72f),
-					maxTime = Main.rand.Next(16, 45),
-					scale = Main.rand.NextFloat(10f, 40f),
-					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0, 1f }
-				};
-				Ins.VFXManager.Add(fire);
+				GenerateVFX();
 			}
-			for (int g = 0; g < Frequency * 2; g++)
+		}
+		private void GenerateVFX()
+		{
+			Vector2 playerVel = Main.player[Projectile.owner].velocity;
+			Vector2 projVel = Projectile.velocity;
+			float rot = Main.rand.NextFloat(-0.4f, 0.4f);
+			Vector2 vel = playerVel + projVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(0.75f, 3.25f);
+			Vector2 pos = Projectile.Center + projVel.RotatedBy(rot) * Main.rand.NextFloat(1f, 2.5f);
+			var cf = new CursedFlame_flowDust
 			{
-				Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity * 0.2f;
-				var spark = new CurseFlameSparkDust
-				{
-					velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(72f),
-					maxTime = Main.rand.Next(37, 145),
-					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
-					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.03f, 0.03f) }
-				};
-				Ins.VFXManager.Add(spark);
-			}
+				velocity = vel * 0.15f,
+				Active = true,
+				Visible = true,
+				position = pos,
+				maxTime = Main.rand.Next(12, 22),
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), -rot * 0.02f, Main.rand.NextFloat(9.6f, 20f), Main.rand.NextFloat(-0.01f, 0.01f) }
+			};
+			Ins.VFXManager.Add(cf);
+		}
+		private void GenerateSpark()
+		{
+			Vector2 playerVel = Main.player[Projectile.owner].velocity;
+			Vector2 projVel = Projectile.velocity;
+			float rot = Main.rand.NextFloat(-0.3f, 0.3f);
+			Vector2 vel = playerVel + projVel.RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f)) * Main.rand.NextFloat(0.75f, 2.25f);
+			Vector2 pos = Projectile.Center + projVel.RotatedBy(rot) * Main.rand.NextFloat(0.1f, 5f);
+			var spark = new CurseFlameSparkDust
+			{
+				velocity = vel * 0.15f,
+				Active = true,
+				Visible = true,
+				position = pos,
+				maxTime = Main.rand.Next(137, 245),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 17.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.02f, 0.02f) }
+			};
+			Ins.VFXManager.Add(spark);
 		}
 		public override void PostDraw(Color lightColor)
 		{
-			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * Projectile.timeLeft / TradeLength, 0.24f * Projectile.timeLeft / TradeLength, 0.3f * Projectile.timeLeft / TradeLength);
+			float value = Projectile.timeLeft / TradeLength / (Projectile.extraUpdates + 1);
+			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * value, 0.24f * value, 0.3f * value);
 			Player player = Main.player[Projectile.owner];
 			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;

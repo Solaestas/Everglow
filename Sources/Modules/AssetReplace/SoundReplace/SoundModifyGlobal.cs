@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Terraria.UI;
 
 namespace Everglow.AssetReplace.SoundReplace;
@@ -26,11 +26,14 @@ public abstract class SoundModifyGlobal : GlobalItem, IModifyItemPickSound
 			SoundEngine.PlaySound(PickSound());
 		}
 	}
+	public void Dispose()
+	{
+	}
 }
 
 public class BalloonPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Balloon", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Balloon", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -42,7 +45,7 @@ public class BalloonPickSoundModify : SoundModifyGlobal
 
 public class BonePickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Bone", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Bone", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -54,7 +57,7 @@ public class BonePickSoundModify : SoundModifyGlobal
 
 public class DustPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Dust", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Dust", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -66,7 +69,7 @@ public class DustPickSoundModify : SoundModifyGlobal
 
 public class FurPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Fur", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Fur", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -78,7 +81,7 @@ public class FurPickSoundModify : SoundModifyGlobal
 
 public class GlassPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Glass", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Glass", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.3f),
@@ -90,7 +93,7 @@ public class GlassPickSoundModify : SoundModifyGlobal
 
 public class MagicPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Magic", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Magic", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -102,7 +105,7 @@ public class MagicPickSoundModify : SoundModifyGlobal
 
 public class MeatPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Meat", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Meat", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -114,7 +117,7 @@ public class MeatPickSoundModify : SoundModifyGlobal
 
 public class MetalPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Metal", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Metal", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.3f, 0.5f),
@@ -126,7 +129,7 @@ public class MetalPickSoundModify : SoundModifyGlobal
 
 public class PaperPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Paper", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Paper", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -138,7 +141,7 @@ public class PaperPickSoundModify : SoundModifyGlobal
 
 public class PotionPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Potion", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Potion", SoundType.Sound)
 	{
 		Volume = 0.8f,
 		PitchRange = (-0.3f, 0.3f),
@@ -150,7 +153,7 @@ public class PotionPickSoundModify : SoundModifyGlobal
 
 public class SilkPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Silk", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Silk", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -162,7 +165,7 @@ public class SilkPickSoundModify : SoundModifyGlobal
 
 public class SlimePickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Slime", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Slime", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -174,7 +177,7 @@ public class SlimePickSoundModify : SoundModifyGlobal
 
 public class StonePickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Stone", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Stone", SoundType.Sound)
 	{
 		Volume = 1f,
 		PitchRange = (-0.1f, 0.1f),
@@ -186,7 +189,7 @@ public class StonePickSoundModify : SoundModifyGlobal
 
 public class WaterBucketPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/WaterBucket", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/WaterBucket", SoundType.Sound)
 	{
 		Volume = 0.8f,
 		PitchRange = (-0.2f, 0.1f),
@@ -197,7 +200,7 @@ public class WaterBucketPickSoundModify : SoundModifyGlobal
 }
 public class LavaBucketPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/LavaBucket", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/LavaBucket", SoundType.Sound)
 	{
 		Volume = 0.8f,
 		PitchRange = (-0.2f, 0.1f),
@@ -209,7 +212,7 @@ public class LavaBucketPickSoundModify : SoundModifyGlobal
 
 public class WoodPickSoundModify : SoundModifyGlobal
 {
-	public override SoundStyle PickSound() => new($"Everglow/Resources/Sounds/PickSound/Wood", SoundType.Sound)
+	public override SoundStyle PickSound() => new($"Everglow/AssetReplace/Resources/Sounds/PickSound/Wood", SoundType.Sound)
 	{
 		Volume = 0.8f,
 		PitchVariance = 0.4f,

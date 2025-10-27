@@ -11,16 +11,16 @@ public class ScaleWingBladeProj : MeleeProj
 	{
 		maxAttackType = 2;
 		trailLength = 20;
-		shadertype = "Trail";
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
 		Projectile.scale *= 1.1f;
 	}
 	public override string TrailShapeTex()
 	{
-		return "Everglow/MEAC/Images/Melee";
+		return Commons.ModAsset.Melee_Mod;
 	}
 	public override string TrailColorTex()
 	{
-		return "Everglow/MEAC/Images/TestColor";
+		return Commons.ModAsset.MEAC_Color1_Mod;
 	}
 	public override float TrailAlpha(float factor)
 	{
@@ -133,7 +133,7 @@ public class ScaleWingBladeProj : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
 			if (timer > 30 * timeMul && timer < 50 * timeMul)
 			{
 				isAttacking = true;
@@ -169,7 +169,7 @@ public class ScaleWingBladeProj : MeleeProj
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
 			if (timer > 30 * timeMul && timer < 50 * timeMul)
 			{
 				isAttacking = true;
@@ -230,7 +230,7 @@ public class ScaleWingBladeProj : MeleeProj
 			if (timer == 1 || timer == 20)
 			{
 				useTrail = false;
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleeSwing"));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod));
 				if (Projectile.owner == Main.myPlayer)
 				{
 					//寻敌
@@ -319,7 +319,7 @@ public class ScaleWingBladeProj : MeleeProj
 				d3.noGravity = true;
 			}
 			if (timer == 105)
-				AttSound(new SoundStyle("Everglow/MEAC/Sounds/TrueMeleePowerSwing"));
+				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleePowerSwing_Mod));
 			if (timer > 100 * timeMul)
 			{
 				isAttacking = true;

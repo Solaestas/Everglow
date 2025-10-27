@@ -1,4 +1,4 @@
-using Everglow.Commons.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
@@ -12,14 +12,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			TradeLength = 4;
 			TradeShade = 0.3f;
 			Shade = 0.2f;
-			FadeTradeShade = 0.64f;
+			FadeShade = 0.64f;
 			FadeScale = 1;
 			TradeLightColorValue = 1f;
 			FadeLightColorValue = 0.4f;
 			MaxLength = 1.25f;
 			DrawWidth = 0.4f;
 		}
-		public override void AI()
+		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
 			Vector2 vel = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.04f, 0.08f);
@@ -29,15 +29,18 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 				dust.noGravity = true;
 			}
-			cooling--;
+		}
+		public override void AI()
+		{
 			base.AI();
+			cooling--;
 		}
 		private int cooling = 0;
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if(Main.rand.NextBool(6) && cooling <= 0)
 			{
-				cooling = 12;
+				cooling = 12 * (Projectile.extraUpdates + 1);
 				Vector2 newAddPos = new Vector2(120, 0).RotatedByRandom(Math.PI * 2);
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center + newAddPos, -newAddPos * 0.2f, ModContent.ProjectileType<HolyBayonet_Slash>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
@@ -45,7 +48,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		}
 		public override void DrawEffect(Color lightColor)
 		{
-			Texture2D Shadow = Commons.ModAsset.StabbingProjectileShade.Value;
+			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;

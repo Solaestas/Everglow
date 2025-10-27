@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using SubworldLibrary;
 using Terraria.WorldBuilding;
 
@@ -6,27 +7,47 @@ namespace Everglow.Yggdrasil;
 
 internal class YggdrasilWorld : Subworld
 {
-	public override int Width => 1200;
-	public override int Height => 12000;
+	public static bool InYggdrasil => SubworldSystem.IsActive<YggdrasilWorld>();
+
+	public static float YggdrasilTimer = 0;
+	public Vector2 StoneCageOfChallengesCenter = Vector2.zeroVector;
+
+	/// <summary>
+	/// After feeding the Giant Ghost Claw Barnacle by the flesh of Vampire Carpet, players can enter the underwater treasury.
+	/// </summary>
+	public static bool CanEnterTheGiantGhoseClawBarnacle = false;
+
+	public override int Width => 2000;
+
+	public override int Height => 21000;
+
 	public override bool NormalUpdates => true;
-	public override bool ShouldSave => true;
+
+	public override bool ShouldSave => false; // Only in debug mode,when published,turn true.
+
 	public override List<GenPass> Tasks => new List<GenPass>()
 	{
-		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass()
+		new WorldGeneration.YggdrasilWorldGeneration.YggdrasilWorldGenPass(),
 	};
+
 	public override void OnEnter()
 	{
 		SubworldSystem.hideUnderworld = true;
+		YggdrasilTimer = 0;
+		YggdrasilTownBiome.CheckedBiomeCenter = false;
 	}
+
 	public override void OnLoad()
 	{
-		Main.worldSurface = Main.maxTilesY - 1000;
-		Main.rockLayer = Main.maxTilesY - 500;
+		Main.worldSurface = Main.maxTilesY - 100;
+		Main.rockLayer = Main.maxTilesY - 50;
 	}
+
 	public override void Load()
 	{
 		On_WorldGen.setWorldSize += WorldGen_setWorldSize;
 	}
+
 	private static void WorldGen_setWorldSize(On_WorldGen.orig_setWorldSize orig)
 	{
 		int fixedwidth = ((Main.maxTilesX - 1) / 200 + 1) * 200;
@@ -41,7 +62,8 @@ internal class YggdrasilWorld : Subworld
 			Main.mapMaxX = Main.maxTilesX;
 			Main.mapMaxY = Main.maxTilesY;
 
-			Main.instance.mapTarget = new RenderTarget2D[(Main.maxTilesX / Main.textureMaxWidth) + 1,
+			Main.instance.mapTarget = new RenderTarget2D[
+				(Main.maxTilesX / Main.textureMaxWidth) + 1,
 				(Main.maxTilesY / Main.textureMaxHeight) + 1];
 			Main.mapWasContentLost = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
 			Main.initMap = new bool[Main.instance.mapTarget.GetLength(0), Main.instance.mapTarget.GetLength(1)];
@@ -57,3 +79,22 @@ internal class YggdrasilWorld : Subworld
 	}
 }
 
+public class YggdrasilWorldSystem : ModSystem
+{
+	public override void PostUpdateEverything()
+	{
+		if (YggdrasilWorld.InYggdrasil)
+		{
+			YggdrasilWorld.YggdrasilTimer++;
+
+			if (Main.bloodMoon)
+			{
+				Main.bloodMoon = false;
+			}
+			if (Main.slimeRain)
+			{
+				Main.slimeRain = false;
+			}
+		}
+	}
+}

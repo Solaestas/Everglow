@@ -2,6 +2,7 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -25,6 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 4;
 			Projectile.aiStyle = -1;
+			ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 12800;
 		}
 		public int timeToKill = 0;
 		public int targetNPC = -1;
@@ -50,7 +52,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			if (targetNPC >= 0 && targetNPC < 200)
 			{
-				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage)
+				if (Main.npc[targetNPC].active && !Main.npc[targetNPC].dontTakeDamage && (Main.npc[targetNPC].Center - Projectile.Center).Length() < 900f)
 				{
 					return;
 				}
@@ -61,7 +63,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				if (npc.active && !npc.dontTakeDamage)
 				{
-					if ((npc.Center - Projectile.Center).Length() < minDis)
+					float length = (npc.Center - Projectile.Center).Length();
+					if (!npc.CanBeChasedBy())
+					{
+						length = 580 + Main.rand.NextFloat(10f);
+					}
+					if (npc.type == NPCID.TargetDummy)
+					{
+						length = 590 + Main.rand.NextFloat(10f);
+					}
+					if (length < minDis)
 					{
 						minDis = npc.Center.Length();
 						whoAmI = npc.whoAmI;
@@ -238,7 +249,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				new Vertex2D(endCenter + normalize - Main.screenPosition, shadow, new Vector3(coordY,0,0)),
 				new Vertex2D(endCenter - normalize - Main.screenPosition,shadow, new Vector3(coordY,1,0))
 			};
-				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectileShade.Value;
+				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 				if (bars.Count > 3)
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
