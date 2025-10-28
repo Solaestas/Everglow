@@ -11,7 +11,7 @@ public class GreenRelicBrick_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<BloodChurch_Scene>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Desert_Scene>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -25,10 +25,15 @@ public class GreenRelicBrick_Item : ModItem
 			var checkTiles = YggdrasilWorldGeneration.BFSContinueTile(point, true, 1024);
 			foreach (var tile in checkTiles)
 			{
-				//if (tile.TileType == TileID.GreenDungeonBrick)
-				//{
-				//	tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
-				//}
+				if (tile.TileType == TileID.GreenDungeonBrick)
+				{
+					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+				}
+
+				if (tile.TileType == TileID.Sand)
+				{
+					tile.TileType = (ushort)TileID.Glass;
+				}
 
 				//if (tile.WallType == WallID.GreenDungeonSlab)
 				//{

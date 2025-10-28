@@ -1,10 +1,11 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
-public class BloodChurch_Scene : ModTile, ISceneTile
+public class Desert_Scene : ModTile, ISceneTile
 {
 	public override string Texture => ModAsset.GreenRelicBrick_Mod;
 
@@ -33,31 +34,35 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		scene_Close.CustomDraw += DrawBloodyChurchOverTile;
+		scene_Close.CustomDraw += DrawOverTile;
 
 		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
-		scene_Background.CustomDraw += DrawBloodyChurchBackground;
+		scene_Background.CustomDraw += DrawBackground;
 
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
-
-		// Ins.VFXManager.Add(scene_Fountain);
 	}
 
-	public void DrawBloodyChurchOverTile(TwilightCastle_RoomScene_OverTiles otD)
+	public void DrawOverTile(TwilightCastle_RoomScene_OverTiles otD)
 	{
-		Texture2D tex0 = ModAsset.BloodChurch_Scene_Close.Value;
+		Texture2D tex0 = ModAsset.Desert_Scene_Close.Value;
+
+		Tile tile_lantern = YggdrasilWorldGeneration.SafeGetTile(otD.originTile + new Point(7, 5));
+		if (tile_lantern.TileType == ModContent.TileType<SandgoldLantern>() && tile_lantern.TileFrameX == 0)
+		{
+			tex0 = ModAsset.Desert_Scene_Close_lightUp.Value;
+		}
 
 		List<Vertex2D> bars = new List<Vertex2D>();
 		SceneUtils.DrawMultiSceneTowardRightBottom(otD.originTile.X, otD.originTile.Y, tex0, bars);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 	}
 
-	public void DrawBloodyChurchBackground(TwilightCastle_RoomScene_Background bg)
+	public void DrawBackground(TwilightCastle_RoomScene_Background bg)
 	{
-		Texture2D tex0 = ModAsset.BloodChurch_Scene_Background.Value;
-		Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
-		Texture2D tex2 = ModAsset.BloodChurch_Scene_Fountain.Value;
+		Texture2D tex0 = ModAsset.Desert_Scene_Background.Value;
+		Texture2D tex1 = ModAsset.Desert_Scene_Far.Value;
+		Texture2D tex2 = ModAsset.Desert_Scene_WallGemsReflection.Value;
 
 		List<Vertex2D> bars = new List<Vertex2D>();
 		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex0, bars);
@@ -68,7 +73,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X + 17, bg.originTile.Y + 10, tex2, bars);
+		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X + 34, bg.originTile.Y + 11, tex2, bars, 2.6f);
 		Ins.Batch.Draw(tex2, bars, PrimitiveType.TriangleList);
 	}
 }

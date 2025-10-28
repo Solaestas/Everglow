@@ -33,10 +33,34 @@ public class StoneCave_Scene : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Close.Value };
+		scene_Close.CustomDraw += DrawStoneCaveOverTile;
 		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Background.Value };
-		var scene_Far = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Far.Value };
+		scene_Background.CustomDraw += DrawStoneCaveBackground;
+
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
-		Ins.VFXManager.Add(scene_Far);
+	}
+
+	public void DrawStoneCaveOverTile(TwilightCastle_RoomScene_OverTiles otD)
+	{
+		Texture2D tex0 = ModAsset.StoneCave_Scene_Close.Value;
+
+		List<Vertex2D> bars = new List<Vertex2D>();
+		SceneUtils.DrawMultiSceneTowardRightBottom(otD.originTile.X, otD.originTile.Y, tex0, bars);
+		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
+	}
+
+	public void DrawStoneCaveBackground(TwilightCastle_RoomScene_Background bg)
+	{
+		Texture2D tex0 = ModAsset.StoneCave_Scene_Background.Value;
+		Texture2D tex1 = ModAsset.StoneCave_Scene_Far.Value;
+
+		List<Vertex2D> bars = new List<Vertex2D>();
+		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex0, bars);
+		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
+
+		bars = new List<Vertex2D>();
+		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex1, bars);
+		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 	}
 }

@@ -9,14 +9,35 @@ public class TwilightCastle_RoomScene_OverTiles : BackgroundVFX
 
 	public Point Offset = new Point(0, 0);
 
+	/// <summary>
+	/// Allow to make a custon draw for this vfx.
+	/// </summary>
+	public delegate void CustomDrawVFX(TwilightCastle_RoomScene_OverTiles overtileDraw);
+
+	public event CustomDrawVFX CustomDraw;
+
 	public override void OnSpawn()
 	{
 	}
 
 	public override void Draw()
 	{
-		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(originTile.X + Offset.X, originTile.Y + Offset.Y, texture, bars);
-		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
+		CustomDraw?.Invoke(this);
+	}
+
+	public override void Kill()
+	{
+		UnregisterCustomLogic(CustomDraw);
+		base.Kill();
+	}
+
+	public void RegisterCustomLogic(CustomDrawVFX customDraw)
+	{
+		CustomDraw += customDraw;
+	}
+
+	public void UnregisterCustomLogic(CustomDrawVFX customDraw)
+	{
+		CustomDraw -= customDraw;
 	}
 }
