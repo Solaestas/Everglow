@@ -8,127 +8,127 @@ DevilHeartSetBuff: {
 }
 
 BloodSwordStrikeBuff: {
-	DisplayName: Blood Sword Strike Buff
+	DisplayName: 汲血剑
 	Description: ""
 }
 
 LifeRotten: {
-	DisplayName: Life Rotten
+	DisplayName: 生命腐化
 	Description: ""
 }
 
 BloodDrinking: {
-	DisplayName: Blood Drinking
+	DisplayName: 茹毛饮血
 	Description: ""
 }
 
 OnElectric: {
-	DisplayName: On Electric
+	DisplayName: 触电
 	Description: ""
 }
 
 StaminaEnergyBuff: {
-	DisplayName: Stamina Energy Buff
-	Description: ""
+	DisplayName: 能量饮料
+	Description: "使用刺剑时体力更多"
 }
 
 StarCrack: {
-	DisplayName: Star Crack
+	DisplayName: 裂星
 	Description: ""
 }
 
 AppleBuff: {
-	DisplayName: Apple Buff
+	DisplayName: 苹果
 	Description: ""
 }
 
 ApplePieBuff: {
-	DisplayName: Apple Pie Buff
+	DisplayName: 苹果派
 	Description: ""
 }
 
 ApricotBuff: {
-	DisplayName: Apricot Buff
+	DisplayName: 杏
 	Description: ""
 }
 
 BaconBuff: {
-	DisplayName: Bacon Buff
+	DisplayName: 培根
 	Description: ""
 }
 
 BananaBuff: {
-	DisplayName: Banana Buff
+	DisplayName: 香蕉
 	Description: ""
 }
 
 BananaSplitBuff: {
-	DisplayName: Banana Split Buff
+	DisplayName: 香蕉船
 	Description: ""
 }
 
 BBQRibsBuff: {
-	DisplayName: BBQRibs Buff
+	DisplayName: 烧烤排骨
 	Description: ""
 }
 
 BlackCurrantBuff: {
-	DisplayName: Black Currant Buff
+	DisplayName: 黑加仑
 	Description: ""
 }
 
 BloodOrangeBuff: {
-	DisplayName: Blood Orange Buff
+	DisplayName: 血橙
 	Description: ""
 }
 
 BowlofSoupBuff: {
-	DisplayName: Bowlof Soup Buff
+	DisplayName: 鱼菇汤
 	Description: ""
 }
 
 BunnyStewBuff: {
-	DisplayName: Bunny Stew Buff
+	DisplayName: 炖兔兔
 	Description: ""
 }
 
 BurgerBuff: {
-	DisplayName: Burger Buff
+	DisplayName: 汉堡
 	Description: ""
 }
 
 CherryBuff: {
-	DisplayName: Cherry Buff
+	DisplayName: 樱桃
 	Description: ""
 }
 
 ChickenNuggetBuff: {
-	DisplayName: Chicken Nugget Buff
+	DisplayName: 鸡块
 	Description: ""
 }
 
 ChocolateChipCookieBuff: {
-	DisplayName: Chocolate Chip Cookie Buff
+	DisplayName: 巧克力曲奇饼干
 	Description: ""
 }
 
 ChristmasPuddingBuff: {
-	DisplayName: Christmas Pudding Buff
+	DisplayName: 圣诞布丁
 	Description: ""
 }
 
 CoconutBuff: {
-	DisplayName: Coconut Buff
+	DisplayName: 椰子
 	Description: ""
 }
 
 CookedFishBuff: {
-	DisplayName: Cooked Fish Buff
+	DisplayName: 熟鱼
 	Description: ""
 }
 
 CookedMarshmallowBuff: {
-	DisplayName: Cooked Marshmallow Buff
+	DisplayName: 熟棉花糖
 	Description: ""
 }
 

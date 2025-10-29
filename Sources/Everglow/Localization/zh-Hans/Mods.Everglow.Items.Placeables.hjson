@@ -1,70 +1,70 @@
 BottleOfNutShellFlowers: {
-	DisplayName: Bottle Of Nut Shell Flowers
+	DisplayName: 瓶中干花
 	Tooltip: ""
 }
 
 BronzeLamp_3_Item: {
-	DisplayName: Bronze Lamp_3_ Item
+	DisplayName: 青铜三灯柱
 	Tooltip: ""
 }
 
 BronzeLamp_Item: {
-	DisplayName: Bronze Lamp_ Item
+	DisplayName: 青铜灯柱
 	Tooltip: ""
 }
 
 ChinesePartitionLamp: {
-	DisplayName: Chinese Partition Lamp
+	DisplayName: 中式屏风灯
 	Tooltip: ""
 }
 
 ChineseStyleFloorLamp: {
-	DisplayName: Chinese Style Floor Lamp
+	DisplayName: 中式地灯
 	Tooltip: ""
 }
 
 DoubleArmsChineseStreetLamp: {
-	DisplayName: Double Arms Chinese Street Lamp
+	DisplayName: 双垂中式街灯笼
 	Tooltip: ""
 }
 
 FluoriteHangLamp: {
-	DisplayName: Fluorite Hang Lamp
+	DisplayName: 荧光吊灯
 	Tooltip: ""
 }
 
 FluoriteLampPost_Item: {
-	DisplayName: Fluorite Lamp Post_ Item
+	DisplayName: 荧光灯柱
 	Tooltip: ""
 }
 
 GiantBell: {
-	DisplayName: Giant Bell
+	DisplayName: 巨钟
 	Tooltip: ""
 }
 
 GiantCampFire: {
-	DisplayName: Giant Camp Fire
+	DisplayName: 巨型篝火
 	Tooltip: ""
 }
 
 HangingSkyLantern: {
-	DisplayName: Hanging Sky Lantern
+	DisplayName: 挂式灯笼
 	Tooltip: ""
 }
 
 HexagonalCeilingLamp: {
-	DisplayName: Hexagonal Ceiling Lamp
+	DisplayName: 六角宫灯
 	Tooltip: ""
 }
 
 LapisLazuliDome_Item: {
-	DisplayName: Lapis Lazuli Dome_ Item
+	DisplayName: 蓝色穹顶
 	Tooltip: ""
 }
 
 LapisLazuliDome_mini_Item: {
-	DisplayName: Lapis Lazuli Dome_mini_ Item
+	DisplayName: 小型蓝色穹顶
 	Tooltip: ""
 }
 

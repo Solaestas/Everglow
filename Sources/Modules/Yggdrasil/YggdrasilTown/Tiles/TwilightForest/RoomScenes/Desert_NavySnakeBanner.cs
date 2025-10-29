@@ -41,6 +41,11 @@ public class Desert_NavySnakeBanner : ModTile, ITileFluentlyDrawn
 		AddMapEntry(new Color(13, 88, 130), name);
 	}
 
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+	}
+
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		TileFluentDrawManager.AddFluentPoint(this, i, j);
