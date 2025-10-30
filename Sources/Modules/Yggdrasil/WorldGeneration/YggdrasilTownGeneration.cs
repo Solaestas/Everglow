@@ -2229,9 +2229,9 @@ public class YggdrasilTownGeneration
 				int roomOriginY = centerY - 100 + y * 25 + 12;
 				string[] randomRooms = new string[]
 				{
-					ModAsset.TwilightCastle_Room_1_40x21_Path,
-					ModAsset.TwilightCastle_Room_2_40x21_Path,
-					ModAsset.TwilightCastle_Room_3_40x21_Path,
+					ModAsset.TCRoom_Ld_00_StoneCave_40x21_Path,
+					ModAsset.TCRoom_Ld_01_BloodyChurch_40x21_Path,
+					ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
 					ModAsset.TwilightCastle_Room_4_40x21_Path,
 					ModAsset.TwilightCastle_Room_5_40x21_Path,
 					ModAsset.TwilightCastle_Room_6_40x21_Path,

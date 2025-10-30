@@ -1,221 +1,320 @@
 StaminaItem: {
-	DisplayName: Stamina Item
-	Tooltip: ""
+	DisplayName: 耐力测试物品
+	Tooltip: "开发者物品"
 }
 
 EnergyBand: {
-	DisplayName: Energy Band
-	Tooltip: ""
+	DisplayName: 能量绷带
+	Tooltip: "减少25%体力消耗"
 }
 
 BloodGlucoseMonitor: {
-	DisplayName: Blood Glucose Monitor
-	Tooltip: ""
+	DisplayName: 血糖仪
+	Tooltip: "显示饥饿值"
 }
 
 OsmoticPressureMonitor: {
-	DisplayName: Osmotic Pressure Monitor
-	Tooltip: ""
+	DisplayName: 渗透压测定仪
+	Tooltip: "显示渴度"
 }
 
 PlayerPenetrationTest: {
-	DisplayName: Player Penetration Test
-	Tooltip: ""
+	DisplayName: 玩家穿透测试物品
+	Tooltip: "开发者物品"
 }
 
 BurningFrozenHeart: {
-	DisplayName: Burning Frozen Heart
-	Tooltip: ""
+	DisplayName: 霜火之心
+	Tooltip: "免疫多数冷系伤害并发出霜火的光"
 }
 
 PearlOfCyan: {
-	DisplayName: Pearl Of Cyan
-	Tooltip: ""
+	DisplayName: 松景球
+	Tooltip: "暴击时附加4魔法伤害的松针协助攻击"
 }
 
 SnowPineLockBox: {
-	DisplayName: Snow Pine Lock Box
-	Tooltip: ""
+	DisplayName: 有松香的铁盒
+	Tooltip: "召唤松树之灵协助作战"
 }
 
 TuskLace: {
-	DisplayName: Tusk Lace
-	Tooltip: ""
+	DisplayName: 獠牙项链
+	Tooltip: 
+	'''
+	盔甲穿透增加5\n伤害和暴击增加5%
+	一颗獠牙被从猛兽嘴里打了下来,你又敲下了上面的一小部分
+	'''
 }
 
 FireflyBorageBadge: {
-	DisplayName: Firefly Borage Badge
-	Tooltip: ""
+	DisplayName: 流萤黑花胸章
+	Tooltip: "伤害+6%，速度+15%，腐檀巨蛾存在时有特殊效果"
 }
 
 MothEye: {
-	DisplayName: Moth Eye
-	Tooltip: ""
+	DisplayName: 蛾眼
+	Tooltip: "召唤伤害+6%，召唤栏位+1，哨兵栏位+1，对流萤系列武器有特殊效果"
 }
 
 BlueflowerBra: {
-	DisplayName: Blueflower Bra
+	DisplayName: 蓝花黑内衣
 	Tooltip: ""
 }
 
 BlueflowerCap: {
-	DisplayName: Blueflower Cap
+	DisplayName: 蓝花黑阔边帽
 	Tooltip: ""
 }
 
 BlueGel: {
-	DisplayName: Blue Gel
-	Tooltip: ""
+	DisplayName: 蓝星凝胶
+	Tooltip: "+4魔力回复和30魔法上限"
 }
 
 CorruptEye: {
-	DisplayName: Corrupt Eye
-	Tooltip: ""
+	DisplayName: 腐化之眼
+	Tooltip: "防御+5，伤害+4%，免疫咒火，受击后迸发出若干咒火球"
 }
 
 DukeTooth: {
-	DisplayName: Duke Tooth
-	Tooltip: ""
+	DisplayName: 猪龙鱼獠牙吊坠
+	Tooltip: "+12盔甲穿透"
 }
 
 GoldLiquidPupil: {
-	DisplayName: Gold Liquid Pupil
-	Tooltip: ""
+	DisplayName: 灵液瞳孔
+	Tooltip: "受击后生成灵液之环"
 }
 
 GreenGel: {
-	DisplayName: Green Gel
-	Tooltip: ""
+	DisplayName: 绿心凝胶
+	Tooltip: "+4生命回复和30生命上限"
 }
 
 JungleVitamin: {
-	DisplayName: Jungle Vitamin
-	Tooltip: ""
+	DisplayName: 丛林维生素
+	Tooltip: "+50生命上限"
 }
 
 Odd8Ring: {
-	DisplayName: Odd8 Ring
-	Tooltip: ""
+	DisplayName: 诡8指环
+	Tooltip: "单次造成的最低伤害变为8"
 }
 
 RedGel: {
-	DisplayName: Red Gel
-	Tooltip: ""
+	DisplayName: 红尖凝胶
+	Tooltip: "暴击率+6%，暴击伤害+9%"
 }
 
 SilverWing: {
-	DisplayName: Silver Wing
-	Tooltip: ""
+	DisplayName: 银翼证章
+	Tooltip: "暴击伤害+8%，3秒不使用武器后伤害+40%"
 }
 
 WalnutClip: {
-	DisplayName: Walnut Clip
-	Tooltip: ""
+	DisplayName: 胡桃夹子
+	Tooltip: "暴击伤害+16%，生命值低于一半时增加所有伤害，生命值越低幅度越大"
 }
 
 BlueTorchFlower: {
-	DisplayName: Blue Torch Flower
-	Tooltip: ""
+	DisplayName: 翠蓝冰炬
+	Tooltip: 
+	'''
+	增加20魔力上限
+	命中敌人回复2魔力,有0.2秒冷却
+	'火炬花的一个变种'
+	'''
 }
 
 CyanBranch: {
-	DisplayName: Cyan Branch
-	Tooltip: ""
+	DisplayName: 一束天青
+	Tooltip: 
+	'''
+	受击后10秒增加8闪避能力
+	'它十分坚硬，但也很脆弱'
+	'''
 }
 
 CyanPedal: {
-	DisplayName: Cyan Pedal
-	Tooltip: ""
+	DisplayName: 四瓣琉璃
+	Tooltip: 
+	'''
+	闪避能力增加4
+	'少的那一瓣化作你的勇气'
+	'''
 }
 
 DarkHat: {
-	DisplayName: Dark Hat
-	Tooltip: ""
+	DisplayName: 罂粟花坠饰
+	Tooltip: 
+	'''
+	增加20魔力上限
+	暴击率增加4%,暴击伤害增加12
+	'除用于战斗和装饰不建议使用'
+	'''
 }
 
 GoldRound: {
-	DisplayName: Gold Round
-	Tooltip: ""
+	DisplayName: 金盏轮盘
+	Tooltip: 
+	'''
+	+7防御，+7%伤害
+	'传统的泰拉人通常配戴它来保持健康'
+	'''
 }
 
 HotPinkCrown: {
-	DisplayName: Hot Pink Crown
-	Tooltip: ""
+	DisplayName: 活化郁金香
+	Tooltip: 
+	'''
+	暴击伤害增加(最大生命值*5%)%
+	'经过风之精华的催化,它将对生命力做出反应'
+	'''
 }
 
 LightPurplePen: {
-	DisplayName: Light Purple Pen
-	Tooltip: ""
+	DisplayName: 紫豪中山兔
+	Tooltip: 
+	'''
+	伤害、暴击率和近战攻速各增加7%
+	'没有任何兔子在制作过程中受到伤害'
+	'''
 }
 
 ManyWhiteFlower: {
-	DisplayName: Many White Flower
-	Tooltip: ""
+	DisplayName: 白星锦球
+	Tooltip: 
+	'''
+	近战攻速增加8%,近战伤害增加8%
+	'你不想让这些神奇又可爱的花被损坏'
+	'''
 }
 
 OrangeCrown: {
-	DisplayName: Orange Crown
-	Tooltip: ""
+	DisplayName: 坚韧郁金香
+	Tooltip: 
+	'''
+	防御力+(最大生命值*3%)%
+	'埃俄罗斯祝福过的郁金香,结构强度出奇的高'
+	'''
 }
 
 OrangeStick: {
-	DisplayName: Orange Stick
-	Tooltip: ""
+	DisplayName: 坚橙狼尾
+	Tooltip: 
+	'''
+	受击后3秒获得5防御力和击退免疫
+	'与大多数草不同,它在狂风中坚挺而不折腰'
+	'''
 }
 
 PinkFourPedal: {
-	DisplayName: Pink Four Pedal
-	Tooltip: ""
+	DisplayName: 四命轮回
+	Tooltip: 
+	'''
+	最大生命值增加40
+	'据说受伤的动物会去吃它来疗伤...事实确实如此,但好像对人效果不大'
+	'''
 }
 
 PurpleBall: {
-	DisplayName: Purple Ball
-	Tooltip: ""
+	DisplayName: 紫绣球吊坠
+	Tooltip: 
+	'''
+	命中身周的敌人会释放紫色花瓣爆炸
+	花瓣伤害随攻击的伤害增加
+	有0.5秒冷却
+	'愤怒紫绣球'
+	'''
 }
 
 PurpleReedHalo: {
-	DisplayName: Purple Reed Halo
-	Tooltip: ""
+	DisplayName: 紫苇花冠
+	Tooltip: 
+	'''
+	生命上限增加30
+	魔力上限增加40
+	'好闻又好看'
+	'''
 }
 
 RedTriangle: {
-	DisplayName: Red Triangle
-	Tooltip: ""
+	DisplayName: 三尖红狐
+	Tooltip: 
+	'''
+	暴击伤害增加18%
+	'在泰拉文化中,这是一种具有攻击性的形状'
+	'''
 }
 
 SilverCupFlower: {
-	DisplayName: Silver Cup Flower
-	Tooltip: ""
+	DisplayName: 皇家酒杯
+	Tooltip: 
+	'''
+	+8防御
+	生命上限增加20
+	'曾有一位残暴的国王真的尝试拿它当酒杯,他一滴也没喝上'
+	'''
 }
 
 ThreeColorCrown: {
-	DisplayName: Three Color Crown
-	Tooltip: ""
+	DisplayName: 三色花环
+	Tooltip: 
+	'''
+	击中敌人后随机获得以下三种效果之一,持续7秒
+	红:伤害增加22%，暴击率增加11%
+	紫:免疫绝大多数减益效果
+	魔力上限增加300
+	有30秒CD
+	'求别太幸运'
+	'''
 }
 
 WhiteCrown: {
-	DisplayName: White Crown
-	Tooltip: ""
+	DisplayName: 希望之花
+	Tooltip: 
+	'''
+	奔跑速度增加(生命上限*0.2%)
+	'一枝素白的郁金香，像在悼念...'
+	'''
 }
 
 WhitePedal: {
-	DisplayName: White Pedal
-	Tooltip: ""
+	DisplayName: 光纱之瓣
+	Tooltip: 
+	'''
+	闪避能力增加2
+	暴击率增加4%
+	'它是如此轻薄'
+	'''
 }
 
 WhiteWoodFlower: {
-	DisplayName: White Wood Flower
-	Tooltip: ""
+	DisplayName: 银耳花
+	Tooltip: 
+	'''
+	召唤栏位增加2
+	'奇妙的共生关系'
+	'''
 }
 
 YellowBellFlower: {
-	DisplayName: Yellow Bell Flower
-	Tooltip: ""
+	DisplayName: 金簇铃兰
+	Tooltip: 
+	'''
+	伤害增加(20%防御力)%
+	'稀有又好看'
+	'''
 }
 
 CrystalSkull: {
-	DisplayName: Crystal Skull
-	Tooltip: ""
+	DisplayName: 水晶颅骨
+	Tooltip: 
+	'''
+	让你完全理解魔法书中所记载的法术，它强大得令人胆寒
+	'以前的用法就像拿枪杆子当棍棒敲人'
+	'''
 }
 
 AnemoShell: {
