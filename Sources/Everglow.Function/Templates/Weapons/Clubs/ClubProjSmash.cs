@@ -97,73 +97,90 @@ public abstract class ClubProjSmash : MeleeProj
 		modPlayer.HideLeg = true;
 		useSlash = true;
 		float timeMul = 1 / Owner.meleeSpeed;
+
+		// Smash down
 		if (currantAttackType == 0)
 		{
-			if (timer < 14 * timeMul)// 前摇
+			if (timer < 14 * timeMul)
 			{
+				// Pre-cast
 				useSlash = false;
 				LockPlayerDir(Owner);
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
+				targetRot *= Owner.gravDir;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
-			if (timer == (int)(14 * timeMul))
+			else if (timer == (int)(14 * timeMul))
 			{
 				AttSound(SoundID.Item1);
 			}
-
-			if (timer > 14 * timeMul && timer < 35 * timeMul)
+			else if (timer > 14 * timeMul && timer < 35 * timeMul)
 			{
+				// Preparation stance
 				canHit = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul;
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul * Owner.gravDir;
 
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
-				Owner.fullRotationOrigin = new Vector2(10, 42);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
+
+				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
+				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction * Owner.gravDir;
 				Owner.legRotation = -Owner.fullRotation;
 			}
-			if (Owner.gravDir == 1)
-			{
-				Point bottomPos = Owner.Bottom.ToTileCoordinates();
-				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
-				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-				if (Collision.SolidCollision(Owner.BottomLeft, Owner.width, 64) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 16)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 0)) || TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, -16)) || ((Owner.waterWalk || Owner.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !Owner.wet))
-				{
-					if (timer <= 70)
-					{
-						Smash(0);
-					}
-					if (timer > 70)
-					{
-						Smash(1);
-					}
-				}
-			}
-			if (Owner.gravDir == -1)
-			{
-				if (Collision.SolidCollision(Owner.TopLeft - new Vector2(0, 64), Owner.width, 80))
-				{
-					if (timer <= 70)
-					{
-						Smash(0);
-					}
-					if (timer > 70)
-					{
-						Smash(1);
-					}
-				}
-			}
+
 			if (timer > 25 * timeMul)
 			{
 				Owner.velocity.Y += Owner.gravDir;
 				LockPlayerDir(Owner);
 				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
+				targetRot *= Owner.gravDir;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
 				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
+
+			// Check and switch to post attack type
+			if (Owner.gravDir == 1)
+			{
+				Point bottomPos = Owner.Bottom.ToTileCoordinates();
+				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+				if (Collision.SolidCollision(Owner.BottomLeft, Owner.width, 64) // Normal
+					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 16)) // Platform
+					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 0))
+					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, -16))
+					|| ((Owner.waterWalk || Owner.waterWalk2) // Water walker
+						&& Main.tile[bottomPos].LiquidAmount > 0
+						&& !Owner.wet))
+				{
+					if (timer <= 70)
+					{
+						Smash(0);
+					}
+					if (timer > 70)
+					{
+						Smash(1);
+					}
+				}
+			}
+			else
+			{
+				if (Collision.SolidCollision(Owner.TopLeft - new Vector2(0, 64), Owner.width, 80)) // Normal
+				{
+					if (timer <= 70)
+					{
+						Smash(0);
+					}
+					if (timer > 70)
+					{
+						Smash(1);
+					}
+				}
+			}
 		}
+
+		// Post attack
 		if (currantAttackType == 1)
 		{
 			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();

@@ -187,7 +187,7 @@ public abstract class ClubProj : ModProjectile, IWarpProjectile
 		Vector2 MouseToPlayer = Main.MouseWorld - player.MountedCenter;
 		MouseToPlayer = Vector2.Normalize(MouseToPlayer) * 15f;
 		Vector2 vT0 = Main.MouseWorld - player.MountedCenter;
-		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(vT0.Y, vT0.X) - Math.PI / 2d));
+		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (float)(Math.Atan2(vT0.Y * player.gravDir, vT0.X) - Math.PI / 2d));
 		Projectile.Center = player.MountedCenter + MouseToPlayer;
 		Projectile.spriteDirection = player.direction;
 		Projectile.localNPCHitCooldown = (int)(MathF.PI / Math.Max(Omega, 0.157));
