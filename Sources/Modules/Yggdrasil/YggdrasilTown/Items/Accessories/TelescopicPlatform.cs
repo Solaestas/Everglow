@@ -115,41 +115,46 @@ public class TelescopePlatformPlayer : ModPlayer
 
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
-        if (Player.velocity.Length() != 0)
+		if (Player.HasBuff(BuffID.Gravitation))
+		{
+			return;
+		}
+
+		if (Player.velocity.Length() != 0)
         {
             InPlatform = false;
             return;
         }
-        if (Platform == null || Platform.MaxHeight == 0)
+		if (Platform == null || Platform.MaxHeight == 0)
         {
             NowHeight = 0;
             InPlatform = false;
             return;
         }
-        int direction = 0;
+		int direction = 0;
 
         // 同时按下的时候要停住
-        if (triggersSet.Up)
+		if (triggersSet.Up)
         {
             direction++;
         }
-        if (triggersSet.Down)
+		if (triggersSet.Down)
         {
             direction--;
         }
 
-        if (direction == 0)
+		if (direction == 0)
         {
             return;
         }
 
-        if (NowHeight == 0)
+		if (NowHeight == 0)
         {
             PlatformBasePos = Player.position;
         }
 
-        int move = Platform.MoveSpeed * direction;
-        NowHeight = Math.Clamp(NowHeight + move, 0, Platform.MaxHeight);
+		int move = Platform.MoveSpeed * direction;
+		NowHeight = Math.Clamp(NowHeight + move, 0, Platform.MaxHeight);
     }
 
     public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
