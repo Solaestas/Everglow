@@ -5,76 +5,17 @@ namespace Everglow.Commons.CustomTiles;
 
 public class ColliderManager : ILoadable
 {
+	private const bool AllowOverflow = true;
+
+	private const int Capacity = 100;
+
 	public static bool EnableHook { get; set; } = true;
 
 	public static bool Enable { get; private set; }
 
 	public static ColliderManager Instance => ModContent.GetInstance<ColliderManager>();
 
-	public void Add(RigidEntity entity)
-	{
-		Enable = true;
-		if (rigidbody.Count > Capacity)
-		{
-			int count = rigidbody.RemoveAll(tile => !tile.Active);
-			if (count == 0 && !AllowOverflow)
-			{
-				rigidbody[0] = entity;
-				return;
-			}
-		}
-		rigidbody.Add(entity);
-	}
-
-	public void Clear()
-	{
-		rigidbody.Clear();
-		Enable = false;
-	}
-
-	public void Draw()
-	{
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		foreach (var tile in rigidbody)
-		{
-			tile.Draw();
-		}
-		Main.spriteBatch.End();
-	}
-
-	public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
-	{
-		foreach (var tile in rigidbody)
-		{
-			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
-		}
-	}
-
-	public bool First(AABB aabb, out RigidEntity result)
-	{
-		foreach (var entity in rigidbody)
-		{
-			if (entity.Intersect(aabb))
-			{
-				result = entity;
-				return true;
-			}
-		}
-		result = null;
-		return false;
-	}
-
-	public bool Intersect(AABB aabb)
-	{
-		foreach (var entity in rigidbody)
-		{
-			if (entity.Intersect(aabb))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	private List<RigidEntity> rigidbodies = [];
 
 	public void Load(Mod mod)
 	{
@@ -91,10 +32,83 @@ public class ColliderManager : ILoadable
 		Ins.HookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear);
 	}
 
+	public void Unload()
+	{
+		On_Collision.LaserScan -= Collision_LaserScan;
+		On_Collision.TileCollision -= Collision_TileCollision;
+		On_Collision.SolidCollision_Vector2_int_int -= Collision_SolidCollision_Vector2_int_int;
+		On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
+	}
+
+	public void Add(RigidEntity entity)
+	{
+		Enable = true;
+		if (rigidbodies.Count > Capacity)
+		{
+			int count = rigidbodies.RemoveAll(tile => !tile.Active);
+			if (count == 0 && !AllowOverflow)
+			{
+				rigidbodies[0] = entity;
+				return;
+			}
+		}
+		rigidbodies.Add(entity);
+	}
+
+	public void Clear()
+	{
+		rigidbodies.Clear();
+		Enable = false;
+	}
+
+	public void Draw()
+	{
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		foreach (var tile in rigidbodies)
+		{
+			tile.Draw();
+		}
+		Main.spriteBatch.End();
+	}
+
+	public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
+	{
+		foreach (var tile in rigidbodies)
+		{
+			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
+		}
+	}
+
+	public bool First(AABB aabb, out RigidEntity result)
+	{
+		foreach (var entity in rigidbodies)
+		{
+			if (entity.Intersect(aabb))
+			{
+				result = entity;
+				return true;
+			}
+		}
+		result = null;
+		return false;
+	}
+
+	public bool Intersect(AABB aabb)
+	{
+		foreach (var entity in rigidbodies)
+		{
+			if (entity.Intersect(aabb))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public IEnumerable<CollisionResult> Move(IBox box, Vector2 stride)
 	{
 		var list = new List<CollisionResult>();
-		foreach (var entity in rigidbody)
+		foreach (var entity in rigidbodies)
 		{
 			if (box.Ignore(entity))
 			{
@@ -112,34 +126,20 @@ public class ColliderManager : ILoadable
 
 	public IEnumerable<T> OfType<T>()
 	{
-		return rigidbody.OfType<T>();
-	}
-
-	public void Unload()
-	{
-		On_Collision.LaserScan -= Collision_LaserScan;
-		On_Collision.TileCollision -= Collision_TileCollision;
-		On_Collision.SolidCollision_Vector2_int_int -= Collision_SolidCollision_Vector2_int_int;
-		On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
+		return rigidbodies.OfType<T>();
 	}
 
 	public void Update()
 	{
-		for (int i = 0; i < rigidbody.Count; i++)
+		for (int i = 0; i < rigidbodies.Count; i++)
 		{
-			var tile = rigidbody[i];
+			var tile = rigidbodies[i];
 			if (tile.Active)
 			{
 				tile.Update();
 			}
 		}
 	}
-
-	private const bool AllowOverflow = true;
-
-	private const int Capacity = 100;
-
-	private List<RigidEntity> rigidbody = new();
 
 	// TODO: StepHook, when player try to move on the CustomTile, it should be stepped to the top.
 	// private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
@@ -245,7 +245,7 @@ public class ColliderManager : ILoadable
 				Size = new Vector2(Width, Height),
 				Gravity = gravDir,
 			};
-			foreach (var entity in rigidbody)
+			foreach (var entity in rigidbodies)
 			{
 				if (entity.Collision(box, stride, out var result))
 				{
