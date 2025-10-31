@@ -3,9 +3,9 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.LanternMoon.Projectiles;
 
-class RedLanternMeteor : TrailingProjectile
+public class RedLanternMeteor : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 		TrailColor = new Color(1, 0.05f, 0, 0f);
@@ -17,15 +17,18 @@ class RedLanternMeteor : TrailingProjectile
 		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
 	}
+
 	public override void AI()
 	{
 		Projectile.velocity.Y -= 0.5f;
 		base.AI();
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return base.PreDraw(ref lightColor);
 	}
+
 	public override void DrawSelf()
 	{
 		Texture2D star = Commons.ModAsset.StarSlash.Value;
@@ -44,23 +47,29 @@ class RedLanternMeteor : TrailingProjectile
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 	}
+
 	public override void DrawTrail()
 	{
 		List<Vector2> unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			unSmoothPos.Add(Projectile.oldPos[i]);
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (unSmoothPos.Count != 0)
+		{
 			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+		}
 
 		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
@@ -80,7 +89,7 @@ class RedLanternMeteor : TrailingProjectile
 
 			Vector2 drawPos = SmoothTrail[i] + halfSize;
 			Color drawC = TrailColor;
-			drawC *= (1 - i / (float)SmoothTrail.Count);
+			drawC *= 1 - i / (float)SmoothTrail.Count;
 			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
 			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
 			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
@@ -100,21 +109,25 @@ class RedLanternMeteor : TrailingProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
 		if (bars.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
 		if (bars2.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
+		}
+
 		if (bars3.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
+		}
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+	}
 
-	}
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
-	}
-	public override void KillMainStructure()
+	public override void DestroyEntity()
 	{
 		for (int x = 0; x < 25; x++)
 		{
@@ -127,11 +140,10 @@ class RedLanternMeteor : TrailingProjectile
 				maxTime = Main.rand.Next(57, 255),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(8f, 17.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0 }
+				ai = new float[] { 0 },
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.KillMainStructure();
+		base.DestroyEntity();
 	}
 }
-

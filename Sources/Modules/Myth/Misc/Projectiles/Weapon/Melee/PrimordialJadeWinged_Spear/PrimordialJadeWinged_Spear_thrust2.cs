@@ -7,6 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear
 public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_Spear";
+
 	public override void SetDefaults()
 	{
 		Projectile.extraUpdates = 16;
@@ -17,6 +18,7 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 		Projectile.friendly = true;
 		Projectile.penetrate = -1;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -24,6 +26,7 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 		Projectile.velocity = Vector2.Normalize(Projectile.velocity) * 3.7F;
 		SoundEngine.PlaySound(SoundID.Item71.WithVolume(0.6f).WithPitchOffset(-0.5f), Projectile.Center);
 	}
+
 	public override bool PreAI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -41,7 +44,7 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 			{
 				GenerateVFX();
 			}
-			if(Main.rand.NextBool(6))
+			if (Main.rand.NextBool(6))
 			{
 				GenerateSpark();
 			}
@@ -54,11 +57,13 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 		myplayer.InvincibleFrameTime = 15;
 		return false;
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
 		player.fullRotation = 0;
 	}
+
 	private void Generate3DVFXRing()
 	{
 		BlackRingVFX v = new BlackRingVFX()
@@ -68,14 +73,15 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 			color = Color.Lerp(Color.White, Color.Transparent, 0.4f),
 			scale = 3,
 			maxtime = 20,
-			timeleft = 20
+			timeleft = 20,
 		};
 		Ins.VFXManager.Add(v);
 	}
+
 	private void GenerateVFX()
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
-		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 320, Projectile.timeLeft + 60));
+		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(Projectile.timeLeft - 320, Projectile.timeLeft + 60);
 		if (Collision.SolidCollision(Projectile.Center, 1, 1))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
@@ -88,7 +94,7 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 			Visible = true,
 			position = positionVFX,
 			maxTime = Main.rand.Next(17, 26),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) },
 		};
 		Ins.VFXManager.Add(filthy);
 
@@ -99,14 +105,15 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 			Visible = true,
 			position = positionVFX,
 			maxTime = Main.rand.Next(17, 26),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(18f, 30f) },
 		};
 		Ins.VFXManager.Add(filthy2);
 	}
+
 	public void GenerateSpark()
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
-		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0));
+		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0);
 		if (Collision.SolidCollision(Projectile.Center, 1, 1))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
@@ -124,10 +131,11 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 			rotation2 = Main.rand.NextFloat(6.283f),
 			omega = Main.rand.NextFloat(-30f, 30f),
 			phi = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) }
+			ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) },
 		};
 		Ins.VFXManager.Add(smog);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float timeValue = 1f;
@@ -138,35 +146,37 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 40f * timeValue;
 		Vector2 start = Projectile.Center + Vector2.Normalize(Projectile.velocity) * 90;
 		Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 240;
-		float value = (Projectile.timeLeft) / 135f;
+		float value = Projectile.timeLeft / 135f;
 		Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		Color alphaColor = Color.White;
 		alphaColor.A = 0;
 		alphaColor.R = (byte)(((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-		alphaColor.G = (byte)(250 - collisionTimer * 6);
+		alphaColor.G = (byte)((250 - collisionTimer * 6) * 0.1f);
 
 		Color alphaColor2 = alphaColor;
 		alphaColor2.G = 0;
 
 		List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 24f), 0, 0),new Vector3(1 + time, 0.25f, 0)),
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 24f), 0, 0),new Vector3(1 + time, 0.75f, 0)),
-				new Vertex2D(middle + normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 240f), 0, 0), new Vector3(1 + time, 0.25f, 0)),
+				new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 240f), 0, 0), new Vector3(1 + time, 0.75f, 0)),
+				new Vertex2D(middle + normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 1, 1)),
 			};
 		spriteBatch.Draw(Commons.ModAsset.Noise_spiderNet.Value, bars, PrimitiveType.TriangleStrip);
 	}
+
 	public int collisionTimer = 0;
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D mainTex = ModAsset.PrimordialJadeWinged_Spear_PrimordialJadeWinged_Spear.Value;
 		Vector2 drawCenter = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 150f;
 		float fadeLightColor = 1f;
-		if(Projectile.timeLeft > 200)
+		if (Projectile.timeLeft > 200)
 		{
 			fadeLightColor = 240 - Projectile.timeLeft;
 			fadeLightColor /= 40f;
@@ -251,23 +261,24 @@ public class PrimordialJadeWinged_Spear_thrust2 : ModProjectile, IWarpProjectile
 		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;
 	}
 
 	public static int CyanStrike = 0;
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
 	}
+
 	public override void Load()
 	{
 		On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
 	}
+
 	private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 	{
 		if (CyanStrike > 0)

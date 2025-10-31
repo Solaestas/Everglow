@@ -1,10 +1,11 @@
-using Everglow.SpellAndSkull.Common;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Everglow.SpellAndSkull.Common;
+
 namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 
-internal class GoldenShowerArray : ModProjectile, IWarpProjectile
+public class GoldenShowerArray : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -17,10 +18,12 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -31,13 +34,17 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (projPower < 30)
+			{
 				projPower++;
+			}
 		}
 		else
 		{
 			projPower--;
 			if (projPower < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -48,6 +55,7 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 
 		ringPos = ringPos * 0.9f + new Vector2(-72 * player.direction, -24 * player.gravDir) * 0.1f;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawMagicArray();
@@ -69,7 +77,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		fade.Parameters["uTransform"].SetValue(model * projection);
 		fade.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.01f));
 		fade.CurrentTechnique.Passes[0].Apply();
-		//黑色底
+
+		// 黑色底
 		Color c0 = new Color(0, 0, 0, 55) * power;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
@@ -83,7 +92,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		//黄色波纹外圈
+
+		// 黄色波纹外圈
 		c0 = new Color(255, 210, 0, 0) * 0.15f * power;
 		bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
@@ -99,7 +109,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		//黄色辐条
+
+		// 黄色辐条
 		bars = new List<Vertex2D>();
 		float timeValue = (float)(Main.timeForVisualEffects * 0.03);
 		for (int t = 0; t <= 12; t++)
@@ -118,7 +129,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_2.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
-		//黑底瞳孔
+
+		// 黑底瞳孔
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Effect eye = ModAsset.GoldenEye_shader.Value;
@@ -141,7 +153,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0_black.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		//金色瞳孔
+
+		// 金色瞳孔
 		bars = new List<Vertex2D>();
 		c0 = new Color(255, 210, 0, 0) * 0.75f * power;
 		for (int t = 0; t <= 8; t++)
@@ -158,7 +171,8 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_0.Value;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		//黑色瞳仁
+
+		// 黑色瞳仁
 		c0 = new Color(0, 0, 0, 255) * power;
 		bars = new List<Vertex2D>();
 		for (int t = 0; t <= 8; t++)
@@ -178,18 +192,18 @@ internal class GoldenShowerArray : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float power = projPower / 30f;
 		Player player = Main.player[Projectile.owner];
-		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, projPower * 3, projPower * 2.4f, new Color(1, 0.6f * power, 0f, 0f), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_0.Value, (float)(Main.timeForVisualEffects * 0.02f));
-
+		SpellAndSkullUtils.DrawTexCircle_Warp(spriteBatch, projPower * 3, projPower * 2.4f, new Color(1, 0.06f * power, 0f, 0f), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_0.Value, (float)(Main.timeForVisualEffects * 0.02f));
 
 		spriteBatch.End();
 		spriteBatch.Begin(BlendState.AlphaBlend);
 		Effect eye = ModAsset.GoldenEye_shader.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		eye.Parameters["uTransform"].SetValue(model * projection);
 		eye.Parameters["uTime"].SetValue((float)(Main.timeForVisualEffects * 0.01f));
 		eye.CurrentTechnique.Passes[0].Apply();

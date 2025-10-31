@@ -205,6 +205,6 @@ public class MagnetSphereLighting : ModProjectile, IWarpProjectile
 		float value = (200 - Projectile.timeLeft) / (float)Projectile.timeLeft * 1.4f;
 		float colorV = 0.9f * (1 - value);
 		Texture2D t = Commons.ModAsset.Wave.Value;
-		DrawTexCircle(spriteBatch, value * 160, 100, new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle(spriteBatch, value * 160, 100, new Color(colorV, colorV * 0.02f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

@@ -1,6 +1,4 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Graphics;
-using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.Misc.Projectiles.Accessory;
 
@@ -9,13 +7,14 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 public class IchorClub : ClubProj
 {
 	private float vfxTimer = 0;
+	private int flyClubCooling = 0;
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
 		vfxTimer = 0;
-		WarpValue = 0.3f;
+		WarpValue = 0.03f;
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -58,8 +57,6 @@ public class IchorClub : ClubProj
 		}
 	}
 
-	private int flyClubCooling = 0;
-
 	public override void PostDraw(Color lightColor)
 	{
 		SpriteEffects effects = SpriteEffects.None;
@@ -81,57 +78,21 @@ public class IchorClub : ClubProj
 
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		float fade = Omega * 2f + 0.2f;
+		var color2 = new Color(fade, Math.Min(fade * 0.4f, 0.6f), 0, 0);
+		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, useSpecialAplha: true, trailColor: color2);
+		if (bars == null)
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		float fade = Omega * 2f + 0.2f;
-		var color2 = new Color(fade, Math.Min(fade * 0.4f, 0.6f), 0, 0);
-
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
-		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
-		}
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, model);
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();
@@ -143,8 +104,7 @@ public class IchorClub : ClubProj
 		Player player = Main.player[Projectile.owner];
 		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
 
-
-        for (int g = 0; g < Frequency * 2; g++)
+		for (int g = 0; g < Frequency * 2; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(10f)).RotatedByRandom(MathHelper.TwoPi);
 			float mulScale = Main.rand.NextFloat(1f, 6f);

@@ -6,7 +6,7 @@ using Terraria.Audio;
 
 namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;
 
-internal class DemonScythePlus : ModProjectile, IWarpProjectile
+public class DemonScythePlus : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -203,12 +203,5 @@ internal class DemonScythePlus : ModProjectile, IWarpProjectile
 
 		Main.graphics.GraphicsDevice.Textures[0] = tex;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex2Ds.ToArray(), 0, vertex2Ds.Count / 3);
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-
-		DrawTexMoon(spriteBatch, 18, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition, ModAsset.BloomLight.Value, Main.timeForVisualEffects / 3);
-		//DrawTexMoon(spriteBatch, 22, 35, new Color(64, 70, 255, 0), Projectile.Center - Main.screenPosition,ModAsset.BloomLight.Value, -Main.timeForVisualEffects / 1.8);
 	}
 }

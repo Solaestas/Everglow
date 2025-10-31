@@ -4,13 +4,13 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class PalladiumClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 44;
 		Item.value = 2074;
 		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PalladiumClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PalladiumClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.PalladiumClub_smash>();
 	}
 	public override void AddRecipes()
 	{

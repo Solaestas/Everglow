@@ -1,12 +1,11 @@
 using Everglow.Commons.Graphics;
-using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CurseClub_smash : ClubProj_Smash
+public class CurseClub_smash : ClubProjSmash
 {
-	public override string Texture => "Everglow/" + ModAsset.CurseClub_Path;
+	public override string Texture => ModAsset.CurseClub_Mod;
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
@@ -18,31 +17,30 @@ public class CurseClub_smash : ClubProj_Smash
 	public override void AI()
 	{
 		base.AI();
-		Player player = Main.player[Projectile.owner];
-		for (float x = 0; x < Omega + 0.2 + player.velocity.Length() / 100f; x += 0.12f)
+		for (float x = 0; x < Omega + 0.2 + Player.velocity.Length() / 100f; x += 0.12f)
 		{
-			Vector2 pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] + trailVecs2.ToArray()[trailVecs2.Count - 1]) / 2f;
+			Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 			float factor = Main.rand.NextFloat(0, 1f);
-			if (trailVecs2.Count > 1)
+			if (SmashTrailVecs.Count > 1)
 			{
-				pos = trailVecs2.ToArray()[trailVecs2.Count - 1] * factor + trailVecs2.ToArray()[trailVecs2.Count - 2] * (1 - factor);
+				pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 			}
-			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - player.velocity * factor;
+			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Player.velocity * factor;
 			Vector2 vel = Vector2.zeroVector;
-			if (trailVecs2.Count > 1)
+			if (SmashTrailVecs.Count > 1)
 			{
-				vel = trailVecs2.ToArray()[trailVecs2.Count - 1] - trailVecs2.ToArray()[trailVecs2.Count - 2];
+				vel = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2];
 			}
-			if (trailVecs2.Count > 2)
+			if (SmashTrailVecs.Count > 2)
 			{
-				vel = (trailVecs2.ToArray()[trailVecs2.Count - 1] - trailVecs2.ToArray()[trailVecs2.Count - 2]) * factor + (trailVecs2.ToArray()[trailVecs2.Count - 2] - trailVecs2.ToArray()[trailVecs2.Count - 3]) * (1 - factor);
+				vel = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2]) * factor + (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 3]) * (1 - factor);
 			}
-			vel += player.velocity;
+			vel += Player.velocity;
 			vel *= Main.rand.NextFloat(0.1f, 0.3f);
 			float rot = 0;
-			if (trailVecs2.Count > 1)
+			if (SmashTrailVecs.Count > 1)
 			{
-				rot = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).ToRotation() - (trailVecs2.ToArray()[trailVecs2.Count - 2] - Projectile.Center).ToRotation();
+				rot = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).ToRotation() - (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] - Projectile.Center).ToRotation();
 			}
 
 			if (Main.rand.NextBool(5))
@@ -53,7 +51,7 @@ public class CurseClub_smash : ClubProj_Smash
 				int time = Main.rand.Next(15, 35);
 				var fire = new Flare()
 				{
-					position = Vector2.Lerp(player.Center, pos, Main.rand.NextFloat(0.4f, 1.25f)),
+					position = Vector2.Lerp(Player.Center, pos, Main.rand.NextFloat(0.4f, 1.25f)),
 					velocity = vel * 0.2f,
 					color = color,
 					timeleft = time,
@@ -98,7 +96,6 @@ public class CurseClub_smash : ClubProj_Smash
 
 	public override void Smash(int level)
 	{
-		Player player = Main.player[Projectile.owner];
 		smashed = true;
 		for (int t = 0; t < 5; t++)
 		{
@@ -108,7 +105,7 @@ public class CurseClub_smash : ClubProj_Smash
 				velocity = vel,
 				Active = true,
 				Visible = true,
-				position = player.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
+				position = Player.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
 				maxTime = Main.rand.Next(10, 25),
 
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(3.6f, 30f) },
@@ -123,7 +120,7 @@ public class CurseClub_smash : ClubProj_Smash
 				velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
 				Active = true,
 				Visible = true,
-				position = player.Bottom - vel * 3,
+				position = Player.Bottom - vel * 3,
 				maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
@@ -135,30 +132,17 @@ public class CurseClub_smash : ClubProj_Smash
 		base.Smash(level);
 	}
 
-	public override void DrawTrail2(Color color)
+	public override void DrawSmashTrail(Color color)
 	{
-		base.DrawTrail2(color);
+		base.DrawSmashTrail(color);
 
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs2.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		if (!SmashTrailVecs.Smooth(out var smoothedTrail))
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
+		var length = smoothedTrail.Count;
 		var bars = new List<Vertex2D>();
-
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
@@ -168,7 +152,7 @@ public class CurseClub_smash : ClubProj_Smash
 				c0 = Color.Transparent;
 			}
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, c0, new Vector3(0, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(smoothedTrail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_glow.Value;
