@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.Audio;

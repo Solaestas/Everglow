@@ -1,6 +1,7 @@
+using Everglow.Commons.CustomTiles.Abstracts;
 using Everglow.Commons.Physics.DataStructures;
 
-namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.CustomTiles.Core;
 
 public abstract class RigidEntity
 {
@@ -12,7 +13,9 @@ public abstract class RigidEntity
 
 	public virtual Color MapColor => Color.White;
 
-	public virtual void AI() { }
+	public virtual void AI()
+	{
+	}
 
 	public abstract bool Intersect(AABB box);
 

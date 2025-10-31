@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.Utilities;

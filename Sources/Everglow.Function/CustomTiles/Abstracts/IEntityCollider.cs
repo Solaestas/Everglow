@@ -1,6 +1,7 @@
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Utilities;
 
-namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.CustomTiles.Abstracts;
 
 public interface IEntityCollider<T> : IBox where T : Entity
 {

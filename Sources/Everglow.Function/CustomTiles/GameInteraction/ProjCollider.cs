@@ -1,6 +1,8 @@
+using Everglow.Commons.CustomTiles.Abstracts;
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Physics.DataStructures;
 
-namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.CustomTiles.GameInteraction;
 
 public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 {

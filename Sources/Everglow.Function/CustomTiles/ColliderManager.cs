@@ -1,3 +1,5 @@
+using Everglow.Commons.CustomTiles.Abstracts;
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.DataStructures;
 

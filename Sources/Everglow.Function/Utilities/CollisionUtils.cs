@@ -1,4 +1,5 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.CustomTiles.Core;
+using Everglow.Commons.Physics.Colliders;
 using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
 
@@ -558,4 +559,6 @@ public static class CollisionUtils
 		}
 		return false;
 	}
+
+	public static AABBCollider2D GetCollider(this Entity entity) => new(new AABB(entity.position.X, entity.position.Y, entity.width, entity.height));
 }

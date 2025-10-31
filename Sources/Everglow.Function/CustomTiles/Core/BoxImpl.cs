@@ -1,6 +1,7 @@
+using Everglow.Commons.CustomTiles.Abstracts;
 using Everglow.Commons.Physics.DataStructures;
 
-namespace Everglow.Commons.CustomTiles;
+namespace Everglow.Commons.CustomTiles.Core;
 
 public class BoxImpl : IBox
 {
