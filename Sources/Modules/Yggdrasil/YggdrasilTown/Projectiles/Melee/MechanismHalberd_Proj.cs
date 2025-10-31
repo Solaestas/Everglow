@@ -86,7 +86,6 @@ public class MechanismHalberd_Proj : MeleeProj
 				useTrail = false;
 
 				float rot0 = -MathHelper.PiOver2 - rot * 1.2f;
-				Main.NewText("旋转：" + rot0.ToString());
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, rot0, -0.8f, rot), 0.15f);
 				Projectile.rotation = mainVec.ToRotation();
 			}
