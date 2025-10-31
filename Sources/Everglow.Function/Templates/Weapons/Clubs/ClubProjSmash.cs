@@ -127,6 +127,11 @@ public abstract class ClubProjSmash : MeleeProj
 				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
 				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction * Owner.gravDir;
 				Owner.legRotation = -Owner.fullRotation;
+				if(Owner.gravDir == -1)
+				{
+					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
+					Owner.legRotation = 0;
+				}
 			}
 
 			if (timer > 25 * timeMul)
@@ -207,9 +212,15 @@ public abstract class ClubProjSmash : MeleeProj
 				float theta = 1.16f;
 				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * Owner.direction;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
-				Owner.fullRotationOrigin = new Vector2(10, 42);
+
+				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
 				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
 				Owner.legRotation = -Owner.fullRotation;
+				if (Owner.gravDir == -1)
+				{
+					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
+					Owner.legRotation = 0;
+				}
 			}
 			if (timer > 100 * timeMul)
 			{
@@ -243,9 +254,15 @@ public abstract class ClubProjSmash : MeleeProj
 				float theta = 0.4f + timer / 71f;
 				float phi = (-1.2f + timer / 50f) * Owner.direction;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
-				Owner.fullRotationOrigin = new Vector2(10, 42);
+
+				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
 				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
 				Owner.legRotation = -Owner.fullRotation;
+				if (Owner.gravDir == -1)
+				{
+					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
+					Owner.legRotation = 0;
+				}
 			}
 			if (timer > 50 * timeMul)
 			{
