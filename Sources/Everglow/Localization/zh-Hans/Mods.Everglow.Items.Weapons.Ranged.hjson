@@ -8,281 +8,294 @@ CyanVineBow: {
 }
 
 IcedSpear: {
-	DisplayName: Iced Spear
+	DisplayName: 冰尖投矛
 	Tooltip: ""
 }
 
 SpineGun: {
-	DisplayName: Spine Gun
+	DisplayName: 脊骨手枪
 	Tooltip: ""
 }
 
 ToothBow: {
-	DisplayName: Tooth Bow
-	Tooltip: ""
+	DisplayName: 獠牙巨弓
+	Tooltip: "发射巨形獠牙箭"
 }
 
 PhosphorescenceGun: {
-	DisplayName: Phosphorescence Gun
+	DisplayName: 磷光枪
 	Tooltip: ""
 }
 
 ShadowWingBow: {
-	DisplayName: Shadow Wing Bow
-	Tooltip: ""
+	DisplayName: 影翼巨弓
+	Tooltip: "蓄力发射更多幻箭"
 }
 
 CloudGun: {
-	DisplayName: Cloud Gun
-	Tooltip: ""
+	DisplayName: 云导炮
+	Tooltip: "发射云团"
 }
 
 SilveralGun: {
-	DisplayName: Silveral Gun
+	DisplayName: 银影手枪
 	Tooltip: ""
 }
 
 SilveralRifle: {
-	DisplayName: Silveral Rifle
+	DisplayName: 银影步枪
 	Tooltip: ""
 }
 
 AmbiguousNight: {
-	DisplayName: Ambiguous Night
+	DisplayName: 幻夜弹弓
 	Tooltip: ""
 }
 
 AmethystSlingshot: {
-	DisplayName: Amethyst Slingshot
+	DisplayName: 紫晶弹弓
 	Tooltip: ""
 }
 
 BorealWoodSlingshot: {
-	DisplayName: Boreal Wood Slingshot
+	DisplayName: 针叶木弹弓
 	Tooltip: ""
 }
 
 CactusSlingShot: {
-	DisplayName: Cactus Sling Shot
+	DisplayName: 仙人掌弹弓
 	Tooltip: ""
 }
 
 DiamondSlingshot: {
-	DisplayName: Diamond Slingshot
+	DisplayName: 钻石弹弓
 	Tooltip: ""
 }
 
 EbonwoodSlingshot: {
-	DisplayName: Ebonwood Slingshot
+	DisplayName: 乌木弹弓
 	Tooltip: ""
 }
 
 EmeraldSlingshot: {
-	DisplayName: Emerald Slingshot
+	DisplayName: 祖母绿弹弓
 	Tooltip: ""
 }
 
 GelSlingshot: {
-	DisplayName: Gel Slingshot
+	DisplayName: 凝胶弹弓
 	Tooltip: ""
 }
 
 JungleSlingshot: {
-	DisplayName: Jungle Slingshot
+	DisplayName: 丛林弹弓
 	Tooltip: ""
 }
 
 PalmWoodSlingshot: {
-	DisplayName: Palm Wood Slingshot
+	DisplayName: 棕榈木弹弓
 	Tooltip: ""
 }
 
 PearlwoodSlingshot: {
-	DisplayName: Pearlwood Slingshot
+	DisplayName: 珍珠木弹弓
 	Tooltip: ""
 }
 
 RichMahoganySlingshot: {
-	DisplayName: Rich Mahogany Slingshot
+	DisplayName: 红木弹弓
 	Tooltip: ""
 }
 
 RubySlingshot: {
-	DisplayName: Ruby Slingshot
+	DisplayName: 红宝石弹弓
 	Tooltip: ""
 }
 
 SapphireSlingshot: {
-	DisplayName: Sapphire Slingshot
+	DisplayName: 蓝宝石弹弓
 	Tooltip: ""
 }
 
 ShadewoodSlingShot: {
-	DisplayName: Shadewood Sling Shot
+	DisplayName: 暗影木弹弓
 	Tooltip: ""
 }
 
 StarSlingshot: {
-	DisplayName: Star Slingshot
+	DisplayName: 星星弹弓
 	Tooltip: ""
 }
 
 TopazSlingshot: {
-	DisplayName: Topaz Slingshot
+	DisplayName: 黄玉弹弓
 	Tooltip: ""
 }
 
 WoodSlingshot: {
-	DisplayName: Wood Slingshot
+	DisplayName: 木弹弓
 	Tooltip: ""
 }
 
 CloudBall: {
-	DisplayName: Cloud Ball
+	DisplayName: 云团
 	Tooltip: ""
 }
 
 RampageShark: {
-	DisplayName: Rampage Shark
+	DisplayName: 复仇鲨
 	Tooltip: ""
 }
 
 TsunamiShark: {
-	DisplayName: Tsunami Shark
+	DisplayName: 海啸鲨
 	Tooltip: ""
 }
 
 ArmorPiercingBlaster: {
-	DisplayName: Armor Piercing Blaster
+	DisplayName: 穿甲爆破子
 	Tooltip: ""
 }
 
 Caltrop: {
-	DisplayName: Caltrop
+	DisplayName: 铁蒺藜
 	Tooltip: ""
 }
 
 CeremonialRifle: {
-	DisplayName: Ceremonial Rifle
+	DisplayName: 仪式用枪
 	Tooltip: ""
 }
 
 GunOfAvarice: {
-	DisplayName: Gun Of Avarice
-	Tooltip: ""
+	DisplayName: 贪婪之铳
+	Tooltip: 
+	'''
+	每打完14发子弹进行一次弹匣更换(45帧)，期间无法攻击
+    弹匣更换成功率为80%
+	成功：弹匣更换后等级+1伤害较之前提升25%
+    失败：爆炸并受到面板伤害的2.8倍伤害
+    成功效果最多达到10级。
+    右键手动更换弹匣并使弹匣等级清零
+    每次命中让敌人价值+75铜
+	'''
 }
 
 Nehemoth: {
-	DisplayName: Nehemoth
-	Tooltip: ""
+	DisplayName: 低语者
+	Tooltip: 
+	'''.
+		将火枪子弹变成高速特殊弹幕，无限穿透，命中的生物有66%的概率获得瘟疫Debuff4秒
+	瘟疫能在敌人之间散步，造成群体血量流失
+	'''
 }
 
 RustSlingshot: {
-	DisplayName: Rust Slingshot
+	DisplayName: 生锈弹弓
 	Tooltip: ""
 }
 
 SevenShotGun: {
-	DisplayName: Seven Shot Gun
+	DisplayName: 七发猎枪
 	Tooltip: ""
 }
 
 StoneJavelin: {
-	DisplayName: Stone Javelin
+	DisplayName: 岩石投矛
 	Tooltip: ""
 }
 
 RockSpikeBallista: {
-	DisplayName: Rock Spike Ballista
+	DisplayName: 碎裂投石
 	Tooltip: ""
 }
 
 BrittleRockSlingshot: {
-	DisplayName: Brittle Rock Slingshot
+	DisplayName: 碎石弹弓
 	Tooltip: ""
 }
 
 KissOfCthulhu: {
-	DisplayName: Kiss Of Cthulhu
+	DisplayName: 克苏鲁之吻
 	Tooltip: ""
 }
 
 BowOfEnlightment: {
-	DisplayName: Bow Of Enlightment
+	DisplayName: 启明之弓
 	Tooltip: ""
 }
 
 HandgunOfEnlightment: {
-	DisplayName: Handgun Of Enlightment
+	DisplayName: 启明手枪
 	Tooltip: ""
 }
 
 LampWoodBow: {
-	DisplayName: Lamp Wood Bow
+	DisplayName: 灯木弓
 	Tooltip: ""
 }
 
 CyanVineCrossBow: {
-	DisplayName: Cyan Vine Cross Bow
+	DisplayName: 青缎弩
 	Tooltip: ""
 }
 
 CyanVineFlintlock: {
-	DisplayName: Cyan Vine Flintlock
+	DisplayName: 青缎燧发枪
 	Tooltip: ""
 }
 
 CyanVineThrowingSpear: {
-	DisplayName: Cyan Vine Throwing Spear
+	DisplayName: 青缎投矛
 	Tooltip: ""
 }
 
 CaterpillarJuiceArrow: {
-	DisplayName: Caterpillar Juice Arrow
+	DisplayName: 虫汁箭
 	Tooltip: ""
 }
 
 LightArrow: {
-	DisplayName: Light Arrow
+	DisplayName: 灯油箭
 	Tooltip: ""
 }
 
 LightBullet: {
-	DisplayName: Light Bullet
+	DisplayName: 灯油弹
 	Tooltip: ""
 }
 
 RockArrow: {
-	DisplayName: Rock Arrow
+	DisplayName: 岩甲重箭
 	Tooltip: ""
 }
 
 GreenThornBallLauncher: {
-	DisplayName: Green Thorn Ball Launcher
+	DisplayName: 青刺球发射器
 	Tooltip: ""
 }
 
 MossyCyatheaBow: {
-	DisplayName: Mossy Cyathea Bow
+	DisplayName: 青苔桫椤弓
 	Tooltip: ""
 }
 
 DevilHeartBow: {
-	DisplayName: Devil Heart Bow
+	DisplayName: 魔心铁弓
 	Tooltip: ""
 }
 
 DevilHeartGun: {
-	DisplayName: Devil Heart Gun
+	DisplayName: 魔心手枪
 	Tooltip: ""
 }
 
 CyatheaArrow: {
-	DisplayName: Cyathea Arrow
+	DisplayName: 桫椤箭
 	Tooltip: ""
 }
 
 TerraViewerHowitzer: {
-	DisplayName: Terra Viewer Howitzer
+	DisplayName:泰拉观察者
 	Tooltip: ""
 }
