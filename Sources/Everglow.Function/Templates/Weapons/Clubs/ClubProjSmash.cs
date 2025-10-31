@@ -13,8 +13,6 @@ public abstract class ClubProjSmash : MeleeProj
 
 	public static IReadOnlyCollection<int> OwnSmashClubPlayers => ownSmashClubPlayers;
 
-	protected Player Owner => Main.player[Projectile.owner];
-
 	protected float Omega { get; private set; } = 0;
 
 	protected bool Crash { get; private set; } = false;
@@ -76,12 +74,12 @@ public abstract class ClubProjSmash : MeleeProj
 
 	public override void End()
 	{
-		Owner.legFrame = new Rectangle(0, 0, Owner.legFrame.Width, Owner.legFrame.Height);
-		Owner.fullRotation = 0;
-		Owner.legRotation = 0;
-		Owner.legPosition = Vector2.Zero;
+		Player.legFrame = new Rectangle(0, 0, Player.legFrame.Width, Player.legFrame.Height);
+		Player.fullRotation = 0;
+		Player.legRotation = 0;
+		Player.legPosition = Vector2.Zero;
 		Projectile.Kill();
-		Owner.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
+		Player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -93,10 +91,10 @@ public abstract class ClubProjSmash : MeleeProj
 	{
 		base.AI();
 
-		TestPlayerDrawer modPlayer = Owner.GetModPlayer<TestPlayerDrawer>();
+		TestPlayerDrawer modPlayer = Player.GetModPlayer<TestPlayerDrawer>();
 		modPlayer.HideLeg = true;
 		useSlash = true;
-		float timeMul = 1 / Owner.meleeSpeed;
+		float timeMul = 1 / Player.meleeSpeed;
 
 		// Smash down
 		if (currantAttackType == 0)
@@ -105,11 +103,11 @@ public abstract class ClubProjSmash : MeleeProj
 			{
 				// Pre-cast
 				useSlash = false;
-				LockPlayerDir(Owner);
-				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				targetRot *= Owner.gravDir;
+				LockPlayerDir(Player);
+				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
+				targetRot *= Player.gravDir;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			else if (timer == (int)(14 * timeMul))
@@ -120,44 +118,44 @@ public abstract class ClubProjSmash : MeleeProj
 			{
 				// Preparation stance
 				canHit = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul * Owner.gravDir;
+				Projectile.rotation += Projectile.spriteDirection * 0.32f / timeMul * Player.gravDir;
 
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(110, Projectile.rotation, 0f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul) * Projectile.scale;
 
-				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction * Owner.gravDir;
-				Owner.legRotation = -Owner.fullRotation;
-				if(Owner.gravDir == -1)
+				Player.fullRotationOrigin = new Vector2(Player.width / 2, Player.height);
+				Player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Player.direction * Player.gravDir;
+				Player.legRotation = -Player.fullRotation;
+				if(Player.gravDir == -1)
 				{
-					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
-					Owner.legRotation = 0;
+					Player.fullRotationOrigin = new Vector2(Player.width / 2, 0);
+					Player.legRotation = 0;
 				}
 			}
 
 			if (timer > 25 * timeMul)
 			{
-				Owner.velocity.Y += Owner.gravDir;
-				LockPlayerDir(Owner);
-				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
-				targetRot *= Owner.gravDir;
+				Player.velocity.Y += Player.gravDir;
+				LockPlayerDir(Player);
+				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
+				targetRot *= Player.gravDir;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 
 			// Check and switch to post attack type
-			if (Owner.gravDir == 1)
+			if (Player.gravDir == 1)
 			{
-				Point bottomPos = Owner.Bottom.ToTileCoordinates();
+				Point bottomPos = Player.Bottom.ToTileCoordinates();
 				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-				if (Collision.SolidCollision(Owner.BottomLeft, Owner.width, 64) // Normal
-					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 16)) // Platform
-					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, 0))
-					|| TileCollisionUtils.PlatformCollision(Owner.Bottom + new Vector2(0, -16))
-					|| ((Owner.waterWalk || Owner.waterWalk2) // Water walker
+				if (Collision.SolidCollision(Player.BottomLeft, Player.width, 64) // Normal
+					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, 16)) // Platform
+					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, 0))
+					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, -16))
+					|| ((Player.waterWalk || Player.waterWalk2) // Water walker
 						&& Main.tile[bottomPos].LiquidAmount > 0
-						&& !Owner.wet))
+						&& !Player.wet))
 				{
 					if (timer <= 70)
 					{
@@ -171,7 +169,7 @@ public abstract class ClubProjSmash : MeleeProj
 			}
 			else
 			{
-				if (Collision.SolidCollision(Owner.TopLeft - new Vector2(0, 64), Owner.width, 80)) // Normal
+				if (Collision.SolidCollision(Player.TopLeft - new Vector2(0, 64), Player.width, 80)) // Normal
 				{
 					if (timer <= 70)
 					{
@@ -188,15 +186,15 @@ public abstract class ClubProjSmash : MeleeProj
 		// Post attack
 		if (currantAttackType == 1)
 		{
-			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
+			ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 14).RotatedByRandom(6.283);
-			Owner.direction = FixedDirection;
+			Player.direction = FixedDirection;
 			if (timer < 8 * timeMul)// 前摇
 			{
 				useSlash = false;
-				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
@@ -210,16 +208,16 @@ public abstract class ClubProjSmash : MeleeProj
 				Omega *= 0.98f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 1.16f;
-				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * Owner.direction;
+				float phi = MathF.Sin((90 - timer) * (90 - timer) / 1000f) * Player.direction;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(110, Projectile.rotation, theta, phi), 0.4f / timeMul) * Projectile.scale;
 
-				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
-				Owner.legRotation = -Owner.fullRotation;
-				if (Owner.gravDir == -1)
+				Player.fullRotationOrigin = new Vector2(Player.width / 2, Player.height);
+				Player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Player.direction;
+				Player.legRotation = -Player.fullRotation;
+				if (Player.gravDir == -1)
 				{
-					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
-					Owner.legRotation = 0;
+					Player.fullRotationOrigin = new Vector2(Player.width / 2, 0);
+					Player.legRotation = 0;
 				}
 			}
 			if (timer > 100 * timeMul)
@@ -230,15 +228,15 @@ public abstract class ClubProjSmash : MeleeProj
 		}// 强
 		if (currantAttackType == 2)
 		{
-			ScreenShaker Gsplayer = Owner.GetModPlayer<ScreenShaker>();
+			ScreenShaker Gsplayer = Player.GetModPlayer<ScreenShaker>();
 			Gsplayer.FlyCamPosition = new Vector2(0, 28).RotatedByRandom(6.283);
-			Owner.direction = FixedDirection;
+			Player.direction = FixedDirection;
 			if (timer < 8 * timeMul)// 前摇
 			{
 				useSlash = false;
-				float targetRot = -MathHelper.PiOver2 - Owner.direction * 0.5f;
+				float targetRot = -MathHelper.PiOver2 - Player.direction * 0.5f;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, targetRot, +1.2f), 0.4f / timeMul) * Projectile.scale;
-				mainAxisDirection += Projectile.DirectionFrom(Owner.Center) * 3;
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(2 * timeMul))
@@ -252,16 +250,16 @@ public abstract class ClubProjSmash : MeleeProj
 				Omega *= 0.95f;
 				Projectile.rotation -= Projectile.spriteDirection * Omega / timeMul;
 				float theta = 0.4f + timer / 71f;
-				float phi = (-1.2f + timer / 50f) * Owner.direction;
+				float phi = (-1.2f + timer / 50f) * Player.direction;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(90, Projectile.rotation, theta, phi), 0.9f / timeMul) * Projectile.scale;
 
-				Owner.fullRotationOrigin = new Vector2(Owner.width / 2, Owner.height);
-				Owner.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Owner.direction;
-				Owner.legRotation = -Owner.fullRotation;
-				if (Owner.gravDir == -1)
+				Player.fullRotationOrigin = new Vector2(Player.width / 2, Player.height);
+				Player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Player.direction;
+				Player.legRotation = -Player.fullRotation;
+				if (Player.gravDir == -1)
 				{
-					Owner.fullRotationOrigin = new Vector2(Owner.width / 2, 0);
-					Owner.legRotation = 0;
+					Player.fullRotationOrigin = new Vector2(Player.width / 2, 0);
+					Player.legRotation = 0;
 				}
 			}
 			if (timer > 50 * timeMul)
@@ -287,11 +285,11 @@ public abstract class ClubProjSmash : MeleeProj
 			Omega = 0.8f;
 			for (int g = 0; g < 24; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
-				Vector2 pos = Owner.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if (Owner.gravDir == -1)
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 74f) * Player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = Player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if (Player.gravDir == -1)
 				{
-					pos = Owner.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+					pos = Player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
 				var somg = new ClubSmog
 				{
@@ -314,11 +312,11 @@ public abstract class ClubProjSmash : MeleeProj
 			Omega = 0.4f;
 			for (int g = 0; g < 12; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
-				Vector2 pos = Owner.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
-				if (Owner.gravDir == -1)
+				Vector2 newVelocity = new Vector2(0, -Main.rand.NextFloat(35f, 44f) * Player.gravDir).RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
+				Vector2 pos = Player.Bottom + new Vector2(0, 48) - newVelocity * 0.2f;
+				if (Player.gravDir == -1)
 				{
-					pos = Owner.Top - new Vector2(0, 48) - newVelocity * 0.2f;
+					pos = Player.Top - new Vector2(0, 48) - newVelocity * 0.2f;
 				}
 				var somg = new ClubSmog
 				{
@@ -333,11 +331,11 @@ public abstract class ClubProjSmash : MeleeProj
 				Ins.VFXManager.Add(somg);
 			}
 		}
-		StopPoint = Owner.Bottom;
+		StopPoint = Player.Bottom;
 		Crash = true;
 		timer = 0;
 
-		FixedDirection = Owner.direction;
+		FixedDirection = Player.direction;
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -408,7 +406,7 @@ public abstract class ClubProjSmash : MeleeProj
 
 	public override void OnKill(int timeLeft)
 	{
-		Owner.fullRotation = 0;
+		Player.fullRotation = 0;
 		ownSmashClubPlayers.RemoveAll(p => p == Projectile.owner);
 	}
 }

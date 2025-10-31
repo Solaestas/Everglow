@@ -53,8 +53,8 @@ public class StarDancer_smash : ClubProjSmash
 		{
 			for (int i = 0; i < 12; i++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Owner.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
-				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * Player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 				p0.Center += addPos;
 				p0.timeLeft = (int)(addPos.Length() * 0.2f + 4);
 			}
@@ -63,15 +63,15 @@ public class StarDancer_smash : ClubProjSmash
 		{
 			for (int i = 0; i < 12; i++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Owner.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
-				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-35, -120) * Player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 				p0.Center += addPos;
 				p0.timeLeft = (int)(addPos.Length() * 0.2f + 4 + Main.rand.Next(5));
 			}
 			for (int i = 0; i < 24; i++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Owner.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj2>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
-				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-25, -260) * Owner.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
+				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, 40 * Player.gravDir), Vector2.zeroVector, ModContent.ProjectileType<StarDancer_starProj2>(), Projectile.damage / 3, Projectile.knockBack * 0.2f, Projectile.owner);
+				Vector2 addPos = new Vector2(0, Main.rand.NextFloat(-25, -260) * Player.gravDir).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 				p0.Center += addPos;
 				p0.timeLeft = (int)(addPos.Length() * 0.26f + 10 + Main.rand.Next(5));
 				p0.scale = Main.rand.NextFloat(0.5f, 2);
@@ -86,7 +86,7 @@ public class StarDancer_smash : ClubProjSmash
 		if (SmashTrailVecs.Count > 0)
 		{
 			int type = DustID.GoldCoin;
-			for (float x = 0; x < Omega + 0.2 + Owner.velocity.Length() / 40f; x += 0.05f)
+			for (float x = 0; x < Omega + 0.2 + Player.velocity.Length() / 40f; x += 0.05f)
 			{
 				Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 				float factor = Main.rand.NextFloat(0, 1f);
@@ -94,12 +94,12 @@ public class StarDancer_smash : ClubProjSmash
 				{
 					pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 				}
-				pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Owner.velocity * factor;
+				pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Player.velocity * factor;
 				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
 				d0.noGravity = true;
 				d0.velocity = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
 			}
-			for (float x = 0; x < Omega + 0.2 + Owner.velocity.Length() / 40f; x += 0.10f)
+			for (float x = 0; x < Omega + 0.2 + Player.velocity.Length() / 40f; x += 0.10f)
 			{
 				Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 				float factor = Main.rand.NextFloat(0, 1f);
@@ -107,12 +107,12 @@ public class StarDancer_smash : ClubProjSmash
 				{
 					pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 				}
-				pos = (pos - Projectile.Center) * 0.5f + Projectile.Center - Owner.velocity * factor;
+				pos = (pos - Projectile.Center) * 0.5f + Projectile.Center - Player.velocity * factor;
 				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
 				d0.noGravity = true;
 				d0.velocity = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
 			}
-			for (float x = 0; x < Omega + 0.2 + Owner.velocity.Length() / 40f; x += 0.15f)
+			for (float x = 0; x < Omega + 0.2 + Player.velocity.Length() / 40f; x += 0.15f)
 			{
 				Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 				float factor = Main.rand.NextFloat(0, 1f);
@@ -120,7 +120,7 @@ public class StarDancer_smash : ClubProjSmash
 				{
 					pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 				}
-				pos = (pos - Projectile.Center) * 0.2f + Projectile.Center - Owner.velocity * factor;
+				pos = (pos - Projectile.Center) * 0.2f + Projectile.Center - Player.velocity * factor;
 				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
 				d0.noGravity = true;
 				d0.velocity = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;

@@ -24,7 +24,7 @@ public class IchorClub_smash : ClubProjSmash
 	public override void AI()
 	{
 		base.AI();
-		for (float x = 0; x < Omega + 0.6 + Owner.velocity.Length() / 180f; x += 0.05f)
+		for (float x = 0; x < Omega + 0.6 + Player.velocity.Length() / 180f; x += 0.05f)
 		{
 			Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 			float factor = Main.rand.NextFloat(0, 1f);
@@ -32,7 +32,7 @@ public class IchorClub_smash : ClubProjSmash
 			{
 				pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 			}
-			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Owner.velocity * factor;
+			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Player.velocity * factor;
 			Vector2 vel = Vector2.zeroVector;
 			if (SmashTrailVecs.Count > 1)
 			{
@@ -42,7 +42,7 @@ public class IchorClub_smash : ClubProjSmash
 			{
 				vel = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2]) * factor + (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 3]) * (1 - factor);
 			}
-			vel += Owner.velocity;
+			vel += Player.velocity;
 			vel *= Main.rand.NextFloat(0.1f, 0.3f);
 			float rot = 0;
 			if (SmashTrailVecs.Count > 1)

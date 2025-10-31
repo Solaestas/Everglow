@@ -17,7 +17,7 @@ public class CurseClub_smash : ClubProjSmash
 	public override void AI()
 	{
 		base.AI();
-		for (float x = 0; x < Omega + 0.2 + Owner.velocity.Length() / 100f; x += 0.12f)
+		for (float x = 0; x < Omega + 0.2 + Player.velocity.Length() / 100f; x += 0.12f)
 		{
 			Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
 			float factor = Main.rand.NextFloat(0, 1f);
@@ -25,7 +25,7 @@ public class CurseClub_smash : ClubProjSmash
 			{
 				pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
 			}
-			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Owner.velocity * factor;
+			pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - Player.velocity * factor;
 			Vector2 vel = Vector2.zeroVector;
 			if (SmashTrailVecs.Count > 1)
 			{
@@ -35,7 +35,7 @@ public class CurseClub_smash : ClubProjSmash
 			{
 				vel = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2]) * factor + (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] - SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 3]) * (1 - factor);
 			}
-			vel += Owner.velocity;
+			vel += Player.velocity;
 			vel *= Main.rand.NextFloat(0.1f, 0.3f);
 			float rot = 0;
 			if (SmashTrailVecs.Count > 1)
@@ -51,7 +51,7 @@ public class CurseClub_smash : ClubProjSmash
 				int time = Main.rand.Next(15, 35);
 				var fire = new Flare()
 				{
-					position = Vector2.Lerp(Owner.Center, pos, Main.rand.NextFloat(0.4f, 1.25f)),
+					position = Vector2.Lerp(Player.Center, pos, Main.rand.NextFloat(0.4f, 1.25f)),
 					velocity = vel * 0.2f,
 					color = color,
 					timeleft = time,
@@ -105,7 +105,7 @@ public class CurseClub_smash : ClubProjSmash
 				velocity = vel,
 				Active = true,
 				Visible = true,
-				position = Owner.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
+				position = Player.Bottom - vel * 3 + Main.rand.NextVector2Circular(30, 30),
 				maxTime = Main.rand.Next(10, 25),
 
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.1f, 0.1f), Main.rand.NextFloat(3.6f, 30f) },
@@ -120,7 +120,7 @@ public class CurseClub_smash : ClubProjSmash
 				velocity = vel.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
 				Active = true,
 				Visible = true,
-				position = Owner.Bottom - vel * 3,
+				position = Player.Bottom - vel * 3,
 				maxTime = Main.rand.Next(6, Main.rand.Next(6, 405)),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(4f, 47.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
