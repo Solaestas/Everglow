@@ -1,18 +1,29 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class SpikeClub : ClubProj_metal
+public class SpikeClub : ClubProj
 {
-	public override void SetDef()
+	private List<Vector2> moonBladeI = [];
+	private List<Vector2> moonBladeII = [];
+	private List<Vector2> moonBladeIII = [];
+	private List<Vector2> moonBladeIV = [];
+
+	private int timeI = 60;
+	private int timeII = 60;
+	private int timeIII = 60;
+	private int timeIV = 60;
+
+	public override void SetCustomDefaults()
 	{
+		EnableReflection = true;
 		HitLength = 32f;
-		ReflectStrength = 6f;
+		ReflectionStrength = 6f;
 	}
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		modifiers.Knockback *= 0.4f;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Player player = Main.player[Projectile.owner];
@@ -20,31 +31,28 @@ public class SpikeClub : ClubProj_metal
 		Projectile.NewProjectile(null, target.Center - v * 3, v, ModContent.ProjectileType<SpikeClubSlash>(), Projectile.damage / 2, 0, player.whoAmI, Main.rand.NextFloat(-0.05f, 0.05f));
 		target.AddBuff(BuffID.Bleeding, 600);
 	}
-	internal List<Vector2> MoonBladeI = new List<Vector2>();
-	internal List<Vector2> MoonBladeII = new List<Vector2>();
-	internal List<Vector2> MoonBladeIII = new List<Vector2>();
-	internal List<Vector2> MoonBladeIV = new List<Vector2>();
-	internal int timeI = 60;
-	internal int timeII = 60;
-	internal int timeIII = 60;
-	internal int timeIV = 60;
+
 	private void DrawMoon(List<Vector2> listVec, float timeLeft)
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(listVec.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(listVec.ToList());
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (listVec.Count != 0)
+		{
 			SmoothTrail.Add(listVec.ToArray()[listVec.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
 
 		var bars = new List<Vertex2D>();
 		Color light = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
@@ -56,7 +64,10 @@ public class SpikeClub : ClubProj_metal
 			float delta = (1 - timeLeft / 60f * 0.45f) * Omega / MaxOmega + 1 - Omega / MaxOmega;
 			float maxValue = 20f;
 			if (length < maxValue)
+			{
 				delta = delta * length / maxValue + (maxValue - length) / maxValue;
+			}
+
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * delta * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + SmoothTrail[i] * Projectile.scale - Main.screenPosition, light, new Vector3(factor, 0, 0f)));
 		}
@@ -65,77 +76,64 @@ public class SpikeClub : ClubProj_metal
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	private void UpdateMoon(ref List<Vector2> listVec)
 	{
 		if (listVec.Count > 0)
 		{
 			float value = 1;
 			if (listVec.Count > 6)
+			{
 				value = 6 / (float)listVec.Count;
+			}
+
 			listVec.Add(listVec[listVec.Count - 1].RotatedBy(Omega * value));
 		}
 	}
+
 	private void ActivateMoon(ref List<Vector2> listVec)
 	{
 		if (listVec.Count > 0)
+		{
 			return;
+		}
+
 		listVec = new List<Vector2>();
 		if (Main.rand.NextBool(2))
-			listVec.Add(trailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+		{
+			listVec.Add(TrailVecs.ToList()[1] * Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+		}
 		else
 		{
-			listVec.Add(trailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
+			listVec.Add(TrailVecs.ToList()[1] * -Main.rand.NextFloat(0.95f, Math.Min(1.75f, 1 + Omega * 1.5f)));
 		}
 	}
+
 	private void DeactivateMoon(ref List<Vector2> listVec)
 	{
 		listVec.Clear();
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float point = 0;
 		Vector2 HitRange = new Vector2(HitLength, HitLength * Projectile.spriteDirection).RotatedBy(Projectile.rotation) * Projectile.scale;
 		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center - HitRange / 32f * 45f, Projectile.Center + HitRange / 32f * 45f, 2 * HitLength / 32f * Omega / 0.3f, ref point))
+		{
 			return true;
+		}
+
 		return false;
 	}
+
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
+		var bars = CreateTrailVertices(0.7f, 0.6f, useSpecialAplha: true);
+		if (bars == null)
 		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
 			return;
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
+		}
 
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.7f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		bars.Add(new Vertex2D(Projectile.Center, Color.Transparent, new Vector3(0, 0, 0)));
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.6f * Projectile.scale, Color.White, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale, Color.White, new Vector3(factor, 0, w * ReflectStrength)));
-		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone);
 
@@ -147,11 +145,16 @@ public class SpikeClub : ClubProj_metal
 		if (!Main.gamePaused)
 		{
 			if (Main.rand.NextBool(10) && Omega > 0.1f)
-				ActivateMoon(ref MoonBladeI);
-			if (MoonBladeI.Count > 20 && timeI == 60)
 			{
-				if (Main.rand.Next(MoonBladeI.Count, 50) > 44)
+				ActivateMoon(ref moonBladeI);
+			}
+
+			if (moonBladeI.Count > 20 && timeI == 60)
+			{
+				if (Main.rand.Next(moonBladeI.Count, 50) > 44)
+				{
 					timeI--;
+				}
 			}
 			if (timeI < 60)
 			{
@@ -159,16 +162,21 @@ public class SpikeClub : ClubProj_metal
 				if (timeI <= 0)
 				{
 					timeI = 60;
-					DeactivateMoon(ref MoonBladeI);
+					DeactivateMoon(ref moonBladeI);
 				}
 			}
 
 			if (Main.rand.NextBool(10) && Omega > 0.1f)
-				ActivateMoon(ref MoonBladeII);
-			if (MoonBladeII.Count > 20 && timeII == 60)
 			{
-				if (Main.rand.Next(MoonBladeII.Count, 50) > 44)
+				ActivateMoon(ref moonBladeII);
+			}
+
+			if (moonBladeII.Count > 20 && timeII == 60)
+			{
+				if (Main.rand.Next(moonBladeII.Count, 50) > 44)
+				{
 					timeII--;
+				}
 			}
 			if (timeII < 60)
 			{
@@ -176,16 +184,21 @@ public class SpikeClub : ClubProj_metal
 				if (timeII <= 0)
 				{
 					timeII = 60;
-					DeactivateMoon(ref MoonBladeII);
+					DeactivateMoon(ref moonBladeII);
 				}
 			}
 
 			if (Main.rand.NextBool(10) && Omega > 0.1f)
-				ActivateMoon(ref MoonBladeIII);
-			if (MoonBladeIII.Count > 20 && timeIII == 60)
 			{
-				if (Main.rand.Next(MoonBladeIII.Count, 50) > 44)
+				ActivateMoon(ref moonBladeIII);
+			}
+
+			if (moonBladeIII.Count > 20 && timeIII == 60)
+			{
+				if (Main.rand.Next(moonBladeIII.Count, 50) > 44)
+				{
 					timeIII--;
+				}
 			}
 			if (timeIII < 60)
 			{
@@ -193,15 +206,20 @@ public class SpikeClub : ClubProj_metal
 				if (timeIII <= 0)
 				{
 					timeIII = 60;
-					DeactivateMoon(ref MoonBladeIII);
+					DeactivateMoon(ref moonBladeIII);
 				}
 			}
 			if (Main.rand.NextBool(10) && Omega > 0.1f)
-				ActivateMoon(ref MoonBladeIV);
-			if (MoonBladeIV.Count > 20 && timeIV == 60)
 			{
-				if (Main.rand.Next(MoonBladeIV.Count, 50) > 44)
+				ActivateMoon(ref moonBladeIV);
+			}
+
+			if (moonBladeIV.Count > 20 && timeIV == 60)
+			{
+				if (Main.rand.Next(moonBladeIV.Count, 50) > 44)
+				{
 					timeIV--;
+				}
 			}
 			if (timeIV < 60)
 			{
@@ -209,19 +227,19 @@ public class SpikeClub : ClubProj_metal
 				if (timeIV <= 0)
 				{
 					timeIV = 60;
-					DeactivateMoon(ref MoonBladeIV);
+					DeactivateMoon(ref moonBladeIV);
 				}
 			}
 
-			UpdateMoon(ref MoonBladeI);
-			UpdateMoon(ref MoonBladeIV);
-			UpdateMoon(ref MoonBladeIII);
-			UpdateMoon(ref MoonBladeIV);
+			UpdateMoon(ref moonBladeI);
+			UpdateMoon(ref moonBladeIV);
+			UpdateMoon(ref moonBladeIII);
+			UpdateMoon(ref moonBladeIV);
 		}
 
-		DrawMoon(MoonBladeI, timeI);
-		DrawMoon(MoonBladeII, timeII);
-		DrawMoon(MoonBladeIII, timeIII);
-		DrawMoon(MoonBladeIV, timeIV);
+		DrawMoon(moonBladeI, timeI);
+		DrawMoon(moonBladeII, timeII);
+		DrawMoon(moonBladeIII, timeIII);
+		DrawMoon(moonBladeIV, timeIV);
 	}
 }

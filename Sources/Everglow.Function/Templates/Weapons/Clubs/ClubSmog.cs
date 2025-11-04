@@ -4,11 +4,11 @@ using Everglow.Commons.VFX;
 
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
-public class Smog_clubPipeline : Pipeline
+public class ClubSmogPipeline : Pipeline
 {
 	public override void Load()
 	{
-		effect = ModAsset.Smog_club;
+		effect = ModAsset.ClubSmog;
 	}
 
 	public override void BeginRender()
@@ -19,7 +19,7 @@ public class Smog_clubPipeline : Pipeline
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uNoise"].SetValue(ModAsset.Noise_flame_0.Value);
 		effect.Parameters["uLine"].SetValue(ModAsset.TrailV.Value);
-		Ins.Batch.BindTexture<Vertex2D>(ModAsset.Smog_club_Heatmap.Value);
+		Ins.Batch.BindTexture<Vertex2D>(ModAsset.ClubSmog_Heatmap.Value);
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.LinearClamp, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
@@ -30,8 +30,8 @@ public class Smog_clubPipeline : Pipeline
 	}
 }
 
-[Pipeline(typeof(Smog_clubPipeline))]
-public class Smog_club_front : Visual
+[Pipeline(typeof(ClubSmogPipeline))]
+public class ClubSmog : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -42,9 +42,8 @@ public class Smog_club_front : Visual
 	public float timer;
 	public float maxTime;
 	public float scale;
-	public float alpha;
 
-	public Smog_club_front()
+	public ClubSmog()
 	{
 	}
 
@@ -85,7 +84,6 @@ public class Smog_club_front : Visual
 		{
 			for (int i = 1; i < 3; i++)
 			{
-
 				var lightColorWithPos = new Color(1f, 1f, 1f, 0);
 				bars.Add(position, lightColorWithPos, new Vector3(0, (i + 15 - len) / 75f + timer / 15000f, fx));
 				bars.Add(position, lightColorWithPos, new Vector3(1, (i + 15 - len) / 75f + timer / 15000f, fx));

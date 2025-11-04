@@ -1,11 +1,16 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class MeteorClub_smash : ClubProj_Smash_metal
+public class MeteorClub_smash : ClubProjSmash
 {
-	public override string TrailColorTex() => "Everglow/" + ModAsset.MeteorClub_glow_Path;
-	public override string Texture => "Everglow/" + ModAsset.MeteorClub_Path;
+	public override string Texture => ModAsset.MeteorClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
+
+	public override string TrailColorTex() => ModAsset.MeteorClub_glow_Mod;
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		int type = DustID.Flare;
@@ -17,21 +22,52 @@ public class MeteorClub_smash : ClubProj_Smash_metal
 		}
 		target.AddBuff(BuffID.OnFire, 300);
 	}
-	public override void DrawTrail2(Color color)
-	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs2.ToList());//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs2.Count != 0)
-			SmoothTrail.Add(trailVecs2.ToArray()[trailVecs2.Count - 1]);
 
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+	public override void AI()
+	{
+		base.AI();
+		Player player = Main.player[Projectile.owner];
+		if (SmashTrailVecs.Count > 0)
+		{
+			int type = DustID.Torch;
+			for (float x = 0; x < Omega + 0.2 + player.velocity.Length() / 40f; x += 0.05f)
+			{
+				Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
+				float factor = Main.rand.NextFloat(0, 1f);
+				if (SmashTrailVecs.Count > 1)
+				{
+					pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
+				}
+				pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - player.velocity * factor;
+				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
+				d0.noGravity = true;
+				d0.velocity = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
+			}
+
+			for (float x = 0; x < Omega + 0.2 + player.velocity.Length() / 40f; x += 0.15f)
+			{
+				Vector2 pos = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1]) / 2f;
+				float factor = Main.rand.NextFloat(0, 1f);
+				if (SmashTrailVecs.Count > 1)
+				{
+					pos = SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] * factor + SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 2] * (1 - factor);
+				}
+				pos = (pos - Projectile.Center) * 0.24f + Projectile.Center - player.velocity * factor;
+				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
+				d0.noGravity = true;
+				d0.velocity = (SmashTrailVecs.ToArray()[SmashTrailVecs.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
+			}
+		}
+	}
+
+	public override void DrawSmashTrail(Color color)
+	{
+		if (!SmashTrailVecs.Smooth(out var smoothedTrail))
+		{
 			return;
-		Vector2[] trail = SmoothTrail.ToArray();
+		}
+
+		var length = smoothedTrail.Count;
 		var bars = new List<Vertex2D>();
 
 		for (int i = 0; i < length; i++)
@@ -43,50 +79,13 @@ public class MeteorClub_smash : ClubProj_Smash_metal
 				c0 = Color.Transparent;
 			}
 			bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, c0, new Vector3(0, 1, 0f)));
-			bars.Add(new Vertex2D(trail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+			bars.Add(new Vertex2D(smoothedTrail[i] - Main.screenPosition, c0, new Vector3(1, 0, 0)));
 		}
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.MeteorClub_glow.Value;
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-
-		base.DrawTrail2(color);
-	}
-	public override void AI()
-	{
-		base.AI();
-		Player player = Main.player[Projectile.owner];
-		if (trailVecs2.Count > 0)
-		{
-			int type = DustID.Torch;
-			for (float x = 0; x < Omega + 0.2 + player.velocity.Length() / 40f; x += 0.05f)
-			{
-				Vector2 pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] + trailVecs2.ToArray()[trailVecs2.Count - 1]) / 2f;
-				float factor = Main.rand.NextFloat(0, 1f);
-				if (trailVecs2.Count > 1)
-				{
-					pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] * factor + trailVecs2.ToArray()[trailVecs2.Count - 2] * (1 - factor));
-				}
-				pos = (pos - Projectile.Center) * 0.9f + Projectile.Center - player.velocity * factor;
-				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
-				d0.noGravity = true;
-				d0.velocity = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
-			}
-
-			for (float x = 0; x < Omega + 0.2 + player.velocity.Length() / 40f; x += 0.15f)
-			{
-				Vector2 pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] + trailVecs2.ToArray()[trailVecs2.Count - 1]) / 2f;
-				float factor = Main.rand.NextFloat(0, 1f);
-				if (trailVecs2.Count > 1)
-				{
-					pos = (trailVecs2.ToArray()[trailVecs2.Count - 1] * factor + trailVecs2.ToArray()[trailVecs2.Count - 2] * (1 - factor));
-				}
-				pos = (pos - Projectile.Center) * 0.24f + Projectile.Center - player.velocity * factor;
-				var d0 = Dust.NewDustDirect(pos - new Vector2(4)/*Dust的Size=8x8*/, 0, 0, type, 0, 0, 150, default, Main.rand.NextFloat(0.9f, 1.2f));
-				d0.noGravity = true;
-				d0.velocity = (trailVecs2.ToArray()[trailVecs2.Count - 1] - Projectile.Center).RotatedBy(MathHelper.PiOver2) / 150f;
-			}
-		}
+		base.DrawSmashTrail(color);
 	}
 }

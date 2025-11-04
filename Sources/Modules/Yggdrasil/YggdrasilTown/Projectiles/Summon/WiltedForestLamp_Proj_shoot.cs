@@ -11,9 +11,8 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 {
 	public override string Texture => Commons.ModAsset.Empty_Mod;
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
 		Projectile.timeLeft = 12000;
 		Projectile.aiStyle = -1;
 		Projectile.friendly = true;
@@ -27,7 +26,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		TrailColor = new Color(0.7f, 0.7f, 0.2f, 0);
 		TrailWidth = 6;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
+		TrailLength = 40;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 180000;
 	}
 
@@ -35,7 +34,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 
 	public override void OnSpawn(IEntitySource source) => base.OnSpawn(source);
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		Player player = Main.player[Projectile.owner];
 		NPC npc = Projectile.FindTargetWithinRange(800);
@@ -63,7 +62,6 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 				ai = new float[] { Main.rand.NextFloat(1f, 8f) },
 			};
 			Ins.VFXManager.Add(dustVFX);
-			base.AI();
 			return;
 		}
 		OldVel = Projectile.velocity;
@@ -75,7 +73,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		float betaVel = Vector3.Cross(new Vector3(oldOldVel / 12f, 0), new Vector3(OldVel / 12f, 0)).Z;
 		betaVel = MathF.Asin(betaVel);
 		betaVel = omegaVel - betaVel;
-		if (TimeTokill <= 0 && Projectile.timeLeft < 11998)
+		if (TimeAfterEntityDestroy <= 0 && Projectile.timeLeft < 11998)
 		{
 			var dustVFX = new Leaf_VFX
 			{
@@ -93,50 +91,23 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			Ins.VFXManager.Add(dustVFX);
 		}
 		var colorLight = new Vector3(0.4f, 0.7f, 0.2f);
-		if(TimeTokill > 0)
+		if(TimeAfterEntityDestroy > 0)
 		{
-			colorLight *= TimeTokill / 40f;
+			colorLight *= TimeAfterEntityDestroy / 40f;
 		}
 		Lighting.AddLight(Projectile.Center, colorLight);
-		base.AI();
 	}
 
-	public override bool PreDraw(ref Color lightColor)
-	{
-		DrawTrail();
-		if (TimeTokill <= 0)
-		{
-			DrawSelf();
-		}
-		return false;
-	}
-
-	public override void DrawSelf() => base.DrawSelf();
-
+	/// <summary>
+	/// This really a special projectile, so it's unavoidable to be overrided.
+	/// </summary>
 	public override void DrawTrail()
 	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		if (SmoothedOldPos.Count <= 0 || TrailLength <= 0)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-			{
-				break;
-			}
-
-			unSmoothPos.Add(Projectile.oldPos[i]);
-		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			SmoothTrail.Add(smoothTrail_current[x]);
-		}
-		if (unSmoothPos.Count != 0)
-		{
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
+			return;
 		}
 
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
 		var bars = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
 		var bars3 = new List<Vertex2D>();
@@ -148,7 +119,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		var bars7 = new List<Vertex2D>();
 		var bars8 = new List<Vertex2D>();
 		var bars9 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
+		for (int i = -1; i < SmoothedOldPos.Count; ++i)
 		{
 			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
 			if (mulFac > 1f)
@@ -156,19 +127,23 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 				mulFac = 1f;
 			}
 			float timeValue = (float)Main.time * 0.0005f;
-			float factor = i / (float)SmoothTrail.Count * mulFac;
+			float factor = i / (float)SmoothedOldPos.Count * mulFac;
 			float width = TrailWidthFunction(factor);
 			factor += timeValue;
 
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			var drawC = Color.Lerp(TrailColor, new Color(0.4f, 0.1f, 0f, 0f), i / (float)SmoothTrail.Count);
+			Vector2 drawPos = Projectile.Center;
+			if (i >= 0)
+			{
+				drawPos = SmoothedOldPos[i];
+			}
+			var drawC = Color.Lerp(TrailColor, new Color(0.4f, 0.1f, 0f, 0f), i / (float)SmoothedOldPos.Count);
 
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			bars.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width));
+			bars.Add(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width));
+			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width));
+			bars2.Add(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width));
+			bars3.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width));
+			bars3.Add(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width));
 
 			var coverColor = new Color(0.05f, 0.7f, 0.3f, 0);
 			Vector4 coverEnvironment = coverColor.ToVector4() * Lighting.GetColor(drawPos.ToTileCoordinates()).ToVector4();
@@ -177,35 +152,35 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			{
 				coverColor *= MathF.Max(0, (25 - i) / 13f);
 			}
-			if (i > SmoothTrail.Count - 5)
+			if (i > SmoothedOldPos.Count - 5)
 			{
-				coverColor *= (SmoothTrail.Count - i) / 5f;
+				coverColor *= (SmoothedOldPos.Count - i) / 5f;
 			}
-			float factor2 = i / (float)SmoothTrail.Count * mulFac * 4.5f;
+			float factor2 = i / (float)SmoothedOldPos.Count * mulFac * 4.5f;
 			factor2 -= timeValue * 100;
 			float headWidth = 2f;
-			bars4.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 0f, width)));
-			bars4.Add(new Vertex2D(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width)));
-			bars5.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 1, width)));
-			bars5.Add(new Vertex2D(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width)));
-			bars6.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 0, width)));
-			bars6.Add(new Vertex2D(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width)));
+			bars4.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 0f, width));
+			bars4.Add(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width));
+			bars5.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 1, width));
+			bars5.Add(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width));
+			bars6.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth * headWidth, coverColor, new Vector3(factor2 + timeValue, 0, width));
+			bars6.Add(drawPos, coverColor, new Vector3(factor2 + timeValue, 0.5f, width));
 
 			Color coverColor2 = Color.Black;
 			if (i > 13)
 			{
 				coverColor2 *= MathF.Max(0, (25 - i) / 13f);
 			}
-			if (i > SmoothTrail.Count - 5)
+			if (i > SmoothedOldPos.Count - 5)
 			{
-				coverColor2 *= (SmoothTrail.Count - i) / 5f;
+				coverColor2 *= (SmoothedOldPos.Count - i) / 5f;
 			}
-			bars7.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 0f, width)));
-			bars7.Add(new Vertex2D(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width)));
-			bars8.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 1, width)));
-			bars8.Add(new Vertex2D(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width)));
-			bars9.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 0, width)));
-			bars9.Add(new Vertex2D(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width)));
+			bars7.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 0f, width));
+			bars7.Add(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width));
+			bars8.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 1, width));
+			bars8.Add(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width));
+			bars9.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth * headWidth, coverColor2, new Vector3(factor2 + timeValue, 0, width));
+			bars9.Add(drawPos, coverColor2, new Vector3(factor2 + timeValue, 0.5f, width));
 		}
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
@@ -269,14 +244,19 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 		}
 
 		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public override void DrawTrailDark()
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
 
-	public override void KillMainStructure()
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
+	public override void DestroyEntityEffect()
 	{
 		for (int i = 0; i < 18; i++)
 		{
@@ -284,6 +264,5 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			dust.velocity = Projectile.velocity.RotateRandom(0.4) * Main.rand.NextFloat(0.7f, 1.1f);
 			dust.scale = Main.rand.NextFloat(0.3f, 1.1f);
 		}
-		base.KillMainStructure();
 	}
 }

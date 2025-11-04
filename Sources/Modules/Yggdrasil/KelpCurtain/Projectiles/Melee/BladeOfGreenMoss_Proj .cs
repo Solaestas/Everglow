@@ -9,11 +9,11 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	public override void SetDef()
 	{
 		maxAttackType = 4;
-		trailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
-		AutoEnd = false;
-		CanLongLeftClick = true;
-		ClickMaxtimer = 240;
+		maxSlashTrailLength = 20;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		autoEnd = false;
+		canLongLeftClick = true;
+		maxClickTimer = 240;
 	}
 
 	public override string TrailShapeTex()
@@ -47,25 +47,25 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	{
 		DrawTrail(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
-		if (timer < 60 && attackType == 3)
+		if (timer < 60 && currantAttackType == 3)
 		{
 			float value = timer;
 			value /= 4f;
 			value = Math.Min(value, (60 - timer) * 0.3f) / 5;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + mainVec.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.4f;
-			Lighting.AddLight(Projectile.Center + mainVec * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection*0.175f) * 0.4f;
+			Lighting.AddLight(Projectile.Center+ mainAxisDirection * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value*10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
-		if (timer < 60 && attackType == 4)
+		if (timer < 60 && currantAttackType == 4)
 		{
 			float value = timer;
 			value /= 4f;
 			value = Math.Min(value, (60 - timer) * 0.3f) / 3;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + mainVec.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.35f;
-			Lighting.AddLight(Projectile.Center + mainVec * 0.35f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.35f;
+			Lighting.AddLight(Projectile.Center + mainAxisDirection * 0.35f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
@@ -81,7 +81,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 		{
 		}
 
-		useTrail = true;
+		useSlash = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -120,17 +120,17 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			}
 		}
 
-		if (attackType <= 2)
+		if (currantAttackType <= 2)
 		{
 			if (timer < 30)
 			{
 				Projectile.ai[0] = GetAngToMouse();
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(90, targetRot, -0.75f, Projectile.ai[0]), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(90, targetRot, -0.75f, Projectile.ai[0]), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == 8)
 			{
@@ -140,10 +140,10 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 			if (timer > 30 && timer < 45)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.0f, 0.36f, 0.24f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.0f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.35f;
-				mainVec = Vector2Elipse(100, Projectile.rotation, -0.75f, Projectile.ai[0]);
+				mainAxisDirection = Vector2Elipse(100, Projectile.rotation, -0.75f, Projectile.ai[0]);
 			}
 			if (timer > 50)
 			{
@@ -159,15 +159,15 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (attackType == 3)
+		if (currantAttackType == 3)
 		{
 			if (timer < 60)
 			{
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(120, targetRot, 0, 0, 1000), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, 0, 0, 1000), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 
 			if (timer % 10 == 0 && timer > 60)
@@ -177,10 +177,10 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 			if (timer > 60 && timer < 90)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.0f, 0.36f, 0.24f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.0f, 0.36f, 0.24f);
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.425f;
-				mainVec = Vector2Elipse(120, Projectile.rotation, 0, 0, 1000);
+				mainAxisDirection = Vector2Elipse(120, Projectile.rotation, 0, 0, 1000);
 			}
 			if (timer > 100)
 			{
@@ -197,26 +197,27 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			}
 			if (timer % 2 == 0 && timer >= 60 && Main.rand.NextBool(4))
 			{
-				Vector2 pos = player.Center + mainVec * Main.rand.NextFloat(0.15f, 0.25f);
-				Vector2 v = mainVec * Main.rand.NextFloat(0.01f, 0.015f);
+				Vector2 pos = player.Center + mainAxisDirection * Main.rand.NextFloat(0.15f, 0.25f);
+				Vector2 v = mainAxisDirection * Main.rand.NextFloat(0.01f, 0.015f);
 				int type = Main.rand.Next(567, 572);
 
 				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), pos, v, type, Projectile.damage / 4, Projectile.knockBack * 0.25f, Projectile.owner);
 				p.timeLeft = (int)(p.timeLeft * 1.5f);
 			}
 		}
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			float BodyRotation;
 			if (timer < 60)
 			{
-				CanIgnoreTile = true;
-				useTrail = false;
+				ignoreTile = true;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(120, targetRot, -1.2f), 0.1f);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, -1.2f), 0.1f );
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
+
 			}
 
 			if (timer == 65)
@@ -226,13 +227,13 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 			if (timer > 60)
 			{
-				isAttacking = true;
+				canHit = true;
 				drawScaleFactor = 0.6f;
 				if (timer < 75)
 				{
-					isAttacking = true;
-					mainVec = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
-					Projectile.rotation += Projectile.spriteDirection * 0.42f;
+					canHit = true;
+					mainAxisDirection = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
+					Projectile.rotation += Projectile.spriteDirection * 0.42f ;
 				}
 
 				BodyRotation = (float)Math.Sin((timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;
@@ -253,11 +254,11 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				End();
 			}
 		}
-		if (isAttacking)
+		if (canHit)
 		{
 			for (int i = 0; i < 5; i++)
 			{
-				Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainVec * Main.rand.NextFloat(0.5f, 1.25f), 100, 100, ModContent.DustType<YggdrasilCyatheaLeafDust>(), 0, 0, 0, default, Main.rand.NextFloat(1f, 2f));
+				Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(20, 20) + mainAxisDirection * Main.rand.NextFloat(0.5f, 1.25f), 100, 100, ModContent.DustType<YggdrasilCyatheaLeafDust>(), 0, 0, 0, default, Main.rand.NextFloat(1f, 2f));
 				d.velocity += player.velocity * 0.5f + Main.rand.NextVector2Unit() * 3;
 				d.noGravity = true;
 			}
@@ -267,16 +268,14 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	public override void DrawTrail(Color color)
 	{
 		base.DrawTrail(color);
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
 			SmoothTrail.Add(smoothTrail_current[x]);
 		}
-		if (trailVecs.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-		}
+		if (slashTrail.Count != 0)
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
@@ -349,7 +348,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
-		if (attackType == 4)
+
+		if (currantAttackType == 4)
 		{
 			modifiers.FinalDamage *= 2f;
 

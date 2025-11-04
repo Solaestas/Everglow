@@ -5,7 +5,7 @@ using Terraria.Audio;
 
 namespace Everglow.SpellAndSkull.Projectiles.BookofSkulls;
 
-internal class BoneSpike : ModProjectile, IWarpProjectile
+public class BoneSpike : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -288,10 +288,10 @@ internal class BoneSpike : ModProjectile, IWarpProjectile
 		{
 			Pdark = (Projectile.timeLeft - 1750) / 30f;
 		}
-		var c1 = new Color(0.25f * Pdark, 0.11f * Pdark * Pdark, 0f, 0f);
+		var c1 = new Color(0.25f * Pdark, 0.011f * Pdark * Pdark, 0f, 0f);
 		DrawTexLineColor(spriteBatch, Projectile.Center + new Vector2(0, -70).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c1, 14f * Pwidth, Power);
 		DrawTexLineColor(spriteBatch, Projectile.Center, Projectile.Center + new Vector2(0, 70).RotatedBy(Projectile.rotation), c1, Color.Transparent, 14f * Pwidth, Power);
-		var c2 = new Color(Projectile.rotation / 6.283f, 0.3f, 0f, 0f);
+		var c2 = new Color(Projectile.rotation / 6.283f, 0.03f, 0f, 0f);
 		if (shot)
 		{
 			DrawTexLineColor(spriteBatch, Projectile.Center + new Vector2(0, -350).RotatedBy(Projectile.rotation), Projectile.Center, Color.Transparent, c2, 14f * Pwidth, Power);

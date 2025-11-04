@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
-class WorldHit : ModProjectile, IWarpProjectile
+internal class WorldHit : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -18,6 +18,7 @@ class WorldHit : ModProjectile, IWarpProjectile
 		Projectile.tileCollide = false;
 		Projectile.extraUpdates = 3;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		for (int f = 0; f < Projectile.ai[0] * 30f; f++)
@@ -28,10 +29,6 @@ class WorldHit : ModProjectile, IWarpProjectile
 		}
 	}
 
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
-
-	}
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
@@ -47,16 +44,18 @@ class WorldHit : ModProjectile, IWarpProjectile
 			}
 			DrawLine[i, 0] += DrawLineVelocity[i];
 			DrawLineVelocity[i] *= 0.9f;
-			for (int j = 17; j > 0; j--)//记录每一组流星火位置
+			for (int j = 17; j > 0; j--)// 记录每一组流星火位置
 			{
 				DrawLine[i, j] = DrawLine[i, j - 1];
 			}
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	private Effect ef;
 	internal float radius = 0;
 	internal float FirstRo = 0;
@@ -67,9 +66,15 @@ class WorldHit : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		if (FirstRo == 0)
+		{
 			FirstRo = Main.rand.NextFloat(0, 6.283f);
+		}
+
 		if (SecondRo == 0)
+		{
 			SecondRo = Main.rand.NextFloat(0, 6.283f);
+		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 		var bars = new List<Vertex2D>();
@@ -88,7 +93,9 @@ class WorldHit : ModProjectile, IWarpProjectile
 			var w = MathHelper.Lerp(1f, 0.05f, 0.5f);
 
 			if (width < radius)
+			{
 				bars.Add(new Vertex2D(Projectile.Center, color, new Vector3(factor, 0, w)));
+			}
 			else
 			{
 				bars.Add(new Vertex2D(vDp + Projectile.Center + normalDir * width, color, new Vector3(factor, 1, w)));
@@ -112,19 +119,19 @@ class WorldHit : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
 			Main.graphics.GraphicsDevice.RasterizerState = originalState;
-
 		}
 		for (int i = 0; i < 23; i++)
 		{
-
 			var barsII = new List<Vertex2D>();
-
 
 			for (int z = 1; z < 18; ++z)
 			{
-				float widthII = Math.Clamp((DrawLine[i, z] - DrawLine[i, z - 1]).Length(), 0, 20 * Projectile.ai[0]);//宽度为距离(速度决定,上限20)
+				float widthII = Math.Clamp((DrawLine[i, z] - DrawLine[i, z - 1]).Length(), 0, 20 * Projectile.ai[0]); // 宽度为距离(速度决定,上限20)
 				if (z > 13)
+				{
 					widthII *= (18 - z) / 5f;
+				}
+
 				var normalDir = Vector2.Normalize(DrawLine[i, z] - DrawLine[i, z - 1]).RotatedBy(1.57);
 				var factor = z / 18f;
 				var w = MathHelper.Lerp(1f, 0.05f, 0.5f);

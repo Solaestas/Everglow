@@ -3,7 +3,7 @@ using Terraria.Audio;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
 
 public class BoneShoot : ModProjectile, IWarpProjectile
-{ 
+{
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -19,7 +19,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		if(Projectile.timeLeft == 199)
+		if (Projectile.timeLeft == 199)
 		{
 			SoundEngine.PlaySound(SoundID.Item71.WithVolume(Projectile.ai[0] / 5f), Projectile.position);
 			Vector2 vTOMouse = Main.MouseWorld - Projectile.Center;
@@ -35,7 +35,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 
 	public override void PostDraw(Color lightColor)
 	{
-		if(Projectile.timeLeft > 200)
+		if (Projectile.timeLeft > 200)
 		{
 			return;
 		}
@@ -46,6 +46,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 		DrawTexCircle((1 - timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(timeValue, timeValue, timeValue, timeValue) * 0.5f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_black.Value);
 		DrawTexCircle((1 - timeValue) * 24 * Projectile.ai[0], 8 * (1 - timeValue) * Projectile.ai[0], new Color(0.6f * timeValue, 0.6f * timeValue, 0.4f * timeValue, 0f), Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (Projectile.timeLeft > 200)
@@ -63,6 +64,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 
 		return false;
 	}
+
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -81,6 +83,7 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -89,7 +92,6 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 		c0.R = 0;
 		for (int h = 0; h < radius / 2; h += 1)
 		{
-
 			c0.R = (byte)(h / radius * 2 * 255);
 			circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 1, 0)));
 			circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(h / radius * Math.PI * 4 + addRot), c0, new Vector3(h * 2 / radius, 0, 0)));
@@ -99,8 +101,11 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), c0, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), c0, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		if (Projectile.timeLeft > 200)
@@ -110,17 +115,24 @@ public class BoneShoot : ModProjectile, IWarpProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		if (Projectile.ai[0] >= 10)
+		{
 			colorV *= Projectile.ai[0] / 10f;
+		}
+
 		Texture2D t = Commons.ModAsset.Trail.Value;
 		float width = 60;
 		if (Projectile.timeLeft < 60)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.4f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, value * 36 * Projectile.ai[0], width * 0.6f * Projectile.ai[0], new Color(colorV, colorV * 0.04f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 	}

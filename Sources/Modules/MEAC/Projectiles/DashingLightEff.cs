@@ -22,12 +22,13 @@ public class DashingLightEff : ModProjectile, IWarpProjectile
 		Projectile.extraUpdates = 2;
 		Projectile.hide = true;
 		Projectile.DamageType = DamageClass.Melee;
-		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 100;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 1000;
 		oldPos = new Vector2[25];
 	}
 
 	private Vector2[] oldPos = new Vector2[25];
 	private Vector2 vec = Vector2.Zero;
+
 	public override void AI()
 	{
 		Lighting.AddLight(Projectile.Center + Projectile.velocity * (40 - Projectile.timeLeft) * 0.6f, 0.9f, 0.6f, 0);
@@ -35,7 +36,10 @@ public class DashingLightEff : ModProjectile, IWarpProjectile
 		if (Projectile.ai[0] == 0)
 		{
 			if (Projectile.timeLeft > 20)
+			{
 				vec = player.Center + (40f - Projectile.timeLeft) * Projectile.velocity * 0.2f;
+			}
+
 			Projectile.Center = vec;
 		}
 		else
@@ -59,11 +63,12 @@ public class DashingLightEff : ModProjectile, IWarpProjectile
 			Projectile.friendly = false;
 		}
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		overPlayers.Add(index);
-
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float timeValue = 1f;
@@ -80,23 +85,25 @@ public class DashingLightEff : ModProjectile, IWarpProjectile
 		Color alphaColor = Color.White;
 		alphaColor.A = 0;
 		alphaColor.R = (byte)(((Projectile.rotation + MathHelper.TwoPi + MathHelper.PiOver4 * 4) % MathHelper.TwoPi) / MathHelper.TwoPi * 255);
-		alphaColor.G = (byte)(Projectile.timeLeft * 3);
+		alphaColor.G = (byte)(Projectile.timeLeft * 0.3f);
 
 		Color alphaColor2 = alphaColor;
 		alphaColor2.G = 0;
 
 		List<Vertex2D> bars = new List<Vertex2D>
-			{
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R / 255f, 0.5f, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R / 255f, 0.5f, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 1, 1))
-			};
+		{
+			new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R / 255f, 0.05f, 0, 0), new Vector3(1 + time, 0, 0)),
+			new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R / 255f, 0.05f, 0, 0), new Vector3(1 + time, 1, 0)),
+			new Vertex2D(middle + normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+			new Vertex2D(middle - normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+			new Vertex2D(end + normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 0, 1)),
+			new Vertex2D(end - normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 1, 1)),
+		};
 		spriteBatch.Draw(Commons.ModAsset.Noise_spiderNet.Value, bars, PrimitiveType.TriangleStrip);
 	}
+
 	public int collisionTimer = 0;
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Vector2 drawCenter = Projectile.Center + Vector2.Normalize(Projectile.velocity) * (100 - Projectile.timeLeft) * 3;

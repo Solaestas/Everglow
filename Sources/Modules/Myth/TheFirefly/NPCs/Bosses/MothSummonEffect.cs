@@ -6,13 +6,18 @@ namespace Everglow.Myth.TheFirefly.NPCs.Bosses;
 public class MothSummonEffect : TrailingProjectile
 {
 	public override string Texture => Commons.ModAsset.LightPoint_Mod;
+
 	public NPC Moth;
-	public override void SetDef()
+
+	public override void SetCustomDefaults()
 	{
 		Projectile.timeLeft = 600;
 		Projectile.tileCollide = false;
-		base.SetDef();
+		TrailLength = 40;
+		TrailTexture = Commons.ModAsset.Trail_10.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_10_black.Value;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		bool hasMoth = false;
@@ -35,58 +40,54 @@ public class MothSummonEffect : TrailingProjectile
 		Projectile.timeLeft = Main.rand.Next(510, 560);
 		base.OnSpawn(source);
 	}
-	public override void AI()
+
+	public override void Behaviors()
 	{
 		if (!Moth.active || Moth.type != ModContent.NPCType<CorruptMoth>())
 		{
 			Projectile.active = false;
 		}
-		Timer++;
-		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
-		if (TimeTokill >= 0 && TimeTokill <= 2)
-			Projectile.Kill();
-		TimeTokill--;
-		if (TimeTokill < 0)
+		if (Projectile.timeLeft < 500)
 		{
-			if (Projectile.timeLeft < 500)
+			Vector2 toTarget = Moth.Center - Projectile.Center - Projectile.velocity;
+			if (toTarget.Length() < 35f)
 			{
-				Vector2 toTarget = Moth.Center - Projectile.Center - Projectile.velocity;
-				if (toTarget.Length() < 35f)
+				DestroyEntity();
+				CorruptMoth cMoth = Moth.ModNPC as CorruptMoth;
+				if (cMoth != null)
 				{
-					KillMainStructure();
-					CorruptMoth cMoth = Moth.ModNPC as CorruptMoth;
-					if (cMoth != null)
-					{
-						cMoth.Timer += 10;
-					}
-				}
-				Vector2 targetVel = Vector2.Normalize(toTarget) * 15f;
-				Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVel, 0.05f);
-
-			}
-			else
-			{
-				Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
-				if (Projectile.velocity.Length() > 3f)
-				{
-					Projectile.velocity *= 0.9f;
+					cMoth.Timer += 10;
 				}
 			}
+			Vector2 targetVel = Vector2.Normalize(toTarget) * 15f;
+			Projectile.velocity = Vector2.Lerp(Projectile.velocity, targetVel, 0.05f);
 		}
 		else
 		{
-			Projectile.velocity *= 0f;
-			return;
+			Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
+			if (Projectile.velocity.Length() > 3f)
+			{
+				Projectile.velocity *= 0.9f;
+			}
 		}
 	}
-	public override bool PreDraw(ref Color lightColor)
+
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		DrawTrail();
-		if (TimeTokill <= 0)
+		if (style == 1)
 		{
-			var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
-			Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
+			float value = index / (float)SmoothedOldPos.Count;
+			Color color = Color.Lerp(new Color(0, 126, 255, 0), new Color(135, 0, 155, 0), value);
+			return color;
 		}
-		return false;
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
+	public override void DrawSelf()
+	{
+		var texMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
+		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition, null, TrailColor, Projectile.rotation, texMain.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 	}
 }

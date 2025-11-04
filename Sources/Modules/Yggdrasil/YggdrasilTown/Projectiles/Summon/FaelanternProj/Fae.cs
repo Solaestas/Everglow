@@ -1,5 +1,4 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Terraria.DataStructures;
 
@@ -21,8 +20,7 @@ public class Fae : TrailingProjectile
 
 	public int state = (int)State.Idle;
 
-
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 26;
 		Projectile.height = 26;
@@ -35,14 +33,12 @@ public class Fae : TrailingProjectile
 		Projectile.DamageType = DamageClass.Summon;
 		Projectile.gfxOffY = 7;
 
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
+		TrailLength = 30;
 		TrailColor = new Color(0.13f, 0.976f, 0.977f, 0f);
-		TrailWidth = 5f;
+		TrailWidth = 20f;
 		SelfLuminous = true;
-		TrailTexture = Commons.ModAsset.Trail_2_black.Value;
+		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
-		TrailShader = Commons.ModAsset.Trailing.Value;
 	}
 
 	public override bool? CanDamage()
@@ -58,11 +54,10 @@ public class Fae : TrailingProjectile
 
 	private Projectile owner;
 	private NPC target;
-	private int timer = 0;
 
 	public CoroutineManager _coroutineManager = new CoroutineManager();
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		Lighting.AddLight(Projectile.Center, 0.13f, 0.976f, 0.977f);
 		owner = Main.projectile[(int)Projectile.ai[0]];
@@ -70,10 +65,7 @@ public class Fae : TrailingProjectile
 		{
 			Projectile.Kill();
 		}
-
-
-		timer++;
-		if (timer % 3 == 0)
+		if (Timer % 3 == 0)
 		{
 			Projectile.frame++;
 		}
@@ -98,25 +90,26 @@ public class Fae : TrailingProjectile
 					break;
 				}
 		}
-		base.AI();
 	}
 
 	public void Idle()
 	{
-
 		var FaelanternProj = owner.ModProjectile as FaelanternProj;
+		if (FaelanternProj is null)
+		{
+			return;
+		}
 		var pos = new Vector2(FaelanternProj.FaelanternSkeleton.Skeleton.FindBone("bone6").WorldX, FaelanternProj.FaelanternSkeleton.Skeleton.FindBone("bone6").WorldY);
 		Vector2 ToPos = (pos - Projectile.Center).NormalizeSafe() * 0.5f;
 		if (Projectile.Hitbox.Intersects(owner.Hitbox))
 		{
-			Projectile.velocity += new Vector2(-(float)Math.Sin(0.05f * timer) / 2f, -(float)Math.Cos(0.04f * timer) / 3f) * 0.5f;
+			Projectile.velocity += new Vector2(-(float)Math.Sin(0.05f * Timer) / 2f, -(float)Math.Cos(0.04f * Timer) / 3f) * 0.5f;
 		}
 		else
 		{
-			Projectile.velocity += new Vector2(0, -(float)Math.Cos(0.04f * timer)) * 0.25f;
+			Projectile.velocity += new Vector2(0, -(float)Math.Cos(0.04f * Timer)) * 0.25f;
 			ToPos = (pos - Projectile.Center).NormalizeSafe() * 5f;
 		}
-
 
 		Projectile.velocity = Vector2.Lerp(Projectile.velocity, ToPos, 0.2f);
 
@@ -138,9 +131,9 @@ public class Fae : TrailingProjectile
 			}
 			else
 			{
-				Vector2 pos = target.Center + new Vector2(0, -(float)Math.Cos(0.04f * timer));
+				Vector2 pos = target.Center + new Vector2(0, -(float)Math.Cos(0.04f * Timer));
 				Vector2 ToPos = (pos - Projectile.Center).NormalizeSafe() * 5f;
-				Projectile.velocity += new Vector2(0, -(float)Math.Cos(0.04f * timer)) * 0.5f;
+				Projectile.velocity += new Vector2(0, -(float)Math.Cos(0.04f * Timer)) * 0.5f;
 				Projectile.velocity = Vector2.Lerp(Projectile.velocity, ToPos, 0.2f);
 				if (Projectile.Distance(target.Center) <= 50)
 				{
@@ -151,12 +144,12 @@ public class Fae : TrailingProjectile
 		}
 	}
 
-	int i = 60;
+	private int i = 60;
 
 	public void Charm()
 	{
 		i--;
-		Projectile.velocity = Vector2.Lerp(Projectile.velocity, new Vector2(-(float)Math.Sin(0.05f * timer), -(float)Math.Cos(0.04f * timer) / 3f), 0.1f);
+		Projectile.velocity = Vector2.Lerp(Projectile.velocity, new Vector2(-(float)Math.Sin(0.05f * Timer), -(float)Math.Cos(0.04f * Timer) / 3f), 0.1f);
 		if (i == 30)
 		{
 			Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<FaeCharmRing>(), Projectile.damage / 2, 0f, Projectile.owner, 10);
@@ -175,108 +168,49 @@ public class Fae : TrailingProjectile
 		}
 	}
 
-	public override bool PreDraw(ref Color lightColor)
+	public override void DrawSelf()
 	{
-		TrailColor = new Color(0.13f, 0.976f, 0.977f, 0f);
-		TrailWidth = 10f;
-		SelfLuminous = true;
-		TrailTexture = Commons.ModAsset.Trail_2_thick.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_2_black.Value;
-		TrailShader = Commons.ModAsset.Trailing.Value;
-		DrawTrail();
-
-		float factor = MathHelper.Clamp(timer / 60f, 0f, 1f);
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		var origin = new Vector2(tex.Width / 2, tex.Height / 2);
 		Rectangle sourceRec = tex.Frame(1, 7, 0, Projectile.frame % 7);
-
 		Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition + new Vector2(0f, 70f), sourceRec, Color.White, 0f, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-		return false;
 	}
 
-	public override void DrawTrail()
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		var unSmoothPos = new List<Vector2>();
-		for (int i = 0; i < Projectile.oldPos.Length; ++i)
+		if (style == 1)
 		{
-			if (Projectile.oldPos[i] == Vector2.Zero)
-				break;
-			unSmoothPos.Add(Projectile.oldPos[i]);
+			float value = index / (float)SmoothedOldPos.Count;
+			Color color = Color.Lerp(new Color(0, 126, 255, 0), Color.Transparent, value);
+			return color;
 		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(unSmoothPos);//平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor - timeValue * 0.5f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
 		{
-			SmoothTrail.Add(smoothTrail_current[x]);
+			y = 0;
 		}
-		if (unSmoothPos.Count != 0)
-			SmoothTrail.Add(unSmoothPos[unSmoothPos.Count - 1]);
-
-		Vector2 halfSize = new Vector2(Projectile.width, Projectile.height) / 2f;
-		var bars = new List<Vertex2D>();
-		var bars2 = new List<Vertex2D>();
-		var bars3 = new List<Vertex2D>();
-		for (int i = 1; i < SmoothTrail.Count; ++i)
+		if (phase % 2 == 1)
 		{
-			float mulFac = Timer / (float)ProjectileID.Sets.TrailCacheLength[Projectile.type];
-			if (mulFac > 1f)
-			{
-				mulFac = 1f;
-			}
-			float factor = i / (float)SmoothTrail.Count * mulFac;
-			float width = TrailWidthFunction(factor);
-			float timeValue = (float)Main.time * 0.0005f;
-			factor += timeValue;
-
-			Vector2 drawPos = SmoothTrail[i] + halfSize;
-			Color drawC = TrailColor;
-			if (!SelfLuminous)
-			{
-				Color lightC = Lighting.GetColor((drawPos / 16f).ToPoint());
-				drawC.R = (byte)(lightC.R * drawC.R / 255f);
-				drawC.G = (byte)(lightC.G * drawC.G / 255f);
-				drawC.B = (byte)(lightC.B * drawC.B / 255f);
-			}
-			bars.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars2.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars2.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
-			bars3.Add(new Vertex2D(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * TrailWidth, drawC, new Vector3(factor + timeValue, 1, width)));
-			bars3.Add(new Vertex2D(drawPos, drawC, new Vector3(factor + timeValue, 0.5f, width)));
+			y = 0.5f;
 		}
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Effect effect = TrailShader;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-		Main.graphics.GraphicsDevice.Textures[0] = TrailTexture;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
-		if (bars.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		if (bars2.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
-		if (bars3.Count > 3)
-			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars3.ToArray(), 0, bars3.Count - 2);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
+		return new Vector3(x, y, z);
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-
 		var size = new Vector2(Projectile.width, Projectile.height);
 		float point = 0;
 		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.position + size, Projectile.position, 50f, ref point))
 		{
 			return true;
 		}
-
 		return false;
 	}
-
 }
