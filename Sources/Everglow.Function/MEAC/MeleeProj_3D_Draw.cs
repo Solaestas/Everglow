@@ -9,29 +9,11 @@ namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
+	public float CurrentTrailFade = 1f;
+
+	public Queue<float> OldTrailFade = new Queue<float>();
+
 	public bool EnableSphereCoordDraw = false;
-
-	public float CenterZ = 200;
-
-	public Vector3 RotatedAxis = new Vector3(0, -1, 0);
-
-	public Vector3 SphericalCoordPos => CartesianToSpherical(SpacePosition);
-
-	public Vector3 SpacePositionWithDepth => SpacePosition + new Vector3(0, 0, CenterZ);
-
-	public Vector3 SpacePosition = new Vector3(120, 0, 0);
-
-	public float RadialDistance => SphericalCoordPos.X;
-
-	public float PolarAngle => SphericalCoordPos.Y;
-
-	public float AzimuthalAngle => SphericalCoordPos.Z;
-
-	public Vector2 Offset => Projectile.Center - Main.screenPosition;
-
-	public Queue<Vector3> OldArrowTips = new Queue<Vector3>();
-
-	public List<Vector3> OldArrowTips_Smoothed = new List<Vector3>();
 
 	public Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
 			MathHelper.PiOver4,
@@ -53,7 +35,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		{
 			DrawReferenceSphere(RadialDistance);
 		}
-		DrawWeapon(SpacePosition, Vector3.zero, new Vector3(0, 0, CenterZ));
+		DrawWeapon(WeaponAxis, MainAxis, new Vector3(0, 0, CenterZ));
 		DrawTrail();
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -80,14 +62,14 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		for (int l = 0; l < 9; l++)
 		{
 			List<Vector3> latitudeRing = ToLatitudeRing(basicRing, (l + 0.5f) / 9f * MathHelper.Pi - MathHelper.PiOver2, radius);
-			Draw3DCurve(latitudeRing, drawColor, Offset);
+			Draw3DCurve(latitudeRing, drawColor, ScreenPositionOffset);
 		}
 
 		// LongitudeRing Rings
 		for (int l = 0; l < 9; l++)
 		{
 			List<Vector3> longitudeRing = ToLongitudeRing(basicRing, l / 9f * MathHelper.Pi + (float)Main.time * 0.003f);
-			Draw3DCurve(longitudeRing, drawColor, Offset);
+			Draw3DCurve(longitudeRing, drawColor, ScreenPositionOffset);
 		}
 
 		// Shear Surface
@@ -101,8 +83,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		for (int i = 0; i <= shearRing.Count; i++)
 		{
 			Vector2 ringPos = shearRing[i % shearRing.Count];
-			shearSurface.Add(ringPos + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
-			shearSurface.Add(ringPos * 0.9f + Offset, drawColor, new Vector3(0.7f, 0.5f, 0));
+			shearSurface.Add(ringPos + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
+			shearSurface.Add(ringPos * 0.9f + ScreenPositionOffset, drawColor, new Vector3(0.7f, 0.5f, 0));
 		}
 		if (shearSurface.Count >= 4)
 		{
@@ -113,44 +95,25 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		// Current
 		DrawPositionArrow(drawColor);
 		Draw3DLine(RotatedAxis, Vector3.zero, Color.Red * 0.5f, new Vector3(0, 0, CenterZ));
+		Draw3DLine(WeaponAxis, MainAxis, Color.Purple * 0.5f, new Vector3(0, 0, CenterZ));
 		Color currentColor = new Color(1f, 0.05f, 0.1f, 0);
 		List<Vector3> latitudeRing_current = ToLatitudeRing(basicRing, MathHelper.PiOver2 - PolarAngle, RadialDistance);
-		DrawCurrentCoordRing(latitudeRing_current, currentColor, Offset, 15);
+		DrawCurrentCoordRing(latitudeRing_current, currentColor, ScreenPositionOffset, 15);
 
 		List<Vector3> longitudeRing_current = ToLongitudeRing(basicRing, AzimuthalAngle + MathHelper.PiOver2);
-		DrawCurrentCoordRing(longitudeRing_current, currentColor, Offset, 15);
+		DrawCurrentCoordRing(longitudeRing_current, currentColor, ScreenPositionOffset, 15);
 	}
 
 	public void DrawPositionText(Vector2 drawPos)
 	{
-		var coordText = SpacePosition.ToString();
+		var coordText = MainAxis.ToString();
 		coordText += "\n[R:" + SphericalCoordPos.X + " ,Theta:" + SphericalCoordPos.Y / MathHelper.TwoPi * 360 + " ,Phi:" + SphericalCoordPos.Z / MathHelper.TwoPi * 360 + "]";
-		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, coordText, drawPos + Offset, Color.White, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
+		Main.spriteBatch.DrawString(FontAssets.MouseText.Value, coordText, drawPos + ScreenPositionOffset, Color.White, 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 	}
 
 	public void DrawPositionArrow(Color drawColor)
 	{
-		// Position Arrow
-		//List<Vertex2D> arrow = new List<Vertex2D>();
-		//Vector2 arrowTip = Project(SpacePositionWithDepth, ProjectionMatrix);
-		//Vector2 center = Project(new Vector3(0, 0, CenterZ), ProjectionMatrix);
-		//Vector2 arrowWidth = (arrowTip - center).NormalizeSafe().RotatedBy(MathHelper.PiOver2);
-		//float tipScale = GetSizeZ(SpacePositionWithDepth.Z);
-		//if (SpacePosition.Z > 0)
-		//{
-		//	tipScale *= 0.3f;
-		//}
-
-		//arrow.Add(arrowTip + arrowWidth * tipScale + Offset, drawColor * tipScale, new Vector3(0.5f, 0.5f, 0));
-		//arrow.Add(arrowTip - arrowWidth * tipScale + Offset, drawColor * tipScale, new Vector3(0.5f, 0.5f, 0));
-
-		//arrow.Add(center + arrowWidth + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
-		//arrow.Add(center - arrowWidth + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
-		//if (arrow.Count >= 4)
-		//{
-		//	Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, arrow.ToArray(), 0, arrow.Count - 2);
-		//}
-		Draw3DLine(SpacePosition, Vector3.zero, drawColor, new Vector3(0, 0, CenterZ));
+		Draw3DLine(MainAxis, Vector3.zero, drawColor, new Vector3(0, 0, CenterZ));
 	}
 
 	public void Draw3DLine(Vector3 start, Vector3 end, Color drawColor, Vector3 offset)
@@ -162,11 +125,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		float startScale = GetSizeZ((start + offset).Z);
 		float endScale = GetSizeZ((end + offset).Z);
 
-		arrow.Add(start2 + arrowWidth * startScale + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
-		arrow.Add(start2 - arrowWidth * startScale + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
+		arrow.Add(start2 + arrowWidth * startScale + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
+		arrow.Add(start2 - arrowWidth * startScale + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
 
-		arrow.Add(end2 + arrowWidth * endScale + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
-		arrow.Add(end2 - arrowWidth * endScale + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
+		arrow.Add(end2 + arrowWidth * endScale + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
+		arrow.Add(end2 - arrowWidth * endScale + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
 		if (arrow.Count >= 4)
 		{
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, arrow.ToArray(), 0, arrow.Count - 2);
@@ -192,8 +155,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		// Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
 		// float size = GetSizeZ(currentPos3D.Z);
 		// Color drawColor = origColor * (i / (float)OldArrowTips_Smoothed.Count);
-		// trails.Add(currentPos + Offset + width * size, drawColor, new Vector3(0.5f, 0.5f, 0));
-		// trails.Add(currentPos + Offset, drawColor, new Vector3(0.5f, 0.5f, 0));
+		// trails.Add(currentPos + ScreenPositionOffset + width * size, drawColor, new Vector3(0.5f, 0.5f, 0));
+		// trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
 		// }
 		// if (trails.Count >= 4)
 		// {
@@ -219,12 +182,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			Color drawColor = origColor * (i / (float)OldArrowTips_Smoothed.Count);
 			float value = 1 - i / (float)OldArrowTips_Smoothed.Count;
 			float timeValue = -(float)Main.time * 0.03f;
+			float fade = GetFade(i);
 
-			trails.Add(currentPos + Offset, drawColor * value, new Vector3(1f, value + timeValue, 0));
-			trails.Add(currentPos_Inner + Offset, drawColor * value * 0, new Vector3(0f, value + timeValue, 0));
+			trails.Add(currentPos + ScreenPositionOffset, drawColor * value * fade, new Vector3(1f, value + timeValue, 0));
+			trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor * value * fade * 0, new Vector3(0f, value + timeValue, 0));
 
-			trails_tip.Add(currentPos + Offset, drawColor, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
-			trails_tip.Add(currentPos_Edge + Offset, drawColor, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
+			trails_tip.Add(currentPos + ScreenPositionOffset, drawColor * fade, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
+			trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor * fade, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
 		}
 		if (trails.Count >= 4)
 		{
@@ -248,11 +212,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Vector2 dirWidth = (arrowTip - center).NormalizeSafe().RotatedBy(MathHelper.PiOver2) * width;
 
 		List<Vertex2D> weapon = new List<Vertex2D>();
-		AddVertex(weapon, center + Offset, new Vector3(0, 1, 0));
-		AddVertex(weapon, middle + dirWidth + Offset, new Vector3(0, 0, 0));
+		AddVertex(weapon, center + ScreenPositionOffset, new Vector3(0, 1, 0));
+		AddVertex(weapon, middle + dirWidth + ScreenPositionOffset, new Vector3(0, 0, 0));
 
-		AddVertex(weapon, middle - dirWidth + Offset, new Vector3(1, 1, 0));
-		AddVertex(weapon, arrowTip + Offset, new Vector3(1, 0, 0));
+		AddVertex(weapon, middle - dirWidth + ScreenPositionOffset, new Vector3(1, 1, 0));
+		AddVertex(weapon, arrowTip + ScreenPositionOffset, new Vector3(1, 0, 0));
 
 		if (weapon.Count >= 4)
 		{
@@ -266,7 +230,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		bars.Add(screenPos, Lighting.GetColor((screenPos + Main.screenPosition).ToTileCoordinates()), coord);
 	}
 
-	public void Draw3DCurve(List<Vector3> curve, Color drawColor, Vector2 Offset, float lineWidth = 3f)
+	public void Draw3DCurve(List<Vector3> curve, Color drawColor, Vector2 ScreenPositionOffset, float lineWidth = 3f)
 	{
 		for (int r = 0; r < 2; r++)
 		{
@@ -282,8 +246,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 					drawColor2 *= 0.3f;
 				}
 				float size = GetSizeZ(ringPos3D.Z);
-				bars.Add(ringPos2D + Offset, drawColor2, new Vector3(0.5f, 0.5f, 0));
-				bars.Add(ringPos2D - normal * size + Offset, drawColor2, new Vector3(0.7f, 0.5f, 0));
+				bars.Add(ringPos2D + ScreenPositionOffset, drawColor2, new Vector3(0.5f, 0.5f, 0));
+				bars.Add(ringPos2D - normal * size + ScreenPositionOffset, drawColor2, new Vector3(0.7f, 0.5f, 0));
 			}
 			if (bars.Count >= 4)
 			{
@@ -292,7 +256,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 	}
 
-	public void DrawCurrentCoordRing(List<Vector3> curve, Color drawColor, Vector2 Offset, float lineWidth = 3f)
+	public void DrawCurrentCoordRing(List<Vector3> curve, Color drawColor, Vector2 ScreenPositionOffset, float lineWidth = 3f)
 	{
 		for (int r = 0; r < 2; r++)
 		{
@@ -303,19 +267,26 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Vector3 ringPos3D = curve[i % curve.Count];
 				Vector2 ringPos2D = Project(ringPos3D, ProjectionMatrix);
 				var drawColor2 = drawColor;
-				if ((ringPos3D.Z - CenterZ) * SpacePosition.Z < 0)
+				if ((ringPos3D.Z - CenterZ) * MainAxis.Z < 0)
 				{
 					drawColor2 *= 0.1f;
 				}
 				float size = GetSizeZ(ringPos3D.Z);
-				bars.Add(ringPos2D + Offset, drawColor2, new Vector3(0.5f, 0.5f, 0));
-				bars.Add(ringPos2D - normal * size + Offset, drawColor2, new Vector3(0.7f, 0.5f, 0));
+				bars.Add(ringPos2D + ScreenPositionOffset, drawColor2, new Vector3(0.5f, 0.5f, 0));
+				bars.Add(ringPos2D - normal * size + ScreenPositionOffset, drawColor2, new Vector3(0.7f, 0.5f, 0));
 			}
 			if (bars.Count >= 4)
 			{
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
 		}
+	}
+
+	public float GetFade(int indexInSmootheTrail)
+	{
+		float value = indexInSmootheTrail / (float)OldArrowTips_Smoothed.Count * OldTrailFade.Count;
+		int index = (int)Math.Clamp(value, 0, OldTrailFade.Count - 1);
+		return OldTrailFade.ToArray()[index];
 	}
 
 	public void DrawBloom()
@@ -339,7 +310,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
 
 			Vector2 warpDir = currentPos.RotatedBy(MathHelper.PiOver2).NormalizeSafe() * 10f;
-			if(i >= 1)
+			if (i >= 1)
 			{
 				Vector3 currentPos3D_Old = OldArrowTips_Smoothed[i - 1] + new Vector3(0, 0, CenterZ);
 				Vector2 currentPos_Old = Project(currentPos3D_Old, ProjectionMatrix);
@@ -348,11 +319,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			warpDir *= 0.05f;
 			float value = 1 - i / (float)OldArrowTips_Smoothed.Count;
 			float timeValue = -(float)Main.time * 0.03f;
-			Color drawColor = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, (1 - value) * 0.1f, 0);
+			Color drawColor = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, (1 - value) * 0.1f * GetFade(i), 0);
 			Color drawColorInner = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, 0, 0);
 
-			trails.Add(currentPos + Offset, drawColor, new Vector3(1f, value + timeValue, 0));
-			trails.Add(currentPos_Inner + Offset, drawColorInner, new Vector3(0f, value + timeValue, 0));
+			trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(1f, value + timeValue, 0));
+			trails.Add(currentPos_Inner + ScreenPositionOffset, drawColorInner, new Vector3(0f, value + timeValue, 0));
 		}
 		spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
 	}

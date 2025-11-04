@@ -9,8 +9,47 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public int MaxTrail = 30;
 
+	public float CenterZ = 200;
+
+	/// <summary>
+	/// MainAxis will spin around this.<br/>
+	/// Suggest to set this perpendicular to the MainAxis.
+	/// </summary>
+	public Vector3 RotatedAxis = new Vector3(0, -1, 0);
+
+	public Vector3 SphericalCoordPos => CartesianToSpherical(MainAxis);
+
+	public Vector3 MainAxisWithDepth => MainAxis + new Vector3(0, 0, CenterZ);
+
+	public Vector3 MainAxis = new Vector3(150, 0, 0);
+
+	public Vector3 WeaponAxis = new Vector3(150, 0, 0);
+
+	public Vector3 MainAxisDirection => Vector3.Normalize(MainAxis);
+
+	public float RadialDistance => SphericalCoordPos.X;
+
+	public float PolarAngle => SphericalCoordPos.Y;
+
+	public float AzimuthalAngle => SphericalCoordPos.Z;
+
+	public Vector2 ScreenPositionOffset => Projectile.Center - Main.screenPosition;
+
+	public Queue<Vector3> OldArrowTips = new Queue<Vector3>();
+
+	public List<Vector3> OldArrowTips_Smoothed = new List<Vector3>();
+
+	public int CurrentAttackType = 0;
+
+	public float AttackTimer;
+
+	public float CurrentAttackSpeed;
+
+	public float RotateSpeed = 0;
+
 	public override void OnSpawn(IEntitySource source)
 	{
+		EnableSphereCoordDraw = false;
 	}
 
 	public override void SetDefaults()
@@ -32,7 +71,17 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void Trail()
 	{
-		OldArrowTips.Enqueue(SpacePosition);
+		if(RotateSpeed <= 0.005f)
+		{
+			OldTrailFade.Clear();
+			OldArrowTips.Clear();
+		}
+		OldTrailFade.Enqueue(CurrentTrailFade);
+		if (OldTrailFade.Count > MaxTrail)
+		{
+			OldTrailFade.Dequeue();
+		}
+		OldArrowTips.Enqueue(WeaponAxis);
 		if (OldArrowTips.Count > MaxTrail)
 		{
 			OldArrowTips.Dequeue();
@@ -42,7 +91,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void DevelopersAdjust()
 	{
-		float rotSpeed = 0.03f;
+		//float rotSpeed = 0.03f;
 		//if (Owner.controlUp)
 		//{
 		//	SphericalCoordPos.Y += rotSpeed;
@@ -59,15 +108,26 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		//{
 		//	SphericalCoordPos.Z -= rotSpeed;
 		//}
-		RotatedByMouseAxis();
+		// RotatedByMouseAxis();
+		if(Main.mouseLeft && Main.mouseLeftRelease)
+		{
+			RotatedAxis = new Vector3(Main.rand.NextFloat(-1, 1), -1 / 3f, Main.rand.NextFloat(-1, 1));
+			RotatedAxis = Vector3.Normalize(RotatedAxis);
+			RotateToPerpendicular(RotatedAxis, ref MainAxis);
+			RotateSpeed = 2.5f;
+			CurrentTrailFade = 0;
+		}
 
-		//FollowMouse();
+		CurrentTrailFade = RotateSpeed * 3;
+		RotateMainAxis(RotateSpeed * 0.35f);
+		BindWeaponAxis();
+		RotateSpeed *= 0.88f;
 	}
 
 	public void FollowMouse()
 	{
 		Vector3 toMouse = new Vector3(Main.MouseScreen - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f, 0) - new Vector3(0, 0, CenterZ * 0.1f);
-		SpacePosition = Vector3.Normalize(toMouse) * 240f;
+		MainAxis = Vector3.Normalize(toMouse) * 240f;
 	}
 
 	public void RotatedByMouseAxis()
@@ -77,8 +137,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		Vector3 toMouse = new Vector3(Main.MouseScreen - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f, 0) - new Vector3(0, 0, CenterZ * 0.1f);
 		RotatedAxis = Vector3.Normalize(toMouse) * 120f;
-		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(RotatedAxis), value * 0.35f);
-		SpacePosition = Vector3.Transform(SpacePosition, rotation);
+		RotateMainAxis(value * 0.35f);
 	}
 
 	public virtual void CheckHeldItem()
@@ -120,5 +179,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		//{
 		//	SphericalCoordPos.Z += MathHelper.TwoPi;
 		//}
+	}
+
+	public virtual void BindWeaponAxis()
+	{
+		WeaponAxis = MainAxis + MainAxisDirection * 120f;
 	}
 }

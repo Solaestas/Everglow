@@ -92,6 +92,22 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return new Vector3((float)r, (float)theta, (float)phi);
 	}
 
+	public void RotateToPerpendicular(Vector3 fixAxis, ref Vector3 rotateAxis)
+	{
+		Vector3 perpendicularAxis = Vector3.Normalize(Vector3.Cross(fixAxis, rotateAxis));
+		float angle = Vector3.Dot(fixAxis, rotateAxis) / fixAxis.Length() / rotateAxis.Length();
+		angle = MathF.Acos(angle);
+		Quaternion rotation = Quaternion.CreateFromAxisAngle(perpendicularAxis, MathHelper.PiOver2 - angle);
+		rotateAxis = Vector3.Transform(rotateAxis, rotation);
+	}
+
+	public void RotateMainAxis(float angle)
+	{
+		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(RotatedAxis), angle);
+		MainAxis = Vector3.Transform(MainAxis, rotation);
+		WeaponAxis = Vector3.Transform(WeaponAxis, rotation);
+	}
+
 	public float GetSizeZ(float coordZ)
 	{
 		return CenterZ / coordZ;
