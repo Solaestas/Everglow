@@ -10,13 +10,22 @@
         <member name="F:ModLiquidLib.ID.LiquidID_TLmod.Sets.CreateLiquidBucketItem">
             <summary> The Item created when a bucket is used on a liquid selected </summary>
         </member>
+        <member name="F:ModLiquidLib.ID.LiquidID_TLmod.Sets.CanBeAbsorbedBy">
+            <summary> Whats Items a liquid can be absorbed by. Used for defining sponges. </summary>
+        </member>
+        <member name="F:ModLiquidLib.ID.LiquidID_TLmod.Sets.CanModdedNPCSpawnInModdedLiquid">
+            <summary> Whether or not the NPC can spawn in the liquid specified. NOTE: only works for modded liquids and npcs </summary>
+        </member>
+        <member name="F:ModLiquidLib.ID.LiquidID_TLmod.Sets.UsesWaterFishingLootPool">
+            <summary> Whether or not the liquid uses the water loot pool when fished it. NOTE: this set does not effect/change Water, lava or honey and is mainly used for modded liquids. </summary>
+        </member>
         <member name="T:ModLiquidLib.ModLoader.GlobalLiquid">
             <summary>
             This class allows you to modify the behavior of any liquid in the game, both vanilla and modded.
             <br /> To use it, simply create a new class deriving from this one. Implementations will be registered automatically.
             </summary>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.PreDraw(System.Int32,System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean,System.Int32,System.Single)">
+        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.PreDraw(System.Int32,System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean,System.Int32,System.Single)">
             <summary>
             Allows you to draw things behind the liquid at the given coordinates. Return false to stop the game from drawing the liquid normally. Returns true by default.<para />
             This method is only called in "Color" and "White" lighting modes. Use <see cref="P:ModLiquidLib.ModLoader.GlobalLiquid.PreRetroDraw" /> for the other Lighting modes pre drawing
@@ -28,7 +37,7 @@
             <param name="drawOffset">The amount the liquid rendered is offset by</param>
             <param name="isBackgroundDraw">Whether or not the liquid is in the background</param>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.PostDraw(System.Int32,System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean,System.Int32,System.Single)">
+        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.PostDraw(System.Int32,System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean,System.Int32,System.Single)">
             <summary>
             Allows you to draw things in front of the liquid at the given coordinates. This can also be used to do things such as rendering glowmasks.<para />
             This hook is not called if <see cref="P:ModLiquidLib.ModLoader.ModLiquid.PreDraw" /> returns false.<para />
@@ -41,7 +50,7 @@
             <param name="drawOffset">The amount the liquid rendered is offset by</param>
             <param name="isBackgroundDraw">Whether or not the liquid is in the background</param>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.EmitEffects(System.Int32,System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidCache)">
+        <member name="M:ModLiquidLib.ModLoader.GlobalLiquid.EmitEffects(System.Int32,System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidCache)">
             <summary>
             Allows you to make stuff happen whenever the liquid at the given coordinates is drawn. For example, creating bubble dusts or changing the color the liquid is drawn in. <para />
             This hook is seperate from Liquid Rendering, Only use this for things such as spawning particles. <para />
@@ -591,23 +600,6 @@
         <member name="P:ModLiquidLib.ModLoader.ModLiquid.SlopeTexture">
             <summary> The slope texture of this liquid. Used for rendering the liquids next to tile slopes. </summary>
         </member>
-        <member name="P:ModLiquidLib.ModLoader.ModLiquid.LiquidFallLength">
-            <summary> A property that controls LiquidRenderer.WATERFALL_LENGTH for this LiquidID. <br/>
-            This is the length that liquids draw downwards when falling or when there is a half slope below. <br/>
-            Defaults to 10. </summary>
-        </member>
-        <member name="P:ModLiquidLib.ModLoader.ModLiquid.DefaultOpacity">
-            <summary> A property that controls LiquidRenderer.DEFAULT_OPACITY for this LiquidID. <br/>
-            This is the Opacity of this liquid when in not in any retro lighting mode. <br/>
-            Defaults to 0.6f.<br/> <br/>
-            For retro opacity, please see RetroDrawEffects's RetroLiquidDrawInfo.liquidAlphaMultiplier. <br/>
-            For slope opacity, please see SlopeOpacity property. </summary>
-        </member>
-        <member name="P:ModLiquidLib.ModLoader.ModLiquid.VisualViscosity">
-            <summary> A property that controls LiquidRenderer.VISCOSITY_Mask for this LiquidID. <br/>
-            This is how powerful the ripples are for this liquid. Be careful when setting this property to larger numbers (ie: 255). <br/>
-            Defaults to 0.</summary>
-        </member>
         <member name="P:ModLiquidLib.ModLoader.ModLiquid.SplashSound">
             <summary> The default sound that plays when an entity enters and exits this liquid. Overriding any OnSplash hooks/methods will prevent this from being used. </summary>
         </member>
@@ -697,7 +689,7 @@
             <param name="i">The x position in tile coordinates.</param>
             <param name="j">The y position in tile coordinates.</param>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.ModLiquid.PreDraw(System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean)">
+        <member name="M:ModLiquidLib.ModLoader.ModLiquid.PreDraw(System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean)">
             <summary>
             Allows you to draw things behind the liquid at the given coordinates. Return false to stop the game from drawing the liquid normally. Returns true by default.<para />
             This method is only called in "Color" and "White" lighting modes. Use <see cref="P:ModLiquidLib.ModLoader.ModLiquid.PreRetroDraw" /> for the other Lighting modes pre drawing
@@ -708,7 +700,7 @@
             <param name="drawOffset">The amount the liquid rendered is offset by</param>
             <param name="isBackgroundDraw">Whether or not the liquid is in the background</param>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.ModLiquid.PostDraw(System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean)">
+        <member name="M:ModLiquidLib.ModLoader.ModLiquid.PostDraw(System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidDrawCache,Microsoft.Xna.Framework.Vector2,System.Boolean)">
             <summary>
             Allows you to draw things in front of the liquid at the given coordinates. This can also be used to do things such as rendering glowmasks.<para />
             This hook is not called if <see cref="P:ModLiquidLib.ModLoader.ModLiquid.PreDraw" /> returns false.<para />
@@ -720,7 +712,7 @@
             <param name="drawOffset">The amount the liquid rendered is offset by</param>
             <param name="isBackgroundDraw">Whether or not the liquid is in the background</param>
         </member>
-        <member name="M:ModLiquidLib.ModLoader.ModLiquid.EmitEffects(System.Int32,System.Int32,ModLiquidLib.Utils.Structs.LiquidCache)">
+        <member name="M:ModLiquidLib.ModLoader.ModLiquid.EmitEffects(System.Int32,System.Int32,Terraria.GameContent.Liquid.LiquidRenderer.LiquidCache)">
             <summary>
             Allows you to make stuff happen whenever the liquid at the given coordinates is drawn. For example, creating bubble dusts or changing the color the liquid is drawn in. <para />
             This hook is seperate from Liquid Rendering, Only use this for things such as spawning particles.
