@@ -63,21 +63,15 @@ public class YggdrasilElevator : BoxEntity
 
 	public bool LampOn = false;
 
-	public bool Initialized = false;
-
 	public override Color MapColor => new Color(122, 91, 79);
 
-	public void OnSpawn()
+	public YggdrasilElevator()
 	{
 		Size = new Vector2(96, 16);
 	}
 
 	public override void AI()
 	{
-		if (!Initialized)
-		{
-			OnSpawn();
-		}
 		var winch = YggdrasilWorldGeneration.SafeGetTile(WinchCoord);
 		if (winch.TileType != ModContent.TileType<Winch>())
 		{
@@ -89,7 +83,7 @@ public class YggdrasilElevator : BoxEntity
 		switch (MoveState)
 		{
 			case State.Malfunction:
-				if(DetentionTime > 0)
+				if (DetentionTime > 0)
 				{
 					DetentionTime--;
 				}
@@ -113,7 +107,7 @@ public class YggdrasilElevator : BoxEntity
 				break;
 			case State.NormalMove:
 				CheckRunningDirection();
-				if(CurrentSpeed < 5)
+				if (CurrentSpeed < 5)
 				{
 					AccelerateTimer = (int)((5 - CurrentSpeed) * 10f);
 				}
@@ -129,7 +123,7 @@ public class YggdrasilElevator : BoxEntity
 					AccelerateTimer = 0;
 				}
 				CurrentSpeed += Acceleration;
-				if(CurrentSpeed > 5)
+				if (CurrentSpeed > 5)
 				{
 					CurrentSpeed = 5;
 					AccelerateTimer = 0;
@@ -147,7 +141,7 @@ public class YggdrasilElevator : BoxEntity
 					StopElevator(120);
 				}
 				CurrentSpeed -= Acceleration;
-				if(CurrentSpeed <= 0)
+				if (CurrentSpeed <= 0)
 				{
 					DecelerateTimer = 0;
 					CurrentSpeed = 0;
@@ -168,24 +162,23 @@ public class YggdrasilElevator : BoxEntity
 		if (DetentionTime > 0)
 		{
 			MoveState = State.Malfunction;
-			return;
 		}
-		if (StopTimer > 0)
+		else if (StopTimer > 0)
 		{
 			MoveState = State.Stop;
-			return;
 		}
-		if (AccelerateTimer > 0)
+		else if (AccelerateTimer > 0)
 		{
 			MoveState = State.Accelerating;
-			return;
 		}
-		if (DecelerateTimer > 0)
+		else if (DecelerateTimer > 0)
 		{
 			MoveState = State.Decelerating;
-			return;
 		}
-		MoveState = State.NormalMove;
+		else
+		{
+			MoveState = State.NormalMove;
+		}
 	}
 
 	/// <summary>
@@ -241,7 +234,7 @@ public class YggdrasilElevator : BoxEntity
 
 				bars.Add(drawPos + jointPos + new Vector2(-4, 0), drawcRope, new Vector3(0, f, 0));
 				bars.Add(drawPos + jointPos + new Vector2(4, 0), drawcRope, new Vector3(1, f, 0));
-				if((jointPos + Box.Center).Y < WinchCoord.Y * 16 + 8)
+				if ((jointPos + Box.Center).Y < WinchCoord.Y * 16 + 8)
 				{
 					break;
 				}
