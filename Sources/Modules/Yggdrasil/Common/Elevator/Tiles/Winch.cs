@@ -96,6 +96,5 @@ public class Winch : ModTile
 
 		Rectangle frame = new Rectangle(0, 0, 38, 18);
 		spriteBatch.Draw(t, new Vector2(i * 16, j * 16) - Main.screenPosition + new Vector2(8, 6)/* + new Vector2((int)Vdrag.X, (int)Vdrag.Y)*/ + zero, new Rectangle(0, 0, 38, 18), c0, 0, frame.Size() / 2f, 1, SpriteEffects.None, 0);
-		base.PostDraw(i, j, spriteBatch);
 	}
 }

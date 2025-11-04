@@ -3,8 +3,11 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles.Abstracts;
 
-public interface IEntityCollider<T> : IBox where T : Entity
+public interface IEntityCollider<T> : IBox
+	where T : Entity
 {
+	private const float Sqrt2Div2 = 0.707106781186f;
+
 	public T Entity { get; }
 
 	public RigidEntity Ground { get; set; }
@@ -25,13 +28,12 @@ public interface IEntityCollider<T> : IBox where T : Entity
 			OffsetY = 0;
 		}
 		OldPosition = Entity.position;
-
 	}
 
 	public void Update()
 	{
 		var stride = Entity.position - OldPosition;
-		if (Ground != null)
+		if (Ground != null) // Keep entity over the ground and move with current rg2d.
 		{
 			var acc = Ground.StandAccelerate(this);
 			if (stride.Y * Gravity < 0)
@@ -57,6 +59,4 @@ public interface IEntityCollider<T> : IBox where T : Entity
 			OnCollision(result);
 		}
 	}
-
-	private const float Sqrt2Div2 = 0.707106781186f;
 }
