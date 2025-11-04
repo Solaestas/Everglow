@@ -17,10 +17,12 @@ public class ColliderManager : ILoadable
 
 	public static ColliderManager Instance => ModContent.GetInstance<ColliderManager>();
 
-	private List<RigidEntity> rigidbodies = [];
+	private List<RigidEntity> rigidbodies;
 
 	public void Load(Mod mod)
 	{
+		rigidbodies = [];
+
 		On_Collision.LaserScan += Collision_LaserScan;
 		On_Collision.TileCollision += Collision_TileCollision;
 		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
@@ -36,19 +38,29 @@ public class ColliderManager : ILoadable
 
 	public void Unload()
 	{
+		rigidbodies = null;
+
 		On_Collision.LaserScan -= Collision_LaserScan;
 		On_Collision.TileCollision -= Collision_TileCollision;
 		On_Collision.SolidCollision_Vector2_int_int -= Collision_SolidCollision_Vector2_int_int;
 		On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
 	}
 
+	/// <summary>
+	/// Adds the rigid entity to the collection, enabling the container if it is not already enabled.
+	/// </summary>
+	/// <remarks>
+	/// If the collection exceeds its capacity, inactive entities may be removed to make room for the new entity.
+	/// <br/>If no inactive entities are available and overflow is not allowed, the first entity in the collection will be replaced.
+	/// </remarks>
+	/// <param name="entity">The rigid entity to add to the collection.</param>
 	public void Add(RigidEntity entity)
 	{
 		Enable = true;
 		if (rigidbodies.Count > Capacity)
 		{
-			int count = rigidbodies.RemoveAll(tile => !tile.Active);
-			if (count == 0 && !AllowOverflow)
+			int removedCount = rigidbodies.RemoveAll(rg => !rg.Active);
+			if (removedCount == 0 && !AllowOverflow) // TODO: Add more intelligent removal strategy. Allow banning removal for some important entities.
 			{
 				rigidbodies[0] = entity;
 				return;
@@ -57,31 +69,14 @@ public class ColliderManager : ILoadable
 		rigidbodies.Add(entity);
 	}
 
-	public void Clear()
-	{
-		rigidbodies.Clear();
-		Enable = false;
-	}
-
-	public void Draw()
-	{
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		foreach (var tile in rigidbodies)
-		{
-			tile.Draw();
-		}
-		Main.spriteBatch.End();
-	}
-
-	public void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
-	{
-		foreach (var tile in rigidbodies)
-		{
-			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
-		}
-	}
-
-	public bool First(AABB aabb, out RigidEntity result)
+	/// <summary>
+	/// Tries to find the first rigid entity that intersects with the specified axis-aligned bounding box.
+	/// <br/>If none is found, returns false and sets result to null.
+	/// </summary>
+	/// <param name="aabb"></param>
+	/// <param name="result"></param>
+	/// <returns></returns>
+	public bool TryFirst(AABB aabb, out RigidEntity result)
 	{
 		foreach (var entity in rigidbodies)
 		{
@@ -95,6 +90,11 @@ public class ColliderManager : ILoadable
 		return false;
 	}
 
+	/// <summary>
+	/// Indicates whether any rigid entity intersects with the specified axis-aligned bounding box.
+	/// </summary>
+	/// <param name="aabb"></param>
+	/// <returns></returns>
 	public bool Intersect(AABB aabb)
 	{
 		foreach (var entity in rigidbodies)
@@ -107,6 +107,16 @@ public class ColliderManager : ILoadable
 		return false;
 	}
 
+	/// <summary>
+	/// Attempts to move the specified box by the given stride, detecting and reporting any collisions encountered during movement.
+	/// </summary>
+	/// <remarks>
+	/// If a collision occurs, the stride may be adjusted to prevent overlapping with other entities.
+	/// <br/>The box's final position reflects the actual movement after resolving collisions.
+	/// </remarks>
+	/// <param name="box">The box to move. Must not be null.</param>
+	/// <param name="stride">The desired movement vector to apply to the box.</param>
+	/// <returns>Details about each collision encountered in the order they occurred.</returns>
 	public IEnumerable<CollisionResult> Move(IBox box, Vector2 stride)
 	{
 		var list = new List<CollisionResult>();
@@ -116,30 +126,63 @@ public class ColliderManager : ILoadable
 			{
 				continue;
 			}
+
 			if (entity.Collision(box, stride, out var result))
 			{
 				stride = result.Stride;
 				list.Add(result);
 			}
 		}
+
 		box.Position += stride;
 		return list;
 	}
 
+	/// <summary>
+	/// Filters the elements based on a specified type.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
 	public IEnumerable<T> OfType<T>()
 	{
 		return rigidbodies.OfType<T>();
 	}
 
-	public void Update()
+	#region Game Hooks
+
+	private void Update()
 	{
 		for (int i = 0; i < rigidbodies.Count; i++)
 		{
-			var tile = rigidbodies[i];
-			if (tile.Active)
+			var rg = rigidbodies[i];
+			if (rg.Active)
 			{
-				tile.Update();
+				rg.Update();
 			}
+		}
+	}
+
+	private void Clear()
+	{
+		rigidbodies.Clear();
+		Enable = false;
+	}
+
+	private void Draw()
+	{
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		foreach (var tile in rigidbodies)
+		{
+			tile.Draw();
+		}
+		Main.spriteBatch.End();
+	}
+
+	private void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
+	{
+		foreach (var tile in rigidbodies)
+		{
+			tile.DrawToMap(mapTopLeft, mapX2Y2AndOff, mapRect, mapScale);
 		}
 	}
 
@@ -195,6 +238,10 @@ public class ColliderManager : ILoadable
 	// }
 	// }
 	// }
+	#endregion
+
+	#region Collision Hooks
+
 	private void Collision_LaserScan(On_Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
 	{
 		if (!Enable || !EnableHook)
@@ -258,4 +305,6 @@ public class ColliderManager : ILoadable
 		}
 		return stride;
 	}
+
+	#endregion
 }
