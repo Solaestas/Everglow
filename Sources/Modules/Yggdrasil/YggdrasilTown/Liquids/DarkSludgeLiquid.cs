@@ -1,7 +1,6 @@
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using ModLiquidLib.ModLoader;
 using ModLiquidLib.Utils.Structs;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics.Light;
 using Terraria.Localization;
@@ -17,9 +16,6 @@ public class DarkSludgeLiquid : ModLiquid
 		PlayerMovementMultiplier = 0.2f;
 		StopWatchMPHMultiplier = 0.2f;
 		NPCMovementMultiplierDefault = 0.2f;
-		VisualViscosity = 200;
-		LiquidFallLength = 20;
-		DefaultOpacity = 1f;
 		SlopeOpacity = 1f;
 		WaterRippleMultiplier = 1f;
 		SplashDustType = ModContent.DustType<Dusts.SplashDust_DarkSludge>();
