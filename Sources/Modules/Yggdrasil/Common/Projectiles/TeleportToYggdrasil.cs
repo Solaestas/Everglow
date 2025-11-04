@@ -142,7 +142,7 @@ public class TeleportToYggdrasil : ModProjectile, IWarpProjectile
 		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Noise_melting.Value;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, nets.ToArray(), 0, nets.Count - 2);
 
-		if(Timer < 30)
+		if (Timer < 30)
 		{
 			nets = new List<Vertex2D>();
 			for (int i = 0; i <= precise; i++)
@@ -350,7 +350,7 @@ public class TeleportToYggdrasil : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		if(Timer < 30)
+		if (Timer < 30)
 		{
 			float value = Timer / 30f;
 			value = MathF.Sqrt(value);
@@ -358,7 +358,7 @@ public class TeleportToYggdrasil : ModProjectile, IWarpProjectile
 			Texture2D t = Commons.ModAsset.Noise_rgbPerlin.Value;
 			float width = 600;
 
-			DrawWarpTexCircle_VFXBatch(spriteBatch, value * 1600, width, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+			DrawWarpTexCircle_VFXBatch(spriteBatch, value * 1600, width, new Color(colorV, colorV * 0.07f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 		}
 	}
 }

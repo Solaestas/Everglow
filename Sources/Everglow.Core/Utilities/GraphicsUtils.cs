@@ -109,6 +109,40 @@ public static class GraphicsUtils
 	}
 
 	/// <summary>
+	/// Use <see cref="CatmullRom(IEnumerable{Vector2}, int?)"/> to smooth a list of <see cref="Vector2"/>.
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns><c>null</c> if the result is too short to draw.</returns>
+	public static List<Vector2> Smooth(this IEnumerable<Vector2> vectors)
+	{
+		List<Vector2> smoothedTrailVecs = GraphicsUtils.CatmullRom(vectors);
+		var smoothedTrail = smoothedTrailVecs[..^1];
+		if (vectors.Any())
+		{
+			smoothedTrail.Add(vectors.Last());
+		}
+
+		int length = smoothedTrail.Count;
+		if (length <= 3)
+		{
+			return null;
+		}
+
+		return smoothedTrail;
+	}
+
+	/// <summary>
+	/// Use <see cref="CatmullRom(IEnumerable{Vector2}, int?)"/> to smooth a list of <see cref="Vector2"/>.
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns><c>null</c> if the result is too short to draw.</returns>
+	public static bool Smooth(this IEnumerable<Vector2> vectors, out List<Vector2> result)
+	{
+		result = Smooth(vectors);
+		return result is not null;
+	}
+
+	/// <summary>
 	/// 根据输入点的List获得一条贝塞尔曲线
 	/// </summary>
 	/// <param name="origPath"></param>

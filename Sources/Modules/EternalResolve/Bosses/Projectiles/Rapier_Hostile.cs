@@ -9,106 +9,121 @@ using Terraria.Utilities;
 namespace Everglow.EternalResolve.Bosses.Projectiles
 {
 	public abstract class Rapier_Hostile : ModProjectile, IWarpProjectile
-    {
+	{
 		public int itemType;
+
 		/// <summary>
 		/// 常规颜色
 		/// </summary>
 		public Color Color = Color.White;
+
 		/// <summary>
 		/// 阴影强度
 		/// </summary>
 		public float Shade = 0f;
+
 		/// <summary>
 		/// 重影深度
 		/// </summary>
 		public float TradeShade = 0f;
+
 		/// <summary>
 		/// 重影彩色部分亮度
 		/// </summary>
 		public float TradeLightColorValue = 0f;
+
 		/// <summary>
 		/// 重影数量
 		/// </summary>
-		public int TradeLength = 0;//小于200
+		public int TradeLength = 0; // 小于200
+
 		/// <summary>
 		/// 重影大小缩变,小于1
 		/// </summary>
 		public float FadeScale = 0f;
+
 		/// <summary>
 		/// 刀光宽度1
 		/// </summary>
 		public float DrawWidth = 1f;
+
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
 		public float FadeShade = 0f;
+
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
 		public float FadeLightColorValue = 0f;
+
 		/// <summary>
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
 		public float MaxLength = 1f;
+
 		/// <summary>
 		/// 荧光颜色,默认不会发光
 		/// </summary>
 		public Color GlowColor = Color.Transparent;
+
 		/// <summary>
 		/// 荧光颜色缩变,小于1
 		/// </summary>
 		public float FadeGlowColorValue = 0f;
+
 		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
+
 		/// <summary>
 		/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
 		/// </summary>
 		public override void SetDefaults()
-        {
-            Projectile.width = 30;
+		{
+			Projectile.width = 30;
 			Projectile.height = 30;
 			Projectile.aiStyle = -1;
-            Projectile.friendly = false;
+			Projectile.friendly = false;
 			Projectile.hostile = true;
-            Projectile.tileCollide = false;
-            Projectile.DamageType = DamageClass.Melee;
-            Projectile.penetrate = -1;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 4;
+			Projectile.tileCollide = false;
+			Projectile.DamageType = DamageClass.Melee;
+			Projectile.penetrate = -1;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 4;
 			Projectile.timeLeft = 60;
-        }
+		}
 
-        public override void AI()
-        {
-
+		public override void AI()
+		{
 			NPC npc = Main.npc[(int)Projectile.ai[0]];
-			Projectile.Center = npc.Center + Projectile.velocity * 25+new Vector2(0,10);
+			Projectile.Center = npc.Center + Projectile.velocity * 25 + new Vector2(0, 10);
 			Projectile.velocity = npc.ai[3].ToRotationVector2();
-            Projectile.rotation = Projectile.velocity.ToRotation();
-            Projectile.spriteDirection = Projectile.direction;
-            Projectile.soundDelay--;
+			Projectile.rotation = Projectile.velocity.ToRotation();
+			Projectile.spriteDirection = Projectile.direction;
+			Projectile.soundDelay--;
 			npc.spriteDirection = Projectile.spriteDirection;
-            if (Projectile.soundDelay <= 0)
-            {
-				//SoundStyle ss = new SoundStyle(ModAsset.Swordswing_Mod);
+			if (Projectile.soundDelay <= 0)
+			{
+				// SoundStyle ss = new SoundStyle(ModAsset.Swordswing_Mod);
 				SoundStyle ss = SoundID.Item1;
 				SoundEngine.PlaySound(ss, Projectile.Center);
-                Projectile.soundDelay = 6;
-            }
+				Projectile.soundDelay = 6;
+			}
 
 			UpdateItemDraw();
 			UpdateDarkDraw();
 			UpdateLightDraw();
 		}
+
 		public virtual void HitTileSound(float scale)
 		{
-			//SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
+			// SoundStyle ss = new SoundStyle("Everglow/Commons/Weapons/StabbingSwords/StabCollide");
 			SoundStyle ss = SoundID.NPCHit4;
 			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)).WithVolume(0.3f), Projectile.Center);
 			Projectile.soundDelay = 6;
 		}
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
 			float point = 0;
 			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxLength * 100;
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
@@ -119,27 +134,30 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				}
 			}
 			return false;
-        }
-        public override void CutTiles()
-        {
-            DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+		}
+
+		public override void CutTiles()
+		{
+			DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
 			float cutLength = 164f;
-            Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
-			while(!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, end, 0, 0))
+			Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, end, 0, 0))
 			{
 				cutLength -= 8;
-				if(cutLength < 0)
+				if (cutLength < 0)
 				{
 					break;
 				}
 				end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
 			}
-            Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
-        }
-        public override bool PreDraw(ref Color lightColor)
-        {
-            return false;
+			Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
 		}
+
+		public override bool PreDraw(ref Color lightColor)
+		{
+			return false;
+		}
+
 		public struct DrawParameters
 		{
 			public DrawParameters(Vector2 postion, Color color, float rotation, Vector2 size, SpriteEffects spriteEffect)
@@ -150,13 +168,16 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Size = size;
 				SpriteEffect = spriteEffect;
 			}
+
 			public Vector2 Postion;
 			public Color Color;
 			public float Rotation;
 			public Vector2 Size;
 			public SpriteEffects SpriteEffect;
 		}
-		public DrawParameters ItemDraw = new DrawParameters();
+
+		public DrawParameters ItemDraw = default(DrawParameters);
+
 		public void UpdateItemDraw()
 		{
 			UnifiedRandom rand = Main.rand;
@@ -169,14 +190,16 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			if (Projectile.rotation < -MathF.PI / 2f || Projectile.rotation > MathF.PI / 2f)
 			{
 				itemFinalRotation += MathF.PI / 2f;
-				itemSpriteEffect = (itemSpriteEffect | SpriteEffects.FlipHorizontally);
+				itemSpriteEffect = itemSpriteEffect | SpriteEffects.FlipHorizontally;
 			}
 			ItemDraw.Postion = itemPos;
 			ItemDraw.Rotation = itemFinalRotation;
 			ItemDraw.Size = new Vector2(1f);
 			ItemDraw.SpriteEffect = itemSpriteEffect;
 		}
+
 		public DrawParameters[] DarkDraw = new DrawParameters[200];
+
 		public void UpdateDarkDraw()
 		{
 			UnifiedRandom rand = Main.rand;
@@ -217,7 +240,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * FadeScale;
 				}
 			}
-			if(Projectile.timeLeft >= TradeLength - 1)
+			if (Projectile.timeLeft >= TradeLength - 1)
 			{
 				DarkDraw[0].Color.A = (byte)(TradeShade * 255);
 				DarkDraw[0].Postion = drawPos;
@@ -232,7 +255,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				DarkDraw[0].Rotation = drawRotation;
 			}
 		}
-		public DrawParameters LightDraw = new DrawParameters();
+
+		public DrawParameters LightDraw = default(DrawParameters);
+
 		public void UpdateLightDraw()
 		{
 			UnifiedRandom rand = Main.rand;
@@ -253,17 +278,18 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				if (rndRange < 0.3f)
 				{
 					break;
-				}		
+				}
 			}
 			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
 			LightDraw.Postion = drawPos;
 			LightDraw.Size = drawSize;
 			LightDraw.Rotation = drawRotation;
 		}
+
 		public virtual void DrawBeforeItem()
 		{
-
 		}
+
 		/// <summary>
 		/// mulVelocity 决定了旗帜下方两个角收到弹幕速度的影响大小
 		/// </summary>
@@ -297,18 +323,22 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			bars.Add(new Vertex2D(flagBottomRight, lightColor, new Vector3(1, 1, 0)));
 			Main.graphics.GraphicsDevice.Textures[0] = flagTexture;
 			if (bars.Count > 3)
+			{
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
 		}
+
 		public virtual void DrawItem(Color lightColor)
 		{
-            int type = itemType;
-            Texture2D itemTexture = TextureAssets.Item[type].Value;
-            Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
-        }
-        public virtual void DrawAfterItem()
-		{
-
+			int type = itemType;
+			Texture2D itemTexture = TextureAssets.Item[type].Value;
+			Main.spriteBatch.Draw(itemTexture, ItemDraw.Postion - Main.screenPosition, null, lightColor, ItemDraw.Rotation, itemTexture.Size() / 2f, ItemDraw.Size, ItemDraw.SpriteEffect, 0f);
 		}
+
+		public virtual void DrawAfterItem()
+		{
+		}
+
 		public virtual void DrawEffect(Color lightColor)
 		{
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
@@ -341,13 +371,15 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
 		}
+
 		public override void PostDraw(Color lightColor)
-		{	
+		{
 			DrawBeforeItem();
 			DrawItem(lightColor);
 			DrawAfterItem();
 			DrawEffect(lightColor);
 		}
+
 		public void DrawWarp(VFXBatch sb)
 		{
 			float time = (float)(Main.time * 0.03);
@@ -364,20 +396,20 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					Color alphaColor = Color;
 					alphaColor.A = 0;
 					alphaColor.R = (byte)(((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-					alphaColor.G = (byte)(DarkDraw[f].Color.A);
+					alphaColor.G = (byte)(DarkDraw[f].Color.A / 10f);
 					List<Vertex2D> bars = new List<Vertex2D>
-		        	{
-			        	new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
-			        	new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
-			        	new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
-			        	new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
-			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
-			        	new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
-		        	};
+					{
+						new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
+						new Vertex2D(start + normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 1, 0)),
+						new Vertex2D(middle - normalY, new Color(alphaColor.R, alphaColor.G / 3, 0, 0), new Vector3(0.5f + time, 0, 0.5f)),
+						new Vertex2D(middle + normalY, new Color(alphaColor.R, alphaColor.G / 3, 0, 0), new Vector3(0.5f + time, 1, 0.5f)),
+						new Vertex2D(end, alphaColor, new Vector3(0f + time, 0.5f, 1)),
+						new Vertex2D(end, alphaColor, new Vector3(0f + time, 0.5f, 1)),
+					};
 					sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 				}
 			}
-			if(TradeShade > 0)
+			if (TradeShade > 0)
 			{
 				Vector2 center = LightDraw.Postion - Main.screenPosition;
 				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
@@ -388,15 +420,15 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Color alphaColor = Color;
 				alphaColor.A = 0;
 				alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
-				alphaColor.G = 200;
+				alphaColor.G = 20;
 				List<Vertex2D> bars = new List<Vertex2D>
 				{
-						new Vertex2D(start - normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 0, 0)),
-						new Vertex2D(start + normalY,new Color(alphaColor.R, alphaColor.G / 9, 0, 0),new Vector3(1 + time, 1, 0)),
-						new Vertex2D(middle - normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 0, 0.5f)),
-						new Vertex2D(middle + normalY,new Color(alphaColor.R, alphaColor.G / 3, 0, 0),new Vector3(0.5f + time, 1, 0.5f)),
-						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1)),
-						new Vertex2D(end,alphaColor,new Vector3(0f + time, 0.5f, 1))
+					new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
+					new Vertex2D(start + normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 1, 0)),
+					new Vertex2D(middle - normalY, new Color(alphaColor.R, alphaColor.G / 3, 0, 0), new Vector3(0.5f + time, 0, 0.5f)),
+					new Vertex2D(middle + normalY, new Color(alphaColor.R, alphaColor.G / 3, 0, 0), new Vector3(0.5f + time, 1, 0.5f)),
+					new Vertex2D(end, alphaColor, new Vector3(0f + time, 0.5f, 1)),
+					new Vertex2D(end, alphaColor, new Vector3(0f + time, 0.5f, 1)),
 				};
 				sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 			}

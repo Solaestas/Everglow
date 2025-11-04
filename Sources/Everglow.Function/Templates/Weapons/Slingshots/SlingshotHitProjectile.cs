@@ -1,6 +1,6 @@
-using Everglow.Commons.VFX;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
 
 namespace Everglow.Commons.Templates.Weapons.Slingshots;
 
@@ -10,6 +10,7 @@ namespace Everglow.Commons.Templates.Weapons.Slingshots;
 public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 {
 	public override bool CloneNewInstances => false;
+
 	public override bool IsCloneable => false;
 
 	public override void SetDefaults()
@@ -23,10 +24,11 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 		Projectile.DamageType = DamageClass.Ranged;
 		SetDef();
 	}
+
 	public virtual void SetDef()
 	{
-
 	}
+
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -45,6 +47,7 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -52,11 +55,12 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 		Texture2D t = ModAsset.Trail_1.Value;
 		DrawTexCircle(value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
-
 		return false;
 	}
+
 	private static void DrawTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -83,13 +87,16 @@ public abstract class SlingshotHitProjectile : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0.2f, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.6f * MathF.Sqrt(Projectile.ai[0]) * (1 - value);
 		Texture2D t = ModAsset.Trail_1.Value;
-		DrawTexCircle_VFXBatch(spriteBatch, value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.4f * (1 - value), colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawTexCircle_VFXBatch(spriteBatch, value * 22 * MathF.Sqrt(Projectile.ai[0]), 8 * MathF.Sqrt(Projectile.ai[0]) * value, new Color(colorV, colorV * 0.04f * (1 - value), colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
 }

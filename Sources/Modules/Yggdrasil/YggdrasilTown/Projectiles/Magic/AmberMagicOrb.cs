@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 
-public class AmberMagicOrb : HandholdProjectile, IWarpProjectile
+public class AmberMagicOrb : HandholdProjectile
 {
 	public override void SetDef()
 	{
@@ -156,9 +156,5 @@ public class AmberMagicOrb : HandholdProjectile, IWarpProjectile
 		}
 
 		return false;
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
 	}
 }

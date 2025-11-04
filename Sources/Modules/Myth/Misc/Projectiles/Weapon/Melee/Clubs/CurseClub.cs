@@ -1,13 +1,12 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
-using Everglow.Commons.Templates.Weapons.Clubs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
 public class CurseClub : ClubProj
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Beta = 0.005f;
 		MaxOmega = 0.45f;
@@ -131,64 +130,23 @@ public class CurseClub : ClubProj
 		D.velocity = new Vector2(-v0.Y * Speed, v0.X * Speed);
 	}
 
-	public override void PostDraw(Color lightColor)
-	{
-		base.PostDraw(lightColor);
-	}
-
 	public override void PostPreDraw()
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
-		{
-			SmoothTrail.Add(SmoothTrailX[x]);
-		}
-		if (trailVecs.Count != 0)
-		{
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
+		float fade = Omega * 2f + 0.2f;
+		var color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade);
+		var bars = CreateTrailVertices(paramA: 0.5f, paramB: 0.5f, useSpecialAplha: true, trailColor: color2);
+		if(bars == null)
 		{
 			return;
 		}
 
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 
-		float fade = Omega * 2f + 0.2f;
-		var color2 = new Color(Math.Min(fade * 0.6f, 0.6f), fade, fade * 0.01f, fade);
-
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
-		bars.Add(new Vertex2D(Projectile.Center - Main.screenPosition, Color.Transparent, new Vector3(0, 0, 0)));
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length - 1f);
-			float w = 1 - Math.Abs((trail[i].X * 0.5f + trail[i].Y * 0.5f) / trail[i].Length());
-			float w2 = MathF.Sqrt(TrailAlpha(factor));
-			w *= w2 * w;
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 0.5f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center - trail[i] * 1.0f * Projectile.scale - Main.screenPosition, color2, new Vector3(factor, 0, w)));
-		}
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.AnisotropicWrap, DepthStencilState.None, RasterizerState.CullNone, null, model);
 
 		Main.graphics.GraphicsDevice.Textures[0] = ModAsset.CurseClub_trail.Value;
-
-		var lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16)).ToVector4();
-		lightColor.W = 0.7f * Omega;
 
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		Main.spriteBatch.End();

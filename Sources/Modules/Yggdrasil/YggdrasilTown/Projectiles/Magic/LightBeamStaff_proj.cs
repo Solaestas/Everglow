@@ -7,7 +7,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 
-public class LightBeamStaff_proj : HandholdProjectile, IWarpProjectile
+public class LightBeamStaff_proj : HandholdProjectile
 {
 	public override void SetDef()
 	{
@@ -100,9 +100,5 @@ public class LightBeamStaff_proj : HandholdProjectile, IWarpProjectile
 		var powerColor = new Color(duration + 0.3f, duration * duration, duration * duration, 0);
 		Main.spriteBatch.Draw(texMain_glow, Projectile.Center - Main.screenPosition + DrawOffset - new Vector2(54, 0).RotatedBy(Projectile.rotation - MathHelper.PiOver4), null, powerColor, rot, texMain_glow.Size() / 2f, 1f, se, 0);
 		return false;
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
 	}
 }
