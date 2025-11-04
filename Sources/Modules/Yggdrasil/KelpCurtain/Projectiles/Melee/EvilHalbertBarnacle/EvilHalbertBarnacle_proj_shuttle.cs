@@ -45,12 +45,12 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 	public override void AI()
 	{
 		Timer++;
-		if (TimeTokill >= 0 && TimeTokill <= 2)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
 			Projectile.Kill();
 		}
-		TimeTokill--;
-		if (TimeTokill >= 0)
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy >= 0)
 		{
 			Projectile.velocity *= 0f;
 			return;
@@ -287,7 +287,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 		DrawTrailDark();
 		DrawTrailDark();
 		DrawTrail();
-		if (TimeTokill <= 0)
+		if (TimeAfterEntityDestroy <= 0)
 		{
 			DrawSelf();
 		}
@@ -414,7 +414,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public override void DrawTrailDark()
+	public void DrawTrailDark()
 	{
 		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)

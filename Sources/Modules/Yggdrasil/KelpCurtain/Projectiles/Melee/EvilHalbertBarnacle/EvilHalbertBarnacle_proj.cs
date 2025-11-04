@@ -23,11 +23,10 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 	public override void SetDef()
 	{
 		maxAttackType = 5;
-		trailLength = 20;
+		maxSlashTrailLength = 20;
 		longHandle = true;
-		AutoEnd = true;
-		CanLongLeftClick = true;
-		selfWarp = false;
+		autoEnd = true;
+		canLongLeftClick = true;
 		Omega = 0;
 	}
 
@@ -62,7 +61,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			CurrentFade *= 0.5f;
 		}
 		DrawTrailFade.Enqueue(CurrentFade);
-		if(DrawTrailFade.Count > trailLength)
+		if(DrawTrailFade.Count > maxSlashTrailLength)
 		{
 			DrawTrailFade.Dequeue();
 		}
@@ -110,10 +109,10 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-			DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+			DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 			if (glowTexture != null)
 			{
-				DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+				DrawVertexByTwoLine(glowTexture, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 			}
 
 			spriteBatch.End();
@@ -131,7 +130,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 
 		// Melee time parameter, the faster, the smaller.
 		float meleeTime = 1f / player.meleeSpeed;
-		if (attackType == 0)
+		if (currantAttackType == 0)
 		{
 			NoWeapon = false;
 			if (timer < 16 * meleeTime)
@@ -139,10 +138,10 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				NoTrail = true;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Projectile.spriteDirection * 2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(162, targetRot, -1.2f), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(162, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
 				Omega = 0;
-				Projectile.rotation = mainVec.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				RotationTowardScreen = RotationTowardScreen * 0.8f;
 			}
 			else if (timer < 50 * meleeTime)
@@ -151,7 +150,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				{
 					NoTrail = false;
 				}
-				isAttacking = true;
+				canHit = true;
 				if (timer < 32 * meleeTime)
 				{
 					Omega += 0.02f / meleeTime;
@@ -162,23 +161,23 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 					NoTrail = true;
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
+				mainAxisDirection = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
 			}
 			if (timer > 56 * meleeTime)
 			{
 				NextAttackType();
 			}
 		}
-		if (attackType == 1)
+		if (currantAttackType == 1)
 		{
 			if (timer < 4 * meleeTime)
 			{
 				NoTrail = true;
 				LockPlayerDir(Player);
-				mainVec = mainVec * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -1.3f, RotationTowardScreen, 1000) * 0.1f;
+				mainAxisDirection = mainAxisDirection * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -1.3f, RotationTowardScreen, 1000) * 0.1f;
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				Projectile.rotation = mainVec.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				RotationTowardScreen = RotationTowardScreen * 0.75f + 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
@@ -187,7 +186,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				{
 					NoTrail = false;
 				}
-				isAttacking = true;
+				canHit = true;
 				if (timer < 16 * meleeTime)
 				{
 					Omega += 0.026f / meleeTime;
@@ -198,23 +197,23 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 					NoTrail = true;
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
+				mainAxisDirection = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
 			}
 			if (timer > 36 * meleeTime)
 			{
 				NextAttackType();
 			}
 		}
-		if (attackType == 2)
+		if (currantAttackType == 2)
 		{
 			if (timer < 4 * meleeTime)
 			{
 				NoTrail = true;
 				LockPlayerDir(Player);
-				mainVec = mainVec * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -1.3f, RotationTowardScreen, 1000) * 0.1f;
+				mainAxisDirection = mainAxisDirection * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -1.3f, RotationTowardScreen, 1000) * 0.1f;
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				Projectile.rotation = mainVec.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				RotationTowardScreen = RotationTowardScreen * 0.75f - 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
@@ -223,7 +222,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				{
 					NoTrail = false;
 				}
-				isAttacking = true;
+				canHit = true;
 				if (timer < 12 * meleeTime)
 				{
 					Omega -= 0.04f / meleeTime;
@@ -233,14 +232,14 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 					Omega *= 0.5f / MathF.Log(meleeTime * MathHelper.E);
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
+				mainAxisDirection = Vector2Elipse(162, Projectile.rotation, -1.3f, RotationTowardScreen, 1000);
 			}
 			if (timer > 26 * meleeTime)
 			{
 				NextAttackType();
 			}
 		}
-		if (attackType == 3)
+		if (currantAttackType == 3)
 		{
 			NoTrail = true;
 			NoWeapon = true;
@@ -260,16 +259,16 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				NextAttackType();
 			}
 		}
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			if (timer < 4 * meleeTime)
 			{
 				NoWeapon = false;
 				LockPlayerDir(Player);
-				mainVec = mainVec * 0.6f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, 0, RotationTowardScreen, 1000) * 0.4f;
+				mainAxisDirection = mainAxisDirection * 0.6f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, 0, RotationTowardScreen, 1000) * 0.4f;
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				Projectile.rotation = mainVec.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				RotationTowardScreen = RotationTowardScreen * 0.75f - 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
@@ -278,7 +277,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				{
 					NoTrail = false;
 				}
-				isAttacking = true;
+				canHit = true;
 				if (timer < 12 * meleeTime)
 				{
 					Omega -= 0.04f / meleeTime;
@@ -288,7 +287,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 					Omega *= 0.5f / MathF.Log(meleeTime * MathHelper.E);
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(154, Projectile.rotation, 0, RotationTowardScreen, 1000);
+				mainAxisDirection = Vector2Elipse(154, Projectile.rotation, 0, RotationTowardScreen, 1000);
 			}
 			if (timer > 36 * meleeTime)
 			{
@@ -296,16 +295,16 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			}
 		}
 
-		if (attackType == 5)
+		if (currantAttackType == 5)
 		{
 			if (timer < 4 * meleeTime)
 			{
 				NoTrail = true;
 				LockPlayerDir(Player);
-				mainVec = mainVec * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -0.8f, RotationTowardScreen, 1000) * 0.1f;
+				mainAxisDirection = mainAxisDirection * 0.9f + Vector2Elipse(162, -MathHelper.PiOver2 + Projectile.rotation, -0.8f, RotationTowardScreen, 1000) * 0.1f;
 				Omega *= 0.4f / MathF.Log(meleeTime * MathHelper.E);
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				Projectile.rotation = mainVec.ToRotation();
+				Projectile.rotation = mainAxisDirection.ToRotation();
 				RotationTowardScreen = RotationTowardScreen * 0.75f + 0.6f * 0.25f * (-Projectile.spriteDirection);
 			}
 			else if (timer < 42 * meleeTime)
@@ -314,7 +313,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 				{
 					NoTrail = false;
 				}
-				isAttacking = true;
+				canHit = true;
 				if (timer < 12 * meleeTime)
 				{
 					Omega += 0.04f / meleeTime;
@@ -324,7 +323,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 					Omega *= 0.5f / MathF.Log(meleeTime * MathHelper.E);
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(154, Projectile.rotation, -0.8f, RotationTowardScreen, 1000);
+				mainAxisDirection = Vector2Elipse(154, Projectile.rotation, -0.8f, RotationTowardScreen, 1000);
 			}
 			if (timer > 36 * meleeTime)
 			{
@@ -342,7 +341,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
@@ -350,13 +349,13 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		if (trailVecs.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			Vector2 vec = trailVecs.ToArray()[trailVecs.Count - 1];
+			Vector2 vec = slashTrail.ToArray()[slashTrail.Count - 1];
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		Vector2 center = Projectile.Center - Vector2.Normalize(mainVec) * disFromPlayer;
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainAxisDirection) * disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 		{
@@ -366,7 +365,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 		var bars_Side = new List<Vertex2D>();
-		float fadeIndexScale = trailVecs.Count / (float)length;
+		float fadeIndexScale = slashTrail.Count / (float)length;
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);

@@ -10,11 +10,11 @@ public class MechanismHalberd_Proj : MeleeProj
 	public override void SetDef()
 	{
 		maxAttackType = 2; // 三段攻击
-		trailLength = 18; // 拖尾长度
+		maxSlashTrailLength = 18; // 拖尾长度
 		longHandle = true; // 长柄武器
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
-		AutoEnd = false; // 不使用默认结束攻击逻辑
-		CanLongLeftClick = false; // 不需要左键蓄力
+		autoEnd = false; // 不使用默认结束攻击逻辑
+		canLongLeftClick = false; // 不需要左键蓄力
 	}
 
 	public override string TrailColorTex() => ModAsset.MechanismHalberd_Color_Mod;
@@ -32,7 +32,7 @@ public class MechanismHalberd_Proj : MeleeProj
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
 
-		useTrail = true;
+		useSlash = true;
 
 		Vector2 vToMouse = Main.MouseWorld - player.Top;
 		float AddHeadRotation = (float)Math.Atan2(vToMouse.Y, vToMouse.X) + (1 - player.direction) * 1.57f;
@@ -72,7 +72,7 @@ public class MechanismHalberd_Proj : MeleeProj
 		}
 
 		// 上劈
-		if (attackType == 0)
+		if (currantAttackType == 0)
 		{
 			LockPlayerDir(player);
 			float rot = player.direction;
@@ -83,35 +83,35 @@ public class MechanismHalberd_Proj : MeleeProj
 			}
 			if (timer < 20)
 			{
-				useTrail = false;
+				useSlash = false;
 
 				float rot0 = -MathHelper.PiOver2 - rot * 1.2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(100, rot0, -0.8f, rot), 0.15f);
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(100, rot0, -0.8f, rot), 0.15f);
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer > 20 && timer < 40)
 			{
-				isAttacking = true;
-				Lighting.AddLight(Projectile.Center + mainVec, 0.25f, 0.3f, 0.35f);
+				canHit = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.25f, 0.3f, 0.35f);
 
 				Projectile.rotation -= Projectile.spriteDirection * 0.22f;
 
-				mainVec = Vector2Elipse(120, Projectile.rotation, -0.8f, rot);
+				mainAxisDirection = Vector2Elipse(120, Projectile.rotation, -0.8f, rot);
 			}
 			if (timer > 45)
 			{
 				NextAttackType();
 			}
 
-			if (isAttacking && Main.rand.NextBool(4))
+			if (canHit && Main.rand.NextBool(4))
 			{
-				Vector2 offset = mainVec * Main.rand.NextFloat(0.3f, 0.9f);
+				Vector2 offset = mainAxisDirection * Main.rand.NextFloat(0.3f, 0.9f);
 				Dust.NewDustPerfect(Projectile.Center + offset, DustID.Smoke, Main.rand.NextVector2Unit() * 1.5f, 0, new Color(180, 200, 220), 1.1f).noGravity = true;
 			}
 		}
 
 		// 下劈
-		else if (attackType == 1)
+		else if (currantAttackType == 1)
 		{
 			LockPlayerDir(player);
 			float rot = player.direction;
@@ -123,18 +123,18 @@ public class MechanismHalberd_Proj : MeleeProj
 			if (timer < 18)
 			{
 				float rot0 = -MathHelper.PiOver2 + 0.8f * rot;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(60, rot0, -0.8f, rot), 0.15f);
-				useTrail = false;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(60, rot0, -0.8f, rot), 0.15f);
+				useSlash = false;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer > 18 && timer < 35)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.4f, 0.4f, 0.25f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.4f, 0.4f, 0.25f);
+				canHit = true;
 
 				Projectile.rotation += Projectile.spriteDirection * 0.3f;
 
-				mainVec = Vector2Elipse(160, Projectile.rotation, -0.8f, rot);
+				mainAxisDirection = Vector2Elipse(160, Projectile.rotation, -0.8f, rot);
 			}
 			if (timer > 45)
 			{
@@ -143,7 +143,7 @@ public class MechanismHalberd_Proj : MeleeProj
 		}
 
 		// 横劈
-		else if (attackType == 2)
+		else if (currantAttackType == 2)
 		{
 			LockPlayerDir(player);
 			float rot = player.direction;
@@ -155,12 +155,12 @@ public class MechanismHalberd_Proj : MeleeProj
 					SoundEngine.PlaySound(SoundID.Item24 with { Volume = 2f }, Projectile.Center);
 				}
 
-				useTrail = false;
-				isAttacking = false;
+				useSlash = false;
+				canHit = false;
 
 				float rot0 = -MathHelper.PiOver2 - 0.4f * rot;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(80, rot0, -1.3f, rot * 0.1f), 0.2f);
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(80, rot0, -1.3f, rot * 0.1f), 0.2f);
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			else if (timer == 30)
 			{
@@ -168,17 +168,17 @@ public class MechanismHalberd_Proj : MeleeProj
 			}
 			else if (timer > 30 && timer < 45)
 			{
-				isAttacking = true;
-				useTrail = true;
+				canHit = true;
+				useSlash = true;
 
-				Lighting.AddLight(Projectile.Center + mainVec, 0.2f, 0.4f, 0.8f);
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.2f, 0.4f, 0.8f);
 
 				Projectile.rotation += Projectile.spriteDirection * 0.35f;
-				mainVec = Vector2Elipse(180, Projectile.rotation, -1.3f, rot * 0.1f);
+				mainAxisDirection = Vector2Elipse(180, Projectile.rotation, -1.3f, rot * 0.1f);
 
 				if (timer % 5 == 0)
 				{
-					Lighting.AddLight(Projectile.Center + mainVec * 0.5f, 0.3f, 0.5f, 0.9f);
+					Lighting.AddLight(Projectile.Center + mainAxisDirection * 0.5f, 0.3f, 0.5f, 0.9f);
 				}
 			}
 			else if (timer > 45)
