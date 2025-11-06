@@ -1,4 +1,5 @@
 using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.WorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
@@ -8,6 +9,30 @@ public class TwilightCastle_RoomScene_OverTiles : BackgroundVFX
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 
 	public Point Offset = new Point(0, 0);
+
+	public bool FlipHorizontally(int i, int j)
+	{
+		int leftSolid = 0;
+		int rightSolid = 0;
+		for (int x = 1; x < 15; x++)
+		{
+			Tile tileLeft = YggdrasilWorldGeneration.SafeGetTile(i - x, j);
+			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + x, j);
+			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
+			{
+				leftSolid++;
+			}
+			if (tileRight.HasTile && tileRight.TileType == ModContent.TileType<GreenRelicBrick>())
+			{
+				rightSolid++;
+			}
+		}
+		if (rightSolid > leftSolid)
+		{
+			return false;
+		}
+		return true;
+	}
 
 	/// <summary>
 	/// Allow to make a custon draw for this vfx.
@@ -27,7 +52,7 @@ public class TwilightCastle_RoomScene_OverTiles : BackgroundVFX
 
 	public override void Kill()
 	{
-		UnregisterCustomLogic(CustomDraw);
+		UnregisterCustomDraw(CustomDraw);
 		base.Kill();
 	}
 
@@ -36,7 +61,7 @@ public class TwilightCastle_RoomScene_OverTiles : BackgroundVFX
 		CustomDraw += customDraw;
 	}
 
-	public void UnregisterCustomLogic(CustomDrawVFX customDraw)
+	public void UnregisterCustomDraw(CustomDrawVFX customDraw)
 	{
 		CustomDraw -= customDraw;
 	}

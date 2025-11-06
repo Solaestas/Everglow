@@ -2229,22 +2229,19 @@ public class YggdrasilTownGeneration
 				int roomOriginY = centerY - 100 + y * 25 + 12;
 				string[] randomRooms = new string[]
 				{
-					ModAsset.TCRoom_Ld_00_StoneCave_40x21_Path,
-					ModAsset.TCRoom_Ld_01_BloodyChurch_40x21_Path,
-					ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
-					ModAsset.TwilightCastle_Room_4_40x21_Path,
-					ModAsset.TwilightCastle_Room_5_40x21_Path,
-					ModAsset.TwilightCastle_Room_6_40x21_Path,
-					ModAsset.TwilightCastle_Room_7_40x21_Path,
-					ModAsset.TwilightCastle_Room_8_40x21_Path,
-					ModAsset.TwilightCastle_Room_9_40x21_Path,
-					ModAsset.TwilightCastle_Room_10_40x21_Path,
-					ModAsset.TwilightCastle_Room_11_40x21_Path,
-					ModAsset.TwilightCastle_Room_12_40x21_Path,
-					ModAsset.TwilightCastle_Room_13_40x21_Path,
-					ModAsset.TwilightCastle_Room_14_40x21_Path,
-					ModAsset.TwilightCastle_Room_15_40x21_Path,
+					ModAsset.TCRoom_Rd_00_StoneCave_40x21_Path,
+					ModAsset.TCRoom_Rd_01_BloodyChurch_40x21_Path,
+					ModAsset.TCRoom_Rd_02_Desert_40x21_Path,
 				};
+				if (x == 2)
+				{
+					randomRooms = new string[]
+					{
+						ModAsset.TCRoom_Ld_00_StoneCave_40x21_Path,
+						ModAsset.TCRoom_Ld_01_BloodyChurch_40x21_Path,
+						ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
+					};
+				}
 				QuickBuild(roomOriginX - 20, roomOriginY - 10, randomRooms[GenRand.Next(randomRooms.Length)]);
 
 				// KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
@@ -2580,12 +2577,12 @@ public class YggdrasilTownGeneration
 			for (int i = x; i <= x + roomWidth; i++)
 			{
 				var tile = SafeGetTile(i, y - 2);
-				if (tile.TileType == 124)
+				if (tile.TileType == TileID.WoodenBeam)
 				{
 					for (int j = 0; j < 30; j++)
 					{
 						var tile2 = SafeGetTile(i, y + j);
-						if (tile2.HasTile && tile2.TileType != 124)
+						if (tile2.HasTile && tile2.TileType != TileID.WoodenBeam)
 						{
 							break;
 						}
@@ -2593,7 +2590,7 @@ public class YggdrasilTownGeneration
 						{
 							if (ChestSafe(i, y + j))
 							{
-								tile2.TileType = 124;
+								tile2.TileType = TileID.WoodenBeam;
 								tile2.HasTile = true;
 							}
 						}
@@ -2606,7 +2603,7 @@ public class YggdrasilTownGeneration
 								for (int h = 0; h < 100; h++)
 								{
 									var tile3 = SafeGetTile(i + h, y + j);
-									if (tile3.HasTile && tile2.TileType != 124)
+									if (tile3.HasTile && tile2.TileType != TileID.WoodenBeam)
 									{
 										break;
 									}
@@ -2625,7 +2622,7 @@ public class YggdrasilTownGeneration
 								for (int h = 0; h < 100; h++)
 								{
 									var tile3 = SafeGetTile(i - h, y + j);
-									if (tile3.HasTile && tile2.TileType != 124)
+									if (tile3.HasTile && tile2.TileType != TileID.WoodenBeam)
 									{
 										break;
 									}

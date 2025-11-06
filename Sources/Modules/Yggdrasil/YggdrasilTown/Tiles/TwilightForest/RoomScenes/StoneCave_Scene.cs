@@ -45,8 +45,9 @@ public class StoneCave_Scene : ModTile, ISceneTile
 	{
 		Texture2D tex0 = ModAsset.StoneCave_Scene_Close.Value;
 
+		bool flipH = otD.FlipHorizontally(otD.originTile.X, otD.originTile.Y);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(otD.originTile.X, otD.originTile.Y, tex0, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(otD.originTile.X, otD.originTile.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 	}
 
@@ -55,12 +56,13 @@ public class StoneCave_Scene : ModTile, ISceneTile
 		Texture2D tex0 = ModAsset.StoneCave_Scene_Background.Value;
 		Texture2D tex1 = ModAsset.StoneCave_Scene_Far.Value;
 
+		bool flipH = bg.FlipHorizontally(bg.originTile.X, bg.originTile.Y);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex0, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex1, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex1, bars, flipH);
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 	}
 }

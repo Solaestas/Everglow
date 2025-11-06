@@ -14,7 +14,7 @@ public class SceneUtils
 	/// <param name="startCoordX"></param>
 	/// <param name="startCoordY"></param>
 	/// <param name="bars"></param>
-	public static void DrawTileCover(int i, int j, Texture2D texture, float startCoordX, float startCoordY, List<Vertex2D> bars, float colorFactors)
+	public static void DrawTileCover(int i, int j, Texture2D texture, float startCoordX, float startCoordY, List<Vertex2D> bars, bool flipH, float colorFactors)
 	{
 		Vector2 drawPos0 = new Point(i, j).ToWorldCoordinates() - new Vector2(8);
 		Vector2 drawPos1 = drawPos0 + new Vector2(16, 0);
@@ -28,13 +28,20 @@ public class SceneUtils
 
 		Vector2 size = new Vector2(16) / texture.Size();
 
-		bars.Add(drawPos0, light0, new Vector3(startCoordX, startCoordY, 0));
-		bars.Add(drawPos1, light1, new Vector3(startCoordX + size.X, startCoordY, 0));
-		bars.Add(drawPos3, light3, new Vector3(startCoordX + size.X, startCoordY + size.Y, 0));
+		float coordX0 = startCoordX;
+		float coordX1 = startCoordX + size.X;
+		if(flipH)
+		{
+			(coordX0, coordX1) = (coordX1, coordX0);
+		}
 
-		bars.Add(drawPos0, light0, new Vector3(startCoordX, startCoordY, 0));
-		bars.Add(drawPos3, light3, new Vector3(startCoordX + size.X, startCoordY + size.Y, 0));
-		bars.Add(drawPos2, light2, new Vector3(startCoordX, startCoordY + size.Y, 0));
+		bars.Add(drawPos0, light0, new Vector3(coordX0, startCoordY, 0));
+		bars.Add(drawPos1, light1, new Vector3(coordX1, startCoordY, 0));
+		bars.Add(drawPos3, light3, new Vector3(coordX1, startCoordY + size.Y, 0));
+
+		bars.Add(drawPos0, light0, new Vector3(coordX0, startCoordY, 0));
+		bars.Add(drawPos3, light3, new Vector3(coordX1, startCoordY + size.Y, 0));
+		bars.Add(drawPos2, light2, new Vector3(coordX0, startCoordY + size.Y, 0));
 	}
 
 	/// <summary>
@@ -44,13 +51,20 @@ public class SceneUtils
 	/// <param name="j"></param>
 	/// <param name="texture"></param>
 	/// <param name="bars"></param>
-	public static void DrawMultiSceneTowardRightBottom(int i, int j, Texture2D texture, List<Vertex2D> bars, float colorFactors = 1)
+	public static void DrawMultiSceneTowardBottom(int i, int j, Texture2D texture, List<Vertex2D> bars, bool flipH, float colorFactors = 1)
 	{
 		for (int x = 0; x < texture.Width; x += 16)
 		{
 			for (int y = 0; y < texture.Height; y += 16)
 			{
-				DrawTileCover(i + x / 16, j + y / 16, texture, x / (float)texture.Width, y / (float)texture.Height, bars, colorFactors);
+				if(flipH)
+				{
+					DrawTileCover(i - x / 16, j + y / 16, texture, x / (float)texture.Width, y / (float)texture.Height, bars, flipH, colorFactors);
+				}
+				else
+				{
+					DrawTileCover(i + x / 16, j + y / 16, texture, x / (float)texture.Width, y / (float)texture.Height, bars, flipH, colorFactors);
+				}
 			}
 		}
 	}

@@ -16,6 +16,7 @@ public class RubyDarkGoldChest_BloodyChurch : ModTile
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
 		Main.tileOreFinderPriority[Type] = 500;
+		Main.tileLighted[Type] = true;
 		TileID.Sets.HasOutlines[Type] = true;
 		TileID.Sets.BasicChest[Type] = true;
 		TileID.Sets.DisableSmartCursor[Type] = true;
@@ -158,5 +159,12 @@ public class RubyDarkGoldChest_BloodyChurch : ModTile
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		base.PostDraw(i, j, spriteBatch);
+	}
+
+	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+	{
+		r = 2.000f;
+		g = 0f;
+		b = 0.400f;
 	}
 }

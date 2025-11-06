@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
@@ -46,15 +47,21 @@ public class Desert_Scene : ModTile, ISceneTile
 	public void DrawOverTile(TwilightCastle_RoomScene_OverTiles otD)
 	{
 		Texture2D tex0 = ModAsset.Desert_Scene_Close.Value;
+		bool flipH = otD.FlipHorizontally(otD.originTile.X, otD.originTile.Y);
+		int direction = 1;
+		if (flipH)
+		{
+			direction = -1;
+		}
 
-		Tile tile_lantern = YggdrasilWorldGeneration.SafeGetTile(otD.originTile + new Point(7, 5));
+		Tile tile_lantern = YggdrasilWorldGeneration.SafeGetTile(otD.originTile + new Point(7 * direction, 5));
 		if (tile_lantern.TileType == ModContent.TileType<SandgoldLantern>() && tile_lantern.TileFrameX == 0)
 		{
 			tex0 = ModAsset.Desert_Scene_Close_lightUp.Value;
 		}
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(otD.originTile.X, otD.originTile.Y, tex0, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(otD.originTile.X, otD.originTile.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 	}
 
@@ -64,16 +71,22 @@ public class Desert_Scene : ModTile, ISceneTile
 		Texture2D tex1 = ModAsset.Desert_Scene_Far.Value;
 		Texture2D tex2 = ModAsset.Desert_Scene_WallGemsReflection.Value;
 
+		bool flipH = bg.FlipHorizontally(bg.originTile.X, bg.originTile.Y);
+		int direction = 1;
+		if (flipH)
+		{
+			direction = -1;
+		}
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex0, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X, bg.originTile.Y, tex1, bars);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex1, bars, flipH);
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardRightBottom(bg.originTile.X + 34, bg.originTile.Y + 11, tex2, bars, 2.6f);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X + 34 * direction, bg.originTile.Y + 11, tex2, bars, flipH, 2.6f);
 		Ins.Batch.Draw(tex2, bars, PrimitiveType.TriangleList);
 	}
 }

@@ -109,6 +109,34 @@ public class EmptyWaterStaff_proj : TrailingProjectile
 		Main.spriteBatch.Draw(texMain, Projectile.Center - Main.screenPosition - Projectile.velocity, null, color, Projectile.velocity.ToRotation() - MathHelper.PiOver2, texMain.Size() / 2f, 0.6f, SpriteEffects.None, 0);
 	}
 
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor - timeValue * 0.6f;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
+	}
+
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
+	{
+		if (style == 1)
+		{
+			return ProjTrailColor.GetColor(factor);
+		}
+		else
+		{
+			return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+		}
+	}
+
 	//public override void DrawTrail()
 	//{
 	//	var unSmoothPos = new List<Vector2>();

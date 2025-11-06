@@ -210,7 +210,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 
 	public override void Kill()
 	{
-		UnregisterCustomLogic(LaserScan);
+		UnregisterCustomDraw(LaserScan);
 		base.Kill();
 	}
 
@@ -227,7 +227,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	/// Unregister a custom logic.
 	/// </summary>
 	/// <param name="customLogic"></param>
-	public void UnregisterCustomLogic(ScanningLogic customLogic)
+	public void UnregisterCustomDraw(ScanningLogic customLogic)
 	{
 		LaserScan -= customLogic;
 	}
