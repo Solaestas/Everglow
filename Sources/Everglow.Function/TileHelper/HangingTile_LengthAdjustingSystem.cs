@@ -98,6 +98,12 @@ public class HangingTile_LengthAdjustingSystem : Visual
 				Kill(hangingTile, player);
 			}
 		}
+
+		// 一开始藤曼行为
+		if (Timer == 1 && Style == 1)
+		{
+			hangingTile.OnAdjustmentStart(FixPoint, player);
+		}
 		if (Timer < 12)
 		{
 			PanelRange = (MathF.Sin(Timer / 10f * MathHelper.Pi - MathHelper.PiOver2) + 1.2f) * 0.5f;
@@ -114,7 +120,9 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		{
 			PanelRange *= 1;
 		}
-		if (player.HeldItem.createTile != tile.TileType)
+
+		// 动态性，根据子类的判断条件去控制
+		if (!hangingTile.IsCanRightClick(i, j))
 		{
 			EndAdjustment();
 			return;
@@ -168,7 +176,12 @@ public class HangingTile_LengthAdjustingSystem : Visual
 				{
 					SoundEngine.PlaySound(SoundID.Unlock.WithVolume(0.5f), FixPoint.ToWorldCoordinates());
 				}
+
+				// 每次长度变化都传回HangingTile
+				int oldFrameY = tile.TileFrameY;
 				tile.TileFrameY = (short)Math.Clamp(nowFrameY, 1, hangingTile.MaxCableLength - 1);
+				int deltaLength = tile.TileFrameY - oldFrameY;
+				hangingTile.OnAdjustmentUpdate(FixPoint, player, deltaLength);
 			}
 
 			Vector2 handleDir = new Vector2(1, 0).RotatedBy(HandleRotation);
@@ -248,6 +261,9 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		{
 			hangingTile.KnobAdjustingPlayers.Remove(FixPoint);
 		}
+
+		// 结束行为
+		hangingTile.OnAdjustmentEnd(FixPoint, owner);
 	}
 
 	public override void Draw()
@@ -283,7 +299,7 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		}
 
 		// If your HeldItem doesn't match with the tile type, it turns red.
-		if (player.HeldItem.createTile != tile.type)
+		if (!hangingTile.IsCanRightClick(i, j))
 		{
 			drawColor = new Color(1f, 0, 0, 0.5f);
 			Main.instance.MouseText("Different Type Error", ItemRarityID.Red);

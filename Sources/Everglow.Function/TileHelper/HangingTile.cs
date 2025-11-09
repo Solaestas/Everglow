@@ -105,6 +105,34 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	{
 	}
 
+	/// <summary>
+	/// 在刚打开按钮时的行为
+	/// </summary>
+	/// <param name="fixPoint">HangingTile实例位置</param>
+	/// <param name="player">正在操作的玩家</param>
+	public virtual void OnAdjustmentStart(Point fixPoint, Player player)
+	{
+	}
+
+	/// <summary>
+	/// 调整长度时的行为
+	/// </summary>
+	/// <param name="fixPoint">位置坐标</param>
+	/// <param name="player">操作玩家</param>
+	/// <param name="deltaLength">长度增量,值为0代表这帧没变化,如果不需要处理0请在值为0时直接return</param>
+	public virtual void OnAdjustmentUpdate(Point fixPoint, Player player, int deltaLength)
+	{
+	}
+
+	/// <summary>
+	/// 结束调整时的行为
+	/// </summary>
+	/// <param name="fixPoint">位置坐标</param>
+	/// <param name="player">操作玩家</param>
+	public virtual void OnAdjustmentEnd(Point fixPoint, Player player)
+	{
+	}
+
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -427,24 +455,38 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <returns></returns>
 	public override bool RightClick(int i, int j)
 	{
-		Point point = new Point(i, j);
-		if (LengthAdjustable && !RopeGraspingPlayer.ContainsKey(point))
+		if (IsCanRightClick(i, j))
 		{
-			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !KnobAdjustingPlayers.ContainsKey(point))
+			Point point = new Point(i, j);
+			if (LengthAdjustable && !RopeGraspingPlayer.ContainsKey(point))
 			{
-				HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
-				vfx.RegisterCustomPanelDrawing(DrawDefaultPanel);
-				Ins.VFXManager.Add(vfx);
-				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				KnobAdjustingPlayers.Add(point, Main.LocalPlayer);
+				Tile tile = Main.tile[i, j];
+				if (!KnobAdjustingPlayers.ContainsKey(point))
+				{
+					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
+					vfx.RegisterCustomPanelDrawing(DrawDefaultPanel);
+					Ins.VFXManager.Add(vfx);
+					SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
+					KnobAdjustingPlayers.Add(point, Main.LocalPlayer);
+				}
 			}
 		}
 		return base.RightClick(i, j);
 	}
 
 	/// <summary>
-	/// The drawing part of the rope-adjusting-knob.
+	/// 基于右键实现调整绳子长度的功能，你可以自定义开启调整旋钮的条件，默认当手持物品和右键物块类型相同时返回true。
+	/// </summary>
+	/// <param name="i">右键位置的横坐标</param>
+	/// <param name="j">右键位置的纵坐标</param>
+	/// <returns>值为true表示允许开启旋钮</returns>
+	public virtual bool IsCanRightClick(int i, int j)
+	{
+		return Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType;
+	}
+
+	/// <summary>
+	/// The drawing part of the rope-adjusting-knob. 重写我来重绘按钮效果
 	/// </summary>
 	/// <param name="hangingSystem"></param>
 	/// <param name="player"></param>
