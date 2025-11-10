@@ -11,9 +11,13 @@ namespace Everglow.Commons.CustomTiles.GameInteraction;
 
 public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 {
-	public AABB Box => new(Player.position, new Vector2(Player.width, Player.height));
+	private float jumpSpeed;
+
+	public override bool IsCloneable => true;
 
 	public override bool CloneNewInstances => true;
+
+	public AABB Box => new(Player.position, new Vector2(Player.width, Player.height));
 
 	public float Gravity => Player.gravDir;
 
@@ -22,8 +26,6 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 	public RigidEntity Grab { get; set; }
 
 	public int GrabDir { get; set; }
-
-	public override bool IsCloneable => true;
 
 	public float OffsetY { get => Player.gfxOffY; set => Player.gfxOffY = value; }
 
@@ -43,18 +45,14 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		set => Player.velocity = value;
 	}
 
-	public static void Player_JumpMovement(On_Player.orig_JumpMovement orig, Player self)
+	public override void Load()
 	{
-		var collider = self.GetModPlayer<PlayerCollider>();
-		orig(self);
-		if (self.jump != 0 && collider.jumpSpeed != 0)
-		{
-			self.velocity.Y = collider.jumpSpeed;
-		}
-		else
-		{
-			collider.jumpSpeed = 0;
-		}
+		On_Player.CanFitSpace += Player_CanFitSpace;
+		On_Player.DryCollision += Player_DryCollision;
+		On_Player.WaterCollision += Player_WaterCollision;
+		On_Player.JumpMovement += Player_JumpMovement;
+		On_Player.HoneyCollision += Player_HoneyCollision;
+		IL_Player.WallslideMovement += Player_WallslideMovement_IL;
 	}
 
 	public override ModPlayer Clone(Player newEntity)
@@ -74,16 +72,6 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 	public bool Ignore(RigidEntity entity)
 	{
 		return false;
-	}
-
-	public override void Load()
-	{
-		On_Player.CanFitSpace += Player_CanFitSpace;
-		On_Player.DryCollision += Player_DryCollision;
-		On_Player.WaterCollision += Player_WaterCollision;
-		On_Player.JumpMovement += Player_JumpMovement;
-		On_Player.HoneyCollision += Player_HoneyCollision;
-		IL_Player.WallslideMovement += Player_WallslideMovement_IL;
 	}
 
 	public void OnCollision(CollisionResult result)
@@ -107,7 +95,7 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		}
 	}
 
-	private float jumpSpeed;
+	#region Hooks
 
 	private static bool Player_CanFitSpace(On_Player.orig_CanFitSpace orig, Player self, int heightBoost)
 	{
@@ -130,6 +118,36 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		orig(self, fallThrough, ignorePlats);
 		player.Update();
 		ColliderManager.EnableHook = true;
+	}
+
+	private static void Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
+	{
+		if (!ColliderManager.Enable || self.ghost)
+		{
+			orig(self, fallThrough, ignorePlats);
+			return;
+		}
+
+		ColliderManager.EnableHook = false;
+		IEntityCollider<Player> player = self.GetModPlayer<PlayerCollider>();
+		player.Prepare();
+		orig(self, fallThrough, ignorePlats);
+		player.Update();
+		ColliderManager.EnableHook = true;
+	}
+
+	private static void Player_JumpMovement(On_Player.orig_JumpMovement orig, Player self)
+	{
+		var collider = self.GetModPlayer<PlayerCollider>();
+		orig(self);
+		if (self.jump != 0 && collider.jumpSpeed != 0)
+		{
+			self.velocity.Y = collider.jumpSpeed;
+		}
+		else
+		{
+			collider.jumpSpeed = 0;
+		}
 	}
 
 	private static void Player_HoneyCollision(On_Player.orig_HoneyCollision orig, Player self, bool fallThrough, bool ignorePlats)
@@ -202,19 +220,5 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 		}
 	}
 
-	private static void Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats)
-	{
-		if (!ColliderManager.Enable || self.ghost)
-		{
-			orig(self, fallThrough, ignorePlats);
-			return;
-		}
-
-		ColliderManager.EnableHook = false;
-		IEntityCollider<Player> player = self.GetModPlayer<PlayerCollider>();
-		player.Prepare();
-		orig(self, fallThrough, ignorePlats);
-		player.Update();
-		ColliderManager.EnableHook = true;
-	}
+	#endregion
 }

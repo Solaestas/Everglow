@@ -13,30 +13,30 @@ public abstract class RigidEntity
 
 	public virtual Color MapColor => Color.White;
 
-	public virtual void AI()
+	public void Update()
 	{
+		UpdatePosition();
+		AI();
 	}
-
-	public abstract bool Intersect(AABB box);
-
-	public abstract void Draw();
-
-	public abstract void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale);
 
 	public virtual void UpdatePosition()
 	{
 		Position += Velocity;
 	}
 
+	public virtual void AI()
+	{
+	}
+
+	public abstract bool Intersect(AABB box);
+
 	public abstract bool Collision(IBox obj, Vector2 step, out CollisionResult result);
 
 	public abstract Vector2 StandAccelerate(IBox obj);
 
-	public void Update()
-	{
-		UpdatePosition();
-		AI();
-	}
+	public abstract void Draw();
+
+	public abstract void DrawToMap(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale);
 
 	public void Kill()
 	{

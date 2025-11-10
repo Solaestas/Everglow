@@ -3,12 +3,12 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles.Abstracts;
 
-public interface IEntityCollider<T> : IBox
-	where T : Entity
+public interface IEntityCollider<TEntity> : IBox
+	where TEntity : Entity
 {
 	private const float Sqrt2Div2 = 0.707106781186f;
 
-	public T Entity { get; }
+	public TEntity Entity { get; }
 
 	public RigidEntity Ground { get; set; }
 
@@ -47,7 +47,7 @@ public interface IEntityCollider<T> : IBox
 		Entity.position = OldPosition;
 		foreach (var result in ColliderManager.Instance.Move(this, stride))
 		{
-			if (Vector2.Dot(result.Normal, Gravity * Vector2.UnitY) > Sqrt2Div2)
+			if (IsGround(result.Normal, Gravity))
 			{
 				Ground = result.Collider;
 				Entity.velocity.Y = 0;
@@ -58,5 +58,10 @@ public interface IEntityCollider<T> : IBox
 			}
 			OnCollision(result);
 		}
+	}
+
+	private static bool IsGround(Vector2 normal, float gravity)
+	{
+		return Vector2.Dot(normal, gravity * Vector2.UnitY) > Sqrt2Div2;
 	}
 }

@@ -6,19 +6,21 @@ namespace Everglow.Commons.CustomTiles.GameInteraction;
 
 public class NPCCollider : GlobalNPC, IEntityCollider<NPC>
 {
+	private bool fall;
+
 	public AABB Box => new AABB(Entity.position, Entity.width, Entity.height);
 
 	public override bool CloneNewInstances => true;
+
+	public override bool InstancePerEntity => true;
+
+	public override bool IsCloneable => true;
 
 	public NPC Entity { get; set; }
 
 	public float Gravity => 1;
 
 	public RigidEntity Ground { get; set; }
-
-	public override bool InstancePerEntity => true;
-
-	public override bool IsCloneable => true;
 
 	public float OffsetY { get => Entity.gfxOffY; set => Entity.gfxOffY = value; }
 
@@ -58,8 +60,6 @@ public class NPCCollider : GlobalNPC, IEntityCollider<NPC>
 	public void OnLeave()
 	{
 	}
-
-	private bool fall;
 
 	private static void NPC_ApplyTileCollision(On_NPC.orig_ApplyTileCollision orig, NPC self, bool fall, Vector2 cPosition, int cWidth, int cHeight)
 	{

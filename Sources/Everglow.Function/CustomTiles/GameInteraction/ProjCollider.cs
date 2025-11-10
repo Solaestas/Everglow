@@ -45,9 +45,9 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 
 	public override void Load()
 	{
-		On_Projectile.AI_007_GrapplingHooks += Projectile_AI_007_GrapplingHooks_On;
+		On_Projectile.AI_007_GrapplingHooks += On_Projectile_AI_007_GrapplingHooks;
 		On_Projectile.AI_007_GrapplingHooks_CanTileBeLatchedOnTo += On_Projectile_AI_007_GrapplingHooks_CanTileBeLatchedOnTo;
-		On_Projectile.HandleMovement += Projectile_HandleMovement;
+		On_Projectile.HandleMovement += On_Projectile_HandleMovement;
 	}
 
 	private bool On_Projectile_AI_007_GrapplingHooks_CanTileBeLatchedOnTo(On_Projectile.orig_AI_007_GrapplingHooks_CanTileBeLatchedOnTo orig, Projectile self, int x, int y)
@@ -59,7 +59,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 		return orig(self, x, y);
 	}
 
-	private static void Projectile_AI_007_GrapplingHooks_On(On_Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
+	private static void On_Projectile_AI_007_GrapplingHooks(On_Projectile.orig_AI_007_GrapplingHooks orig, Projectile self)
 	{
 		if (!ColliderManager.Enable)
 		{
@@ -75,7 +75,7 @@ public class ProjCollider : GlobalProjectile, IEntityCollider<Projectile>
 		canHook.Remove(self);
 	}
 
-	private static void Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
+	private static void On_Projectile_HandleMovement(On_Projectile.orig_HandleMovement orig, Projectile self, Vector2 wetVelocity, out int overrideWidth, out int overrideHeight)
 	{
 		if (!ColliderManager.Enable || !self.tileCollide || self.aiStyle == HookAIStyle)
 		{
