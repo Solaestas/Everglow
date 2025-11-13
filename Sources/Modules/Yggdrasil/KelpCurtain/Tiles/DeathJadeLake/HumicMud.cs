@@ -17,7 +17,7 @@ public class HumicMud : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		HumicMud_Algae_fore leaf = new HumicMud_Algae_fore { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		HumicMud_Algae_fore leaf = new HumicMud_Algae_fore { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 		leaf.scale = 1f;
 		leaf.style = (i + j) % 4;
 		Ins.VFXManager.Add(leaf);

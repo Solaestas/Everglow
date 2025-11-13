@@ -4,8 +4,10 @@ using SubworldLibrary;
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
 [Pipeline(typeof(WCSPipeline))]
-public class GiantGhostClawBarnacle_Background : BackgroundVFX
+public class GiantGhostClawBarnacle_Background : TileVFX
 {
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
+
 	public override void Update()
 	{
 		if (!SubworldSystem.IsActive<YggdrasilWorld>())
@@ -17,7 +19,7 @@ public class GiantGhostClawBarnacle_Background : BackgroundVFX
 
 	public override void OnSpawn()
 	{
-		texture = ModAsset.GiantGhostClawBarnacle_Background.Value;
+		Texture = ModAsset.GiantGhostClawBarnacle_Background.Value;
 	}
 
 	public override void Draw()
@@ -40,15 +42,15 @@ public class GiantGhostClawBarnacle_Background : BackgroundVFX
 				AddBars(i + 1, j + 1, bars);
 			}
 		}
-		if(bars.Count > 0)
+		if (bars.Count > 0)
 		{
-			Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
+			Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleList);
 		}
 	}
 
 	public void AddBars(int i, int j, List<Vertex2D> bars)
 	{
 		var frame = new Rectangle(0, 0, 304, 368);
-		bars.Add(position + new Vector2(i, j) * 16, Lighting.GetColor(originTile + new Point(i, j)), new Vector3(i * 16 / (float)frame.Width, j * 16 / (float)frame.Height, 0));
+		bars.Add(Position + new Vector2(i, j) * 16, Lighting.GetColor(OriginTilePos + new Point(i, j)), new Vector3(i * 16 / (float)frame.Width, j * 16 / (float)frame.Height, 0));
 	}
 }

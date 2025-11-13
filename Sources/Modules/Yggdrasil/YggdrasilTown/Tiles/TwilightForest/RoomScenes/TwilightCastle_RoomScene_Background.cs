@@ -4,7 +4,7 @@ using Everglow.Yggdrasil.WorldGeneration;
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
-public class TwilightCastle_RoomScene_Background : BackgroundVFX
+public class TwilightCastle_RoomScene_Background : TileVFX
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
 

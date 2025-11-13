@@ -57,13 +57,13 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Close = new TwilightCastle_RoomScene_OverTiles { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 		scene_Close.CustomDraw += DrawBloodyChurchOverTile;
 
-		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+		var scene_Background = new TwilightCastle_RoomScene_Background { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 		scene_Background.CustomDraw += DrawBloodyChurchBackground;
 
-		var liquid_OverPlayer = new BloodChurch_Liquid_Scene { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, LiquidAreas = new List<Rectangle>() };
+		var liquid_OverPlayer = new BloodChurch_Liquid_Scene { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, LiquidAreas = new List<Rectangle>() };
 
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
@@ -74,17 +74,17 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 
 	public void DrawBloodyChurchOverTile(TwilightCastle_RoomScene_OverTiles otD)
 	{
-		bool flipH = otD.FlipHorizontally(otD.originTile.X, otD.originTile.Y);
+		bool flipH = otD.FlipHorizontally(otD.OriginTilePos.X, otD.OriginTilePos.Y);
 		Texture2D tex0 = ModAsset.BloodChurch_Scene_Close.Value;
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(otD.originTile.X, otD.originTile.Y, tex0, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(otD.OriginTilePos.X, otD.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 	}
 
 	public void DrawBloodyChurchBackground(TwilightCastle_RoomScene_Background bg)
 	{
-		bool flipH = bg.FlipHorizontally(bg.originTile.X, bg.originTile.Y);
+		bool flipH = bg.FlipHorizontally(bg.OriginTilePos.X, bg.OriginTilePos.Y);
 		Texture2D tex0 = ModAsset.BloodChurch_Scene_Background.Value;
 		Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
 		Texture2D tex2 = ModAsset.BloodChurch_Scene_Fountain.Value;
@@ -94,11 +94,11 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		Texture2D tex4 = Commons.ModAsset.Noise_WaterFallWave.Value;
 
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex0, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex1, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
 		// Fountain waterfall background
@@ -113,15 +113,15 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		for (int i = 0; i < 11; i++)
 		{
 			float addCoordX = MathF.Acos((40f - i * 8) / 41f) / MathHelper.Pi - coordX;
-			Vector2 drawPos = new Vector2(bg.originTile.X + 17 * direction, bg.originTile.Y + 11).ToWorldCoordinates() + new Vector2(i * 8 * direction, 0);
+			Vector2 drawPos = new Vector2(bg.OriginTilePos.X + 17 * direction, bg.OriginTilePos.Y + 11).ToWorldCoordinates() + new Vector2(i * 8 * direction, 0);
 
 			bars = new List<Vertex2D>();
 			List<Vertex2D> bars_black = new List<Vertex2D>();
 			for (int j = 0; j < 10; j++)
 			{
 				float addYCoord = MathF.Pow(j, 0.5f);
-				float x0 = -4 + GetOffsetHorizontal(i, j, 5.5f) * direction;
-				float x1 = 4 + GetOffsetHorizontal(i + 1 * direction, j, 5.5f) * direction;
+				float x0 = -4 + GetOffsetHorizontal(i, j, 6f) * direction;
+				float x1 = 4 + GetOffsetHorizontal(i + 1 * direction, j, 6f) * direction;
 
 				Vector2 drawPieceLeft = drawPos + new Vector2(x0, j * 16);
 				Vector2 drawPieceRight = drawPos + new Vector2(x1, j * 16);
@@ -152,7 +152,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		for (int i = 0; i < 3; i++)
 		{
 			float addCoordX = MathF.Acos((40f - i * 8) / 41f) / MathHelper.Pi - coordX;
-			Vector2 drawPos = new Vector2(bg.originTile.X + 19 * direction, bg.originTile.Y + 9).ToWorldCoordinates() + new Vector2(i * 8 * direction, 8);
+			Vector2 drawPos = new Vector2(bg.OriginTilePos.X + 19 * direction, bg.OriginTilePos.Y + 9).ToWorldCoordinates() + new Vector2(i * 8 * direction, 8);
 
 			bars = new List<Vertex2D>();
 			List<Vertex2D> bars_black = new List<Vertex2D>();
@@ -190,12 +190,12 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 
 		// Fountain
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X + 17 * direction, bg.originTile.Y + 10, tex2, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X + 17 * direction, bg.OriginTilePos.Y + 10, tex2, bars, flipH);
 		Ins.Batch.Draw(tex2, bars, PrimitiveType.TriangleList);
 
-		Color envLight = Lighting.GetColor(bg.originTile.X + 22, bg.originTile.Y + 14);
+		Color envLight = Lighting.GetColor(bg.OriginTilePos.X + 22, bg.OriginTilePos.Y + 14);
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X + 17 * direction, bg.originTile.Y + 10, tex2, bars, flipH, (envLight.R - Math.Max(envLight.G, envLight.B)) / 255f);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X + 17 * direction, bg.OriginTilePos.Y + 10, tex2, bars, flipH, (envLight.R - Math.Max(envLight.G, envLight.B)) / 255f);
 		Ins.Batch.Draw(tex2_red, bars, PrimitiveType.TriangleList);
 
 		// Fountain waterfall front
@@ -204,15 +204,15 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		for (int i = 0; i < 11; i++)
 		{
 			float addCoordX = MathF.Acos((40f - i * 8) / 41f) / MathHelper.Pi - coordX;
-			Vector2 drawPos = new Vector2(bg.originTile.X + 17 * direction, bg.originTile.Y + 11).ToWorldCoordinates() + new Vector2(i * 8 * direction, 0);
+			Vector2 drawPos = new Vector2(bg.OriginTilePos.X + 17 * direction, bg.OriginTilePos.Y + 11).ToWorldCoordinates() + new Vector2(i * 8 * direction, 0);
 			bars = new List<Vertex2D>();
 			List<Vertex2D> bars_black = new List<Vertex2D>();
 			List<Vertex2D> bars_reflect = new List<Vertex2D>();
 			for (int j = 0; j < 10; j++)
 			{
 				float addYCoord = MathF.Pow(j, 0.5f);
-				float x0 = -4 + GetOffsetHorizontal(i, j, 5.5f) * direction;
-				float x1 = 4 + GetOffsetHorizontal(i + 1 * direction, j, 5.5f) * direction;
+				float x0 = -4 + GetOffsetHorizontal(i, j, 6f) * direction;
+				float x1 = 4 + GetOffsetHorizontal(i + 1 * direction, j, 6f) * direction;
 
 				Vector2 drawPieceLeft = drawPos + new Vector2(x0, j * 16);
 				Vector2 drawPieceRight = drawPos + new Vector2(x1, j * 16);
@@ -250,7 +250,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		for (int i = 0; i < 3; i++)
 		{
 			float addCoordX = MathF.Acos((40f - i * 8) / 41f) / MathHelper.Pi - coordX;
-			Vector2 drawPos = new Vector2(bg.originTile.X + 19 * direction, bg.originTile.Y + 9).ToWorldCoordinates() + new Vector2(i * 8 * direction, 8);
+			Vector2 drawPos = new Vector2(bg.OriginTilePos.X + 19 * direction, bg.OriginTilePos.Y + 9).ToWorldCoordinates() + new Vector2(i * 8 * direction, 8);
 
 			bars = new List<Vertex2D>();
 			List<Vertex2D> bars_black = new List<Vertex2D>();
@@ -294,33 +294,6 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 			Ins.Batch.Draw(tex3, bars, PrimitiveType.TriangleStrip);
 			Ins.Batch.Draw(tex4, bars_reflect, PrimitiveType.TriangleStrip);
 		}
-
-		// Fountain blood liquid
-
-		//Texture2D liquidTex = ModAsset.BloodChurch_Scene_FakeLiquid_dark.Value;
-		//Texture2D liquidTex_highlight = ModAsset.BloodChurch_Scene_FakeLiquid.Value;
-		//bars = new List<Vertex2D>();
-		//List<Vertex2D> bars_highlight = new List<Vertex2D>();
-		//Vector2 liquidSurfacePos = new Vector2(bg.originTile.X + 13, bg.originTile.Y + 18).ToWorldCoordinates();
-		//for (int i = 1; i < 26; i++)
-		//{
-		//	Vector2 drawPos = liquidSurfacePos + new Vector2(i * 8, 4);
-		//	float coordX0 = i / 34f + timeValue * 0.4f;
-		//	Color waterEnvLight = Lighting.GetColor(liquidSurfacePos.ToTileCoordinates());
-		//	float pureRed = (envLight.R - Math.Max(envLight.G, envLight.B)) / 255f;
-		//	pureRed = MathF.Pow(pureRed, 5) * 2;
-		//	if (i > 5 && i < 21)
-		//	{
-		//		pureRed += 1;
-		//	}
-		//	bars.Add(drawPos + new Vector2(0, -10 + GetRandomWave(i)), waterEnvLight, new Vector3(coordX0, 0, 0));
-		//	bars.Add(drawPos + new Vector2(0, 6), waterEnvLight, new Vector3(coordX0, 1, 0));
-
-		//	bars_highlight.Add(drawPos + new Vector2(0, -10 + GetRandomWave(i)), waterEnvLight * pureRed, new Vector3(coordX0, 0, 0));
-		//	bars_highlight.Add(drawPos + new Vector2(0, 6), waterEnvLight * pureRed, new Vector3(coordX0, 1, 0));
-		//}
-		//Ins.Batch.Draw(liquidTex, bars, PrimitiveType.TriangleStrip);
-		//Ins.Batch.Draw(liquidTex_highlight, bars_highlight, PrimitiveType.TriangleStrip);
 	}
 
 	public float GetOffsetHorizontal(float x, float y, float middleX)

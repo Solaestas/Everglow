@@ -62,7 +62,7 @@ public class FloorScaleForPlayers : ModTile, ISceneTile
 		Tile tile = Main.tile[i, j];
 		if ((tile.TileFrameX == 18 || tile.TileFrameX == 144) && tile.TileFrameY == 0)
 		{
-			var scene = new FloorScaleForPlayers_Screen { position = new Vector2(i, j) * 16, Active = true, originTile = new Point(i, j), originType = Type };
+			var scene = new FloorScaleForPlayers_Screen { Position = new Vector2(i, j) * 16, Active = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 			Ins.VFXManager.Add(scene);
 		}
 	}

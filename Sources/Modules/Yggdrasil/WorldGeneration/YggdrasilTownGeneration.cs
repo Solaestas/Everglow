@@ -2232,6 +2232,7 @@ public class YggdrasilTownGeneration
 					ModAsset.TCRoom_Rd_00_StoneCave_40x21_Path,
 					ModAsset.TCRoom_Rd_01_BloodyChurch_40x21_Path,
 					ModAsset.TCRoom_Rd_02_Desert_40x21_Path,
+					ModAsset.TCRoom_Rd_03_WaterSluice_40x21_Path,
 				};
 				if (x == 2)
 				{
@@ -2240,6 +2241,7 @@ public class YggdrasilTownGeneration
 						ModAsset.TCRoom_Ld_00_StoneCave_40x21_Path,
 						ModAsset.TCRoom_Ld_01_BloodyChurch_40x21_Path,
 						ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
+						ModAsset.TCRoom_Ld_03_WaterSluice_40x21_Path,
 					};
 				}
 				QuickBuild(roomOriginX - 20, roomOriginY - 10, randomRooms[GenRand.Next(randomRooms.Length)]);

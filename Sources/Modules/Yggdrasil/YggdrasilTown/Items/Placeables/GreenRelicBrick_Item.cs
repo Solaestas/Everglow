@@ -11,7 +11,7 @@ public class GreenRelicBrick_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<Desert_Scene>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<ForestCastle_Scene>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -30,11 +30,6 @@ public class GreenRelicBrick_Item : ModItem
 					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
 				}
 
-				if (tile.TileType == TileID.Sand)
-				{
-					tile.TileType = (ushort)TileID.Glass;
-				}
-
 				//if (tile.WallType == WallID.GreenDungeonSlab)
 				//{
 				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
@@ -43,8 +38,8 @@ public class GreenRelicBrick_Item : ModItem
 				//{
 				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
 				//}
-
 				tile.wall = 0;
+				//tile.wall = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
 			}
 		}
 	}

@@ -32,9 +32,9 @@ public class StoneCave_Scene : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		var scene_Close = new TwilightCastle_RoomScene_OverTiles { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Close.Value };
+		var scene_Close = new TwilightCastle_RoomScene_OverTiles { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.StoneCave_Scene_Close.Value };
 		scene_Close.CustomDraw += DrawStoneCaveOverTile;
-		var scene_Background = new TwilightCastle_RoomScene_Background { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type, texture = ModAsset.StoneCave_Scene_Background.Value };
+		var scene_Background = new TwilightCastle_RoomScene_Background { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.StoneCave_Scene_Background.Value };
 		scene_Background.CustomDraw += DrawStoneCaveBackground;
 
 		Ins.VFXManager.Add(scene_Close);
@@ -45,9 +45,9 @@ public class StoneCave_Scene : ModTile, ISceneTile
 	{
 		Texture2D tex0 = ModAsset.StoneCave_Scene_Close.Value;
 
-		bool flipH = otD.FlipHorizontally(otD.originTile.X, otD.originTile.Y);
+		bool flipH = otD.FlipHorizontally(otD.OriginTilePos.X, otD.OriginTilePos.Y);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(otD.originTile.X, otD.originTile.Y, tex0, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(otD.OriginTilePos.X, otD.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 	}
 
@@ -56,13 +56,13 @@ public class StoneCave_Scene : ModTile, ISceneTile
 		Texture2D tex0 = ModAsset.StoneCave_Scene_Background.Value;
 		Texture2D tex1 = ModAsset.StoneCave_Scene_Far.Value;
 
-		bool flipH = bg.FlipHorizontally(bg.originTile.X, bg.originTile.Y);
+		bool flipH = bg.FlipHorizontally(bg.OriginTilePos.X, bg.OriginTilePos.Y);
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex0, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
 		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.originTile.X, bg.originTile.Y, tex1, bars, flipH);
+		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 	}
 }

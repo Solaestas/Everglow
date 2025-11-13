@@ -4,7 +4,7 @@ using Everglow.Yggdrasil.WorldGeneration;
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
-public class BloodChurch_Liquid_Scene : BackgroundVFX
+public class BloodChurch_Liquid_Scene : TileVFX
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawPlayers;
 
@@ -38,15 +38,15 @@ public class BloodChurch_Liquid_Scene : BackgroundVFX
 	{
 		if(LiquidAreas.Count <= 0)
 		{
-			bool flipH = FlipHorizontally(originTile.X, originTile.Y);
-			int direction = 1;
+			bool flipH = FlipHorizontally(OriginTilePos.X, OriginTilePos.Y);
+			int Direction = 1;
 			int offsetX = 0;
 			if (flipH)
 			{
-				direction = -1;
+				Direction = -1;
 				offsetX = -176;
 			}
-			LiquidAreas.Add(new Rectangle((originTile.X + 14 * direction) * 16 + offsetX, (originTile.Y + 18) * 16, 192, 16));
+			LiquidAreas.Add(new Rectangle((OriginTilePos.X + 14 * Direction) * 16 + offsetX, (OriginTilePos.Y + 18) * 16, 192, 16));
 		}
 		foreach(Player player in Main.player)
 		{
@@ -74,7 +74,7 @@ public class BloodChurch_Liquid_Scene : BackgroundVFX
 		for(int x = 0; x < length / 6; x++)
 		{
 			Vector2 pos = new Vector2(splashStart + Main.rand.NextFloat(length), liquidBox.Y);
-			Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<GenerateSplash>(), Vector2.zeroVector);
+			Dust dust = Dust.NewDustPerfect(Position, ModContent.DustType<GenerateSplash>(), Vector2.zeroVector);
 			var splash = new BloodChurch_Scene_FakeLiquid_Dust()
 			{
 				Position = pos,
@@ -94,11 +94,11 @@ public class BloodChurch_Liquid_Scene : BackgroundVFX
 
 	public override void Draw()
 	{
-		bool flipH = FlipHorizontally(originTile.X, originTile.Y);
-		int direction = 1;
+		bool flipH = FlipHorizontally(OriginTilePos.X, OriginTilePos.Y);
+		int Direction = 1;
 		if (flipH)
 		{
-			direction = -1;
+			Direction = -1;
 		}
 
 		// Fountain blood liquid
@@ -107,13 +107,13 @@ public class BloodChurch_Liquid_Scene : BackgroundVFX
 		float timeValue = -(float)Main.time / 240f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		List<Vertex2D> bars_highlight = new List<Vertex2D>();
-		Vector2 liquidSurfacePos = new Vector2(originTile.X + 13 * direction, originTile.Y + 18).ToWorldCoordinates();
+		Vector2 liquidSurfacePos = new Vector2(OriginTilePos.X + 13 * Direction, OriginTilePos.Y + 18).ToWorldCoordinates();
 
 		for (int i = 0; i < 26; i++)
 		{
-			Vector2 drawPos = liquidSurfacePos + new Vector2(i * 8 * direction, 4);
+			Vector2 drawPos = liquidSurfacePos + new Vector2(i * 8 * Direction, 4);
 			float coordX0 = i / 34f + timeValue * 0.4f;
-			float coordX1 = (i + 1 * direction) / 34f + timeValue * 0.4f;
+			float coordX1 = (i + 1 * Direction) / 34f + timeValue * 0.4f;
 
 			Color waterEnvLight0 = Lighting.GetColor(drawPos.ToTileCoordinates()) * 0.75f;
 			Color waterEnvLight1 = Lighting.GetColor((drawPos + new Vector2(8, 0)).ToTileCoordinates()) * 0.75f;
@@ -133,20 +133,20 @@ public class BloodChurch_Liquid_Scene : BackgroundVFX
 			if (toCenter > 5 && toCenter < 12)
 			{
 				bars.Add(drawPos + new Vector2(0, -10 + GetRandomWave(i)), waterEnvLight0, new Vector3(coordX0, 0, 0));
-				bars.Add(drawPos + new Vector2(8 * direction, -10 + GetRandomWave(i + 1)), waterEnvLight1, new Vector3(coordX1, 0, 0));
+				bars.Add(drawPos + new Vector2(8 * Direction, -10 + GetRandomWave(i + 1)), waterEnvLight1, new Vector3(coordX1, 0, 0));
 				bars.Add(drawPos + new Vector2(0, 6), waterEnvLight0, new Vector3(coordX0, 1, 0));
 
 				bars.Add(drawPos + new Vector2(0, 6), waterEnvLight0, new Vector3(coordX0, 1, 0));
-				bars.Add(drawPos + new Vector2(8 * direction, -10 + GetRandomWave(i + 1)), waterEnvLight1, new Vector3(coordX1, 0, 0));
-				bars.Add(drawPos + new Vector2(8 * direction, 6), waterEnvLight1, new Vector3(coordX1, 1, 0));
+				bars.Add(drawPos + new Vector2(8 * Direction, -10 + GetRandomWave(i + 1)), waterEnvLight1, new Vector3(coordX1, 0, 0));
+				bars.Add(drawPos + new Vector2(8 * Direction, 6), waterEnvLight1, new Vector3(coordX1, 1, 0));
 
 				bars_highlight.Add(drawPos + new Vector2(0, -10 + GetRandomWave(i)), waterEnvLight0 * pureRed0, new Vector3(coordX0, 0, 0));
-				bars_highlight.Add(drawPos + new Vector2(8 * direction, -10 + GetRandomWave(i + 1)), waterEnvLight1 * pureRed1, new Vector3(coordX1, 0, 0));
+				bars_highlight.Add(drawPos + new Vector2(8 * Direction, -10 + GetRandomWave(i + 1)), waterEnvLight1 * pureRed1, new Vector3(coordX1, 0, 0));
 				bars_highlight.Add(drawPos + new Vector2(0, 6), waterEnvLight0 * pureRed0, new Vector3(coordX0, 1, 0));
 
 				bars_highlight.Add(drawPos + new Vector2(0, 6), waterEnvLight0 * pureRed0, new Vector3(coordX0, 1, 0));
-				bars_highlight.Add(drawPos + new Vector2(8 * direction, -10 + GetRandomWave(i + 1)), waterEnvLight1 * pureRed1, new Vector3(coordX1, 0, 0));
-				bars_highlight.Add(drawPos + new Vector2(8 * direction, 6), waterEnvLight1 * pureRed1, new Vector3(coordX1, 1, 0));
+				bars_highlight.Add(drawPos + new Vector2(8 * Direction, -10 + GetRandomWave(i + 1)), waterEnvLight1 * pureRed1, new Vector3(coordX1, 0, 0));
+				bars_highlight.Add(drawPos + new Vector2(8 * Direction, 6), waterEnvLight1 * pureRed1, new Vector3(coordX1, 1, 0));
 			}
 		}
 		Ins.Batch.Draw(liquidTex, bars, PrimitiveType.TriangleList);

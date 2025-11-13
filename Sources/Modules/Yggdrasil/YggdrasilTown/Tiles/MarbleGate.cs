@@ -49,7 +49,7 @@ public class MarbleGate : RoomDoorTile, ISceneTile
 		Tile tile = SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
-			MarbleGate_BackgroundTile mGBT = new MarbleGate_BackgroundTile { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };
+			MarbleGate_BackgroundTile mGBT = new MarbleGate_BackgroundTile { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 			Ins.VFXManager.Add(mGBT);
 		}
 	}

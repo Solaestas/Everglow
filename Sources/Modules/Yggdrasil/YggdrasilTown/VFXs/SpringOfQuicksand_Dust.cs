@@ -3,7 +3,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.VFXs;
 [Pipeline(typeof(WCSPipeline), typeof(BloomPipeline))]
 public class SpringOfQuicksand_Dust : Visual
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawNPCs;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
 	public float Timer;
 	public float MaxTime;
@@ -22,7 +22,7 @@ public class SpringOfQuicksand_Dust : Visual
 			return;
 		}
 		Position += Velocity;
-		Velocity.Y += 0.25f * Scale / 2f;
+		Velocity.Y += 0.15f * Scale / 2f;
 		Velocity *= 0.995f;
 	}
 

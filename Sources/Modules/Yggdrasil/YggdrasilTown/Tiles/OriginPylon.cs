@@ -138,7 +138,7 @@ public class OriginPylon : ModTile, ISceneTile
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
-			OriginalPylon_VFX oPVFX = new OriginalPylon_VFX { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<OriginPylon>() };
+			OriginalPylon_VFX oPVFX = new OriginalPylon_VFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = ModContent.TileType<OriginPylon>() };
 			Ins.VFXManager.Add(oPVFX);
 		}
 	}
@@ -157,11 +157,13 @@ public class OriginPylon : ModTile, ISceneTile
 }
 
 [Pipeline(typeof(WCSPipeline))]
-public class OriginalPylon_VFX : BackgroundVFX
+public class OriginalPylon_VFX : TileVFX
 {
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
+
 	public override void OnSpawn()
 	{
-		texture = ModAsset.StoneBridge_fence.Value;
+		Texture = ModAsset.StoneBridge_fence.Value;
 	}
 
 	public override void Update()
@@ -177,8 +179,8 @@ public class OriginalPylon_VFX : BackgroundVFX
 	{
 		if (!Ins.VisualQuality.Low)
 		{
-			float i = position.X / 16f;
-			float j = position.Y / 16f;
+			float i = Position.X / 16f;
+			float j = Position.Y / 16f;
 			List<Vertex2D> bars = new List<Vertex2D>();
 			Color color0 = Color.White * 0.4f;
 			color0.A = 0;

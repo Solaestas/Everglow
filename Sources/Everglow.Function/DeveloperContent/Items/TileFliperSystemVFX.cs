@@ -82,6 +82,8 @@ public class TileFliperSystemVFX : Visual
 				(tile0.IsHalfBlock, tile1.IsHalfBlock) = (tile1.IsHalfBlock, tile0.IsHalfBlock);
 				(tile0.TileFrameX, tile1.TileFrameX) = (tile1.TileFrameX, tile0.TileFrameX);
 				(tile0.TileFrameY, tile1.TileFrameY) = (tile1.TileFrameY, tile0.TileFrameY);
+				(tile0.HasActuator, tile1.HasActuator) = (tile1.HasActuator, tile0.HasActuator);
+				(tile0.IsActuated, tile1.IsActuated) = (tile1.IsActuated, tile0.IsActuated);
 			}
 		}
 		for (int i = 0; i < flip.Width; i++)
