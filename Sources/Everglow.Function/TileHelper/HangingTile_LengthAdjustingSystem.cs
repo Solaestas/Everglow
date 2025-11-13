@@ -99,11 +99,6 @@ public class HangingTile_LengthAdjustingSystem : Visual
 			}
 		}
 
-		// 一开始藤曼行为
-		if (Timer == 1 && Style == 1)
-		{
-			hangingTile.OnAdjustmentStart(FixPoint, player);
-		}
 		if (Timer < 12)
 		{
 			PanelRange = (MathF.Sin(Timer / 10f * MathHelper.Pi - MathHelper.PiOver2) + 1.2f) * 0.5f;
@@ -211,6 +206,8 @@ public class HangingTile_LengthAdjustingSystem : Visual
 			int y = (int)(player.MouseWorld().Y / 16f);
 			if (Main.mouseRight && Main.mouseRightRelease && (x != FixPoint.X || y != FixPoint.Y))
 			{
+				// 结束行为
+				hangingTile.OnAdjustmentEnd(FixPoint, player);
 				EndAdjustment();
 				return;
 			}
@@ -261,9 +258,6 @@ public class HangingTile_LengthAdjustingSystem : Visual
 		{
 			hangingTile.KnobAdjustingPlayers.Remove(FixPoint);
 		}
-
-		// 结束行为
-		hangingTile.OnAdjustmentEnd(FixPoint, owner);
 	}
 
 	public override void Draw()
@@ -337,7 +331,6 @@ public class HangingTile_LengthAdjustingSystem : Visual
 			new Vertex2D(pos + new Vector2(8, -8).RotatedBy(rotation), color, new Vector3(1, 0, 0)),
 			new Vertex2D(pos + new Vector2(8, 8).RotatedBy(rotation), color, new Vector3(1, 1, 0)),
 		};
-
 		Ins.Batch.Draw(ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList);
 	}
 

@@ -433,9 +433,9 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		{
 			if (!MouseOverWinchPlayers.ContainsKey(Main.LocalPlayer))
 			{
-				MouseOverWinchPlayers.Add(Main.LocalPlayer, point);
-				if (Main.LocalPlayer.HeldItem.createTile == Type)
+				if (IsCanRightClick(i, j))
 				{
+					MouseOverWinchPlayers.Add(Main.LocalPlayer, point);
 					HangingTile_LengthAdjustingSystem vfx = new HangingTile_LengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 0 };
 					Ins.VFXManager.Add(vfx);
 				}
@@ -468,6 +468,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 					Ins.VFXManager.Add(vfx);
 					SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
 					KnobAdjustingPlayers.Add(point, Main.LocalPlayer);
+					OnAdjustmentStart(point, Main.LocalPlayer); // 开启调用
 				}
 			}
 		}
