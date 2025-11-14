@@ -76,11 +76,8 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 
 	public void OnCollision(CollisionResult result)
 	{
-		if (Player.spikedBoots <= 0)
-		{
-			return;
-		}
-		if (1 - Math.Abs(result.Normal.X) < CollisionUtils.Epsilon)
+		if (Player.spikedBoots > 0
+			&& 1 - Math.Abs(result.Normal.X) < CollisionUtils.Epsilon)
 		{
 			Grab = result.Collider;
 			GrabDir = Math.Sign(result.Normal.X);

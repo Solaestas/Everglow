@@ -33,7 +33,7 @@ public class ColliderManager : ILoadable
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
-		Ins.HookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear);
+		Ins.HookManager.AddHook(CodeLayer.PostEnterWorld_Single, Clear);
 	}
 
 	public void Unload()

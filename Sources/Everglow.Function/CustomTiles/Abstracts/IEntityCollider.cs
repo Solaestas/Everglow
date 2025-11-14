@@ -33,7 +33,9 @@ public interface IEntityCollider<TEntity> : IBox
 	public void Update()
 	{
 		var stride = Entity.position - OldPosition;
-		if (Ground != null) // Keep entity over the ground and move with current rg2d.
+
+		// Apply standing behavior
+		if (Ground != null)
 		{
 			var acc = Ground.StandAccelerate(this);
 			if (stride.Y * Gravity < 0)
@@ -52,9 +54,10 @@ public interface IEntityCollider<TEntity> : IBox
 				Ground = result.Collider;
 				Entity.velocity.Y = 0;
 			}
-			else if (result.Normal == new Vector2(0, -1))
+			else if (result.Normal == -Vector2.UnitY
+				&& result.Collider.Velocity.Y <= 0) // Added this condition for preventing player from sticking to box's bottom, when box is moving downward.
 			{
-				Entity.velocity.Y = -CollisionUtils.Epsilon;
+				 Entity.velocity.Y = -CollisionUtils.Epsilon;
 			}
 			OnCollision(result);
 		}
