@@ -40,29 +40,29 @@ public class Winch : ModTile
 		{
 			return;
 		}
-		if (!CheckEmpty(i - 5, j + 1, 11, 15))
+		if (!CheckEmpty(i - 2, j + 1, 3, 3))
 		{
 			return;
 		}
 
-		bool HasLift = false;
+		bool hasLift = false;
 		foreach (var boxEntity in ColliderManager.Instance.OfType<YggdrasilElevator>())
 		{
 			if (boxEntity is YggdrasilElevator elevator)
 			{
 				if (elevator.WinchCoord == new Point(i, j))
 				{
-					HasLift = true;
+					hasLift = true;
 					break;
 				}
 			}
 		}
-		if (!HasLift)
+		if (!hasLift)
 		{
 			ColliderManager.Instance.Add(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8), WinchCoord = new Point(i, j) });
 			tile.TileFrameY = 0;
 		}
-		if (HasLift)
+		if (hasLift)
 		{
 			tile.TileFrameY = 18;
 		}

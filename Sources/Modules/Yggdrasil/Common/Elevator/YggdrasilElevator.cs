@@ -186,17 +186,88 @@ public class YggdrasilElevator : BoxEntity
 	/// </summary>
 	public void CheckRunningDirection()
 	{
-		if ((Box.Center.Y > WinchCoord.Y * 16 + 8 + 2560 || Terraria.Collision.SolidCollision(Position + new Vector2(0, Size.Y + Velocity.Y + 100), (int)Size.X, 1)) && CurrentMoveDirection == 1)
+		Vector2 tileCenter = Box.Center / 16f;
+		int tileCenterX = (int)tileCenter.X;
+		int tileCenterY = (int)tileCenter.Y;
+		int tileWidth = (int)(Size.X / 32f); // 电梯平台的半宽度
+
+		int lamp = 0;
+		const int searchDistance = 1000;
+		int distanceToWinch = searchDistance;
+
+		// 向上1000格检索绞盘
+		for (int dy = 0; dy < searchDistance; dy++)
 		{
-			NextMoveDirection = -1;
-			DecelerateTimer = 30;
+			if (tileCenterX < Main.maxTilesX - 20
+				&& tileCenterY + dy * NextMoveDirection < Main.maxTilesY - 20
+				&& tileCenterY + dy * NextMoveDirection > 20
+				&& tileCenterX > 20)
+			{
+				Tile tile0 = Main.tile[tileCenterX, tileCenterY + dy * NextMoveDirection];
+				if (tile0.TileType == ModContent.TileType<Winch>())
+				{
+					distanceToWinch = dy;
+					if (NextMoveDirection == -1)
+					{
+						distanceToWinch -= 12;
+					}
+
+					break;
+				}
+				if (tile0.HasTile)
+				{
+					distanceToWinch = dy;
+					if (NextMoveDirection == -1)
+					{
+						distanceToWinch -= 12;
+					}
+
+					break;
+				}
+			}
+			if (distanceToWinch != searchDistance)
+			{
+				break;
+			}
+		}
+		if (distanceToWinch > 3)
+		{
+			for (int dy = 0; dy < distanceToWinch; dy++)
+			{
+				for (int dx = 0; dx < 5; dx++)
+				{
+					if (tileCenterX - (tileWidth + dx) < Main.maxTilesX - 20
+						&& tileCenterX + tileWidth + dx < Main.maxTilesX - 20
+						&& tileCenterY + dy * NextMoveDirection < Main.maxTilesY - 20
+						&& tileCenterY + dy * NextMoveDirection > 20
+						&& tileCenterX + tileWidth + dx > 20
+						&& tileCenterX - (tileWidth + dx) > 20)
+					{
+						Tile tileleft = Main.tile[tileCenterX - (tileWidth + dx), tileCenterY + dy * NextMoveDirection];
+						Tile tileright = Main.tile[tileCenterX + tileWidth + dx, tileCenterY + dy * NextMoveDirection];
+						if (tileleft.TileType == ModContent.TileType<LiftLamp>() && tileleft.TileFrameY == 36)
+						{
+							lamp++;
+						}
+
+						if (tileright.TileType == ModContent.TileType<LiftLamp>() && tileright.TileFrameY == 36)
+						{
+							lamp++;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			StopElevator(240);
+		}
+		if (lamp == 0)
+		{
+			NextMoveDirection *= -1;
 		}
 
-		if (Box.Center.Y < WinchCoord.Y * 16 + 8 + 300 && CurrentMoveDirection == -1)
-		{
-			NextMoveDirection = 1;
-			DecelerateTimer = 30;
-		}
+		AccelerateTimer = 60;
 	}
 
 	public override void Draw()
