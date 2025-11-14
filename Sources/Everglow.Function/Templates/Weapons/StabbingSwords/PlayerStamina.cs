@@ -1,49 +1,71 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
+using Terraria.DataStructures;
+
 namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
+
 public class PlayerStaminaDrawer : ModSystem
 {
-	Vector2 pos = Vector2.Zero;
+	private Vector2 pos = Vector2.Zero;
+
 	public override void PostDrawInterface(SpriteBatch spriteBatch)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(sBS.SortMode, BlendState.AlphaBlend, SamplerState.PointWrap, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, Main.GameViewMatrix.TransformationMatrix);
 		Player p = Main.LocalPlayer;
-		pos = Vector2.Lerp(pos, p.Center - new Vector2(50, 0) * p.direction - Main.screenPosition, 0.2f);
+		pos = Vector2.Lerp(pos, p.Center + new Vector2(-50 * p.direction, 40 * p.gravDir), 0.2f);
 		p.GetModPlayer<PlayerStamina>().DrawStamina(pos);
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 	}
+
+	public override void PostDrawTiles() => base.PostDrawTiles();
 }
+
 public class PlayerStamina : ModPlayer
 {
 	private float stamina = 100f;
 	private float maxStamina = 100f;
 	private int recCD = 45;
+
 	/// <summary>
 	/// 体力消耗速率,默认为1
 	/// </summary>
-	public float staminaDecreasingSpeed = 1f;
+	public float StaminaDecreasingSpeed = 1f;
+
 	/// <summary>
 	/// 额外的体力值
 	/// </summary>
-	public float extraStamina = 0f;
+	public float ExtraStamina = 0f;
+
 	public override void ResetInfoAccessories()
 	{
-		mulStaminaRecoveryValue = 1f;
-		staminaDecreasingSpeed = 1f;
-		extraStamina = 0f;
+		StaminaRecoveryValueRate = 1f;
+		StaminaDecreasingSpeed = 1f;
+		ExtraStamina = 0f;
 	}
+
 	/// <summary>
 	/// 耐力恢复速度 可更改
 	/// </summary>
-	public float staminaRecoveryValue = 1f;
+	public float StaminaRecoveryValue = 1f;
+
 	/// <summary>
 	/// 耐力恢复倍率 可更改(乘算于耐力恢复速度之后)
 	/// </summary>
-	public float mulStaminaRecoveryValue = 1f;
+	public float StaminaRecoveryValueRate = 1f;
+
 	public override void ResetEffects()
 	{
-		staminaRecoveryValue = (maxStamina + extraStamina) / 100f * mulStaminaRecoveryValue;
+		StaminaRecoveryValue = (maxStamina + ExtraStamina) / 100f * StaminaRecoveryValueRate;
 	}
+
 	/// <summary>
 	/// 耐力恢复期
 	/// </summary>
-	public bool staminaRecovery = false;
+	public bool StaminaRecovery = false;
+
 	/// <summary>
 	/// 检测并扣除耐力值
 	/// </summary>
@@ -52,13 +74,18 @@ public class PlayerStamina : ModPlayer
 	/// <returns></returns>
 	public bool CheckStamina(float amount, bool pay = true)
 	{
-		if (staminaRecovery)
+		if (StaminaRecovery)
+		{
 			return false;
-		amount *= staminaDecreasingSpeed;
+		}
+
+		amount *= StaminaDecreasingSpeed;
 		if (stamina > amount)
 		{
 			if (pay)
+			{
 				stamina -= amount;
+			}
 		}
 		else
 		{
@@ -66,20 +93,21 @@ public class PlayerStamina : ModPlayer
 		}
 		return true;
 	}
+
 	public override void PostUpdate()
 	{
-		maxStamina = 100f + extraStamina;
-		if (stamina <= 0 && !staminaRecovery) //进入恢复期
+		maxStamina = 100f + ExtraStamina;
+		if (stamina <= 0 && !StaminaRecovery) // 进入恢复期
 		{
 			stamina = 0;
-			staminaRecovery = true;
+			StaminaRecovery = true;
 		}
-		if (staminaRecovery && recCD <= 0)
+		if (StaminaRecovery && recCD <= 0)
 		{
-			stamina += staminaRecoveryValue;
+			stamina += StaminaRecoveryValue;
 			if (stamina > maxStamina)
 			{
-				staminaRecovery = false;
+				StaminaRecovery = false;
 				stamina = maxStamina;
 			}
 		}
@@ -90,7 +118,7 @@ public class PlayerStamina : ModPlayer
 				if (recCD <= 0)
 				{
 					recCD = 0;
-					stamina += staminaRecoveryValue / 2f;
+					stamina += StaminaRecoveryValue / 2f;
 				}
 				else
 				{
@@ -98,7 +126,9 @@ public class PlayerStamina : ModPlayer
 				}
 			}
 			else
+			{
 				stamina = maxStamina;
+			}
 		}
 		else
 		{
@@ -108,7 +138,7 @@ public class PlayerStamina : ModPlayer
 		if (stamina != maxStamina)
 		{
 			drawAlpha = MathHelper.Lerp(drawAlpha, 1f, 0.2f);
-			drawAlphaCD = 30;
+			drawAlphaCD = 5;
 		}
 		else
 		{
@@ -117,20 +147,56 @@ public class PlayerStamina : ModPlayer
 				drawAlphaCD--;
 			}
 			else
-				drawAlpha = MathHelper.Lerp(drawAlpha, 0f, 0.05f);
+			{
+				drawAlpha = MathHelper.Lerp(drawAlpha, 0f, 0.1f);
+			}
 		}
-
 	}
-	float drawAlpha = 0f;
-	int drawAlphaCD = 30;
-	public void DrawStamina(Vector2 center)//最好重绘一下，现在这个比较丑
+
+	private float drawAlpha = 0f;
+	private int drawAlphaCD = 5;
+
+	public void DrawStamina(Vector2 center)// 最好重绘一下，现在这个比较丑
 	{
 		if (drawAlpha == 0)
+		{
 			return;
-		Texture2D tex = Terraria.GameContent.TextureAssets.MagicPixel.Value;
+		}
+
+		Texture2D tex_dark = ModAsset.StabbingSwordStamina_black.Value;
+		Texture2D tex = ModAsset.StabbingSwordStamina.Value;
+		Texture2D tex_bloom = ModAsset.StabbingSwordStamina_bloom.Value;
 		float value = stamina / maxStamina;
 		Color color = Main.hslToRgb(value * 0.36f - 0.15f, 1f, 0.75f);
-		float alpha = drawAlpha * (staminaRecovery ? 0.4f : 0.8f);
-		Main.spriteBatch.Draw(tex, center, new Rectangle(0, 0, 2, 2), color * alpha, 0, new Vector2(1f), new Vector2(1, value * 20), 0, 0);
+		color.A = 0;
+		float alpha = drawAlpha * (StaminaRecovery ? 0.4f : 0.8f);
+		int height = (int)(tex.Height * value);
+		int height2 = height + 2;
+		if(height <= 0)
+		{
+			height2 = 0;
+		}
+		if (height2 > tex.Height)
+		{
+			height2 = tex.Height;
+		}
+		Rectangle frame = new Rectangle(0, tex.Height - height, tex.Width, height);
+		Rectangle frame2 = new Rectangle(0, tex.Height - height2, tex.Width, height2);
+		Main.spriteBatch.Draw(tex_dark, center - Main.screenPosition, null, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
+		Main.spriteBatch.Draw(tex, center - Main.screenPosition + new Vector2(0, tex.Height - height2), frame2, color * alpha * 3, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
+		Main.spriteBatch.Draw(tex_dark, center - Main.screenPosition + new Vector2(0, tex.Height - height), frame, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
+		Main.spriteBatch.Draw(tex, center - Main.screenPosition + new Vector2(0, tex.Height - height), frame, color * alpha * 0.7f, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
+		Main.spriteBatch.Draw(tex_bloom, center - Main.screenPosition + new Vector2(0, 45), null, color * alpha * 0.4f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, 0, 0);
+		if (stamina == maxStamina)
+		{
+			Main.spriteBatch.Draw(tex_bloom, center - Main.screenPosition + new Vector2(0, 45), null, color * alpha * 0.6f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, 0, 0);
+		}
 	}
+
+	public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+	{
+		base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
+	}
+
+	public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) => base.ModifyDrawInfo(ref drawInfo);
 }
