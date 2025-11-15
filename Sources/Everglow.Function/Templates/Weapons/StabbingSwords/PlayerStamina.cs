@@ -27,15 +27,24 @@ public class PlayerStamina : ModPlayer
 {
 	private float stamina = 100f;
 	private float maxStamina = 100f;
-	private int recCD = 45;
+
+	public const int RecoveryCoolingDefault = 45;
 
 	/// <summary>
+	/// The time interval between recovery process and the (end of) last attack<br/>
+	/// 最后一次攻击(结束)到恢复期的时间间隔
+	/// </summary>
+	public int RecoveryCooling = RecoveryCoolingDefault;
+
+	/// <summary>
+	/// he speed of stamina consuming, default to 1.<br/>
 	/// 体力消耗速率,默认为1
 	/// </summary>
 	public float StaminaDecreasingSpeed = 1f;
 
 	/// <summary>
-	/// 额外的体力值
+	/// Extra stamina, usually produced by buffs or equipments.<br/>
+	/// 额外的体力值, 通常由增益或装备提供
 	/// </summary>
 	public float ExtraStamina = 0f;
 
@@ -47,12 +56,14 @@ public class PlayerStamina : ModPlayer
 	}
 
 	/// <summary>
-	/// 耐力恢复速度 可更改
+	/// The speed of stamina recovering, default to 1.<br/>
+	/// 耐力恢复速度, 默认为1
 	/// </summary>
 	public float StaminaRecoveryValue = 1f;
 
 	/// <summary>
-	/// 耐力恢复倍率 可更改(乘算于耐力恢复速度之后)
+	/// The rate of recovering speed, a multilicative zone of <see cref="StaminaRecoveryValue"/>, default to 1
+	/// 耐力恢复倍率 可更改(乘算于耐力恢复速度之后), 默认为1
 	/// </summary>
 	public float StaminaRecoveryValueRate = 1f;
 
@@ -97,12 +108,14 @@ public class PlayerStamina : ModPlayer
 	public override void PostUpdate()
 	{
 		maxStamina = 100f + ExtraStamina;
-		if (stamina <= 0 && !StaminaRecovery) // 进入恢复期
+
+		// Start Recovery Process | 进入恢复期
+		if (stamina <= 0 && !StaminaRecovery)
 		{
 			stamina = 0;
 			StaminaRecovery = true;
 		}
-		if (StaminaRecovery && recCD <= 0)
+		if (StaminaRecovery && RecoveryCooling <= 0)
 		{
 			stamina += StaminaRecoveryValue;
 			if (stamina > maxStamina)
@@ -115,14 +128,14 @@ public class PlayerStamina : ModPlayer
 		{
 			if (stamina < maxStamina)
 			{
-				if (recCD <= 0)
+				if (RecoveryCooling <= 0)
 				{
-					recCD = 0;
+					RecoveryCooling = 0;
 					stamina += StaminaRecoveryValue / 2f;
 				}
 				else
 				{
-					recCD--;
+					RecoveryCooling--;
 				}
 			}
 			else
@@ -132,13 +145,13 @@ public class PlayerStamina : ModPlayer
 		}
 		else
 		{
-			recCD = 45;
+			RecoveryCooling = RecoveryCoolingDefault;
 		}
 
 		if (stamina != maxStamina)
 		{
 			drawAlpha = MathHelper.Lerp(drawAlpha, 1f, 0.2f);
-			drawAlphaCD = 5;
+			drawAlphaCD = 0;
 		}
 		else
 		{
@@ -148,15 +161,15 @@ public class PlayerStamina : ModPlayer
 			}
 			else
 			{
-				drawAlpha = MathHelper.Lerp(drawAlpha, 0f, 0.1f);
+				drawAlpha = MathHelper.Lerp(drawAlpha, 0f, 0.08f);
 			}
 		}
 	}
 
 	private float drawAlpha = 0f;
-	private int drawAlphaCD = 5;
+	private int drawAlphaCD = 0;
 
-	public void DrawStamina(Vector2 center)// 最好重绘一下，现在这个比较丑
+	public void DrawStamina(Vector2 center)
 	{
 		if (drawAlpha == 0)
 		{
@@ -172,7 +185,7 @@ public class PlayerStamina : ModPlayer
 		float alpha = drawAlpha * (StaminaRecovery ? 0.4f : 0.8f);
 		int height = (int)(tex.Height * value);
 		int height2 = height + 2;
-		if(height <= 0)
+		if (height <= 1)
 		{
 			height2 = 0;
 		}
@@ -180,6 +193,7 @@ public class PlayerStamina : ModPlayer
 		{
 			height2 = tex.Height;
 		}
+		Vector2 drawPos = center - Main.screenPosition;
 		Rectangle frame = new Rectangle(0, tex.Height - height, tex.Width, height);
 		Rectangle frame2 = new Rectangle(0, tex.Height - height2, tex.Width, height2);
 		Main.spriteBatch.Draw(tex_dark, center - Main.screenPosition, null, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
@@ -190,6 +204,12 @@ public class PlayerStamina : ModPlayer
 		if (stamina == maxStamina)
 		{
 			Main.spriteBatch.Draw(tex_bloom, center - Main.screenPosition + new Vector2(0, 45), null, color * alpha * 0.6f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, 0, 0);
+		}
+		Vector2 topLeft = drawPos - new Vector2(tex.Width * 0.5f, tex.Height);
+		Rectangle drawArea = new Rectangle((int)topLeft.X, (int)topLeft.Y, frame.Width, frame.Height);
+		if(drawArea.Contains((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y))
+		{
+			//Main.instance.MouseText += "Stamina";
 		}
 	}
 
