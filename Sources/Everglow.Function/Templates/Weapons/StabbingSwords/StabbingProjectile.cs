@@ -9,6 +9,11 @@ using Terraria.Utilities;
 
 namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
+/// <summary>
+/// Principle : generate <see cref="DrawParameters_Structure"/> continuously, with random direction and scale in a certain range.<br/>
+/// <see cref="LightDraw"/> will generate at first, then turn to <see cref="DarkDraw"/>.<br/>
+/// Each <see cref="DarkDraw"/> will fades per update, and kill after <see cref="TradeLength"/> times.
+/// </summary>
 public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 {
 	/// <summary>
@@ -214,7 +219,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
 			{
-				foreach (DrawParameters draw in DarkDraw)
+				foreach (DrawParameters_Structure draw in DarkDraw)
 				{
 					Vector2 HitRange = new Vector2(1, 0).RotatedBy(draw.Rotation) * MaxLength * 72;
 					if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, draw.Postion, draw.Postion + HitRange, draw.Size.Y * 10))
@@ -249,9 +254,9 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		return false;
 	}
 
-	public struct DrawParameters
+	public struct DrawParameters_Structure
 	{
-		public DrawParameters(Vector2 postion, Color color, float rotation, Vector2 size, SpriteEffects spriteEffect)
+		public DrawParameters_Structure(Vector2 postion, Color color, float rotation, Vector2 size, SpriteEffects spriteEffect)
 		{
 			Postion = postion;
 			Color = color;
@@ -267,7 +272,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		public SpriteEffects SpriteEffect;
 	}
 
-	public DrawParameters ItemDraw = default;
+	public DrawParameters_Structure ItemDraw = default;
 
 	public void UpdateItemDraw()
 	{
@@ -289,7 +294,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		ItemDraw.SpriteEffect = itemSpriteEffect;
 	}
 
-	public DrawParameters[] DarkDraw = new DrawParameters[200];
+	public DrawParameters_Structure[] DarkDraw = new DrawParameters_Structure[200];
 
 	public void UpdateDarkDraw()
 	{
@@ -356,7 +361,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		}
 	}
 
-	public DrawParameters LightDraw = default;
+	public DrawParameters_Structure LightDraw = default;
 
 	public void UpdateLightDraw()
 	{

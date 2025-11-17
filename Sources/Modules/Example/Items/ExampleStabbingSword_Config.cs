@@ -1,30 +1,11 @@
 using System.Reflection;
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.Commons.Utilities;
 using Everglow.Example.Projectiles;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
 
 namespace Everglow.Example.Items;
-
-public class ExampleStabbingSwordConfigDrawer : ModSystem
-{
-	// private Vector2 pos = Vector2.Zero;
-	public override void PostDrawInterface(SpriteBatch spriteBatch)
-	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
-		spriteBatch.End();
-		spriteBatch.Begin(sBS.SortMode, BlendState.AlphaBlend, SamplerState.PointWrap, sBS.DepthStencilState, RasterizerState.CullNone, sBS.Effect, Main.GameViewMatrix.TransformationMatrix);
-		Player p = Main.LocalPlayer;
-
-		// pos = Vector2.Lerp(pos, p.Center + new Vector2(-50 * p.direction, 40), 0.2f);
-		p.GetModPlayer<ExampleStabbingSword_Config>().Draw();
-		spriteBatch.End();
-		spriteBatch.Begin(sBS);
-	}
-}
 
 public class ExampleStabbingSword_Config : ModPlayer
 {
@@ -45,47 +26,47 @@ public class ExampleStabbingSword_Config : ModPlayer
 	/// <summary>
 	/// Shadow intensity | 阴影强度
 	/// </summary>
-	public float Shade = 0f;
+	public float Shade = 0.2f;
 
 	/// <summary>
 	/// 重影深度
 	/// </summary>
-	public float TradeShade = 0f;
+	public float TradeShade = 0.7f;
 
 	/// <summary>
 	/// 重影彩色部分亮度
 	/// </summary>
-	public float TradeLightColorValue = 0f;
+	public float TradeLightColorValue = 1f;
 
 	/// <summary>
 	/// 重影数量 (小于200)
 	/// </summary>
-	public int TradeLength = 0;
+	public int TradeLength = 4;
 
 	/// <summary>
 	/// 重影大小缩变,小于1
 	/// </summary>
-	public float FadeScale = 0f;
+	public float FadeScale = 1f;
 
 	/// <summary>
 	/// 刀光宽度1
 	/// </summary>
-	public float DrawWidth = 1f;
+	public float DrawWidth = 0.4f;
 
 	/// <summary>
 	/// 重影深度缩变,小于1
 	/// </summary>
-	public float FadeShade = 0f;
+	public float FadeShade = 0.64f;
 
 	/// <summary>
 	/// 重影彩色部分亮度缩变,小于1
 	/// </summary>
-	public float FadeLightColorValue = 0f;
+	public float FadeLightColorValue = 0.4f;
 
 	/// <summary>
 	/// 表示刺剑攻击长度,标准长度1
 	/// </summary>
-	public float MaxLength = 1f;
+	public float MaxLength = 0.7f;
 
 	/// <summary>
 	/// 荧光颜色,默认不会发光
@@ -143,11 +124,25 @@ public class ExampleStabbingSword_Config : ModPlayer
 		DrawAndModify(0, 1, ref FadeLightColorValue, 0.4f, nameof(FadeLightColorValue), 6);
 		DrawAndModify(0, 1, ref FadeGlowColorValue, 0f, nameof(FadeGlowColorValue), 7);
 		DrawAndModify(0.5f, 4, ref MaxLength, 0.7f, nameof(MaxLength), 8);
+		DrawAndModify_Int(1, 50, ref TradeLength, 4, nameof(TradeLength), 9);
 	}
 
 	public void DrawAndModify(float minVallue, float maxValue, ref float currentValue, float defaultValue, string valueName, int order)
 	{
 		DrawSlideBar(minVallue, maxValue, ref currentValue, defaultValue, valueName, order);
+		if (Stabbing_ModProj is not null)
+		{
+			FieldInfo fi = typeof(StabbingProjectile).GetField(valueName);
+			if (fi != null)
+			{
+				fi.SetValue(Stabbing_ModProj, currentValue);
+			}
+		}
+	}
+
+	public void DrawAndModify_Int(int minVallue, int maxValue, ref int currentValue, int defaultValue, string valueName, int order)
+	{
+		DrawSlideBar_Int(minVallue, maxValue, ref currentValue, defaultValue, valueName, order);
 		if (Stabbing_ModProj is not null)
 		{
 			FieldInfo fi = typeof(StabbingProjectile).GetField(valueName);
@@ -171,6 +166,13 @@ public class ExampleStabbingSword_Config : ModPlayer
 		StabbingSword.Update(StabbingSword.whoAmI);
 	}
 
+	public void DrawSlideBar_Int(int minVallue, int maxValue, ref int currentValue, int defaultValue, string valueName, int order)
+	{
+		float midValue = currentValue;
+		DrawSlideBar(minVallue, maxValue, ref midValue, defaultValue, valueName, order);
+		currentValue = (int)midValue;
+	}
+
 	public void DrawSlideBar(float minVallue, float maxValue, ref float currentValue, float defaultValue, string valueName, int order)
 	{
 		Texture2D track = Commons.ModAsset.SlideTrack_black.Value;
@@ -178,7 +180,6 @@ public class ExampleStabbingSword_Config : ModPlayer
 		Texture2D defaultCut = Commons.ModAsset.SlideDefaultCut.Value;
 		Vector2 pos = Player.Center + new Vector2(-240, -120 + order * 16) + PanelPos;
 		Vector2 mouseTransformed = Vector2.Transform(Main.MouseScreen, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
-		mouseTransformed += Main.screenPosition;
 
 		// Panel
 		Vector2 panelPos = pos - Main.screenPosition;
@@ -186,7 +187,7 @@ public class ExampleStabbingSword_Config : ModPlayer
 		Rectangle panelAreaLeft = new Rectangle((int)panelPos.X - 240, (int)panelPos.Y - 8, 150, 16);
 		Rectangle panelAreaRight = new Rectangle((int)panelPos.X - 240 + 350, (int)panelPos.Y - 8, 50, 16);
 		Main.spriteBatch.Draw(Terraria.GameContent.TextureAssets.MagicPixel.Value, panelArea, new Color(0.05f, 0.05f, 0.05f, 0.4f));
-		if (DraggingIndex == -1 && (panelAreaLeft.Contains((mouseTransformed - Main.screenPosition).ToPoint()) || panelAreaRight.Contains((mouseTransformed - Main.screenPosition).ToPoint())))
+		if (DraggingIndex == -1 && (panelAreaLeft.Contains(mouseTransformed.ToPoint()) || panelAreaRight.Contains(mouseTransformed.ToPoint())))
 		{
 			if (Main.mouseLeft && Main.mouseLeftRelease)
 			{
@@ -195,9 +196,9 @@ public class ExampleStabbingSword_Config : ModPlayer
 				DraggingIndex = -2;
 			}
 		}
-		if(DraggingIndex == -2)
+		if (DraggingIndex == -2)
 		{
-			if(Main.mouseLeft)
+			if (Main.mouseLeft)
 			{
 				PanelPos = oldPanelPos + mouseTransformed - oldClickPos;
 			}
@@ -206,6 +207,8 @@ public class ExampleStabbingSword_Config : ModPlayer
 				DraggingIndex = -1;
 			}
 		}
+
+		mouseTransformed += Main.screenPosition;
 
 		// Slide track
 		Main.spriteBatch.Draw(track, pos - Main.screenPosition, null, Color.White, 0, track.Size() * 0.5f, 1f, SpriteEffects.None, 0);
@@ -244,8 +247,8 @@ public class ExampleStabbingSword_Config : ModPlayer
 		// default cut
 		if (defaultCutkRec.Contains(mouseTransformed.ToPoint()))
 		{
-			Main.spriteBatch.Draw(defaultCut, defaultCutPos - Main.screenPosition, null, Color.White, 0, defaultCut.Size() * 0.5f, 1.2f, SpriteEffects.None, 0);
-			Main.instance.MouseText(valueName + " default : " + currentValue);
+			Main.spriteBatch.Draw(defaultCut, defaultCutPos - Main.screenPosition, null, Color.Brown, 0, defaultCut.Size() * 0.5f, 1.2f, SpriteEffects.None, 0);
+			Main.instance.MouseText(valueName + " default : " + defaultValue);
 			if (Main.mouseLeft && Main.mouseLeftRelease)
 			{
 				currentValue = defaultValue;
@@ -253,7 +256,7 @@ public class ExampleStabbingSword_Config : ModPlayer
 		}
 		else
 		{
-			Main.spriteBatch.Draw(defaultCut, defaultCutPos - Main.screenPosition, null, Color.White * 0.75f, 0, defaultCut.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(defaultCut, defaultCutPos - Main.screenPosition, null, Color.Brown * 0.75f, 0, defaultCut.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		}
 
 		// silde block

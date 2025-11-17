@@ -158,9 +158,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			return false;
 		}
 
-		public struct DrawParameters
+		public struct DrawParameters_Structure
 		{
-			public DrawParameters(Vector2 postion, Color color, float rotation, Vector2 size, SpriteEffects spriteEffect)
+			public DrawParameters_Structure(Vector2 postion, Color color, float rotation, Vector2 size, SpriteEffects spriteEffect)
 			{
 				Postion = postion;
 				Color = color;
@@ -176,7 +176,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			public SpriteEffects SpriteEffect;
 		}
 
-		public DrawParameters ItemDraw = default(DrawParameters);
+		public DrawParameters_Structure ItemDraw = default(DrawParameters_Structure);
 
 		public void UpdateItemDraw()
 		{
@@ -198,7 +198,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			ItemDraw.SpriteEffect = itemSpriteEffect;
 		}
 
-		public DrawParameters[] DarkDraw = new DrawParameters[200];
+		public DrawParameters_Structure[] DarkDraw = new DrawParameters_Structure[200];
 
 		public void UpdateDarkDraw()
 		{
@@ -256,7 +256,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			}
 		}
 
-		public DrawParameters LightDraw = default(DrawParameters);
+		public DrawParameters_Structure LightDraw = default(DrawParameters_Structure);
 
 		public void UpdateLightDraw()
 		{
