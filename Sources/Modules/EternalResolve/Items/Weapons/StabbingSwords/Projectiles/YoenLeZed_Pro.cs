@@ -1,6 +1,7 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.Buffs;
+using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
 using Terraria.GameContent;
 
@@ -22,11 +23,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			MaxLength = 1.15f;
 			DrawWidth = 0.4f;
 		}
+
 		public override void VisualParticle()
 		{
-			GenerateVFX(1);
-			SplitVFX(2);
+			if (Main.rand.NextBool(3))
+			{
+				GenerateVFX(1);
+			}
+			if (Main.rand.NextBool(2))
+			{
+				SplitVFX(1);
+			}
 		}
+
 		public override void AI()
 		{
 			base.AI();
@@ -38,6 +47,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 		}
+
 		public override void OnKill(int timeLeft)
 		{
 			ActiveSound sound = SoundEngine.FindActiveSound(new SoundStyle("Everglow/EternalResolve/Sounds/ElectricCurrency").WithVolume(0.6f));
@@ -46,49 +56,52 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				sound.Stop();
 			}
 		}
+
 		public void GenerateVFX(int Frequency)
 		{
 			float mulVelocity = Main.rand.NextFloat(0.25f, 0.5f);
 			for (int g = 0; g < Frequency; g++)
 			{
 				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(8f, 16f));
-				Vector2 afterVelocity = Projectile.velocity;
-				var electric = new ElectricCurrent
+				Vector2 afterVelocity = Projectile.velocity.RotateRandom(0.7f);
+				var electric = new YoenLeZedElecticFlow
 				{
 					velocity = afterVelocity * mulVelocity,
 					Active = true,
 					Visible = true,
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
-					maxTime = size * size / 8f,
+					maxTime = size * size / 12f,
 					scale = size,
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size / 2, 0 }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 1, Main.rand.NextFloat(-0.2f, 0.2f) },
 				};
 				Ins.VFXManager.Add(electric);
 			}
 		}
+
 		public void SplitVFX(int Frequency)
 		{
-			float mulVelocity = 1f;
+			float mulVelocity = 0.5f;
 			for (int g = 0; g < Frequency; g++)
 			{
 				float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
-				Vector2 afterVelocity = Projectile.velocity;
-				var electric = new ElectricCurrent
+				Vector2 afterVelocity = Projectile.velocity.RotateRandom(0.3f);
+				var electric = new YoenLeZedElecticFlow
 				{
 					velocity = afterVelocity * mulVelocity,
 					Active = true,
 					Visible = true,
-					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * MathF.Sqrt(Main.rand.NextFloat(1f)) * 6f,
-					maxTime = size * size / 8f,
+					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * MathF.Sqrt(Main.rand.NextFloat(1f)) * 6f - afterVelocity,
+					maxTime = size * size / 18f,
 					scale = size,
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 2, Main.rand.NextFloat(-0.2f, 0.2f) },
 				};
 				Ins.VFXManager.Add(electric);
 			}
 		}
+
 		public override void PostDraw(Color lightColor)
 		{
-			Lighting.AddLight(Projectile.Center + Projectile.velocity, 0.2f * Projectile.timeLeft / TradeLength, 0.24f * Projectile.timeLeft / TradeLength, 0.3f * Projectile.timeLeft / TradeLength);
+			Lighting.AddLight(Projectile.Center + Projectile.velocity, new Vector3(0.2f, 0.24f, 0.3f));
 			Player player = Main.player[Projectile.owner];
 			Texture2D itemTexture = TextureAssets.Item[Main.player[Projectile.owner].HeldItem.type].Value;
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
@@ -130,6 +143,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Dust d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);

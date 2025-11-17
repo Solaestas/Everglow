@@ -3,11 +3,11 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class YoenLeZed : StabbingSwordItem
+	public class YoenLeZed : StabbingSwordItem
 	{
-		//TODO:翻译
-		//攻击附带雷电，水中雷电伤害翻三倍且更容易传导
-		//比考场忘带身份证还刺激一点
+		// TODO:翻译
+		// 攻击附带雷电，水中雷电伤害翻三倍且更容易传导
+		// 比考场忘带身份证还刺激一点
 		public override void SetDefaults()
 		{
 			Item.damage = 14;

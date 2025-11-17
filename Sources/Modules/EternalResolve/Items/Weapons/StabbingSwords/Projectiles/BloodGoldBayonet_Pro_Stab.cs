@@ -3,12 +3,14 @@ using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.EternalResolve.Buffs;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Everglow.EternalResolve.VFXs;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
 	public class BloodGoldBayonet_Pro_Stab : StabbingProjectile_Stab
 	{
 		public NPC ProjTarget;
+
 		public override void SetDefaults()
 		{
 			Color = Color.Red;
@@ -21,10 +23,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			DrawWidth = 0.4f;
 			base.SetDefaults();
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			base.DrawEffect(lightColor);
 		}
+
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
 			yield return new WaitForFrames(45);
@@ -35,7 +39,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				color = Color * 0.4f,
 				scale = 25,
 				maxtime = 10,
-				timeleft = 10
+				timeleft = 10,
 			};
 			if (EndPos == Vector2.Zero)
 			{
@@ -49,13 +53,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				color = Color * 0.4f,
 				scale = 15,
 				maxtime = 10,
-				timeleft = 10
+				timeleft = 10,
 			};
 			if (EndPos == Vector2.Zero)
 			{
 				Ins.VFXManager.Add(v);
 			}
 		}
+
 		public override void AI()
 		{
 			if (Main.rand.NextBool(6))
@@ -71,12 +76,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 
 			base.AI();
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(ModContent.BuffType<BloodDrinking>(), 180);
 			base.OnHitNPC(target, hit, damageDone);
 		}
 	}
+
 	public class BloodDrinkingTarget : GlobalNPC
 	{
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -99,13 +106,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				{
 					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
 					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 3f, SpriteEffects.None, 0f);
-
 				}
 				else
 				{
 					spriteBatch.Draw(bloodMarkBlack, npc.Center - Main.screenPosition, null, new Color(dark, dark, dark, dark), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 5000f * npc.scale * 2, SpriteEffects.None, 0f);
 					spriteBatch.Draw(bloodMark, npc.Center - Main.screenPosition, null, new Color(light, light, light, 0), 0, bloodMark.Size() * 0.5f, 4f * npc.width * npc.height / 5000f * npc.scale * 2, SpriteEffects.None, 0f);
-
 				}
 			}
 		}

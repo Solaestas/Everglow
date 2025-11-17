@@ -3,25 +3,27 @@ using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
+using Everglow.EternalResolve.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class EternalNight_Pro_Stab : StabbingProjectile_Stab
-    {
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
+	public class EternalNight_Pro_Stab : StabbingProjectile_Stab
+	{
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
 			Color = new Color(119, 34, 255);
 			TradeShade = 1f;
 			Shade = 1f;
-			FadeShade =1f;
+			FadeShade = 1f;
 			FadeScale = 0.7f;
 			TradeLightColorValue = 0.6f;
 			FadeLightColorValue = 0.1f;
 			MaxLength = 1.40f;
 			DrawWidth = 0.4f;
 		}
+
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
 			yield return new WaitForFrames(45);
@@ -32,7 +34,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				color = Color * 0.4f,
 				scale = 25,
 				maxtime = 10,
-				timeleft = 10
+				timeleft = 10,
 			};
 			if (EndPos == Vector2.Zero)
 			{
@@ -46,13 +48,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				color = Color * 0.4f,
 				scale = 15,
 				maxtime = 10,
-				timeleft = 10
+				timeleft = 10,
 			};
 			if (EndPos == Vector2.Zero)
 			{
 				Ins.VFXManager.Add(v);
 			}
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60 * ToKill / 120f * DrawWidth;
@@ -68,12 +71,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(120, 120, 120, 120) * 0.9f * Shade,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(120, 120, 120, 120)* 0.9f* Shade,new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,Color.White* 0.8f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,Color.White* 0.8f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(120, 120, 120, 120) * 0.9f * Shade, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(120, 120, 120, 120) * 0.9f * Shade, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White * 0.8f * dark * Shade, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White * 0.8f * dark * Shade, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -99,12 +102,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor * 1.2f,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor * 1.2f,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor * 1.2f, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor * 1.2f, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -129,12 +132,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -152,7 +155,6 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 
-
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -163,12 +165,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * DrawWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,Color.White,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,Color.White,new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,Color.White,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,Color.White,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,Color.White,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,Color.White,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, Color.White, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, Color.White, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -190,9 +192,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 		}
+
 		public override void AI()
 		{
-			if(Main.rand.NextBool(7))
+			if (Main.rand.NextBool(7))
 			{
 				Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
 				if (EndPos != Vector2.zeroVector)
@@ -205,28 +208,31 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			base.AI();
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			for (int k = 0; k < 3; k++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
-					target.Center - new Vector2(0, Main.rand.NextFloat(115, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f))
-					, Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>()
-					, Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
+				Projectile p0 = Projectile.NewProjectileDirect(
+					Projectile.GetSource_FromAI(),
+					target.Center - new Vector2(0, Main.rand.NextFloat(115, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+					Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>(),
+					Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
 				p0.timeLeft = 240 + k * 5;
-
 			}
 			base.OnHitNPC(target, hit, damageDone);
 		}
+
 		public override void OnSpawn(IEntitySource source)
 		{
 			base.OnSpawn(source);
 			for (int k = 0; k < 7; k++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
-					Projectile.Center + Projectile.velocity * k * 25f - new Vector2(0, Main.rand.NextFloat(80, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.7f, 0.7f))
-					, Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>()
-					, Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, -1);
+				Projectile p0 = Projectile.NewProjectileDirect(
+					Projectile.GetSource_FromAI(),
+					Projectile.Center + Projectile.velocity * k * 25f - new Vector2(0, Main.rand.NextFloat(80, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.7f, 0.7f)),
+					Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>(),
+					Projectile.damage / 7, Projectile.knockBack * 0.6f, Projectile.owner, -1);
 				p0.timeLeft = 240 + k * 4;
 				p0.rotation = MathF.PI * 0.75f + Main.rand.NextFloat(-1f, 1f);
 			}

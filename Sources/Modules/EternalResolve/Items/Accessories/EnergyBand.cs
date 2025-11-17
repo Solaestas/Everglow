@@ -7,7 +7,6 @@ namespace Everglow.EternalResolve.Items.Accessories
 		// Decrease stamina comsumption by 25%
 		public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
 
-		// Decrease stamina comsumption by 25%
 		public override void SetDefaults()
 		{
 			Item.width = 40;

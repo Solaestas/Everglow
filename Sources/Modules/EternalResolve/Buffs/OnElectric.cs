@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.VFXs;
-using SteelSeries.GameSense;
 
 namespace Everglow.EternalResolve.Buffs;
 
@@ -35,18 +34,18 @@ public class OnElectric : ModBuff
 			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.04f;
 		}
 
-		float mulVelocity = 1f;
+		float mulVelocity = 0.5f;
 		float size = Main.rand.NextFloat(8f, Main.rand.NextFloat(4f, 10f));
 		Vector2 afterVelocity = new Vector2(0, size * 1.3f).RotatedByRandom(MathHelper.TwoPi);
-		var electric = new ElectricCurrent
+		var electric = new YoenLeZedElecticFlow
 		{
 			velocity = afterVelocity * mulVelocity,
 			Active = true,
 			Visible = true,
-			position = npc.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity * mulVelocity * 2,
-			maxTime = size * size / 8f,
+			position = npc.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) - afterVelocity * mulVelocity * 6,
+			maxTime = size * size / 34f,
 			scale = size,
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), size, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) }
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 1f, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) },
 		};
 		Ins.VFXManager.Add(electric);
 

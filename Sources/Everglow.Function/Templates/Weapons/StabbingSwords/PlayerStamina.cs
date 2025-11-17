@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 
 namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
@@ -12,9 +13,9 @@ public class PlayerStaminaDrawer : ModSystem
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		spriteBatch.End();
-		spriteBatch.Begin(sBS.SortMode, BlendState.AlphaBlend, SamplerState.PointWrap, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, Main.GameViewMatrix.TransformationMatrix);
+		spriteBatch.Begin(sBS.SortMode, BlendState.AlphaBlend, SamplerState.PointWrap, sBS.DepthStencilState, RasterizerState.CullNone, sBS.Effect, Main.GameViewMatrix.TransformationMatrix);
 		Player p = Main.LocalPlayer;
-		pos = Vector2.Lerp(pos, p.Center + new Vector2(-50 * p.direction, 40 * p.gravDir), 0.2f);
+		pos = Vector2.Lerp(pos, p.Center + new Vector2(-50 * p.direction, 40), 0.2f);
 		p.GetModPlayer<PlayerStamina>().DrawStamina(pos);
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
@@ -25,10 +26,12 @@ public class PlayerStaminaDrawer : ModSystem
 
 public class PlayerStamina : ModPlayer
 {
-	private float stamina = 100f;
-	private float maxStamina = 100f;
+	private float stamina = MaxStaminaDefault;
+	private float maxStamina = MaxStaminaDefault;
 
 	public const int RecoveryCoolingDefault = 45;
+
+	public const float MaxStaminaDefault = 100;
 
 	/// <summary>
 	/// The time interval between recovery process and the (end of) last attack<br/>
@@ -107,7 +110,7 @@ public class PlayerStamina : ModPlayer
 
 	public override void PostUpdate()
 	{
-		maxStamina = 100f + ExtraStamina;
+		maxStamina = MaxStaminaDefault + ExtraStamina;
 
 		// Start Recovery Process | 进入恢复期
 		if (stamina <= 0 && !StaminaRecovery)
@@ -171,7 +174,7 @@ public class PlayerStamina : ModPlayer
 
 	public void DrawStamina(Vector2 center)
 	{
-		if (drawAlpha == 0)
+		if (drawAlpha <= 0.001)
 		{
 			return;
 		}
@@ -179,6 +182,11 @@ public class PlayerStamina : ModPlayer
 		Texture2D tex_dark = ModAsset.StabbingSwordStamina_black.Value;
 		Texture2D tex = ModAsset.StabbingSwordStamina.Value;
 		Texture2D tex_bloom = ModAsset.StabbingSwordStamina_bloom.Value;
+		SpriteEffects spriteEffects = SpriteEffects.None;
+		if(Player.gravDir == -1)
+		{
+			spriteEffects = SpriteEffects.FlipVertically;
+		}
 		float value = stamina / maxStamina;
 		Color color = Main.hslToRgb(value * 0.36f - 0.15f, 1f, 0.75f);
 		color.A = 0;
@@ -196,20 +204,30 @@ public class PlayerStamina : ModPlayer
 		Vector2 drawPos = center - Main.screenPosition;
 		Rectangle frame = new Rectangle(0, tex.Height - height, tex.Width, height);
 		Rectangle frame2 = new Rectangle(0, tex.Height - height2, tex.Width, height2);
-		Main.spriteBatch.Draw(tex_dark, center - Main.screenPosition, null, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
-		Main.spriteBatch.Draw(tex, center - Main.screenPosition + new Vector2(0, tex.Height - height2), frame2, color * alpha * 3, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
-		Main.spriteBatch.Draw(tex_dark, center - Main.screenPosition + new Vector2(0, tex.Height - height), frame, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
-		Main.spriteBatch.Draw(tex, center - Main.screenPosition + new Vector2(0, tex.Height - height), frame, color * alpha * 0.7f, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, 0, 0);
-		Main.spriteBatch.Draw(tex_bloom, center - Main.screenPosition + new Vector2(0, 45), null, color * alpha * 0.4f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, 0, 0);
+		Main.spriteBatch.Draw(tex_dark, drawPos, null, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+		if(Player.gravDir == 1)
+		{
+			Main.spriteBatch.Draw(tex, drawPos + new Vector2(0, tex.Height - height2), frame2, color * alpha * 3, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+			Main.spriteBatch.Draw(tex_dark, drawPos + new Vector2(0, tex.Height - height), frame, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+			Main.spriteBatch.Draw(tex, drawPos + new Vector2(0, tex.Height - height), frame, color * alpha * 0.7f, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+		}
+		else
+		{
+			Main.spriteBatch.Draw(tex, drawPos + new Vector2(0, tex.Height - tex.Height), frame2, color * alpha * 3, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+			Main.spriteBatch.Draw(tex_dark, drawPos + new Vector2(0, tex.Height - tex.Height), frame, Color.White * alpha, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+			Main.spriteBatch.Draw(tex, drawPos + new Vector2(0, tex.Height - tex.Height), frame, color * alpha * 0.7f, 0, new Vector2(tex.Width * 0.5f, tex.Height), 1f, spriteEffects, 0);
+		}
+		Main.spriteBatch.Draw(tex_bloom, drawPos + new Vector2(0, 45), null, color * alpha * 0.4f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, spriteEffects, 0);
 		if (stamina == maxStamina)
 		{
-			Main.spriteBatch.Draw(tex_bloom, center - Main.screenPosition + new Vector2(0, 45), null, color * alpha * 0.6f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, 0, 0);
+			Main.spriteBatch.Draw(tex_bloom, drawPos + new Vector2(0, 45), null, color * alpha * 0.6f, 0, new Vector2(tex_bloom.Width * 0.5f, tex_bloom.Height), 1f, spriteEffects, 0);
 		}
 		Vector2 topLeft = drawPos - new Vector2(tex.Width * 0.5f, tex.Height);
-		Rectangle drawArea = new Rectangle((int)topLeft.X, (int)topLeft.Y, frame.Width, frame.Height);
-		if(drawArea.Contains((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y))
+		Rectangle drawArea = new Rectangle((int)topLeft.X, (int)topLeft.Y, tex.Width, tex.Height);
+		Vector2 mouseScreen = Vector2.Transform(Main.MouseScreen, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+		if (drawArea.Contains((int)mouseScreen.X, (int)mouseScreen.Y))
 		{
-			//Main.instance.MouseText += "Stamina";
+			Main.instance.MouseText("Stamina: " + (int)stamina + "/" + maxStamina, ItemRarityID.White);
 		}
 	}
 

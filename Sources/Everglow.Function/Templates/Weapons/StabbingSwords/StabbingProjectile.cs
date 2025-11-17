@@ -12,17 +12,17 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 {
 	/// <summary>
-	/// 常规情况下的ExtraUpdates
+	/// Default ExtraUpdates | 默认ExtraUpdates
 	/// </summary>
 	public const int NormalExtraUpdates = 20;
 
 	/// <summary>
-	/// 常规颜色
+	/// Main color | 主要颜色
 	/// </summary>
 	public Color Color = Color.White;
 
 	/// <summary>
-	/// 阴影强度
+	/// Shadow intensity | 阴影强度
 	/// </summary>
 	public float Shade = 0f;
 
@@ -76,6 +76,8 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float FadeGlowColorValue = 0f;
 
+	public Player Owner => Main.player[Projectile.owner];
+
 	public override string Texture => ModAsset.StabbingProjectile_Mod;
 
 	/// <summary>
@@ -113,9 +115,8 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		Player player = Main.player[Projectile.owner];
 		UpdateTimer++;
-		Projectile.extraUpdates = (int)(NormalExtraUpdates * player.meleeSpeed);
+		Projectile.extraUpdates = (int)(NormalExtraUpdates * Owner.meleeSpeed);
 		int animation = 9;
 		float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
 		Projectile.ai[0] += 1f / 20f;
@@ -129,18 +130,18 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			Projectile.soundDelay = SoundTimer * (1 + NormalExtraUpdates);
 			SoundStyle ss = SoundID.Item1;
-			SoundEngine.PlaySound(ss.WithPitchOffset(player.meleeSpeed - 1), Projectile.Center);
+			SoundEngine.PlaySound(ss.WithPitchOffset(Owner.meleeSpeed - 1), Projectile.Center);
 		}
 		if (Main.myPlayer == Projectile.owner)
 		{
-			if (player.channel && !player.noItems && !player.CCed)
+			if (Owner.channel && !Owner.noItems && !Owner.CCed)
 			{
-				float hitSize = player.inventory[player.selectedItem].shootSpeed * Projectile.scale;
-				Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
+				float hitSize = Owner.inventory[Owner.selectedItem].shootSpeed * Projectile.scale;
+				Vector2 toMouse = Main.MouseWorld - Owner.RotatedRelativePoint(Owner.MountedCenter);
 				toMouse.Normalize();
 				if (toMouse.HasNaNs())
 				{
-					toMouse = Vector2.UnitX * player.direction;
+					toMouse = Vector2.UnitX * Owner.direction;
 				}
 				toMouse *= hitSize;
 				if (toMouse.X != Projectile.velocity.X || toMouse.Y != Projectile.velocity.Y)
@@ -152,28 +153,28 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			}
 		}
 
-		if (!player.controlUseItem && Projectile.timeLeft > TradeLength * (NormalExtraUpdates + 1))
+		if (!Owner.controlUseItem && Projectile.timeLeft > TradeLength * (NormalExtraUpdates + 1))
 		{
 			Projectile.timeLeft = TradeLength * (NormalExtraUpdates + 1);
 		}
 
-		if (player.HeldItem.ModItem is StabbingSwordItem modItem)
+		if (Owner.HeldItem.ModItem is StabbingSwordItem modItem)
 		{
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost / Projectile.extraUpdates))
+			if (!Owner.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost / Projectile.extraUpdates))
 			{
-				OnStaminaDepleted(player);
+				OnStaminaDepleted(Owner);
 				Projectile.Kill(); // Return一堆怪问题，杀了就好了
 			}
 		}
 
-		Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
+		Projectile.position = Owner.RotatedRelativePoint(Owner.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f;
 		Projectile.rotation = Projectile.velocity.ToRotation();
 		Projectile.spriteDirection = Projectile.direction;
-		player.ChangeDir(Projectile.direction);
-		player.heldProj = Projectile.whoAmI;
-		player.SetDummyItemTime(animation);
-		player.itemRotation = MathHelper.WrapAngle((float)Math.Atan2(Projectile.velocity.Y * Projectile.direction, Projectile.velocity.X * Projectile.direction) + rotationRange);
-		player.itemAnimation = animation - (int)Projectile.ai[0];
+		Owner.ChangeDir(Projectile.direction);
+		Owner.heldProj = Projectile.whoAmI;
+		Owner.SetDummyItemTime(animation);
+		Owner.itemRotation = MathHelper.WrapAngle((float)Math.Atan2(Projectile.velocity.Y * Projectile.direction, Projectile.velocity.X * Projectile.direction) + rotationRange);
+		Owner.itemAnimation = animation - (int)Projectile.ai[0];
 		UpdateItemDraw();
 		UpdateDarkDraw();
 		UpdateLightDraw();
@@ -181,6 +182,11 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			VisualParticle();
 		}
+		CustomBehavior();
+	}
+
+	public virtual void CustomBehavior()
+	{
 	}
 
 	/// <summary>
