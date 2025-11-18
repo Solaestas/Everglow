@@ -33,7 +33,6 @@ public class ColliderManager : ILoadable
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
-		Ins.HookManager.AddHook(CodeLayer.PostEnterWorld_Single, Clear);
 	}
 
 	public void Unload()
@@ -307,4 +306,15 @@ public class ColliderManager : ILoadable
 	}
 
 	#endregion
+
+	public class ColliderManagerSystem : ModPlayer
+	{
+		public override void OnEnterWorld()
+		{
+			if (Player.whoAmI == Main.myPlayer)
+			{
+				Instance.Clear();
+			}
+		}
+	}
 }
