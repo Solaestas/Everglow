@@ -9,7 +9,6 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
-using Terraria.Map;
 
 namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
@@ -51,14 +50,23 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		Projectile.extraUpdates = 5;
 		Projectile.tileCollide = false;
 		Projectile.ArmorPenetration = 20;
+		SetCustomDefaults();
 	}
 
-	public Vector2 StartCenter = Vector2.zeroVector;
-	public Vector2 EndPos = Vector2.zeroVector;
-	public int ToKill = 120;
+	/// <summary>
+	/// Anouced that stab will default with 20 ArmorPenetration.
+	/// </summary>
+	public virtual void SetCustomDefaults()
+	{
+	}
+
+	public Vector2 StabStartPoint_WorldPos = Vector2.zeroVector;
+	public Vector2 StabEndPoint_WorldPos = Vector2.zeroVector;
+	public int StabTimer = 120;
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		// Calculate direction
 		Player player = Main.player[Projectile.owner];
 		Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
 		toMouse.Normalize();
@@ -72,8 +80,10 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		}
 		Projectile.velocity = toMouse;
 
+		// Ring effect
 		_coroutineManager.StartCoroutine(new Coroutine(Generate3DRingVFX(toMouse)));
 
+		// Dust effect
 		for (int i = 0; i < 6; i++)
 		{
 			StabLightDust v1;
@@ -92,7 +102,6 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(v1);
 		}
-
 		for (int i = 0; i < 10; i++)
 		{
 			StabLightDust v1;
@@ -112,21 +121,22 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Ins.VFXManager.Add(v1);
 		}
 
+		// Stab Sound
 		var ss = new SoundStyle(ModAsset.SwordSwing_Mod);
 		SoundEngine.PlaySound(ss, Projectile.Center);
-		StartCenter = Projectile.Center;
+		StabStartPoint_WorldPos = Projectile.Center;
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		Vector2 end = Projectile.Center + Projectile.velocity * 80 * StabDistance;
-		if (EndPos != Vector2.zeroVector)
+		if (StabEndPoint_WorldPos != Vector2.zeroVector)
 		{
-			end = EndPos;
+			end = StabEndPoint_WorldPos;
 		}
-		if (Collision.CanHit(StartCenter, 0, 0, targetHitbox.Center(), 0, 0))
+		if (Collision.CanHit(StabStartPoint_WorldPos, 0, 0, targetHitbox.Center(), 0, 0))
 		{
-			if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, StartCenter, end, Projectile.width))
+			if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, StabStartPoint_WorldPos, end, Projectile.width))
 			{
 				return true;
 			}
@@ -135,7 +145,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	}
 
 	/// <summary>
-	/// 用协程管理环状特效
+	/// Use Coroutine to handle ring VFX | 用协程管理环状特效
 	/// </summary>
 	/// <returns></returns>
 	public virtual IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
@@ -143,28 +153,28 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		yield return new WaitForFrames(40);
 		var v = new StabVFX()
 		{
-			pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
+			pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - StabTimer / 135f),
 			vel = velocity,
 			color = Color.Lerp(StabColor, Color.Transparent, 0.4f),
 			scale = 26,
 			maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 			timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 		};
-		if (EndPos == Vector2.Zero)
+		if (StabEndPoint_WorldPos == Vector2.Zero)
 		{
 			Ins.VFXManager.Add(v);
 		}
 		yield return new WaitForFrames(40);
 		v = new StabVFX()
 		{
-			pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
+			pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - StabTimer / 135f),
 			vel = velocity,
 			color = Color.Lerp(StabColor, Color.Transparent, 0.56f),
 			scale = 15,
 			maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 			timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 		};
-		if (EndPos == Vector2.Zero)
+		if (StabEndPoint_WorldPos == Vector2.Zero)
 		{
 			Ins.VFXManager.Add(v);
 		}
@@ -172,16 +182,21 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		Player player = Main.player[Projectile.owner];
+		// Water interaction
 		ProduceWaterRipples(new Vector2(Projectile.velocity.Length(), 30));
+
+		// Ring effect coroutine update.
 		_coroutineManager.Update();
+
+		// Set player posture
+		Player player = Main.player[Projectile.owner];
 		if (Projectile.timeLeft <= 1)
 		{
-			ToKill--;
-			if (ToKill > 0)
+			StabTimer--;
+			if (StabTimer > 0)
 			{
 				Projectile.timeLeft++;
-				float value = (Projectile.timeLeft + ToKill) / 135f;
+				float value = (Projectile.timeLeft + StabTimer) / 135f;
 				float BodyRotation = MathF.Sin(value * MathF.PI) * player.direction * 0.2f;
 				TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 				Tplayer.HeadRotation = 0;
@@ -199,12 +214,12 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 				player.legRotation = 0;
 				Tplayer.HeadRotation = 0;
 				Tplayer.HideLeg = false;
-
 				player.legPosition = Vector2.Zero;
 			}
 		}
 
-		if (ToKill >= 120)
+		// Set projectile posture
+		if (StabTimer >= 120)
 		{
 			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
 			Projectile.rotation = Projectile.velocity.ToRotation();
@@ -214,13 +229,23 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		{
 			Projectile.extraUpdates = 24;
 		}
-		Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
-		if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
+		if (StabEndPoint_WorldPos == Vector2.zeroVector)
 		{
-			if (EndPos == Vector2.zeroVector)
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
+			if (Collision.IsWorldPointSolid(end))
 			{
-				EndPos = end;
-				HitTile();
+				for (int k = 0; k < 500; k++)
+				{
+					Vector2 modifiedEnd = end - Projectile.velocity.NormalizeSafe() * k;
+					if (!Collision.IsWorldPointSolid(modifiedEnd))
+					{
+						StabEndPoint_WorldPos = modifiedEnd;
+						Projectile.Center = modifiedEnd;
+						Projectile.velocity *= 0.01f;
+						HitTile();
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -254,7 +279,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 				velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = EndPos,
+				position = StabEndPoint_WorldPos,
 				maxTime = Main.rand.Next(1, 25),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(10f, 27.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
@@ -262,6 +287,17 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
+		var hitSparkFixed = new StabbingProjectile_HitEffect()
+		{
+			Active = true,
+			Visible = true,
+			Position = StabEndPoint_WorldPos,
+			MaxTime = 10,
+			Scale = 0.24f,
+			Rotation = Projectile.velocity.ToRotation(),
+			Color = new Color(1f, 0.45f, 0.05f, 0),
+		};
+		Ins.VFXManager.Add(hitSparkFixed);
 	}
 
 	private void ProduceWaterRipples(Vector2 beamDims)
@@ -283,7 +319,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public virtual void DrawItem(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
-		if (ToKill > 60)
+		if (StabTimer > 60)
 		{
 			Texture2D itemTexture = TextureAssets.Item[player.HeldItem.type].Value;
 			Main.spriteBatch.Draw(itemTexture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI * 0.25f, itemTexture.Size() / 2f, 1, SpriteEffects.None, 0f);
@@ -293,18 +329,22 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		DrawEffect(lightColor);
+
+		// Vector2 endPos = Projectile.Center + Projectile.velocity * 100 * StabDistance;
+		// Texture2D tex = Commons.ModAsset.LightPoint2.Value;
+		// Main.spriteBatch.Draw(tex, endPos - Main.screenPosition,null,new Color(1f, 1f, 1f, 0),0,tex.Size() * 0.5f,0.5f,SpriteEffects.None,0);
 	}
 
 	public virtual void DrawEffect(Color lightColor)
 	{
-		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 90 * ToKill / 120f * StabEffectWidth;
-		Vector2 start = StartCenter;
+		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 90 * StabTimer / 120f * StabEffectWidth;
+		Vector2 start = StabStartPoint_WorldPos;
 		Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
-		if (EndPos != Vector2.Zero)
+		if (StabEndPoint_WorldPos != Vector2.Zero)
 		{
-			end = EndPos;
+			end = StabEndPoint_WorldPos;
 		}
-		float value = (Projectile.timeLeft + ToKill) / 135f;
+		float value = (Projectile.timeLeft + StabTimer) / 135f;
 		var middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		float dark = MathF.Sin(value * MathF.PI) * 4;
@@ -338,7 +378,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		alphaColor.G = (byte)(alphaColor.G * lightColor.G / 255f);
 		alphaColor.B = (byte)(alphaColor.B * lightColor.B / 255f);
 
-		normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 72 * ToKill / 120f * StabEffectWidth;
+		normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 72 * StabTimer / 120f * StabEffectWidth;
 		bars = new List<Vertex2D>
 		{
 			new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -368,7 +408,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		alphaColor.R = (byte)(StabColor.R * 2 * lightColor.R / 255f);
 		alphaColor.G = (byte)(StabColor.G * 2 * lightColor.G / 255f);
 		alphaColor.B = (byte)(StabColor.B * 2 * lightColor.B / 255f);
-		normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * StabEffectWidth;
+		normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * StabTimer / 120f * StabEffectWidth;
 		bars = new List<Vertex2D>
 		{
 			new Vertex2D(start + normalized, alphaColor * 0.4f, new Vector3(1 + time, 0, 0)),
@@ -397,14 +437,14 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch sb)
 	{
-		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * StabEffectWidth;
-		Vector2 start = StartCenter;
+		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * StabTimer / 120f * StabEffectWidth;
+		Vector2 start = StabStartPoint_WorldPos;
 		Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
-		if (EndPos != Vector2.Zero)
+		if (StabEndPoint_WorldPos != Vector2.Zero)
 		{
-			end = EndPos;
+			end = StabEndPoint_WorldPos;
 		}
-		float value = (Projectile.timeLeft + ToKill) / 135f;
+		float value = (Projectile.timeLeft + StabTimer) / 135f;
 		var middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		Color alphaColor = StabColor;

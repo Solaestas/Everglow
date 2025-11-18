@@ -1,10 +1,10 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class BloodGoldBayonet : StabbingSwordItem
+	public class BloodGoldBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//命中敌人后有1/25的概率吸血,吸血量为造成伤害的30%

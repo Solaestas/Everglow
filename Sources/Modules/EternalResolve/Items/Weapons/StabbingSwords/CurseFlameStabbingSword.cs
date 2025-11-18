@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class CurseFlameStabbingSword : StabbingSwordItem
+	public class CurseFlameStabbingSword : StabbingSwordItem
 	{
 		//TODO:翻译
 		//用诅咒火焰点燃敌人！

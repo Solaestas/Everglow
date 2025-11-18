@@ -6,9 +6,8 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 {
 	public class PineStab_Pro_Stab : StabbingProjectile_Stab
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			StabColor = new Color(11, 84, 46);
 			StabShade = 2f;
 			StabDistance = 0.63f;
@@ -27,7 +26,7 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 			SoundEngine.PlaySound(ss.WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center);
 			for (int x = 0; x < 6; x++)
 			{
-				Dust.NewDustDirect(EndPos, 0, 0, ModContent.DustType<PineDust>());
+				Dust.NewDustDirect(StabEndPoint_WorldPos, 0, 0, ModContent.DustType<PineDust>());
 			}
 		}
 	}

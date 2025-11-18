@@ -4,9 +4,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
 
 public class DarkMassacreDagger_Projectile_thrust : StabbingProjectile_Stab
 {
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
 		StabColor = new Color(209, 55, 7);
 		StabShade = 0.2f;
 		StabDistance = 0.70f;

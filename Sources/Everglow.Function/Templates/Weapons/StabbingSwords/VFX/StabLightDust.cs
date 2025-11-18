@@ -10,6 +10,7 @@ internal class StabLightDust : Visual
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
 	public Color EffectColor;
+	public Color GlowColor;
 	public Vector2 Center;
 	public Vector2 Velocity;
 	public float Rotation;
@@ -47,14 +48,6 @@ internal class StabLightDust : Visual
 		float timeSize = Timeleft / (float)MaxTime;
 		drawColor *= timeSize;
 		Ins.Batch.Draw(tex, Center, null, drawColor, Rotation, tex.Size() * 0.5f, new Vector2(timeSize, 2) * Scale, SpriteEffects.None);
-
-		// Main.NewText(Center);
-		// Main.NewText(Main.LocalPlayer.Center,Color.Red);
-
-		/*
-        for (int i = 0; i < 5; i++)
-        {
-            Ins.Batch.Draw(tex, Center - Velocity * i / 30 , null, drawColor * alpha * (1 - i / 5f) * 1.2f, Velocity.ToRotation(), tex.Size() / 2, new Vector2(1.2f, 0.8f) * ai0 * scale, SpriteEffects.None);
-        }*/
+		Ins.Batch.Draw(tex, Center, null, GlowColor, Rotation, tex.Size() * 0.5f, new Vector2(timeSize, 2) * Scale, SpriteEffects.None);
 	}
 }

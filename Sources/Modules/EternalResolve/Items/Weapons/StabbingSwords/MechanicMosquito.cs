@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class MechanicMosquito : StabbingSwordItem
+	public class MechanicMosquito : StabbingSwordItem
 	{
 		//TODO:翻译：械蚊\n召唤三个会吸血的机械蚊子协助攻击,蚊子每次攻击会获得1点吸血，最多累积10点。使用结束之后，治疗吸血累积的点数。
 		public override void SetDefaults()

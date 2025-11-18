@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class DreamStar : StabbingSwordItem
+	public class DreamStar : StabbingSwordItem
 	{
 		//TODO:翻译
 		//每次命中都会给敌人标上1层角星标

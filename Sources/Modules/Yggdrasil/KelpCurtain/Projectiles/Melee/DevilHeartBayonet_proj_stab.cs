@@ -6,10 +6,8 @@ public class DevilHeartBayonet_proj_stab : StabbingProjectile_Stab
 {
 	public float Power = 0;
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
-
 		StabColor = new Color(255, 107, 171);
 		StabShade = 0.2f;
 		StabDistance = 0.70f;

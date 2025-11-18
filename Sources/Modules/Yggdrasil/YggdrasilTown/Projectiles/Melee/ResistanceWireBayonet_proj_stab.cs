@@ -8,9 +8,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee
 	{
 		public float Power = 0;
 
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			StabColor = new Color(71, 89, 99);
 			StabShade = 0.2f;
 			StabDistance = 0.70f;

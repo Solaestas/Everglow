@@ -1,4 +1,5 @@
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -85,9 +86,6 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 
 	public override string Texture => ModAsset.StabbingProjectile_Mod;
 
-	/// <summary>
-	/// 宽度width会影响伤害判定(斜矩形)的宽度,高度会影响判定的长度
-	/// </summary>
 	public override void SetDefaults()
 	{
 		Projectile.width = 30;
@@ -100,6 +98,11 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 4;
 		Projectile.extraUpdates = 20;
+		SetCustomDefaults();
+	}
+
+	public virtual void SetCustomDefaults()
+	{
 	}
 
 	public virtual int SoundTimer { get; private set; } = 6;
@@ -378,14 +381,24 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
 			float additiveDrawPos = AttackLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
-			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
+			bool collided = true;
+			float distanceCheck = 0f;
+			while (!Collision.IsWorldPointSolid(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * distanceCheck * lerpedTwice))
 			{
-				rndRange *= 0.9f;
-				drawPos -= Projectile.velocity * 0.2f;
-				if (rndRange < 0.3f)
+				distanceCheck += 0.03f;
+				if (distanceCheck >= rndRange)
 				{
+					collided = false;
 					break;
 				}
+			}
+			if(collided)
+			{
+				if(distanceCheck > 0)
+				{
+					HitTileEffect(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * rndRange * lerpedTwice, drawRotation, rndRange - distanceCheck);
+				}
+				rndRange = distanceCheck;
 			}
 			Vector2 drawSize = new Vector2(rndRange, AttackEffectWidth) * lerpedTwice;
 			LightDraw.Postion = drawPos;
@@ -397,6 +410,21 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			LightDraw.Color.A = (byte)(LightDraw.Color.A * MathF.Pow(ShadeMultiplicative_Modifier, 1f / NormalExtraUpdates));
 			LightDraw.Size.Y *= MathF.Pow(ScaleMultiplicative_Modifier * 0.2f, 1f / NormalExtraUpdates);
 		}
+	}
+
+	public virtual void HitTileEffect(Vector2 hitPosition, float rotation, float power)
+	{
+		var hitSparkFixed = new StabbingProjectile_HitEffect()
+		{
+			Active = true,
+			Visible = true,
+			Position = hitPosition,
+			MaxTime = 8,
+			Scale = 0.12f * power,
+			Rotation = rotation,
+			Color = new Color(1f, 0.45f, 0.05f, 0),
+		};
+		Ins.VFXManager.Add(hitSparkFixed);
 	}
 
 	public virtual void DrawBeforeItem()
