@@ -396,7 +396,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			{
 				if(distanceCheck > 0)
 				{
-					HitTileEffect(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * rndRange * lerpedTwice, drawRotation, rndRange - distanceCheck);
+					HitTileEffect(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * distanceCheck * lerpedTwice, drawRotation, rndRange - distanceCheck);
 				}
 				rndRange = distanceCheck;
 			}
