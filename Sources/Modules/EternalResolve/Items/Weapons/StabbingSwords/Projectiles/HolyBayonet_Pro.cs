@@ -3,22 +3,23 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class HolyBayonet_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            Color = new Color(243, 175, 105);
-            base.SetDefaults();
-			TradeLength = 4;
-			TradeShade = 0.3f;
+	public class HolyBayonet_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			AttackColor = new Color(243, 175, 105);
+			base.SetDefaults();
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.3f;
 			Shade = 0.2f;
-			FadeShade = 0.64f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 1.25f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.64f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.4f;
+			AttackLength = 1.25f;
+			AttackEffectWidth = 0.4f;
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -30,15 +31,18 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.noGravity = true;
 			}
 		}
+
 		public override void AI()
 		{
 			base.AI();
 			cooling--;
 		}
+
 		private int cooling = 0;
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if(Main.rand.NextBool(6) && cooling <= 0)
+			if (Main.rand.NextBool(6) && cooling <= 0)
 			{
 				cooling = 12 * (Projectile.extraUpdates + 1);
 				Vector2 newAddPos = new Vector2(120, 0).RotatedByRandom(Math.PI * 2);
@@ -46,20 +50,21 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			base.OnHitNPC(target, hit, damageDone);
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
 					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = Color * (DarkDraw[f].Color.A / 255f);
+					Color fadeLight = AttackColor * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
-					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
 					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					if (GlowColor != Color.Transparent)
@@ -72,7 +77,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			if (GlowColor != Color.Transparent)
 			{
 				Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);

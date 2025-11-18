@@ -3,22 +3,23 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class EnchantedBayonet_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
+	public class EnchantedBayonet_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
 			base.SetDefaults();
-			Color = new Color(76, 126, 255);
-			TradeLength = 4;
-			TradeShade = 0.8f;
+			AttackColor = new Color(76, 126, 255);
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.8f;
 			Shade = 0.2f;
-			FadeShade = 0.64f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.5f;
-			MaxLength = 0.88f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.64f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.5f;
+			AttackLength = 0.88f;
+			AttackEffectWidth = 0.4f;
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -30,6 +31,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.noGravity = true;
 			}
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
@@ -41,28 +43,27 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(FadeShade * 255));
+						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 1:
-						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(FadeShade * 255));
+						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 2:
-						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(FadeShade * 255));
+						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 3:
-						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(FadeShade * 255));
+						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 				}
 			}
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
-
 					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					Color fadeLight = DarkDraw[f].Color * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
-					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 				}
 			}
@@ -70,7 +71,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 		}
 	}
 }

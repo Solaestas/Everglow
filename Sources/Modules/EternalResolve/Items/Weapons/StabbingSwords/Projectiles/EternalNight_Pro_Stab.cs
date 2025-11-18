@@ -13,15 +13,10 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Color = new Color(119, 34, 255);
-			TradeShade = 1f;
-			Shade = 1f;
-			FadeShade = 1f;
-			FadeScale = 0.7f;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			MaxLength = 1.40f;
-			DrawWidth = 0.4f;
+			StabColor = new Color(119, 34, 255);
+			StabShade = 1f;
+			StabDistance = 1.40f;
+			StabEffectWidth = 0.4f;
 		}
 
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
@@ -29,9 +24,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			yield return new WaitForFrames(45);
 			StabVFX v = new NightStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color * 0.4f,
+				color = StabColor * 0.4f,
 				scale = 25,
 				maxtime = 10,
 				timeleft = 10,
@@ -43,9 +38,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			yield return new WaitForFrames(40);
 			v = new NightStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color * 0.4f,
+				color = StabColor * 0.4f,
 				scale = 15,
 				maxtime = 10,
 				timeleft = 10,
@@ -58,9 +53,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 
 		public override void DrawEffect(Color lightColor)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60 * ToKill / 120f * StabEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -71,12 +66,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized, new Color(120, 120, 120, 120) * 0.9f * Shade, new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized, new Color(120, 120, 120, 120) * 0.9f * Shade, new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized, Color.White * 0.8f * dark * Shade, new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized, Color.White * 0.8f * dark * Shade, new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 1, 1)),
+				new Vertex2D(start + normalized, new Color(120, 120, 120, 120) * 0.9f * StabShade, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(120, 120, 120, 120) * 0.9f * StabShade, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White * 0.8f * dark * StabShade, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White * 0.8f * dark * StabShade, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White * 0.9f * dark * StabShade, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White * 0.9f * dark * StabShade, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -93,13 +88,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
-			Color alphaColor = Color;
+			Color alphaColor = StabColor;
 			alphaColor.A = 0;
 			alphaColor.R = (byte)(alphaColor.R * lightColor.R / 255f);
 			alphaColor.G = (byte)(alphaColor.G * lightColor.G / 255f);
 			alphaColor.B = (byte)(alphaColor.B * lightColor.B / 255f);
 
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * StabEffectWidth;
 			bars = new List<Vertex2D>
 			{
 				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -129,7 +124,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			alphaColor.R = (byte)(184 * lightColor.R / 255f);
 			alphaColor.G = (byte)(0 * lightColor.G / 255f);
 			alphaColor.B = (byte)(378 * lightColor.B / 255f);
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 96 * ToKill / 120f * StabEffectWidth;
 			bars = new List<Vertex2D>
 			{
 				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -162,7 +157,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			value = (Projectile.timeLeft + ToKill) / 135f;
 			middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 			time = (float)(Main.time * 0.03);
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * StabEffectWidth;
 			bars = new List<Vertex2D>
 			{
 				new Vertex2D(start + normalized, Color.White, new Vector3(1 + time, 0, 0)),
@@ -197,7 +192,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			if (Main.rand.NextBool(7))
 			{
-				Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
+				Vector2 end = Projectile.Center + Projectile.velocity * 80 * StabDistance;
 				if (EndPos != Vector2.zeroVector)
 				{
 					end = EndPos;

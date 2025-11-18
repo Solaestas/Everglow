@@ -9,18 +9,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Color = new Color(105, 105, 255);
-			TradeLength = 8;
-			TradeShade = 0.7f;
+			AttackColor = new Color(105, 105, 255);
+			MaxOldAttackUnitCount = 8;
+			OldShade = 0.7f;
 			Shade = 0.5f;
-			FadeShade = 0.6f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			DrawWidth = 0.4f;
-
+			ShadeMultiplicative_Modifier = 0.6f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 0.6f;
+			LightColorValueMultiplicative_Modifier = 0.1f;
+			AttackEffectWidth = 0.4f;
 		}
-		RottenGoldBayonet sourceItem = null;
+
+		private RottenGoldBayonet sourceItem = null;
+
 		public override void OnSpawn(IEntitySource source)
 		{
 			if (source is EntitySource_ItemUse_WithAmmo eiw)
@@ -32,6 +33,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -42,17 +44,20 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 			}
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (sourceItem.specialDelay == 0)
 			{
 				sourceItem.specialDelay = 60;
 				target.defense -= 1;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<RottenGoldBayonet_Mark>(), (int)(Projectile.damage * 1f), Projectile.knockBack * 2.97f, Projectile.owner,0,target.whoAmI);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<RottenGoldBayonet_Mark>(), (int)(Projectile.damage * 1f), Projectile.knockBack * 2.97f, Projectile.owner, 0, target.whoAmI);
 			}
 		}
-		float bottomPos1 = 0f;
-		float bottomPos2 = 0f;
+
+		private float bottomPos1 = 0f;
+		private float bottomPos2 = 0f;
+
 		public override void DrawItem(Color lightColor)
 		{
 			if (!Main.gamePaused)
@@ -62,7 +67,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			else
 			{
-				//暂停的时候可以有一个渐停效果，看起来很好
+				// 暂停的时候可以有一个渐停效果，看起来很好
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}

@@ -18,15 +18,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 1, 2, 0);
 			Item.shoot = ModContent.ProjectileType<BloodGoldBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<BloodGoldBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override bool AltFunctionUse(Player player)
 		{
-			if (stabCD > 0)
+			if (CurrentPowerfulStabCD > 0)
 				return false;
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(staminaCost * 45))
+			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost * 45))
 				return false;
 			foreach (Projectile proj in Main.projectile)
 			{

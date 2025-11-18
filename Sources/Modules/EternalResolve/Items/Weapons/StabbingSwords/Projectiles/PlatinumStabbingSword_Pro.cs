@@ -6,20 +6,22 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	{
 		public override void SetDefaults()
 		{
-			Color = new Color(166, 166, 226);
+			AttackColor = new Color(166, 166, 226);
 			base.SetDefaults();
-			TradeLength = 4;
-			TradeShade = 0.7f;
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.7f;
 			Shade = 0.2f;
-			FadeShade = 0.64f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.90f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.64f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.4f;
+			AttackLength = 0.90f;
+			AttackEffectWidth = 0.4f;
 		}
-		float bottomPos1 = 0f;
-		float bottomPos2 = 0f;
+
+		private float bottomPos1 = 0f;
+		private float bottomPos2 = 0f;
+
 		public override void DrawItem(Color lightColor)
 		{
 			Texture2D itemTexture = ModAsset.PlatinumStabbingSword_withouFlag.Value;
@@ -32,7 +34,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			else
 			{
-				//暂停的时候可以有一个渐停效果，看起来很好
+				// 暂停的时候可以有一个渐停效果，看起来很好
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}

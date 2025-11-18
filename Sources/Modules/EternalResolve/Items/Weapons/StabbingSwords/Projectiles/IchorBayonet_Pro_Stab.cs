@@ -3,7 +3,6 @@ using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.EternalResolve.Buffs;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
@@ -11,28 +10,24 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	{
 		public override void SetDefaults()
 		{
-			Color = new Color(247, 197, 0);
+			StabColor = new Color(247, 197, 0);
 			base.SetDefaults();
-			TradeShade = 0.2f;
-			Shade = 0.2f;
-			FadeShade = 0.74f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.8f;
-			MaxLength = 1.9f;
-			DrawWidth = 0.4f;
+			StabShade = 0.2f;
+			StabDistance = 1.9f;
+			StabEffectWidth = 0.4f;
 		}
+
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)
 		{
 			yield return new WaitForFrames(40);
 			StabVFX v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.2f),
+				color = Color.Lerp(StabColor, Color.White, 0.2f),
 				scale = 30,
 				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
-				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 			};
 			if (EndPos == Vector2.Zero)
 			{
@@ -41,23 +36,24 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			yield return new WaitForFrames(40);
 			v = new SelfLightingStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color.Lerp(Color, Color.White, 0.4f),
+				color = Color.Lerp(StabColor, Color.White, 0.4f),
 				scale = 15,
 				maxtime = (int)(240 / (float)(Projectile.extraUpdates + 1)),
-				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1))
+				timeleft = (int)(240 / (float)(Projectile.extraUpdates + 1)),
 			};
 			if (EndPos == Vector2.Zero)
 			{
 				Ins.VFXManager.Add(v);
 			}
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 50 * ToKill / 120f * StabEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -68,12 +64,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * 0.4f * Shade,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 120)* 0.4f* Shade,new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 120) * 0.4f * StabShade, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 120) * 0.4f * StabShade, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White * 0.4f * dark * StabShade, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White * 0.4f * dark * StabShade, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White * 0.9f * dark * StabShade, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White * 0.9f * dark * StabShade, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -90,21 +86,21 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
-			Color alphaColor = Color;
+			Color alphaColor = StabColor;
 			alphaColor.A = 0;
 			alphaColor.R = alphaColor.R;
 			alphaColor.G = alphaColor.G;
 			alphaColor.B = alphaColor.B;
 
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 72 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 72 * ToKill / 120f * StabEffectWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor * 1.2f,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor * 1.2f,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor * 1.2f, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor * 1.2f, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -126,15 +122,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			alphaColor.R = 255;
 			alphaColor.G = 255;
 			alphaColor.B = 255;
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * StabEffectWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
@@ -152,6 +148,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			}
 		}
+
 		public void GenerateVFX(int Frequency)
 		{
 			float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
@@ -168,7 +165,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					maxTime = Main.rand.Next(32, 64) * (ToKill / 200f),
 					scale = mulScale,
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) }
+					ai = new float[] { 0f, Main.rand.NextFloat(0.0f, 4.93f) },
 				};
 				Ins.VFXManager.Add(blood);
 			}
@@ -183,23 +180,29 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					position = Projectile.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283) + Projectile.velocity * Main.rand.NextFloat(70f),
 					maxTime = Main.rand.Next(32, 64) * (ToKill / 200f),
 					scale = Main.rand.NextFloat(6f, 12f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.4f), 0 },
 				};
 				Ins.VFXManager.Add(blood);
 			}
 		}
+
 		public override void AI()
 		{
 			if (Main.rand.NextBool(9))
+			{
 				GenerateVFX(1);
+			}
+
 			Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.7f, 0) * (ToKill / 120f));
 			base.AI();
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			target.AddBuff(BuffID.Ichor, 900);
 			base.OnHitNPC(target, hit, damageDone);
 		}
+
 		public override void HitTile()
 		{
 			base.HitTile();

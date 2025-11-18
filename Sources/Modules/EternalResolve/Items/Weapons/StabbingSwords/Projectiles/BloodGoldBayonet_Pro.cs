@@ -7,23 +7,25 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	public class BloodGoldBayonet_Pro : StabbingProjectile
 	{
 		public NPC ProjTarget;
+
 		public override void SetDefaults()
 		{
-			Color = Color.Red;
-			TradeLength = 8;
-			TradeShade = 0.7f;
+			AttackColor = Color.Red;
+			MaxOldAttackUnitCount = 8;
+			OldShade = 0.7f;
 			Shade = 0.5f;
-			FadeShade = 0.6f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.6f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 0.6f;
+			LightColorValueMultiplicative_Modifier = 0.1f;
+			AttackEffectWidth = 0.4f;
 			base.SetDefaults();
 		}
+
 		public override void AI()
 		{
 			base.AI();
-			
+
 			Player player = Main.player[Projectile.owner];
 			if (ProjTarget == null)
 			{
@@ -34,6 +36,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			}
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -44,12 +47,14 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 			}
 		}
+
 		public override void OnKill(int timeLeft)
 		{
 			Player player = Main.player[Projectile.owner];
 			player.ClearBuff(ModContent.BuffType<Buffs.BloodSwordStrikeBuff>());
 			base.OnKill(timeLeft);
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			if (Main.rand.NextBool(25))

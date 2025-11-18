@@ -11,19 +11,21 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	{
 		public override void SetDefaults()
 		{
-			Color = Color.Orange;
+			AttackColor = Color.Orange;
 			base.SetDefaults();
-			TradeLength = 6;
-			TradeShade = 1f;
+			MaxOldAttackUnitCount = 6;
+			OldShade = 1f;
 			Shade = 0.65f;
-			FadeShade = 0.84f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.90f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.84f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.4f;
+			AttackLength = 0.90f;
+			AttackEffectWidth = 0.4f;
 		}
+
 		public int SuddenCooling = 0;
+
 		public override void OnSpawn(IEntitySource source)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -36,12 +38,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				SuddenCooling = 60;
 			}
 		}
+
 		public void GenerateSmoke(int frequency)
 		{
 			for (int g = 0; g < frequency; g++)
 			{
 				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 4f)).RotatedByRandom(MathHelper.TwoPi) + new Vector2(0, -4f);
-				;
 				var somg = new VaporDust
 				{
 					velocity = newVelocity,
@@ -51,11 +53,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 					maxTime = Main.rand.Next(10, 90),
 					scale = Main.rand.NextFloat(20f, 135f),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 }
+					ai = new float[] { Main.rand.NextFloat(-0.05f, -0.01f), 0 },
 				};
 				Ins.VFXManager.Add(somg);
 			}
 		}
+
 		public override void AI()
 		{
 			base.AI();
@@ -101,7 +104,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 						maxTime = Main.rand.Next(6, 25),
 						scale = Main.rand.NextFloat(10f, 50f),
 						rotation = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+						ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 					};
 					Ins.VFXManager.Add(fire);
 				}
@@ -137,6 +140,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -145,6 +149,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				target.AddBuff(BuffID.OnFire, 150);
 			}
 		}
+
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
 			Player player = Main.player[Projectile.owner];
@@ -153,11 +158,12 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				modifiers.FinalDamage *= 2f;
 			}
 		}
+
 		public override void PostDraw(Color lightColor)
 		{
 			Player player = Main.player[Projectile.owner];
 			base.PostDraw(lightColor);
-			float valueLight = Projectile.timeLeft / TradeLength / (Projectile.extraUpdates + 1);
+			float valueLight = Projectile.timeLeft / MaxOldAttackUnitCount / (Projectile.extraUpdates + 1);
 			Lighting.AddLight(Projectile.Center + Projectile.velocity, 1f * valueLight, 0.4f * valueLight, 0f);
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
@@ -167,39 +173,39 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				{
 					if (!player.wet || player.lavaWet)
 					{
-						Color = Color.Orange;
-						TradeLength = 6;
-						TradeShade = 1f;
+						AttackColor = Color.Orange;
+						MaxOldAttackUnitCount = 6;
+						OldShade = 1f;
 						Shade = 0.65f;
-						FadeShade = 0.84f;
-						FadeScale = 1;
-						TradeLightColorValue = 1f;
-						FadeLightColorValue = 0.4f;
-						MaxLength = 0.90f;
-						DrawWidth = 0.6f;
+						ShadeMultiplicative_Modifier = 0.84f;
+						ScaleMultiplicative_Modifier = 1;
+						OldLightColorValue = 1f;
+						LightColorValueMultiplicative_Modifier = 0.4f;
+						AttackLength = 0.90f;
+						AttackEffectWidth = 0.6f;
 
 						for (int f = Projectile.timeLeft - 1; f > -1; f--)
 						{
-							float value = (TradeLength - f) / (float)TradeLength;
+							float value = (MaxOldAttackUnitCount - f) / (float)MaxOldAttackUnitCount;
 							Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, new Color(value, value * value * value * 0.5f, 0, 0), DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 						}
 						Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(255, 155, 0, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 					}
 					else
 					{
-						Color = new Color(80, 0, 0, 0);
-						TradeLength = 6;
-						TradeShade = 0.4f;
+						AttackColor = new Color(80, 0, 0, 0);
+						MaxOldAttackUnitCount = 6;
+						OldShade = 0.4f;
 						Shade = 0.65f;
-						FadeShade = 0.74f;
-						FadeScale = 1;
-						TradeLightColorValue = 1f;
-						FadeLightColorValue = 0.4f;
-						MaxLength = 0.90f;
-						DrawWidth = 0.6f;
+						ShadeMultiplicative_Modifier = 0.74f;
+						ScaleMultiplicative_Modifier = 1;
+						OldLightColorValue = 1f;
+						LightColorValueMultiplicative_Modifier = 0.4f;
+						AttackLength = 0.90f;
+						AttackEffectWidth = 0.6f;
 						for (int f = Projectile.timeLeft - 1; f > -1; f--)
 						{
-							float value = (TradeLength - f) / (float)TradeLength;
+							float value = (MaxOldAttackUnitCount - f) / (float)MaxOldAttackUnitCount;
 							value *= value;
 							Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, new Color(value * 0.1f, 0, 0, 0), DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 						}

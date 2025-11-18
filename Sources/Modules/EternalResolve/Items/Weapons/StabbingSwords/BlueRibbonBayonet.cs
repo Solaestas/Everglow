@@ -12,7 +12,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 4, 72, 0);
 			Item.shoot = ModContent.ProjectileType<BlueRibbonBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<BlueRibbonBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}

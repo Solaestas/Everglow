@@ -27,37 +27,37 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 重影深度
 		/// </summary>
-		public float TradeShade = 0f;
+		public float OldShade = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度
 		/// </summary>
-		public float TradeLightColorValue = 0f;
+		public float OldLightColorValue = 0f;
 
 		/// <summary>
 		/// 重影大小缩变,小于1
 		/// </summary>
-		public float FadeScale = 0f;
+		public float ScaleMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 刀光宽度1
 		/// </summary>
-		public float DrawWidth = 1f;
+		public float AttackEffectWidth = 1f;
 
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
-		public float FadeShade = 0f;
+		public float ShadeMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
-		public float FadeLightColorValue = 0f;
+		public float LightColorValueMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
-		public float MaxLength = 1f;
+		public float AttackLength = 1f;
 
 		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
 
@@ -95,7 +95,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float point = 0;
-			Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 80 * AttackLength;
 			if (EndPos != Vector2.zeroVector)
 			{
 				end = EndPos;
@@ -116,7 +116,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			{
 				StabVFX v = new StabVFX()
 				{
-					pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+					pos = Projectile.Center + Projectile.velocity * AttackLength * 140,
 					vel = Vector2.Normalize(Projectile.velocity),
 					color = Color.Lerp(Color, Color.White, 0.2f),
 					scale = 10,
@@ -130,7 +130,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			if (Projectile.ai[1] == 0)
 			{
 				Main.npc[(int)Projectile.ai[0]].spriteDirection = Projectile.spriteDirection;
-				Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * MaxLength;
+				Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * AttackLength;
 			}
 			else
 			{
@@ -158,7 +158,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					Projectile.Kill();
 				}
 			}
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
 			{
 				if (EndPos == Vector2.zeroVector)
@@ -221,9 +221,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 
 		public virtual void DrawEffect(Color lightColor)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * AttackEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -262,7 +262,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			alphaColor.G = (byte)(alphaColor.G * lightColor.G / 255f);
 			alphaColor.B = (byte)(alphaColor.B * lightColor.B / 255f);
 
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 36 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 36 * ToKill / 120f * AttackEffectWidth;
 			bars = new List<Vertex2D>
 			{
 				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -292,7 +292,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			alphaColor.R = (byte)(565 * lightColor.R / 255f);
 			alphaColor.G = (byte)(565 * lightColor.G / 255f);
 			alphaColor.B = (byte)(565 * lightColor.B / 255f);
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * AttackEffectWidth;
 			bars = new List<Vertex2D>
 			{
 				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -321,9 +321,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 
 		public void DrawWarp(VFXBatch sb)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * AttackEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;

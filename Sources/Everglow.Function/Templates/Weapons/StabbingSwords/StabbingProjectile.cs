@@ -10,74 +10,74 @@ using Terraria.Utilities;
 namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
 /// <summary>
-/// Principle : generate <see cref="DrawParameters_Structure"/> continuously, with random direction and scale in a certain range.<br/>
-/// <see cref="LightDraw"/> will generate at first, then turn to <see cref="DarkDraw"/>.<br/>
-/// Each <see cref="DarkDraw"/> will fades per update, and kill after <see cref="TradeLength"/> times.
+/// Principle : generate <see cref="DrawParameters_Structure"/> continuously as an attack unit, with random direction and scale in a certain range.<br/>
+/// Attack unit will generate as <see cref="LightDraw"/> at first, then turn to <see cref="DarkDraw"/>.<br/>
+/// Attack units in <see cref="DarkDraw"/> will fade per update, and kill after <see cref="MaxOldAttackUnitCount"/> times.
 /// </summary>
 public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 {
 	/// <summary>
-	/// Default ExtraUpdates | 默认ExtraUpdates
+	/// Default ExtraUpdates | 默认额外刷新次数
 	/// </summary>
 	public const int NormalExtraUpdates = 20;
 
 	/// <summary>
 	/// Main color | 主要颜色
 	/// </summary>
-	public Color Color = Color.White;
+	public Color AttackColor = Color.White;
 
 	/// <summary>
-	/// Shadow intensity | 阴影强度
+	/// Shadow intensity of first attack unit(<see cref="LightDraw"/>) | 首个攻击单元阴影强度
 	/// </summary>
 	public float Shade = 0f;
 
 	/// <summary>
-	/// 重影深度
+	/// Shadow intensity of old attack units(<see cref="DarkDraw"/>) | 旧攻击单元阴影强度
 	/// </summary>
-	public float TradeShade = 0f;
+	public float OldShade = 0f;
 
 	/// <summary>
-	/// 重影彩色部分亮度
+	/// Color(RGB) illumination coefficient of old attack units | 旧攻击单元RGB亮度系数
 	/// </summary>
-	public float TradeLightColorValue = 0f;
+	public float OldLightColorValue = 0f;
 
 	/// <summary>
-	/// 重影数量 (小于200)
+	/// Amount of old attack units (Length of<see cref="DarkDraw"/>), default to 4; Warning : The projectile will keep active until old attack units run out | 最大旧攻击单元数，默认4; 警告：射弹会一直存在直到旧攻击单元耗尽
 	/// </summary>
-	public int TradeLength = 0;
+	public int MaxOldAttackUnitCount = 0;
 
 	/// <summary>
-	/// 重影大小缩变,小于1
+	/// Scale of old attack units will multiply this per update, no more than 1.0f | 旧攻击单元大小每次更新倍率, 不大于1.0f
 	/// </summary>
-	public float FadeScale = 0f;
+	public float ScaleMultiplicative_Modifier = 0f;
 
 	/// <summary>
-	/// 刀光宽度1
+	/// Light effect width coefficient of an attack unit， default to 1.0f | 攻击单元刀光宽度系数, 默认1.0f
 	/// </summary>
-	public float DrawWidth = 1f;
+	public float AttackEffectWidth = 1f;
 
 	/// <summary>
-	/// 重影深度缩变,小于1
+	/// Shadow intensity of old attack units will multiply this per update, no more than 1.0f | 旧攻击单元阴影强度每次更新倍率, 不大于1.0f
 	/// </summary>
-	public float FadeShade = 0f;
+	public float ShadeMultiplicative_Modifier = 0f;
 
 	/// <summary>
-	/// 重影彩色部分亮度缩变,小于1
+	/// Color(RGB) illumination of old attack units will multiply this per update, no more than 1.0f | 旧攻击单元RGB色彩每次更新倍率, 不大于1.0f
 	/// </summary>
-	public float FadeLightColorValue = 0f;
+	public float LightColorValueMultiplicative_Modifier = 0f;
 
 	/// <summary>
-	/// 表示刺剑攻击长度,标准长度1
+	/// Light effect length coefficient of an attack unit， default to 1.0f (1.0 * 72 = 72) | 攻击单元刀光长度系数, 默认1.0f (1.0 * 72 = 72)
 	/// </summary>
-	public float MaxLength = 1f;
+	public float AttackLength = 1f;
 
 	/// <summary>
-	/// 荧光颜色,默认不会发光
+	/// Glow color, no affected by environment, default to <see cref="Color.Transparent"/> | 荧光颜色，不受环境影响，默认无色
 	/// </summary>
 	public Color GlowColor = Color.Transparent;
 
 	/// <summary>
-	/// 荧光颜色缩变,小于1
+	/// Glow color(RGB) of old attack units will multiply this per update, no more than 1.0f | 旧攻击单元荧光颜色每次更新倍率, 不大于1.0f
 	/// </summary>
 	public float FadeGlowColorValue = 0f;
 
@@ -154,18 +154,18 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 					Projectile.netUpdate = true;
 				}
 				Projectile.velocity = toMouse;
-				Projectile.timeLeft = TradeLength * (NormalExtraUpdates + 1);
+				Projectile.timeLeft = MaxOldAttackUnitCount * (NormalExtraUpdates + 1);
 			}
 		}
 
-		if (!Owner.controlUseItem && Projectile.timeLeft > TradeLength * (NormalExtraUpdates + 1))
+		if (!Owner.controlUseItem && Projectile.timeLeft > MaxOldAttackUnitCount * (NormalExtraUpdates + 1))
 		{
-			Projectile.timeLeft = TradeLength * (NormalExtraUpdates + 1);
+			Projectile.timeLeft = MaxOldAttackUnitCount * (NormalExtraUpdates + 1);
 		}
 
 		if (Owner.HeldItem.ModItem is StabbingSwordItem modItem)
 		{
-			if (!Owner.GetModPlayer<PlayerStamina>().CheckStamina(modItem.staminaCost / Projectile.extraUpdates))
+			if (!Owner.GetModPlayer<PlayerStamina>().CheckStamina(modItem.StaminaCost / Projectile.extraUpdates))
 			{
 				OnStaminaDepleted(Owner);
 				Projectile.Kill(); // Return一堆怪问题，杀了就好了
@@ -221,7 +221,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			{
 				foreach (DrawParameters_Structure draw in DarkDraw)
 				{
-					Vector2 HitRange = new Vector2(1, 0).RotatedBy(draw.Rotation) * MaxLength * 72;
+					Vector2 HitRange = new Vector2(1, 0).RotatedBy(draw.Rotation) * AttackLength * 72;
 					if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, draw.Postion, draw.Postion + HitRange, draw.Size.Y * 10))
 					{
 						return true;
@@ -236,7 +236,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	{
 		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
 		float cutLength = 164f;
-		Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+		Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * AttackLength;
 		while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, end, 0, 0))
 		{
 			cutLength -= 8;
@@ -244,7 +244,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			{
 				break;
 			}
-			end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+			end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * AttackLength;
 		}
 		Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
 	}
@@ -304,10 +304,10 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
 		float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
 
-		float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
+		float rndRange = rand.NextFloat(AttackLength * 0.5f, AttackLength * 1.21f) * 2f;
 		float rndDirction = rand.NextFloatDirection();
 		float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
-		float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
+		float additiveDrawPos = AttackLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 		Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 		bool canHit = Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0);
 
@@ -325,37 +325,37 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			}
 			HitTileSound(volumn);
 		}
-		Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
-		for (int f = TradeLength - 1; f >= 0; f--)
+		Vector2 drawSize = new Vector2(volumn, AttackEffectWidth) * lerpedTwice;
+		for (int f = MaxOldAttackUnitCount - 1; f >= 0; f--)
 		{
-			DarkDraw[f].Color.A = (byte)(DarkDraw[f].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
-			DarkDraw[f].Size.Y *= MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+			DarkDraw[f].Color.A = (byte)(DarkDraw[f].Color.A * MathF.Pow(ShadeMultiplicative_Modifier, 1f / NormalExtraUpdates));
+			DarkDraw[f].Size.Y *= MathF.Pow(ScaleMultiplicative_Modifier, 1f / NormalExtraUpdates);
 		}
 
 		if (UpdateTimer % NormalExtraUpdates == NormalExtraUpdates / 2)
 		{
-			if (TradeLength > 0)
+			if (MaxOldAttackUnitCount > 0)
 			{
-				for (int f = TradeLength - 1; f > 0; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > 0; f--)
 				{
 					DarkDraw[f] = DarkDraw[f - 1];
 					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
-					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * MathF.Pow(ShadeMultiplicative_Modifier, 1f / NormalExtraUpdates));
+					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * MathF.Pow(ScaleMultiplicative_Modifier, 1f / NormalExtraUpdates);
 				}
 			}
-			if (Projectile.timeLeft >= (TradeLength - 1) * (NormalExtraUpdates + 1))
+			if (Projectile.timeLeft >= (MaxOldAttackUnitCount - 1) * (NormalExtraUpdates + 1))
 			{
-				DarkDraw[0].Color.A = (byte)(TradeShade * 255);
+				DarkDraw[0].Color.A = (byte)(OldShade * 255);
 				DarkDraw[0].Postion = drawPos;
 				DarkDraw[0].Size = drawSize;
 				DarkDraw[0].Rotation = drawRotation;
 			}
 			else
 			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
+				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * MathF.Pow(ShadeMultiplicative_Modifier, 1f / NormalExtraUpdates));
 				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
-				DarkDraw[0].Size.Y = drawSize.Y * MathF.Pow(FadeScale, 1f / NormalExtraUpdates);
+				DarkDraw[0].Size.Y = drawSize.Y * MathF.Pow(ScaleMultiplicative_Modifier, 1f / NormalExtraUpdates);
 				DarkDraw[0].Rotation = drawRotation;
 			}
 		}
@@ -373,10 +373,10 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
 			float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
 
-			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
+			float rndRange = rand.NextFloat(AttackLength * 0.5f, AttackLength * 1.21f) * 2f;
 			float rndDirction = rand.NextFloatDirection();
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
-			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
+			float additiveDrawPos = AttackLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
 			{
@@ -387,15 +387,15 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 					break;
 				}
 			}
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
+			Vector2 drawSize = new Vector2(rndRange, AttackEffectWidth) * lerpedTwice;
 			LightDraw.Postion = drawPos;
 			LightDraw.Size = drawSize;
 			LightDraw.Rotation = drawRotation;
 		}
 		else
 		{
-			LightDraw.Color.A = (byte)(LightDraw.Color.A * MathF.Pow(FadeShade, 1f / NormalExtraUpdates));
-			LightDraw.Size.Y *= MathF.Pow(FadeScale * 0.2f, 1f / NormalExtraUpdates);
+			LightDraw.Color.A = (byte)(LightDraw.Color.A * MathF.Pow(ShadeMultiplicative_Modifier, 1f / NormalExtraUpdates));
+			LightDraw.Size.Y *= MathF.Pow(ScaleMultiplicative_Modifier * 0.2f, 1f / NormalExtraUpdates);
 		}
 	}
 
@@ -458,14 +458,14 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		Texture2D light = ModAsset.StabbingProjectile.Value;
 		Vector2 drawOrigin = light.Size() / 2f;
 		Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-		if (TradeShade > 0)
+		if (OldShade > 0)
 		{
-			for (int f = TradeLength - 1; f > -1; f--)
+			for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 			{
 				Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-				Color fadeLight = Color * (DarkDraw[f].Color.A / 255f);
+				Color fadeLight = AttackColor * (DarkDraw[f].Color.A / 255f);
 				fadeLight.A = 0;
-				fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+				fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 				fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
 				Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 				if (GlowColor != Color.Transparent)
@@ -478,7 +478,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 		}
-		Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 		if (GlowColor != Color.Transparent)
 		{
 			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
@@ -496,9 +496,9 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		float time = (float)(Main.time * 0.03);
-		if (TradeShade > 0)
+		if (OldShade > 0)
 		{
-			for (int f = TradeLength - 1; f > -1; f--)
+			for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 			{
 				Vector2 center = DarkDraw[f].Postion - Main.screenPosition;
 				Vector2 normalX = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
@@ -506,7 +506,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 				Vector2 start = center - normalX * 0.4f;
 				Vector2 middle = center;
 				Vector2 end = center + normalX;
-				Color alphaColor = Color;
+				Color alphaColor = AttackColor;
 				alphaColor.A = 0;
 				alphaColor.R = (byte)((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 				alphaColor.G = (byte)(DarkDraw[f].Color.A * 0.1f);
@@ -522,7 +522,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 				sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 			}
 		}
-		if (TradeShade > 0)
+		if (OldShade > 0)
 		{
 			Vector2 center = LightDraw.Postion - Main.screenPosition;
 			Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
@@ -530,7 +530,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Vector2 start = center - normalX * 0.4f;
 			Vector2 middle = center;
 			Vector2 end = center + normalX;
-			Color alphaColor = Color;
+			Color alphaColor = AttackColor;
 			alphaColor.A = 0;
 			alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 			alphaColor.G = 20;

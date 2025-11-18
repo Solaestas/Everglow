@@ -19,7 +19,7 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 			Item.useStyle = ItemUseStyleID.Rapier;
 			Item.useAnimation = 24;
 			Item.useTime = 24;
-			stabCD = stabCDMax;
+			CurrentPowerfulStabCD = PowerfulStabCDMax;
 			SetCustomDefault();
 		}
 
@@ -30,32 +30,56 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 		{
 		}
 
+		/// <summary>
+		/// The projectile type of powerful stab.
+		/// </summary>
 		public int PowerfulStabProj;
-		public float StabMulDamage = 4f;
-		public int stabCD;
-		public int stabCDMax = 30;
-		public float staminaCost = 1f;
+
+		/// <summary>
+		/// The multiply zone of powerful stab, default to 400%(4f).
+		/// </summary>
+		public float PowerfulStabDamageFlat = 4f;
+
+		/// <summary>
+		/// Remaining cooling time.
+		/// </summary>
+		public int CurrentPowerfulStabCD;
+
+		/// <summary>
+		/// Cooling time of powerful stab.
+		/// </summary>
+		public int PowerfulStabCDMax = 30;
+
+		/// <summary>
+		/// Stamina deplete per unit of attack.
+		/// </summary>
+		public float StaminaCost = 1f;
+
+		/// <summary>
+		/// Stamina deplete per powerful stab, default to 45. Notice that this value will multiplied by <see cref="StaminaCost"/>.
+		/// </summary>
+		public float PowerfulStabStaminaCost = 45f;
 
 		public override void UpdateInventory(Player player)
 		{
-			if (stabCD > 0)
+			if (CurrentPowerfulStabCD > 0)
 			{
-				stabCD--;
+				CurrentPowerfulStabCD--;
 			}
 			else
 			{
-				stabCD = 0;
+				CurrentPowerfulStabCD = 0;
 			}
 		}
 
 		public override bool AltFunctionUse(Player player)
 		{
-			if (stabCD > 0)
+			if (CurrentPowerfulStabCD > 0)
 			{
 				return false;
 			}
 
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(staminaCost * 45))
+			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost * PowerfulStabStaminaCost))
 			{
 				return false;
 			}
@@ -74,8 +98,8 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 		{
 			if (player.altFunctionUse == 2)
 			{
-				stabCD = stabCDMax;
-				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, (int)(damage * StabMulDamage), knockback * 2, player.whoAmI, 0f, 0f);
+				CurrentPowerfulStabCD = PowerfulStabCDMax;
+				Projectile.NewProjectile(source, position, Vector2.Zero, PowerfulStabProj, (int)(damage * PowerfulStabDamageFlat), knockback * 2, player.whoAmI, 0f, 0f);
 				player.itemTime = Item.useTime / 4;
 				player.itemAnimation = Item.useAnimation / 4;
 
@@ -98,7 +122,7 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 		public override bool CanUseItem(Player player)
 		{
 			// Item.SetDefaults(Item.type); Only Debug
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(staminaCost, false))
+			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost, false))
 			{
 				return false;
 			}

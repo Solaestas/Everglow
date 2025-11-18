@@ -6,33 +6,35 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 	public class MechanicMosquito_Pro : StabbingProjectile
 	{
 		public int ProjTarget = -1;
+
 		public override void SetDefaults()
 		{
-			Color = new Color(187, 196, 196);
-			TradeLength = 4;
-			TradeShade = 0.4f;
+			AttackColor = new Color(187, 196, 196);
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.4f;
 			Shade = 0.5f;
-			FadeShade = 0.6f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.6f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 0.6f;
+			LightColorValueMultiplicative_Modifier = 0.1f;
+			AttackEffectWidth = 0.4f;
 			base.SetDefaults();
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
 					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = Color.Lerp(Color, Color.Red, 1 - f / (float)TradeLength) * (DarkDraw[f].Color.A / 255f);
+					Color fadeLight = Color.Lerp(AttackColor, Color.Red, 1 - f / (float)MaxOldAttackUnitCount) * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
-					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
 					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					if (GlowColor != Color.Transparent)
@@ -45,15 +47,16 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			{
 				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			if (GlowColor != Color.Transparent)
 			{
 				Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 			}
 		}
+
 		public override void AI()
 		{
-			if(UpdateTimer % NormalExtraUpdates == 10)
+			if (UpdateTimer % NormalExtraUpdates == 10)
 			{
 				Player player = Main.player[Projectile.owner];
 				int mosq = ModContent.ProjectileType<MechanicMosquito_Mosquito>();
@@ -72,6 +75,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			}
 			base.AI();
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -82,6 +86,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 			}
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			ProjTarget = target.whoAmI;

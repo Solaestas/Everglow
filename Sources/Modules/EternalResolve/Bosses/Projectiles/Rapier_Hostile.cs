@@ -25,42 +25,42 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 重影深度
 		/// </summary>
-		public float TradeShade = 0f;
+		public float OldShade = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度
 		/// </summary>
-		public float TradeLightColorValue = 0f;
+		public float OldLightColorValue = 0f;
 
 		/// <summary>
 		/// 重影数量
 		/// </summary>
-		public int TradeLength = 0; // 小于200
+		public int MaxOldAttackUnitCount = 0; // 小于200
 
 		/// <summary>
 		/// 重影大小缩变,小于1
 		/// </summary>
-		public float FadeScale = 0f;
+		public float ScaleMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 刀光宽度1
 		/// </summary>
-		public float DrawWidth = 1f;
+		public float AttackEffectWidth = 1f;
 
 		/// <summary>
 		/// 重影深度缩变,小于1
 		/// </summary>
-		public float FadeShade = 0f;
+		public float ShadeMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
-		public float FadeLightColorValue = 0f;
+		public float LightColorValueMultiplicative_Modifier = 0f;
 
 		/// <summary>
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
-		public float MaxLength = 1f;
+		public float AttackLength = 1f;
 
 		/// <summary>
 		/// 荧光颜色,默认不会发光
@@ -125,7 +125,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
 			float point = 0;
-			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * MaxLength * 100;
+			Vector2 HitRange = Projectile.velocity.SafeNormalize(Vector2.Zero) * AttackLength * 100;
 			if (Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, new Vector2(targetHitbox.Left + targetHitbox.Width / 2f, targetHitbox.Top + targetHitbox.Height / 2f), 0, 0))
 			{
 				if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + HitRange, Projectile.width, ref point))
@@ -140,7 +140,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		{
 			DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
 			float cutLength = 164f;
-			Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * AttackLength;
 			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, end, 0, 0))
 			{
 				cutLength -= 8;
@@ -148,7 +148,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				{
 					break;
 				}
-				end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * MaxLength;
+				end = Projectile.Center + Projectile.velocity.SafeNormalize(Vector2.UnitX) * cutLength * Projectile.scale * AttackLength;
 			}
 			Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
 		}
@@ -208,10 +208,10 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
 			float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
 
-			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
+			float rndRange = rand.NextFloat(AttackLength * 0.5f, AttackLength * 1.21f) * 2f;
 			float rndDirction = rand.NextFloatDirection();
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
-			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
+			float additiveDrawPos = AttackLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 			bool canHit = Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0);
 
@@ -229,29 +229,29 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				}
 				HitTileSound(volumn);
 			}
-			Vector2 drawSize = new Vector2(volumn, DrawWidth) * lerpedTwice;
-			if (TradeLength > 0)
+			Vector2 drawSize = new Vector2(volumn, AttackEffectWidth) * lerpedTwice;
+			if (MaxOldAttackUnitCount > 0)
 			{
-				for (int f = TradeLength - 1; f > 0; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > 0; f--)
 				{
 					DarkDraw[f] = DarkDraw[f - 1];
 					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * FadeShade);
-					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * FadeScale;
+					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * ShadeMultiplicative_Modifier);
+					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * ScaleMultiplicative_Modifier;
 				}
 			}
-			if (Projectile.timeLeft >= TradeLength - 1)
+			if (Projectile.timeLeft >= MaxOldAttackUnitCount - 1)
 			{
-				DarkDraw[0].Color.A = (byte)(TradeShade * 255);
+				DarkDraw[0].Color.A = (byte)(OldShade * 255);
 				DarkDraw[0].Postion = drawPos;
 				DarkDraw[0].Size = drawSize;
 				DarkDraw[0].Rotation = drawRotation;
 			}
 			else
 			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * FadeShade);
+				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * ShadeMultiplicative_Modifier);
 				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
-				DarkDraw[0].Size.Y = drawSize.Y * FadeScale;
+				DarkDraw[0].Size.Y = drawSize.Y * ScaleMultiplicative_Modifier;
 				DarkDraw[0].Rotation = drawRotation;
 			}
 		}
@@ -266,10 +266,10 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			float lerpedFloat = Utils.GetLerpValue(0f, 0.3f, rndFloat, clamped: true) * Utils.GetLerpValue(1f, 0.5f, rndFloat, clamped: true);
 			float lerpedTwice = MathHelper.Lerp(0.6f, 1f, lerpedFloat);
 
-			float rndRange = rand.NextFloat(MaxLength * 0.5f, MaxLength * 1.21f) * 2f;
+			float rndRange = rand.NextFloat(AttackLength * 0.5f, AttackLength * 1.21f) * 2f;
 			float rndDirction = rand.NextFloatDirection();
 			float drawRotation = Projectile.rotation + rndDirction * (MathF.PI * 2f) * 0.03f;
-			float additiveDrawPos = MaxLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
+			float additiveDrawPos = AttackLength * 15f + MathHelper.Lerp(0f, 50f, rndFloat) + rndRange * 16f;
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 			while (!Collision.CanHit(Projectile.Center - Projectile.velocity, 0, 0, drawPos + Vector2.Normalize(Projectile.velocity) * 36f * rndRange * lerpedTwice, 0, 0))
 			{
@@ -280,7 +280,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					break;
 				}
 			}
-			Vector2 drawSize = new Vector2(rndRange, DrawWidth) * lerpedTwice;
+			Vector2 drawSize = new Vector2(rndRange, AttackEffectWidth) * lerpedTwice;
 			LightDraw.Postion = drawPos;
 			LightDraw.Size = drawSize;
 			LightDraw.Rotation = drawRotation;
@@ -345,14 +345,14 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
 					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					Color fadeLight = Color * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
-					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
 					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
 					if (GlowColor != Color.Transparent)
@@ -383,9 +383,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public void DrawWarp(VFXBatch sb)
 		{
 			float time = (float)(Main.time * 0.03);
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
 					Vector2 center = DarkDraw[f].Postion - Main.screenPosition;
 					Vector2 normalX = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
@@ -409,7 +409,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 				}
 			}
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
 				Vector2 center = LightDraw.Postion - Main.screenPosition;
 				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;

@@ -6,16 +6,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
     {
         public override void SetDefaults()
         {
-            Color = new Color(28, 37, 63);
+			StabColor = new Color(28, 37, 63);
 			base.SetDefaults();
-			TradeShade = 0.4f;
-			Shade = 0.2f;
-			FadeShade = 0.44f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.72f;
-			DrawWidth = 0.4f;
+			StabShade = 0.2f;
+			StabDistance = 0.72f;
+			StabEffectWidth = 0.4f;
 		}
 	}
 }

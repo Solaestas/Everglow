@@ -10,16 +10,16 @@ public class DevilHeartBayonet_proj : StabbingProjectile
 	{
 		base.SetDefaults();
 
-		Color = new Color(255, 107, 171);
-		TradeLength = 4;
-		TradeShade = 0.3f;
+		AttackColor = new Color(255, 107, 171);
+		MaxOldAttackUnitCount = 4;
+		OldShade = 0.3f;
 		Shade = 0.2f;
-		FadeShade = 0.64f;
-		FadeScale = 1;
-		TradeLightColorValue = 1f;
-		FadeLightColorValue = 0.4f;
-		MaxLength = 1.05f;
-		DrawWidth = 0.4f;
+		ShadeMultiplicative_Modifier = 0.64f;
+		ScaleMultiplicative_Modifier = 1;
+		OldLightColorValue = 1f;
+		LightColorValueMultiplicative_Modifier = 0.4f;
+		AttackLength = 1.05f;
+		AttackEffectWidth = 0.4f;
 	}
 
 	public override void OnStaminaDepleted(Player player)

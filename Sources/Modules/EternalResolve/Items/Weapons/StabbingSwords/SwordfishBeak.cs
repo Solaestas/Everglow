@@ -13,8 +13,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 2, 14, 0);
 			Item.shoot = ModContent.ProjectileType<SwordfishBeak_Pro>();
-			StabMulDamage = 4f;
-			staminaCost = 0.75f;
+			PowerfulStabDamageFlat = 4f;
+			StaminaCost = 0.75f;
 			PowerfulStabProj = ModContent.ProjectileType<SwordfishBeak_Pro_Stab>();
 			base.SetDefaults();
 		}
@@ -22,11 +22,11 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			if(player.wet)
 			{
-				staminaCost = 0.4875f;
+				StaminaCost = 0.4875f;
 			}
 			else
 			{
-				staminaCost = 0.75f;
+				StaminaCost = 0.75f;
 			}
 		}
 		public override void AddRecipes()

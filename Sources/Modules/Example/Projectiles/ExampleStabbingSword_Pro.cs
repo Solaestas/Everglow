@@ -7,22 +7,21 @@ namespace Everglow.Example.Projectiles
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			Color = new Color(255, 0, 0);
-			TradeLength = 4;
-			TradeShade = 0.7f;
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.7f;
 			Shade = 0.2f;
-			FadeShade = 0.64f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.70f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.64f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.4f;
+			AttackLength = 0.70f;
+			AttackEffectWidth = 0.4f;
 		}
 
 		public override void CustomBehavior()
 		{
 			float timeValue = (float)(Main.time / 120f);
-			Color = Main.hslToRgb(timeValue % 1.0f, 1, 0.5f);
+			AttackColor = Main.hslToRgb(timeValue % 1.0f, 1, 0.5f);
 		}
 	}
 }

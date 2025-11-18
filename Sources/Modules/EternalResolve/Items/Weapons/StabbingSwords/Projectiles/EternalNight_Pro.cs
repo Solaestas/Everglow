@@ -3,35 +3,37 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class EternalNight_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            base.SetDefaults();
-			Color = new Color(189, 14, 255);
-			TradeLength = 8;
-			TradeShade = 0.8f;
+	public class EternalNight_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			base.SetDefaults();
+			AttackColor = new Color(189, 14, 255);
+			MaxOldAttackUnitCount = 8;
+			OldShade = 0.8f;
 			Shade = 1;
-			FadeShade = 0.7f;
-			FadeScale = 0.7f;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			MaxLength = 1.20f;
-			DrawWidth = 0.8f;
+			ShadeMultiplicative_Modifier = 0.7f;
+			ScaleMultiplicative_Modifier = 0.7f;
+			OldLightColorValue = 0.6f;
+			LightColorValueMultiplicative_Modifier = 0.1f;
+			AttackLength = 1.20f;
+			AttackEffectWidth = 0.8f;
 		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			if(Main.rand.NextBool(3))
+			if (Main.rand.NextBool(3))
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),
-					Projectile.Center - new Vector2(0, Main.rand.NextFloat(115, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f))
-					, Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>()
-					, Projectile.damage, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
+				Projectile p0 = Projectile.NewProjectileDirect(
+					Projectile.GetSource_FromAI(),
+					Projectile.Center - new Vector2(0, Main.rand.NextFloat(115, 180) * Main.player[Projectile.owner].gravDir).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)),
+					Vector2.zeroVector, ModContent.ProjectileType<EternalNight_shadow>(),
+					Projectile.damage, Projectile.knockBack * 0.6f, Projectile.owner, target.whoAmI);
 				p0.timeLeft = 240;
-
 			}
 			base.OnHitNPC(target, hit, damageDone);
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -43,6 +45,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.noGravity = true;
 			}
 		}
+
 		public override void DrawEffect(Color lightColor)
 		{
 			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
@@ -50,14 +53,13 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 
-			if (TradeShade > 0)
+			if (OldShade > 0)
 			{
-				for (int f = TradeLength - 1; f > -1; f--)
+				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
 				{
-
-					Color fadeLight = Color * (DarkDraw[f].Color.A / 255f);
+					Color fadeLight = AttackColor * (DarkDraw[f].Color.A / 255f);
 					fadeLight.A = 0;
-					fadeLight = fadeLight * TradeLightColorValue * MathF.Pow(FadeLightColorValue, f);
+					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
 					Vector2 lightSize = DarkDraw[f].Size;
 					lightSize.Y *= 2;
@@ -68,8 +70,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				}
 			}
 			Vector2 size = LightDraw.Size;
-			size.Y *=1.1f;
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin,size, SpriteEffects.None, 0f);
+			size.Y *= 1.1f;
+			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, size, SpriteEffects.None, 0f);
 			size = LightDraw.Size;
 			size.Y *= 0.4f;
 			Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, size, SpriteEffects.None, 0f);

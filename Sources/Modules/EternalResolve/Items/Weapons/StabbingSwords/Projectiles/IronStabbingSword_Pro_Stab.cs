@@ -1,22 +1,16 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class IronStabbingSword_Pro_Stab : StabbingProjectile_Stab
-    {
-        public override void SetDefaults()
-        {
-            Color = new Color(50, 34, 32);
-            base.SetDefaults();
-			TradeShade = 0.4f;
-			Shade = 0.2f;
-			FadeShade = 0.44f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.70f;
-			DrawWidth = 0.4f;
+	public class IronStabbingSword_Pro_Stab : StabbingProjectile_Stab
+	{
+		public override void SetDefaults()
+		{
+			StabColor = new Color(50, 34, 32);
+			base.SetDefaults();
+			StabShade = 0.2f;
+			StabDistance = 0.70f;
+			StabEffectWidth = 0.4f;
 		}
 	}
 }

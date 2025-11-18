@@ -13,14 +13,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 
 		public override void SetDefaults()
 		{
-			Color = Color.Red;
-			TradeShade = 0.7f;
-			Shade = 0.5f;
-			FadeShade = 0.6f;
-			FadeScale = 1;
-			TradeLightColorValue = 0.6f;
-			FadeLightColorValue = 0.1f;
-			DrawWidth = 0.4f;
+			StabColor = Color.Red;
+			StabShade = 0.5f;
+			StabEffectWidth = 0.4f;
 			base.SetDefaults();
 		}
 
@@ -34,9 +29,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			yield return new WaitForFrames(45);
 			StabVFX v = new BloodGoldStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color * 0.4f,
+				color = StabColor * 0.4f,
 				scale = 25,
 				maxtime = 10,
 				timeleft = 10,
@@ -48,9 +43,9 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 			yield return new WaitForFrames(40);
 			v = new BloodGoldStabVFX()
 			{
-				pos = Projectile.Center + Projectile.velocity * MaxLength * 80 * (1 - ToKill / 135f),
+				pos = Projectile.Center + Projectile.velocity * StabDistance * 80 * (1 - ToKill / 135f),
 				vel = velocity,
-				color = Color * 0.4f,
+				color = StabColor * 0.4f,
 				scale = 15,
 				maxtime = 10,
 				timeleft = 10,
@@ -65,7 +60,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 		{
 			if (Main.rand.NextBool(6))
 			{
-				Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
+				Vector2 end = Projectile.Center + Projectile.velocity * 80 * StabDistance;
 				if (EndPos != Vector2.zeroVector)
 				{
 					end = EndPos;

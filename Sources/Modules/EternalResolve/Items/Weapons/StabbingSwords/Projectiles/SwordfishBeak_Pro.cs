@@ -4,25 +4,26 @@ using Terraria.Audio;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 {
-    public class SwordfishBeak_Pro : StabbingProjectile
-    {
-        public override void SetDefaults()
-        {
-            Color = new Color(117, 134, 243);
-            base.SetDefaults();
-			TradeLength = 4;
-			TradeShade = 0.3f;
+	public class SwordfishBeak_Pro : StabbingProjectile
+	{
+		public override void SetDefaults()
+		{
+			AttackColor = new Color(117, 134, 243);
+			base.SetDefaults();
+			MaxOldAttackUnitCount = 4;
+			OldShade = 0.3f;
 			Shade = 0.2f;
-			FadeShade = 0.64f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.75f;
-			DrawWidth = 0.4f;
+			ShadeMultiplicative_Modifier = 0.64f;
+			ScaleMultiplicative_Modifier = 1;
+			OldLightColorValue = 1f;
+			LightColorValueMultiplicative_Modifier = 0.4f;
+			AttackLength = 0.75f;
+			AttackEffectWidth = 0.4f;
 		}
+
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			if(!target.wet)
+			if (!target.wet)
 			{
 				modifiers.FinalDamage.Multiplicative *= 1.4f;
 			}
@@ -33,6 +34,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				modifiers.ArmorPenetration += 4;
 			}
 		}
+
 		public override void VisualParticle()
 		{
 			Vector2 pos = Projectile.position + Projectile.velocity.RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f)) * Main.rand.NextFloat(0.4f, 8f);
@@ -43,18 +45,19 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles
 				dust.velocity = vel;
 			}
 			Player player = Main.player[Projectile.owner];
-			if(player.wet)
+			if (player.wet)
 			{
-				MaxLength = 1.125f;
+				AttackLength = 1.125f;
 			}
 			else
 			{
-				MaxLength = 0.75f;
+				AttackLength = 0.75f;
 			}
 		}
+
 		public override void HitTileSound(float scale)
 		{
-			SoundEngine.PlaySound((SoundID.Dig.WithVolume(1 - scale / 2.42f)).WithPitchOffset(Main.rand.NextFloat(0.6f, 1f)), Projectile.Center);
+			SoundEngine.PlaySound(SoundID.Dig.WithVolume(1 - scale / 2.42f).WithPitchOffset(Main.rand.NextFloat(0.6f, 1f)), Projectile.Center);
 			Projectile.soundDelay = SoundTimer;
 		}
 	}
