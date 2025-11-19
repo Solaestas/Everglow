@@ -392,9 +392,9 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 					break;
 				}
 			}
-			if(collided)
+			if (collided)
 			{
-				if(distanceCheck > 0)
+				if (distanceCheck > 0)
 				{
 					HitTileEffect(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * distanceCheck * lerpedTwice, drawRotation, rndRange - distanceCheck);
 				}
@@ -425,6 +425,19 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Color = new Color(1f, 0.45f, 0.05f, 0),
 		};
 		Ins.VFXManager.Add(hitSparkFixed);
+		Vector2 tilePos = hitPosition + new Vector2(8, 0).RotatedBy(rotation);
+		Point tileCoord = tilePos.ToTileCoordinates();
+		Tile tile = SafeGetTile(tileCoord);
+		if(TileClassification.FragileTileType.Contains(tile.TileType))
+		{
+			HitTile hitTile = Owner.hitTile;
+			int tileId = hitTile.HitObject(tileCoord.X, tileCoord.Y, 1);
+			bool killed = hitTile.AddDamage(tileId, 40, true) >= 100;
+			if (killed)
+			{
+				WorldGen.KillTile(tileCoord.X, tileCoord.Y);
+			}
+		}
 	}
 
 	public virtual void DrawBeforeItem()
@@ -511,6 +524,11 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
 		}
+
+		// Debug Codes.
+		// Texture2D mark = ModAsset.White.Value;
+		// Main.spriteBatch.Draw(mark, LightDraw.Postion + new Vector2(1, 0).RotatedBy(LightDraw.Rotation) * 36f * LightDraw.Size.X - Main.screenPosition, null, new Color(1f, 0f, 0, 1), 0, mark.Size() * 0.5f, 0.05f, SpriteEffects.None, 0f);
+		// Main.spriteBatch.Draw(mark, LightDraw.Postion + new Vector2(-1, 0).RotatedBy(LightDraw.Rotation) * 36f * LightDraw.Size.X - Main.screenPosition, null, new Color(1f, 0f, 0, 1), 0, mark.Size() * 0.5f, 0.05f, SpriteEffects.None, 0f);
 	}
 
 	public override void PostDraw(Color lightColor)
@@ -573,5 +591,14 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			};
 			sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}
+	}
+	public static Tile SafeGetTile(int i, int j)
+	{
+		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
+	}
+
+	public static Tile SafeGetTile(Point point)
+	{
+		return Main.tile[Math.Clamp(point.X, 20, Main.maxTilesX - 20), Math.Clamp(point.Y, 20, Main.maxTilesY - 20)];
 	}
 }
