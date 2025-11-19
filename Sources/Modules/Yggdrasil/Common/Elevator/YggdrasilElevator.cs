@@ -37,9 +37,21 @@ public class YggdrasilElevator : BoxEntity
 	public int AccelerateTimer = 0;
 
 	/// <summary>
+	/// Total accelerate time when start moving.<br/>
+	/// Default to 30.
+	/// </summary>
+	public int NormalAccelerateTime = 30;
+
+	/// <summary>
 	/// Timer for decelerating.
 	/// </summary>
 	public int DecelerateTimer = 0;
+
+	/// <summary>
+	/// Total decelerate time when start stopping.<br/>
+	/// Default to 30.
+	/// </summary>
+	public int NormalDecelerateTime = 30;
 
 	/// <summary>
 	/// Detention time due to malfunction
@@ -52,9 +64,35 @@ public class YggdrasilElevator : BoxEntity
 	/// </summary>
 	public State MoveState = State.Stop;
 
+	/// <summary>
+	/// When the elevator move exceed this value to the winch, elevator will return forcefully.<br/>
+	/// Default to ∞.
+	/// </summary>
+	public float LengthRestrict = float.PositiveInfinity;
+
 	public float CurrentSpeed = 0f;
 
+	/// <summary>
+	/// During <see cref="State.Accelerating"/> / <see cref="State.Decelerating"/> The velocity will +/- this value per tick.
+	/// </summary>
 	public float Acceleration = 0.1f;
+
+	/// <summary>
+	/// ↑v<br/>
+	/// │<br/>
+	/// │  *<br/>
+	/// │      *<br/>
+	/// │          *<br/>
+	/// │              *<br/>
+	/// │                  *<br/>
+	/// │                      *  t<br/>
+	/// └─────────────→
+	/// </summary>
+	/// <returns></returns>
+	public float UniformlyVaryingMotionDistance(float speed, float a, float t)
+	{
+		return speed * t + 0.5f * a * t * t;
+	}
 
 	/// <summary>
 	/// Anchor at a winch tile.
@@ -100,7 +138,7 @@ public class YggdrasilElevator : BoxEntity
 				if (StopTimer <= 0)
 				{
 					StopTimer = 0;
-					AccelerateTimer = 30;
+					AccelerateTimer = NormalAccelerateTime;
 					CurrentMoveDirection = NextMoveDirection;
 				}
 				Velocity *= 0;
@@ -182,9 +220,9 @@ public class YggdrasilElevator : BoxEntity
 	}
 
 	/// <summary>
-	/// Only update when <see cref="MoveState"/> is <see cref="State.NormalMove"/>.
+	/// Obsolete code.
 	/// </summary>
-	public void CheckRunningDirection()
+	public void CheckRunningDirection_Legacy()
 	{
 		Vector2 tileCenter = Box.Center / 16f;
 		int tileCenterX = (int)tileCenter.X;
@@ -268,6 +306,29 @@ public class YggdrasilElevator : BoxEntity
 		}
 
 		AccelerateTimer = 60;
+	}
+
+	/// <summary>
+	/// Only update when <see cref="MoveState"/> is <see cref="State.NormalMove"/>.
+	/// Calculate
+	/// </summary>
+	public void CheckRunningDirection()
+	{
+		// Current move direction = 1, downward.
+		float checkDistanceDown = UniformlyVaryingMotionDistance(Velocity.Y, -Acceleration, NormalDecelerateTime);
+		if ((Box.Center.Y > WinchCoord.Y * 16 + 8 + LengthRestrict/* Exceed length restriction */ || Terraria.Collision.SolidCollision(Position + new Vector2(0, Size.Y + checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == 1)
+		{
+			NextMoveDirection = -1;
+			DecelerateTimer = NormalDecelerateTime;
+		}
+
+		// Current move direction = -1, upward.
+		float checkDistanceUp = UniformlyVaryingMotionDistance(Velocity.Y, Acceleration, NormalDecelerateTime);
+		if ((Box.Center.Y < WinchCoord.Y * 16 + 8 + 400 + checkDistanceUp/* Hit the winch */ || Terraria.Collision.SolidCollision(Position + new Vector2(0, checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == -1)
+		{
+			NextMoveDirection = 1;
+			DecelerateTimer = NormalDecelerateTime;
+		}
 	}
 
 	public override void Draw()
