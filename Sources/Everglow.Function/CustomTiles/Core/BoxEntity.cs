@@ -23,7 +23,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		AABB box = obj.Box;
 		AABB collider = Box;
 
-		if (box.Intersect(collider))
+		if (box.Intersect(collider, true))
 		{
 			result.Stride = stride;
 			result.Normal = Vector2.Zero;
@@ -67,7 +67,7 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		float tMin = Math.Max(txMin, tyMin), tMax = Math.Min(txMax, tyMax);
 		if (tMin >= 0 && tMin <= 1 && tMin <= tMax)
 		{
-			if (txMin < tyMin)
+			if (txMin <= tyMin)
 			{
 				result.Normal = new Vector2(0, Math.Sign(stride.Y));
 				result.Stride = stride with { Y = stride.Y * tyMin - 0.001f * Math.Sign(stride.Y) } + Velocity;

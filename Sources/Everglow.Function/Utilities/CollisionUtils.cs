@@ -36,14 +36,26 @@ public static class CollisionUtils
 	/// <param name="a"></param>
 	/// <param name="b"></param>
 	/// <returns></returns>
-	public static bool Intersect(this AABB a, AABB b)
+	public static bool Intersect(this AABB a, AABB b, bool allowEdge = false)
 	{
-		if (a.position.X > b.position.X + b.size.X || a.position.X + a.size.X < b.position.X ||
-			a.position.Y > b.position.Y + b.size.Y || a.position.Y + a.size.Y < b.position.Y)
+		if (allowEdge)
 		{
-			return false;
+			if (a.position.X >= b.position.X + b.size.X || a.position.X + a.size.X <= b.position.X ||
+			a.position.Y >= b.position.Y + b.size.Y || a.position.Y + a.size.Y <= b.position.Y)
+			{
+				return false;
+			}
+			return true;
 		}
-		return true;
+		else
+		{
+			if (a.position.X > b.position.X + b.size.X || a.position.X + a.size.X < b.position.X ||
+			a.position.Y > b.position.Y + b.size.Y || a.position.Y + a.size.Y < b.position.Y)
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 
 	public static bool Intersect(this AABB a, AABB b, out AABB area)
