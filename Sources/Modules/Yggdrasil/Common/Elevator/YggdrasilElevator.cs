@@ -1,4 +1,5 @@
 using Everglow.Commons.CustomTiles.Core;
+using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
 using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.Audio;
@@ -352,9 +353,11 @@ public class YggdrasilElevator : BoxEntity
 			Texture2D LiftRopeTop = ModAsset.SkyTreeLiftRope.Value;
 			Texture2D LiftRope = ModAsset.Rope.Value;
 
-			Main.spriteBatch.Draw(LiftFramework, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(LiftFramework, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, LiftFramework.Size() * 0.5f, 1, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(LiftRopeTop, Box.Center - Main.screenPosition + new Vector2(0, -110), null, drawc, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
 
+			// Draw cable.
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			var bars = new List<Vertex2D>();
@@ -377,36 +380,36 @@ public class YggdrasilElevator : BoxEntity
 				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			}
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 
-			if (!LampOn)
-			{
-				Main.spriteBatch.Draw(LiftLampOff, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
-			}
-			else
-			{
-				Main.spriteBatch.Draw(LiftLampOn, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
-				Main.spriteBatch.Draw(LiftLampGlow, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawcLampGlow, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
-			}
-			Vector2 ButtomPosition = new Vector2(-11, -33) + Box.Center;
-			if ((Main.MouseWorld - ButtomPosition).Length() < 10)
-			{
-				if (Main.SmartCursorIsUsed)
-				{
-					Texture2D LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomHightLight.Value;
-					if (LampOn)
-					{
-						LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomOnHightLight.Value;
-					}
+			//if (!LampOn)
+			//{
+			//	Main.spriteBatch.Draw(LiftLampOff, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, LiftLampOff.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			//}
+			//else
+			//{
+			//	Main.spriteBatch.Draw(LiftLampOn, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, LiftLampOn.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			//	Main.spriteBatch.Draw(LiftLampGlow, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawcLampGlow, 0, LiftLampGlow.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			//}
+			//Vector2 ButtomPosition = new Vector2(-11, -33) + Box.Center;
+			//if ((Main.MouseWorld - ButtomPosition).Length() < 10)
+			//{
+			//	if (Main.SmartCursorIsUsed)
+			//	{
+			//		Texture2D LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomHightLight.Value;
+			//		if (LampOn)
+			//		{
+			//			LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtomOnHightLight.Value;
+			//		}
 
-					Main.spriteBatch.Draw(LiftButtomHighLight, Box.Center - Main.screenPosition + new Vector2(0, -46), null, Color.White, 0, new Vector2(48, 54), 1, SpriteEffects.None, 0);
-				}
-				if (Main.mouseRight && Main.mouseRightRelease)
-				{
-					SoundEngine.PlaySound(SoundID.Unlock, ButtomPosition);
-					LampOn = !LampOn;
-				}
-			}
+			//		Main.spriteBatch.Draw(LiftButtomHighLight, Box.Center - Main.screenPosition + new Vector2(0, -46), null, Color.White, 0, LiftButtomHighLight.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			//	}
+			//	if (Main.mouseRight && Main.mouseRightRelease)
+			//	{
+			//		SoundEngine.PlaySound(SoundID.Unlock, ButtomPosition);
+			//		LampOn = !LampOn;
+			//	}
+			//}
 		}
 	}
 }
