@@ -347,9 +347,6 @@ public class YggdrasilElevator : BoxEntity
 
 			var drawcLampGlow = new Color(255, 255, 255, 0);
 
-			Texture2D LiftLampOff = ModAsset.SkyTreeLiftShellLightOff.Value;
-			Texture2D LiftLampOn = ModAsset.SkyTreeLiftShellLampOn.Value;
-			Texture2D LiftLampGlow = ModAsset.SkyTreeLiftShellLampOnGlow.Value;
 			Texture2D LiftRopeTop = ModAsset.SkyTreeLiftRope.Value;
 			Texture2D LiftRope = ModAsset.Rope.Value;
 
