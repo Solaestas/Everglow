@@ -79,7 +79,7 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 				return false;
 			}
 
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost * PowerfulStabStaminaCost))
+			if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost * PowerfulStabStaminaCost))
 			{
 				return false;
 			}
@@ -122,7 +122,7 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords
 		public override bool CanUseItem(Player player)
 		{
 			// Item.SetDefaults(Item.type); Only Debug
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost, false))
+			if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost, false))
 			{
 				return false;
 			}

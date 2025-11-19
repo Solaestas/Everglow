@@ -122,7 +122,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		}
 
 		// Stab Sound
-		var ss = new SoundStyle(ModAsset.SwordSwing_Mod);
+		var ss = new SoundStyle(ModAsset.StabbingSwordSound_Mod);
 		SoundEngine.PlaySound(ss, Projectile.Center);
 		StabStartPoint_WorldPos = Projectile.Center;
 	}
@@ -253,7 +253,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
-		if (player.GetModPlayer<PlayerStamina>().StaminaRecovery)
+		if (player.GetModPlayer<StabbingSwordStaminaPlayer>().StaminaRecovering)
 		{
 			OnStaminaDepleted(player);
 		}

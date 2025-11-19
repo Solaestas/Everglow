@@ -168,7 +168,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 
 		if (Owner.HeldItem.ModItem is StabbingSwordItem modItem)
 		{
-			if (!Owner.GetModPlayer<PlayerStamina>().CheckStamina(modItem.StaminaCost / Projectile.extraUpdates))
+			if (!Owner.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(modItem.StaminaCost / Projectile.extraUpdates))
 			{
 				OnStaminaDepleted(Owner);
 				Projectile.Kill(); // Return一堆怪问题，杀了就好了

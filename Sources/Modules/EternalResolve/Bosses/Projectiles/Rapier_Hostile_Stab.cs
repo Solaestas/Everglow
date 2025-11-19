@@ -81,7 +81,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 
 		public override void OnSpawn(IEntitySource source)
 		{
-			SoundStyle ss = new SoundStyle(Commons.ModAsset.SwordSwing_Mod);
+			SoundStyle ss = new SoundStyle(Commons.ModAsset.StabbingSwordSound_Mod);
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 

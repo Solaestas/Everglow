@@ -103,8 +103,8 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			npc.spriteDirection = Projectile.spriteDirection;
 			if (Projectile.soundDelay <= 0)
 			{
-				// SoundStyle ss = new SoundStyle(ModAsset.Swordswing_Mod);
-				SoundStyle ss = SoundID.Item1;
+                // SoundStyle ss = new SoundStyle(ModAsset.StabbingSwordSound_Mod);
+                SoundStyle ss = SoundID.Item1;
 				SoundEngine.PlaySound(ss, Projectile.Center);
 				Projectile.soundDelay = 6;
 			}

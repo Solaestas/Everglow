@@ -26,7 +26,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		{
 			if (CurrentPowerfulStabCD > 0)
 				return false;
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost * 45))
+			if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost * 45))
 				return false;
 			foreach (Projectile proj in Main.projectile)
 			{

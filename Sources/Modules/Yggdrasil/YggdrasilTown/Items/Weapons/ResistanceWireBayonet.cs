@@ -34,7 +34,7 @@ public class ResistanceWireBayonet : StabbingSwordItem
 			return false;
 		}
 
-		if (!player.GetModPlayer<PlayerStamina>().CheckStamina(StaminaCost * 45))
+		if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost * 45))
 		{
 			return false;
 		}
