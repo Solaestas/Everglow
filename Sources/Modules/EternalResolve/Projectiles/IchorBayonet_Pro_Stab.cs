@@ -14,6 +14,7 @@ namespace Everglow.EternalResolve.Projectiles
 			StabShade = 0.2f;
 			StabDistance = 1.9f;
 			StabEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(0.5f, 0.4f, 0, 0);
 		}
 
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)

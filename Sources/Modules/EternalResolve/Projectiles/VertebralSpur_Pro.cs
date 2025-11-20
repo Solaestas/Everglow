@@ -18,6 +18,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.4f;
 			AttackLength = 0.70f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(105, 92, 76, 50);
 		}
 
 		private float bottomPos1 = 0f;

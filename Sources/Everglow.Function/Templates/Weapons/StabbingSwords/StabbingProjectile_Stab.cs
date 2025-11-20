@@ -34,6 +34,11 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public float StabEffectWidth = 1f;
 
 	/// <summary>
+	/// Color of spark when hit solid tile, default to new Color(1f, 0.45f, 0.05f, 0). | 撞击火花颜色，打到固体物块的时候溅出，默认new Color(1f, 0.45f, 0.05f, 0)
+	/// </summary>
+	public Color HitTileSparkColor = new Color(1f, 0.45f, 0.05f, 0);
+
+	/// <summary>
 	/// Stab range coefficient, multiplied by 80 | 攻击距离系数, 乘以80
 	/// </summary>
 	public float StabDistance = 1f;
@@ -299,7 +304,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			MaxTime = 10,
 			Scale = 0.24f,
 			Rotation = Projectile.velocity.ToRotation(),
-			Color = new Color(1f, 0.45f, 0.05f, 0),
+			Color = HitTileSparkColor,
 		};
 		Ins.VFXManager.Add(hitSparkFixed);
 

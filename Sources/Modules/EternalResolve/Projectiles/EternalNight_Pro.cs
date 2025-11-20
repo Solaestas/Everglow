@@ -1,4 +1,7 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
+using Everglow.Commons.Utilities;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Projectiles
@@ -17,6 +20,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackLength = 1.20f;
 			AttackEffectWidth = 0.8f;
+			HitTileSparkColor = new Color(0.05f, 0f, 0.15f, 1f);
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

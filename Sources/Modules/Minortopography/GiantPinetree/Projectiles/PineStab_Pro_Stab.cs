@@ -12,6 +12,7 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 			StabShade = 2f;
 			StabDistance = 0.63f;
 			StabEffectWidth = 0.25f;
+			HitTileSparkColor = new Color(11, 84, 46, 30);
 		}
 
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

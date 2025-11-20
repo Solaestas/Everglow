@@ -6,10 +6,8 @@ public class DevilHeartBayonet_proj : StabbingProjectile
 {
 	public const int HealAmountOnStaminaDepleted = 5;
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
-
 		AttackColor = new Color(255, 107, 171);
 		MaxDarkAttackUnitCount = 4;
 		OldColorFactor = 0.3f;
@@ -20,6 +18,7 @@ public class DevilHeartBayonet_proj : StabbingProjectile
 		LightColorValueMultiplicative_Modifier = 0.4f;
 		AttackLength = 1.05f;
 		AttackEffectWidth = 0.4f;
+		HitTileSparkColor = new Color(0.8f, 0.32f, 0.65f, 0);
 	}
 
 	public override void OnStaminaDepleted(Player player)

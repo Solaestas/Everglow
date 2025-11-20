@@ -88,7 +88,7 @@ public class YoenLeZedElecticFlow : Visual
 
 			float pocessionInv = 1 - pocession;
 			float c = pocessionInv * 1.0f;
-			Lighting.AddLight(position, MathF.Pow(c, 0.5f) * 0.7f, c * 0.9f, c * c * 2.6f);
+			Lighting.AddLight(oldPos[i], new Vector3(MathF.Pow(c, 0.5f) * 0.7f, c * 0.9f, c * c * 2.6f) * scale / 30f);
 		}
 		if (bars.Count < 2)
 		{

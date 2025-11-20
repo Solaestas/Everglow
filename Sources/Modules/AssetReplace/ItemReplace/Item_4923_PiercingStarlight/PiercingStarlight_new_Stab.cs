@@ -17,6 +17,7 @@ namespace Everglow.AssetReplace.ItemReplace.Item_4923_PiercingStarlight
 			StabColor = Main.hslToRgb(timeValue % 1.0f, 1, 0.5f);
 			StabColor = Color.Lerp(StabColor, new Color(147, 242, 255), 0.2f);
 			StabColor.A = 0;
+			HitTileSparkColor = StabColor * 1.2f;
 		}
 	}
 }

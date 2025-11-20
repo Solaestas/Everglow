@@ -19,6 +19,7 @@ namespace Everglow.EternalResolve.Projectiles
 			OldLightColorValue = 0.6f;
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(66, 137, 58, 0);
 		}
 
 		private VegetationBayonet sourceItem = null;

@@ -5,9 +5,8 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 {
 	public class PineStab_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			AttackColor = new Color(11, 84, 46);
 			MaxDarkAttackUnitCount = 4;
 			OldColorFactor = 0.5f;
@@ -18,6 +17,7 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.4f;
 			AttackLength = 0.63f;
 			AttackEffectWidth = 0.25f;
+			HitTileSparkColor = new Color(11, 84, 46, 30);
 		}
 
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

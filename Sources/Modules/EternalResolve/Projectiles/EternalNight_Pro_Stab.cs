@@ -1,9 +1,13 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 using Everglow.EternalResolve.VFXs;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Projectiles
@@ -16,6 +20,7 @@ namespace Everglow.EternalResolve.Projectiles
 			StabShade = 1f;
 			StabDistance = 1.40f;
 			StabEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(0.05f, 0f, 0.15f, 1);
 		}
 
 		public override IEnumerator<ICoroutineInstruction> Generate3DRingVFX(Vector2 velocity)

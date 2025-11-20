@@ -58,7 +58,7 @@ namespace Everglow.EternalResolve.Projectiles
 				dust.noGravity = true;
 				dust.velocity = new Vector2(0, Main.rand.NextFloat(6f)).RotateRandom(6.283);
 			}
-			if (StabTimer == 90)
+			if (StabTimer == 90 && Projectile.velocity.Length() > 0.9f)
 			{
 				Projectile.NewProjectileDirect(
 					Projectile.GetSource_FromAI(),

@@ -37,7 +37,14 @@ public class StabbingProjectile_HitEffect : Visual
 		Texture2D tex = ModAsset.SparkLight.Value;
 		float colorFade = MathF.Max(0, 1 - Timer / MaxTime);
 		colorFade = MathF.Pow(colorFade, 0.5f);
-		Ins.Batch.Draw(tex, Position, null, Color, Rotation, new Vector2(218, 128), Scale * colorFade, SpriteEffects.None);
+		if(Color.A > 0)
+		{
+			Texture2D tex_black = ModAsset.SparkDark.Value;
+			Ins.Batch.Draw(tex_black, Position, null, Color.White * (Color.A / 255f), Rotation, new Vector2(218, 128), Scale * colorFade, SpriteEffects.None);
+		}
+		Color drawGlow = Color;
+		drawGlow.A = 0;
+		Ins.Batch.Draw(tex, Position, null, drawGlow, Rotation, new Vector2(218, 128), Scale * colorFade, SpriteEffects.None);
 		Lighting.AddLight(Position, Color.ToVector3() * Scale * 4 * colorFade);
 	}
 }

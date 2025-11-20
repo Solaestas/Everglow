@@ -11,7 +11,7 @@ namespace Everglow.EternalResolve.Projectiles
 			MaxDarkAttackUnitCount = 4;
 			OldColorFactor = 0.8f;
 			CurrentColorFactor = 0.2f;
-			ShadeMultiplicative_Modifier = 0.64f;
+			ShadeMultiplicative_Modifier = 0.82f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;
 			LightColorValueMultiplicative_Modifier = 0.5f;
@@ -42,18 +42,19 @@ namespace Everglow.EternalResolve.Projectiles
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						DarkAttackEffect[0].Color = new Color(76, 126, 255, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(76, 126, 255, (byte)(ShadeMultiplicative_Modifier * 25));
 						break;
 					case 1:
-						DarkAttackEffect[0].Color = new Color(229, 111, 216, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(229, 111, 216, (byte)(ShadeMultiplicative_Modifier * 25));
 						break;
 					case 2:
-						DarkAttackEffect[0].Color = new Color(247, 233, 141, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(247, 233, 141, (byte)(ShadeMultiplicative_Modifier * 25));
 						break;
 					case 3:
-						DarkAttackEffect[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 25));
 						break;
 				}
+				HitTileSparkColor = DarkAttackEffect[0].Color;
 			}
 			if (OldColorFactor > 0)
 			{

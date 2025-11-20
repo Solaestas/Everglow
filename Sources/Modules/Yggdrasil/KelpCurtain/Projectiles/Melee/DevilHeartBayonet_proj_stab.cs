@@ -12,6 +12,7 @@ public class DevilHeartBayonet_proj_stab : StabbingProjectile_Stab
 		StabShade = 0.2f;
 		StabDistance = 0.70f;
 		StabEffectWidth = 0.4f;
+		HitTileSparkColor = new Color(0.8f, 0.32f, 0.65f, 0);
 	}
 
 	public override void OnStaminaDepleted(Player player)

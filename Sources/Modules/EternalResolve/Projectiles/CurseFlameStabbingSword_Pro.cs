@@ -18,6 +18,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.8f;
 			AttackLength = 1.15f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(0.2f, 1f, 0f, 0);
 		}
 
 		public override void VisualParticle()
