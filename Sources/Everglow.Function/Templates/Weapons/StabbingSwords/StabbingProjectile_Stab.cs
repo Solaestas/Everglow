@@ -36,6 +36,10 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float StabDistance = 1f;
 
+	public Vector2 StabStartPoint_WorldPos = Vector2.Zero;
+	public Vector2 StabEndPoint_WorldPos = Vector2.Zero;
+	public int StabTimer = 120;
+
 	public Player Owner => Main.player[Projectile.owner];
 
 	/// <summary>
@@ -43,7 +47,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	/// </summary>
 	private CoroutineManager _coroutineManager = new CoroutineManager();
 
-	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
+	public override string Texture => ModAsset.StabbingProjectile_Mod;
 
 	public override void SetDefaults()
 	{
@@ -66,10 +70,6 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public virtual void SetCustomDefaults()
 	{
 	}
-
-	public Vector2 StabStartPoint_WorldPos = Vector2.zeroVector;
-	public Vector2 StabEndPoint_WorldPos = Vector2.zeroVector;
-	public int StabTimer = 120;
 
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -136,7 +136,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		Vector2 end = Projectile.Center + Projectile.velocity * 80 * StabDistance;
-		if (StabEndPoint_WorldPos != Vector2.zeroVector)
+		if (StabEndPoint_WorldPos != Vector2.Zero)
 		{
 			end = StabEndPoint_WorldPos;
 		}
@@ -234,7 +234,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		{
 			Projectile.extraUpdates = 24;
 		}
-		if (StabEndPoint_WorldPos == Vector2.zeroVector)
+		if (StabEndPoint_WorldPos == Vector2.Zero)
 		{
 			float lengthDetect = Projectile.velocity.Length() * 100 * StabDistance;
 			for (int k = 0; k < lengthDetect; k++)
