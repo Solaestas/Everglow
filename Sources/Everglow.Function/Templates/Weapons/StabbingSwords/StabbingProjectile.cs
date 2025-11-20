@@ -18,6 +18,8 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 /// </summary>
 public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeProjectiles;
+
 	/// <summary>
 	/// Default ExtraUpdates | 默认额外刷新次数
 	/// </summary>

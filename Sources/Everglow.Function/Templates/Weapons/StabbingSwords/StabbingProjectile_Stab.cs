@@ -16,6 +16,8 @@ namespace Everglow.Commons.Templates.Weapons.StabbingSwords;
 
 public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 {
+	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeProjectiles;
+
 	/// <summary>
 	/// Main color | 主要颜色
 	/// </summary>
