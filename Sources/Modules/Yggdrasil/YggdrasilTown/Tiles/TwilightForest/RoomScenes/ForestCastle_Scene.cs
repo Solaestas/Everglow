@@ -36,9 +36,12 @@ public class ForestCastle_Scene : ModTile, ISceneTile
 		scene_Close.CustomDraw += DrawForestCastleOverTile;
 		var scene_Background = new TwilightCastle_RoomScene_Background { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.ForestCastle_Scene_Background.Value };
 		scene_Background.CustomDraw += DrawForestCastleBackground;
-		var flag_Scene = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.ForestCastle_Scene_Background.Value, AnchorOffset = new Vector2(800, 0) };
-
+		var flag_Scene = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = Commons.ModAsset.TileBlock3x3.Value, AnchorOffset = new Vector2(600, 0) };
 		Ins.VFXManager.Add(flag_Scene);
+		var flag_Scene2 = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = Commons.ModAsset.TileBlock4x4.Value, AnchorOffset = new Vector2(690, 0) };
+		Ins.VFXManager.Add(flag_Scene2);
+
+
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
 	}
@@ -67,7 +70,7 @@ public class ForestCastle_Scene : ModTile, ISceneTile
 		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
 		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
-		Texture2D texFern0 = Commons.ModAsset.TileBlock3x3.Value;//;ModAsset.ForestCastle_Scene_Fern0.Value;
+		Texture2D texFern0 = Commons.ModAsset.TileBlock3x3.Value; // ;ModAsset.ForestCastle_Scene_Fern0.Value;
 		Texture2D texFern1 = ModAsset.ForestCastle_Scene_Fern1.Value;
 	}
 
