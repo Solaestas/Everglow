@@ -36,6 +36,10 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float StabDistance = 1f;
 
+	public Vector2 StabStartPoint_WorldPos = Vector2.Zero;
+	public Vector2 StabEndPoint_WorldPos = Vector2.Zero;
+	public int StabTimer = 120;
+
 	public Player Owner => Main.player[Projectile.owner];
 
 	/// <summary>
@@ -67,10 +71,6 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public virtual void SetCustomDefaults()
 	{
 	}
-
-	public Vector2 StabStartPoint_WorldPos = Vector2.Zero;
-	public Vector2 StabEndPoint_WorldPos = Vector2.Zero;
-	public int StabTimer = 120;
 
 	public override void OnSpawn(IEntitySource source)
 	{
