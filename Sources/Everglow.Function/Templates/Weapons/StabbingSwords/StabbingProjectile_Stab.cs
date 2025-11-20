@@ -57,6 +57,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		Projectile.extraUpdates = 5;
 		Projectile.tileCollide = false;
 		Projectile.ArmorPenetration = 20;
+		Projectile.melee = true;
 		SetCustomDefaults();
 	}
 
