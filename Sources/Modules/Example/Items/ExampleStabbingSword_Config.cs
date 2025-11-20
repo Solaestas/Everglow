@@ -392,7 +392,7 @@ public class ExampleStabbingSword_Config : ModPlayer
 		Texture2D block = Commons.ModAsset.SlideBlock.Value;
 		Texture2D defaultCut = Commons.ModAsset.SlideDefaultCut.Value;
 		Vector2 pos = Player.Center + new Vector2(-360, -120 + order * 16) + PanelPos;
-		Vector2 mouseTransformed = Vector2.Transform(Main.MouseScreen, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+		Vector2 mouseTransformed = Main.MouseScreen;
 
 		// Panel
 		Vector2 panelPos = pos - Main.screenPosition;
@@ -492,7 +492,7 @@ public class ExampleStabbingSword_Config : ModPlayer
 	public void DrawStringStack(string content, int order)
 	{
 		Vector2 pos = Player.Center + new Vector2(-360, -120 + order * 16) + PanelPos;
-		Vector2 mouseTransformed = Vector2.Transform(Main.MouseScreen, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+		Vector2 mouseTransformed = Main.MouseScreen;
 
 		// Panel
 		Vector2 panelPos = pos - Main.screenPosition;
