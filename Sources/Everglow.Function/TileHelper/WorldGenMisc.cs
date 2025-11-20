@@ -54,21 +54,22 @@ public class WorldGenMisc
 				}
 			}
 		}
-		//int cIndex = Chest.FindChest(x, y);
-		//if (cIndex >= 0)
-		//{
-		//	Chest chest = Main.chest[cIndex];
-		//	if (chest != null)
-		//	{
-		//		if (chest.x == x && chest.y + 1 == y)
-		//		{
-		//			for (int t = 0; t < itemList.Count; t++)
-		//			{
-		//				chest.item[t] = itemList[t];
-		//			}
-		//		}
-		//	}
-		//}
+
+		// int cIndex = Chest.FindChest(x, y);
+		// if (cIndex >= 0)
+		// {
+		// Chest chest = Main.chest[cIndex];
+		// if (chest != null)
+		// {
+		// if (chest.x == x && chest.y + 1 == y)
+		// {
+		// for (int t = 0; t < itemList.Count; t++)
+		// {
+		// chest.item[t] = itemList[t];
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/// <summary>
@@ -172,7 +173,7 @@ public class WorldGenMisc
 	/// <returns></returns>
 	public static bool PlaceRope(int i0, int j0, int i1, int j1, int type, int style = 0)
 	{
-		if((i0, j0) == (i1, j1))
+		if ((i0, j0) == (i1, j1))
 		{
 			return false;
 		}
@@ -191,5 +192,58 @@ public class WorldGenMisc
 			return true;
 		}
 		return false;
+	}
+
+	/// <summary>
+	/// Do damage to a certain tile.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="damage"></param>
+	/// <param name="player"></param>
+	public static void DamageTile(int x, int y, int damage, Player player = null)
+	{
+		if (player == null)
+		{
+			player = Main.LocalPlayer;
+		}
+		if (Main.LocalPlayer == null)
+		{
+			return;
+		}
+		HitTile hitTile = player.hitTile;
+		int tileId = hitTile.HitObject(x, y, 1);
+		bool killed = hitTile.AddDamage(tileId, damage, true) >= 100;
+		if (killed)
+		{
+			WorldGen.KillTile(x, y);
+		}
+	}
+
+	/// <summary>
+	/// Do damage to a certain tile.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="damage"></param>
+	/// <param name="player"></param>
+	public static void DamageTile(Point point, int damage, Player player = null)
+	{
+		DamageTile(point.X, point.Y, damage, player);
+	}
+
+	public static Tile SafeGetTile(int i, int j)
+	{
+		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
+	}
+
+	public static Tile SafeGetTile(Point point)
+	{
+		return SafeGetTile(point.X, point.Y);
+	}
+
+	public static Tile SafeGetTile_WorldCoord(Vector2 position)
+	{
+		return SafeGetTile(position.ToTileCoordinates());
 	}
 }

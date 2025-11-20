@@ -1,5 +1,6 @@
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -124,7 +125,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	public override void AI()
 	{
 		UpdateTimer++;
-		Projectile.extraUpdates = (int)(NormalExtraUpdates * Owner.meleeSpeed);
+		Projectile.extraUpdates = (int)(NormalExtraUpdates * (Owner.meleeSpeed + 1));
 		int animation = 9;
 		float rotationRange = Main.rand.NextFloatDirection() * (MathF.PI * 2f) * 0.05f;
 		Projectile.ai[0] += 1f / 20f;
@@ -138,7 +139,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		{
 			Projectile.soundDelay = SoundTimer * (1 + NormalExtraUpdates);
 			SoundStyle ss = SoundID.Item1;
-			SoundEngine.PlaySound(ss.WithPitchOffset(Owner.meleeSpeed - 1), Projectile.Center);
+			SoundEngine.PlaySound(ss.WithPitchOffset(Owner.meleeSpeed), Projectile.Center);
 		}
 		if (Main.myPlayer == Projectile.owner)
 		{
@@ -383,7 +384,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Vector2 drawPos = Pos + drawRotation.ToRotationVector2() * additiveDrawPos + rand.NextVector2Circular(20f, 20f);
 			bool collided = true;
 			float distanceCheck = 0f;
-			while (!Collision.IsWorldPointSolid(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * distanceCheck * lerpedTwice))
+			while (!SolidTileButNotSolidTop(drawPos + new Vector2(1, 0).RotatedBy(drawRotation) * 36f * distanceCheck * lerpedTwice))
 			{
 				distanceCheck += 0.03f;
 				if (distanceCheck >= rndRange)
@@ -425,18 +426,12 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Color = new Color(1f, 0.45f, 0.05f, 0),
 		};
 		Ins.VFXManager.Add(hitSparkFixed);
-		Vector2 tilePos = hitPosition + new Vector2(8, 0).RotatedBy(rotation);
+		Vector2 tilePos = hitPosition + new Vector2(1, 0).RotatedBy(rotation);
 		Point tileCoord = tilePos.ToTileCoordinates();
-		Tile tile = SafeGetTile(tileCoord);
-		if(TileClassification.FragileTileType.Contains(tile.TileType))
+		Tile tile = WorldGenMisc.SafeGetTile(tileCoord);
+		if (TileClassification.StabbingSwordFragileTileType.Contains(tile.TileType))
 		{
-			HitTile hitTile = Owner.hitTile;
-			int tileId = hitTile.HitObject(tileCoord.X, tileCoord.Y, 1);
-			bool killed = hitTile.AddDamage(tileId, 40, true) >= 100;
-			if (killed)
-			{
-				WorldGen.KillTile(tileCoord.X, tileCoord.Y);
-			}
+			WorldGenMisc.DamageTile(tileCoord, 40, Owner);
 		}
 	}
 
@@ -592,13 +587,11 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			sb.Draw(ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}
 	}
-	public static Tile SafeGetTile(int i, int j)
-	{
-		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
-	}
 
-	public static Tile SafeGetTile(Point point)
+	public static bool SolidTileButNotSolidTop(Vector2 worldPosition)
 	{
-		return Main.tile[Math.Clamp(point.X, 20, Main.maxTilesX - 20), Math.Clamp(point.Y, 20, Main.maxTilesY - 20)];
+		Tile tile = WorldGenMisc.SafeGetTile_WorldCoord(worldPosition);
+		bool solidTop = Main.tileSolidTop[tile.TileType];
+		return Collision.IsWorldPointSolid(worldPosition) && !solidTop;
 	}
 }

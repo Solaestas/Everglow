@@ -1,6 +1,8 @@
 using Everglow.Commons.Coroutines;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
@@ -34,6 +36,11 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float StabDistance = 1f;
 
+	public Player Owner => Main.player[Projectile.owner];
+
+	/// <summary>
+	/// Manager of Visual effect ring.
+	/// </summary>
 	private CoroutineManager _coroutineManager = new CoroutineManager();
 
 	public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
@@ -67,12 +74,11 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		// Calculate direction
-		Player player = Main.player[Projectile.owner];
-		Vector2 toMouse = Main.MouseWorld - player.RotatedRelativePoint(player.MountedCenter);
+		Vector2 toMouse = Main.MouseWorld - Owner.RotatedRelativePoint(Owner.MountedCenter);
 		toMouse.Normalize();
 		if (toMouse.HasNaNs())
 		{
-			toMouse = Vector2.UnitX * player.direction;
+			toMouse = Vector2.UnitX * Owner.direction;
 		}
 		if (toMouse.X != Projectile.velocity.X || toMouse.Y != Projectile.velocity.Y)
 		{
@@ -189,7 +195,6 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		_coroutineManager.Update();
 
 		// Set player posture
-		Player player = Main.player[Projectile.owner];
 		if (Projectile.timeLeft <= 1)
 		{
 			StabTimer--;
@@ -197,31 +202,31 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			{
 				Projectile.timeLeft++;
 				float value = (Projectile.timeLeft + StabTimer) / 135f;
-				float BodyRotation = MathF.Sin(value * MathF.PI) * player.direction * 0.2f;
-				TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
+				float BodyRotation = MathF.Sin(value * MathF.PI) * Owner.direction * 0.2f;
+				TestPlayerDrawer Tplayer = Owner.GetModPlayer<TestPlayerDrawer>();
 				Tplayer.HeadRotation = 0;
 				Tplayer.HideLeg = true;
-				player.headRotation = -BodyRotation;
-				Tplayer.HeadRotation = player.headRotation;
-				player.fullRotation = BodyRotation;
-				player.fullRotationOrigin = new Vector2(player.Hitbox.Width / 2f, player.gravDir == -1 ? 0 : player.Hitbox.Height);
+				Owner.headRotation = -BodyRotation;
+				Tplayer.HeadRotation = Owner.headRotation;
+				Owner.fullRotation = BodyRotation;
+				Owner.fullRotationOrigin = new Vector2(Owner.Hitbox.Width / 2f, Owner.gravDir == -1 ? 0 : Owner.Hitbox.Height);
 			}
 			else
 			{
-				TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-				player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
-				player.fullRotation = 0;
-				player.legRotation = 0;
+				TestPlayerDrawer Tplayer = Owner.GetModPlayer<TestPlayerDrawer>();
+				Owner.legFrame = new Rectangle(0, 0, Owner.legFrame.Width, Owner.legFrame.Height);
+				Owner.fullRotation = 0;
+				Owner.legRotation = 0;
 				Tplayer.HeadRotation = 0;
 				Tplayer.HideLeg = false;
-				player.legPosition = Vector2.Zero;
+				Owner.legPosition = Vector2.Zero;
 			}
 		}
 
 		// Set projectile posture
 		if (StabTimer >= 120)
 		{
-			Projectile.position = player.RotatedRelativePoint(player.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
+			Projectile.position = Owner.RotatedRelativePoint(Owner.MountedCenter, reverseRotation: false, addGfxOffY: false) - Projectile.Size / 2f + Projectile.velocity * (15 - Projectile.timeLeft) * 2;
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			Projectile.spriteDirection = Projectile.direction;
 		}
@@ -231,20 +236,17 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		}
 		if (StabEndPoint_WorldPos == Vector2.zeroVector)
 		{
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
-			if (Collision.IsWorldPointSolid(end))
+			float lengthDetect = Projectile.velocity.Length() * 100 * StabDistance;
+			for (int k = 0; k < lengthDetect; k++)
 			{
-				for (int k = 0; k < 500; k++)
+				Vector2 modifiedEnd = Projectile.Center + Projectile.velocity.NormalizeSafe() * k;
+				if (StabbingProjectile.SolidTileButNotSolidTop(modifiedEnd))
 				{
-					Vector2 modifiedEnd = end - Projectile.velocity.NormalizeSafe() * k;
-					if (!Collision.IsWorldPointSolid(modifiedEnd))
-					{
-						StabEndPoint_WorldPos = modifiedEnd;
-						Projectile.Center = modifiedEnd;
-						Projectile.velocity *= 0.01f;
-						HitTile();
-						break;
-					}
+					StabEndPoint_WorldPos = modifiedEnd;
+					Projectile.Center = modifiedEnd;
+					Projectile.velocity *= 0.01f;
+					HitTile();
+					break;
 				}
 			}
 		}
@@ -252,10 +254,9 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		Player player = Main.player[Projectile.owner];
-		if (player.GetModPlayer<StabbingSwordStaminaPlayer>().StaminaRecovering)
+		if (Owner.GetModPlayer<StabbingSwordStaminaPlayer>().StaminaRecovering)
 		{
-			OnStaminaDepleted(player);
+			OnStaminaDepleted(Owner);
 		}
 	}
 
@@ -298,6 +299,14 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Color = new Color(1f, 0.45f, 0.05f, 0),
 		};
 		Ins.VFXManager.Add(hitSparkFixed);
+
+		Vector2 tilePos = StabEndPoint_WorldPos + new Vector2(1, 0).RotatedBy(Projectile.velocity.ToRotation());
+		Point tileCoord = tilePos.ToTileCoordinates();
+		Tile tile = WorldGenMisc.SafeGetTile(tileCoord);
+		if (TileClassification.StabbingSwordFragileTileType.Contains(tile.TileType))
+		{
+			WorldGenMisc.DamageTile(tileCoord, 100);
+		}
 	}
 
 	private void ProduceWaterRipples(Vector2 beamDims)
@@ -318,10 +327,9 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 
 	public virtual void DrawItem(Color lightColor)
 	{
-		Player player = Main.player[Projectile.owner];
 		if (StabTimer > 60)
 		{
-			Texture2D itemTexture = TextureAssets.Item[player.HeldItem.type].Value;
+			Texture2D itemTexture = TextureAssets.Item[Owner.HeldItem.type].Value;
 			Main.spriteBatch.Draw(itemTexture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI * 0.25f, itemTexture.Size() / 2f, 1, SpriteEffects.None, 0f);
 		}
 	}
@@ -329,14 +337,11 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 	public override void PostDraw(Color lightColor)
 	{
 		DrawEffect(lightColor);
-
-		// Vector2 endPos = Projectile.Center + Projectile.velocity * 100 * StabDistance;
-		// Texture2D tex = Commons.ModAsset.LightPoint2.Value;
-		// Main.spriteBatch.Draw(tex, endPos - Main.screenPosition,null,new Color(1f, 1f, 1f, 0),0,tex.Size() * 0.5f,0.5f,SpriteEffects.None,0);
 	}
 
 	public virtual void DrawEffect(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 90 * StabTimer / 120f * StabEffectWidth;
 		Vector2 start = StabStartPoint_WorldPos;
 		Vector2 end = Projectile.Center + Projectile.velocity * 100 * StabDistance;
@@ -370,7 +375,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail_black.Value;
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 		}
 		Color alphaColor = StabColor;
 		alphaColor.A = 0;
@@ -401,7 +406,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail_1.Value;
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 		}
 
 		alphaColor.A = 0;
@@ -431,7 +436,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Main.graphics.graphicsDevice.Textures[0] = ModAsset.Trail_7.Value;
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 		}
 	}
 
