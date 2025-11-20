@@ -88,16 +88,6 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	/// </summary>
 	public float FadeGlowColorValue = 0f;
 
-	public virtual int SoundTimer { get; private set; } = 6;
-
-	public int UpdateTimer = 0;
-
-	public DrawParameters_Structure ItemDraw = default;
-
-	public DrawParameters_Structure[] DarkAttackEffect = new DrawParameters_Structure[200];
-
-	public DrawParameters_Structure LightAttackEffect = default;
-
 	public Player Owner => Main.player[Projectile.owner];
 
 	public override string Texture => ModAsset.StabbingProjectile_Mod;
@@ -121,14 +111,20 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 	{
 	}
 
+	public virtual int SoundTimer { get; private set; } = 6;
+
+	public int UpdateTimer = 0;
+
 	public override void SendExtraAI(BinaryWriter writer)
 	{
 		writer.Write(SoundTimer);
+		base.SendExtraAI(writer);
 	}
 
 	public override void ReceiveExtraAI(BinaryReader reader)
 	{
 		SoundTimer = reader.ReadInt32();
+		base.ReceiveExtraAI(reader);
 	}
 
 	public override void AI()
@@ -262,7 +258,10 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		Utils.PlotTileLine(Projectile.Center, end, 80f * Projectile.scale, DelegateMethods.CutTiles);
 	}
 
-	public override bool PreDraw(ref Color lightColor) => false;
+	public override bool PreDraw(ref Color lightColor)
+	{
+		return false;
+	}
 
 	public struct DrawParameters_Structure
 	{
@@ -283,6 +282,8 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		public SpriteEffects SpriteEffect;
 	}
 
+	public DrawParameters_Structure ItemDraw = default;
+
 	public void UpdateItemDraw()
 	{
 		UnifiedRandom rand = Main.rand;
@@ -302,6 +303,8 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		ItemDraw.Size = new Vector2(1f);
 		ItemDraw.SpriteEffect = itemSpriteEffect;
 	}
+
+	public DrawParameters_Structure[] DarkAttackEffect = new DrawParameters_Structure[200];
 
 	public virtual void UpdateDarkAttackEffect()
 	{
@@ -364,6 +367,8 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			}
 		}
 	}
+
+	public DrawParameters_Structure LightAttackEffect = default;
 
 	/// <summary>
 	/// Update the current attack draw effect.
