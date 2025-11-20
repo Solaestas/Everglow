@@ -13,20 +13,18 @@ namespace Everglow.EternalResolve.Projectiles
 
 		public override int SoundTimer => 10;
 
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
 			AttackColor = Color.Gold;
-			MaxOldAttackUnitCount = 6;
-			OldShade = 0.4f;
-			Shade = 0.2f;
+			MaxDarkAttackUnitCount = 6;
+			OldColorFactor = 0.4f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.74f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;
-
 			LightColorValueMultiplicative_Modifier = 0.9f;
 			AttackLength = 1.05f;
 			AttackEffectWidth = 0.4f;
-			base.SetDefaults();
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 5;
 		}
@@ -129,12 +127,12 @@ namespace Everglow.EternalResolve.Projectiles
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 			DrawItem(lightColor);
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = new Color(230, 120, 195) * (DarkDraw[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = new Color(230, 120, 195) * (DarkAttackEffect[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					if (fadeLight.G > 20)
@@ -146,14 +144,14 @@ namespace Everglow.EternalResolve.Projectiles
 						fadeLight.G = 0;
 					}
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
-					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 				}
 			}
-			if (Shade > 0)
+			if (CurrentColorFactor > 0)
 			{
-				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(Shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(AttackColor.R / 255f, AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(AttackColor.R / 255f, AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			float drawTimer = (float)Main.time * 0.04f;

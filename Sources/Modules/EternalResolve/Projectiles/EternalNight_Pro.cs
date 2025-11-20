@@ -5,13 +5,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class EternalNight_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			AttackColor = new Color(189, 14, 255);
-			MaxOldAttackUnitCount = 8;
-			OldShade = 0.8f;
-			Shade = 1;
+			MaxDarkAttackUnitCount = 8;
+			OldColorFactor = 0.8f;
+			CurrentColorFactor = 1;
 			ShadeMultiplicative_Modifier = 0.7f;
 			ScaleMultiplicative_Modifier = 0.7f;
 			OldLightColorValue = 0.6f;
@@ -53,28 +52,28 @@ namespace Everglow.EternalResolve.Projectiles
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
 
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Color fadeLight = AttackColor * (DarkDraw[f].Color.A / 255f);
+					Color fadeLight = AttackColor * (DarkAttackEffect[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
-					Vector2 lightSize = DarkDraw[f].Size;
+					Vector2 lightSize = DarkAttackEffect[f].Size;
 					lightSize.Y *= 2;
-					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, lightSize, SpriteEffects.None, 0f);
-					Vector2 darkSize = DarkDraw[f].Size;
+					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, lightSize, SpriteEffects.None, 0f);
+					Vector2 darkSize = DarkAttackEffect[f].Size;
 					darkSize.Y *= 0.4f;
-					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, darkSize, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, darkSize, SpriteEffects.None, 0f);
 				}
 			}
-			Vector2 size = LightDraw.Size;
+			Vector2 size = LightAttackEffect.Size;
 			size.Y *= 1.1f;
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, size, SpriteEffects.None, 0f);
-			size = LightDraw.Size;
+			Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightAttackEffect.Rotation, drawOrigin, size, SpriteEffects.None, 0f);
+			size = LightAttackEffect.Size;
 			size.Y *= 0.4f;
-			Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(Shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, size, SpriteEffects.None, 0f);
 		}
 	}
 }

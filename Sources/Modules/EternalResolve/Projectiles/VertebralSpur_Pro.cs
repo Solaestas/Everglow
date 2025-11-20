@@ -6,13 +6,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class VertebralSpur_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			AttackColor = new Color(105, 92, 76);
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.7f;
-			Shade = 0.8f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.7f;
+			CurrentColorFactor = 0.8f;
 			ShadeMultiplicative_Modifier = 0.34f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 0.6f;

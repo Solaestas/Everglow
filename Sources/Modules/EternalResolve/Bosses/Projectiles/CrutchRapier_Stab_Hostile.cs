@@ -8,8 +8,8 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
         {
             Color = new Color(155, 162, 164);
             base.SetDefaults();
-			OldShade = 0.3f;
-			Shade = 0.2f;
+			OldColorFactor = 0.3f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.64f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;

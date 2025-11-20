@@ -9,13 +9,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class PrisonFireBayonet_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
 			AttackColor = Color.Orange;
-			base.SetDefaults();
-			MaxOldAttackUnitCount = 6;
-			OldShade = 1f;
-			Shade = 0.65f;
+			MaxDarkAttackUnitCount = 6;
+			OldColorFactor = 1f;
+			CurrentColorFactor = 0.65f;
 			ShadeMultiplicative_Modifier = 0.84f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;
@@ -163,7 +162,7 @@ namespace Everglow.EternalResolve.Projectiles
 		{
 			Player player = Main.player[Projectile.owner];
 			base.PostDraw(lightColor);
-			float valueLight = Projectile.timeLeft / MaxOldAttackUnitCount / (Projectile.extraUpdates + 1);
+			float valueLight = Projectile.timeLeft / MaxDarkAttackUnitCount / (Projectile.extraUpdates + 1);
 			Lighting.AddLight(Projectile.Center + Projectile.velocity, 1f * valueLight, 0.4f * valueLight, 0f);
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
@@ -174,9 +173,9 @@ namespace Everglow.EternalResolve.Projectiles
 					if (!player.wet || player.lavaWet)
 					{
 						AttackColor = Color.Orange;
-						MaxOldAttackUnitCount = 6;
-						OldShade = 1f;
-						Shade = 0.65f;
+						MaxDarkAttackUnitCount = 6;
+						OldColorFactor = 1f;
+						CurrentColorFactor = 0.65f;
 						ShadeMultiplicative_Modifier = 0.84f;
 						ScaleMultiplicative_Modifier = 1;
 						OldLightColorValue = 1f;
@@ -186,17 +185,17 @@ namespace Everglow.EternalResolve.Projectiles
 
 						for (int f = Projectile.timeLeft - 1; f > -1; f--)
 						{
-							float value = (MaxOldAttackUnitCount - f) / (float)MaxOldAttackUnitCount;
-							Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, new Color(value, value * value * value * 0.5f, 0, 0), DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+							float value = (MaxDarkAttackUnitCount - f) / (float)MaxDarkAttackUnitCount;
+							Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, new Color(value, value * value * value * 0.5f, 0, 0), DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 						}
-						Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(255, 155, 0, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(255, 155, 0, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 					}
 					else
 					{
 						AttackColor = new Color(80, 0, 0, 0);
-						MaxOldAttackUnitCount = 6;
-						OldShade = 0.4f;
-						Shade = 0.65f;
+						MaxDarkAttackUnitCount = 6;
+						OldColorFactor = 0.4f;
+						CurrentColorFactor = 0.65f;
 						ShadeMultiplicative_Modifier = 0.74f;
 						ScaleMultiplicative_Modifier = 1;
 						OldLightColorValue = 1f;
@@ -205,11 +204,11 @@ namespace Everglow.EternalResolve.Projectiles
 						AttackEffectWidth = 0.6f;
 						for (int f = Projectile.timeLeft - 1; f > -1; f--)
 						{
-							float value = (MaxOldAttackUnitCount - f) / (float)MaxOldAttackUnitCount;
+							float value = (MaxDarkAttackUnitCount - f) / (float)MaxDarkAttackUnitCount;
 							value *= value;
-							Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, new Color(value * 0.1f, 0, 0, 0), DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+							Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, new Color(value * 0.1f, 0, 0, 0), DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 						}
-						Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(20, 0, 0, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(20, 0, 0, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 					}
 				}
 			}

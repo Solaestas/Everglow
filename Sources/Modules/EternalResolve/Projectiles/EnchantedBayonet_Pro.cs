@@ -5,13 +5,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class EnchantedBayonet_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			AttackColor = new Color(76, 126, 255);
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.8f;
-			Shade = 0.2f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.8f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.64f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;
@@ -43,35 +42,35 @@ namespace Everglow.EternalResolve.Projectiles
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						DarkDraw[0].Color = new Color(76, 126, 255, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(76, 126, 255, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 1:
-						DarkDraw[0].Color = new Color(229, 111, 216, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(229, 111, 216, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 2:
-						DarkDraw[0].Color = new Color(247, 233, 141, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(247, 233, 141, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 					case 3:
-						DarkDraw[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 255));
+						DarkAttackEffect[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 255));
 						break;
 				}
 			}
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = DarkDraw[f].Color * (DarkDraw[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = DarkAttackEffect[f].Color * (DarkAttackEffect[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
-					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 				}
 			}
-			if (Shade > 0)
+			if (CurrentColorFactor > 0)
 			{
-				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(Shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * AttackColor.R / 255f, lightColor.G / 255f * AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 		}
 	}
 }

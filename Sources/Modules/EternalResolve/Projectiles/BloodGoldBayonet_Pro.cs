@@ -10,18 +10,17 @@ namespace Everglow.EternalResolve.Projectiles
 	{
 		public NPC ProjTarget;
 
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
 			AttackColor = Color.Red;
-			MaxOldAttackUnitCount = 8;
-			OldShade = 0.7f;
-			Shade = 0.5f;
+			MaxDarkAttackUnitCount = 8;
+			OldColorFactor = 0.7f;
+			CurrentColorFactor = 0.5f;
 			ShadeMultiplicative_Modifier = 0.6f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 0.6f;
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackEffectWidth = 0.4f;
-			base.SetDefaults();
 		}
 
 		public override void AI()

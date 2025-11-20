@@ -4,13 +4,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class TungstenStabbingSword_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
 			AttackColor = new Color(173, 218, 175);
-			base.SetDefaults();
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.3f;
-			Shade = 0.2f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.3f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.64f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;

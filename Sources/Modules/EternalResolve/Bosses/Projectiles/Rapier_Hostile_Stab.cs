@@ -22,12 +22,12 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 阴影强度
 		/// </summary>
-		public float Shade = 0f;
+		public float CurrentColorFactor = 0f;
 
 		/// <summary>
 		/// 重影深度
 		/// </summary>
-		public float OldShade = 0f;
+		public float OldColorFactor = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度
@@ -234,12 +234,12 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized, new Color(0, 0, 0, 120) * 0.4f * Shade, new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized, new Color(0, 0, 0, 120) * 0.4f * Shade, new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized, Color.White * 0.4f * dark * Shade, new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized, Color.White * 0.4f * dark * Shade, new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized, Color.White * 0.9f * dark * Shade, new Vector3(0f + time, 1, 1)),
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 120) * 0.4f * CurrentColorFactor, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 120) * 0.4f * CurrentColorFactor, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White * 0.4f * dark * CurrentColorFactor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White * 0.4f * dark * CurrentColorFactor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White * 0.9f * dark * CurrentColorFactor, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White * 0.9f * dark * CurrentColorFactor, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{

@@ -11,9 +11,9 @@ public class DevilHeartBayonet_proj : StabbingProjectile
 		base.SetDefaults();
 
 		AttackColor = new Color(255, 107, 171);
-		MaxOldAttackUnitCount = 4;
-		OldShade = 0.3f;
-		Shade = 0.2f;
+		MaxDarkAttackUnitCount = 4;
+		OldColorFactor = 0.3f;
+		CurrentColorFactor = 0.2f;
 		ShadeMultiplicative_Modifier = 0.64f;
 		ScaleMultiplicative_Modifier = 1;
 		OldLightColorValue = 1f;

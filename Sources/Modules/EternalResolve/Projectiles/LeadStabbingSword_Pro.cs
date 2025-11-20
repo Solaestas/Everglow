@@ -4,13 +4,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class LeadStabbingSword_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
 			AttackColor = new Color(85, 94, 123);
-			base.SetDefaults();
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.4f;
-			Shade = 0.2f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.4f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.44f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 0.6f;

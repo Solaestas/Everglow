@@ -9,9 +9,9 @@ namespace Everglow.Minortopography.GiantPinetree.Projectiles
 		{
 			base.SetDefaults();
 			AttackColor = new Color(11, 84, 46);
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.5f;
-			Shade = 0.4f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.5f;
+			CurrentColorFactor = 0.4f;
 			ShadeMultiplicative_Modifier = 0.52f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;

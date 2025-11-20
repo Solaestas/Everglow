@@ -7,9 +7,9 @@ namespace Everglow.Example.Projectiles
 		public override void SetDefaults()
 		{
 			base.SetDefaults();
-			MaxOldAttackUnitCount = 4;
-			OldShade = 0.7f;
-			Shade = 0.2f;
+			MaxDarkAttackUnitCount = 4;
+			OldColorFactor = 0.7f;
+			CurrentColorFactor = 0.2f;
 			ShadeMultiplicative_Modifier = 0.64f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 1f;

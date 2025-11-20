@@ -7,13 +7,12 @@ namespace Everglow.EternalResolve.Projectiles
 {
 	public class RottenGoldBayonet_Pro : StabbingProjectile
 	{
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
 			AttackColor = new Color(105, 105, 255);
-			MaxOldAttackUnitCount = 8;
-			OldShade = 0.7f;
-			Shade = 0.5f;
+			MaxDarkAttackUnitCount = 8;
+			OldColorFactor = 0.7f;
+			CurrentColorFactor = 0.5f;
 			ShadeMultiplicative_Modifier = 0.6f;
 			ScaleMultiplicative_Modifier = 1;
 			OldLightColorValue = 0.6f;

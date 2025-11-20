@@ -32,14 +32,14 @@ public class ExampleStabbingSword_Config : ModPlayer
 	public Color AttackColor = Color.White;
 
 	/// <summary>
-	/// Shadow intensity of first attack unit(<see cref="LightDraw"/>) | 首个攻击单元阴影强度
+	/// Shadow intensity of first attack unit(<see cref="LightAttackEffect"/>) | 首个攻击单元阴影强度
 	/// </summary>
-	public float Shade = 0.2f;
+	public float CurrentColorFactor = 0.2f;
 
 	/// <summary>
-	/// Shadow intensity of old attack units(<see cref="DarkDraw"/>) | 旧攻击单元阴影强度
+	/// Shadow intensity of old attack units(<see cref="DarkAttackEffect"/>) | 旧攻击单元阴影强度
 	/// </summary>
-	public float OldShade = 0.7f;
+	public float OldColorFactor = 0.7f;
 
 	/// <summary>
 	/// Color(RGB) illumination coefficient of old attack units | 旧攻击单元RGB亮度系数
@@ -47,9 +47,9 @@ public class ExampleStabbingSword_Config : ModPlayer
 	public float OldLightColorValue = 1f;
 
 	/// <summary>
-	/// Amount of old attack units (Length of<see cref="DarkDraw"/>), default to 4; Warning : The projectile will keep active until old attack units run out | 最大旧攻击单元数，默认4; 警告：射弹会一直存在直到旧攻击单元耗尽
+	/// Amount of old attack units (Length of<see cref="DarkAttackEffect"/>), default to 4; Warning : The projectile will keep active until old attack units run out | 最大旧攻击单元数，默认4; 警告：射弹会一直存在直到旧攻击单元耗尽
 	/// </summary>
-	public int MaxOldAttackUnitCount = 4;
+	public int MaxDarkAttackUnitCount = 4;
 
 	/// <summary>
 	/// Scale of old attack units will multiply this per update, no more than 1.0f | 旧攻击单元大小每次更新倍率, 不大于1.0f
@@ -185,8 +185,8 @@ public class ExampleStabbingSword_Config : ModPlayer
 			return;
 		}
 		DrawStringStack("Projectile Configs", -1);
-		DrawAndModify(0, 1, ref Shade, 0.2f, nameof(Shade), 0);
-		DrawAndModify(0, 1, ref OldShade, 0.7f, nameof(OldShade), 1);
+		DrawAndModify(0, 1, ref CurrentColorFactor, 0.2f, nameof(CurrentColorFactor), 0);
+		DrawAndModify(0, 1, ref OldColorFactor, 0.7f, nameof(OldColorFactor), 1);
 		DrawAndModify(0, 1, ref OldLightColorValue, 1f, nameof(OldLightColorValue), 2);
 		DrawAndModify(0, 1, ref ScaleMultiplicative_Modifier, 1f, nameof(ScaleMultiplicative_Modifier), 3);
 		DrawAndModify(0, 1, ref AttackEffectWidth, 0.4f, nameof(AttackEffectWidth), 4);
@@ -194,7 +194,7 @@ public class ExampleStabbingSword_Config : ModPlayer
 		DrawAndModify(0, 1, ref LightColorValueMultiplicative_Modifier, 0.4f, nameof(LightColorValueMultiplicative_Modifier), 6);
 		DrawAndModify(0, 1, ref FadeGlowColorValue, 0f, nameof(FadeGlowColorValue), 7);
 		DrawAndModify(0.5f, 4, ref AttackLength, 0.7f, nameof(AttackLength), 8);
-		DrawAndModify_Int(1, 50, ref MaxOldAttackUnitCount, 4, nameof(MaxOldAttackUnitCount), 9);
+		DrawAndModify_Int(1, 50, ref MaxDarkAttackUnitCount, 4, nameof(MaxDarkAttackUnitCount), 9);
 		DrawAndModify_Color(ref AttackColor, Color.Gray, nameof(AttackColor), 10);
 		DrawAndModify_Color(ref GlowColor, Color.Transparent, nameof(GlowColor), 14);
 

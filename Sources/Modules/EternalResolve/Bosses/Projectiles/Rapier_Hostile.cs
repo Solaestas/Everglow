@@ -20,12 +20,12 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 阴影强度
 		/// </summary>
-		public float Shade = 0f;
+		public float CurrentColorFactor = 0f;
 
 		/// <summary>
 		/// 重影深度
 		/// </summary>
-		public float OldShade = 0f;
+		public float OldColorFactor = 0f;
 
 		/// <summary>
 		/// 重影彩色部分亮度
@@ -35,7 +35,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		/// <summary>
 		/// 重影数量
 		/// </summary>
-		public int MaxOldAttackUnitCount = 0; // 小于200
+		public int MaxDarkAttackUnitCount = 0; // 小于200
 
 		/// <summary>
 		/// 重影大小缩变,小于1
@@ -110,8 +110,8 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			}
 
 			UpdateItemDraw();
-			UpdateDarkDraw();
-			UpdateLightDraw();
+			UpdateDarkAttackEffect();
+			UpdateLightAttackEffect();
 		}
 
 		public virtual void HitTileSound(float scale)
@@ -198,9 +198,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			ItemDraw.SpriteEffect = itemSpriteEffect;
 		}
 
-		public DrawParameters_Structure[] DarkDraw = new DrawParameters_Structure[200];
+		public DrawParameters_Structure[] DarkAttackEffect = new DrawParameters_Structure[200];
 
-		public void UpdateDarkDraw()
+		public void UpdateDarkAttackEffect()
 		{
 			UnifiedRandom rand = Main.rand;
 			Vector2 Pos = Projectile.Center - Projectile.rotation.ToRotationVector2() * 2;
@@ -230,35 +230,35 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				HitTileSound(volumn);
 			}
 			Vector2 drawSize = new Vector2(volumn, AttackEffectWidth) * lerpedTwice;
-			if (MaxOldAttackUnitCount > 0)
+			if (MaxDarkAttackUnitCount > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > 0; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > 0; f--)
 				{
-					DarkDraw[f] = DarkDraw[f - 1];
-					DarkDraw[f].Postion = DarkDraw[f - 1].Postion + Main.player[Projectile.owner].velocity;
-					DarkDraw[f].Color.A = (byte)(DarkDraw[f - 1].Color.A * ShadeMultiplicative_Modifier);
-					DarkDraw[f].Size.Y = DarkDraw[f - 1].Size.Y * ScaleMultiplicative_Modifier;
+					DarkAttackEffect[f] = DarkAttackEffect[f - 1];
+					DarkAttackEffect[f].Postion = DarkAttackEffect[f - 1].Postion + Main.player[Projectile.owner].velocity;
+					DarkAttackEffect[f].Color.A = (byte)(DarkAttackEffect[f - 1].Color.A * ShadeMultiplicative_Modifier);
+					DarkAttackEffect[f].Size.Y = DarkAttackEffect[f - 1].Size.Y * ScaleMultiplicative_Modifier;
 				}
 			}
-			if (Projectile.timeLeft >= MaxOldAttackUnitCount - 1)
+			if (Projectile.timeLeft >= MaxDarkAttackUnitCount - 1)
 			{
-				DarkDraw[0].Color.A = (byte)(OldShade * 255);
-				DarkDraw[0].Postion = drawPos;
-				DarkDraw[0].Size = drawSize;
-				DarkDraw[0].Rotation = drawRotation;
+				DarkAttackEffect[0].Color.A = (byte)(OldColorFactor * 255);
+				DarkAttackEffect[0].Postion = drawPos;
+				DarkAttackEffect[0].Size = drawSize;
+				DarkAttackEffect[0].Rotation = drawRotation;
 			}
 			else
 			{
-				DarkDraw[0].Color.A = (byte)(DarkDraw[0].Color.A * ShadeMultiplicative_Modifier);
-				DarkDraw[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
-				DarkDraw[0].Size.Y = drawSize.Y * ScaleMultiplicative_Modifier;
-				DarkDraw[0].Rotation = drawRotation;
+				DarkAttackEffect[0].Color.A = (byte)(DarkAttackEffect[0].Color.A * ShadeMultiplicative_Modifier);
+				DarkAttackEffect[0].Postion = drawPos + Main.player[Projectile.owner].velocity;
+				DarkAttackEffect[0].Size.Y = drawSize.Y * ScaleMultiplicative_Modifier;
+				DarkAttackEffect[0].Rotation = drawRotation;
 			}
 		}
 
-		public DrawParameters_Structure LightDraw = default(DrawParameters_Structure);
+		public DrawParameters_Structure LightAttackEffect = default(DrawParameters_Structure);
 
-		public void UpdateLightDraw()
+		public void UpdateLightAttackEffect()
 		{
 			UnifiedRandom rand = Main.rand;
 			Vector2 Pos = Projectile.Center - Projectile.rotation.ToRotationVector2() * 2;
@@ -281,9 +281,9 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				}
 			}
 			Vector2 drawSize = new Vector2(rndRange, AttackEffectWidth) * lerpedTwice;
-			LightDraw.Postion = drawPos;
-			LightDraw.Size = drawSize;
-			LightDraw.Rotation = drawRotation;
+			LightAttackEffect.Postion = drawPos;
+			LightAttackEffect.Size = drawSize;
+			LightAttackEffect.Rotation = drawRotation;
 		}
 
 		public virtual void DrawBeforeItem()
@@ -345,30 +345,30 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
 			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkDraw[f].Postion - Main.screenPosition, null, Color.White * (DarkDraw[f].Color.A / 255f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = Color * (DarkDraw[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = Color * (DarkAttackEffect[f].Color.A / 255f);
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
-					Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, fadeLight, DarkDraw[f].Rotation, drawOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 					if (GlowColor != Color.Transparent)
 					{
-						Main.spriteBatch.Draw(light, DarkDraw[f].Postion - Main.screenPosition, null, GlowColor * MathF.Pow(FadeGlowColorValue, f), DarkDraw[f].Rotation, drawShadowOrigin, DarkDraw[f].Size, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, GlowColor * MathF.Pow(FadeGlowColorValue, f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
 					}
 				}
 			}
-			if (Shade > 0)
+			if (CurrentColorFactor > 0)
 			{
-				Main.spriteBatch.Draw(Shadow, LightDraw.Postion - Main.screenPosition, null, Color.White * Shade, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(Shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			}
-			Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightDraw.Rotation, drawOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(lightColor.R / 255f * Color.R / 255f, lightColor.G / 255f * Color.G / 255f, lightColor.B / 255f * Color.B / 255f, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			if (GlowColor != Color.Transparent)
 			{
-				Main.spriteBatch.Draw(light, LightDraw.Postion - Main.screenPosition, null, GlowColor, LightDraw.Rotation, drawShadowOrigin, LightDraw.Size, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, GlowColor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			}
 		}
 
@@ -383,20 +383,20 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 		public void DrawWarp(VFXBatch sb)
 		{
 			float time = (float)(Main.time * 0.03);
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				for (int f = MaxOldAttackUnitCount - 1; f > -1; f--)
+				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Vector2 center = DarkDraw[f].Postion - Main.screenPosition;
-					Vector2 normalX = new Vector2(0, 40).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
-					Vector2 normalY = new Vector2(0, 15).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+					Vector2 center = DarkAttackEffect[f].Postion - Main.screenPosition;
+					Vector2 normalX = new Vector2(0, 40).RotatedBy(LightAttackEffect.Rotation).RotatedBy(-Math.PI / 2) * LightAttackEffect.Size.X;
+					Vector2 normalY = new Vector2(0, 15).RotatedBy(LightAttackEffect.Rotation) * LightAttackEffect.Size.Y;
 					Vector2 start = center - normalX * 0.4f;
 					Vector2 middle = center;
 					Vector2 end = center + normalX;
 					Color alphaColor = Color;
 					alphaColor.A = 0;
-					alphaColor.R = (byte)(((DarkDraw[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-					alphaColor.G = (byte)(DarkDraw[f].Color.A / 10f);
+					alphaColor.R = (byte)(((DarkAttackEffect[f].Rotation + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
+					alphaColor.G = (byte)(DarkAttackEffect[f].Color.A / 10f);
 					List<Vertex2D> bars = new List<Vertex2D>
 					{
 						new Vertex2D(start - normalY, new Color(alphaColor.R, alphaColor.G / 9, 0, 0), new Vector3(1 + time, 0, 0)),
@@ -409,17 +409,17 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 				}
 			}
-			if (OldShade > 0)
+			if (OldColorFactor > 0)
 			{
-				Vector2 center = LightDraw.Postion - Main.screenPosition;
-				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightDraw.Rotation).RotatedBy(-Math.PI / 2) * LightDraw.Size.X;
-				Vector2 normalY = new Vector2(0, 20).RotatedBy(LightDraw.Rotation) * LightDraw.Size.Y;
+				Vector2 center = LightAttackEffect.Postion - Main.screenPosition;
+				Vector2 normalX = new Vector2(0, 45).RotatedBy(LightAttackEffect.Rotation).RotatedBy(-Math.PI / 2) * LightAttackEffect.Size.X;
+				Vector2 normalY = new Vector2(0, 20).RotatedBy(LightAttackEffect.Rotation) * LightAttackEffect.Size.Y;
 				Vector2 start = center - normalX * 0.4f;
 				Vector2 middle = center;
 				Vector2 end = center + normalX;
 				Color alphaColor = Color;
 				alphaColor.A = 0;
-				alphaColor.R = (byte)((LightDraw.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
+				alphaColor.R = (byte)((LightAttackEffect.Rotation + 6.283 + Math.PI) % 6.283 / 6.283 * 255);
 				alphaColor.G = 20;
 				List<Vertex2D> bars = new List<Vertex2D>
 				{
