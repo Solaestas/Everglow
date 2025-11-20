@@ -171,7 +171,6 @@ public class ExampleStabbingSword_Config : ModPlayer
 				}
 			}
 		}
-		base.UpdateEquips();
 	}
 
 	public void Draw()
