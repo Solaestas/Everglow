@@ -433,7 +433,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 		Vector2 tilePos = hitPosition + new Vector2(1, 0).RotatedBy(rotation);
 		Point tileCoord = tilePos.ToTileCoordinates();
 		Tile tile = WorldGenMisc.SafeGetTile(tileCoord);
-		if (TileClassification.StabbingSwordFragileTileType.Contains(tile.TileType))
+		if (TileUtils.Sets.TileFragile[tile.TileType])
 		{
 			WorldGenMisc.DamageTile(tileCoord, (int)(power * 10), Owner);
 		}

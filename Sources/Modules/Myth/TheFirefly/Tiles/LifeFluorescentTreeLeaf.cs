@@ -11,13 +11,14 @@ public class LifeFluorescentTreeLeaf : ModTile
 		Main.tileBlockLight[Type] = true;
 		Main.tileMerge[Type][ModContent.TileType<LifeFluorescentTreeWood>()] = true;
 		Main.tileMerge[ModContent.TileType<LifeFluorescentTreeWood>()][Type] = true;
+		TileUtils.Sets.TileFragile[Type] = true;
+	}
+
+	public override void PostSetDefaults()
+	{
 		DustType = ModContent.DustType<FluorescentLeafDust>();
 		HitSound = SoundID.Grass;
 		AddMapEntry(new Color(0, 53, 158));
-		if(!TileClassification.StabbingSwordFragileTileType.Contains(Type))
-		{
-			TileClassification.StabbingSwordFragileTileType.Add(Type);
-		}
 	}
 
 	public override IEnumerable<Item> GetItemDrops(int i, int j)
