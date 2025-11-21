@@ -20,7 +20,7 @@ public class YggdrasilTown_TradeUnionGate : ModItem
 	{
 		//int x0 = (int)(Main.MouseWorld.X / 16);
 		//int y0 = (int)(Main.MouseWorld.Y / 16);
-		//PlaceFrameImportantTiles(x0, y0, 1, 1, ModContent.TileType<MarbleGate>(), 0, 0);
+		//TileUtils.PlaceFrameImportantTiles(x0, y0, 1, 1, ModContent.TileType<MarbleGate>(), 0, 0);
 		Main.NewText(YggdrasilTownCentralSystem.TownPos(Main.MouseWorld));
 		return false;
 	}

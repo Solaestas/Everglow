@@ -53,7 +53,7 @@ public class KelpCurtainGeneration
 		while (startY < (int)(Main.maxTilesY * 0.9f))
 		{
 			startY++;
-			Tile tile = SafeGetTile(startX, startY);
+			Tile tile = TileUtils.SafeGetTile(startX, startY);
 			if (tile.HasTile)
 			{
 				startY -= 20;
@@ -74,9 +74,9 @@ public class KelpCurtainGeneration
 				int x = startX + step;
 				int y = startY - height;
 				int count = 0;
-				while (!SafeGetTile(x, y).HasTile)
+				while (!TileUtils.SafeGetTile(x, y).HasTile)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 					tile.HasTile = true;
 					count++;
@@ -134,9 +134,9 @@ public class KelpCurtainGeneration
 					type = ModContent.TileType<YggdrasilGrayRock>();
 					wallType = ModContent.WallType<MossProneSandSoilWall>();
 				}
-				if (!SafeGetTile(x, y).HasTile && stoneValue >= 0)
+				if (!TileUtils.SafeGetTile(x, y).HasTile && stoneValue >= 0)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)type;
 					tile.HasTile = true;
 					tile.WallType = (ushort)wallType;
@@ -155,7 +155,7 @@ public class KelpCurtainGeneration
 			{
 				int x = lakePeakX + step;
 				int y = startY - peakHeight + deltaY;
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 				tile.HasTile = true;
 			}
@@ -166,7 +166,7 @@ public class KelpCurtainGeneration
 		{
 			int y = startY - peakHeight + 7;
 			int count = 0;
-			while (!SafeGetTile(x, y).HasTile)
+			while (!TileUtils.SafeGetTile(x, y).HasTile)
 			{
 				count++;
 				if (count > 300)
@@ -175,7 +175,7 @@ public class KelpCurtainGeneration
 				}
 				if (x > KelpCurtainBiome.FindClosestStratumBoundPointX(y))
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.LiquidType = LiquidID.Water;
 					tile.LiquidAmount = 255;
 				}
@@ -218,13 +218,13 @@ public class KelpCurtainGeneration
 		checkPos.Y += deltaY - 2;
 		for (int x = (int)(checkPos.X - 4); x <= (int)(checkPos.X + 5); x++)
 		{
-			var tile = SafeGetTile(x, (int)(checkPos.Y + 2));
+			var tile = TileUtils.SafeGetTile(x, (int)(checkPos.Y + 2));
 			tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 			tile.HasTile = true;
 		}
 
 		// Place Geyser Air Buds.
-		PlaceFrameImportantTiles((int)checkPos.X, (int)checkPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
+		TileUtils.PlaceFrameImportantTiles((int)checkPos.X, (int)checkPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
 		for (int t = 1; t < 16; t++)
 		{
 			Vector2 addPos = new Vector2((t % 2 - 0.5f) * 30 + 10 + Main.rand.NextFloat(-3, 3), -t * 24 + 10);
@@ -235,14 +235,14 @@ public class KelpCurtainGeneration
 			topPos.Y += deltaYTop - 2;
 			for (int x = (int)(topPos.X - 1); x <= (int)(topPos.X + 2); x++)
 			{
-				var tile = SafeGetTile(x, (int)(topPos.Y + 2));
+				var tile = TileUtils.SafeGetTile(x, (int)(topPos.Y + 2));
 				tile.ClearEverything();
 				tile.wall = (ushort)ModContent.WallType<OldMossWall>();
 				tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 				tile.HasTile = true;
 				tile.Slope = SlopeType.Solid;
 			}
-			PlaceFrameImportantTiles((int)topPos.X, (int)topPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
+			TileUtils.PlaceFrameImportantTiles((int)topPos.X, (int)topPos.Y, 2, 2, ModContent.TileType<GeyserAirBudsPlatform>());
 		}
 	}
 
@@ -252,7 +252,7 @@ public class KelpCurtainGeneration
 		{
 			for (int y = (int)(Main.maxTilesY * 0.89f); y <= (int)(Main.maxTilesY * 0.96f); y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (tile.TileType == ModContent.TileType<SquamousShellSeal>())
 				{
 					return new Point(x - tile.TileFrameX / 18, y - tile.TileFrameY / 18);
@@ -311,7 +311,7 @@ public class KelpCurtainGeneration
 					float lerpValue = (float)(Main.maxTilesY * 0.88 - y) / 63f;
 					decayValue = (float)Utils.Lerp(decayValue, 0.6f, lerpValue);
 				}
-				var tile = SafeGetTile(x, y);
+				var tile = TileUtils.SafeGetTile(x, y);
 				if (!tile.HasTile && tile.wall == 0)
 				{
 					if (decayValue is > 0.2f and < 1f)
@@ -354,7 +354,7 @@ public class KelpCurtainGeneration
 				{
 					decayValue += (y - Main.maxTilesY * 0.88f) / 80f;
 				}
-				var tile = SafeGetTile(x, y);
+				var tile = TileUtils.SafeGetTile(x, y);
 				if (!tile.HasTile && tile.wall == 0)
 				{
 					if (decayValue is > 0.2f and < 1f)
@@ -438,7 +438,7 @@ public class KelpCurtainGeneration
 			CircleTile(checkPos, width, -1, true);
 			checkPos += vel;
 			vel = vel.RotatedBy((GetPerlinPixelR(checkPos.X, checkPos.Y) - 60f / 255f) * 0.06f);
-			if (!SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
+			if (!TileUtils.SafeGetTile(checkPos + vel.NormalizeSafe() * (width + 2)).HasTile && t < maxStep - 5 && t > 20)
 			{
 				maxStep = t + 4;
 			}
@@ -460,7 +460,7 @@ public class KelpCurtainGeneration
 		while (startY < (int)(Main.maxTilesY * 0.89f))
 		{
 			startY++;
-			Tile tile = SafeGetTile(Main.maxTilesX / 2, startY);
+			Tile tile = TileUtils.SafeGetTile(Main.maxTilesX / 2, startY);
 			if (tile.HasTile)
 			{
 				break;
@@ -474,7 +474,7 @@ public class KelpCurtainGeneration
 				int dense = PerlinPixelB[(x / 4 + randX) % 512, (y + randY) % 512];
 				if (dense > 160)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<OldMoss>();
 					tile.HasTile = true;
 				}
@@ -502,7 +502,7 @@ public class KelpCurtainGeneration
 			height = MathF.Min(heightMax, height);
 			for (int y = 0; y < height; y++)
 			{
-				var tile = SafeGetTile(x, lakeBottomY - y);
+				var tile = TileUtils.SafeGetTile(x, lakeBottomY - y);
 				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
 				tile.HasTile = true;
 			}
@@ -549,7 +549,7 @@ public class KelpCurtainGeneration
 				}
 
 				// Exist a projection. SeedMap is not TileMap.
-				var tile = SafeGetTile(x, lakeBottomYHalfX - y);
+				var tile = TileUtils.SafeGetTile(x, lakeBottomYHalfX - y);
 				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
 				{
 					if (!tile.HasTile)
@@ -592,7 +592,7 @@ public class KelpCurtainGeneration
 			sandLayerTopY = (int)(Main.maxTilesY * 0.893f + deltaY);
 			for (int y = sandLayerBottomY; y >= sandLayerTopY; y--)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (!tile.HasTile)
 				{
 					tile.TileType = (ushort)ModContent.TileType<DecaySandSoil>();
@@ -610,7 +610,7 @@ public class KelpCurtainGeneration
 		{
 			for (int y = sandLayerTopY - 10; y < sandLayerBottomY; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (tile.HasTile)
 				{
 					if (GenRand.NextBool(2) && tile.Slope == SlopeType.Solid)
@@ -621,7 +621,7 @@ public class KelpCurtainGeneration
 							{
 								break;
 							}
-							Tile algea = SafeGetTile(x, y - algeaY - 1);
+							Tile algea = TileUtils.SafeGetTile(x, y - algeaY - 1);
 							if (!algea.HasTile)
 							{
 								algea.TileType = (ushort)ModContent.TileType<JadeLakeSargassum>();
@@ -651,7 +651,7 @@ public class KelpCurtainGeneration
 	/// <param name="radius"></param>
 	public static void DigAMossyCaveLow(int i, int j, float height, float radius)
 	{
-		Tile firstCheck = SafeGetTile(i, j);
+		Tile firstCheck = TileUtils.SafeGetTile(i, j);
 		if (!firstCheck.HasTile || EmbeddingDepth(i, j, 10) < 10)
 		{
 			return;
@@ -678,7 +678,7 @@ public class KelpCurtainGeneration
 				for (int h = (int)(-height * hCheck); h <= height * hCheck; h++)
 				{
 					int y = j + h;
-					Tile tile = SafeGetTile(xCheck, y);
+					Tile tile = TileUtils.SafeGetTile(xCheck, y);
 					if (!tile.HasTile)
 					{
 						maxStepRight = step + 13;
@@ -689,7 +689,7 @@ public class KelpCurtainGeneration
 			for (int h = (int)(-height * hValue - 3); h <= height * hValue + 3; h++)
 			{
 				int y = j + h;
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (MathF.Abs(h) < height * hValue)
 				{
 					tile.wall = (ushort)ModContent.WallType<OldMossWall>();
@@ -725,7 +725,7 @@ public class KelpCurtainGeneration
 				for (int h = (int)(-height * hCheck); h <= height * hCheck; h++)
 				{
 					int y = j + h;
-					Tile tile = SafeGetTile(xCheck, y);
+					Tile tile = TileUtils.SafeGetTile(xCheck, y);
 					if (!tile.HasTile)
 					{
 						maxStepLeft = step + 13;
@@ -736,7 +736,7 @@ public class KelpCurtainGeneration
 			for (int h = (int)(-height * hValue - 3); h <= height * hValue + 3; h++)
 			{
 				int y = j + h;
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (MathF.Abs(h) < height * hValue)
 				{
 					tile.wall = (ushort)ModContent.WallType<OldMossWall>();
@@ -789,7 +789,7 @@ public class KelpCurtainGeneration
 					}
 					if (shouldKill)
 					{
-						Tile tile = SafeGetTile((int)(x + checkPoint.X), (int)(y + checkPoint.Y));
+						Tile tile = TileUtils.SafeGetTile((int)(x + checkPoint.X), (int)(y + checkPoint.Y));
 						if (tile.HasTile)
 						{
 							if (checkDir.Length() < halfWidth - 1)
@@ -880,7 +880,7 @@ public class KelpCurtainGeneration
 		{
 			return count;
 		}
-		while (!SafeGetTile(x0, y0).HasTile && SafeGetTile(x0, y0).LiquidAmount <= 0)
+		while (!TileUtils.SafeGetTile(x0, y0).HasTile && TileUtils.SafeGetTile(x0, y0).LiquidAmount <= 0)
 		{
 			if (y0 > Main.maxTilesY)
 			{
@@ -943,7 +943,7 @@ public class KelpCurtainGeneration
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (!tile.HasTile)
 				{
 					tile.TileType = (ushort)type;
