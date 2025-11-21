@@ -148,7 +148,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 	{
 		if (SubworldSystem.Current is RoomWorld)
 		{
-			return YggdrasilWorldGeneration.SafeGetTile(20, 20).TileType == ModContent.TileType<CanteenCommandBlock>();
+			return TileUtils.SafeGetTile(20, 20).TileType == ModContent.TileType<CanteenCommandBlock>();
 		}
 		return false;
 	}
@@ -157,7 +157,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 	{
 		if (SubworldSystem.Current is RoomWorld)
 		{
-			return YggdrasilWorldGeneration.SafeGetTile(20, 20).TileType == ModContent.TileType<UnionCommandBlock>();
+			return TileUtils.SafeGetTile(20, 20).TileType == ModContent.TileType<UnionCommandBlock>();
 		}
 		return false;
 	}
@@ -166,7 +166,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 	{
 		if (SubworldSystem.Current is RoomWorld)
 		{
-			return YggdrasilWorldGeneration.SafeGetTile(20, 20).TileType == ModContent.TileType<PlayerRoomCommandBlock>();
+			return TileUtils.SafeGetTile(20, 20).TileType == ModContent.TileType<PlayerRoomCommandBlock>();
 		}
 		return false;
 	}
@@ -175,7 +175,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 	{
 		if (SubworldSystem.Current is RoomWorld)
 		{
-			return YggdrasilWorldGeneration.SafeGetTile(20, 20).TileType == ModContent.TileType<ArenaCommandBlock>();
+			return TileUtils.SafeGetTile(20, 20).TileType == ModContent.TileType<ArenaCommandBlock>();
 		}
 		return false;
 	}
@@ -204,7 +204,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 			{
 				for (int y = -8; y < 9; y++)
 				{
-					Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+					Tile tile = TileUtils.SafeGetTile(i + x, j + y);
 					if (tile.TileType == ModContent.TileType<RoadSignPost_ToArena>())
 					{
 						if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
@@ -346,7 +346,7 @@ public class ArenaPlayer : ModPlayer
 			if(ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
 			{
 				ShieldCooling = 0;
-				var tile = YggdrasilWorldGeneration.SafeGetTile((Player.Bottom + new Vector2(0, 16)).ToTileCoordinates());
+				var tile = TileUtils.SafeGetTile((Player.Bottom + new Vector2(0, 16)).ToTileCoordinates());
 				if (Player.controlDown && Player.velocity.Y <= 0.05f && Collision.SolidCollision(Player.BottomLeft, Player.width, 16) && tile.TileType == ModContent.TileType<ShieldTile>() && tile.TileFrameX == 0 && tile.TileFrameY == 0)
 				{
 					tile.TileFrameX = 342;

@@ -16,7 +16,7 @@ public class CylinderChandelierGroup : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		//PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HangingSkyLantern>());
+		//TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HangingSkyLantern>());
 		base.Build(ref x, y);
 	}
 }
@@ -35,7 +35,7 @@ public class HexagonalCeilingChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		//PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HexagonalCeilingLamp>());
+		//TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, ModContent.TileType<HexagonalCeilingLamp>());
 		base.Build(ref x, y);
 	}
 }
@@ -54,7 +54,7 @@ public class DynasticChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1188);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1188);
 		base.Build(ref x, y);
 	}
 }
@@ -73,7 +73,7 @@ public class GoldenChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1080);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1080);
 		base.Build(ref x, y);
 	}
 }
@@ -92,7 +92,7 @@ public class CrystalChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 108, 0);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 108, 0);
 		base.Build(ref x, y);
 	}
 }
@@ -111,7 +111,7 @@ public class MetalChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 54 * WorldGen.genRand.Next(6));
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 54 * WorldGen.genRand.Next(6));
 		base.Build(ref x, y);
 	}
 }
@@ -130,7 +130,7 @@ public class BambooChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 108, 432);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 108, 432);
 		base.Build(ref x, y);
 	}
 }
@@ -149,7 +149,7 @@ public class RichMahoganyChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 648);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 648);
 		base.Build(ref x, y);
 	}
 }
@@ -168,7 +168,7 @@ public class PalmChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1242);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1242);
 		base.Build(ref x, y);
 	}
 }
@@ -187,7 +187,7 @@ public class GreenDungeonChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1242);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1242);
 		base.Build(ref x, y);
 	}
 }
@@ -206,7 +206,7 @@ public class EvilChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1728);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1728);
 		base.Build(ref x, y);
 	}
 }
@@ -225,7 +225,7 @@ public class GraniteChandelier : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1890);
+		TileUtils.PlaceFrameImportantTiles(x, y, 3, 3, TileID.Chandeliers, 0, 1890);
 		base.Build(ref x, y);
 	}
 }
@@ -244,7 +244,7 @@ public class ChineseLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 2, 2, TileID.ChineseLanterns);
+		TileUtils.PlaceFrameImportantTiles(x, y, 2, 2, TileID.ChineseLanterns);
 		base.Build(ref x, y);
 	}
 }
@@ -263,7 +263,7 @@ public class DiscoBall : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 2, 2, TileID.DiscoBall);
+		TileUtils.PlaceFrameImportantTiles(x, y, 2, 2, TileID.DiscoBall);
 		base.Build(ref x, y);
 	}
 }
@@ -282,7 +282,7 @@ public class FireflyBottle : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.FireflyinaBottle);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.FireflyinaBottle);
 		base.Build(ref x, y);
 	}
 }
@@ -301,7 +301,7 @@ public class LightningBugBottle : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.LightningBuginaBottle);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.LightningBuginaBottle);
 		base.Build(ref x, y);
 	}
 }
@@ -320,7 +320,7 @@ public class DynasticLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 936);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 936);
 		base.Build(ref x, y);
 	}
 }
@@ -339,7 +339,7 @@ public class MetalLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 36 * WorldGen.genRand.Next(2, 5));
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 36 * WorldGen.genRand.Next(2, 5));
 		base.Build(ref x, y);
 	}
 }
@@ -358,7 +358,7 @@ public class SpellLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 180);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 180);
 		base.Build(ref x, y);
 	}
 }
@@ -377,7 +377,7 @@ public class BowlLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 216);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 216);
 		base.Build(ref x, y);
 	}
 }
@@ -393,7 +393,7 @@ public class GlassLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 252);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 252);
 		base.Build(ref x, y);
 	}
 }
@@ -409,7 +409,7 @@ public class FleshLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 828);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 828);
 		base.Build(ref x, y);
 	}
 }
@@ -425,7 +425,7 @@ public class LivingWoodLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 792);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 792);
 		base.Build(ref x, y);
 	}
 }
@@ -441,7 +441,7 @@ public class CrystalLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 1332);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 1332);
 		base.Build(ref x, y);
 	}
 }
@@ -457,7 +457,7 @@ public class BambooLantern : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 1620);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.HangingLanterns, 0, 1620);
 		base.Build(ref x, y);
 	}
 }
@@ -473,7 +473,7 @@ public class LavaFlyBottle : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.LavaflyinaBottle);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.LavaflyinaBottle);
 		base.Build(ref x, y);
 	}
 }
@@ -489,7 +489,7 @@ public class SoulBottle : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 1, 2, TileID.SoulBottles, 0, WorldGen.genRand.Next(6) * 36);
+		TileUtils.PlaceFrameImportantTiles(x, y, 1, 2, TileID.SoulBottles, 0, WorldGen.genRand.Next(6) * 36);
 		base.Build(ref x, y);
 	}
 }
@@ -505,7 +505,7 @@ public class BurningBowl : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 2, 3, 592);
+		TileUtils.PlaceFrameImportantTiles(x, y, 2, 3, 592);
 		base.Build(ref x, y);
 	}
 }
@@ -521,7 +521,7 @@ public class PlantBowl : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y, 2, 3, 591, 36 * WorldGen.genRand.Next(9));
+		TileUtils.PlaceFrameImportantTiles(x, y, 2, 3, 591, 36 * WorldGen.genRand.Next(9));
 		base.Build(ref x, y);
 	}
 }

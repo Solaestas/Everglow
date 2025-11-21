@@ -37,7 +37,7 @@ public class OldMoss : ModTile
 		//}
 		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 2) && Main.rand.NextBool(4))
 		{
-			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 2, ModContent.TileType<RottenStump_4x2>(), Main.rand.Next(2) * 72);
+			TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 2, ModContent.TileType<RottenStump_4x2>(), Main.rand.Next(2) * 72);
 			return;
 		}
 		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2) && Main.rand.NextBool(3))
@@ -47,12 +47,12 @@ public class OldMoss : ModTile
 			{
 				typePlaced = ModContent.TileType<SucculentHerb_type0>();
 			}
-			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, typePlaced, Main.rand.Next(2) * 54);
+			TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, typePlaced, Main.rand.Next(2) * 54);
 			return;
 		}
 		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 2, 2) && Main.rand.NextBool(4))
 		{
-			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 2, 2, ModContent.TileType<SucculentHerb_type1>(), Main.rand.Next(2) * 36);
+			TileUtils.PlaceFrameImportantTilesAbove(i, j, 2, 2, ModContent.TileType<SucculentHerb_type1>(), Main.rand.Next(2) * 36);
 			return;
 		}
 		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 1))
@@ -61,20 +61,20 @@ public class OldMoss : ModTile
 			if (Main.rand.NextBool(3))
 			{
 				typePlaced = ModContent.TileType<SucculentHerb_bud_type1>();
-				if (Main.rand.NextBool(3) && YggdrasilWorldGeneration.SafeGetTile(i, j - 1).LiquidAmount <= 0)
+				if (Main.rand.NextBool(3) && TileUtils.SafeGetTile(i, j - 1).LiquidAmount <= 0)
 				{
 					typePlaced = ModContent.TileType<KelpCurtainBoletus>();
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(4) * 30);
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(4) * 30);
 					return;
 				}
 				else
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(2) * 18);
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(2) * 18);
 					return;
 				}
 			}
 
-			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(2) * 154);
+			TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, typePlaced, Main.rand.Next(2) * 154);
 			return;
 		}
 		if (Main.tile[i, j].Slope == SlopeType.Solid && Main.tile[i + 1, j].Slope == SlopeType.Solid && Main.tile[i - 1, j].Slope == SlopeType.Solid && Main.tile[i + 2, j].Slope == SlopeType.Solid && Main.tile[i - 2, j].Slope == SlopeType.Solid &&

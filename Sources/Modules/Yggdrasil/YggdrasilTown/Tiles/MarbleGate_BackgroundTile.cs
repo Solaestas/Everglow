@@ -25,7 +25,7 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 					{
 						for (int y = -8; y < 9; y++)
 						{
-							Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+							Tile tile = TileUtils.SafeGetTile(i + x, j + y);
 							if (tile.TileType == ModContent.TileType<MarbleGate>())
 							{
 								i += x;
@@ -58,7 +58,7 @@ public class MarbleGate_BackgroundTile : BackgroundVFX
 		{
 			for (int y = 20; y < 23; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.wall = 1;
 				ushort typeChange = (ushort)ModContent.TileType<UnionCommandBlock>();
 				if (y == 22)

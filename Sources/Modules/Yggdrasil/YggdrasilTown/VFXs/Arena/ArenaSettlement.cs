@@ -267,11 +267,11 @@ public class ArenaSettlement : Visual
 				int y1 = 170;
 				int y2 = 185;
 
-				Tile tile1 = YggdrasilWorldGeneration.SafeGetTile(x, y1);
+				Tile tile1 = TileUtils.SafeGetTile(x, y1);
 				tile1.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
 				tile1.HasTile = true;
 
-				Tile tile2 = YggdrasilWorldGeneration.SafeGetTile(x, y2);
+				Tile tile2 = TileUtils.SafeGetTile(x, y2);
 				tile2.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
 				tile2.HasTile = true;
 			}

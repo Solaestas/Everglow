@@ -37,7 +37,7 @@ public class TwilightWoodLeggings : ModItem
                 int length = Main.rand.Next(4, 12);
                 float scale = Main.rand.NextFloat(1, 2) / 10f;
                 Vector2 offset = Vector2.zeroVector;
-                var tile = YggdrasilWorldGeneration.SafeGetTile((player.Bottom + new Vector2(0, 12)).ToTileCoordinates());
+                var tile = TileUtils.SafeGetTile((player.Bottom + new Vector2(0, 12)).ToTileCoordinates());
                 if (tile.Slope == SlopeType.SlopeUpLeft)
                 {
                     offset = new Vector2(-8, -8);

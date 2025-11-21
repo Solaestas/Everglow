@@ -40,7 +40,7 @@ public class DarkForestGrass : ModTile, ISceneTile
 		{
 			for (int y = -1; y < 2; y++)
 			{
-				Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+				Tile checkTile = TileUtils.SafeGetTile(i + x, j + y);
 				if (checkTile.HasTile && !Main.tileFrameImportant[checkTile.TileType])
 				{
 					blockCount++;
@@ -60,7 +60,7 @@ public class DarkForestGrass : ModTile, ISceneTile
 			{
 				for (int y = -1; y < 2; y++)
 				{
-					Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + x + spreadX, j + y + spreadY);
+					Tile checkTile = TileUtils.SafeGetTile(i + x + spreadX, j + y + spreadY);
 					if (checkTile.HasTile && (checkTile.TileType == ModContent.TileType<DarkForestSoil>() || checkTile.TileType == Type))
 					{
 						blockCount++;
@@ -77,7 +77,7 @@ public class DarkForestGrass : ModTile, ISceneTile
 			}
 			if (Main.rand.Next(9, 18) < blockCount)
 			{
-				Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + spreadX, j + spreadY);
+				Tile checkTile = TileUtils.SafeGetTile(i + spreadX, j + spreadY);
 				if (checkTile.TileType == ModContent.TileType<DarkForestSoil>())
 				{
 					checkTile.TileType = Type;
@@ -110,73 +110,73 @@ public class DarkForestGrass : ModTile, ISceneTile
 				case 0:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 1))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 1, ModContent.TileType<LampWood_Stone_6x1>(), 0, 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 6, 1, ModContent.TileType<LampWood_Stone_6x1>(), 0, 0);
 					}
 					break;
 				case 1:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 4))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 5, 4, ModContent.TileType<LampWood_Stone_5x4>(), 90 * Main.rand.Next(2), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 5, 4, ModContent.TileType<LampWood_Stone_5x4>(), 90 * Main.rand.Next(2), 0);
 					}
 					break;
 				case 2:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<LampWood_Stump_3x2>(), 0, 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<LampWood_Stump_3x2>(), 0, 0);
 					}
 					break;
 				case 3:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 6))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 8, 6, ModContent.TileType<LampWood_Bone_8x6>(), 144 * Main.rand.Next(2), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 8, 6, ModContent.TileType<LampWood_Bone_8x6>(), 144 * Main.rand.Next(2), 0);
 					}
 					break;
 				case 4:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 1))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 1, ModContent.TileType<LampWood_Stone_4x1>(), 72 * Main.rand.Next(2), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 1, ModContent.TileType<LampWood_Stone_4x1>(), 72 * Main.rand.Next(2), 0);
 					}
 					break;
 				case 5:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 4))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 5, 4, ModContent.TileType<LampWood_Stone_5x4>(), 90 * Main.rand.Next(2), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 5, 4, ModContent.TileType<LampWood_Stone_5x4>(), 90 * Main.rand.Next(2), 0);
 					}
 					break;
 				case 6:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
 					}
 					break;
 				case 7:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
 					}
 					break;
 				case 8:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
 					}
 					break;
 				case 9:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<LampWood_Grass>(), 18 * Main.rand.Next(6));
 					}
 					break;
 				case 10:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 3))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 3, ModContent.TileType<DarkTaro>(), 72 * Main.rand.Next(3));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 3, ModContent.TileType<DarkTaro>(), 72 * Main.rand.Next(3));
 					}
 					break;
 				case 19:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 2, ModContent.TileType<LampWood_Stone_6x2>(), 108 * Main.rand.Next(4), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 6, 2, ModContent.TileType<LampWood_Stone_6x2>(), 108 * Main.rand.Next(4), 0);
 					}
 					break;
 				case 20:
@@ -189,37 +189,37 @@ public class DarkForestGrass : ModTile, ISceneTile
 				case 21:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 6))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 6, ModContent.TileType<LampWood_Stone_3x6>());
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 6, ModContent.TileType<LampWood_Stone_3x6>());
 					}
 					break;
 				case 22:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInLampWood>(), 54 * Main.rand.Next(2));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInLampWood>(), 54 * Main.rand.Next(2));
 					}
 					break;
 				case 23:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBox>(), 54 * Main.rand.Next(2));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBox>(), 54 * Main.rand.Next(2));
 					}
 					break;
 				case 24:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 6))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 6, ModContent.TileType<WaveLeafFlower4x6>(), 72 * Main.rand.Next(3));
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 6, ModContent.TileType<WaveLeafFlower4x6>(), 72 * Main.rand.Next(3));
 					}
 					break;
 				case 25:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 7))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 7, ModContent.TileType<WaveLeafFlower4x7>());
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 7, ModContent.TileType<WaveLeafFlower4x7>());
 					}
 					break;
 				case 26:
 					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 8))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 8, ModContent.TileType<WaveLeafFlower6x8>());
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 6, 8, ModContent.TileType<WaveLeafFlower6x8>());
 					}
 					break;
 				default:
