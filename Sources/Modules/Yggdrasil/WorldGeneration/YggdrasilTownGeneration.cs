@@ -651,7 +651,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(3))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 4, y, 5, 3))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 4, y, 5, 3))
 								{
 									PlaceLargeCyanVineOre(x - 4, y - 3);
 								}
@@ -664,7 +664,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(12))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y + 1, 4, 3))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y + 1, 4, 3))
 								{
 									PlaceMiddleCyanVineOre(x - 2, y - 2);
 								}
@@ -677,7 +677,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(12))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y, 3, 2))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y, 3, 2))
 								{
 									PlaceSmallCyanVineOre(x - 2, y - 2);
 								}
@@ -690,7 +690,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(6))
 							{
-								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 2, y - 1, 3, 2))
+								if (TileUtils.CanPlaceMultiBenethTowardsDownRight(x - 2, y - 1, 3, 2))
 								{
 									PlaceSmallUpCyanVineOre(x - 2, y);
 								}
@@ -703,7 +703,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(3))
 							{
-								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 4, y - 1, 5, 3))
+								if (TileUtils.CanPlaceMultiBenethTowardsDownRight(x - 4, y - 1, 5, 3))
 								{
 									PlaceLargeUpCyanVineOre(x - 4, y);
 								}
@@ -2103,7 +2103,7 @@ public class YggdrasilTownGeneration
 						Tile tile = SafeGetTile(basePos + new Vector2(x0, y0));
 						if (tile.TileType == ModContent.TileType<TwilightGrassBlock>())
 						{
-							if (GenRand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight((int)basePos.X + x0 - 3, (int)basePos.Y + y0, 8, height))
+							if (GenRand.NextBool(3) && TileUtils.CanPlaceMultiAtTopTowardsUpRight((int)basePos.X + x0 - 3, (int)basePos.Y + y0, 8, height))
 							{
 								TreePlacer.BuildTwilightTree((int)basePos.X + x0, (int)basePos.Y + y0 - 1, height);
 							}
@@ -2205,7 +2205,7 @@ public class YggdrasilTownGeneration
 				Tile tile = SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
 				if (tile.TileType == ModContent.TileType<TwilightGrassBlock>())
 				{
-					if (GenRand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
+					if (GenRand.NextBool(3) && TileUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
 					{
 						TreePlacer.BuildTwilightTree(centerX + x0, centerY + y0 - 1, height);
 					}

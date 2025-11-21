@@ -352,7 +352,7 @@ public class Acytaea_yggdrasil : ModNPC
 			{
 				NPC.velocity.Y += 1f;
 			}
-			if (TileCollisionUtils.PlatformCollision(NPC.Bottom))
+			if (TileUtils.PlatformCollision(NPC.Bottom))
 			{
 				NPC.velocity *= 0;
 				break;

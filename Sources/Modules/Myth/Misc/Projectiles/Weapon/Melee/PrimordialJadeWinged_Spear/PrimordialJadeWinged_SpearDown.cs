@@ -61,7 +61,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 
 		for (int t = -8; t < Projectile.velocity.Length() + 8; t += 1)
 		{
-			if (TileCollisionUtils.PlatformCollision(Projectile.Center + Vector2.Normalize(Projectile.velocity) * t))
+			if (TileUtils.PlatformCollision(Projectile.Center + Vector2.Normalize(Projectile.velocity) * t))
 			{
 				if (stopPoint == Vector2.zeroVector)
 				{
@@ -103,7 +103,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(Pos))
+						if (!TileUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -136,7 +136,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(Pos))
+						if (!TileUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -170,7 +170,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					var positionVFX = Projectile.Center + new Vector2((f - times / 2) * 24, -60 * player.gravDir) + newVec * Main.rand.NextFloat(0.7f, 1f);
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(positionVFX))
+						if (!TileUtils.PlatformCollision(positionVFX))
 						{
 							positionVFX.Y += 12 * player.gravDir;
 						}
@@ -307,7 +307,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
 		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0);
-		if (TileCollisionUtils.PlatformCollision(Projectile.Center))
+		if (TileUtils.PlatformCollision(Projectile.Center))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
 		}
