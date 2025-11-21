@@ -1,4 +1,6 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
@@ -38,6 +40,7 @@ namespace Everglow.EternalResolve.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -49,7 +52,7 @@ namespace Everglow.EternalResolve.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_black.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 			Color alphaColor = StabColor;
 			alphaColor.A = 0;
@@ -69,6 +72,7 @@ namespace Everglow.EternalResolve.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -80,7 +84,7 @@ namespace Everglow.EternalResolve.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 
 			bars = new List<Vertex2D>
@@ -94,6 +98,7 @@ namespace Everglow.EternalResolve.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -105,7 +110,7 @@ namespace Everglow.EternalResolve.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_5_black.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 
 			alphaColor.A = 0;
@@ -124,6 +129,7 @@ namespace Everglow.EternalResolve.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -135,7 +141,7 @@ namespace Everglow.EternalResolve.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_5.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 		}
 

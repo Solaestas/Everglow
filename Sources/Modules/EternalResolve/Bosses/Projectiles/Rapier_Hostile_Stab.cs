@@ -1,5 +1,7 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
@@ -243,6 +245,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -254,7 +257,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_black.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 			Color alphaColor = Color;
 			alphaColor.A = 0;
@@ -274,6 +277,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -285,7 +289,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 
 			alphaColor.A = 0;
@@ -304,6 +308,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -315,7 +320,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 		}
 

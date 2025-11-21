@@ -1,4 +1,6 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
@@ -214,6 +216,7 @@ namespace Everglow.EternalResolve.Projectiles
 
 		public override bool PreDraw(ref Color lightColor)
 		{
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -222,7 +225,7 @@ namespace Everglow.EternalResolve.Projectiles
 			{
 				coordY = 0.9f;
 			}
-			if (Projectile.timeLeft < 180)
+			if (Projectile.timeLeft < 180 && endCenter != Vector2.zeroVector)
 			{
 				Vector2 hitCenter = startCenter + Vector2.Normalize(flashVelocity) * 120f;
 				lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
@@ -235,27 +238,26 @@ namespace Everglow.EternalResolve.Projectiles
 				var light = new Color(0.85f * lightColor.R / 255f, 0, 2f * lightColor.B / 255f, 0);
 				light *= width / 10f;
 				var bars = new List<Vertex2D>
-			{
-				new Vertex2D(startCenter + normalize - Main.screenPosition, light, new Vector3(0, 0, 0)),
-				new Vertex2D(startCenter - normalize - Main.screenPosition, light, new Vector3(0, 1, 0)),
-				new Vertex2D(endCenter + normalize - Main.screenPosition, light, new Vector3(coordY, 0, 0)),
-				new Vertex2D(endCenter - normalize - Main.screenPosition, light, new Vector3(coordY, 1, 0)),
-			};
+				{
+					new Vertex2D(startCenter + normalize - Main.screenPosition, light, new Vector3(0, 0, 0)),
+					new Vertex2D(startCenter - normalize - Main.screenPosition, light, new Vector3(0, 1, 0)),
+					new Vertex2D(endCenter + normalize - Main.screenPosition, light, new Vector3(coordY, 0, 0)),
+					new Vertex2D(endCenter - normalize - Main.screenPosition, light, new Vector3(coordY, 1, 0)),
+				};
 				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.StabbingProjectile.Value;
 				if (bars.Count > 3)
 				{
 					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				}
-
 				normalize = normalizedVelocity.RotatedBy(Math.PI / 2d) * width;
 				Color shadow = Color.White;
 				bars = new List<Vertex2D>
-			{
-				new Vertex2D(startCenter + normalize - Main.screenPosition, shadow, new Vector3(0, 0, 0)),
-				new Vertex2D(startCenter - normalize - Main.screenPosition, shadow, new Vector3(0, 1, 0)),
-				new Vertex2D(endCenter + normalize - Main.screenPosition, shadow, new Vector3(coordY, 0, 0)),
-				new Vertex2D(endCenter - normalize - Main.screenPosition, shadow, new Vector3(coordY, 1, 0)),
-			};
+				{
+					new Vertex2D(startCenter + normalize - Main.screenPosition, shadow, new Vector3(0, 0, 0)),
+					new Vertex2D(startCenter - normalize - Main.screenPosition, shadow, new Vector3(0, 1, 0)),
+					new Vertex2D(endCenter + normalize - Main.screenPosition, shadow, new Vector3(coordY, 0, 0)),
+					new Vertex2D(endCenter - normalize - Main.screenPosition, shadow, new Vector3(coordY, 1, 0)),
+				};
 				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star2_black.Value;
 				if (bars.Count > 3)
 				{
@@ -294,7 +296,7 @@ namespace Everglow.EternalResolve.Projectiles
 			Main.spriteBatch.Draw(tex, Projectile.Center, null, new Color(colorValue, colorValue, colorValue, colorValue), Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 			return false;
 		}
 

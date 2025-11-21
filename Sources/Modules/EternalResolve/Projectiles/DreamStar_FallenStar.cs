@@ -1,3 +1,5 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -115,6 +117,7 @@ namespace Everglow.EternalResolve.Projectiles
 				bars.Add(new Vertex2D((oldPos[i] + oldPos[i + 1]) / 2 - Main.screenPosition + normalDir * width, color * w, new Vector3((float)Math.Sqrt(factor), 1, w)));
 				bars.Add(new Vertex2D((oldPos[i] + oldPos[i + 1]) / 2 - Main.screenPosition + normalDir * -width, color * w, new Vector3((float)Math.Sqrt(factor), 0, w)));
 			}
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
@@ -127,7 +130,7 @@ namespace Everglow.EternalResolve.Projectiles
 			}
 
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 
 			Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 			Main.spriteBatch.Draw(tex, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0f), Projectile.rotation, tex.Size() / 2, Projectile.scale, 0, 0);

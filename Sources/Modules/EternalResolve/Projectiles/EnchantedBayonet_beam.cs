@@ -1,3 +1,5 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.VFXs;
 using Terraria.Audio;
@@ -73,6 +75,7 @@ namespace Everglow.EternalResolve.Projectiles
 				new Vertex2D(end - normalized, Color.Transparent, new Vector3(0f + time, 1, 1)),
 			};
 
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 			Effect effect = ModAsset.BeamFlow.Value;
@@ -84,7 +87,7 @@ namespace Everglow.EternalResolve.Projectiles
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars2.ToArray(), 0, bars2.Count - 2);
 			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 
 			float timeValue = 0;
 			if (Projectile.timeLeft <= 200)

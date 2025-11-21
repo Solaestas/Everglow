@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Utilities;
 
-public static class TileUtils
+public static partial class TileUtils
 {
 	public class Sets
 	{
