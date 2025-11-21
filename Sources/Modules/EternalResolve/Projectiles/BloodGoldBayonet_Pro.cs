@@ -21,6 +21,7 @@ namespace Everglow.EternalResolve.Projectiles
 			OldLightColorValue = 0.6f;
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(255, 0, 20, 185);
 		}
 
 		public override void AI()

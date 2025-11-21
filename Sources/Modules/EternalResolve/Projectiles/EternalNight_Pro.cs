@@ -1,7 +1,4 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
-using Everglow.Commons.TileHelper;
-using Everglow.Commons.Utilities;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
 
 namespace Everglow.EternalResolve.Projectiles
@@ -20,7 +17,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackLength = 1.20f;
 			AttackEffectWidth = 0.8f;
-			HitTileSparkColor = new Color(0.05f, 0f, 0.15f, 1f);
+			HitTileSparkColor = new Color(0.25f, 0f, 0.55f, 0.75f);
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -60,7 +57,7 @@ namespace Everglow.EternalResolve.Projectiles
 			{
 				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Color fadeLight = AttackColor * (DarkAttackEffect[f].Color.A / 255f);
+					Color fadeLight = AttackColor * DarkAttackEffect[f].DarkShadow;
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);
@@ -69,7 +66,7 @@ namespace Everglow.EternalResolve.Projectiles
 					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, lightSize, SpriteEffects.None, 0f);
 					Vector2 darkSize = DarkAttackEffect[f].Size;
 					darkSize.Y *= 0.4f;
-					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, darkSize, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * DarkAttackEffect[f].DarkShadow, DarkAttackEffect[f].Rotation, drawShadowOrigin, darkSize, SpriteEffects.None, 0f);
 				}
 			}
 			Vector2 size = LightAttackEffect.Size;

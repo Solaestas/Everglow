@@ -54,14 +54,16 @@ namespace Everglow.EternalResolve.Projectiles
 						DarkAttackEffect[0].Color = new Color(114, 177, 204, (byte)(ShadeMultiplicative_Modifier * 25));
 						break;
 				}
+				DarkAttackEffect[0].DarkShadow = 0.4f;
 				HitTileSparkColor = DarkAttackEffect[0].Color;
+				HitTileSparkColor.A = 0;
 			}
 			if (OldColorFactor > 0)
 			{
 				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = DarkAttackEffect[f].Color * (DarkAttackEffect[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * DarkAttackEffect[f].DarkShadow, DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = DarkAttackEffect[f].Color * DarkAttackEffect[f].DarkShadow;
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					Main.spriteBatch.Draw(light, DarkAttackEffect[f].Postion - Main.screenPosition, null, fadeLight, DarkAttackEffect[f].Rotation, drawOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);

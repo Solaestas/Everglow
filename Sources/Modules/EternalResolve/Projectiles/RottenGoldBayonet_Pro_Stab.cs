@@ -11,6 +11,7 @@ namespace Everglow.EternalResolve.Projectiles
 			StabShade = 0.5f;
 			StabEffectWidth = 0.4f;
 			spAttCounts = 2;
+			HitTileSparkColor = new Color(105, 105, 255, 150);
 		}
 
 		public int spAttCounts = 2; // 一次攻击最多触发两次特殊

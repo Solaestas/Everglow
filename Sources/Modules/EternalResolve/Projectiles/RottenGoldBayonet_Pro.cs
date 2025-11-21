@@ -18,6 +18,7 @@ namespace Everglow.EternalResolve.Projectiles
 			OldLightColorValue = 0.6f;
 			LightColorValueMultiplicative_Modifier = 0.1f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(105, 105, 255, 150);
 		}
 
 		private RottenGoldBayonet sourceItem = null;

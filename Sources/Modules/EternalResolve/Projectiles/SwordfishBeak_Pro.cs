@@ -18,7 +18,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.4f;
 			AttackLength = 0.75f;
 			AttackEffectWidth = 0.4f;
-			HitTileSparkColor = new Color(117, 134, 243, 0);
+			HitTileSparkColor = new Color(117, 134, 243, 100);
 		}
 
 		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

@@ -17,6 +17,7 @@ namespace Everglow.EternalResolve.Projectiles
 			LightColorValueMultiplicative_Modifier = 0.4f;
 			AttackLength = 1.25f;
 			AttackEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(243, 175, 105, 20);
 		}
 
 		public override void VisualParticle()
@@ -60,8 +61,8 @@ namespace Everglow.EternalResolve.Projectiles
 			{
 				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = AttackColor * (DarkAttackEffect[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * DarkAttackEffect[f].DarkShadow, DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = AttackColor * DarkAttackEffect[f].DarkShadow;
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(lightColor.R / 255f * fadeLight.R / 255f, lightColor.G / 255f * fadeLight.G / 255f, lightColor.B / 255f * fadeLight.B / 255f, 0);

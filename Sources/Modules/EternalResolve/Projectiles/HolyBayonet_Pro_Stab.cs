@@ -11,6 +11,7 @@ namespace Everglow.EternalResolve.Projectiles
 			StabShade = 0.2f;
 			StabDistance = 1.25f;
 			StabEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(243, 175, 105, 20);
 		}
 
 		public override void AI()

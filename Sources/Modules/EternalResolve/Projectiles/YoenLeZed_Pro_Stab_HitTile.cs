@@ -3,6 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.Buffs;
+using Everglow.EternalResolve.VFXs;
 
 namespace Everglow.EternalResolve.Projectiles;
 
@@ -121,7 +122,7 @@ public class YoenLeZed_Pro_Stab_HitTile : ModProjectile, IWarpProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		var d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+		var d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<TriggerElectricCurrentDust>(), 0, 0);
 		d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
 		target.AddBuff(ModContent.BuffType<OnElectric>(), 60);
 	}

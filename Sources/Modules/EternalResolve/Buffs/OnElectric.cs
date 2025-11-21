@@ -1,4 +1,3 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.VFXs;
 
 namespace Everglow.EternalResolve.Buffs;
@@ -20,10 +19,6 @@ public class OnElectric : ModBuff
 			buffDamage *= 3;
 			currentElectrityTimeFactor *= 3;
 		}
-		if (npc.buffTime[buffIndex] <= 20)
-		{
-			buffDamage = 0;
-		}
 		npc.lifeRegen = -buffDamage;
 		npc.lifeRegenExpectedLossPerSecond = 7;
 		if (npc.wet)
@@ -32,7 +27,7 @@ public class OnElectric : ModBuff
 		}
 		if (Main.rand.NextBool(3))
 		{
-			Dust d = Dust.NewDustDirect(npc.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+			Dust d = Dust.NewDustDirect(npc.Center, 0, 0, ModContent.DustType<TriggerElectricCurrentDust>(), 0, 0);
 			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.04f;
 		}
 

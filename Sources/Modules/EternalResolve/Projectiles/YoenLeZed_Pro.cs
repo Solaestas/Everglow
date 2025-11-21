@@ -113,8 +113,8 @@ namespace Everglow.EternalResolve.Projectiles
 			{
 				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = AttackColor * (DarkAttackEffect[f].Color.A / 255f);
+					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * DarkAttackEffect[f].DarkShadow, DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = AttackColor * DarkAttackEffect[f].DarkShadow;
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					fadeLight = new Color(fadeLight.R / 255f, fadeLight.G / 255f, fadeLight.B / 255f, 0);
@@ -146,7 +146,7 @@ namespace Everglow.EternalResolve.Projectiles
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			var d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<ElectricMiddleDust>(), 0, 0);
+			var d = Dust.NewDustDirect(target.Center, 0, 0, ModContent.DustType<TriggerElectricCurrentDust>(), 0, 0);
 			d.scale = Main.rand.NextFloat(0.85f, 1.15f) * 0.1f;
 			target.AddBuff(ModContent.BuffType<OnElectric>(), 180);
 			base.OnHitNPC(target, hit, damageDone);

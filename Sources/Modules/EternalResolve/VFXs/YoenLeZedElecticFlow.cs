@@ -2,9 +2,6 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.EternalResolve.Buffs;
-using Everglow.EternalResolve.Common;
-using ReLogic.Content;
 
 namespace Everglow.EternalResolve.VFXs;
 

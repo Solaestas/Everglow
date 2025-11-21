@@ -1,4 +1,8 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
+using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.EternalResolve.Items.Miscs;
 using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts;
@@ -27,6 +31,34 @@ namespace Everglow.EternalResolve.Projectiles
 			AttackEffectWidth = 0.4f;
 			Projectile.usesLocalNPCImmunity = true;
 			Projectile.localNPCHitCooldown = 5;
+		}
+
+		public override void HitTileEffect(Vector2 hitPosition, float rotation, float power)
+		{
+			HitTileSparkColor = new Color(230, 120, 195, 120);
+			if(Main.rand.NextBool(5))
+			{
+				HitTileSparkColor = new Color(255, 231, 0, 0);
+				power *= 1.5f;
+			}
+			var hitSparkFixed = new StabbingProjectile_HitEffect()
+			{
+				Active = true,
+				Visible = true,
+				Position = hitPosition,
+				MaxTime = 8,
+				Scale = Math.Min(0.12f * power, 0.5f),
+				Rotation = rotation,
+				Color = HitTileSparkColor,
+			};
+			Ins.VFXManager.Add(hitSparkFixed);
+			Vector2 tilePos = hitPosition + new Vector2(1, 0).RotatedBy(rotation);
+			Point tileCoord = tilePos.ToTileCoordinates();
+			Tile tile = WorldGenMisc.SafeGetTile(tileCoord);
+			if (TileUtils.Sets.TileFragile[tile.TileType])
+			{
+				WorldGenMisc.DamageTile(tileCoord, (int)(power * 10), Owner);
+			}
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -108,7 +140,6 @@ namespace Everglow.EternalResolve.Projectiles
 			}
 			else
 			{
-				// 暂停的时候可以有一个渐停效果，看起来很好
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}
@@ -122,17 +153,18 @@ namespace Everglow.EternalResolve.Projectiles
 
 		public override void PostDraw(Color lightColor)
 		{
-			Texture2D Shadow = Commons.ModAsset.Star2_black.Value;
+			Texture2D shadow = Commons.ModAsset.Star2_black.Value;
 			Texture2D light = Commons.ModAsset.StabbingProjectile.Value;
 			Vector2 drawOrigin = light.Size() / 2f;
-			Vector2 drawShadowOrigin = Shadow.Size() / 2f;
+			Vector2 drawShadowOrigin = shadow.Size() / 2f;
+			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			DrawItem(lightColor);
 			if (OldColorFactor > 0)
 			{
 				for (int f = MaxDarkAttackUnitCount - 1; f > -1; f--)
 				{
-					Main.spriteBatch.Draw(Shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * (DarkAttackEffect[f].Color.A / 255f), DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
-					Color fadeLight = new Color(230, 120, 195) * (DarkAttackEffect[f].Color.A / 255f);
+					Main.spriteBatch.Draw(shadow, DarkAttackEffect[f].Postion - Main.screenPosition, null, Color.White * DarkAttackEffect[f].DarkShadow, DarkAttackEffect[f].Rotation, drawShadowOrigin, DarkAttackEffect[f].Size, SpriteEffects.None, 0f);
+					Color fadeLight = new Color(230, 120, 195) * DarkAttackEffect[f].DarkShadow;
 					fadeLight.A = 0;
 					fadeLight = fadeLight * OldLightColorValue * MathF.Pow(LightColorValueMultiplicative_Modifier, f);
 					if (fadeLight.G > 20)
@@ -149,7 +181,7 @@ namespace Everglow.EternalResolve.Projectiles
 			}
 			if (CurrentColorFactor > 0)
 			{
-				Main.spriteBatch.Draw(Shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(shadow, LightAttackEffect.Postion - Main.screenPosition, null, Color.White * CurrentColorFactor, LightAttackEffect.Rotation, drawShadowOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			}
 			Main.spriteBatch.Draw(light, LightAttackEffect.Postion - Main.screenPosition, null, new Color(AttackColor.R / 255f, AttackColor.G / 255f, lightColor.B / 255f * AttackColor.B / 255f, 0), LightAttackEffect.Rotation, drawOrigin, LightAttackEffect.Size, SpriteEffects.None, 0f);
 			Main.spriteBatch.End();
@@ -206,7 +238,7 @@ namespace Everglow.EternalResolve.Projectiles
 				}
 			}
 			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			Main.spriteBatch.Begin(sBS);
 		}
 	}
 }

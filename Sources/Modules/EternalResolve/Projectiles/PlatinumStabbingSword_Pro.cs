@@ -33,7 +33,6 @@ namespace Everglow.EternalResolve.Projectiles
 			}
 			else
 			{
-				// 暂停的时候可以有一个渐停效果，看起来很好
 				bottomPos1 = bottomPos1 * 0.9f;
 				bottomPos2 = bottomPos2 * 0.9f;
 			}

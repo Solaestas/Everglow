@@ -16,6 +16,7 @@ namespace Everglow.EternalResolve.Projectiles
 			StabColor = Color.Red;
 			StabShade = 0.5f;
 			StabEffectWidth = 0.4f;
+			HitTileSparkColor = new Color(255, 0, 20, 185);
 		}
 
 		public override void DrawEffect(Color lightColor)
