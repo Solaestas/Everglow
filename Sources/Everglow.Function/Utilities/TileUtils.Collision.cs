@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Utilities;
 
-public static class TileCollisionUtils
+public static partial class TileUtils
 {
 	public static bool PlatformCollision(Vector2 checkPoint)
 	{

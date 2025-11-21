@@ -32,7 +32,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 			}
 			foreach (var poses in style.Keys)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(poses);
+				Tile tile = TileUtils.SafeGetTile(poses);
 				if (tile.TileType != Type)
 				{
 					style.Remove(poses);

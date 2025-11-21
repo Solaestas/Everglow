@@ -139,7 +139,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories
                     Point bottomPos = pos.ToTileCoordinates();
                     bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
                     bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-                    if (TileCollisionUtils.PlatformCollision(pos) || (Player.waterWalk || Player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !Player.wet)
+                    if (TileUtils.PlatformCollision(pos) || (Player.waterWalk || Player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !Player.wet)
                     {
                         return h;
                     }

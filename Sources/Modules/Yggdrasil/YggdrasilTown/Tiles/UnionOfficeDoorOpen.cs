@@ -134,14 +134,14 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles
 			{
 				direction = -1;
 			}
-			var firstTile = YggdrasilWorldGeneration.SafeGetTile(i - (originalTileFrameX % 72) / 18, j - originalTileFrameY / 18);
+			var firstTile = TileUtils.SafeGetTile(i - (originalTileFrameX % 72) / 18, j - originalTileFrameY / 18);
 			if (firstTile.TileType == Type)
 			{
 				for (int x = 0; x < 4; x++)
 				{
 					for (int y = 0; y < 6; y++)
 					{
-						Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x, j - originalTileFrameY / 18 + y);
+						Tile checkTile = TileUtils.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x, j - originalTileFrameY / 18 + y);
 						if (checkTile.TileType == Type)
 						{
 							checkTile.HasTile = false;
@@ -157,7 +157,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles
 				{
 					for (int y = 0; y < 6; y++)
 					{
-						Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x - 1, j - originalTileFrameY / 18 + y);
+						Tile checkTile = TileUtils.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x - 1, j - originalTileFrameY / 18 + y);
 						checkTile.TileType = (ushort)ModContent.TileType<UnionOfficeDoorClosed>();
 						checkTile.TileFrameX = (short)(x * 18);
 						checkTile.TileFrameY = (short)(y * 18);
@@ -172,7 +172,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles
 				{
 					for (int y = 0; y < 6; y++)
 					{
-						Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x + 3, j - originalTileFrameY / 18 + y);
+						Tile checkTile = TileUtils.SafeGetTile(i - (originalTileFrameX % 72) / 18 + x + 3, j - originalTileFrameY / 18 + y);
 						checkTile.TileType = (ushort)ModContent.TileType<UnionOfficeDoorClosed>();
 						checkTile.TileFrameX = (short)(x * 18);
 						checkTile.TileFrameY = (short)(y * 18);
