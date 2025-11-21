@@ -98,18 +98,28 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		_coroutineManager.StartCoroutine(new Coroutine(Generate3DRingVFX(toMouse)));
 
 		// Dust effect
+		Color dustC = Color.Lerp(StabColor, Color.White, 0.6f);
+		dustC.A = 0;
+		StabGasDust(toMouse, dustC);
+
+		// Stab Sound
+		var ss = new SoundStyle(ModAsset.StabbingSwordSound_Mod);
+		SoundEngine.PlaySound(ss, Projectile.Center);
+		StabStartPoint_WorldPos = Projectile.Center;
+	}
+
+	public virtual void StabGasDust(Vector2 velocity, Color color)
+	{
 		for (int i = 0; i < 6; i++)
 		{
 			StabLightDust v1;
-			Color drawC = Color.Lerp(StabColor, Color.White, 0.6f);
-			drawC.A = 0;
 			int maxTime = Main.rand.Next(12, 20);
 			v1 = new StabLightDust()
 			{
-				Center = Projectile.Center + toMouse.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(-12f, 12f) + toMouse.NormalizeSafe() * (i * 10) * StabDistance,
-				Velocity = toMouse * (5 + Main.rand.NextFloatDirection() * 6f),
-				EffectColor = drawC,
-				Rotation = toMouse.ToRotation() + MathHelper.PiOver2,
+				Center = Projectile.Center + velocity.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(-12f, 12f) + velocity.NormalizeSafe() * (i * 10) * StabDistance,
+				Velocity = velocity * (5 + Main.rand.NextFloatDirection() * 6f),
+				EffectColor = color,
+				Rotation = velocity.ToRotation() + MathHelper.PiOver2,
 				Timeleft = maxTime,
 				MaxTime = maxTime,
 				Scale = Main.rand.NextFloat(0.24f, 0.4f),
@@ -119,26 +129,19 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 		for (int i = 0; i < 10; i++)
 		{
 			StabLightDust v1;
-			Color drawC = Color.Lerp(StabColor, Color.White, 0.6f);
-			drawC.A = 0;
 			int maxTime = Main.rand.Next(10, 15);
 			v1 = new StabLightDust()
 			{
-				Center = Projectile.Center + toMouse.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(-12f, 12f) + toMouse.NormalizeSafe() * (i * 10) * StabDistance,
-				Velocity = toMouse * (5 + Main.rand.NextFloatDirection() * 6f),
-				EffectColor = drawC,
-				Rotation = toMouse.ToRotation() + MathHelper.PiOver2,
+				Center = Projectile.Center + velocity.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(-12f, 12f) + velocity.NormalizeSafe() * (i * 10) * StabDistance,
+				Velocity = velocity * (5 + Main.rand.NextFloatDirection() * 6f),
+				EffectColor = color,
+				Rotation = velocity.ToRotation() + MathHelper.PiOver2,
 				Timeleft = maxTime,
 				MaxTime = maxTime,
 				Scale = Main.rand.NextFloat(0.04f, 0.07f),
 			};
 			Ins.VFXManager.Add(v1);
 		}
-
-		// Stab Sound
-		var ss = new SoundStyle(ModAsset.StabbingSwordSound_Mod);
-		SoundEngine.PlaySound(ss, Projectile.Center);
-		StabStartPoint_WorldPos = Projectile.Center;
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
