@@ -200,7 +200,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		for (int i = 0; i < 32; i++)
 		{
 			Vector2 checkPoint = new Vector2(50, 0).RotatedBy(i / 32f * MathHelper.TwoPi);
-			if (TileCollisionUtils.PlatformCollision(checkPoint + Projectile.Center))
+			if (TileUtils.PlatformCollision(checkPoint + Projectile.Center))
 			{
 				totalHit++;
 				NormalToTiles -= checkPoint;
@@ -213,7 +213,7 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		for (int i = 0; i < 24; i++)
 		{
 			Vector2 checkPoint = new Vector2(36, 0).RotatedBy(i / 24f * MathHelper.TwoPi);
-			if (TileCollisionUtils.PlatformCollision(checkPoint + Projectile.Center))
+			if (TileUtils.PlatformCollision(checkPoint + Projectile.Center))
 			{
 				totalHit += 3;
 				NormalToTiles -= checkPoint * 2;
@@ -268,14 +268,14 @@ public class AdamantiteClub_round : ModProjectile, IWarpProjectile
 		int totalHit = 0;
 		for (int i = 0; i < 32; i++)
 		{
-			if (TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(50, 0).RotatedBy(i / 32f * MathHelper.TwoPi)))
+			if (TileUtils.PlatformCollision(checkPoint + new Vector2(50, 0).RotatedBy(i / 32f * MathHelper.TwoPi)))
 			{
 				totalHit++;
 			}
 		}
 		for (int i = 0; i < 24; i++)
 		{
-			if (TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(36, 0).RotatedBy(i / 24f * MathHelper.TwoPi)))
+			if (TileUtils.PlatformCollision(checkPoint + new Vector2(36, 0).RotatedBy(i / 24f * MathHelper.TwoPi)))
 			{
 				totalHit += 3;
 			}

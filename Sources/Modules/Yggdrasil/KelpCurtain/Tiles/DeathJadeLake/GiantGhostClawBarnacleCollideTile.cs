@@ -101,7 +101,7 @@ public class GiantGhostClawBarnacleCollideTile : ShapeDataTile, ISceneTile
 				{
 					for (int y = 0; y < TotalHeight; y++)
 					{
-						var checkTile = YggdrasilWorldGeneration.SafeGetTile(x + i, y + j);
+						var checkTile = TileUtils.SafeGetTile(x + i, y + j);
 						if (checkTile.TileType == ModContent.TileType<GiantGhostClawBarnacleDoorTile>())
 						{
 							checkTile.HasTile = false;
@@ -145,7 +145,7 @@ public class GiantGhostClawBarnacleCollideTile : ShapeDataTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 36)
 		{
 			GiantGhostClawBarnacle_VFX gGCBV = new GiantGhostClawBarnacle_VFX { position = new Vector2(i, j - 2) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

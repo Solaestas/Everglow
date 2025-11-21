@@ -34,12 +34,12 @@ internal class CreamChocolateCup_CreamFlow : ModProjectile
 		{
 			Joints[i] += JointVelocity[i];
 			Vector2 check0 = Joints[i] + new Vector2(JointVelocity[i].X, 0) + Projectile.Center;
-			if (TileCollisionUtils.PlatformCollision(check0))
+			if (TileUtils.PlatformCollision(check0))
 			{
 				JointVelocity[i] = new Vector2(JointVelocity[i].X * -1, JointVelocity[i].Y) * -0.4f;
 			}
 			Vector2 check1 = Joints[i] + new Vector2(0, JointVelocity[i].Y) + Projectile.Center;
-			if (TileCollisionUtils.PlatformCollision(check1))
+			if (TileUtils.PlatformCollision(check1))
 			{
 				bool b = JointVelocity[i].Y < 0;
 				JointVelocity[i] = new Vector2(JointVelocity[i].X, JointVelocity[i].Y * -1) * -0.4f;

@@ -275,7 +275,7 @@ public static class NPCUtils
 		// This check was from 2 tile over NPC's bottom to 3 tiles below.
 		for (int y = -2; y < 4; y++)
 		{
-			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
+			if (!TileUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
 			{
 				empty++;
 			}
@@ -291,7 +291,7 @@ public static class NPCUtils
 			// To stop a walking NPC, a groove at lease 2 tiles is necessary.
 			for (int y = -2; y < 4; y++)
 			{
-				if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
+				if (!TileUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
 				{
 					empty++;
 				}

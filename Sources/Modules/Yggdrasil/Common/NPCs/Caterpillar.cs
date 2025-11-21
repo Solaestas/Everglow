@@ -1352,7 +1352,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			Vector2 check = new Vector2(0, SegmentHitBoxSize * 0.4f).RotatedBy(i / 16f * MathHelper.TwoPi);
 			Vector2 checkWorld = postion + check;
-			if (TileCollisionUtils.PlatformCollision(checkWorld))
+			if (TileUtils.PlatformCollision(checkWorld))
 			{
 				normal -= check;
 			}
@@ -1380,7 +1380,7 @@ public abstract class Caterpillar : ModNPC
 		{
 			Vector2 check = normalDirection * i;
 			Vector2 checkWorld = postion + check;
-			if (TileCollisionUtils.PlatformCollision(checkWorld))
+			if (TileUtils.PlatformCollision(checkWorld))
 			{
 				return i;
 			}
