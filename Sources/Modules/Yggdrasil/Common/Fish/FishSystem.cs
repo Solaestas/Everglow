@@ -44,7 +44,7 @@ public class FishSystem : ModSystem
 
 	public bool CheckSpawn(Player player, Point point, List<FishableItem> toSpawn)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(point);
+		Tile tile = TileUtils.SafeGetTile(point);
 		List<FishableItem> spawned = [];
 		foreach (var item in toSpawn)
 		{
@@ -84,7 +84,7 @@ public class FishSystem : ModSystem
 				for (int nx = -3; nx <= 3; nx++)
 				{
 					Point np = point + new Point(nx, 0);
-					Tile tile = YggdrasilWorldGeneration.SafeGetTile(np);
+					Tile tile = TileUtils.SafeGetTile(np);
 					if (tile.LiquidAmount <= 26)
 					{
 						canSpawn = false;

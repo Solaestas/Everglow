@@ -70,13 +70,13 @@ public class Titanium_Fragment : ModProjectile
 		{
 			bool canFall = true;
 			Projectile.velocity *= 0.96f;
-			if (TileCollisionUtils.PlatformCollision(Projectile.Center + new Vector2(Projectile.velocity.X, 0)))
+			if (TileUtils.PlatformCollision(Projectile.Center + new Vector2(Projectile.velocity.X, 0)))
 			{
 				SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.001f, 0.03f) * Projectile.velocity.Length()).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.Center);
 				Projectile.velocity.X *= Main.rand.NextFloat(-0.9f, -0.6f);
 				canFall = false;
 			}
-			if (TileCollisionUtils.PlatformCollision(Projectile.Center + new Vector2(0, Projectile.velocity.Y)))
+			if (TileUtils.PlatformCollision(Projectile.Center + new Vector2(0, Projectile.velocity.Y)))
 			{
 				SoundEngine.PlaySound(SoundID.NPCHit4.WithVolume(Main.rand.NextFloat(0.001f, 0.03f) * Projectile.velocity.Length()).WithPitchOffset(Main.rand.NextFloat(-0.5f, 0.5f)), Projectile.Center);
 				Projectile.velocity.Y *= Main.rand.NextFloat(-0.9f, -0.6f);

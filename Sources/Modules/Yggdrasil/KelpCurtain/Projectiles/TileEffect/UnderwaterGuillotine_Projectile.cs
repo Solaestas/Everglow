@@ -81,7 +81,7 @@ public class UnderwaterGuillotine_Projectile : ModProjectile
 				// {
 				// for(int y = 0; y < 3; y++)
 				// {
-				// Tile tile = YggdrasilWorldGeneration.SafeGetTile(Projectile.TopLeft.ToTileCoordinates() + new Point(x, y));
+				// Tile tile = TileUtils.SafeGetTile(Projectile.TopLeft.ToTileCoordinates() + new Point(x, y));
 				// ModTile mt = TileLoader.GetTile(tile.TileType);
 				// }
 				// }

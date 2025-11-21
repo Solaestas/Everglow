@@ -49,7 +49,7 @@ public class StoneBridge_Pot : ModTile
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
-		var tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		var tile = TileUtils.SafeGetTile(i, j);
 		switch (Main.rand.Next(7))
 		{
 			case 0:

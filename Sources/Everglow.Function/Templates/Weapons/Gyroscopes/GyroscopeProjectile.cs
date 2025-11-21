@@ -150,7 +150,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 			{
 				Projectile.velocity = Vector2.Normalize(Projectile.velocity) * MaxSpeed();
 			}
-			if (!TileCollisionUtils.PlatformCollision(Projectile.Bottom))
+			if (!TileUtils.PlatformCollision(Projectile.Bottom))
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
@@ -158,7 +158,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 			{
 				for (int i = 0; i < 100; i++)
 				{
-					if (TileCollisionUtils.PlatformCollision(Projectile.Bottom))
+					if (TileUtils.PlatformCollision(Projectile.Bottom))
 					{
 						Projectile.position.Y -= 1;
 						Power -= 0.2f;
@@ -188,10 +188,10 @@ public abstract class GyroscopeProjectile : ModProjectile
 	{
 		// A serrated function.
 		Vector2 targetPos = Owner.Center + new Vector2(240 * MathF.Sin((float)Main.time * 0.04f + Projectile.whoAmI), 24);
-		if (!TileCollisionUtils.PlatformCollision(targetPos))
+		if (!TileUtils.PlatformCollision(targetPos))
 		{
 			int count = 0;
-			while (!TileCollisionUtils.PlatformCollision(targetPos))
+			while (!TileUtils.PlatformCollision(targetPos))
 			{
 				count++;
 				targetPos.Y += 8;
@@ -201,10 +201,10 @@ public abstract class GyroscopeProjectile : ModProjectile
 				}
 			}
 		}
-		if (TileCollisionUtils.PlatformCollision(targetPos))
+		if (TileUtils.PlatformCollision(targetPos))
 		{
 			int count = 0;
-			while (TileCollisionUtils.PlatformCollision(targetPos))
+			while (TileUtils.PlatformCollision(targetPos))
 			{
 				count++;
 				targetPos.Y -= 8;
@@ -240,10 +240,10 @@ public abstract class GyroscopeProjectile : ModProjectile
 		if (!FlyingMode)
 		{
 			Vector2 targetProjectToSurface = npc.Center + new Vector2(120 * MathF.Sin((float)Main.time * 0.05f + Projectile.whoAmI), 0);
-			if (!TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+			if (!TileUtils.PlatformCollision(targetProjectToSurface))
 			{
 				int count = 0;
-				while (!TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+				while (!TileUtils.PlatformCollision(targetProjectToSurface))
 				{
 					count++;
 					targetProjectToSurface.Y += 8;
@@ -253,10 +253,10 @@ public abstract class GyroscopeProjectile : ModProjectile
 					}
 				}
 			}
-			if (TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+			if (TileUtils.PlatformCollision(targetProjectToSurface))
 			{
 				int count = 0;
-				while (TileCollisionUtils.PlatformCollision(targetProjectToSurface))
+				while (TileUtils.PlatformCollision(targetProjectToSurface))
 				{
 					count++;
 					targetProjectToSurface.Y -= 8;
@@ -311,7 +311,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 			}
 		}
 
-		if (!TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
+		if (!TileUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
 		{
 			Projectile.velocity.Y += 0.5f;
 		}
@@ -320,7 +320,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 			FlyingMode = false;
 			for (int i = 0; i < 100; i++)
 			{
-				if (TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
+				if (TileUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height))
 				{
 					Projectile.position.Y -= 1;
 					Power -= 0.2f;
@@ -338,7 +338,7 @@ public abstract class GyroscopeProjectile : ModProjectile
 	{
 		if (FlyHitCooling == 0)
 		{
-			if (TileCollisionUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height + 16))
+			if (TileUtils.PlatformCollision(Projectile.position, Projectile.width, Projectile.height + 16))
 			{
 				var checkPos = target.Center;
 				float deltaY = checkPos.Y - Projectile.Center.Y;
