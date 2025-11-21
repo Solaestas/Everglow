@@ -31,7 +31,7 @@ public class FlappedHangGlider : ModItem
     public override void HoldItem(Player player)
     {
         // Check if player is on the ground
-        if (TileCollisionUtils.PlatformCollision(player.Bottom + new Vector2(0, 2)))
+        if (TileUtils.PlatformCollision(player.Bottom + new Vector2(0, 2)))
         {
             if (DurabilityRecoverCooldown <= 0)
             {

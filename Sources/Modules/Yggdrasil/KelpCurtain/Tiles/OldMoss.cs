@@ -35,12 +35,12 @@ public class OldMoss : ModTile
 		//	tile.TileType = (ushort)ModContent.TileType<KelpMoss>();
 		//	tile.HasTile = true;
 		//}
-		if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 2) && Main.rand.NextBool(4))
+		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 2) && Main.rand.NextBool(4))
 		{
 			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 2, ModContent.TileType<RottenStump_4x2>(), Main.rand.Next(2) * 72);
 			return;
 		}
-		if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2) && Main.rand.NextBool(3))
+		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2) && Main.rand.NextBool(3))
 		{
 			int typePlaced = ModContent.TileType<RottenStump_3x2>();
 			if (Main.rand.NextBool())
@@ -50,12 +50,12 @@ public class OldMoss : ModTile
 			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, typePlaced, Main.rand.Next(2) * 54);
 			return;
 		}
-		if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 2, 2) && Main.rand.NextBool(4))
+		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 2, 2) && Main.rand.NextBool(4))
 		{
 			YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 2, 2, ModContent.TileType<SucculentHerb_type1>(), Main.rand.Next(2) * 36);
 			return;
 		}
-		if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 1))
+		if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 1))
 		{
 			int typePlaced = ModContent.TileType<KelpCurtainBracken>();
 			if (Main.rand.NextBool(3))

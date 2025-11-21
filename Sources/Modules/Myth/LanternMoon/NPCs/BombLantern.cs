@@ -163,7 +163,7 @@ public class BombLantern : ModNPC
 		Tail0 = NPC.Center + new Vector2(0, 30).RotatedBy(NPC.rotation);
 
 		Vector2 addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail1))
+		if (TileUtils.PlatformCollision(Tail1))
 		{
 			addVecGrav = Vector2.zeroVector;
 		}
@@ -174,7 +174,7 @@ public class BombLantern : ModNPC
 		}
 
 		addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail2))
+		if (TileUtils.PlatformCollision(Tail2))
 		{
 			addVecGrav = Vector2.zeroVector;
 		}
@@ -185,7 +185,7 @@ public class BombLantern : ModNPC
 		}
 
 		addVecGrav = new Vector2(0, 10);
-		if (TileCollisionUtils.PlatformCollision(Tail2))
+		if (TileUtils.PlatformCollision(Tail2))
 		{
 			addVecGrav = Vector2.zeroVector;
 		}

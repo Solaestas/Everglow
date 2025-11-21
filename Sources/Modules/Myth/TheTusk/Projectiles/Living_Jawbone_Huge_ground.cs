@@ -29,7 +29,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		Vector2 checkDir = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 20);
+		Vector2 checkDir = TileUtils.GetTopographicGradient(Projectile.Center, 20);
 		for (int y = 0; y < 100; y++)
 		{
 			if (Collision.SolidCollision(Projectile.Center - new Vector2(8), 16, 16))
@@ -42,7 +42,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 				Projectile.active = false;
 			}
 		}
-		Projectile.rotation = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 20).ToRotation();
+		Projectile.rotation = TileUtils.GetTopographicGradient(Projectile.Center, 20).ToRotation();
 		Projectile.position -= Projectile.rotation.ToRotationVector2() * 20;
 		for (int t = 0; t < 100; t++)
 		{
