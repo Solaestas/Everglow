@@ -51,10 +51,10 @@ public class NoGameModeScale : GlobalNPC
 		// Record total damage in the final tick.
 		if (c.TryGotoNext(
 			MoveType.After,
-			x => x.MatchLdloc0(),
-			x => x.MatchMul(),
-			x => x.MatchBle(out _),
-			x => x.MatchRet()))
+			x => x.MatchLdarg0(),
+			x => x.MatchLdfld(out _),
+			x => x.MatchLdcI4(120),
+			x => x.MatchBge(out _)))
 		{
 			c.EmitLdcI4(0);
 			c.EmitStloc(15);
@@ -64,13 +64,15 @@ public class NoGameModeScale : GlobalNPC
 			MoveType.After,
 			x => x.MatchLdcI4(1),
 			x => x.MatchSub(),
-			x => x.MatchStfld(out _)))
+			x => x.MatchStfld(out _),
+			x => x.MatchLdarg(0)))
 		{
+			c.EmitStarg(0);
 			c.EmitLdloc(15);
 			c.EmitLdcI4(1);
 			c.EmitAdd();
 			c.EmitStloc(15);
-			c.RemoveRange(19);
+			c.RemoveRange(18);
 		}
 
 		// Then pop the total value.(but it seems fail?)
@@ -110,8 +112,13 @@ public class NoGameModeScale : GlobalNPC
 			c.EmitLdcI4(1);
 
 			c.EmitCall(typeof(CombatText).GetMethod("NewText", new[] { typeof(Rectangle), typeof(Color), typeof(int), typeof(bool), typeof(bool) }));
-			c.Emit(OpCodes.Pop);
+			c.EmitPop();
 		}
+	}
+
+	private void NewTextIL(int value)
+	{
+		Main.NewText(value);
 	}
 }
 
