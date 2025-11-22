@@ -76,8 +76,8 @@ public class WaterSluice_Scene : ModTile, ISceneTile
 		int rightSolid = 0;
 		for (int x = 1; x < 15; x++)
 		{
-			Tile tileLeft = YggdrasilWorldGeneration.SafeGetTile(i - x, j);
-			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + x, j);
+			Tile tileLeft = TileUtils.SafeGetTile(i - x, j);
+			Tile tileRight = TileUtils.SafeGetTile(i + x, j);
 			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
 			{
 				leftSolid++;
@@ -162,7 +162,7 @@ public class WaterSluice_Scene : ModTile, ISceneTile
 		{
 			for(int y = myArea.Y; y < myArea.Y + myArea.Height; y++)
 			{
-				var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				var tile = TileUtils.SafeGetTile(x, y);
 				if(tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 0)
 				{
 					Lighting.AddLight(x, y, 0.1f, 0.5f, 1f);

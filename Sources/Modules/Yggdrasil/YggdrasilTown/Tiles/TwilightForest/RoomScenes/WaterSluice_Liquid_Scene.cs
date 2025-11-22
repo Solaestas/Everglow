@@ -15,8 +15,8 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		int rightSolid = 0;
 		for (int x = 1; x < 15; x++)
 		{
-			Tile tileLeft = YggdrasilWorldGeneration.SafeGetTile(i - x, j);
-			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + x, j);
+			Tile tileLeft = TileUtils.SafeGetTile(i - x, j);
+			Tile tileRight = TileUtils.SafeGetTile(i + x, j);
 			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
 			{
 				leftSolid++;
@@ -81,7 +81,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		// for (int i = 0; i < 300; i++)
 		// {
 		// Vector2 drawPos = worldPos + new Vector2(0, i * 2);
-		// var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos.ToTileCoordinates());
+		// var tile = TileUtils.SafeGetTile(drawPos.ToTileCoordinates());
 		// float liquidCut = (16 - drawPos.Y % 16) * 16f;
 		// if ((Collision.IsWorldPointSolid(drawPos) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
 		// {
@@ -108,7 +108,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		for (int i = 0; i < 300; i++)
 		{
 			Vector2 drawPos = worldPos + new Vector2(0, i * 2);
-			var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos.ToTileCoordinates());
+			var tile = TileUtils.SafeGetTile(drawPos.ToTileCoordinates());
 			float liquidCut = (16 - drawPos.Y % 16) * 16f;
 			float waterWidth = 3;
 			if ((Collision.IsWorldPointSolid(drawPos) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
@@ -132,7 +132,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		for (int i = 0; i < 300; i++)
 		{
 			Vector2 drawPos = worldPos + new Vector2(0, i * 2);
-			var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos.ToTileCoordinates());
+			var tile = TileUtils.SafeGetTile(drawPos.ToTileCoordinates());
 			float liquidCut = (16 - drawPos.Y % 16) * 16f;
 			float waterWidth = 29;
 			if ((Collision.IsWorldPointSolid(drawPos) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
@@ -166,7 +166,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		for (int i = 0; i < 300; i++)
 		{
 			Vector2 drawPos = worldPos + new Vector2(0, i * 2);
-			var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos.ToTileCoordinates());
+			var tile = TileUtils.SafeGetTile(drawPos.ToTileCoordinates());
 			float liquidCut = (16 - drawPos.Y % 16) * 16f;
 			if ((Collision.IsWorldPointSolid(drawPos) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
 			{
@@ -219,7 +219,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 		// {
 		// (offset0, offset1) = (offset1, offset0);
 		// }
-		// var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos.ToTileCoordinates());
+		// var tile = TileUtils.SafeGetTile(drawPos.ToTileCoordinates());
 		// float liquidCut = (16 - drawPos.Y % 16) * 16f;
 		// if ((Collision.IsWorldPointSolid(drawPos) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
 		// {
@@ -272,7 +272,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 				(offset0, offset1) = (offset1, offset0);
 				(drawPos0, drawPos1) = (drawPos1, drawPos0);
 			}
-			var tile = YggdrasilWorldGeneration.SafeGetTile(drawPos0.ToTileCoordinates());
+			var tile = TileUtils.SafeGetTile(drawPos0.ToTileCoordinates());
 			float liquidCut = (16 - drawPos0.Y % 16) * 16f;
 			if ((Collision.IsWorldPointSolid(drawPos0) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
 			{

@@ -14,8 +14,8 @@ public class TwilightCastle_RoomScene_Background : TileVFX
 		int rightSolid = 0;
 		for (int x = 1; x < 15; x++)
 		{
-			Tile tileLeft = YggdrasilWorldGeneration.SafeGetTile(i - x, j);
-			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + x, j);
+			Tile tileLeft = TileUtils.SafeGetTile(i - x, j);
+			Tile tileRight = TileUtils.SafeGetTile(i + x, j);
 			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
 			{
 				leftSolid++;

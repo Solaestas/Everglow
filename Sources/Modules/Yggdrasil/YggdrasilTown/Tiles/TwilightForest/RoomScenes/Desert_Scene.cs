@@ -30,8 +30,8 @@ public class Desert_Scene : ModTile, ISceneTile
 		int rightSolid = 0;
 		for (int x = 1; x < 15; x++)
 		{
-			Tile tileLeft = YggdrasilWorldGeneration.SafeGetTile(i - x, j);
-			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + x, j);
+			Tile tileLeft = TileUtils.SafeGetTile(i - x, j);
+			Tile tileRight = TileUtils.SafeGetTile(i + x, j);
 			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
 			{
 				leftSolid++;
@@ -77,7 +77,7 @@ public class Desert_Scene : ModTile, ISceneTile
 			direction = -1;
 		}
 
-		Tile tile_lantern = YggdrasilWorldGeneration.SafeGetTile(otD.OriginTilePos + new Point(7 * direction, 5));
+		Tile tile_lantern = TileUtils.SafeGetTile(otD.OriginTilePos + new Point(7 * direction, 5));
 		if (tile_lantern.TileType == ModContent.TileType<SandgoldLantern>() && tile_lantern.TileFrameX == 0)
 		{
 			tex0 = ModAsset.Desert_Scene_Close_lightUp.Value;

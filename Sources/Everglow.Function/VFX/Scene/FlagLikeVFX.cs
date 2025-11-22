@@ -17,6 +17,13 @@ public class FlagLikeVFX : TileVFX
 
 	public Vector2 AnchorOffset = Vector2.zeroVector;
 
+	public bool Flip_H = false;
+
+	/// <summary>
+	/// This associate with the distort magnitude in wind push.
+	/// </summary>
+	public float Hardness = 1f;
+
 	public void GenerateMeshgrid()
 	{
 		int width = Texture.Width / 16;
@@ -49,34 +56,36 @@ public class FlagLikeVFX : TileVFX
 					origPos.X = Meshgrid[x, y - 1].X;
 					Meshgrid[x, y].Y += MathF.Pow(Meshgrid.GetLength(1) - y, 2) * 0.006f;
 				}
-				Meshgrid[x, y] += GetWindPush(Meshgrid[x, y].X, Meshgrid[x, y].Y);
+				Meshgrid[x, y] += GetWindPush(Meshgrid[x, y].X, Meshgrid[x, y].Y, Hardness);
 				Meshgrid[x, y] += (origPos - Meshgrid[x, y]) * 0.2f;
 
 				if (y < Meshgrid.GetLength(1) - 1)
 				{
-					PushFrom(ref origPos, Meshgrid[x, y + 1]);
+					PushFrom(ref origPos, ref Meshgrid[x, y + 1]);
 				}
 				if (y > 0)
 				{
-					PushFrom(ref origPos, Meshgrid[x, y - 1]);
+					PushFrom(ref origPos, ref Meshgrid[x, y - 1]);
 				}
 				if (x < Meshgrid.GetLength(0) - 1)
 				{
-					PushFrom(ref origPos, Meshgrid[x + 1, y]);
+					PushFrom(ref origPos, ref Meshgrid[x + 1, y]);
 				}
 				if (x > 0)
 				{
-					PushFrom(ref origPos, Meshgrid[x - 1, y]);
+					PushFrom(ref origPos, ref Meshgrid[x - 1, y]);
 				}
 			}
 		}
 		base.Update();
 	}
 
-	public void PushFrom(ref Vector2 origPosition, Vector2 targetPos)
+	public void PushFrom(ref Vector2 origPosition, ref Vector2 targetPos)
 	{
 		Vector2 totarget = targetPos - origPosition;
-		origPosition += totarget.NormalizeSafe() * (totarget.Length() - 16) * 0.1f;
+		Vector2 force = totarget.NormalizeSafe() * (totarget.Length() - 16) * 1f;
+		origPosition += force;
+		targetPos -= force;
 	}
 
 	public override void Draw()
@@ -106,26 +115,30 @@ public class FlagLikeVFX : TileVFX
 	{
 		Vector2 position = Meshgrid[xIndex, yIndex];
 		Vector2 texCoord = new Vector2(xIndex, yIndex) / Texture.Size() * 16;
+		if(Flip_H)
+		{
+			texCoord.X = 1 - texCoord.X;
+		}
 		bars.Add(position, Lighting.GetColor(position.ToTileCoordinates()), new Vector3(texCoord, 0));
 	}
 
-	public static Vector2 GetWindPush(Vector2 pos)
+	public static Vector2 GetWindPush(Vector2 pos, float hardness)
 	{
-		return GetWindPush(pos.X, pos.Y);
+		return GetWindPush(pos.X, pos.Y, hardness);
 	}
 
-	public static Vector2 GetWindPush(float x, float y)
+	public static Vector2 GetWindPush(float x, float y, float hardness)
 	{
 		float noise = 0;
-		float timeValue = (float)Main.time * 0.008f;
+		float timeValue = (float)Main.time * 0.08f;
 
 		for (int i = 0; i < 8; i++)
 		{
-			noise += MathF.Sin(timeValue * MathF.Pow(2, i) + (x * 0.025f + i)) * MathF.Pow(2, -i);
+			noise += MathF.Sin((timeValue + x * 0.15f + i) * MathF.Pow(2, i)) * MathF.Pow(2, -i);
 		}
 		for (int j = 0; j < 8; j++)
 		{
-			noise += MathF.Sin(timeValue * MathF.Pow(2, j) + (y * 0.025f + j)) * MathF.Pow(2, -j);
+			noise += MathF.Sin((timeValue + y * 0.15f) + j * MathF.Pow(2, j)) * MathF.Pow(2, -j);
 		}
 		float pushX = noise * 1f * Main.windSpeedCurrent + Main.windSpeedCurrent * 4f;
 		if (Main.tile[new Vector2(x, y).ToTileCoordinates()].WallType > WallID.None)
@@ -144,6 +157,6 @@ public class FlagLikeVFX : TileVFX
 			}
 		}
 
-		return new Vector2(pushX, 0) + addVel;
+		return (new Vector2(pushX, 0) + addVel) * hardness;
 	}
 }

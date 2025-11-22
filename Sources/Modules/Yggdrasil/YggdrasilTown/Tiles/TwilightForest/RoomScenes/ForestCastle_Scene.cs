@@ -30,20 +30,61 @@ public class ForestCastle_Scene : ModTile, ISceneTile
 		return false;
 	}
 
+	public bool FlipHorizontally(int i, int j)
+	{
+		int leftSolid = 0;
+		int rightSolid = 0;
+		for (int x = 1; x < 15; x++)
+		{
+			Tile tileLeft = TileUtils.SafeGetTile(i - x, j);
+			Tile tileRight = TileUtils.SafeGetTile(i + x, j);
+			if (tileLeft.HasTile && tileLeft.TileType == ModContent.TileType<GreenRelicBrick>())
+			{
+				leftSolid++;
+			}
+			if (tileRight.HasTile && tileRight.TileType == ModContent.TileType<GreenRelicBrick>())
+			{
+				rightSolid++;
+			}
+		}
+		if (rightSolid > leftSolid)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	public void AddScene(int i, int j)
 	{
 		var scene_Close = new TwilightCastle_RoomScene_OverTiles { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.ForestCastle_Scene_Close.Value };
 		scene_Close.CustomDraw += DrawForestCastleOverTile;
 		var scene_Background = new TwilightCastle_RoomScene_Background { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = ModAsset.ForestCastle_Scene_Background.Value };
 		scene_Background.CustomDraw += DrawForestCastleBackground;
-		var flag_Scene = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = Commons.ModAsset.TileBlock3x3.Value, AnchorOffset = new Vector2(600, 0) };
-		Ins.VFXManager.Add(flag_Scene);
-		var flag_Scene2 = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = Commons.ModAsset.TileBlock4x4.Value, AnchorOffset = new Vector2(690, 0) };
-		Ins.VFXManager.Add(flag_Scene2);
 
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern0.Value, new Vector2(528, 16));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern1.Value, new Vector2(492, 14));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern2.Value, new Vector2(512, 16));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern3.Value, new Vector2(482, 14));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern4.Value, new Vector2(544, 16));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern5.Value, new Vector2(558, 16));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern6.Value, new Vector2(570, 16));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern7.Value, new Vector2(582, 52));
+		AddFern(i, j, ModAsset.ForestCastle_Scene_Fern8.Value, new Vector2(588, 102));
 
 		Ins.VFXManager.Add(scene_Close);
 		Ins.VFXManager.Add(scene_Background);
+	}
+
+	public void AddFern(int i, int j, Texture2D texture, Vector2 offset)
+	{
+		bool flip_H = FlipHorizontally(i, j);
+		Vector2 anchor = offset + new Vector2(-16, -8);
+		if (flip_H)
+		{
+			anchor.X = -offset.X;
+		}
+		var flag_Scene = new FlagLikeVFX { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type, Texture = texture, AnchorOffset = anchor, Flip_H = flip_H };
+		Ins.VFXManager.Add(flag_Scene);
 	}
 
 	public void DrawForestCastleOverTile(TwilightCastle_RoomScene_OverTiles otD)

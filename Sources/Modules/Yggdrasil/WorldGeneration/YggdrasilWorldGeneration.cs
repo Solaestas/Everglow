@@ -2054,7 +2054,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
 				Point point = new Point(checkX, checkY);
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
 				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&

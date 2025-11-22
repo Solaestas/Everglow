@@ -20,7 +20,7 @@ public class WaterSluiceBubble : ModDust
 		{
 			dust.active = false;
 		}
-		Tile dustPosTile = YggdrasilWorldGeneration.SafeGetTile(dust.position.ToTileCoordinates());
+		Tile dustPosTile = TileUtils.SafeGetTile(dust.position.ToTileCoordinates());
 		if (dust.position.Y % 16 > dustPosTile.LiquidAmount / 16f)
 		{
 			dust.active = false;

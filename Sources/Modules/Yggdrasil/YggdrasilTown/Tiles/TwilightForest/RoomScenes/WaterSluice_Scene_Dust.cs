@@ -28,7 +28,7 @@ public class WaterSluice_Scene_Dust : Visual
 
 	public override void OnSpawn()
 	{
-		var tile = YggdrasilWorldGeneration.SafeGetTile(Position.ToTileCoordinates());
+		var tile = TileUtils.SafeGetTile(Position.ToTileCoordinates());
 		if (Collision.IsWorldPointSolid(Position) && !Main.tileSolidTop[tile.TileType])
 		{
 			Kill();
