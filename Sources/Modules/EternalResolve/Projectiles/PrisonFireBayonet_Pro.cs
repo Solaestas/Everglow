@@ -145,7 +145,7 @@ namespace Everglow.EternalResolve.Projectiles
 			Player player = Main.player[Projectile.owner];
 			if (!player.wet || player.lavaWet)
 			{
-				target.AddBuff(BuffID.OnFire, 150);
+				target.AddBuff(BuffID.OnFire3, 150);
 			}
 		}
 
