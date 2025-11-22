@@ -80,7 +80,7 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 			}
 			else if (element.HasBuildUp)
 			{
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.BuildUpProgress, buildUpColor, backgroundColor, buffBarScale, handler.Texture.Value);
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, 1 - element.BuildUpProgress, buildUpColor, backgroundColor, buffBarScale, handler.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 		}

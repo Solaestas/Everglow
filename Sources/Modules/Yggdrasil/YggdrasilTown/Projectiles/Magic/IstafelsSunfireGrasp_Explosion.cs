@@ -270,7 +270,7 @@ public class IstafelsSunfireGrasp_Explosion : ModProjectile, IWarpProjectile_war
 			Vector2 dirOuter = (dirMiddle - Projectile.velocity.NormalizeSafe() * 0.15f).NormalizeSafe();
 
 			var colorInner = new Color(-dirInner.X * 0.5f + 0.5f, -dirInner.Y * 0.5f + 0.5f, 0, 0);
-			var colorMiddle = new Color(-dirMiddle.X * 0.5f + 0.5f, -dirMiddle.Y * 0.5f + 0.5f, fade * 1.2f * Main.GameViewMatrix.Zoom.X, 0);
+			var colorMiddle = new Color(-dirMiddle.X * 0.5f + 0.5f, -dirMiddle.Y * 0.5f + 0.5f, fade * 0.12f * Main.GameViewMatrix.Zoom.X, 0);
 			var colorOuter = new Color(-dirOuter.X * 0.5f + 0.5f, -dirOuter.Y * 0.5f + 0.5f, 0, 0);
 
 			bars.Add(drawPos + radiusMiddle, colorMiddle, new Vector3(timeValue, i / 50f, 1));

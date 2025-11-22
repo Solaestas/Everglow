@@ -162,7 +162,8 @@ public sealed class ElementalDebuffInstance
 
 		if (!npc.dontTakeDamage)
 		{
-			npc.lifeRegenCount -= Handler.ProcDamage * 120;
+			//npc.lifeRegenCount -= Handler.ProcDamage * 120;
+			npc.StrikeNPC(Handler.ProcDamage * 2, 0, 1);
 		}
 
 		Handler.PostProc(npc);
@@ -181,7 +182,6 @@ public sealed class ElementalDebuffInstance
 			{
 				return;
 			}
-
 			npc.lifeRegen -= Handler.DotDamage;
 		}
 	}
