@@ -1,5 +1,3 @@
-using Everglow.Yggdrasil.WorldGeneration;
-
 namespace Everglow.Yggdrasil.Common.Fish;
 
 public class FishSystem : ModSystem

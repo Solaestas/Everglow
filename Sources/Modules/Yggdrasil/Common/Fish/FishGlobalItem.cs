@@ -164,18 +164,13 @@ public class FishGlobalItem : GlobalItem
 			float delta = item.Center.Y - liqY;
 			if (delta < 0 || liquid == 255)
 			{
-				float ratio = Main.rand.NextFloat(1) + .5f;
+				float ratio = Main.rand.NextFloat(1) + 0.5f;
 				float buoyancy = Math.Clamp(-delta / item.height * 2, 0, 1);
 				gravity *= -ratio * buoyancy;
-				item.velocity.Y *= .9f;
+				item.velocity.Y *= 0.9f;
 				item.velocity.X = FloatSpeed;
 			}
 		}
-	}
-
-	public void UpdateOnModLiquid(Item item, ref float gravity)
-	{
-		Point itemPos = item.Center.ToTileCoordinates();
 	}
 
 	public override void Update(Item item, ref float gravity, ref float maxFallSpeed)
@@ -191,10 +186,6 @@ public class FishGlobalItem : GlobalItem
 			Hovered = false;
 			Hookable = false;
 			return;
-		}
-		if (FishableInfo.IsModLiquid)
-		{
-			UpdateOnModLiquid(item, ref gravity);
 		}
 		else
 		{

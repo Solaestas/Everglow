@@ -3,6 +3,8 @@ using Everglow.Commons.Graphics;
 using Everglow.Commons.Interfaces;
 using Everglow.Yggdrasil.Common.Fish;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
+using Everglow.Yggdrasil.YggdrasilTown.Liquids;
+using ModLiquidLib.ModLoader;
 using Terraria.DataStructures;
 using Terraria.Enums;
 
@@ -11,11 +13,6 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories
     public class AnemoShell : ModItem
     {
         public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Accessories;
-
-        public override void SetStaticDefaults()
-        {
-            FishSystem.RegisterFish(ModContent.GetInstance<YggdrasilTownBiome>(), new(Type, LiquidID.Water, 0.5f));
-        }
 
         public override void SetDefaults()
         {
