@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Commons.Netcode.Packets;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 
 namespace Everglow.Commons.Utilities;
 

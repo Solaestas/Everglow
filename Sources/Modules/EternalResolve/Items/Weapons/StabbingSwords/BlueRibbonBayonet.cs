@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class BlueRibbonBayonet : StabbingSwordItem
+	public class BlueRibbonBayonet : StabbingSwordItem
 	{
 		public override void SetDefaults()
 		{
@@ -12,7 +12,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 4, 72, 0);
 			Item.shoot = ModContent.ProjectileType<BlueRibbonBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<BlueRibbonBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}

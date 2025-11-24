@@ -1,5 +1,5 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
@@ -17,7 +17,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Orange;
 			Item.value = Item.sellPrice(0, 0, 90, 0);
 			Item.shoot = ModContent.ProjectileType<VegetationBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<VegetationBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
