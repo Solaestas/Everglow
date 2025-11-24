@@ -14,7 +14,7 @@ public class AcytaeaInferno : ModBuff
 		int buffDamage = 100;
 
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = 10;
+		npc.SetLifeRegenExpectedLossPerSecond(10);
 
 		GenerateFire(1, npc.Center);
 
