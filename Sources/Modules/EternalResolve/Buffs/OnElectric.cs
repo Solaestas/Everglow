@@ -1,4 +1,5 @@
 using Everglow.EternalResolve.VFXs;
+using static Everglow.Commons.Utilities.NPCUtils;
 
 namespace Everglow.EternalResolve.Buffs;
 
