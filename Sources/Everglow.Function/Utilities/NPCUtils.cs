@@ -1,6 +1,8 @@
 using System.Reflection;
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Commons.Netcode.Packets;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 
 namespace Everglow.Commons.Utilities;
 
@@ -34,6 +36,84 @@ public class NoGameModeScale : GlobalNPC
 			return;
 		}
 		base.ApplyDifficultyAndPlayerScaling(npc, numPlayers, balance, bossAdjustment);
+	}
+
+	public override void Load()
+	{
+		IL_NPC.UpdateNPC_BuffApplyDOTs += IL_NPCBuff_lifeRegenExpectedLossPerSecondPolish;
+		base.Load();
+	}
+
+	private void IL_NPCBuff_lifeRegenExpectedLossPerSecondPolish(ILContext il)
+	{
+		ILCursor c = new(il);
+
+		// Record total damage in the final tick.
+		if (c.TryGotoNext(
+			MoveType.After,
+			x => x.MatchLdarg0(),
+			x => x.MatchLdfld(out _),
+			x => x.MatchLdcI4(120),
+			x => x.MatchBge(out _)))
+		{
+			c.EmitLdcI4(0);
+			c.EmitStloc(15);
+		}
+
+		if (c.TryGotoNext(
+			MoveType.After,
+			x => x.MatchLdcI4(1),
+			x => x.MatchSub(),
+			x => x.MatchStfld(out _),
+			x => x.MatchLdarg(0)))
+		{
+			c.EmitStarg(0);
+			c.EmitLdloc(15);
+			c.EmitLdcI4(1);
+			c.EmitAdd();
+			c.EmitStloc(15);
+			c.RemoveRange(18);
+		}
+
+		// Then pop the total value.(but it seems fail?)
+		if (c.TryGotoNext(
+			MoveType.After,
+			x => x.MatchLdcI4(-120),
+			x => x.MatchBle(out _)))
+		{
+			var label = c.DefineLabel();
+			c.EmitLdloc(15);
+			c.EmitLdcI4(0);
+			c.EmitBgt(label);
+			c.EmitRet();
+
+			c.MarkLabel(label);
+
+			c.EmitLdarg0();
+			c.EmitLdflda(typeof(Entity).GetField("position"));
+			c.EmitLdfld(typeof(Vector2).GetField("X"));
+			c.EmitConvI4();
+
+			c.EmitLdarg0();
+			c.EmitLdflda(typeof(Entity).GetField("position"));
+			c.EmitLdfld(typeof(Vector2).GetField("Y"));
+			c.EmitConvI4();
+
+			c.EmitLdarg0();
+			c.EmitLdfld(typeof(Entity).GetField("width"));
+			c.EmitLdarg0();
+			c.EmitLdfld(typeof(Entity).GetField("height"));
+
+			c.Emit(OpCodes.Newobj, typeof(Rectangle).GetConstructor(new[] { typeof(int), typeof(int), typeof(int), typeof(int) }));
+			c.EmitLdsfld(typeof(CombatText).GetField("LifeRegenNegative"));
+
+			c.EmitLdloc(15);
+			c.EmitLdcI4(0);
+			c.EmitLdcI4(1);
+
+			c.EmitCall(typeof(CombatText).GetMethod("NewText", new[] { typeof(Rectangle), typeof(Color), typeof(int), typeof(bool), typeof(bool) }));
+			c.EmitPop();
+		}
 	}
 }
 
@@ -154,7 +234,7 @@ public static class NPCUtils
 				Point point = (npc.Bottom + Vector2.UnitY * -2f).ToTileCoordinates();
 				for (int i = 0; i < 200; i++)
 				{
-					if (Main.npc[i].active && Main.npc[i].aiStyle == 7 && Main.npc[i].townNPC && Main.npc[i].ai[0] == 5f && (Main.npc[i].Bottom + Vector2.UnitY * -2f).ToTileCoordinates() == point)
+					if (Main.npc[i].active && Main.npc[i].aiStyle == NPCAIStyleID.Passive && Main.npc[i].townNPC && Main.npc[i].ai[0] == 5f && (Main.npc[i].Bottom + Vector2.UnitY * -2f).ToTileCoordinates() == point)
 					{
 						flag = false;
 						break;
@@ -181,7 +261,7 @@ public static class NPCUtils
 		}
 		Point checkPoint = (npc.Bottom + new Vector2(8 * npc.direction, 8)).ToTileCoordinates() + new Point(npc.direction, -1);
 		Tile checkTile = Main.tile[checkPoint];
-		if (TileLoader.IsClosedDoor(checkTile.TileType) || checkTile.TileType == 388)
+		if (TileLoader.IsClosedDoor(checkTile.TileType) || checkTile.TileType == TileID.TallGateClosed)
 		{
 			return true;
 		}
@@ -244,7 +324,6 @@ public static class NPCUtils
 		}
 		return true;
 	}
-
 
 	#endregion
 
