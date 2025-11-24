@@ -74,7 +74,7 @@ public class Winch : ModTile
 		{
 			for (int j = y; j < y + height; j++)
 			{
-				if (YggdrasilWorldGeneration.SafeGetTile(i, j).HasTile)
+				if (TileUtils.SafeGetTile(i, j).HasTile)
 				{
 					return false;
 				}

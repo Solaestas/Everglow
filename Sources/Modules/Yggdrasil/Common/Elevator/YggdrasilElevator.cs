@@ -111,7 +111,7 @@ public class YggdrasilElevator : BoxEntity
 
 	public override void AI()
 	{
-		var winch = YggdrasilWorldGeneration.SafeGetTile(WinchCoord);
+		var winch = TileUtils.SafeGetTile(WinchCoord);
 		if (winch.TileType != ModContent.TileType<Winch>())
 		{
 			Kill();
