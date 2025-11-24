@@ -1,3 +1,4 @@
+using Everglow.Commons.Utilities;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.EternalResolve.VFXs;
 using SteelSeries.GameSense;
@@ -24,10 +25,10 @@ public class OnElectric : ModBuff
 			buffDamage = 0;
 		}
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = 7;
+		npc.SetLifeRegenExpectedLossPerSecond(7);
 		if (npc.wet)
 		{
-			npc.lifeRegenExpectedLossPerSecond *= 3;
+			npc.SetLifeRegenExpectedLossPerSecond(7 * 3);
 		}
 		if (Main.rand.NextBool(3))
 		{
