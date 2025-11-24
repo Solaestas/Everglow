@@ -207,10 +207,5 @@ namespace Everglow.EternalResolve.Projectiles
 			target.AddBuff(BuffID.Ichor, 900);
 			base.OnHitNPC(target, hit, damageDone);
 		}
-
-		public override void HitTile()
-		{
-			base.HitTile();
-		}
 	}
 }

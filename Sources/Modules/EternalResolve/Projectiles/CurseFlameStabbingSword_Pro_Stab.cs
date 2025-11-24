@@ -2,6 +2,7 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.CommonVFXDusts;
@@ -244,6 +245,25 @@ namespace Everglow.EternalResolve.Projectiles
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) },
 				};
 				Ins.VFXManager.Add(spark);
+			}
+			var hitSparkFixed = new StabbingProjectile_HitEffect()
+			{
+				Active = true,
+				Visible = true,
+				Position = StabEndPoint_WorldPos,
+				MaxTime = 16,
+				Scale = 0.24f,
+				Rotation = Projectile.velocity.ToRotation(),
+				Color = HitTileSparkColor,
+			};
+			Ins.VFXManager.Add(hitSparkFixed);
+
+			Vector2 tilePos = StabEndPoint_WorldPos + new Vector2(1, 0).RotatedBy(Projectile.velocity.ToRotation());
+			Point tileCoord = tilePos.ToTileCoordinates();
+			Tile tile = WorldGenMisc.SafeGetTile(tileCoord);
+			if (TileUtils.Sets.TileFragile[tile.TileType])
+			{
+				WorldGenMisc.DamageTile(tileCoord, 100);
 			}
 		}
 	}

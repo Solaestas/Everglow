@@ -304,7 +304,7 @@ public abstract class StabbingProjectile_Stab : ModProjectile, IWarpProjectile
 			Active = true,
 			Visible = true,
 			Position = StabEndPoint_WorldPos,
-			MaxTime = 10,
+			MaxTime = 16,
 			Scale = 0.24f,
 			Rotation = Projectile.velocity.ToRotation(),
 			Color = HitTileSparkColor,
