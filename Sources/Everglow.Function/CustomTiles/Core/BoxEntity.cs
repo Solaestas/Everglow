@@ -67,13 +67,13 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		float tMin = Math.Max(txMin, tyMin), tMax = Math.Min(txMax, tyMax);
 		if (tMin >= 0 && tMin <= 1 && tMin <= tMax)
 		{
-			if (txMin <= tyMin)
+			if (txMin < tyMin)
 			{
 				result.Normal = new Vector2(0, Math.Sign(stride.Y));
 				result.Stride = stride with { Y = stride.Y * tyMin - 0.001f * Math.Sign(stride.Y) } + Velocity;
 				obj.Velocity = obj.Velocity with { Y = Velocity.Y };
 			}
-			else
+			else if(txMin > tyMin)
 			{
 				result.Normal = new Vector2(Math.Sign(stride.X), 0);
 				result.Stride = stride with { X = stride.X * txMin } + Velocity;
