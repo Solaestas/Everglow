@@ -1,5 +1,5 @@
 using Everglow.EternalResolve.VFXs;
-using static Everglow.Commons.Utilities.NPCUtils;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.EternalResolve.Buffs;
 
@@ -46,7 +46,5 @@ public class OnElectric : ModBuff
 			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 1f, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) },
 		};
 		Ins.VFXManager.Add(electric);
-
-		base.Update(npc, ref buffIndex);
 	}
 }
