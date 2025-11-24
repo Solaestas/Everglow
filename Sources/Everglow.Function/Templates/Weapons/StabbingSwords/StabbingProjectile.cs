@@ -421,7 +421,7 @@ public abstract class StabbingProjectile : ModProjectile, IWarpProjectile
 			Active = true,
 			Visible = true,
 			Position = hitPosition,
-			MaxTime = 8,
+			MaxTime = 4,
 			Scale = Math.Min(0.12f * power, 0.5f),
 			Rotation = rotation,
 			Color = HitTileSparkColor,
