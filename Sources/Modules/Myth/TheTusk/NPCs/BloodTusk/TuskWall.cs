@@ -7,11 +7,17 @@ namespace Everglow.Myth.TheTusk.NPCs.BloodTusk;
 public class TuskWall : BoxEntity
 {
 	public bool Flip;
-	public int Timer = 2;
+	public int Timer = 3;
 	public float BottomY = -1;
 	public NPC Tusk;
 	public bool StartShake = false;
 	public bool EndShake = false;
+
+	public override void SetDefaults()
+	{
+		Size = new Vector2(194, 0);
+		Timer = 3;
+	}
 
 	public override void AI()
 	{

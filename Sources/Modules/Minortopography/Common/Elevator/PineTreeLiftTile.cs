@@ -1,11 +1,10 @@
 using Everglow.Commons.CustomTiles.Core;
-using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Vertex;
 using Everglow.Minortopography.Common.Elevator.Tiles;
 
 namespace Everglow.Minortopography.Common.Elevator;
 
-internal class PineTreeLiftTile : BoxEntity
+public class PineTreeLiftTile : BoxEntity
 {
 	/// <summary>
 	/// 接下来运行的方向

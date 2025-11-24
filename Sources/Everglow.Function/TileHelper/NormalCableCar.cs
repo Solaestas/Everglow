@@ -15,6 +15,12 @@ public class NormalCableCar : BoxEntity
 	public bool Initialized = false;
 	public List<int> InsidePlayers = new List<int>();
 
+	public override void SetDefaults()
+	{
+		Size = new Vector2(80, 80);
+		Direction = -1;
+	}
+
 	public override void AI()
 	{
 		if (!Initialized)
@@ -68,7 +74,7 @@ public class NormalCableCar : BoxEntity
 			return;
 		}
 		CheckMouseClick();
-		foreach(Player player in Main.player)
+		foreach (Player player in Main.player)
 		{
 			if (InsidePlayers.Contains(player.whoAmI))
 			{
@@ -87,7 +93,7 @@ public class NormalCableCar : BoxEntity
 			{
 				if (Main.MouseWorld.Y > Position.Y && Main.MouseWorld.Y < Position.Y + Size.Y)
 				{
-					if(!InsidePlayers.Contains(Main.myPlayer))
+					if (!InsidePlayers.Contains(Main.myPlayer))
 					{
 						InsidePlayers.Add(Main.myPlayer);
 						CombatText.NewText(new Rectangle((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 0, 0), Color.White, "Now you sit in the cable car.");

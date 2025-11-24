@@ -1,8 +1,6 @@
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.Elevator.Tiles;
-using Everglow.Yggdrasil.WorldGeneration;
-using Terraria.Audio;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
@@ -104,7 +102,7 @@ public class YggdrasilElevator : BoxEntity
 
 	public override Color MapColor => new Color(122, 91, 79);
 
-	public YggdrasilElevator()
+	public override void SetDefaults()
 	{
 		Size = new Vector2(96, 16);
 	}

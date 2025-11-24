@@ -103,7 +103,7 @@ public class PineWinch : ModTile
 			}
 			if (!hasLift)
 			{
-				ColliderManager.Instance.Add(new PineTreeLiftTile() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8) });
+				ColliderManager.Instance.Add<PineTreeLiftTile>(new Vector2(i, j + 15) * 16 - new Vector2(48, 8));
 				thisTile.TileFrameX = 1;
 			}
 		}

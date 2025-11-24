@@ -46,17 +46,18 @@ public class ColliderManager : ILoadable
 	}
 
 	/// <summary>
-	/// Adds the rigid entity to the collection, enabling the container if it is not already enabled.
+	/// Adds the rigid entity to the collection, enabling the manager if it is not already enabled.
+	/// <br/>Not recommended for use, call <see cref="Add{TRigidEntity}(Vector2)"/> instead.
 	/// </summary>
 	/// <remarks>
 	/// If the collection exceeds its capacity, inactive entities may be removed to make room for the new entity.
 	/// <br/>If no inactive entities are available and overflow is not allowed, the first entity in the collection will be replaced.
 	/// </remarks>
 	/// <param name="entity">The rigid entity to add to the collection.</param>
-	public void Add(RigidEntity entity)
+	private void Add(RigidEntity entity)
 	{
 		Enable = true;
-		if (rigidbodies.Count > Capacity)
+		if (rigidbodies.Count >= Capacity)
 		{
 			int removedCount = rigidbodies.RemoveAll(rg => !rg.Active);
 			if (removedCount == 0 && !AllowOverflow) // TODO: Add more intelligent removal strategy. Allow banning removal for some important entities.
@@ -66,6 +67,31 @@ public class ColliderManager : ILoadable
 			}
 		}
 		rigidbodies.Add(entity);
+	}
+
+	/// <summary>
+	/// Adds the rigid entity to the collection, enabling the manager if it is not already enabled.
+	/// <br/>Automatically creates an instance of the specified rigid entity type using <c>new()</c>.
+	/// </summary>
+	/// <remarks>
+	/// If the collection exceeds its capacity, inactive entities may be removed to make room for the new entity.
+	/// <br/>If no inactive entities are available and overflow is not allowed, the first entity in the collection will be replaced.
+	/// </remarks>
+	/// <param name="position">The initial position of the rigid entity.</param>
+	public TRigidEntity Add<TRigidEntity>(Vector2 position)
+		where TRigidEntity : RigidEntity, new()
+	{
+		var entity = new TRigidEntity()
+		{
+			Position = position,
+		};
+
+		Add(entity);
+
+		entity.SetDefaults();
+		entity.OnSpawn();
+
+		return entity;
 	}
 
 	/// <summary>

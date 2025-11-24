@@ -19,10 +19,6 @@ public class NormalCableCar_item : ModItem
 		Item.rare = ItemRarityID.White;
 	}
 
-	public override void HoldItem(Player player)
-	{
-	}
-
 	public override bool? UseItem(Player player)
 	{
 		Point mouseWorldTile = Main.MouseWorld.ToTileCoordinates();
@@ -32,9 +28,9 @@ public class NormalCableCar_item : ModItem
 			{
 				var checkPoint = mouseWorldTile + new Point(i, j);
 				Tile tile = Main.tile[checkPoint];
-				if(tile.TileType == ModContent.TileType<CableCarJoint>())
+				if (tile.TileType == ModContent.TileType<CableCarJoint>())
 				{
-					ColliderManager.Instance.Add(new NormalCableCar() { Position = checkPoint.ToWorldCoordinates(), Size = new Vector2(80, 80), Direction = -1, Active = true });
+					ColliderManager.Instance.Add<NormalCableCar>(checkPoint.ToWorldCoordinates());
 				}
 			}
 		}

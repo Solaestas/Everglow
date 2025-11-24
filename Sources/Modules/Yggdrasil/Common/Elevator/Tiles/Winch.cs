@@ -1,5 +1,4 @@
 using Everglow.Commons.CustomTiles;
-using Everglow.Yggdrasil.WorldGeneration;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
@@ -35,36 +34,23 @@ public class Winch : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		Tile tile = Main.tile[i, j];
-		if(!CheckEmpty(i - 2, j + 1, 3, 3))
-		{
-			return;
-		}
-		if (!CheckEmpty(i - 2, j + 1, 3, 3))
+		// Skip closer updates.
+		if (closer)
 		{
 			return;
 		}
 
-		bool hasLift = false;
-		foreach (var boxEntity in ColliderManager.Instance.OfType<YggdrasilElevator>())
-		{
-			if (boxEntity is YggdrasilElevator elevator)
-			{
-				if (elevator.WinchCoord == new Point(i, j))
-				{
-					hasLift = true;
-					break;
-				}
-			}
-		}
-		if (!hasLift)
-		{
-			ColliderManager.Instance.Add(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8), WinchCoord = new Point(i, j) });
-			tile.TileFrameY = 0;
-		}
+		Tile winchTile = Main.tile[i, j];
+		var hasLift = ColliderManager.Instance.OfType<YggdrasilElevator>().Any(r => r.WinchCoord == new Point(i, j));
 		if (hasLift)
 		{
-			tile.TileFrameY = 18;
+			winchTile.TileFrameY = 18;
+		}
+		else
+		{
+			var newElevator = ColliderManager.Instance.Add<YggdrasilElevator>(new Vector2(i, j + 15) * 16 - new Vector2(48, 8));
+			newElevator.WinchCoord = new Point(i, j);
+			winchTile.TileFrameY = 0;
 		}
 	}
 

@@ -13,6 +13,14 @@ public abstract class RigidEntity
 
 	public virtual Color MapColor => Color.White;
 
+	public virtual void SetDefaults()
+	{
+	}
+
+	public virtual void OnSpawn()
+	{
+	}
+
 	public void Update()
 	{
 		UpdatePosition();
