@@ -53,8 +53,8 @@ public class ValueBarHelper
 	public static void DrawBreakOutEffect(SpriteBatch spriteBatch, Vector2 position, float valueTime, float scale = 1)
 	{
 		var drawScale = scale * (3 + valueTime * 6);
-		var bloom = ModAsset.Point.Value;
-		spriteBatch.Draw(bloom, position, null, new Color(1f, 1f, 1f, 0) * (1 - valueTime), 0, bloom.Size() / 2, drawScale, SpriteEffects.None, 0);
+		var bloom = ModAsset.PieChartBloom_ring.Value;
+		spriteBatch.Draw(bloom, position, null, new Color(1f, 1f, 1f, 0) * (1 - valueTime), 0, bloom.Size() / 2, drawScale * 1.5f, SpriteEffects.None, 0);
 	}
 
 	/// <summary>
@@ -68,8 +68,12 @@ public class ValueBarHelper
 	/// <param name="scale"></param>
 	public static void DrawCircleValueBar(SpriteBatch spriteBatch, Vector2 position, float value, Color color0, Color color1, float scale = 1, Texture2D centerIcon = null)
 	{
-		var bloom = ModAsset.Point.Value;
-		spriteBatch.Draw(bloom, position, null, new Color(1f, 1f, 1f, 0) * 0.5f, 0, bloom.Size() / 2, scale * 3, SpriteEffects.None, 0);
+		var bloom_shadow = ModAsset.PieChartBloom_black.Value;
+		var bloom = ModAsset.PieChartBloom.Value;
+		Color bloomColor = color1;
+		bloomColor.A = 0;
+		spriteBatch.Draw(bloom_shadow, position, null, Color.White * 0.8f, 0, bloom_shadow.Size() / 2, scale * 4.5f, SpriteEffects.None, 0);
+		spriteBatch.Draw(bloom, position, null, bloomColor, 0, bloom.Size() / 2, scale * 4.5f, SpriteEffects.None, 0);
 		spriteBatch.Draw(ModAsset.White.Value, position, null, Color.White, 0, Vector2.Zero, 0, SpriteEffects.None, 0);
 
 		var frameColor = new Color(0.05f, 0.05f, 0.08f, 0.6f);
@@ -80,14 +84,13 @@ public class ValueBarHelper
 		}
 
 		Color progressColor = color0;
-		Color progressInnerColor = progressColor * 0.9f;
+		Color progressInnerColor = progressColor * 1.9f;
 		progressInnerColor.A = 255;
 
 		Vector2 radius = new Vector2(0, 100) * scale;
 		Vector2 frameRadiusOffset = new Vector2(0, 40) * scale;
 		Vector2 frameInnerRadiusOffset = frameRadiusOffset * 0.3f;
-		Vector2 progressRadiusOffset = frameRadiusOffset * 0.35f;
-		Vector2 progressInnerRadiusOffset = frameRadiusOffset * 0.3f;
+		Vector2 progressInnerRadiusOffset = frameRadiusOffset * 0.5f;
 
 		// Draw frame
 		if (centerIcon is null)
@@ -98,22 +101,18 @@ public class ValueBarHelper
 		else
 		{
 			var fullFrame = (radius + frameRadiusOffset) / 2f;
-			var fullFrameInner = (radius + frameInnerRadiusOffset) / 2f;
-			DrawCircle(spriteBatch, position, frameColor, fullFrame, fullFrame, 1);
-			DrawCircle(spriteBatch, position, frameInnerColor, fullFrameInner, fullFrameInner, 1);
+			DrawCircle(spriteBatch, position, frameColor * 1.5f, fullFrame, fullFrame, 1);
 		}
 
 		// Draw progress
-		float progressBarSize = 0.6f;
-		DrawCircle(spriteBatch, position, frameColor, radius * progressBarSize, frameRadiusOffset, value);
-		DrawCircle(spriteBatch, position, progressColor, radius * progressBarSize, progressRadiusOffset, value);
+		float progressBarSize = 0.7f;
 		DrawCircle(spriteBatch, position, progressInnerColor, radius * progressBarSize, progressInnerRadiusOffset, value);
 
 		if (centerIcon is not null)
 		{
 			var circleRadius = (radius - progressInnerRadiusOffset).Length();
 			var iconScale = circleRadius * 2 * 0.95f / centerIcon.Width;
-			var iconColor = new Color(1f, 1f, 1f, 0.5f) * 0.25f;
+			var iconColor = new Color(0.25f, 0.25f, 0.25f, 0.5f) * 0.25f;
 			spriteBatch.Draw(centerIcon, position, null, iconColor, 0, centerIcon.Size() / 2, iconScale, SpriteEffects.None, 0);
 		}
 	}
