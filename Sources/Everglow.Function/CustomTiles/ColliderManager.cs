@@ -177,14 +177,12 @@ public class ColliderManager : ILoadable
 
 	private void Update()
 	{
-		for (int i = 0; i < rigidbodies.Count; i++)
+		foreach (var rigidbody in rigidbodies.Where(r => r.Active))
 		{
-			var rg = rigidbodies[i];
-			if (rg.Active)
-			{
-				rg.Update();
-			}
+			rigidbody.Update();
 		}
+
+		rigidbodies.RemoveAll(r => !r.Active);
 	}
 
 	private void Clear()
