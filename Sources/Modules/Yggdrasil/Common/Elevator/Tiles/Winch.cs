@@ -1,20 +1,9 @@
-using Everglow.Commons.CustomTiles;
+using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
-public class Winch : ModTile
+public class Winch : WinchTile<YggdrasilElevator>
 {
-	public override void PostSetDefaults()
-	{
-		Main.tileSolid[Type] = true;
-		Main.tileBlendAll[Type] = true;
-		Main.tileBlockLight[Type] = true;
-
-		AddMapEntry(new Color(112, 75, 75));
-
-		DustType = DustID.Iron;
-	}
-
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
 		blockDamaged = false;
@@ -30,43 +19,6 @@ public class Winch : ModTile
 	{
 		Tile thisTile = Main.tile[i, j];
 		thisTile.TileFrameX = 0;
-	}
-
-	public override void NearbyEffects(int i, int j, bool closer)
-	{
-		// Skip closer updates.
-		if (closer)
-		{
-			return;
-		}
-
-		Tile winchTile = Main.tile[i, j];
-		var hasLift = ColliderManager.Instance.OfType<YggdrasilElevator>().Any(r => r.WinchCoord == new Point(i, j));
-		if (hasLift)
-		{
-			winchTile.TileFrameY = 18;
-		}
-		else
-		{
-			var newElevator = ColliderManager.Instance.Add<YggdrasilElevator>(new Vector2(i, j + 15) * 16 - new Vector2(48, 8));
-			newElevator.WinchCoord = new Point(i, j);
-			winchTile.TileFrameY = 0;
-		}
-	}
-
-	public bool CheckEmpty(int x, int y, int width, int height)
-	{
-		for (int i = x; i < x + width; i++)
-		{
-			for (int j = y; j < y + height; j++)
-			{
-				if (TileUtils.SafeGetTile(i, j).HasTile)
-				{
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

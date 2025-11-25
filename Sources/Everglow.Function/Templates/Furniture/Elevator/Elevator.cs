@@ -87,9 +87,11 @@ public abstract class Elevator : BoxEntity
 	/// </summary>
 	public float Acceleration = 0.1f;
 
-	public string ElevatorCableTexture;
+	public abstract string ElevatorTexture { get; }
 
-	public string ElevatorTexture;
+	public abstract string ElevatorCableTexture { get; }
+
+	public virtual int ElevatorCableJointOffset => 0;
 
 	public override Color MapColor => new Color(122, 91, 79);
 
@@ -232,17 +234,29 @@ public abstract class Elevator : BoxEntity
 	{
 		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
-			Color drawC = Lighting.GetColor(Box.Center.ToTileCoordinates());
-			var texture = ModContent.Request<Texture2D>(ElevatorTexture).Value;
-			Main.spriteBatch.Draw(texture, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawC, 0, texture.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			DrawElevatorCable();
+			Color lightColor = Lighting.GetColor(Box.Center.ToTileCoordinates());
+
+			if (PreDrawElevatorCable(lightColor))
+			{
+				DrawElevatorCable(lightColor);
+				PostDrawElevatorCable(lightColor);
+			}
+
+			if (PreDrawElevator(lightColor))
+			{
+				Main.spriteBatch.Draw(ModContent.Request<Texture2D>(ElevatorTexture).Value, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), lightColor);
+				PostDrawElevator(lightColor);
+			}
 		}
 	}
 
-	/// <summary>
-	/// TODO: Update the code.It's legacy.
-	/// </summary>
-	public virtual void DrawElevatorCable()
+	public virtual bool PreDrawElevator(Color lightColor) => true;
+
+	public virtual void PostDrawElevator(Color lightColor)
+	{
+	}
+
+	public virtual void DrawElevatorCable(Color lightColor)
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
@@ -250,7 +264,7 @@ public abstract class Elevator : BoxEntity
 		var bars = new List<Vertex2D>();
 		for (int f = 0; f < 1000; f++)
 		{
-			var jointPos = new Vector2(0, -125 - f * 12);
+			var jointPos = new Vector2(0, -ElevatorCableJointOffset - f * 12);
 			Vector2 drawPos = Box.Center - Main.screenPosition;
 			Color drawcRope = Lighting.GetColor((int)(Position.X / 16f) + 2, (int)((Position.Y - f * 12) / 16f) - 7);
 
@@ -268,5 +282,11 @@ public abstract class Elevator : BoxEntity
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+	}
+
+	public virtual bool PreDrawElevatorCable(Color lightColor) => true;
+
+	public virtual void PostDrawElevatorCable(Color lightColor)
+	{
 	}
 }
