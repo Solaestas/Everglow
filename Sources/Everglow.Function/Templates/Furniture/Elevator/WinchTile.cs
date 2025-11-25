@@ -1,55 +1,42 @@
+using Everglow.Commons.CustomTiles;
+
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
-public abstract class WinchTile : ModTile
+public abstract class WinchTile<TElevator> : ModTile
+	where TElevator : Elevator, new()
 {
-	// Add Elevator.
-	public override void NearbyEffects(int i, int j, bool closer)
+	public override void SetStaticDefaults()
 	{
-		// Tile tile = Main.tile[i, j];
-		// if (!CheckEmpty(i - 2, j + 1, 3, 3))
-		// {
-		// return;
-		// }
-		// if (!CheckEmpty(i - 2, j + 1, 3, 3))
-		// {
-		// return;
-		// }
+		Main.tileSolid[Type] = true;
+		Main.tileBlendAll[Type] = true;
+		Main.tileBlockLight[Type] = true;
 
-		// bool hasLift = false;
-		// foreach (var boxEntity in ColliderManager.Instance.OfType<YggdrasilElevator>())
-		// {
-		// if (boxEntity is YggdrasilElevator elevator)
-		// {
-		// if (elevator.WinchCoord == new Point(i, j))
-		// {
-		// hasLift = true;
-		// break;
-		// }
-		// }
-		// }
-		// if (!hasLift)
-		// {
-		// ColliderManager.Instance.Add(new YggdrasilElevator() { Position = new Vector2(i, j + 15) * 16 - new Vector2(48, 8), WinchCoord = new Point(i, j) });
-		// tile.TileFrameY = 0;
-		// }
-		// if (hasLift)
-		// {
-		// tile.TileFrameY = 18;
-		// }
+		AddMapEntry(new Color(112, 75, 75));
+
+		DustType = DustID.Iron;
 	}
 
-	public bool CheckEmpty(int x, int y, int width, int height)
+	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		for (int i = x; i < x + width; i++)
+		// Skip closer updates.
+		if (closer)
 		{
-			for (int j = y; j < y + height; j++)
-			{
-				if (Elevator.SafeGetTile(i, j).HasTile)
-				{
-					return false;
-				}
-			}
+			return;
 		}
-		return true;
+
+		Point winchTileCoord = new Point(i, j);
+		Tile winchTile = Main.tile[winchTileCoord];
+		if (ColliderManager.Instance.OfType<TElevator>()
+			.Any(r => r.WinchCoord == winchTileCoord))
+		{
+			winchTile.TileFrameY = 18;
+		}
+		else
+		{
+			var newElevator = ColliderManager.Instance.Add<TElevator>(new Vector2(i, j + 15) * 16 - new Vector2(48, 8));
+			newElevator.WinchTileType = Type;
+			newElevator.WinchCoord = winchTileCoord;
+			winchTile.TileFrameY = 0;
+		}
 	}
 }

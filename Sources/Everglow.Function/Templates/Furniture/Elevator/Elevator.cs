@@ -16,7 +16,7 @@ public abstract class Elevator : BoxEntity
 		Decelerating = 3,
 	}
 
-	public abstract int WinchTileType { get; }
+	public int WinchTileType { get; set; }
 
 	/// <summary>
 	/// Coordinate of winch tile in <see cref="Main.tile"/>.
