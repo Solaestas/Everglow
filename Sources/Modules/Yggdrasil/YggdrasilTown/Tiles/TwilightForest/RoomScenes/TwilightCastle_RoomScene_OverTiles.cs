@@ -43,6 +43,7 @@ public class TwilightCastle_RoomScene_OverTiles : TileVFX
 
 	public override void OnSpawn()
 	{
+		MaxDiatanceOutOfScreen = Main.screenWidth / 2f;
 	}
 
 	public override void Draw()

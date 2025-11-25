@@ -6,9 +6,11 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Fishing.FishingRods;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Pets;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Ores;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Tools.Developer;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Liquids;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
@@ -2233,6 +2235,7 @@ public class YggdrasilTownGeneration
 					ModAsset.TCRoom_Rd_01_BloodyChurch_40x21_Path,
 					ModAsset.TCRoom_Rd_02_Desert_40x21_Path,
 					ModAsset.TCRoom_Rd_03_WaterSluice_40x21_Path,
+					ModAsset.TCRoom_Rd_04_Forest_40x21_Path,
 				};
 				if (x == 2)
 				{
@@ -2242,44 +2245,35 @@ public class YggdrasilTownGeneration
 						ModAsset.TCRoom_Ld_01_BloodyChurch_40x21_Path,
 						ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
 						ModAsset.TCRoom_Ld_03_WaterSluice_40x21_Path,
+						ModAsset.TCRoom_Ld_04_Forest_40x21_Path,
 					};
 				}
-				QuickBuild(roomOriginX - 20, roomOriginY - 10, randomRooms[GenRand.Next(randomRooms.Length)]);
-
-				// KillRectangleAreaOfTile(roomOriginX - 18, roomOriginY - 9, roomOriginX + 18, roomOriginY + 9);
-				// int randLampCount = GenRand.Next(1, 4);
-				// for (int i = 0; i < randLampCount; i++)
-				// {
-				// int lampX = roomOriginX + (int)(36f / randLampCount * (i + 0.5f) - 18f + GenRand.Next(-2, 3));
-				// var tile = TileUtils.SafeGetTile(lampX, roomOriginY - 9);
-				// tile.TileType = (ushort)ModContent.TileType<HangingFluoriteLamp>();
-				// tile.HasTile = true;
-				// tile.TileFrameY = (short)GenRand.Next(2, 30);
-				// }
-				// int chainCount = GenRand.Next(1, 3);
-				// for (int i = 0; i < chainCount; i++)
-				// {
-				// int randPos = GenRand.Next(8, 24);
-				// int randNeg = GenRand.Next(8, 24);
-				// int addX0 = (int)(randPos + ((i + 0.5f) / chainCount - 0.5f) * 12);
-				// int addY0 = 0;
-				// if (addX0 > 18)
-				// {
-				// addY0 = addX0 - 18;
-				// addX0 = 18;
-				// }
-
-				// int addX1 = (int)(randNeg + ((i + 0.5f) / chainCount - 0.5f) * 12);
-				// int addY1 = 0;
-				// if (addX1 > 18)
-				// {
-				// addY1 = addX1 - 18;
-				// addX1 = 18;
-				// }
-				// addX1 *= -1;
-
-				// WorldGenMisc.PlaceRope(roomOriginX + addX0, roomOriginY + addY0 - 9, roomOriginX + addX1, roomOriginY + addY1 - 9, ModContent.TileType<ChainCable>());
-				// }
+				int roomType = GenRand.Next(randomRooms.Length);
+				QuickBuild(roomOriginX - 20, roomOriginY - 10, randomRooms[roomType]);
+				int coreItemType = -1;
+				switch (roomType)
+				{
+					case 0:
+						coreItemType = ModContent.ItemType<RockQuake>();
+						break;
+					case 1:
+						coreItemType = ModContent.ItemType<BloodySwamp>();
+						break;
+					case 2:
+						coreItemType = ModContent.ItemType<SpringOfQuicksand>();
+						break;
+					case 3:
+						coreItemType = ModContent.ItemType<MechanismHalberd>();
+						break;
+					case 4:
+						coreItemType = ModContent.ItemType<WiltedForestLamp>();
+						break;
+					default:
+						coreItemType = ItemID.DirtBlock;
+						break;
+				}
+				List<Item> contents = [new Item(setDefaultsToType: coreItemType), .. NormalChestContents()];
+				FillChestXYWH(roomOriginX - 20, roomOriginY - 10, 40, 21, contents);
 
 				// 房间通道
 				if (y == 9 && directionGate + 1 == x)
@@ -2300,13 +2294,15 @@ public class YggdrasilTownGeneration
 				{
 					KillRectangleAreaOfTile(roomOriginX + 18, roomOriginY + 2, roomOriginX + 31, roomOriginY + 9);
 					PlaceRectangleAreaOfBlock(roomOriginX + 19, roomOriginY + 2, roomOriginX + 22, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
-					TileUtils.PlaceFrameImportantTiles(roomOriginX + 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+
+					// TileUtils.PlaceFrameImportantTiles(roomOriginX + 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
 				}
 				if (x == 2)
 				{
 					KillRectangleAreaOfTile(roomOriginX - 31, roomOriginY + 2, roomOriginX - 18, roomOriginY + 9);
 					PlaceRectangleAreaOfBlock(roomOriginX - 22, roomOriginY + 2, roomOriginX - 19, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
-					TileUtils.PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+
+					// TileUtils.PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
 				}
 
 				// PlaceTwilightLegacyBiomeChest(roomOriginX, roomOriginY + 9);
@@ -2579,12 +2575,12 @@ public class YggdrasilTownGeneration
 			for (int i = x; i <= x + roomWidth; i++)
 			{
 				var tile = TileUtils.SafeGetTile(i, y - 2);
-				if (tile.TileType == 124)
+				if (tile.TileType == TileID.WoodenBeam)
 				{
 					for (int j = 0; j < 30; j++)
 					{
 						var tile2 = TileUtils.SafeGetTile(i, y + j);
-						if (tile2.HasTile && tile2.TileType != 124)
+						if (tile2.HasTile && tile2.TileType != TileID.WoodenBeam)
 						{
 							break;
 						}
@@ -2605,7 +2601,7 @@ public class YggdrasilTownGeneration
 								for (int h = 0; h < 100; h++)
 								{
 									var tile3 = TileUtils.SafeGetTile(i + h, y + j);
-									if (tile3.HasTile && tile2.TileType != 124)
+									if (tile3.HasTile && tile2.TileType != TileID.WoodenBeam)
 									{
 										break;
 									}
@@ -2624,7 +2620,7 @@ public class YggdrasilTownGeneration
 								for (int h = 0; h < 100; h++)
 								{
 									var tile3 = TileUtils.SafeGetTile(i - h, y + j);
-									if (tile3.HasTile && tile2.TileType != 124)
+									if (tile3.HasTile && tile2.TileType != TileID.WoodenBeam)
 									{
 										break;
 									}
@@ -3998,19 +3994,26 @@ public class YggdrasilTownGeneration
 				chestContents.Add(new Item(setDefaultsToType: ModContent.ItemType<TwilightRod>(), 1));
 				break;
 		}
+		chestContents.AddRange(NormalChestContents());
+		return chestContents;
+	}
 
-		// 金币
+	public static List<Item> NormalChestContents()
+	{
+		List<Item> contents = new List<Item>();
+
+		// Gold coin
 		if (WorldGen.genRand.NextBool(5))
 		{
-			chestContents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)));
+			contents.Add(new Item(setDefaultsToType: ItemID.GoldCoin, WorldGen.genRand.Next(1, 3)));
 		}
 
-		// 绳子
-		chestContents.Add(new Item(setDefaultsToType: ItemID.Rope, WorldGen.genRand.Next(70, 151)));
+		// Rope
+		contents.Add(new Item(setDefaultsToType: ModContent.ItemType<NylonRope>(), WorldGen.genRand.Next(70, 151)));
 
-		// 药水
+		// Potion
 		int potionType = 1;
-		switch (WorldGen.genRand.Next(5))
+		switch (WorldGen.genRand.Next(6))
 		{
 			case 0:
 				potionType = ItemID.WarmthPotion;
@@ -4027,22 +4030,37 @@ public class YggdrasilTownGeneration
 			case 4:
 				potionType = ItemID.MiningPotion;
 				break;
+			case 5:
+				potionType = ItemID.RecallPotion;
+				break;
 		}
-		chestContents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
+		contents.Add(new Item(setDefaultsToType: potionType, WorldGen.genRand.Next(1, 4)));
 
-		// 荧光棒
+		// glow stick
 		if (WorldGen.genRand.NextBool(2))
 		{
 			if (WorldGen.genRand.NextBool(5))
 			{
-				chestContents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
+				contents.Add(new Item(setDefaultsToType: ItemID.StickyGlowstick, WorldGen.genRand.Next(20, 61)));
 			}
 			else
 			{
-				chestContents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
+				contents.Add(new Item(setDefaultsToType: ItemID.Glowstick, WorldGen.genRand.Next(20, 61)));
 			}
 		}
-		return chestContents;
+
+		// yggdrasil Amber
+		if (WorldGen.genRand.NextBool(5))
+		{
+			contents.Add(new Item(setDefaultsToType: ModContent.ItemType<YggdrasilTown.Items.Materials.YggdrasilAmber>(), WorldGen.genRand.Next(5, 15)));
+		}
+
+		// cyan ore
+		if (WorldGen.genRand.NextBool(5))
+		{
+			contents.Add(new Item(setDefaultsToType: ModContent.ItemType<CyanVineOre>(), WorldGen.genRand.Next(15, 75)));
+		}
+		return contents;
 	}
 
 	/// <summary>

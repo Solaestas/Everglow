@@ -225,7 +225,7 @@ public class YggdrasilTownBackground : ModSystem
 			BackgroundManager.QuickDrawBG(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 3000), baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 2950), baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 		}
 	}
 
