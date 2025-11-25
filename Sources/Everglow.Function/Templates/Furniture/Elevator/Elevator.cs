@@ -16,6 +16,13 @@ public abstract class Elevator : BoxEntity
 		Decelerating = 3,
 	}
 
+	public abstract int WinchTileType { get; }
+
+	/// <summary>
+	/// Coordinate of winch tile in <see cref="Main.tile"/>.
+	/// </summary>
+	public Point WinchCoord;
+
 	/// <summary>
 	/// 1 for down, -1 for up.
 	/// </summary>
@@ -65,47 +72,30 @@ public abstract class Elevator : BoxEntity
 	public State MoveState = State.Stop;
 
 	/// <summary>
-	/// When the elevator move exceed this value to the winch, elevator will return forcefully.<br/>
-	/// Default to ∞.
+	/// Minimum distance to winch tile.
+	/// <br/>When the elevator move exceed this value to the winch, elevator will return forcefully.
+	/// <br/>Defaults to <see cref="float.PositiveInfinity"/>.
 	/// </summary>
 	public float LengthRestrict = float.PositiveInfinity;
 
 	public float CurrentSpeed = 0f;
+
+	public float MaxSpeed = 5f;
 
 	/// <summary>
 	/// During <see cref="State.Accelerating"/> / <see cref="State.Decelerating"/> The velocity will +/- this value per tick.
 	/// </summary>
 	public float Acceleration = 0.1f;
 
-	/// <summary>
-	/// ↑v<br/>
-	/// │*<br/>
-	/// │****<br/>
-	/// │*******<br/>
-	/// │**********<br/>
-	/// │*************<br/>
-	/// │****************<br/>
-	/// │*******************  t<br/>
-	/// └─────────────→<br/>
-	/// Calculate the move distance when doing uniformly varying motion.
-	/// </summary>
-	/// <returns></returns>
-	public float UniformlyVaryingMotionDistance(float speed, float a, float t)
-	{
-		return speed * t + 0.5f * a * t * t;
-	}
+	public string ElevatorCableTexture;
 
-	/// <summary>
-	/// Anchor at a winch tile.
-	/// </summary>
-	public Point WinchCoord;
+	public string ElevatorTexture;
 
 	public override Color MapColor => new Color(122, 91, 79);
 
 	public override void AI()
 	{
-		var winch = SafeGetTile(WinchCoord);
-		if (TileLoader.GetTile(winch.TileType) is WinchTile)
+		if (TileUtils.SafeGetTile(WinchCoord).TileType != WinchTileType)
 		{
 			Kill();
 			return;
@@ -139,9 +129,9 @@ public abstract class Elevator : BoxEntity
 				break;
 			case State.NormalMove:
 				CheckRunningDirection();
-				if (CurrentSpeed < 5)
+				if (CurrentSpeed < MaxSpeed)
 				{
-					AccelerateTimer = (int)((5 - CurrentSpeed) * 10f);
+					AccelerateTimer = (int)((MaxSpeed - CurrentSpeed) * 10f);
 				}
 				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
 				break;
@@ -155,9 +145,9 @@ public abstract class Elevator : BoxEntity
 					AccelerateTimer = 0;
 				}
 				CurrentSpeed += Acceleration;
-				if (CurrentSpeed > 5)
+				if (CurrentSpeed > MaxSpeed)
 				{
-					CurrentSpeed = 5;
+					CurrentSpeed = MaxSpeed;
 					AccelerateTimer = 0;
 				}
 				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
@@ -220,32 +210,31 @@ public abstract class Elevator : BoxEntity
 	public void CheckRunningDirection()
 	{
 		// Current move direction = 1, downward.
-		float checkDistanceDown = UniformlyVaryingMotionDistance(Velocity.Y, -Acceleration, NormalDecelerateTime);
-		if ((Box.Center.Y > WinchCoord.Y * 16 + 8 + LengthRestrict/* Exceed length restriction */ || Terraria.Collision.SolidCollision(Position + new Vector2(0, Size.Y + checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == 1)
+		float checkDistanceDown = MathUtils.UARNDisplacement(Velocity.Y, -Acceleration, NormalDecelerateTime);
+		if ((Box.Center.Y > WinchCoord.Y * 16 + 8 + LengthRestrict/* Exceed length restriction */
+			|| Terraria.Collision.SolidCollision(Position + new Vector2(0, Size.Y + checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == 1)
 		{
 			NextMoveDirection = -1;
 			DecelerateTimer = NormalDecelerateTime;
 		}
 
 		// Current move direction = -1, upward.
-		float checkDistanceUp = UniformlyVaryingMotionDistance(Velocity.Y, Acceleration, NormalDecelerateTime);
-		if ((Box.Center.Y < WinchCoord.Y * 16 + 8 + 400 + checkDistanceUp/* Hit the winch */ || Terraria.Collision.SolidCollision(Position + new Vector2(0, checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == -1)
+		float checkDistanceUp = MathUtils.UARNDisplacement(Velocity.Y, Acceleration, NormalDecelerateTime);
+		if ((Box.Center.Y < WinchCoord.Y * 16 + 8 + 400 + checkDistanceUp/* Hit the winch */
+			|| Terraria.Collision.SolidCollision(Position + new Vector2(0, checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == -1)
 		{
 			NextMoveDirection = 1;
 			DecelerateTimer = NormalDecelerateTime;
 		}
 	}
 
-	public Texture2D ElevatorCableTexture;
-
-	public Texture2D ElevatorTexture;
-
 	public override void Draw()
 	{
 		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
-			Color drawc = Lighting.GetColor(Box.Center.ToTileCoordinates());
-			Main.spriteBatch.Draw(ElevatorTexture, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawc, 0, ElevatorTexture.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			Color drawC = Lighting.GetColor(Box.Center.ToTileCoordinates());
+			var texture = ModContent.Request<Texture2D>(ElevatorTexture).Value;
+			Main.spriteBatch.Draw(texture, Box.Center - Main.screenPosition + new Vector2(0, -46), null, drawC, 0, texture.Size() * 0.5f, 1, SpriteEffects.None, 0);
 			DrawElevatorCable();
 		}
 	}
@@ -274,20 +263,10 @@ public abstract class Elevator : BoxEntity
 		}
 		if (bars.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = ElevatorCableTexture;
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ElevatorCableTexture).Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-	}
-
-	public static Tile SafeGetTile(int i, int j)
-	{
-		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
-	}
-
-	public static Tile SafeGetTile(Point point)
-	{
-		return Main.tile[Math.Clamp(point.X, 20, Main.maxTilesX - 20), Math.Clamp(point.Y, 20, Main.maxTilesY - 20)];
 	}
 }
