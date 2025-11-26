@@ -1,15 +1,15 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.Furnace;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.LampWood;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.TwilightForest;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 
-public class LampWood_Chest : ModTile
+public class DragonChest_DarkDragonRoom : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -26,7 +26,7 @@ public class LampWood_Chest : ModTile
 		TileID.Sets.IsAContainer[Type] = true;
 		TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
 
-		DustType = ModContent.DustType<LampWood_Dust>();
+		DustType = ModContent.DustType<DragonChest_DarkDragonRoom_Dust>();
 		AdjTiles = new int[] { TileID.Containers };
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
@@ -46,19 +46,18 @@ public class LampWood_Chest : ModTile
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 		TileObjectData.addTile(Type);
-
-		AddMapEntry(new Color(85, 72, 126));
-	}
-
-	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
-	{
-		noBreak = true;
-		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+		AddMapEntry(new Color(127, 96, 104));
 	}
 
 	public override ushort GetMapOption(int i, int j)
 	{
 		return (ushort)(Main.tile[i, j].TileFrameX / 36);
+	}
+
+	public override LocalizedText DefaultContainerName(int frameX, int frameY)
+	{
+		int option = frameX / 36;
+		return this.GetLocalization("MapEntry" + option);
 	}
 
 	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
@@ -95,6 +94,11 @@ public class LampWood_Chest : ModTile
 		return name + ": " + Main.chest[chest].name;
 	}
 
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 1;
+	}
+
 	public override bool RightClick(int i, int j)
 	{
 		return FurnitureUtils.ChestRightClick(i, j);
@@ -128,7 +132,7 @@ public class LampWood_Chest : ModTile
 			player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<LampWood_Chest_Item>();
+				player.cursorItemIconID = ModContent.ItemType<DragonChest_DarkDragonRoom_Item>();
 				if (Main.tile[left, top].TileFrameX / 36 == 1)
 				{
 					// player.cursorItemIconID = ModContent.ItemType<>();
@@ -149,13 +153,13 @@ public class LampWood_Chest : ModTile
 		if (player.cursorItemIconText == string.Empty)
 		{
 			player.cursorItemIconEnabled = false;
-			player.cursorItemIconID = 0;
+			player.cursorItemIconID = ItemID.None;
 		}
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Color lightColor = Lighting.GetColor(i, j);
+		base.PostDraw(i, j, spriteBatch);
 		Tile tile = Main.tile[i, j];
 		int left = i - tile.TileFrameX / 18;
 		int top = j - tile.TileFrameY / 18;
@@ -163,12 +167,17 @@ public class LampWood_Chest : ModTile
 		if (chestIndex >= 0)
 		{
 			Chest chest = Main.chest[chestIndex];
-			var zero = new Vector2(Main.offScreenRange);
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 			if (Main.drawToScreen)
 			{
 				zero = Vector2.Zero;
 			}
-			spriteBatch.Draw(ModAsset.LampWood_Chest_crystal.Value, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + chest.frame * 38, 16, 16), lightColor * 2.5f, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+			var texture = ModAsset.DragonChest_DarkDragonRoom_glow.Value;
+			spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + chest.frame * 38, 16, 16), new Color(1f, 1f, 1f, 1f), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+			if (chest.frame > 0)
+			{
+				Lighting.AddLight(i, j, 1.8f * chest.frame, 0.5f * chest.frame, 0.2f * chest.frame);
+			}
 		}
 	}
 }

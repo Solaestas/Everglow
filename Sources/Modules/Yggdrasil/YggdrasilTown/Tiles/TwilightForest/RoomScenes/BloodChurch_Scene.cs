@@ -86,7 +86,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 	{
 		bool flipH = bg.FlipHorizontally(bg.OriginTilePos.X, bg.OriginTilePos.Y);
 		Texture2D tex0 = ModAsset.BloodChurch_Scene_Background.Value;
-		Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
+		//Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
 		Texture2D tex2 = ModAsset.BloodChurch_Scene_Fountain.Value;
 		Texture2D tex2_red = ModAsset.BloodChurch_Scene_Fountain_Red.Value;
 		Texture2D tex3_dark = Commons.ModAsset.Noise_flame_2_pure_black.Value;
@@ -97,9 +97,9 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
-		bars = new List<Vertex2D>();
-		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
-		Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
+		//bars = new List<Vertex2D>();
+		//SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
+		//Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
 		// Fountain waterfall background
 		int direction = 1;

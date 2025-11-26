@@ -2236,6 +2236,7 @@ public class YggdrasilTownGeneration
 					ModAsset.TCRoom_Rd_02_Desert_40x21_Path,
 					ModAsset.TCRoom_Rd_03_WaterSluice_40x21_Path,
 					ModAsset.TCRoom_Rd_04_Forest_40x21_Path,
+					ModAsset.TCRoom_Rd_05_DarkDragon_40x21_Path,
 				};
 				if (x == 2)
 				{
@@ -2246,6 +2247,7 @@ public class YggdrasilTownGeneration
 						ModAsset.TCRoom_Ld_02_Desert_40x21_Path,
 						ModAsset.TCRoom_Ld_03_WaterSluice_40x21_Path,
 						ModAsset.TCRoom_Ld_04_Forest_40x21_Path,
+						ModAsset.TCRoom_Ld_05_DarkDragon_40x21_Path,
 					};
 				}
 				int roomType = GenRand.Next(randomRooms.Length);
@@ -2267,6 +2269,9 @@ public class YggdrasilTownGeneration
 						break;
 					case 4:
 						coreItemType = ModContent.ItemType<WiltedForestLamp>();
+						break;
+					case 5:
+						coreItemType = ModContent.ItemType<MagicOfLightAndShadow>();
 						break;
 					default:
 						coreItemType = ItemID.DirtBlock;

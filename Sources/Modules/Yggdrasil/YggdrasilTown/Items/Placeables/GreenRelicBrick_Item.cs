@@ -11,7 +11,7 @@ public class GreenRelicBrick_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<ForestCastle_Scene>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<DarkDragon_Scene>());
 		Item.width = 16;
 		Item.height = 16;
 	}
