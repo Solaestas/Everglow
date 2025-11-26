@@ -1,4 +1,5 @@
 using Everglow.EternalResolve.VFXs;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.EternalResolve.Buffs;
 
@@ -20,10 +21,10 @@ public class OnElectric : ModBuff
 			currentElectrityTimeFactor *= 3;
 		}
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = 7;
+		npc.SetLifeRegenExpectedLossPerSecond(7);
 		if (npc.wet)
 		{
-			npc.lifeRegenExpectedLossPerSecond *= 3;
+			npc.SetLifeRegenExpectedLossPerSecond(7 * 3);
 		}
 		if (Main.rand.NextBool(3))
 		{
@@ -45,7 +46,5 @@ public class OnElectric : ModBuff
 			ai = new float[] { Main.rand.NextFloat(0.0f, 0.6f), 1f, Main.rand.NextFloat(0.2f, Main.rand.NextFloat(0.2f, 0.4f)) },
 		};
 		Ins.VFXManager.Add(electric);
-
-		base.Update(npc, ref buffIndex);
 	}
 }

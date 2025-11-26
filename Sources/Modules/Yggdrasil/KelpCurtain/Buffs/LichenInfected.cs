@@ -14,7 +14,7 @@ public class LichenInfected : ModBuff
 		int buffDamage = (int)(5 + npc.velocity.Length() * 8);
 
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = (int)(1 + npc.velocity.Length() * 2.4f);
+		npc.SetLifeRegenExpectedLossPerSecond((int)(1 + npc.velocity.Length() * 2.4f));
 
 		base.Update(npc, ref buffIndex);
 	}

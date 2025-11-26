@@ -217,14 +217,21 @@ public static class NPCUtils
 
 	#region Vanilla Stats
 
-	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes)
-	{
-		return buffTypes
+	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes) =>
+		buffTypes
 			.Where(npc.HasBuff)
 			.Where(type => BuffUtils.VanillaDotDebuffDamageOnNPC.TryGetValue(type, out int _))
 			.Select(type => npc.buffTime[npc.FindBuffIndex(type)] * BuffUtils.VanillaDotDebuffDamageOnNPC[type])
 			.Sum();
-	}
+
+	/// <summary>
+	/// Set <see cref="NPC.lifeRegenExpectedLossPerSecond"/> to the max of current value and given value,
+	/// avoiding multiple debuffs stacking incorrectly.
+	/// </summary>
+	/// <param name="npc"></param>
+	/// <param name="value"></param>
+	public static void SetLifeRegenExpectedLossPerSecond(this NPC npc, int value) =>
+		npc.lifeRegenExpectedLossPerSecond = Math.Max(npc.lifeRegenExpectedLossPerSecond, value);
 
 	#endregion
 
