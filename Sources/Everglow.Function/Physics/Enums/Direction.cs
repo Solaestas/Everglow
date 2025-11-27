@@ -1,4 +1,4 @@
-namespace Everglow.Commons.CustomTiles.Core;
+namespace Everglow.Commons.Physics.Enums;
 
 [Flags]
 public enum Direction : byte

@@ -1,11 +1,11 @@
-using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Physics.Colliders;
 using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Physics.Enums;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Utilities;
 
-public static class CollisionUtils
+public static partial class CollisionUtils
 {
 	public const float Epsilon = 1e-4f;
 

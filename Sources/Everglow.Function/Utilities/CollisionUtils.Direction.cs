@@ -1,8 +1,8 @@
-using Everglow.Commons.CustomTiles.Core;
+using Everglow.Commons.Physics.Enums;
 
-namespace Everglow.Commons.CustomTiles.Utils;
+namespace Everglow.Commons.Utilities;
 
-public static class DirectionExtensions
+public static partial class CollisionUtils
 {
 	public static bool IsHorizontal(this Direction dir) => dir == Direction.Left || dir == Direction.Right;
 
