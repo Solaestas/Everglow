@@ -6,4 +6,8 @@ namespace Everglow.Commons.CustomTiles.Abstracts;
 public interface IHookable
 {
 	public void SetHookPosition(Projectile hook);
+
+	public bool PreSetHookPosition(Projectile hook);
+
+	public void PostSetHookPosition(Projectile hook);
 }

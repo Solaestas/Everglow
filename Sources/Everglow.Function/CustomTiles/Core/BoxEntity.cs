@@ -200,8 +200,24 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 
 	public void SetHookPosition(Projectile hook)
 	{
+		if (!PreSetHookPosition(hook))
+		{
+			return;
+		}
+
 		var box = Box;
 		hook.position.X = MathHelper.Clamp(hook.position.X, box.Left, box.Right);
 		hook.position.Y = MathHelper.Clamp(hook.position.Y, box.Top, box.Bottom);
+
+		PostSetHookPosition(hook);
+	}
+
+	public virtual bool PreSetHookPosition(Projectile hook)
+	{
+		return true;
+	}
+
+	public virtual void PostSetHookPosition(Projectile hook)
+	{
 	}
 }
