@@ -16,6 +16,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.OriginPylon;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;

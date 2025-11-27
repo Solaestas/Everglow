@@ -1,7 +1,9 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.BackgroundManager;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
@@ -15,7 +17,7 @@ public class YggdrasilTownBackground : ModSystem
 	public static Vector2 BackgroundAnchoredCenter => YggdrasilTownBiome.BiomeCenter;
 
 	/// <summary>
-	/// Origin Pylon
+	/// The world coord of [Origin Pylon]
 	/// </summary>
 	public static Vector2 OriginPylonCenter => new Vector2(1395, Main.maxTilesY - 405) * 16;
 

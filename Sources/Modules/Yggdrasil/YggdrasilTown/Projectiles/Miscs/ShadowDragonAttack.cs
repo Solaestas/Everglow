@@ -66,12 +66,12 @@ public class ShadowDragonAttack : TrailingProjectile
 
 	public override void DestroyEntityEffect()
 	{
-		for (int k = 0; k < 20; k++)
+		for (int k = 0; k < 30; k++)
 		{
 			var dark = new DarkDragon_Scene_Dust()
 			{
 				Position = Projectile.Center,
-				Velocity = new Vector2(0, Main.rand.NextFloat(3, 6)).RotatedByRandom(MathHelper.TwoPi),
+				Velocity = new Vector2(0, Main.rand.NextFloat(3, 3.5f)).RotatedByRandom(MathHelper.TwoPi),
 				Fade = 1,
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 				Timer = 0,
