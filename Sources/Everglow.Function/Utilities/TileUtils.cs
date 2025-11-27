@@ -65,13 +65,14 @@ public partial class TileUtils
 		}
 	}
 
-	public static bool AreaHasTile(int x, int y, int width, int height)
+	public static bool AreaHasTile(int x, int y, int width, int height, Func<Tile, bool> prediction = null)
 	{
 		for (int i = x; i < x + width; i++)
 		{
 			for (int j = y; j < y + height; j++)
 			{
-				if (SafeGetTile(i, j).HasTile)
+				var tile = SafeGetTile(i, j);
+				if (tile.HasTile && (prediction is null || prediction(tile)))
 				{
 					return true;
 				}

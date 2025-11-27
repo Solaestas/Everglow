@@ -54,10 +54,10 @@ public interface IEntityCollider<TEntity> : IBox
 				Ground = result.Collider;
 				Entity.velocity.Y = 0;
 			}
-			else if (result.Normal == -Vector2.UnitY
-				&& result.Collider.Velocity.Y <= 0) // Added this condition for preventing player from sticking to box's bottom, when box is moving downward.
+			else if (result.Normal == -Vector2.UnitY * Gravity
+				&& result.Collider.Velocity.Y * Gravity <= 0) // Added this condition for preventing player from sticking to box's bottom when box is moving downward.
 			{
-				 Entity.velocity.Y = -CollisionUtils.Epsilon;
+				Entity.velocity.Y = -CollisionUtils.Epsilon;
 			}
 			OnCollision(result);
 		}

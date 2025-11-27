@@ -142,7 +142,8 @@ public abstract class Elevator : BoxEntity
 				nextPosTileCoord.Y++;
 			}
 			Point size = Size.ToTileCoordinates();
-			if (TileUtils.AreaHasTile(nextPosTileCoord.X, nextPosTileCoord.Y, size.X, size.Y))
+			if (TileUtils.AreaHasTile(nextPosTileCoord.X, nextPosTileCoord.Y, size.X, size.Y,
+					tile => Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]))
 			{
 				StopElevator(120);
 			}
@@ -168,7 +169,7 @@ public abstract class Elevator : BoxEntity
 		var a = Box.Bottom.ToTileCoordinate();
 		var b = Box.Top.ToTileCoordinate();
 		int scanRange = 2000;
-		if(LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
+		if (LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
 			scanRange = Math.Min(scanRange, LengthRestrict.ToTileCoordinate());
 		}
@@ -186,7 +187,7 @@ public abstract class Elevator : BoxEntity
 			for (int j = 0; j < Size.ToTileCoordinates().X; j++)
 			{
 				Tile pathTile = Framing.GetTileSafely(startTileX + j, dir == 1 ? y : y);
-				if (pathTile.HasTile && Main.tileSolid[pathTile.TileType] && !Main.tileSolidTop[pathTile.TileType])
+				if (pathTile.HasTile && (Main.tileSolid[pathTile.TileType] || Main.tileSolidTop[pathTile.TileType]))
 				{
 					return dir == 1 ? y : y + 1;
 				}
@@ -233,7 +234,7 @@ public abstract class Elevator : BoxEntity
 			for (int j = 0; j < Size.ToTileCoordinates().X; j++)
 			{
 				Tile pathTile = Framing.GetTileSafely(startTileX + j, dir == 1 ? y : y);
-				if (pathTile.HasTile && Main.tileSolid[pathTile.TileType] && !Main.tileSolidTop[pathTile.TileType])
+				if (pathTile.HasTile && (Main.tileSolid[pathTile.TileType] || Main.tileSolidTop[pathTile.TileType]))
 				{
 					return dir == 1 ? y : y;
 				}
