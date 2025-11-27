@@ -9,61 +9,19 @@ public abstract class Elevator : BoxEntity
 {
 	public enum State
 	{
-		Malfunction = -1,
-		Stop = 0,
-		NormalMove = 1,
-		Accelerating = 2,
-		Decelerating = 3,
+		Stop,
+		Move,
 	}
 
-	public int WinchTileType { get; set; }
+	/// <summary>
+	/// Winch tile type. Set by <see cref="WinchTile{TElevator}"/> automatically.
+	/// </summary>
+	public int WinchTileType;
 
 	/// <summary>
-	/// Coordinate of winch tile in <see cref="Main.tile"/>.
+	/// Coordinate of winch tile in <see cref="Main.tile"/>. Set by <see cref="WinchTile{TElevator}"/> automatically.
 	/// </summary>
 	public Point WinchCoord;
-
-	/// <summary>
-	/// 1 for down, -1 for up.
-	/// </summary>
-	public int CurrentMoveDirection = 1;
-
-	/// <summary>
-	/// Next move direction, assign to <see cref="CurrentMoveDirection"/> when start acclerating.
-	/// </summary>
-	public int NextMoveDirection = 1;
-
-	/// <summary>
-	/// Timer for a stop elevator.
-	/// </summary>
-	public int StopTimer = 0;
-
-	/// <summary>
-	/// Timer for accelerating.
-	/// </summary>
-	public int AccelerateTimer = 0;
-
-	/// <summary>
-	/// Total accelerate time when start moving.<br/>
-	/// Default to 30.
-	/// </summary>
-	public int NormalAccelerateTime = 30;
-
-	/// <summary>
-	/// Timer for decelerating.
-	/// </summary>
-	public int DecelerateTimer = 0;
-
-	/// <summary>
-	/// Total decelerate time when start stopping.<br/>
-	/// Default to 30.
-	/// </summary>
-	public int NormalDecelerateTime = 30;
-
-	/// <summary>
-	/// Detention time due to malfunction
-	/// </summary>
-	public int DetentionTime = 0;
 
 	/// <summary>
 	/// Move state.
@@ -83,9 +41,21 @@ public abstract class Elevator : BoxEntity
 	public float MaxSpeed = 5f;
 
 	/// <summary>
-	/// During <see cref="State.Accelerating"/> / <see cref="State.Decelerating"/> The velocity will +/- this value per tick.
+	/// During accelerating / decelerating, the <see cref="CurrentSpeed"/> will +/- this value per tick.
 	/// </summary>
 	public float Acceleration = 0.1f;
+
+	/// <summary>
+	/// The direction this elevator is moving. A value of 1 means the elevator is moving downward. -1 means moving upward.
+	/// </summary>
+	public int CurrentMoveDirection { get; protected set; } = 1;
+
+	public int NextStopTileY { get; protected set; } = -1;
+
+	/// <summary>
+	/// Timer for a stop elevator.
+	/// </summary>
+	public int StopTimer { get; protected set; } = 0;
 
 	public abstract string ElevatorTexture { get; }
 
@@ -95,6 +65,8 @@ public abstract class Elevator : BoxEntity
 
 	public override Color MapColor => new Color(122, 91, 79);
 
+	#region Behavior
+
 	public override void AI()
 	{
 		if (TileUtils.SafeGetTile(WinchCoord).TileType != WinchTileType)
@@ -103,132 +75,210 @@ public abstract class Elevator : BoxEntity
 			return;
 		}
 
-		CheckState();
-		switch (MoveState)
+		if (MoveState == State.Stop)
 		{
-			case State.Malfunction:
-				if (DetentionTime > 0)
+			if (StopTimer > 0)
+			{
+				StopTimer--;
+			}
+			if (StopTimer <= 0)
+			{
+				StopTimer = 0;
+				MoveState = State.Move;
+				if (!CanMove(CurrentMoveDirection))
 				{
-					DetentionTime--;
+					CurrentMoveDirection *= -1;
+					NextStopTileY = GetNextStopY(CurrentMoveDirection);
 				}
-				if (DetentionTime <= 0)
+				else
 				{
-					DetentionTime = 0;
+					NextStopTileY = GetNextStopY(CurrentMoveDirection);
 				}
-				break;
-			case State.Stop:
-				if (StopTimer > 0)
+			}
+			Velocity = Vector2.Zero;
+		}
+		else if (MoveState == State.Move)
+		{
+			var distToTargetY = Math.Abs(NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top));
+			if (distToTargetY <= 1f)
+			{
+				StopElevator(300);
+
+				return;
+			}
+
+			float requiredDecelerateDistance = (CurrentSpeed * CurrentSpeed) / (2 * Acceleration);
+			if (distToTargetY <= requiredDecelerateDistance)
+			{
+				// Decelerate
+				CurrentSpeed -= Acceleration;
+
+				if (CurrentSpeed < 0f)
 				{
-					StopTimer--;
+					CurrentSpeed = 0f;
 				}
-				if (StopTimer <= 0)
-				{
-					StopTimer = 0;
-					AccelerateTimer = NormalAccelerateTime;
-					CurrentMoveDirection = NextMoveDirection;
-				}
-				Velocity *= 0;
-				break;
-			case State.NormalMove:
-				CheckRunningDirection();
-				if (CurrentSpeed < MaxSpeed)
-				{
-					AccelerateTimer = (int)((MaxSpeed - CurrentSpeed) * 10f);
-				}
-				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
-				break;
-			case State.Accelerating:
-				if (AccelerateTimer > 0)
-				{
-					AccelerateTimer--;
-				}
-				if (AccelerateTimer <= 0)
-				{
-					AccelerateTimer = 0;
-				}
+			}
+			else if (CurrentSpeed < MaxSpeed)
+			{
+				// Accelerate
 				CurrentSpeed += Acceleration;
+
 				if (CurrentSpeed > MaxSpeed)
 				{
 					CurrentSpeed = MaxSpeed;
-					AccelerateTimer = 0;
 				}
-				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
-				break;
-			case State.Decelerating:
-				if (DecelerateTimer > 0)
-				{
-					DecelerateTimer--;
-				}
-				if (DecelerateTimer <= 0)
-				{
-					DecelerateTimer = 0;
-					StopElevator(120);
-				}
-				CurrentSpeed -= Acceleration;
-				if (CurrentSpeed <= 0)
-				{
-					DecelerateTimer = 0;
-					CurrentSpeed = 0;
-					StopElevator(120);
-				}
-				Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
-				break;
+			}
+			else
+			{
+				// Max Speed Uniform Motion
+				CurrentSpeed = MaxSpeed;
+			}
+
+			Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
+
+			Point nextPosTileCoord = Position.ToTileCoordinates();
+			if (CurrentMoveDirection == 1)
+			{
+				nextPosTileCoord.Y++;
+			}
+			Point size = Size.ToTileCoordinates();
+			if (TileUtils.AreaHasTile(nextPosTileCoord.X, nextPosTileCoord.Y, size.X, size.Y))
+			{
+				StopElevator(120);
+			}
+		}
+		else
+		{
+			throw new NotImplementedException($"New state {MoveState} is not handled.");
 		}
 	}
 
 	public void StopElevator(int time)
 	{
 		StopTimer = time;
+		CurrentSpeed = 0;
+		Velocity = Vector2.Zero;
+		MoveState = State.Stop;
 	}
 
-	public void CheckState()
+	private int GetNextTileOnPathY(int dir)
 	{
-		if (DetentionTime > 0)
+		int startTileX = Position.X.ToTileCoordinate();
+		int startTileY = dir == 1 ? Box.Bottom.ToTileCoordinate() : Box.Top.ToTileCoordinate();
+		var a = Box.Bottom.ToTileCoordinate();
+		var b = Box.Top.ToTileCoordinate();
+		int scanRange = 2000;
+		if(LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
-			MoveState = State.Malfunction;
+			scanRange = Math.Min(scanRange, LengthRestrict.ToTileCoordinate());
 		}
-		else if (StopTimer > 0)
+		for (int i = 0; i < scanRange; i++)
 		{
-			MoveState = State.Stop;
+			int y = startTileY + (i * dir);
+
+			// Check world bounds
+			if (y < 0 || y >= Main.maxTilesY)
+			{
+				return y;
+			}
+
+			// 1. Check Path Collision
+			for (int j = 0; j < Size.ToTileCoordinates().X; j++)
+			{
+				Tile pathTile = Framing.GetTileSafely(startTileX + j, dir == 1 ? y : y);
+				if (pathTile.HasTile && Main.tileSolid[pathTile.TileType] && !Main.tileSolidTop[pathTile.TileType])
+				{
+					return dir == 1 ? y : y + 1;
+				}
+			}
+
+			// 2. Check Winch Tile
+			var winchLimitation = WinchCoord.Y * 16 + 8 + 224;
+			var predictY = y * 16;
+			if (dir == -1 && predictY < winchLimitation)
+			{
+				return y;
+			}
 		}
-		else if (AccelerateTimer > 0)
-		{
-			MoveState = State.Accelerating;
-		}
-		else if (DecelerateTimer > 0)
-		{
-			MoveState = State.Decelerating;
-		}
-		else
-		{
-			MoveState = State.NormalMove;
-		}
+
+		return startTileY + scanRange * dir;
 	}
 
 	/// <summary>
-	/// Only update when <see cref="MoveState"/> is <see cref="State.NormalMove"/>.
-	/// Calculate
+	/// Scans the tile map in the movement direction to find the Y pixel coordinate of the next stop.
+	/// Stops are caused by: Solid tiles on path OR Side indicators.
 	/// </summary>
-	public void CheckRunningDirection()
+	/// <returns>The Y tile coordinate of the next stop.</returns>
+	private int GetNextStopY(int dir)
 	{
-		// Current move direction = 1, downward.
-		float checkDistanceDown = MathUtils.UARNDisplacement(Velocity.Y, -Acceleration, NormalDecelerateTime);
-		if ((Box.Center.Y > WinchCoord.Y * 16 + 8 + LengthRestrict/* Exceed length restriction */
-			|| Terraria.Collision.SolidCollision(Position + new Vector2(0, Size.Y + checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == 1)
+		int startTileX = Position.X.ToTileCoordinate();
+		int startTileY = dir == 1 ? Box.Bottom.ToTileCoordinate() : Box.Top.ToTileCoordinate();
+
+		int scanRange = 2000;
+		if (LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
-			NextMoveDirection = -1;
-			DecelerateTimer = NormalDecelerateTime;
+			scanRange = Math.Min(scanRange, LengthRestrict.ToTileCoordinate());
+		}
+		for (int i = 1; i < scanRange; i++)
+		{
+			int y = startTileY + (i * dir);
+
+			// Check world bounds
+			if (y < 0 || y >= Main.maxTilesY)
+			{
+				return y;
+			}
+
+			// 1. Check Path Collision
+			for (int j = 0; j < Size.ToTileCoordinates().X; j++)
+			{
+				Tile pathTile = Framing.GetTileSafely(startTileX + j, dir == 1 ? y : y);
+				if (pathTile.HasTile && Main.tileSolid[pathTile.TileType] && !Main.tileSolidTop[pathTile.TileType])
+				{
+					return dir == 1 ? y : y;
+				}
+			}
+
+			// 2. Check Winch Tile
+			var winchLimitation = WinchCoord.Y * 16 + 8 + 224;
+			var predictY = y * 16;
+			if (dir == -1 && predictY < winchLimitation)
+			{
+				return y;
+			}
+
+			// 3. Check Floor Indicators (Left or Right of path)
+			int leftX = Box.Left.ToTileCoordinate() - 1;
+			int rightX = Box.Right.ToTileCoordinate();
+
+			Tile leftTile = Framing.GetTileSafely(leftX, y);
+			Tile rightTile = Framing.GetTileSafely(rightX, y);
+
+			bool isFloor = (leftTile.HasTile && leftTile.IsType<FloorIndicatorTile>()) ||
+						   (rightTile.HasTile && rightTile.IsType<FloorIndicatorTile>());
+
+			if (isFloor)
+			{
+				return y + (dir == 1 ? Size.Y.ToTileCoordinate() : 0);
+			}
 		}
 
-		// Current move direction = -1, upward.
-		float checkDistanceUp = MathUtils.UARNDisplacement(Velocity.Y, Acceleration, NormalDecelerateTime);
-		if ((Box.Center.Y < WinchCoord.Y * 16 + 8 + 400 + checkDistanceUp/* Hit the winch */
-			|| Terraria.Collision.SolidCollision(Position + new Vector2(0, checkDistanceDown), (int)Size.X, 1)/* Collision with tile */) && CurrentMoveDirection == -1)
-		{
-			NextMoveDirection = 1;
-			DecelerateTimer = NormalDecelerateTime;
-		}
+		return startTileY + scanRange * dir;
 	}
+
+	/// <summary>
+	/// Checks if the elevator can begin moving in a specific direction without immediately colliding.
+	/// </summary>
+	private bool CanMove(int dir)
+	{
+		int target = GetNextTileOnPathY(dir);
+		float dist = Math.Abs(target * 16 - (dir == 1 ? Box.Bottom : Box.Top));
+		return dist > 4f;
+	}
+
+	#endregion
+
+	#region Draw
 
 	public override void Draw()
 	{
@@ -289,4 +339,6 @@ public abstract class Elevator : BoxEntity
 	public virtual void PostDrawElevatorCable(Color lightColor)
 	{
 	}
+
+	#endregion
 }
