@@ -20,20 +20,22 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		result = default;
 		result.Collider = this;
 
-		AABB collider = Box;
-		Vector2 rvel = stride - this.Velocity;
-		Vector2 pos0 = other.Position;
+		AABB selfBox = Box;
 		var otherBox = other.Box;
+		Vector2 otherPosition = other.Position;
+		Vector2 relativeVelocity = stride - Velocity;
 
-		if (!otherBox.Scan(rvel).Intersect(collider))
+		// 1. Coarse Collision Detection
+		if (!otherBox.Scan(relativeVelocity).Intersect(selfBox))
 		{
 			result.Stride = stride;
 			result.Normal = Vector2.Zero;
 			return false;
 		}
 
+		// 2. Intersect Detection
 		const float SmallScale = 7;
-		AABB smallBox = collider;
+		AABB smallBox = selfBox;
 		smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
 		smallBox.BottomRight -= new Vector2(SmallScale, SmallScale);
 		if (smallBox.Intersect(otherBox))
@@ -43,13 +45,14 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 			return true;
 		}
 
+		// 3. Fine Collision Detection
 		bool onGround = other.Velocity.Y + Velocity.Y == 0;
 		bool? isX = null;
-		Vector2 target = otherBox.position + rvel;
+		Vector2 target = otherBox.position + relativeVelocity;
 		do
 		{
 			otherBox.position = otherBox.position.Approach(target, 1);
-			if (otherBox.Intersect(collider, out var area))
+			if (otherBox.Intersect(selfBox, out var area))
 			{
 				isX = area.size.X < area.size.Y;
 				break;
@@ -61,31 +64,36 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		{
 			result.Stride = stride;
 			result.Normal = Vector2.Zero;
+
 			return false;
 		}
 		else if (isX.Value)
 		{
-			otherBox.position.X = otherBox.Left < collider.Left ? collider.Left - otherBox.size.X : collider.Right;
+			otherBox.position.X = otherBox.Left < selfBox.Left ? selfBox.Left - otherBox.size.X : selfBox.Right;
 			otherBox.position.Y = target.Y;
-			result.Stride = otherBox.position - pos0 + this.Velocity;
-			result.Normal = otherBox.Left < collider.Left ? -Vector2.UnitX : Vector2.UnitX;
-			other.Velocity = other.Velocity with { X = this.Velocity.X };
+			other.Velocity = other.Velocity with { X = Velocity.X };
+
+			result.Stride = otherBox.position - otherPosition + Velocity;
+			result.Normal = otherBox.Left < selfBox.Left ? -Vector2.UnitX : Vector2.UnitX;
+
 			return true;
 		}
 		else
 		{
-			otherBox.position.Y = otherBox.Top < collider.Top ? collider.Top - otherBox.size.Y : collider.Bottom;
+			otherBox.position.Y = otherBox.Top < selfBox.Top ? selfBox.Top - otherBox.size.Y : selfBox.Bottom;
 			otherBox.position.X = target.X;
-			result.Stride = otherBox.position - pos0 + this.Velocity;
 			other.Velocity = other.Velocity with
 			{
-				Y = this.Velocity.Y == 0
+				Y = Velocity.Y == 0
 					? onGround
 						? 0
 						: CollisionUtils.Epsilon * 10
-					: this.Velocity.Y,
+					: Velocity.Y,
 			};
-			result.Normal = otherBox.Top < collider.Top ? Vector2.UnitY : -Vector2.UnitY;
+
+			result.Stride = otherBox.position - otherPosition + Velocity;
+			result.Normal = otherBox.Top < selfBox.Top ? Vector2.UnitY : -Vector2.UnitY;
+
 			return true;
 		}
 
