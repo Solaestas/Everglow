@@ -107,7 +107,6 @@ public class PolygonCollisionHelper : Visual
 	/// <param name="polygon">多边形顶点列表（按索引连接，最后一个连0号）</param>
 	/// <param name="point">目标点</param>
 	/// <returns>true=在内部/边界，false=在外部</returns>
-	/// <exception cref="ArgumentException">多边形边相交时抛出</exception>
 	public static bool IsPointInPolygon(List<Vector2> polygon, Vector2 point)
 	{
 		// 1. 基础校验（顶点数≥3才是有效多边形）
@@ -144,7 +143,7 @@ public class PolygonCollisionHelper : Visual
 	}
 
 	/// <summary>
-	/// 校验多边形边是否相交（相邻边除外，避免自相交多边形）
+	/// 校验多边形边是否相交（相邻边除外，避免自相交多边形）暂时不用
 	/// </summary>
 	private static void CheckPolygonEdges(List<Vector2> polygon)
 	{
