@@ -41,6 +41,7 @@ public abstract class EverglowPylonBase<T> : ModPylon
 		Main.tileLighted[Type] = true;
 		Main.tileFrameImportant[Type] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
+		TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 18 };
 		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.newTile.DrawYOffset = 0;
 		TileObjectData.newTile.StyleHorizontal = true;
@@ -53,6 +54,11 @@ public abstract class EverglowPylonBase<T> : ModPylon
 		TileID.Sets.InteractibleByNPCs[Type] = true;
 		TileID.Sets.PreventsSandfall[Type] = true;
 		AddToArray(ref TileID.Sets.CountsAsPylon);
+	}
+
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
