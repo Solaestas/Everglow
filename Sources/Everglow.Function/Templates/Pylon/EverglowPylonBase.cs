@@ -59,7 +59,6 @@ public abstract class EverglowPylonBase<T> : ModPylon
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = 0;
-		base.NumDust(i, j, fail, ref num);
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
