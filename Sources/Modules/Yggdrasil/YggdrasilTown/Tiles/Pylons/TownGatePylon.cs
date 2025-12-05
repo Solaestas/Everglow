@@ -6,11 +6,12 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.Pylons;
 
-public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
+public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
 {
 	public override void SetStaticDefaults()
 	{
-		AddMapEntry(new Color(17, 164, 255));
+		AddMapEntry(new Color(60, 61, 118));
+		MinPick = int.MaxValue;
 		base.SetStaticDefaults();
 	}
 
@@ -30,8 +31,8 @@ public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(0f, 0.4f, 0.9f, 0f), Color.White, CrystalVerticalFrameCount, true, PylonSparkDustType);
-		Lighting.AddLight(i, j, 0f, 0.4f, 0.9f);
+		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), Color.White * 0.1f, new Color(0.1f, 0.1f, 0.2f, 0.5f), CrystalVerticalFrameCount, true, PylonSparkDustType);
+		Lighting.AddLight(i, j, 0.6f, 0.3f, 0.4f);
 	}
 
 	public override void DrawModPylon(SpriteBatch spriteBatch, int i, int j, Asset<Texture2D> CrystalTexture, Asset<Texture2D> CrystalHighlightTexture, Vector2 crystalOffset, Color pylonShadowColor, Color dustColor, int crystalVerticalFrameCount, bool animation = true, int dustType = 43)
@@ -80,10 +81,10 @@ public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
 
 		// Get color value and draw the the crystal
 		Color color = Lighting.GetColor(point.X, point.Y);
-		color = Color.Lerp(color, Color.White, 0.8f);
+		color = Color.Lerp(color, Color.White, 0.2f);
 		spriteBatch.Draw(CrystalTexture.Value, drawingPosition - Main.screenPosition, crystalFrame, color * 0.7f, 0f, origin, 1f, SpriteEffects.None, 0f);
 
-		Texture2D glow = ModAsset.HolographicPylon_Crystal_glow.Value;
+		Texture2D glow = ModAsset.TownGatePylon_Crystal_glow.Value;
 		spriteBatch.Draw(glow, drawingPosition - Main.screenPosition, crystalFrame, new Color(1f, 1f, 1f, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
 
 		// Draw the shadow effect for the crystal
@@ -119,16 +120,5 @@ public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
 
 		Color selectionGlowColor = Colors.GetSelectionGlowColor(selectionLevel == 2, averageBrightness);
 		spriteBatch.Draw(CrystalHighlightTexture.Value, drawingPosition - Main.screenPosition, smartCursorGlowFrame, selectionGlowColor, 0f, origin, 1f, SpriteEffects.None, 0f);
-	}
-
-	public override void GenerateDust(Rectangle dustBox, int dustType, Color dustColor, float chance)
-	{
-		if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextFloat() < chance)
-		{
-			int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, dustType, 0f, 0f, 254, dustColor, 0.5f);
-			Dust obj = Main.dust[numForDust];
-			obj.velocity *= 0.1f;
-			Main.dust[numForDust].velocity.Y -= 0.2f;
-		}
 	}
 }
