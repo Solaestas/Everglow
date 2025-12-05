@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Commons.Templates.Pylon;
 
-public abstract class EverglowPylon<T> : ModPylon
+public abstract class EverglowPylonBase<T> : ModPylon
 	where T : TEModdedPylon
 {
 	public const int DefaultVerticalOffset = -12;
@@ -76,7 +76,7 @@ public abstract class EverglowPylon<T> : ModPylon
 	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
 	{
 		bool mouseOver = DefaultDrawMapIcon(ref context, MapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, nameof(Type), ref mouseOverText);
+		DefaultMapClickHandle(mouseOver, pylonInfo, $"Mods.Everglow.ItemName.{GetType().Name}Item", ref mouseOverText);
 	}
 
 	/// <summary>

@@ -5,7 +5,7 @@ using Terraria.Map;
 
 namespace Everglow.Myth.TheFirefly.Pylon;
 
-public class FireflyPylon : EverglowPylon<FireflyPylonTileEntity>
+public class FireflyPylon : EverglowPylonBase<FireflyPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<FireflyPylonItem>();
 
@@ -39,8 +39,7 @@ public class FireflyPylon : EverglowPylon<FireflyPylonTileEntity>
 			return;
 		}
 
-		bool mouseOver = DefaultDrawMapIcon(ref context, MapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.FireflyPylonItem", ref mouseOverText);
+		base.DrawMapIcon(ref context, ref mouseOverText, pylonInfo, isNearPylon, drawColor, deselectedScale, selectedScale);
 	}
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

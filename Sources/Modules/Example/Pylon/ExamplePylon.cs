@@ -8,7 +8,7 @@ namespace Everglow.Example.Pylon;
 /// <summary>
 /// Example of infinite placement pylon that uses the EverglowPylon template.
 /// </summary>
-public class ExamplePylon : EverglowPylon<ExamplePylonTileEntity>
+public class ExamplePylon : EverglowPylonBase<ExamplePylonTileEntity>
 {
 	public override void SetStaticDefaults()
 	{

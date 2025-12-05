@@ -5,29 +5,26 @@ using Terraria.Map;
 
 namespace Everglow.Myth.TheFirefly.Pylon;
 
-public class ShabbyPylon : EverglowPylon<ShabbyPylonTileEntity>
+public class ShabbyPylon : EverglowPylonBase<ShabbyPylonTileEntity>
 {
+	public float AscensionTimer = 0;
+	public const float MaxAscensionTime = 100;
+	public int AnimationTimer = 0;
+	public const float MaxTime = 100f;
+
+	public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
+
 	public override void PostSetDefaults()
 	{
 		DustType = DustID.Lead;
 		AddMapEntry(new Color(105, 113, 105));
 	}
 
-	public override int DropItemType => ModContent.ItemType<ShabbyPylonItem>();
-
-	public override bool ValidTeleportCheck_NPCCount(TeleportPylonInfo pylonInfo, int defaultNecessaryNPCCount)
-	{
-		return true;
-	}
+	public override bool ValidTeleportCheck_NPCCount(TeleportPylonInfo pylonInfo, int defaultNecessaryNPCCount) => true;
 
 	public override bool ValidTeleportCheck_AnyDanger(TeleportPylonInfo pylonInfo) => true;
 
-	public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
-	{
-		return true;
-
-		// Vector2.Distance(Main.LocalPlayer.Center, ModContent.GetInstance<ShabbyPylonTileEntity>().Position.ToVector2() + new Vector2(24, 32)) <= 80;
-	}
+	public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData) => true; // Vector2.Distance(Main.LocalPlayer.Center, ModContent.GetInstance<ShabbyPylonTileEntity>().Position.ToVector2() + new Vector2(24, 32)) <= 80;
 
 	public override void ValidTeleportCheck_DestinationPostCheck(TeleportPylonInfo destinationPylonInfo, ref bool destinationPylonValid, ref string errorKey)
 	{
@@ -62,11 +59,6 @@ public class ShabbyPylon : EverglowPylon<ShabbyPylonTileEntity>
 		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, offset), shadowColor, Color.Gray, CrystalVerticalFrameCount, animation);
 	}
 
-	public float AscensionTimer = 0;
-	public const float MaxAscensionTime = 100;
-	public int AnimationTimer = 0;
-	public const float MaxTime = 100f;
-
 	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
 	{
 		if (!PylonSystem.Instance.shabbyPylonEnable)
@@ -90,7 +82,6 @@ public class ShabbyPylon : EverglowPylon<ShabbyPylonTileEntity>
 			return;
 		}
 
-		bool mouseOver = DefaultDrawMapIcon(ref context, MapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.ShabbyPylonItem", ref mouseOverText);
+		base.DrawMapIcon(ref context, ref mouseOverText, pylonInfo, isNearPylon, drawColor, deselectedScale, selectedScale);
 	}
 }

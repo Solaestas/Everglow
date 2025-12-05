@@ -1,12 +1,10 @@
 using Everglow.Commons.Templates.Pylon;
 using Everglow.Yggdrasil.Common.Dusts;
 using Everglow.Yggdrasil.Common.Projectiles;
-using Terraria.GameContent;
-using Terraria.Map;
 
 namespace Everglow.Yggdrasil.Common.Tiles;
 
-public class YggdrasilWorldPylon : EverglowPylon<YggdrasilWorldPylonTileEntity>
+public class YggdrasilWorldPylon : EverglowPylonBase<YggdrasilWorldPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<YggdrasilWorldPylon_Item>();
 
@@ -16,12 +14,6 @@ public class YggdrasilWorldPylon : EverglowPylon<YggdrasilWorldPylonTileEntity>
 	{
 		Lighting.AddLight(new Point(i + 1, j).ToWorldCoordinates(), new Vector3(1.3f, 1.3f, 1.3f));
 		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), Color.White * 0.1f, Color.White, CrystalVerticalFrameCount, true, ModContent.DustType<YggdrasilWorldPylonDust>());
-	}
-
-	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
-	{
-		bool mouseOver = DefaultDrawMapIcon(ref context, MapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
-		DefaultMapClickHandle(mouseOver, pylonInfo, "Mods.Everglow.ItemName.YggdrasilWorldPylonItem", ref mouseOverText);
 	}
 
 	public override bool RightClick(int i, int j)
