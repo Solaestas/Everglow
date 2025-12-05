@@ -14,7 +14,7 @@ public class DevilHeartBayonet : StabbingSwordItem
 		Item.rare = ItemRarityID.Green;
 		Item.value = Item.sellPrice(0, 2, 0, 0);
 		Item.shoot = ModContent.ProjectileType<DevilHeartBayonet_proj>();
-		StabMulDamage = 4f;
+		PowerfulStabDamageFlat = 4f;
 		PowerfulStabProj = ModContent.ProjectileType<DevilHeartBayonet_proj_stab>();
 
 		base.SetDefaults();

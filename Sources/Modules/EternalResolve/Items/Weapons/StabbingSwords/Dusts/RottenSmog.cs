@@ -1,11 +1,11 @@
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
 	/// <summary>
 	/// 用color.R和color.G存归属于哪一个Proj
 	/// </summary>
-    public class RottenSmog : ModDust
+	public class RottenSmog : ModDust
 	{
 		public override bool Update(Dust dust)
 		{
