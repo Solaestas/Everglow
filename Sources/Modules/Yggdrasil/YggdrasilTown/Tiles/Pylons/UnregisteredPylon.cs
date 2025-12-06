@@ -1,16 +1,19 @@
 using Everglow.Commons.Templates.Pylon;
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using ReLogic.Content;
+using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Map;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.Pylons;
 
-public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
+public class UnregisteredPylon : EverglowPylonBase<UnregisteredPylonTileEntity>
 {
 	public override void SetStaticDefaults()
 	{
-		AddMapEntry(new Color(60, 61, 118));
-		MinPick = int.MaxValue;
+		AddMapEntry(new Color(175, 0, 0));
 		base.SetStaticDefaults();
 	}
 
@@ -30,8 +33,12 @@ public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), Color.White * 0.1f, new Color(0.1f, 0.1f, 0.2f, 0.5f), CrystalVerticalFrameCount, true, PylonSparkDustType);
-		Lighting.AddLight(i, j, 0.6f, 0.3f, 0.4f);
+		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(0.2f, 0.0f, 0.0f, 0), new Color(0.9f, 0f, 0f, 0f), CrystalVerticalFrameCount, true, PylonSparkDustType);
+		Lighting.AddLight(i, j, 1f, 0f, 0f);
+	}
+
+	public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale)
+	{
 	}
 
 	public override void DrawModPylon(SpriteBatch spriteBatch, int i, int j, Asset<Texture2D> CrystalTexture, Asset<Texture2D> CrystalHighlightTexture, Vector2 crystalOffset, Color pylonShadowColor, Color dustColor, int crystalVerticalFrameCount, bool animation = true, int dustType = 43)
@@ -80,10 +87,10 @@ public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
 
 		// Get color value and draw the the crystal
 		Color color = Lighting.GetColor(point.X, point.Y);
-		color = Color.Lerp(color, Color.White, 0.2f);
+		color = Color.Lerp(color, Color.White, 0.8f);
 		spriteBatch.Draw(CrystalTexture.Value, drawingPosition - Main.screenPosition, crystalFrame, color * 0.7f, 0f, origin, 1f, SpriteEffects.None, 0f);
 
-		Texture2D glow = ModAsset.TownGatePylon_Crystal_glow.Value;
+		Texture2D glow = ModAsset.UnregisteredPylon_Crystal_glow.Value;
 		spriteBatch.Draw(glow, drawingPosition - Main.screenPosition, crystalFrame, new Color(1f, 1f, 1f, 0), 0f, origin, 1f, SpriteEffects.None, 0f);
 
 		// Draw the shadow effect for the crystal
@@ -121,6 +128,17 @@ public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
 		spriteBatch.Draw(CrystalHighlightTexture.Value, drawingPosition - Main.screenPosition, smartCursorGlowFrame, selectionGlowColor, 0f, origin, 1f, SpriteEffects.None, 0f);
 	}
 
+	public override void GenerateDust(Rectangle dustBox, int dustType, Color dustColor, float chance)
+	{
+		if (!Main.gamePaused && Main.instance.IsActive && (!Lighting.UpdateEveryFrame || Main.rand.NextBool(4)) && Main.rand.NextFloat() < chance)
+		{
+			int numForDust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, dustType, 0f, 0f, 254, dustColor, 0.5f);
+			Dust obj = Main.dust[numForDust];
+			obj.velocity *= 0.1f;
+			Main.dust[numForDust].velocity.Y -= 0.2f;
+		}
+	}
+
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
@@ -129,7 +147,83 @@ public class TownGatePylon : EverglowPylonBase<TownGatePylonTileEntity>
 		{
 			zero = Vector2.Zero;
 		}
-		Texture2D tex = ModAsset.HolographicPylon_glow.Value;
+		Texture2D tex = ModAsset.UnregisteredPylon_glow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
+	}
+
+	public override bool RightClick(int i, int j)
+	{
+		var tile = Main.tile[i, j];
+		var topLeftTile = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
+		for (int x = 0; x < 3; x++)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				var checkPoint = new Point(topLeftTile.X + x, topLeftTile.Y + y);
+				var checkTile = WorldGenMisc.SafeGetTile(checkPoint);
+				if (checkTile.TileType == Type)
+				{
+					checkTile.TileType = (ushort)ModContent.TileType<HolographicPylon>();
+					checkTile.TileFrameX = (short)(x * 18);
+					checkTile.TileFrameY = (short)(y * 18);
+				}
+				if(x == 0 && y == 0)
+				{
+					TileEntity tileEntityOld;
+					TileEntity.ByPosition.TryGetValue(new Point16(checkPoint.X, checkPoint.Y), out tileEntityOld);
+					if (tileEntityOld is not null)
+					{
+						ModContent.GetInstance<UnregisteredPylonTileEntity>().Kill(checkPoint.X, checkPoint.Y);
+						TileEntity.PlaceEntityNet(checkPoint.X, checkPoint.Y, ModContent.TileEntityType<HolographicPylonTileEntity>());
+					}
+				}
+				if(x == 1 && y == 3)
+				{
+					UnlockVFX(checkPoint.X, checkPoint.Y);
+				}
+			}
+		}
+		return false;
+	}
+
+	public void UnlockVFX(int x, int y)
+	{
+		Vector2 worldPos = new Point(x, y).ToWorldCoordinates();
+		for (int i = 0; i < 6 + 10; i++)
+		{
+			var vel = new Vector2(0, -Main.rand.NextFloat(3.6f, 6.4f));
+			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 22.4f)).RotatedByRandom(MathHelper.TwoPi);
+			pos.Y *= 0.1f;
+			var dust = new AvariceSuccessDust
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = worldPos + pos,
+				maxTime = Main.rand.Next(60, 120),
+				scale = Main.rand.NextFloat(1f, 2f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(4.0f, 10.93f) },
+			};
+			Ins.VFXManager.Add(dust);
+		}
+		for (int i = 0; i < 12; i++)
+		{
+			var vel = new Vector2(0, -Main.rand.NextFloat(1.6f, 6.4f));
+			Vector2 pos = new Vector2(0, Main.rand.NextFloat(0f, 50.4f)).RotatedByRandom(MathHelper.TwoPi);
+			pos.Y *= 0.1f;
+			var cube = new AvariceSuccessCube
+			{
+				velocity = vel,
+				Active = true,
+				Visible = true,
+				position = worldPos + pos,
+				maxTime = Main.rand.Next(60, 120),
+				scale = Main.rand.NextFloat(10f, 20f),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(4.0f, 20.93f), 0.06f },
+			};
+			Ins.VFXManager.Add(cube);
+		}
 	}
 }

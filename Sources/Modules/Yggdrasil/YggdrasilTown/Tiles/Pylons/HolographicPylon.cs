@@ -1,5 +1,4 @@
 using Everglow.Commons.Templates.Pylon;
-using Everglow.Example.Pylon;
 using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.ObjectData;
@@ -30,7 +29,7 @@ public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(0f, 0.4f, 0.9f, 0f), Color.White, CrystalVerticalFrameCount, true, PylonSparkDustType);
+		DrawModPylon(spriteBatch, i, j, CrystalTexture, CrystalHighlightTexture, new Vector2(0, DefaultVerticalOffset), new Color(0f, 0.4f, 0.9f, 0f), new Color(0f, 0.4f, 0.9f, 0f), CrystalVerticalFrameCount, true, PylonSparkDustType);
 		Lighting.AddLight(i, j, 0f, 0.4f, 0.9f);
 	}
 
@@ -130,5 +129,17 @@ public class HolographicPylon : EverglowPylonBase<HolographicPylonTileEntity>
 			obj.velocity *= 0.1f;
 			Main.dust[numForDust].velocity.Y -= 0.2f;
 		}
+	}
+
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		var tile = Main.tile[i, j];
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.Zero;
+		}
+		Texture2D tex = ModAsset.HolographicPylon_glow.Value;
+		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
 	}
 }
