@@ -95,6 +95,8 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 			Ins.VFXManager.Add(uYSF);
 			Union_Y_Stairs_Back uYSB = new Union_Y_Stairs_Back { Position = new Vector2(i, j) * 16 + new Vector2(0, -70), Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 			Ins.VFXManager.Add(uYSB);
+			Union_Y_Stairs_ban_2nd_floor uYSB2F = new Union_Y_Stairs_ban_2nd_floor { Position = new Vector2(i, j) * 16 + new Vector2(303, 140), Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
+			Ins.VFXManager.Add(uYSB2F);
 		}
 	}
 
