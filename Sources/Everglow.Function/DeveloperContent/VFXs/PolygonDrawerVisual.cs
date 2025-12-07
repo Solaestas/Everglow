@@ -28,7 +28,9 @@ public class PolygonDrawerVisual : Visual
 		}
 
 		// Ensure player holding specfic item
-		if (Owner.HeldItem.type != ModContent.ItemType<PolygonDrawerItem>())
+		if (Owner.HeldItem.type != ModContent.ItemType<PolygonDrawerItem>()
+			|| Owner.HeldItem.ModItem is not PolygonDrawerItem poly
+			|| poly.Visual != this)
 		{
 			Active = false;
 			return;
