@@ -7,7 +7,7 @@ namespace Everglow.Commons.DeveloperContent.Items;
 /// </summary>
 public class PolygonDrawerItem : ModItem
 {
-	private PolygonCollisionHelper polygonCollisionHelper = null;
+	public PolygonDrawerVisual Visual { get; private set; } = null;
 
 	public override void SetDefaults()
 	{
@@ -19,21 +19,20 @@ public class PolygonDrawerItem : ModItem
 
 	public override void HoldItem(Player player)
 	{
-		if (polygonCollisionHelper is not null && polygonCollisionHelper.Active)
+		if (Visual is not null && Visual.Active)
 		{
 			return;
 		}
 
-		var helper = new PolygonCollisionHelper()
+		var helper = new PolygonDrawerVisual()
 		{
 			Visible = true,
-			Active = true,
 			Owner = player,
 		};
 
 		Ins.VFXManager.Add(helper);
 
 		// Save after adding for ensuring the helper visual can be added correctly instead of stucking this item in bug.
-		polygonCollisionHelper = helper;
+		Visual = helper;
 	}
 }

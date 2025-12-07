@@ -9,7 +9,7 @@ using static Everglow.Commons.Utilities.MathUtils;
 namespace Everglow.Commons.DeveloperContent.VFXs;
 
 [Pipeline(typeof(WCSPipeline))]
-public class PolygonCollisionHelper : Visual
+public class PolygonDrawerVisual : Visual
 {
 	public const int RightClickDetectionRange = 20;
 
