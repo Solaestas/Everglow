@@ -26,7 +26,6 @@ public class PolygonDrawerItem : ModItem
 
 		var helper = new PolygonDrawerVisual()
 		{
-			Visible = true,
 			Owner = player,
 		};
 
