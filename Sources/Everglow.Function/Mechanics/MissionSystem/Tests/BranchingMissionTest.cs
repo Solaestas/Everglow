@@ -21,14 +21,14 @@ public class BranchingMissionTest : MissionBase
 		var objective2_1 = new ConsumeItemObjective(new ItemRequirement([ItemID.WoodenArrow], 2));
 		var objective2_2 = new KillNPCObjective();
 		objective2_2.DemandNPC = KillNPCRequirement.Create([NPCID.BlueSlime, NPCID.IceSlime, NPCID.SpikedJungleSlime, NPCID.MotherSlime], 5, true);
-		var branch2 = new MissionObjectiveData().Add(objective2_1).Add(objective2_2);
+		var branch2 = new MissionObjectiveContainer().Add(objective2_1).Add(objective2_2);
 
 		var objective3 = new KillNPCObjective(KillNPCRequirement.Create(
 				[
 					NPCID.EyeofCthulhu,
 				], 2, true));
 
-		var branch3 = new MissionObjectiveData().Add(objective3);
+		var branch3 = new MissionObjectiveContainer().Add(objective3);
 
 		Objectives.Add(objective1).AddBranches(branch2, branch3);
 

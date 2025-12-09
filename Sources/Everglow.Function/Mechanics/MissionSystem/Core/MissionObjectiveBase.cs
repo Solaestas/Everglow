@@ -25,7 +25,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="MissionObjectiveData.Add(MissionObjectiveBase)"/>.
+	/// Invoked by <see cref="MissionObjectiveContainer.Add(MissionObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()

@@ -29,7 +29,7 @@ public abstract class MissionBase : ITagCompoundEntity
 
 	protected MissionBase()
 	{
-		Objectives = new MissionObjectiveData();
+		Objectives = new MissionObjectiveContainer();
 		RewardItems = [];
 		Time = 0;
 	}
@@ -75,7 +75,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务目标数据
 	/// </summary>
-	public MissionObjectiveData Objectives { get; set; }
+	public MissionObjectiveContainer Objectives { get; set; }
 
 	/// <summary>
 	/// 当前任务目标

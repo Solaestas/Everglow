@@ -2,9 +2,9 @@ using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Core;
 
-public class MissionObjectiveData
+public class MissionObjectiveContainer
 {
-	public MissionObjectiveData() => AllObjectives = [];
+	public MissionObjectiveContainer() => AllObjectives = [];
 
 	public MissionObjectiveBase this[int index] => AllObjectives[index];
 
@@ -23,7 +23,7 @@ public class MissionObjectiveData
 	public MissionObjectiveBase FirstIncomplete => AllObjectives.Count != 0 ?
 		AllObjectives.First(x => !x.Completed) : null;
 
-	public MissionObjectiveData Add(MissionObjectiveBase objective)
+	public MissionObjectiveContainer Add(MissionObjectiveBase objective)
 	{
 		objective.ObjectiveID = AllObjectives.Count;
 		objective.OnInitialize(); // On create hook
@@ -51,7 +51,7 @@ public class MissionObjectiveData
 	/// </summary>
 	/// <param name="tasks">The array of objectives will be in the parallel objective</param>
 	/// <returns></returns>
-	public MissionObjectiveData AddParallel(params MissionObjectiveBase[] objectives)
+	public MissionObjectiveContainer AddParallel(params MissionObjectiveBase[] objectives)
 	{
 		return Add(new ParallelObjective(objectives));
 	}
@@ -61,19 +61,18 @@ public class MissionObjectiveData
 	/// </summary>
 	/// <param name="branches"></param>
 	/// <returns></returns>
-	public MissionObjectiveData AddBranches(params MissionObjectiveData[] branches)
+	public MissionObjectiveContainer AddBranches(params MissionObjectiveContainer[] branches)
 	{
-		//foreach (var builder in branches)
-		//{
-		//	CombineWith(builder);
-		//}
-
+		// foreach (var builder in branches)
+		// {
+		// 	 CombineWith(builder);
+		// }
 		var branchingObjective = new BranchingObjective(branches.Select(t => t.First).ToArray());
 
 		return Add(branchingObjective);
 	}
 
-	public void CombineWith(MissionObjectiveData data)
+	public void CombineWith(MissionObjectiveContainer data)
 	{
 		foreach (MissionObjectiveBase objective in data.AllObjectives)
 		{
