@@ -1,5 +1,8 @@
 using Everglow.CagedDomain.Items;
 using Everglow.Commons.VFX.Scene;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.ObjectData;
 
 namespace Everglow.CagedDomain.Tiles.Escalator;
@@ -12,6 +15,7 @@ public class NormalEscalator : ModTile, ISceneTile
 		Main.tileLavaDeath[Type] = true;
 		Main.tileFrameImportant[Type] = true;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+		TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
 		DustType = DustID.WoodFurniture;
@@ -27,12 +31,18 @@ public class NormalEscalator : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
+		int dir = 1;
+		Tile tile = Main.tile[i, j];
+		if (tile.TileFrameX == 18)
+		{
+			dir = -1;
+		}
 		var escalator_VFX = new NormalEscalator_VFX()
 		{
 			OriginTilePos = new Point(i, j),
 			OriginTileType = Type,
 			Position = new Vector2(i * 16, j * 16),
-			Direction = 1,
+			Direction = dir,
 			Active = true,
 			Visible = true,
 		};

@@ -1,7 +1,7 @@
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.CagedDomain.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 
 public class ClothesShelf_Feature_Nature : ModTile
 {

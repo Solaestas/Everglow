@@ -38,6 +38,6 @@ public class NormalEscalator_Item : ModItem
 				Item.value = 40000;
 				break;
 		}
-		Item.placeStyle = Math.Max(player.direction, 0);
+		Item.placeStyle = Math.Max(-player.direction, 0);
 	}
 }

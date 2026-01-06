@@ -1,5 +1,4 @@
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
-using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ObjectData;
 
@@ -7,7 +6,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class HeatproofTable : ModTile
 {
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileTable[Type] = true;
 		Main.tileSolidTop[Type] = true;
@@ -32,7 +32,8 @@ public class HeatproofTable : ModTile
 		AddMapEntry(new Color(200, 200, 200), Language.GetText("MapObject.Table"));
 	}
 
-	public override void NumDust(int x, int y, bool fail, ref int num) {
+	public override void NumDust(int x, int y, bool fail, ref int num)
+	{
 		num = fail ? 1 : 3;
 	}
 }

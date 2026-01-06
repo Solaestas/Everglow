@@ -1,10 +1,10 @@
-using Everglow.CagedDomain.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 
-namespace Everglow.CagedDomain.Items;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.GravelStore;
 
 public class ClothesShelf_Feature_Nature_Item : ModItem
 {
-	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+	public override string LocalizationCategory => LocalizationUtils.Categories.Placeables;
 
 	public override void SetDefaults()
 	{

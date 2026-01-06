@@ -1,11 +1,11 @@
-using Everglow.CagedDomain.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 using Terraria.GameInput;
 
-namespace Everglow.CagedDomain.Items;
+namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables.Furniture.GravelStore;
 
 public class ClothesShopSofa_Feature_Nature_Item : ModItem
 {
-	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+	public override string LocalizationCategory => LocalizationUtils.Categories.Placeables;
 
 	public int PlaceState = 0;
 
@@ -18,7 +18,7 @@ public class ClothesShopSofa_Feature_Nature_Item : ModItem
 
 	public override void HoldItem(Player player)
 	{
-		if(PlayerInput.Triggers.JustReleased.MouseRight)
+		if (PlayerInput.Triggers.JustReleased.MouseRight)
 		{
 			PlaceState = (PlaceState + 1) % 2;
 		}

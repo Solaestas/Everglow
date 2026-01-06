@@ -1,19 +1,18 @@
 using Terraria.ObjectData;
 
-namespace Everglow.CagedDomain.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 
-public class ClothesShopSofa_Feature_Nature : ModTile
+public class BakeryCounter : ModTile
 {
 	public override void PostSetDefaults()
 	{
 		Main.tileSolid[Type] = false;
 		Main.tileLavaDeath[Type] = true;
 		Main.tileFrameImportant[Type] = true;
-		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-		TileObjectData.newTile.StyleHorizontal = true;
+		TileUtils.DefaultToMultiTileAnchorBottom(7, 6);
 		TileObjectData.addTile(Type);
 		DustType = DustID.WoodFurniture;
-		AddMapEntry(new Color(127, 89, 77));
+		AddMapEntry(new Color(76, 57, 46));
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}
 

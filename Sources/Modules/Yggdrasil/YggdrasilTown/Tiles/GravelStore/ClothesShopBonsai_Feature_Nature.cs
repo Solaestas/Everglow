@@ -1,8 +1,8 @@
 using Terraria.ObjectData;
 
-namespace Everglow.CagedDomain.Tiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 
-public class ClothesShopTable_Feature_Nature : ModTile
+public class ClothesShopBonsai_Feature_Nature : ModTile
 {
 	public override void PostSetDefaults()
 	{
@@ -13,7 +13,7 @@ public class ClothesShopTable_Feature_Nature : ModTile
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.addTile(Type);
 		DustType = DustID.WoodFurniture;
-		AddMapEntry(new Color(127, 89, 77));
+		AddMapEntry(new Color(66, 99, 50));
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}
 

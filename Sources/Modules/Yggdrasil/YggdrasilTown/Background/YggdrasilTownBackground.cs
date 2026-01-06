@@ -1,11 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.Common.BackgroundManager;
-using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using SubworldLibrary;
-using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Background;
 
@@ -64,6 +61,11 @@ public class YggdrasilTownBackground : ModSystem
 	/// Background alpha of cage
 	/// </summary>
 	public float BackgroundAlphaCage = 0f;
+
+	/// <summary>
+	/// Background alpha of JellyBall hotbed
+	/// </summary>
+	public float BackgroundAlphaJellyBallHotbed = 0f;
 
 	public static Vector2 Stratum1Center => new Vector2(Main.maxTilesX / 2f * 16, (Main.maxTilesY - 1000) * 16);
 
@@ -133,6 +135,7 @@ public class YggdrasilTownBackground : ModSystem
 		DrawLampWood(baseColor);
 		DrawTwilightForsetAndRelic(baseColor);
 		DrawCageOfChallengers(baseColor);
+		DrawJellyBallHotbed(baseColor);
 	}
 
 	public void DrawYggdrasilTown_Town(Color baseColor)
@@ -180,7 +183,7 @@ public class YggdrasilTownBackground : ModSystem
 				BackgroundManager.QuickDrawBG(townFar, 15f, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(townMiddle, 6f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				BackgroundManager.QuickDrawBG(townClose, 3f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				if(YggdrasilTownCentralSystem.InArena_YggdrasilTown())
+				if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 				{
 					var arenaClose = ModAsset.ArenaBackground.Value;
 					BackgroundManager.QuickDrawBG(arenaClose, 1.5f, correction + new Vector2(3150, 3754), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
@@ -228,6 +231,48 @@ public class YggdrasilTownBackground : ModSystem
 			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 2950), baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+		}
+	}
+
+	public void DrawJellyBallHotbed(Color baseColor)
+	{
+		if (ModContent.GetInstance<JellyBallHotbedBiome>().IsBiomeActive(Main.LocalPlayer))
+		{
+			if (BackgroundAlphaJellyBallHotbed < 1f)
+			{
+				BackgroundAlphaJellyBallHotbed += 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaJellyBallHotbed = 1f;
+			}
+		}
+		else
+		{
+			if (BackgroundAlphaJellyBallHotbed > 0f)
+			{
+				BackgroundAlphaJellyBallHotbed -= 0.02f;
+			}
+			else
+			{
+				BackgroundAlphaJellyBallHotbed = 0;
+			}
+		}
+
+		if (BackgroundAlphaJellyBallHotbed > 0)
+		{
+			var jellyClose = ModAsset.JellyBallHotbed_Close.Value;
+			var jellyFar = ModAsset.JellyBallHotbed_Far.Value;
+
+			int upBound = Main.maxTilesY - 500;
+			int bottomBound = Main.maxTilesY - 40;
+			int leftBound = Main.maxTilesX - 350;
+			int rightBound = Main.maxTilesX;
+			Vector2 anchorPos = new Vector2((leftBound + rightBound) / 2f, (upBound + bottomBound) / 2f - 120f);
+			anchorPos *= 16f;
+
+			BackgroundManager.QuickDrawBG(jellyFar, 20f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), true, true);
+			BackgroundManager.QuickDrawBG(jellyClose, 6f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 		}
 	}
 

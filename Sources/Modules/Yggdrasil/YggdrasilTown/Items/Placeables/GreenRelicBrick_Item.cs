@@ -1,6 +1,6 @@
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.GravelStore;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest.RoomScenes;
 using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Items.Placeables;
@@ -11,7 +11,7 @@ public class GreenRelicBrick_Item : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<DarkDragon_Scene>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<Bakery_Scene>());
 		Item.width = 16;
 		Item.height = 16;
 	}
@@ -19,6 +19,7 @@ public class GreenRelicBrick_Item : ModItem
 	public override void HoldItem(Player player)
 	{
 		// Green brick runner.
+		Item.DefaultToPlaceableTile(ModContent.TileType<Bakery_Scene>());
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			Point point = Main.MouseWorld.ToTileCoordinates();

@@ -1,5 +1,4 @@
 using Everglow.Commons.VFX.Scene;
-using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 
@@ -86,7 +85,8 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 	{
 		bool flipH = bg.FlipHorizontally(bg.OriginTilePos.X, bg.OriginTilePos.Y);
 		Texture2D tex0 = ModAsset.BloodChurch_Scene_Background.Value;
-		//Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
+
+		// Texture2D tex1 = ModAsset.BloodChurch_Scene_Far.Value;
 		Texture2D tex2 = ModAsset.BloodChurch_Scene_Fountain.Value;
 		Texture2D tex2_red = ModAsset.BloodChurch_Scene_Fountain_Red.Value;
 		Texture2D tex3_dark = Commons.ModAsset.Noise_flame_2_pure_black.Value;
@@ -97,13 +97,13 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 		SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex0, bars, flipH);
 		Ins.Batch.Draw(tex0, bars, PrimitiveType.TriangleList);
 
-		//bars = new List<Vertex2D>();
-		//SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
-		//Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
+		// bars = new List<Vertex2D>();
+		// SceneUtils.DrawMultiSceneTowardBottom(bg.OriginTilePos.X, bg.OriginTilePos.Y, tex1, bars, flipH);
+		// Ins.Batch.Draw(tex1, bars, PrimitiveType.TriangleList);
 
 		// Fountain waterfall background
 		int direction = 1;
-		if(flipH)
+		if (flipH)
 		{
 			direction = -1;
 		}
@@ -272,7 +272,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 
 				float coordX0 = coordX;
 				float coordX1 = coordX + addCoordX;
-				if(flipH)
+				if (flipH)
 				{
 					(coordX0, coordX1) = (coordX1, coordX0);
 				}
@@ -305,7 +305,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 	{
 		bool flipH = FlipHorizontally(i, j);
 		int direction = 1;
-		if(flipH)
+		if (flipH)
 		{
 			direction = -1;
 		}
@@ -364,7 +364,7 @@ public class BloodChurch_Scene : ModTile, ISceneTile
 					pos.Y -= 8;
 				}
 				int frameY = 10;
-				if(Main.rand.NextBool(3))
+				if (Main.rand.NextBool(3))
 				{
 					frameY = 20;
 				}

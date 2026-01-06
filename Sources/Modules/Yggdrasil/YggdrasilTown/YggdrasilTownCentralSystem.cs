@@ -1,13 +1,10 @@
 using Everglow.SubSpace;
-using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Miscs.PlayerArena;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
-using Microsoft.Xna.Framework.Graphics;
 using SubworldLibrary;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
@@ -180,9 +177,18 @@ public class YggdrasilTownCentralSystem : ModSystem
 		return false;
 	}
 
+	public static bool InGravelStore_YggdrasilTown()
+	{
+		if (SubworldSystem.Current is RoomWorld)
+		{
+			return TileUtils.SafeGetTile(20, 20).TileType == ModContent.TileType<GravelStoreCommandBlock>();
+		}
+		return false;
+	}
+
 	public static bool InFurnace_YggdrasilTown()
 	{
-		if(Main.dedServ)
+		if (Main.dedServ)
 		{
 			return false;
 		}
@@ -343,7 +349,7 @@ public class ArenaPlayer : ModPlayer
 				}
 				Player.GetDamage(DamageClass.Generic) *= DamageReduce;
 			}
-			if(ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
+			if (ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
 			{
 				ShieldCooling = 0;
 				var tile = TileUtils.SafeGetTile((Player.Bottom + new Vector2(0, 16)).ToTileCoordinates());
@@ -439,7 +445,7 @@ public class ArenaPlayer : ModPlayer
 			if (TargetBoss != null && TargetBoss.active)
 			{
 				TownNPC_LiveInYggdrasil tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
-				if(tNLIY != null)
+				if (tNLIY != null)
 				{
 					tNLIY.PopFailVFX();
 				}
