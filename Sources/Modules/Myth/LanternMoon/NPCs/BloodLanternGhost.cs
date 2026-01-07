@@ -10,12 +10,14 @@ namespace Everglow.Myth.LanternMoon.NPCs;
 
 public class BloodLanternGhost : ModNPC
 {
-	public override string Texture => "Everglow/Myth/LanternMoon/NPCs/BloodLanternGhost_drained";
-	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
+
+	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 8;
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 75;
@@ -32,6 +34,7 @@ public class BloodLanternGhost : ModNPC
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		NPC.frame.Y = 0;
@@ -39,6 +42,7 @@ public class BloodLanternGhost : ModNPC
 		NPC.ai[1] = 0;
 		NPC.ai[2] = 0;
 	}
+
 	public override void FindFrame(int frameHeight)
 	{
 		if (DizzyTime <= 0)
@@ -59,6 +63,7 @@ public class BloodLanternGhost : ModNPC
 			}
 		}
 	}
+
 	public override void AI()
 	{
 		NPC.TargetClosest(false);
@@ -79,7 +84,7 @@ public class BloodLanternGhost : ModNPC
 		}
 
 		Vector2 toPlayer = player.Center + new Vector2(0, -100).RotatedBy(MathF.Sin(NPC.whoAmI)) - NPC.Center - NPC.velocity;
-		if (NPC.ai[1] == 0)//巡游
+		if (NPC.ai[1] == 0)// 巡游
 		{
 			if (toPlayer.Length() > 1000)
 			{
@@ -103,9 +108,8 @@ public class BloodLanternGhost : ModNPC
 				}
 			}
 		}
-		else//冲撞
+		else// 冲撞
 		{
-
 			NPC.ai[0]++;
 			if (NPC.ai[0] < 30)
 			{
@@ -130,7 +134,7 @@ public class BloodLanternGhost : ModNPC
 			{
 				NPC.velocity.Y -= 2.5f;
 			}
-			if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)//结束冲撞
+			if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)// 结束冲撞
 			{
 				NPC.ai[1] = 0;
 			}
@@ -151,6 +155,7 @@ public class BloodLanternGhost : ModNPC
 			}
 		}
 	}
+
 	public void UpdateExplosion()
 	{
 		Player player = Main.player[NPC.target];
@@ -167,11 +172,14 @@ public class BloodLanternGhost : ModNPC
 			KillMe();
 		}
 	}
+
 	public int DizzyTime = -1;
 	public int ExplosionTimer = -1;
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
@@ -181,6 +189,7 @@ public class BloodLanternGhost : ModNPC
 			NPC.dontTakeDamage = true;
 		}
 	}
+
 	public void KillMe()
 	{
 		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
@@ -190,44 +199,43 @@ public class BloodLanternGhost : ModNPC
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), NPC.Center);
 		for (int f = 0; f < 2; f++)
 		{
-			var gore2 = new FloatLanternGore3
+			var gore2 = new EvilLanternGore3
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore2);
-			var gore3 = new FloatLanternGore4
+			var gore3 = new EvilLanternGore4
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore3);
-			var gore4 = new FloatLanternGore5
+			var gore4 = new EvilLanternGore5
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore4);
-			var gore5 = new FloatLanternGore6
+			var gore5 = new EvilLanternGore6
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore5);
 		}
-		LanternMoonProgress.AddPoint(15);
 
 		for (int f = 0; f < 22; f++)
 		{
@@ -237,12 +245,14 @@ public class BloodLanternGhost : ModNPC
 			Main.dust[r].velocity = v3;
 		}
 		NPC.active = false;
-		LanternMoonProgress.AddPoint(45);
+		LanternMoon.AddPoint(60);
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
 	}
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -251,7 +261,10 @@ public class BloodLanternGhost : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		NPC.spriteDirection = NPC.direction;
 		if (NPC.spriteDirection == 1)
+		{
 			effects = SpriteEffects.FlipHorizontally;
+		}
+
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
 		Texture2D glow0 = ModAsset.BombLantern_glow.Value;
 
@@ -267,8 +280,6 @@ public class BloodLanternGhost : ModNPC
 			}
 		}
 
-
-
 		if (DizzyTime > 0)
 		{
 			float mulSize = 1f;
@@ -276,9 +287,9 @@ public class BloodLanternGhost : ModNPC
 			{
 				mulSize = DizzyTime / 15f;
 			}
-			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 			Color c0 = drawColor;
 			c0.B = 0;
 			c0.A = 0;
@@ -307,8 +318,8 @@ public class BloodLanternGhost : ModNPC
 				}
 			}
 
-			Main.spriteBatch.End();
-			Main.spriteBatch.Begin(sBS);
+			spriteBatch.End();
+			spriteBatch.Begin(sBS);
 		}
 		else
 		{

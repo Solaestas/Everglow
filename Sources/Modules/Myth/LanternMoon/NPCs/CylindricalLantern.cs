@@ -1,20 +1,16 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
-using SteelSeries.GameSense;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
 public class CylindricalLantern : ModNPC
 {
-	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
+	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 72;
@@ -31,11 +27,13 @@ public class CylindricalLantern : ModNPC
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		NPC.ai[0] = 0;
 		NPC.ai[1] = 0;
 	}
+
 	public override void AI()
 	{
 		NPC.ai[0]++;
@@ -48,12 +46,12 @@ public class CylindricalLantern : ModNPC
 			return;
 		}
 		NPC.velocity *= 0;
-		if(NPC.ai[0] > 200)
+		if (NPC.ai[0] > 200)
 		{
 			NPC.ai[0] = 0;
 			NPC.ai[1] = 60;
 		}
-		if(NPC.ai[1] > 0)
+		if (NPC.ai[1] > 0)
 		{
 			NPC.ai[1]--;
 		}
@@ -61,7 +59,7 @@ public class CylindricalLantern : ModNPC
 		{
 			NPC.alpha = 0;
 		}
-		if(NPC.ai[1] > 30)
+		if (NPC.ai[1] > 30)
 		{
 			NPC.alpha += 10;
 		}
@@ -75,6 +73,7 @@ public class CylindricalLantern : ModNPC
 			NPC.alpha -= 10;
 		}
 	}
+
 	public void UpdateExplosion()
 	{
 		Player player = Main.player[NPC.target];
@@ -86,7 +85,9 @@ public class CylindricalLantern : ModNPC
 			KillMe();
 		}
 	}
+
 	public int ExplosionTimer = -1;
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
@@ -96,55 +97,9 @@ public class CylindricalLantern : ModNPC
 			NPC.dontTakeDamage = true;
 		}
 	}
+
 	public void KillMe()
 	{
-		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
-		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
-		var p1 = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, new Vector2(0, -17), ModContent.ProjectileType<FlameCylinder>(), 85, 0.6f, NPC.target, 5);
-		var p2 = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, new Vector2(0, 17), ModContent.ProjectileType<FlameCylinder>(), 85, 0.6f, NPC.target, 5);
-
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), NPC.Center);
-		for (int f = 0; f < 2; f++)
-		{
-			var gore2 = new FloatLanternGore3
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center
-			};
-			Ins.VFXManager.Add(gore2);
-			var gore3 = new FloatLanternGore4
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center
-			};
-			Ins.VFXManager.Add(gore3);
-			var gore4 = new FloatLanternGore5
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center
-			};
-			Ins.VFXManager.Add(gore4);
-			var gore5 = new FloatLanternGore6
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center
-			};
-			Ins.VFXManager.Add(gore5);
-		}
-		LanternMoonProgress.AddPoint(15);
-
 		for (int f = 0; f < 22; f++)
 		{
 			Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -167,7 +122,7 @@ public class CylindricalLantern : ModNPC
 				maxTime = mulVelocity - 30,
 				scale = Main.rand.NextFloat(7f, 15f) * (mulVelocity - 30f) / 30f,
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(fire);
 		}
@@ -185,7 +140,7 @@ public class CylindricalLantern : ModNPC
 				maxTime = mulVelocity - 30,
 				scale = Main.rand.NextFloat(7f, 15f) * (mulVelocity - 30f) / 30f,
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(fire);
 		}
@@ -202,7 +157,7 @@ public class CylindricalLantern : ModNPC
 				maxTime = Main.rand.Next(17, 125),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.02f, 0.02f) }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.02f, 0.02f) },
 			};
 			Ins.VFXManager.Add(spark);
 		}
@@ -219,17 +174,19 @@ public class CylindricalLantern : ModNPC
 				maxTime = Main.rand.Next(17, 125),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.02f, 0.02f) }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.02f, 0.02f) },
 			};
 			Ins.VFXManager.Add(spark);
 		}
 		NPC.active = false;
-		LanternMoonProgress.AddPoint(45);
+		LanternMoon.AddPoint(45);
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
 	}
+
 	public override void FindFrame(int frameHeight)
 	{
 		NPC.frameCounter++;
@@ -243,6 +200,7 @@ public class CylindricalLantern : ModNPC
 			}
 		}
 	}
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -252,7 +210,10 @@ public class CylindricalLantern : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		NPC.spriteDirection = NPC.direction;
 		if (NPC.spriteDirection == 1)
+		{
 			effects = SpriteEffects.FlipHorizontally;
+		}
+
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, null, drawColor * mulColor, NPC.rotation, texture.Size() * 0.5f, NPC.scale, effects, 0);
 
 		Texture2D flame = ModAsset.CylindricalLantern_flame.Value;
@@ -260,6 +221,5 @@ public class CylindricalLantern : ModNPC
 		spriteBatch.Draw(flame, NPC.Center - Main.screenPosition, new Rectangle(0, NPC.frame.Y, 14, 28), new Color(0.7f, 0.6f, 0.6f, 0) * mulColor, NPC.rotation, new Vector2(7, 14), NPC.scale, effects, 0);
 
 		Lighting.AddLight(NPC.Center, new Vector3(1f, 0.6f, 0.4f) * mulColor);
-
 	}
 }

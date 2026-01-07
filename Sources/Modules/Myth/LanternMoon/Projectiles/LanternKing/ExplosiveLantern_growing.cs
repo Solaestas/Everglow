@@ -117,7 +117,7 @@ public class ExplosiveLantern_growing : ModNPC
 
 	public void Explosion()
 	{
-		var gore2 = new FloatLanternGore3
+		var gore2 = new EvilLanternGore3
 		{
 			Active = true,
 			Visible = true,
@@ -126,7 +126,7 @@ public class ExplosiveLantern_growing : ModNPC
 			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore2);
-		var gore3 = new FloatLanternGore4
+		var gore3 = new EvilLanternGore4
 		{
 			Active = true,
 			Visible = true,
@@ -135,7 +135,7 @@ public class ExplosiveLantern_growing : ModNPC
 			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore3);
-		var gore4 = new FloatLanternGore5
+		var gore4 = new EvilLanternGore5
 		{
 			Active = true,
 			Visible = true,
@@ -144,7 +144,7 @@ public class ExplosiveLantern_growing : ModNPC
 			position = NPC.Center,
 		};
 		Ins.VFXManager.Add(gore4);
-		var gore5 = new FloatLanternGore6
+		var gore5 = new EvilLanternGore6
 		{
 			Active = true,
 			Visible = true,

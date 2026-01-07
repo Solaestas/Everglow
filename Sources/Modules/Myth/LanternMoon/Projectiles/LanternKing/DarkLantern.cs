@@ -48,7 +48,7 @@ public class DarkLantern : TrailingProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		var gore2 = new FloatLanternGore3
+		var gore2 = new EvilLanternGore3
 		{
 			Active = true,
 			Visible = true,
@@ -57,7 +57,7 @@ public class DarkLantern : TrailingProjectile
 			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore2);
-		var gore3 = new FloatLanternGore4
+		var gore3 = new EvilLanternGore4
 		{
 			Active = true,
 			Visible = true,
@@ -66,7 +66,7 @@ public class DarkLantern : TrailingProjectile
 			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore3);
-		var gore4 = new FloatLanternGore5
+		var gore4 = new EvilLanternGore5
 		{
 			Active = true,
 			Visible = true,
@@ -75,7 +75,7 @@ public class DarkLantern : TrailingProjectile
 			position = Projectile.Center,
 		};
 		Ins.VFXManager.Add(gore4);
-		var gore5 = new FloatLanternGore6
+		var gore5 = new EvilLanternGore6
 		{
 			Active = true,
 			Visible = true,

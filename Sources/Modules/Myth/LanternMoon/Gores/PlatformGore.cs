@@ -5,7 +5,7 @@ public class PlatformGore : ModGore
 	public static Vector2[] PlatFrame = new Vector2[1000];
 	public override void SetStaticDefaults()
 	{
-		//GoreID.Sets.DisappearSpeed[ModContent.GoreType<Gores.FloatLanternGore1>()] = 6;
+		//GoreID.Sets.DisappearSpeed[ModContent.GoreType<Gores.EvilLanternGore1>()] = 6;
 	}
 	public override Color? GetAlpha(Gore gore, Color lightColor)
 	{

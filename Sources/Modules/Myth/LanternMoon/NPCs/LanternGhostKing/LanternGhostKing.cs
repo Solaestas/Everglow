@@ -12,7 +12,7 @@ namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 [AutoloadBossHead]
 public class LanternGhostKing : ModNPC
 {
-	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
+	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 	internal bool NearDie = false;
 	internal Vector2 RingCenterTrend;
 	internal Vector2 RingCenter;
@@ -187,7 +187,7 @@ public class LanternGhostKing : ModNPC
 			RingRadiusTrend = 1800;
 			if (Phase == 1 && NPC.life == NPC.lifeMax)
 			{
-				if (NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) >= 1)
+				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) >= 1)
 				{
 					NPC.localAI[0] = 0;
 					NPC.dontTakeDamage = true;
@@ -481,13 +481,13 @@ public class LanternGhostKing : ModNPC
 				{
 					maxCount = 45;
 				}
-				if (NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) < maxCount)
+				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < maxCount)
 				{
 					if (NPC.localAI[0] < 388)
 					{
 						if (NPC.localAI[0] % 7 == 0)
 						{
-							NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<FloatLantern>(), 0, 0, 0, 0, 0, 255);
+							NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
 						}
 					}
 				}
@@ -504,7 +504,7 @@ public class LanternGhostKing : ModNPC
 				RingRadiusTrend = 1200;
 				if (NPC.localAI[0] >= 395)
 				{
-					if (NPC.CountNPCS(ModContent.NPCType<FloatLantern>()) >= 1)
+					if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) >= 1)
 					{
 						NPC.localAI[0] = 395;
 					}
@@ -1036,12 +1036,11 @@ public class LanternGhostKing : ModNPC
 	{
 		if (NPC.life <= 0)
 		{
-			LanternMoonProgress.NewWave();
-			LanternMoonProgress.Point = 10000;
-			LanternMoonProgress.WavePoint = 0;
+			LanternMoon.NewWave();
+			LanternMoon.AccumulatedScore = 11200;
 			for (int f = 0; f < 13; f++)
 			{
-				var gore2 = new FloatLanternGore3
+				var gore2 = new EvilLanternGore3
 				{
 					Active = true,
 					Visible = true,
@@ -1050,7 +1049,7 @@ public class LanternGhostKing : ModNPC
 					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore2);
-				var gore3 = new FloatLanternGore4
+				var gore3 = new EvilLanternGore4
 				{
 					Active = true,
 					Visible = true,
@@ -1059,7 +1058,7 @@ public class LanternGhostKing : ModNPC
 					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore3);
-				var gore4 = new FloatLanternGore5
+				var gore4 = new EvilLanternGore5
 				{
 					Active = true,
 					Visible = true,
@@ -1068,7 +1067,7 @@ public class LanternGhostKing : ModNPC
 					position = NPC.Center,
 				};
 				Ins.VFXManager.Add(gore4);
-				var gore5 = new FloatLanternGore6
+				var gore5 = new EvilLanternGore6
 				{
 					Active = true,
 					Visible = true,

@@ -10,11 +10,13 @@ namespace Everglow.Myth.LanternMoon.NPCs;
 
 public class BombLantern : ModNPC
 {
-	public LanternMoonProgress LanternMoonProgress = ModContent.GetInstance<LanternMoonProgress>();
+	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 4;
 	}
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 44;
@@ -31,6 +33,7 @@ public class BombLantern : ModNPC
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		NPC.frame.Y = 0;
@@ -42,6 +45,7 @@ public class BombLantern : ModNPC
 		Tail2 = NPC.Center + new Vector2(0, 55).RotatedBy(NPC.rotation);
 		Tail3 = NPC.Center + new Vector2(0, 55).RotatedBy(NPC.rotation);
 	}
+
 	public override void FindFrame(int frameHeight)
 	{
 		if (DizzyTime <= 0)
@@ -62,6 +66,7 @@ public class BombLantern : ModNPC
 			}
 		}
 	}
+
 	public override void AI()
 	{
 		NPC.TargetClosest(false);
@@ -82,7 +87,7 @@ public class BombLantern : ModNPC
 		}
 
 		Vector2 toPlayer = player.Center + new Vector2(0, -100).RotatedBy(MathF.Sin(NPC.whoAmI)) - NPC.Center - NPC.velocity;
-		if (NPC.ai[1] == 0)//巡游
+		if (NPC.ai[1] == 0)// 巡游
 		{
 			if (toPlayer.Length() > 1000)
 			{
@@ -106,9 +111,9 @@ public class BombLantern : ModNPC
 				}
 			}
 		}
-		else//冲撞
+		else// 冲撞
 		{
-			//没有眩晕
+			// 没有眩晕
 			if (DizzyTime <= 0)
 			{
 				NPC.ai[0]++;
@@ -135,7 +140,7 @@ public class BombLantern : ModNPC
 				{
 					NPC.velocity.Y -= 2.5f;
 				}
-				if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)//结束冲撞
+				if ((toPlayer.Y > 200 && NPC.ai[0] >= 50) || NPC.ai[0] > 200)// 结束冲撞
 				{
 					NPC.ai[1] = 0;
 				}
@@ -195,6 +200,7 @@ public class BombLantern : ModNPC
 			Tail3 += (Tail2 - Tail3) * 0.1f;
 		}
 	}
+
 	public void UpdateDizzyAI()
 	{
 		DizzyTime--;
@@ -221,9 +227,10 @@ public class BombLantern : ModNPC
 
 		if (DizzyTime <= 0)
 		{
-			NPC.ai[1] = 0;//结束冲撞
+			NPC.ai[1] = 0; // 结束冲撞
 		}
 	}
+
 	public void UpdateExplosion()
 	{
 		Player player = Main.player[NPC.target];
@@ -240,11 +247,14 @@ public class BombLantern : ModNPC
 			KillMe();
 		}
 	}
+
 	public int DizzyTime = -1;
 	public int ExplosionTimer = -1;
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 	}
+
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		if (NPC.life <= 0)
@@ -254,6 +264,7 @@ public class BombLantern : ModNPC
 			NPC.dontTakeDamage = true;
 		}
 	}
+
 	public void KillMe()
 	{
 		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
@@ -263,44 +274,44 @@ public class BombLantern : ModNPC
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), NPC.Center);
 		for (int f = 0; f < 2; f++)
 		{
-			var gore2 = new FloatLanternGore3
+			var gore2 = new EvilLanternGore3
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore2);
-			var gore3 = new FloatLanternGore4
+			var gore3 = new EvilLanternGore4
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore3);
-			var gore4 = new FloatLanternGore5
+			var gore4 = new EvilLanternGore5
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore4);
-			var gore5 = new FloatLanternGore6
+			var gore5 = new EvilLanternGore6
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 				noGravity = false,
-				position = NPC.Center
+				position = NPC.Center,
 			};
 			Ins.VFXManager.Add(gore5);
 		}
-		LanternMoonProgress.AddPoint(15);
+		LanternMoon.AddPoint(15);
 
 		for (int f = 0; f < 22; f++)
 		{
@@ -310,16 +321,19 @@ public class BombLantern : ModNPC
 			Main.dust[r].velocity = v3;
 		}
 		NPC.active = false;
-		LanternMoonProgress.AddPoint(45);
+		LanternMoon.AddPoint(60);
 	}
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
 	}
+
 	public Vector2 Tail0 = Vector2.zeroVector;
 	public Vector2 Tail1 = Vector2.zeroVector;
 	public Vector2 Tail2 = Vector2.zeroVector;
 	public Vector2 Tail3 = Vector2.zeroVector;
+
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -328,7 +342,10 @@ public class BombLantern : ModNPC
 		SpriteEffects effects = SpriteEffects.None;
 		NPC.spriteDirection = NPC.direction;
 		if (NPC.spriteDirection == 1)
+		{
 			effects = SpriteEffects.FlipHorizontally;
+		}
+
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
 		Texture2D tail = ModAsset.BombLantern_tail.Value;
 		spriteBatch.Draw(tail, Tail1 - Main.screenPosition, new Rectangle(0, 0, 16, 24), drawColor, (Tail1 - Tail0).ToRotation() - MathHelper.PiOver2, new Vector2(8, 12), NPC.scale, effects, 0);
@@ -348,8 +365,6 @@ public class BombLantern : ModNPC
 				spriteBatch.Draw(glow1, NPC.Center - Main.screenPosition, NPC.frame, glow1C, NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
 			}
 		}
-
-
 
 		if (DizzyTime > 0)
 		{

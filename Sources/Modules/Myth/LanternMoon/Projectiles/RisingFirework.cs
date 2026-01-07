@@ -6,6 +6,7 @@ namespace Everglow.Myth.LanternMoon.Projectiles;
 public class RisingFirework : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/UIImages/VisualTextures/DarkGrey";
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 40;
@@ -20,8 +21,10 @@ public class RisingFirework : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 90;
 	}
+
 	public bool MoveSight = true;
 	public int timeToKill = -1;
+
 	public override void AI()
 	{
 		timeToKill--;
@@ -31,7 +34,6 @@ public class RisingFirework : ModProjectile
 		{
 			if (timeToKill < 0)
 			{
-
 				timeToKill = 90;
 			}
 		}
@@ -68,6 +70,7 @@ public class RisingFirework : ModProjectile
 			}
 		}
 	}
+
 	public void GenerateSmog(int Frequency)
 	{
 		float mulVelocity = 1f;
@@ -83,11 +86,12 @@ public class RisingFirework : ModProjectile
 				maxTime = Main.rand.Next(37, 45),
 				scale = Main.rand.NextFloat(20f, 35f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(somg);
 		}
 	}
+
 	public void GenerateFire(int Frequency)
 	{
 		float mulVelocity = 1f;
@@ -103,11 +107,12 @@ public class RisingFirework : ModProjectile
 				maxTime = Main.rand.Next(9, 25),
 				scale = Main.rand.NextFloat(7f, 15f),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 			};
 			Ins.VFXManager.Add(fire);
 		}
 	}
+
 	public void GenerateSpark(int Frequency)
 	{
 		float mulVelocity = 1f;
@@ -123,24 +128,27 @@ public class RisingFirework : ModProjectile
 				maxTime = Main.rand.Next(17, 25),
 				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(0.1f, 17.0f)),
 				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) },
 			};
 			Ins.VFXManager.Add(spark);
 		}
 	}
+
 	public override void OnKill(int timeLeft)
 	{
-
 		base.OnKill(timeLeft);
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.velocity *= Main.rand.NextFloat(0.3f, 0.8f);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		DrawTrail(new Color(1f, 0.7f, 0.4f, 0));

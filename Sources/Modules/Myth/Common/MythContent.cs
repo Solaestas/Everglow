@@ -46,7 +46,9 @@ public class MythContent
 		if (Main.LocalPlayer != null)
 		{
 			if (Main.LocalPlayer.gravDir == -1)
+			{
 				return new Vector2(StarX, Main.screenHeight - StarY);
+			}
 		}
 
 		return new Vector2(StarX, StarY);
