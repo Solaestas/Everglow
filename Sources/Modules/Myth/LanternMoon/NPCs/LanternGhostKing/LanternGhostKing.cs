@@ -1,9 +1,11 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Myth.Common;
+using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
+using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -22,33 +24,13 @@ public class LanternGhostKing : ModNPC
 
 	public float LeftRotation = 0;
 	public float RightRotation = 0;
-	private static Texture2D[] breads;
 
-	private static Texture2D back;
-	private static Texture2D front;
-	private static Texture2D front_face;
-	private static Texture2D left;
-	private static Texture2D right;
-	private static Texture2D left_glow;
-	private static Texture2D right_glow;
 	public float ShakeStrength = 2;
 	public int Phase = 1;
 
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 3;
-		back = ModAsset.LanternGhostKing_back.Value;
-		front = ModAsset.LanternGhostKing_bone_front.Value;
-		front_face = ModAsset.LanternGhostKing_face_front.Value;
-		left = ModAsset.LanternGhostKing_side_left.Value;
-		right = ModAsset.LanternGhostKing_side_right.Value;
-		left_glow = ModAsset.LanternGhostKing_side_left_glow.Value;
-		right_glow = ModAsset.LanternGhostKing_side_right_glow.Value;
-		breads = new Texture2D[10];
-		for (int i = 0; i < 10; i++)
-		{
-			breads[i] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/LanternGhostKing/LanternGhostKing_bread_" + i.ToString()).Value;
-		}
 	}
 
 	public override void SetDefaults()
@@ -73,7 +55,7 @@ public class LanternGhostKing : ModNPC
 		NPC.noTileCollide = true;
 		NPC.dontTakeDamage = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		Music = MythContent.QuickMusic("DashCore");
+		Music = MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Mod);
 	}
 
 	public override bool CheckActive()
@@ -83,10 +65,6 @@ public class LanternGhostKing : ModNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			breads[i] = ModContent.Request<Texture2D>("Everglow/Myth/LanternMoon/NPCs/LanternGhostKing/LanternGhostKing_bread_" + i.ToString()).Value;
-		}
 		NPC.localAI[0] = 0;
 		Phase = 1;
 		var spark = new LanternFlameRingDust
@@ -155,7 +133,9 @@ public class LanternGhostKing : ModNPC
 			NPC.ai[0] = 1;
 		}
 
-		Lighting.AddLight(NPC.Center, new Vector3(0.75f, 0.2f, 0) * ((255 - NPC.alpha) / 255f));
+		UpdateTailRope();
+
+		Lighting.AddLight(NPC.Center, new Vector3(0.75f, 0.65f, 0.55f) * ((255 - NPC.alpha) / 255f));
 		if (!NearDie)
 		{
 			NPC.dontTakeDamage = false;
@@ -1164,10 +1144,10 @@ public class LanternGhostKing : ModNPC
 				maxTime = Main.rand.Next(126, 136),
 				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(2.45f, 2.8f) * 3, Main.rand.NextFloat(8f, 12f) },
 				FireBallVelocity = new Vector2[]
-	{
-				RandomVector2(2f, 0.01f),
-				RandomVector2(1f, 0.01f),
-	},
+				{
+					RandomVector2(2f, 0.01f),
+					RandomVector2(1f, 0.01f),
+				},
 			};
 			Ins.VFXManager.Add(lanternExplosion);
 
@@ -1220,6 +1200,10 @@ public class LanternGhostKing : ModNPC
 		}
 	}
 
+	public Rectangle BodyFrame = new Rectangle(0, 82, 270, 174);
+	public Rectangle ExteriorFrameworkFrame = new Rectangle(272, 2, 538, 298);
+	public Rectangle CoreAndTailFrame = new Rectangle(912, 2, 100, 182);
+
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
@@ -1227,74 +1211,238 @@ public class LanternGhostKing : ModNPC
 
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		Vector2 originOfTexture = front.Size() * 0.5f;
-		spriteBatch.Draw(back, NPC.Center - Main.screenPosition, null, GetColorRed(drawColor), NPC.rotation, originOfTexture, NPC.scale, SpriteEffects.None, 0f);
+		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
+		Vector2 drawPos = NPC.Center - screenPos;
+		DrawTail(spriteBatch);
+		//spriteBatch.Draw(tex, drawPos, CoreAndTailFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(CoreAndTailFrame.Width * 0.5f, 14), NPC.scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, drawPos, BodyFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()) * 0.85f, 0, BodyFrame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
-		DrawFlame();
-		DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(-160, -20), LeftRotation);
-		DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(160, -20), RightRotation, true);
+		spriteBatch.Draw(tex, drawPos, ExteriorFrameworkFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170), NPC.scale, SpriteEffects.None, 0);
 
-		// 第一阶段全屏炸雷时发光
-		if (Phase == 1)
+		// Vector2 originOfTexture = front.Size() * 0.5f;
+		// spriteBatch.Draw(back, NPC.Center - Main.screenPosition, null, GetColorRed(drawColor), NPC.rotation, originOfTexture, NPC.scale, SpriteEffects.None, 0f);
+
+		// DrawFlame();
+		// DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(-160, -20), LeftRotation);
+		// DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(160, -20), RightRotation, true);
+
+		//// 第一阶段全屏炸雷时发光
+		// if (Phase == 1)
+		// {
+		// if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 1700)
+		// {
+		// float value = 1 - (NPC.localAI[0] - 1600) / 100f;
+		// value *= value;
+		// Color glowColor = new Color(value, value * value, value * value * value, 0);
+		// spriteBatch.Draw(left_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), LeftRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
+		// spriteBatch.Draw(right_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), RightRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
+
+		// Lighting.AddLight(NPC.Center + new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
+		// Lighting.AddLight(NPC.Center - new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
+		// }
+		// }
+
+		// for (int i = 9; i >= 0; i--)
+		// {
+		// Color breadColor = Lighting.GetColor((NPC.Center / 16f).ToPoint() + new Point(5 - i, 8));
+		// breadColor *= 0.7f;
+		// breadColor.A = 255;
+		// spriteBatch.Draw(breads[i], NPC.Center - Main.screenPosition + new Vector2(MathF.Sin(i + (float)Main.time * 0.4f) * ShakeStrength, 0).RotatedBy(i), null, GetColorRed(breadColor), NPC.rotation + MathF.Sin(i + (float)Main.time * 0.6f) * 0.01f, originOfTexture, 1f, SpriteEffects.None, 0f);
+		// }
+		// Color shellColor = drawColor * 0.6f;
+		// shellColor.A = 255;
+
+		//// 第二阶段变透明
+		// if (Phase == 2)
+		// {
+		// if (NPC.localAI[0] >= 700)
+		// {
+		// float value = (NPC.localAI[0] - 700) / 100f;
+		// value = Math.Clamp(value, 0, 1);
+		// value *= value;
+		// shellColor = drawColor * (float)Utils.Lerp(0.6f, 1.2f, value);
+		// shellColor.R = (byte)(MathF.Pow(shellColor.R / 255f, (float)Utils.Lerp(1f, 0.2f, value)) * 255);
+		// shellColor.A = (byte)Utils.Lerp(255, 105, value);
+		// }
+		// }
+		// spriteBatch.Draw(front_face, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
+		// shellColor = drawColor * 0.6f;
+		// shellColor.A = 255;
+		// spriteBatch.Draw(front, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
+
+		//// 第二阶段十字光辉
+		// if (Phase == 2)
+		// {
+		// if (NPC.localAI[0] >= 700)
+		// {
+		// float value = (NPC.localAI[0] - 700) / 100f;
+		// value = Math.Clamp(value, 0, 1);
+		// value *= value;
+		// Texture2D star = Commons.ModAsset.StarSlash.Value;
+		// Vector2 orig = star.Size() / 2f;
+		// Vector2 offset = new Vector2(0, 50);
+		// float value2 = (255 - NPC.alpha) / 255f;
+		// float mulSize = MathF.Sin((float)Main.timeForVisualEffects * 0.4f) * 0.05f + 1;
+		// spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), 0, orig, new Vector2(value, 0.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
+		// spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
+		// }
+		// }
+	}
+
+	public Rope LanternTail = null;
+	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
+	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
+
+	public void UpdateTailRope()
+	{
+		if (LanternTail == null)
 		{
-			if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 1700)
+			LanternTail = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternGhostKingMassSpringSystem.AddMassSpringMesh(LanternTail);
+		}
+		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50);
+		LanternTail.ApplyForce();
+		for (int i = 1; i < LanternTail.Masses.Length; i++)
+		{
+			float damping = 0.3f;
+			float toEnd = LanternTail.Masses.Length - i - 1;
+			if (toEnd < 3)
 			{
-				float value = 1 - (NPC.localAI[0] - 1600) / 100f;
-				value *= value;
-				Color glowColor = new Color(value, value * value, value * value * value, 0);
-				spriteBatch.Draw(left_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), LeftRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-				spriteBatch.Draw(right_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), RightRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-
-				Lighting.AddLight(NPC.Center + new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
-				Lighting.AddLight(NPC.Center - new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
+				damping += (1 - toEnd / 3f) * 0.1f;
 			}
-		}
-
-		for (int i = 9; i >= 0; i--)
-		{
-			Color breadColor = Lighting.GetColor((NPC.Center / 16f).ToPoint() + new Point(5 - i, 8));
-			breadColor *= 0.7f;
-			breadColor.A = 255;
-			spriteBatch.Draw(breads[i], NPC.Center - Main.screenPosition + new Vector2(MathF.Sin(i + (float)Main.time * 0.4f) * ShakeStrength, 0).RotatedBy(i), null, GetColorRed(breadColor), NPC.rotation + MathF.Sin(i + (float)Main.time * 0.6f) * 0.01f, originOfTexture, 1f, SpriteEffects.None, 0f);
-		}
-		Color shellColor = drawColor * 0.6f;
-		shellColor.A = 255;
-
-		// 第二阶段变透明
-		if (Phase == 2)
-		{
-			if (NPC.localAI[0] >= 700)
+			float toStart = i - 1;
+			if (toStart < 3)
 			{
-				float value = (NPC.localAI[0] - 700) / 100f;
-				value = Math.Clamp(value, 0, 1);
-				value *= value;
-				shellColor = drawColor * (float)Utils.Lerp(0.6f, 1.2f, value);
-				shellColor.R = (byte)(MathF.Pow(shellColor.R / 255f, (float)Utils.Lerp(1f, 0.2f, value)) * 255);
-				shellColor.A = (byte)Utils.Lerp(255, 105, value);
+				damping *= toStart / 3f;
 			}
+			LanternTail.ApplyForceSpecial(i, -LanternTail.Masses[i].Velocity * damping);
 		}
-		spriteBatch.Draw(front_face, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-		shellColor = drawColor * 0.6f;
-		shellColor.A = 255;
-		spriteBatch.Draw(front, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
+		LanternGhostKingPBDSolver.Step(LanternGhostKingMassSpringSystem, 1f);
 
-		// 第二阶段十字光辉
-		if (Phase == 2)
+		if(Main.mouseLeft && Main.mouseLeftRelease)
 		{
-			if (NPC.localAI[0] >= 700)
-			{
-				float value = (NPC.localAI[0] - 700) / 100f;
-				value = Math.Clamp(value, 0, 1);
-				value *= value;
-				Texture2D star = Commons.ModAsset.StarSlash.Value;
-				Vector2 orig = star.Size() / 2f;
-				Vector2 offset = new Vector2(0, 50);
-				float value2 = (255 - NPC.alpha) / 255f;
-				float mulSize = MathF.Sin((float)Main.timeForVisualEffects * 0.4f) * 0.05f + 1;
-				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), 0, orig, new Vector2(value, 0.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
-				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
-			}
+			ExplodeEffect();
 		}
+	}
+
+	public void ExplodeEffect()
+	{
+		for (int x = 0; x < 35; x++)
+		{
+			LargeFlame();
+		}
+		for (int x = 0; x < 75; x++)
+		{
+			SmallFlame();
+		}
+		Spark();
+	}
+
+	public void Spark()
+	{
+		for (int g = 0; g < 30; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 22f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new FireSparkDust
+			{
+				velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
+				maxTime = Main.rand.Next(20, 40),
+				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
+				rotation = Main.rand.NextFloat(6.283f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) },
+			};
+			Ins.VFXManager.Add(spark);
+		}
+
+		for (int g = 0; g < 20; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(6f, 22f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new LanternGhostKing_SmokeSpike
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
+				MaxTime = Main.rand.Next(20, 40),
+				Scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
+			};
+			Ins.VFXManager.Add(spark);
+		}
+	}
+
+	public void LargeFlame()
+	{
+		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+		var somg = new LanternFlameDust
+		{
+			velocity = newVelocity,
+			Active = true,
+			Visible = true,
+			position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(40), 0).RotatedByRandom(6.283),
+			maxTime = Main.rand.Next(60, 75),
+			scale = Main.rand.NextFloat(80f, 160f),
+			rotation = Main.rand.NextFloat(6.283f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+		};
+		Ins.VFXManager.Add(somg);
+	}
+
+	public void SmallFlame()
+	{
+		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+		var somg = new LanternFlameDust
+		{
+			velocity = newVelocity,
+			Active = true,
+			Visible = true,
+			position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(60), 0).RotatedByRandom(6.283),
+			maxTime = Main.rand.Next(30, 45),
+			scale = Main.rand.NextFloat(50f, 90f),
+			rotation = Main.rand.NextFloat(6.283f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+		};
+		Ins.VFXManager.Add(somg);
+	}
+
+	public void DrawTail(SpriteBatch spriteBatch)
+	{
+		if (LanternTail == null || LanternTail.Masses.Length <= 0)
+		{
+			return;
+		}
+		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
+		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+
+		float effectWidth = 100f;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int i = 1; i < LanternTail.Masses.Length; i++)
+		{
+			float value = i - 1;
+			value /= LanternTail.Masses.Length - 2;
+			Vector2 drawPos = LanternTail.Masses[i].Position - Main.screenPosition;
+			Vector2 directionVec = LanternTail.Masses[i].Position - LanternTail.Masses[i - 1].Position;
+			directionVec = directionVec.NormalizeSafe();
+			Vector2 directionLeft = directionVec.RotatedBy(MathHelper.PiOver2) * effectWidth / 2f;
+			bars.Add(drawPos + directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(812f / tex.Width, (100f + value * 202f) / tex.Height, 0));
+			bars.Add(drawPos - directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(912f / tex.Width, (100f + value * 202f) / tex.Height, 0));
+
+			// spriteBatch.Draw(icon, LanternTail.Masses[i].Position - Main.screenPosition, null, Color.White, 0, icon.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+		if (bars.Count > 0)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
+		Lighting.AddLight(LanternTail.Masses[1].Position, new Vector3(1.25f, 1.05f, 1f));
+		spriteBatch.Draw(tex, LanternTail.Masses[1].Position - Main.screenPosition, CoreAndTailFrame, Color.White, (LanternTail.Masses[1].Position - LanternTail.Masses[0].Position).ToRotationSafe() - MathHelper.PiOver2, CoreAndTailFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
 	public void DrawVertexTexture(Texture2D tex, Vector2 offset, float rotation, bool flipH = false)

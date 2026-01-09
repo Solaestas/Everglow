@@ -10,7 +10,6 @@ namespace Everglow.Myth.LanternMoon.NPCs;
 
 public class BloodLanternGhost : ModNPC
 {
-
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 
 	public override void SetStaticDefaults()

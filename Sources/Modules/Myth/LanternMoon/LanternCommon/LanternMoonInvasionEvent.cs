@@ -1,18 +1,15 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Events;
 using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
+using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.Localization;
 
 namespace Everglow.Myth.LanternMoon.LanternCommon;
 
-public class LanternMoonInvasionEvent : ModEvent
+public class LanternMoonInvasionEvent : ReplicaEvent
 {
-	/// <summary>
-	/// Current wavw
-	/// </summary>
-	public int Wave = 0;
-
 	/// <summary>
 	/// Point value for completing the current wave
 	/// </summary>
@@ -90,8 +87,9 @@ public class LanternMoonInvasionEvent : ModEvent
 		Color messageColor1 = Color.PaleGreen;
 		Main.NewText(Language.GetTextValue("Lantern Moon is raising..."), messageColor1);
 		Main.NewText(Language.GetTextValue("Wave 1:"), messageColor);
-		Wave = 0;
+		Wave = 1;
 		AccumulatedScore = 0;
+		Icon = ModAsset.LanternMoonIcon.Value;
 	}
 
 	public void AddPoint(int value)
@@ -116,6 +114,7 @@ public class LanternMoonInvasionEvent : ModEvent
 	{
 		Main.NewText("Wave " + (Wave + 2) + ":", new Color(175, 75, 255));
 		Wave++;
+		ProgressMax = ScoreRequireOfWave[Wave];
 	}
 
 	/// <summary>
@@ -142,19 +141,29 @@ public class LanternMoonInvasionEvent : ModEvent
 			}
 		}
 	}
+
 	public override void OnActivate(params object[] args)
 	{
 		Initialization();
+		base.OnActivate();
+	}
+
+	public bool ShouldReinitialize()
+	{
+		bool flag0 = Wave == 0 || ScoreRequireOfWave[0] == 0 || Icon == null;
+		bool flag1 = Active;
+		return flag0 && flag1;
 	}
 
 	public override void Update()
 	{
-		AddEnemies();
-		if (Wave == 0)
+		Main.invasionProgressAlpha = 1;
+		if (ShouldReinitialize())
 		{
-			AccumulatedScore = 0;
+			Initialization();
 		}
-
+		AddEnemies();
+		Progress = WaveScore();
 		if (WaveScore() > ScoreRequireOfWave[Wave])
 		{
 			NewWave();
@@ -215,159 +224,299 @@ public class LanternMoonInvasionEvent : ModEvent
 
 	public override void Draw(SpriteBatch sprite)
 	{
+		if (ShouldReinitialize())
+		{
+			Initialization();
+		}
 		DrawProgressBar(sprite);
 	}
 
 	public void DrawProgressBar(SpriteBatch spriteBatch)
 	{
-		Main.invasionProgressMax = ScoreRequireOfWave[Wave];
-		Main.invasionProgress = WaveScore();
-		Main.invasionProgressMode = 2;
-		Main.invasionProgressNearInvasion = true;
-		Main.invasionProgressWave = Wave + 1;
-
-		if (Main.invasionProgressMode == 2 && Main.invasionProgressNearInvasion && Main.invasionProgressDisplayLeft < 160)
+		SpriteBatchState sBS = spriteBatch.GetState().Value;
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate,BlendState.AlphaBlend,SamplerState.PointClamp,DepthStencilState.None,RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
+		if (innerActive)
 		{
-			Main.invasionProgressDisplayLeft = 160;
+			UIBarFadeTimer = 160;
 		}
-
-		if (!Main.gamePaused && Main.invasionProgressDisplayLeft > 0)
+		if (!Main.gamePaused && UIBarFadeTimer > 0)
 		{
-			Main.invasionProgressDisplayLeft--;
+			UIBarFadeTimer--;
 		}
-
-		if (Main.invasionProgressDisplayLeft > 0)
+		ProgressAlpha += ProgressAlpha + UIBarFadeTimer > 0 ? 0.05f : -0.05f;
+		ProgressAlpha = Math.Clamp(ProgressAlpha, 0, 1);
+		if (ProgressAlpha <= 0f)
 		{
-			Main.invasionProgressAlpha += 0.005f;
-		}
-		else
-		{
-			Main.invasionProgressAlpha -= 0.005f;
-		}
-		if (Main.invasionProgressMode == 0)
-		{
-			Main.invasionProgressDisplayLeft = 0;
-			Main.invasionProgressAlpha = 0f;
-		}
-
-		Main.invasionProgressAlpha = MathHelper.Clamp(Main.invasionProgressAlpha, 0, 1);
-		if (Main.invasionProgressAlpha == 0f)
-		{
+			EventSystem.Deactivate(this);
 			return;
 		}
+		float num = 0.5f + ProgressAlpha * 0.5f;
+		string text = string.Empty;
+		Color c = Color.White;
 
-		float fadinAlpha = 0.5f + Main.invasionProgressAlpha * 0.5f;
-		Texture2D lanternMoonImage = ModAsset.LanternMoonIcon.Value;
-
-		// TODO Hjson，示例我在WorldSystem里写了
-		string LanternMoon = " Lantern Moon ";
-		Color BGColor = Color.White;
-		int barSizeX = (int)(200f * fadinAlpha);
-		int barSizeY = (int)(45f * fadinAlpha);
-		var barCenter = new Vector2(Main.screenWidth - 120, Main.screenHeight - 40);
-		string waveStage = Main.invasionProgressMax == 0 ?
-			WaveScore().ToString() :
-			(int)(Main.invasionProgress * 100f / Main.invasionProgressMax) + "%";
-		float textSizeX = 169f * fadinAlpha;
-		float textSizeY = 8f * fadinAlpha;
-		Texture2D colorBar = TextureAssets.ColorBar.Value;
-		if (Main.invasionProgressWave > 0)
+		ModifyInvasionProgress(ref text, ref c);
+		Vector2 texturescale = new(25.6f / Icon.Width, 25.6f / Icon.Height);
+		texturescale *= num;
+		if (Wave > 0)
 		{
-			waveStage = Language.GetTextValue("Game.WaveMessage", Main.invasionProgressWave, waveStage);
+			int num2 = (int)(200f * num);
+			int num3 = (int)(45f * num);
+			Vector2 vector = new Vector2(Main.screenWidth - 120, Main.screenHeight - 40);
+			Rectangle r4 = new((int)vector.X - num2 / 2, (int)vector.Y - num3 / 2, num2, num3);
+			Utils.DrawInvBG(spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
+			string key = "Game.WaveMessage";
+			object arg = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Language.GetTextValue("Game.InvasionPoints", Progress);
+			string text2 = Language.GetTextValue(key, Wave, arg);
+			Texture2D value2 = TextureAssets.ColorBar.Value;
+			float num4 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+			if (ProgressMax == 0)
+			{
+				num4 = 1f;
+			}
+			float num5 = 169f * num;
+			float num6 = 8f * num;
+			Vector2 vector2 = vector + Vector2.UnitY * num6 + Vector2.UnitX * 1f;
+			Utils.DrawBorderString(spriteBatch, text2, vector2, Color.White * ProgressAlpha, num, 0.5f, 1f, -1);
+			spriteBatch.Draw(value2, vector, null, Color.White * ProgressAlpha, 0f, new Vector2(value2.Width / 2, 0f), num, SpriteEffects.None, 0f);
+			vector2 += Vector2.UnitX * (num4 - 0.5f) * num5;
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 241, 51) * ProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(num5 * num4, num6), SpriteEffects.None, 0f);
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 165, 0, 127) * ProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(2f, num6), SpriteEffects.None, 0f);
+			spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), Color.Black * ProgressAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(num5 * (1f - num4), num6), SpriteEffects.None, 0f);
 		}
 		else
 		{
-			waveStage = Language.GetTextValue("Game.WaveCleared", waveStage);
+			int num7 = (int)(200f * num);
+			int num8 = (int)(45f * num);
+			Vector2 vector3 = new(Main.screenWidth - 120, Main.screenHeight - 40);
+			Rectangle r4 = new((int)vector3.X - num7 / 2, (int)vector3.Y - num8 / 2, num7, num8);
+			Utils.DrawInvBG(spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
+			string text3 = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Progress.ToString();
+			text3 = Language.GetTextValue("Game.WaveCleared", text3);
+			Texture2D value3 = TextureAssets.ColorBar.Value;
+			if (ProgressMax != 0)
+			{
+				spriteBatch.Draw(value3, vector3, null, Color.White * ProgressAlpha, 0f, new Vector2(value3.Width / 2, 0f), num, SpriteEffects.None, 0f);
+				float num9 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+				Vector2 vector4 = FontAssets.MouseText.Value.MeasureString(text3);
+				float num10 = num;
+				if (vector4.Y > 22f)
+				{
+					num10 *= 22f / vector4.Y;
+				}
+				float num11 = 169f * num;
+				float num12 = 8f * num;
+				Vector2 vector5 = vector3 + Vector2.UnitY * num12 + Vector2.UnitX * 1f;
+				Utils.DrawBorderString(spriteBatch, text3, vector5 + new Vector2(0f, -4f), Color.White * ProgressAlpha, num10, 0.5f, 1f, -1);
+				vector5 += Vector2.UnitX * (num9 - 0.5f) * num11;
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 241, 51) * ProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(num11 * num9, num12), SpriteEffects.None, 0f);
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 165, 0, 127) * ProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(2f, num12), SpriteEffects.None, 0f);
+				spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), Color.Black * ProgressAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(num11 * (1f - num9), num12), SpriteEffects.None, 0f);
+			}
 		}
-
-		float waveRate = Main.invasionProgressMax == 0 ? 1 :
-				MathHelper.Clamp(Main.invasionProgress / (float)Main.invasionProgressMax, 0f, 1f);
-
-		Vector2 textPosition = barCenter + Vector2.UnitY * textSizeY + Vector2.UnitX * 1f;
-
-		// Progress Bar Background
-		Utils.DrawInvBG(
-			spriteBatch,
-			new Rectangle((int)barCenter.X - barSizeX / 2, (int)barCenter.Y - barSizeY / 2, barSizeX, barSizeY),
-			new Color(63 * 0.785f, 65 * 0.785f, 151 * 0.785f, 255 * 0.785f));
-
-		// Progress Bar Text
-		Utils.DrawBorderString(spriteBatch, waveStage, textPosition, Color.White * Main.invasionProgressAlpha, fadinAlpha, 0.5f, 1f, -1);
-
-		// Progress Bar Outline
-		spriteBatch.Draw(colorBar, barCenter, null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2(colorBar.Width / 2, 0f), fadinAlpha, SpriteEffects.None, 0f);
-
-		textPosition += Vector2.UnitX * (waveRate - 0.5f) * textSizeX;
-
-		// Progress Bar Value Bar
-		spriteBatch.Draw(
-			TextureAssets.MagicPixel.Value,
-			textPosition,
-			new Rectangle(0, 0, 1, 1),
-			new Color(255, 241, 51) * Main.invasionProgressAlpha,
-			0f,
-			new Vector2(1f, 0.5f),
-			new Vector2(textSizeX * waveRate, textSizeY),
-			SpriteEffects.None,
-			0f);
-		spriteBatch.Draw(
-			TextureAssets.MagicPixel.Value,
-			textPosition,
-			new Rectangle(0, 0, 1, 1),
-			new Color(255, 165, 0, 127) * Main.invasionProgressAlpha,
-			0f,
-			new Vector2(1f, 0.5f),
-			new Vector2(2f, textSizeY),
-			SpriteEffects.None,
-			0f);
-		spriteBatch.Draw(
-			TextureAssets.MagicPixel.Value,
-			textPosition,
-			new Rectangle(0, 0, 1, 1),
-			Color.Black * Main.invasionProgressAlpha,
-			0f,
-			new Vector2(0f, 0.5f),
-			new Vector2(textSizeX * (1f - waveRate), textSizeY),
-			SpriteEffects.None,
-			0f);
-
-		Vector2 lanternMoonSize = FontAssets.MouseText.Value.MeasureString(LanternMoon);
-		float OffsetX = 120f;
-		if (lanternMoonSize.X > 200f)
+		Vector2 value4 = FontAssets.MouseText.Value.MeasureString(text);
+		float num13 = 120f;
+		if (value4.X > 200f)
 		{
-			OffsetX += lanternMoonSize.X - 200f;
+			num13 += value4.X - 200f;
 		}
+		Rectangle r3 = Utils.CenteredRectangle(new Vector2(Main.screenWidth - num13, Main.screenHeight - 80), (value4 + new Vector2(Icon.Width + 12, 6f)) * num);
+		Utils.DrawInvBG(spriteBatch, r3, c);
+		spriteBatch.Draw(Icon, r3.Left() + Vector2.UnitX * num * 8f, null, Color.White * ProgressAlpha, 0f, new Vector2(0f, Icon.Height / 2), texturescale, SpriteEffects.None, 0f);
+		Utils.DrawBorderString(spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Color.White * ProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
 
-		Rectangle BGRectangle = Utils.CenteredRectangle(
-			new Vector2(Main.screenWidth - OffsetX, Main.screenHeight - 80),
-			(lanternMoonSize + new Vector2(lanternMoonImage.Width + 12, 6f)) * fadinAlpha);
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
+	}
 
-		// Lantern Moon Icon
-		Utils.DrawInvBG(
-			spriteBatch,
-			BGRectangle,
-			BGColor);
-
-		spriteBatch.Draw(
-			lanternMoonImage,
-			BGRectangle.Left() + Vector2.UnitX * fadinAlpha * 8f,
-			null,
-			Color.White * Main.invasionProgressAlpha,
-			0f,
-			new Vector2(0f, lanternMoonImage.Height / 2),
-			fadinAlpha * 0.8f,
-			SpriteEffects.None,
-			0f);
-
-		// 灯笼月文字
-		Utils.DrawBorderString(
-			spriteBatch,
-			LanternMoon,
-			BGRectangle.Right() + Vector2.UnitX * fadinAlpha * -22f,
-			Color.White * Main.invasionProgressAlpha,
-			fadinAlpha * 0.9f,
-			1f,
-			0.4f,
-			-1);
+	public void DrawInvasionProgressBar_Replica()
+	{
+		bool flag = Main.invasionProgress == -1;
+		if (!flag)
+		{
+			bool flag2 = Main.invasionProgressMode == 2 && Main.invasionProgressNearInvasion && Main.invasionProgressDisplayLeft < 160;
+			if (flag2)
+			{
+				Main.invasionProgressDisplayLeft = 160;
+			}
+			bool flag3 = !Main.gamePaused && Main.invasionProgressDisplayLeft > 0;
+			if (flag3)
+			{
+				Main.invasionProgressDisplayLeft--;
+			}
+			bool flag4 = Main.invasionProgressDisplayLeft > 0;
+			if (flag4)
+			{
+				Main.invasionProgressAlpha += 0.05f;
+			}
+			else
+			{
+				Main.invasionProgressAlpha -= 0.05f;
+			}
+			bool flag5 = Main.invasionProgressMode == 0;
+			if (flag5)
+			{
+				Main.invasionProgressDisplayLeft = 0;
+				Main.invasionProgressAlpha = 0f;
+			}
+			bool flag6 = Main.invasionProgressAlpha < 0f;
+			if (flag6)
+			{
+				Main.invasionProgressAlpha = 0f;
+			}
+			bool flag7 = Main.invasionProgressAlpha > 1f;
+			if (flag7)
+			{
+				Main.invasionProgressAlpha = 1f;
+			}
+			bool flag8 = Main.invasionProgressAlpha <= 0f;
+			if (!flag8)
+			{
+				float num = 0.5f + Main.invasionProgressAlpha * 0.5f;
+				Texture2D value = TextureAssets.Extra[9].Value;
+				string text = "";
+				Color c = Color.White;
+				bool flag9 = Main.invasionProgressIcon == 1;
+				if (flag9)
+				{
+					value = TextureAssets.Extra[8].Value;
+					text = Lang.inter[83].Value;
+					c = new Color(64, 109, 164) * 0.5f;
+				}
+				else
+				{
+					bool flag10 = Main.invasionProgressIcon == 2;
+					if (flag10)
+					{
+						value = TextureAssets.Extra[12].Value;
+						text = Lang.inter[84].Value;
+						c = new Color(112, 86, 114) * 0.5f;
+					}
+					else
+					{
+						bool flag11 = Main.invasionProgressIcon == 3;
+						if (flag11)
+						{
+							value = TextureAssets.Extra[79].Value;
+							text = Language.GetTextValue("DungeonDefenders2.InvasionProgressTitle");
+							c = new Color(88, 0, 160) * 0.5f;
+						}
+						else
+						{
+							bool flag12 = Main.invasionProgressIcon == 7;
+							if (flag12)
+							{
+								value = TextureAssets.Extra[10].Value;
+								text = Lang.inter[85].Value;
+								c = new Color(165, 160, 155) * 0.5f;
+							}
+							else
+							{
+								bool flag13 = Main.invasionProgressIcon == 6;
+								if (flag13)
+								{
+									value = TextureAssets.Extra[11].Value;
+									text = Lang.inter[86].Value;
+									c = new Color(148, 122, 72) * 0.5f;
+								}
+								else
+								{
+									bool flag14 = Main.invasionProgressIcon == 5;
+									if (flag14)
+									{
+										value = TextureAssets.Extra[7].Value;
+										text = Lang.inter[87].Value;
+										c = new Color(173, 135, 140) * 0.5f;
+									}
+									else
+									{
+										bool flag15 = Main.invasionProgressIcon == 4;
+										if (flag15)
+										{
+											value = TextureAssets.Extra[9].Value;
+											text = Lang.inter[88].Value;
+											c = new Color(94, 72, 131) * 0.5f;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				bool flag16 = Main.invasionProgressWave > 0;
+				if (flag16)
+				{
+					int num2 = (int)(200f * num);
+					int num3 = (int)(45f * num);
+					Vector2 vector = new Vector2((float)(Main.screenWidth - 120), (float)(Main.screenHeight - 40));
+					Rectangle r4 = new Rectangle((int)vector.X - num2 / 2, (int)vector.Y - num3 / 2, num2, num3);
+					Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
+					string key = "Game.WaveMessage";
+					object arg = (Main.invasionProgressMax != 0) ? (((int)((float)Main.invasionProgress * 100f / (float)Main.invasionProgressMax)).ToString() + "%") : Language.GetTextValue("Game.InvasionPoints", Main.invasionProgress);
+					string text2 = Language.GetTextValue(key, Main.invasionProgressWave, arg);
+					Texture2D value2 = TextureAssets.ColorBar.Value;
+					Texture2D value5 = TextureAssets.ColorBlip.Value;
+					float num4 = MathHelper.Clamp((float)Main.invasionProgress / (float)Main.invasionProgressMax, 0f, 1f);
+					bool flag17 = Main.invasionProgressMax == 0;
+					if (flag17)
+					{
+						num4 = 1f;
+					}
+					float num5 = 169f * num;
+					float num6 = 8f * num;
+					Vector2 vector2 = vector + Vector2.UnitY * num6 + Vector2.UnitX * 1f;
+					Utils.DrawBorderString(Main.spriteBatch, text2, vector2, Color.White * Main.invasionProgressAlpha, num, 0.5f, 1f, -1);
+					Main.spriteBatch.Draw(value2, vector, null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2((float)(value2.Width / 2), 0f), num, SpriteEffects.None, 0f);
+					vector2 += Vector2.UnitX * (num4 - 0.5f) * num5;
+					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 241, 51) * Main.invasionProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(num5 * num4, num6), SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 165, 0, 127) * Main.invasionProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(2f, num6), SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector2, new Rectangle?(new Rectangle(0, 0, 1, 1)), Color.Black * Main.invasionProgressAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(num5 * (1f - num4), num6), SpriteEffects.None, 0f);
+				}
+				else
+				{
+					int num7 = (int)(200f * num);
+					int num8 = (int)(45f * num);
+					Vector2 vector3 = new Vector2((float)(Main.screenWidth - 120), (float)(Main.screenHeight - 40));
+					Rectangle r4 = new Rectangle((int)vector3.X - num7 / 2, (int)vector3.Y - num8 / 2, num7, num8);
+					Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
+					string text3 = (Main.invasionProgressMax != 0) ? (((int)((float)Main.invasionProgress * 100f / (float)Main.invasionProgressMax)).ToString() + "%") : Main.invasionProgress.ToString();
+					text3 = Language.GetTextValue("Game.WaveCleared", text3);
+					Texture2D value3 = TextureAssets.ColorBar.Value;
+					Texture2D value6 = TextureAssets.ColorBlip.Value;
+					bool flag18 = Main.invasionProgressMax != 0;
+					if (flag18)
+					{
+						Main.spriteBatch.Draw(value3, vector3, null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2((float)(value3.Width / 2), 0f), num, SpriteEffects.None, 0f);
+						float num9 = MathHelper.Clamp((float)Main.invasionProgress / (float)Main.invasionProgressMax, 0f, 1f);
+						Vector2 vector4 = FontAssets.MouseText.Value.MeasureString(text3);
+						float num10 = num;
+						bool flag19 = vector4.Y > 22f;
+						if (flag19)
+						{
+							num10 *= 22f / vector4.Y;
+						}
+						float num11 = 169f * num;
+						float num12 = 8f * num;
+						Vector2 vector5 = vector3 + Vector2.UnitY * num12 + Vector2.UnitX * 1f;
+						Utils.DrawBorderString(Main.spriteBatch, text3, vector5 + new Vector2(0f, -4f), Color.White * Main.invasionProgressAlpha, num10, 0.5f, 1f, -1);
+						vector5 += Vector2.UnitX * (num9 - 0.5f) * num11;
+						Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 241, 51) * Main.invasionProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(num11 * num9, num12), SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), new Color(255, 165, 0, 127) * Main.invasionProgressAlpha, 0f, new Vector2(1f, 0.5f), new Vector2(2f, num12), SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, vector5, new Rectangle?(new Rectangle(0, 0, 1, 1)), Color.Black * Main.invasionProgressAlpha, 0f, new Vector2(0f, 0.5f), new Vector2(num11 * (1f - num9), num12), SpriteEffects.None, 0f);
+					}
+				}
+				Vector2 value4 = FontAssets.MouseText.Value.MeasureString(text);
+				float num13 = 120f;
+				bool flag20 = value4.X > 200f;
+				if (flag20)
+				{
+					num13 += value4.X - 200f;
+				}
+				Rectangle r3 = Utils.CenteredRectangle(new Vector2((float)Main.screenWidth - num13, (float)(Main.screenHeight - 80)), (value4 + new Vector2((float)(value.Width + 12), 6f)) * num);
+				Utils.DrawInvBG(Main.spriteBatch, r3, c);
+				Main.spriteBatch.Draw(value, r3.Left() + Vector2.UnitX * num * 8f, null, Color.White * Main.invasionProgressAlpha, 0f, new Vector2(0f, (float)(value.Height / 2)), num * 0.8f, SpriteEffects.None, 0f);
+				Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Color.White * Main.invasionProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
+			}
+		}
 	}
 }
