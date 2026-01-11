@@ -52,7 +52,7 @@ public class WarpPipeline : Pipeline
 		Effect effect0 = VFXManager.DefaultEffect.Value;
 
 		effect0.Parameters["uTransform"].SetValue(
-	Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+	Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) *
 	Main.GameViewMatrix.TransformationMatrix *
 	Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 		effect0.CurrentTechnique.Passes[0].Apply();
