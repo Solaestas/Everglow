@@ -1214,7 +1214,8 @@ public class LanternGhostKing : ModNPC
 		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
 		Vector2 drawPos = NPC.Center - screenPos;
 		DrawTail(spriteBatch);
-		//spriteBatch.Draw(tex, drawPos, CoreAndTailFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(CoreAndTailFrame.Width * 0.5f, 14), NPC.scale, SpriteEffects.None, 0);
+
+		// spriteBatch.Draw(tex, drawPos, CoreAndTailFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(CoreAndTailFrame.Width * 0.5f, 14), NPC.scale, SpriteEffects.None, 0);
 		spriteBatch.Draw(tex, drawPos, BodyFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()) * 0.85f, 0, BodyFrame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
 
 		spriteBatch.Draw(tex, drawPos, ExteriorFrameworkFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170), NPC.scale, SpriteEffects.None, 0);
@@ -1319,7 +1320,7 @@ public class LanternGhostKing : ModNPC
 		}
 		LanternGhostKingPBDSolver.Step(LanternGhostKingMassSpringSystem, 1f);
 
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			ExplodeEffect();
 		}
@@ -1327,15 +1328,23 @@ public class LanternGhostKing : ModNPC
 
 	public void ExplodeEffect()
 	{
-		for (int x = 0; x < 35; x++)
+		// for (int x = 0; x < 35; x++)
+		// {
+		// LargeFlame();
+		// }
+		// for (int x = 0; x < 75; x++)
+		// {
+		// SmallFlame();
+		// }
+		// Spark();
+		var explode = new LanternExplosionDustGroup
 		{
-			LargeFlame();
-		}
-		for (int x = 0; x < 75; x++)
-		{
-			SmallFlame();
-		}
-		Spark();
+			Active = true,
+			Visible = true,
+			Position = Main.MouseWorld,
+			MaxTime = 120,
+		};
+		Ins.VFXManager.Add(explode);
 	}
 
 	public void Spark()
