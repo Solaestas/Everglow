@@ -12,13 +12,16 @@ public class LanternGhostKing_SmokeSpike : Visual
 	public float MaxTime;
 	public float Scale;
 
+	public float Fade => 1 - Timer / MaxTime;
+
 	public override void Update()
 	{
 		Position += Velocity;
-		Velocity *= 0.95f;
+		Velocity *= 0.9f;
 		if (StartPosition == Vector2.zeroVector)
 		{
 			StartPosition = Position;
+			Position += Velocity * 6;
 		}
 		Timer++;
 		if (Timer > MaxTime)
@@ -45,12 +48,18 @@ public class LanternGhostKing_SmokeSpike : Visual
 			fade *= timeValue / 20f;
 		}
 
-		var bars = new List<Vertex2D>();
-		bars.Add(Position + dir, Lighting.GetColor(Position.ToTileCoordinates()) * fade, new Vector3(0, 0, 0));
-		bars.Add(Position - dir, Lighting.GetColor(Position.ToTileCoordinates()) * fade, new Vector3(1, 0, 0));
+		Color powerColor = Color.Lerp(new Color(1f, 0f, 0f, 0f), new Color(1f, 0.9f, 0.6f, 0), Fade);
+		Color endColor = Lighting.GetColor(Position.ToTileCoordinates());
+		Color startColor = Lighting.GetColor(StartPosition.ToTileCoordinates());
+		endColor = Color.Lerp(endColor, powerColor, fade);
+		startColor = Color.Lerp(startColor, powerColor, fade);
 
-		bars.Add(StartPosition + dir, Lighting.GetColor(StartPosition.ToTileCoordinates()) * fade * 0.2f, new Vector3(0, 1, 0));
-		bars.Add(StartPosition - dir, Lighting.GetColor(StartPosition.ToTileCoordinates()) * fade * 0.2f, new Vector3(1, 1, 0));
+		var bars = new List<Vertex2D>();
+		bars.Add(Position + dir, endColor * fade, new Vector3(0, 0, 0));
+		bars.Add(Position - dir, endColor * fade, new Vector3(1, 0, 0));
+
+		bars.Add(StartPosition + dir, startColor * fade * 0.2f, new Vector3(0, 1, 0));
+		bars.Add(StartPosition - dir, startColor * 0.2f, new Vector3(1, 1, 0));
 
 		Ins.Batch.Draw(tex, bars, PrimitiveType.TriangleStrip);
 	}

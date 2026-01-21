@@ -1,5 +1,3 @@
-using Microsoft.Xna.Framework.Graphics;
-
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
 [Pipeline(typeof(WarpPipeline))]
@@ -9,7 +7,9 @@ internal class LanternFlameRing_warpDust : Visual
 	public float timer;
 	public float maxTime;
 	public float Radius;
+
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public override void OnSpawn()
 	{
 		if (OwnerLanternKing == null)
@@ -26,6 +26,7 @@ internal class LanternFlameRing_warpDust : Visual
 			}
 		}
 	}
+
 	public override void Update()
 	{
 		if (OwnerLanternKing == null || !OwnerLanternKing.active)
@@ -61,11 +62,11 @@ internal class LanternFlameRing_warpDust : Visual
 		}
 		float width = 150;
 		float mulColor = 1f;
-		if(Radius < 1000)
+		if (Radius < 1000)
 		{
 			width *= MathF.Max(0, (Radius - 500) / 500f);
 		}
-		if(timer > 120)
+		if (timer > 120)
 		{
 			mulColor *= (240 - timer) / 120f;
 		}
@@ -77,8 +78,8 @@ internal class LanternFlameRing_warpDust : Visual
 			Vector2 pos = new Vector2(Radius, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
 			Vector2 outerPos = new Vector2(Radius + width, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
 
-			var color0 = new Color(0.5f + pos.X / Radius, 0.5f + pos.Y / Radius, 0.95f * mulColor, 0);
-			var color1 = new Color(0.5f + pos.X / Radius, 0.5f + pos.Y / Radius, 0f, 0);
+			var color0 = new Color(0.5f + pos.X / Radius, 0.5f + pos.Y / Radius, 0.19f * mulColor, 1);
+			var color1 = new Color(0.5f + pos.X / Radius, 0.5f + pos.Y / Radius, 0f, 1);
 
 			bars.Add(center + pos, color0, new Vector3(i / 100f, 0 + timeValue, 0));
 			bars.Add(center + outerPos, color1, new Vector3(i / 100f, 0.05f + timeValue, 0));
@@ -93,12 +94,12 @@ internal class LanternFlameRing_warpDust : Visual
 			Vector2 pos2 = new Vector2(Radius, 0).RotatedBy((i + 6) / 500f * MathHelper.TwoPi);
 			Vector2 innerrPos = new Vector2(Radius - width * 0.3f, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
 
-			var color0 = new Color(0.5f + pos2.X / Radius, 0.5f + pos2.Y / Radius, 0.8f * mulColor, 0);
-			var color1 = new Color(0.5f + pos2.X / Radius, 0.5f + pos2.Y / Radius, 0f, 0);
+			var color0 = new Color(0.5f + pos2.X / Radius, 0.5f + pos2.Y / Radius, 0.16f * mulColor, 1);
+			var color1 = new Color(0.5f + pos2.X / Radius, 0.5f + pos2.Y / Radius, 0f, 1);
 
 			bars.Add(center + pos, color0, new Vector3(i / 100f, 0 + timeValue, 0));
 			bars.Add(center + innerrPos, color1, new Vector3(i / 100f, 0.02f + timeValue, 0));
 		}
-		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
+		Ins.Batch.Draw(Commons.ModAsset.Noise_melting.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

@@ -1,5 +1,6 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.LanternMoon.VFX;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -47,6 +48,9 @@ public class GoldLanternLine3 : TrailingProjectile
 
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.75f, 0, 0), (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
+
+		Texture2D spot = Commons.ModAsset.LightPoint2.Value;
+		Main.spriteBatch.Draw(spot, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 0.7f, 0), (float)Main.timeForVisualEffects * 0.04f, spot.Size() / 2f, width, SpriteEffects.None, 0);
 	}
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
@@ -55,18 +59,20 @@ public class GoldLanternLine3 : TrailingProjectile
 
 	public override void DestroyEntityEffect()
 	{
-		for (int x = 0; x < 25; x++)
+		for (int x = 0; x < 12; x++)
 		{
-			var spark = new RayDustDust
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(4f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new GoldenLineStar()
 			{
-				velocity = new Vector2(0, Main.rand.NextFloat(2, 6f)).RotateRandom(MathHelper.TwoPi),
+				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center,
-				maxTime = Main.rand.Next(57, 255),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(8f, 17.0f)),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0 },
+				Position = Projectile.Center,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(20, 40),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+				Frame = Main.rand.Next(0, 4),
 			};
 			Ins.VFXManager.Add(spark);
 		}

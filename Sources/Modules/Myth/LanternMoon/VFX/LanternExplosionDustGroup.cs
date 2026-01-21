@@ -43,10 +43,6 @@ public class LanternExplosionDustGroup : Visual
 			dust.Velocity = dust.Velocity.RotatedBy(dust.RotationSpeed);
 			dust.Velocity *= Math.Clamp(0.99f - MathF.Abs(dust.RotationSpeed * 0.02f), 0, 1);
 			dust.RotationSpeed *= 0.95f;
-			//dust.RotationSpeed += GetRandomNoise(dust.Position) * 0.01f;
-
-			// drag
-
 			Dusts[i] = dust;
 		}
 	}

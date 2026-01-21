@@ -1,5 +1,3 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
 
@@ -40,81 +38,189 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		}
 		mulSize *= Projectile.ai[0] / 5f;
 
-		for (int x = 0; x < 35; x++)
-		{
-			LargeFlame();
-		}
-		for (int x = 0; x < 75; x++)
-		{
-			SmallFlame();
-		}
-		Spark();
+		ExplodeEffect(Projectile.Center);
 	}
 
-	public void Spark()
+	public void ExplodeEffect(Vector2 pos)
 	{
-		for (int g = 0; g < 30; g++)
+		for (int x = 0; x < 15; x++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 22f)).RotatedByRandom(MathHelper.TwoPi);
-			var spark = new FireSparkDust
+			SmallFlame(pos);
+		}
+		for (int x = 0; x < 15; x++)
+		{
+			LargeFlame(pos);
+		}
+
+		Spark(pos);
+		Wave(pos);
+	}
+
+	public void Wave(Vector2 pos)
+	{
+		var wave = new WarpLanternWave
+		{
+			Position = pos,
+			Speed = 25f,
+			Range = 0,
+			Timer = 0,
+			MaxTime = 30,
+			SpeedDecay = 0.9f,
+			Active = true,
+			Visible = true,
+		};
+		Ins.VFXManager.Add(wave);
+
+		var redWave = new RedLanternWave
+		{
+			Position = pos,
+			Speed = 25f,
+			Range = 0,
+			Timer = 0,
+			MaxTime = 30,
+			SpeedDecay = 0.9f,
+			Active = true,
+			Visible = true,
+		};
+		Ins.VFXManager.Add(redWave);
+	}
+
+	public void Spark(Vector2 pos)
+	{
+		for (int g = 0; g < 20; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(9f, 16f)).RotatedByRandom(MathHelper.TwoPi);
+			var sparkFlame = new LanternRedPaperFlame
 			{
-				velocity = newVelocity,
+				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
-				maxTime = Main.rand.Next(20, 40),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) },
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = Main.rand.NextFloat(-1.2f, 1.2f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 2,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(45, 60),
+				Scale = Main.rand.NextFloat(3f, 12f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(sparkFlame);
+		}
+
+		for (int g = 0; g < 32; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(17f, 30f)).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new LanternExplosionSpark
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = Main.rand.NextFloat(-0.7f, 0.7f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.05f, 0.25f) * (g % 2 - 0.5f) * 2,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 60),
+				Scale = Main.rand.NextFloat(2f, 3f),
+				Frame = Main.rand.Next(0, 4),
 			};
 			Ins.VFXManager.Add(spark);
 		}
 
-		for (int g = 0; g < 20; g++)
+		for (int g = 0; g < 6; g++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(6f, 22f)).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 15f)).RotatedByRandom(MathHelper.TwoPi);
+			var sparkStar = new LanternExplosionSparkStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(20, 40),
+				Scale = Main.rand.NextFloat(0.5f, 2.6f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(sparkStar);
+		}
+
+		for (int g = 0; g < 30; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 18f)).RotatedByRandom(MathHelper.TwoPi);
 			var spark = new LanternGhostKing_SmokeSpike
 			{
 				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
-				MaxTime = Main.rand.Next(20, 40),
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				MaxTime = Main.rand.Next(10, 30),
 				Scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
 			};
 			Ins.VFXManager.Add(spark);
 		}
+		for (int g = 0; g < 2; g++)
+		{
+			float scale = 100f;
+			int maxTime = 50;
+			float rot = Main.rand.NextFloat(MathHelper.TwoPi);
+			if (g == 1)
+			{
+				maxTime = 50;
+				scale = 100f;
+				rot += MathHelper.Pi;
+			}
+			if (g == 0)
+			{
+				maxTime = 30;
+				scale = 150f;
+			}
+			var blackLine = new LanternExplosionDecayBlackLines
+			{
+				Position = pos,
+				Timer = 0,
+				MaxTime = maxTime,
+				Scale = scale,
+				Rotation = rot,
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f), scale / 6f },
+				Active = true,
+				Visible = true,
+			};
+			Ins.VFXManager.Add(blackLine);
+		}
 	}
 
-	public void LargeFlame()
+	public void LargeFlame(Vector2 pos)
 	{
-		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+		float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+		Vector2 newVelocity = new Vector2(0, sqrtSpeed * 8).RotatedByRandom(MathHelper.TwoPi);
 		var somg = new LanternFlameDust
 		{
-			velocity = newVelocity,
+			Velocity = newVelocity,
 			Active = true,
 			Visible = true,
-			position = Projectile.Center + new Vector2(Main.rand.NextFloat(40), 0).RotatedByRandom(6.283),
-			maxTime = Main.rand.Next(60, 75),
-			scale = Main.rand.NextFloat(80f, 160f),
-			rotation = Main.rand.NextFloat(6.283f),
+			Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
+			MaxTime = Main.rand.Next(60, 75),
+			Scale = Main.rand.NextFloat(160f, 240f),
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
 			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 		};
 		Ins.VFXManager.Add(somg);
 	}
 
-	public void SmallFlame()
+	public void SmallFlame(Vector2 pos)
 	{
-		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+		float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+		Vector2 newVelocity = new Vector2(0, sqrtSpeed * 16f).RotatedByRandom(MathHelper.TwoPi);
 		var somg = new LanternFlameDust
 		{
-			velocity = newVelocity,
+			Velocity = newVelocity,
 			Active = true,
 			Visible = true,
-			position = Projectile.Center + new Vector2(Main.rand.NextFloat(60), 0).RotatedByRandom(6.283),
-			maxTime = Main.rand.Next(30, 45),
-			scale = Main.rand.NextFloat(50f, 90f),
-			rotation = Main.rand.NextFloat(6.283f),
+			Position = pos + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+			MaxTime = Main.rand.Next(30, 45),
+			Scale = Main.rand.NextFloat(50f, 120f),
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
 			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 		};
 		Ins.VFXManager.Add(somg);

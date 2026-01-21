@@ -1,11 +1,9 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
-using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
-using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -15,12 +13,12 @@ namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 public class LanternGhostKing : ModNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-	internal bool NearDie = false;
-	internal Vector2 RingCenterTrend;
-	internal Vector2 RingCenter;
-	internal Vector2 Lantern3RingCenter;
-	internal float RingRadius = 0;
-	internal float RingRadiusTrend = 1800;
+	public bool NearDie = false;
+	public Vector2 RingCenterTrend;
+	public Vector2 RingCenter;
+	public Vector2 Lantern3RingCenter;
+	public float RingRadius = 0;
+	public float RingRadiusTrend = 1800;
 
 	public float LeftRotation = 0;
 	public float RightRotation = 0;
@@ -28,10 +26,7 @@ public class LanternGhostKing : ModNPC
 	public float ShakeStrength = 2;
 	public int Phase = 1;
 
-	public override void SetStaticDefaults()
-	{
-		Main.npcFrameCount[NPC.type] = 3;
-	}
+	public int Timer = 0;
 
 	public override void SetDefaults()
 	{
@@ -65,7 +60,7 @@ public class LanternGhostKing : ModNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		NPC.localAI[0] = 0;
+		Timer = 0;
 		Phase = 1;
 		var spark = new LanternFlameRingDust
 		{
@@ -120,43 +115,30 @@ public class LanternGhostKing : ModNPC
 
 	public override void AI()
 	{
-		NPC.localAI[0] += 1;
+		Timer += 1;
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
-		if (NPC.localAI[0] > 14400)
+		if (Timer > 14400)
 		{
-			NPC.ai[0] = (14680 - NPC.localAI[0]) / 240f;
+			NPC.ai[0] = (14680 - Timer) / 240f;
 		}
 		else
 		{
 			NPC.ai[0] = 1;
 		}
-
 		UpdateTailRope();
-
+		PlayerDeadHealthRecovery();
 		Lighting.AddLight(NPC.Center, new Vector3(0.75f, 0.65f, 0.55f) * ((255 - NPC.alpha) / 255f));
 		if (!NearDie)
 		{
 			NPC.dontTakeDamage = false;
 		}
 
-		if (player.dead)
-		{
-			if (NPC.life < NPC.lifeMax)
-			{
-				NPC.life += 10;
-			}
-			else
-			{
-				NPC.life = NPC.lifeMax;
-			}
-		}
-
-		if (NPC.localAI[0] <= 1)
+		if (Timer <= 1)
 		{
 			NPC.rotation = NPC.velocity.X / 120f;
-			Vector2 v = player.Center + new Vector2((float)Math.Sin(NPC.localAI[0] / 40f) * 500f, (float)Math.Sin((NPC.localAI[0] + 200) / 40f) * 50f - 350) - NPC.Center;
+			Vector2 v = player.Center + new Vector2((float)Math.Sin(Timer / 40f) * 500f, (float)Math.Sin((Timer + 200) / 40f) * 50f - 350) - NPC.Center;
 			if (NPC.velocity.Length() < 9f)
 			{
 				NPC.velocity += v / v.Length() * 0.35f;
@@ -169,7 +151,7 @@ public class LanternGhostKing : ModNPC
 			{
 				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) >= 1)
 				{
-					NPC.localAI[0] = 0;
+					Timer = 0;
 					NPC.dontTakeDamage = true;
 				}
 			}
@@ -182,813 +164,87 @@ public class LanternGhostKing : ModNPC
 		if (Phase == 1)
 		{
 			// 闪烁金线 ai1借用为晃动力
-			if (NPC.localAI[0] < 700 && NPC.localAI[0] > 0)
+			if (Timer < 700 && Timer > 0)
 			{
-				float duration = NPC.localAI[0] % 100;
-				if (duration < 50)
-				{
-					NPC.rotation = NPC.velocity.X / 120f;
-					Vector2 v = player.Center + new Vector2((float)Math.Sin(Main.time * 0.045f) * 500f, (float)Math.Sin(Main.time * 0.075f + 20) * 50f - 350) - NPC.Center;
-					NPC.velocity += v / v.Length() * 1f;
-					NPC.velocity *= 0.96f;
-				}
-				else if (duration >= 50 && duration < 60)
-				{
-					NPC.rotation = NPC.velocity.X / 120f;
-					NPC.velocity *= 0.8f;
-				}
-				else
-				{
-					if (duration == 60)
-					{
-						NPC.rotation = 0.6f;
-						NPC.ai[1] = -0.2f;
-						ShakeStrength = 25;
-					}
-					if (duration % 2 == 1)
-					{
-						Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
-						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
-						float myDamage = 40;
-						if (Main.expertMode)
-						{
-							myDamage = 55;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 70;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-					NPC.rotation += NPC.ai[1];
-					NPC.ai[1] -= NPC.rotation * 0.07f;
-					NPC.rotation *= 0.9f;
-				}
-
-				RingCenterTrend = NPC.Center;
-				RingRadiusTrend = 1200;
+				GoldenLine(player);
 			}
 
 			// 灯火炸环
-			if (NPC.localAI[0] >= 700 && NPC.localAI[0] < 1500)
+			if (Timer >= 700 && Timer < 1500)
 			{
-				if (NPC.localAI[0] % 250 == 0)
-				{
-					Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI);
-				}
-
-				if (NPC.localAI[0] % 250 < 20)
-				{
-					NPC.velocity *= 0.95f;
-					NPC.rotation *= 0.95f;
-				}
-				if (NPC.localAI[0] % 250 < 30 && NPC.localAI[0] % 250 < 20)
-				{
-					NPC.velocity *= 0;
-					NPC.rotation *= 0.95f;
-				}
-				if (NPC.localAI[0] % 250 == 30)
-				{
-					int count = 6;
-					if (Main.expertMode)
-					{
-						count = 12;
-					}
-					for (int i = 0; i < count; i++)
-					{
-						Vector2 v1 = new Vector2(0, 100).RotatedBy(i / (double)count * 2 * Math.PI);
-						Vector2 v2 = v1 + NPC.Center;
-						var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-						float myDamage = 50;
-						if (Main.expertMode)
-						{
-							myDamage = 75;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 100;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-				}
-				if (NPC.localAI[0] % 250 == 60)
-				{
-					int count = 9;
-					if (Main.expertMode)
-					{
-						count = 24;
-					}
-					for (int i = 0; i < count; i++)
-					{
-						Vector2 v1 = new Vector2(0, 150).RotatedBy(i / (double)count * 2 * Math.PI);
-						Vector2 v2 = v1 + NPC.Center;
-						var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-						float myDamage = 50;
-						if (Main.expertMode)
-						{
-							myDamage = 75;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 100;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-				}
-				if (NPC.localAI[0] % 250 == 90)
-				{
-					int count = 15;
-					if (Main.expertMode)
-					{
-						count = 36;
-					}
-					for (int i = 0; i < count; i++)
-					{
-						Vector2 v1 = new Vector2(0, 200).RotatedBy(i / (double)count * 2 * Math.PI);
-						Vector2 v2 = v1 + NPC.Center;
-						var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-						float myDamage = 50;
-						if (Main.expertMode)
-						{
-							myDamage = 75;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 100;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-				}
-				if (NPC.localAI[0] % 250 > 120)
-				{
-					Vector2 v = player.Center + Lantern3RingCenter + player.velocity * 30f;
-					NPC.velocity += (v - NPC.Center) / (v - NPC.Center).Length() * 0.25f;
-					if (NPC.velocity.Length() > 20f)
-					{
-						NPC.velocity *= 0.96f;
-					}
-				}
-				if (NPC.localAI[0] >= 999)
-				{
-					NPC.localAI[0] = 1500;
-				}
-				RingCenterTrend = NPC.Center;
-				RingRadiusTrend = 1200;
+				Layer3LanternRing(player);
 			}
 
 			// 灯火炸弹阵法
-			if (NPC.localAI[0] >= 1500 && NPC.localAI[0] < 1700)
+			if (Timer >= 1500 && Timer < 1700)
 			{
-				NPC.rotation *= 0.95f;
-				NPC.velocity *= 0.95f;
-				if (NPC.localAI[0] == 1600)
-				{
-					int count = 80;
-					if (Main.expertMode)
-					{
-						count = 120;
-					}
-					if (Main.masterMode)
-					{
-						count = 180;
-					}
-					for (int j = 0; j < count; j++)
-					{
-						Vector2 v2 = new Vector2(0, Main.rand.Next(Main.rand.Next(0, 1200), 1200)).RotatedByRandom(Math.PI * 2);
-						var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBomb2>(), 50, 0f, player.whoAmI, 0, 0);
-						float myDamage = 50;
-						if (Main.expertMode)
-						{
-							myDamage = 75;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 100;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-				}
+				LanternBombMatrix(player);
 			}
 
 			// 游离灯火
-			if (NPC.localAI[0] >= 1700 && NPC.localAI[0] < 2300)
+			if (Timer >= 1700 && Timer < 2300)
 			{
-				NPC.rotation *= 0.95f;
-				NPC.velocity *= 0.95f;
+				SmallLanternRelease(player);
+			}
 
-				float frequency = 3;
-				if (Main.expertMode)
-				{
-					frequency = 4;
-				}
-				if (Main.masterMode)
-				{
-					frequency = 6;
-				}
-				if (NPC.localAI[0] % 9 == 0 && NPC.localAI[0] > 2000)
-				{
-					float dx = (NPC.localAI[0] - 2000) / 300f;
-					for (int j = 0; j < frequency; j++)
-					{
-						Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * j / frequency * 2 + dx * dx * 4);
-						var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v2, v2, ModContent.ProjectileType<FloatLantern_style2>(), 50, 0f, player.whoAmI, 0, 0);
-						float myDamage = 50;
-						if (Main.expertMode)
-						{
-							myDamage = 75;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 100;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-					if (Main.masterMode)
-					{
-						for (int j = 0; j < 3; j++)
-						{
-							Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * j / 1.5 + dx * dx * 4);
-							var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v2, v2, ModContent.ProjectileType<FloatLantern_style3>(), 50, 0f, player.whoAmI, 0, 0);
-							float myDamage = 50;
-							if (Main.expertMode)
-							{
-								myDamage = 75;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 100;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-					if (Main.expertMode)
-					{
-						for (int j = 0; j < 3; j++)
-						{
-							Vector2 v2 = new Vector2(0, 1 + dx).RotatedBy(Math.PI * (j + 1.5) / 1.5 + dx * dx * 4);
-							var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v2, v2, ModContent.ProjectileType<FloatLantern_style4>(), 50, 0f, player.whoAmI, 0, 0);
-							float myDamage = 50;
-							if (Main.expertMode)
-							{
-								myDamage = 75;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 100;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-				}
-				if (NPC.localAI[0] >= 2298)
-				{
-					NPC.localAI[0] = 0;
-				}
+			// 短距离冲撞
+			if (Timer >= 2300 && Timer < 2900)
+			{
+				RotateAndRush(player);
+			}
+			if (Timer >= 2898)
+			{
+				Timer = 0;
 			}
 		}
 		if (Phase == 2)
 		{
 			// 召唤小弟
-			if (NPC.localAI[0] < 400)
+			if (Timer < 400)
 			{
-				NPC.defense = 1000;
-				int maxCount = 20;
-				if (Main.expertMode)
-				{
-					maxCount = 30;
-				}
-				if (Main.masterMode)
-				{
-					maxCount = 45;
-				}
-				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < maxCount)
-				{
-					if (NPC.localAI[0] < 388)
-					{
-						if (NPC.localAI[0] % 7 == 0)
-						{
-							NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
-						}
-					}
-				}
-
-				NPC.rotation *= 0.95f;
-				Vector2 v = player.Center + new Vector2(0, -350) - NPC.Center;
-				if (NPC.velocity.Length() < 9f)
-				{
-					NPC.velocity += v / v.Length() * 0.35f;
-					NPC.velocity.X += player.velocity.X * 0.07f;
-				}
-				NPC.velocity *= 0.96f;
-				RingCenterTrend = NPC.Center;
-				RingRadiusTrend = 1200;
-				if (NPC.localAI[0] >= 395)
-				{
-					if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) >= 1)
-					{
-						NPC.localAI[0] = 395;
-					}
-					else
-					{
-						NPC.dontTakeDamage = false;
-						NPC.localAI[0] = 405;
-						NPC.defense = 30;
-					}
-				}
+				Phase2_SummonMinion(player);
 			}
 
 			// 流灯河 ai1借用为位置
-			if (NPC.localAI[0] > 400 && NPC.localAI[0] < 1200)
+			if (Timer > 400 && Timer < 1200)
 			{
-				if (NPC.localAI[0] == 406)
-				{
-					NPC.ai[1] = 1;
-					if (Main.rand.NextBool(2))
-					{
-						NPC.ai[1] = -1;
-					}
-				}
-				if (NPC.localAI[0] < 430)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha += 20;
-				}
-				if (NPC.localAI[0] == 430)
-				{
-					Vector2 testPos = player.Center + new Vector2(600 * NPC.ai[1], 0);
-					int count = 0;
-					while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-					{
-						testPos.Y -= 100;
-						count++;
-						if (count > 10 || testPos.Y < 1000)
-						{
-							break;
-						}
-					}
-					NPC.position = testPos;
-				}
-				if (NPC.localAI[0] > 430 && NPC.localAI[0] < 450)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha -= 20;
-					if (NPC.alpha < 0)
-					{
-						NPC.alpha = 0;
-					}
-				}
-				if (NPC.localAI[0] == 450)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha = 0;
-					RingCenterTrend = NPC.Center;
-				}
-				if (NPC.localAI[0] == 455)
-				{
-					if (Main.masterMode)
-					{
-						float addValue = Main.rand.NextFloat(6.283f);
-						for (int x = 0; x < 5; x++)
-						{
-							Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), 85, 0f, player.whoAmI, 0.02f, 0);
-							LanternFlow l0 = p0.ModProjectile as LanternFlow;
-							l0.OwnerNPC = NPC;
-						}
-					}
-					else if (Main.expertMode)
-					{
-						float addValue = Main.rand.NextFloat(6.283f);
-						for (int x = 0; x < 3; x++)
-						{
-							Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(2000, 0).RotatedBy(x / 3f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 3f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), 67, 0f, player.whoAmI, 0.02f, 0);
-							LanternFlow l0 = p0.ModProjectile as LanternFlow;
-							l0.OwnerNPC = NPC;
-						}
-					}
-					else
-					{
-						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(2000, 0), new Vector2(-11, 0), ModContent.ProjectileType<LanternFlow>(), 45, 0f, player.whoAmI, 0.02f, 0);
-						LanternFlow l0 = p0.ModProjectile as LanternFlow;
-						l0.OwnerNPC = NPC;
-						Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-2000, 0), new Vector2(11, 0), ModContent.ProjectileType<LanternFlow>(), 45, 0f, player.whoAmI, 0.02f, 0);
-						LanternFlow l1 = p1.ModProjectile as LanternFlow;
-						l1.OwnerNPC = NPC;
-					}
-				}
+				Phase2_LanterRiver(player);
 			}
 
 			// 千灯夜雨
-			if (NPC.localAI[0] >= 1200 && NPC.localAI[0] < 1600)
+			if (Timer >= 1200 && Timer < 1600)
 			{
-				NPC.rotation *= 0.96f;
-				if (NPC.localAI[0] == 1206)
-				{
-					NPC.ai[1] = 1;
-					if (Main.rand.NextBool(2))
-					{
-						NPC.ai[1] = -1;
-					}
-				}
-				if (NPC.localAI[0] < 1230)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha += 20;
-				}
-				if (NPC.localAI[0] == 1230)
-				{
-					Vector2 testPos = player.Center + new Vector2(200 * NPC.ai[1], 0);
-					int count = 0;
-					while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-					{
-						testPos.Y -= 100;
-						count++;
-						if (count > 10 || testPos.Y < 1000)
-						{
-							break;
-						}
-					}
-					NPC.position = testPos;
-				}
-				if (NPC.localAI[0] > 1230 && NPC.localAI[0] < 1250)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha -= 20;
-					if (NPC.alpha < 0)
-					{
-						NPC.alpha = 0;
-					}
-				}
-				if (NPC.localAI[0] == 1250)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha = 0;
-					RingCenterTrend = NPC.Center;
-				}
-
-				// 释放一波灯雨
-				if (NPC.localAI[0] >= 1250 && NPC.localAI[0] % 67 == 0)
-				{
-					for (int x = -10; x < 11; x++)
-					{
-						float deltaY = MathF.Sin(x + (float)Main.time * 0.2f) * 60;
-						float deltaY2 = MathF.Cos(x + (float)Main.time * 0.2f) * 60;
-						NPC npc0 = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 1000, ModContent.NPCType<ExplosiveLantern_growing>(), 0, 0f, 0, 0, 0);
-
-						npc0.Center = NPC.Center + new Vector2(x * 200 + NPC.localAI[0] % 135 - 70, -700 + deltaY);
-						npc0.velocity = new Vector2(0, -deltaY2 * 0.005f);
-						npc0.damage = NPC.damage / 2;
-					}
-				}
-				if (NPC.localAI[0] == 1599)
-				{
-					SwitchAttackTypeInPhase2();
-				}
+				Phase2_LanterRain(player);
 			}
 
 			// 甩出金丝 ai3借用存方向  临时向量0借为旋转中心,临时向量1借为转动半径
-			if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 2000)
+			if (Timer >= 1600 && Timer < 2000)
 			{
-				if (NPC.localAI[0] == 1601)
-				{
-					NPC.ai[3] = 1;
-					if (Main.rand.NextBool(2))
-					{
-						NPC.ai[3] = -1;
-					}
-				}
-				if (NPC.localAI[0] < 1630)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha += 20;
-				}
-				if (NPC.localAI[0] == 1630)
-				{
-					Vector2 testPos = player.Center + new Vector2(600 * NPC.ai[3], 200);
-					int count = 0;
-					while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-					{
-						testPos.Y -= 100;
-						count++;
-						if (count > 10 || testPos.Y < 1000)
-						{
-							break;
-						}
-					}
-					NPC.Center = testPos;
-					RingCenterTrend = NPC.Center;
-				}
-				if (NPC.localAI[0] > 1630 && NPC.localAI[0] < 1650)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha -= 20;
-					if (NPC.alpha < 0)
-					{
-						NPC.alpha = 0;
-					}
-				}
-				if (NPC.localAI[0] == 1650)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha = 0;
-					innerVector0 = NPC.Center + new Vector2(-NPC.ai[3] * 600, -200);
-					innerVector1 = new Vector2(NPC.ai[3] * 600, 200);
-				}
-				if (NPC.localAI[0] > 1680 && NPC.localAI[0] <= 1710)
-				{
-					float rotValue = (1710 - NPC.localAI[0]) / 30f;
-					rotValue = MathF.Pow(rotValue, 3);
-					rotValue = 1 - rotValue;
-					rotValue *= 3.0f;
-					Vector2 addValue = innerVector1.RotatedBy(rotValue * NPC.ai[3]);
-					NPC.Center = innerVector0 + addValue;
-					NPC.rotation = MathF.Atan2(addValue.Y, addValue.X) - MathHelper.PiOver2;
-					if (NPC.localAI[0] % 2 == 0)
-					{
-						Vector2 v0 = -Vector2.Normalize(addValue) * 10f;
-						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine3>(), 40, 0f, player.whoAmI, 0, 0);
-						float myDamage = 40;
-						if (Main.expertMode)
-						{
-							myDamage = 55;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 70;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-				}
-				if (NPC.localAI[0] > 1710)
-				{
-					LeftRotation *= 0.9f;
-					RightRotation *= 0.9f;
-					NPC.rotation *= 0.7f;
-				}
-				if (NPC.localAI[0] == 1739)
-				{
-					SwitchAttackTypeInPhase2();
-				}
+				Phase2_SwingGoldenLines(player);
 			}
 
 			// 闪烁金线2 ai1借用为晃动力
-			if (NPC.localAI[0] >= 2000 && NPC.localAI[0] < 2300)
+			if (Timer >= 2000 && Timer < 2300)
 			{
-				float duration = NPC.localAI[0] % 60;
-				if (duration < 30)
-				{
-					NPC.rotation = NPC.velocity.X / 120f;
-					Vector2 v = player.Center + new Vector2((float)Math.Sin(Main.time * 0.045f) * 500f, (float)Math.Sin(Main.time * 0.075f + 20) * 50f - 350) - NPC.Center;
-					NPC.velocity += Vector2.Normalize(v) * 1.3f;
-					NPC.velocity *= 0.96f;
-				}
-				else if (duration >= 30 && duration < 35)
-				{
-					NPC.rotation = NPC.velocity.X / 120f;
-					NPC.velocity *= 0.8f;
-				}
-				else
-				{
-					if (duration == 40)
-					{
-						NPC.ai[2] = 1;
-						if (Main.rand.NextBool(2))
-						{
-							NPC.ai[2] = -1;
-						}
-						NPC.rotation = 0.9f * NPC.ai[2];
-						NPC.ai[1] = -0.3f;
-						ShakeStrength = 25;
-					}
-					Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
-					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
-					float myDamage = 40;
-					if (Main.expertMode)
-					{
-						myDamage = 55;
-					}
-					if (Main.masterMode)
-					{
-						myDamage = 70;
-					}
-					p0.damage = (int)myDamage / 2;
-					NPC.rotation += NPC.ai[1];
-					NPC.ai[1] -= NPC.rotation * 0.07f;
-					NPC.rotation *= 0.9f;
-				}
-
-				RingCenterTrend = NPC.Center;
-				RingRadiusTrend = 1200;
-				if (NPC.localAI[0] == 2299)
-				{
-					SwitchAttackTypeInPhase2();
-				}
+				Phase2_GoldenLine(player);
 			}
 
 			// 灯火炸环2
-			if (NPC.localAI[0] >= 2400 && NPC.localAI[0] < 3100)
+			if (Timer >= 2400 && Timer < 3100)
 			{
-				if (NPC.localAI[0] < 3000)
-				{
-					if (NPC.localAI[0] % 250 == 0)
-					{
-						Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f));
-					}
-
-					if (NPC.localAI[0] % 250 < 20)
-					{
-						NPC.velocity *= 0.95f;
-						NPC.rotation *= 0.85f;
-					}
-					if (NPC.localAI[0] % 250 < 30 && NPC.localAI[0] % 250 < 20)
-					{
-						NPC.velocity *= 0;
-						NPC.rotation *= 0.95f;
-					}
-					if (NPC.localAI[0] % 250 == 30)
-					{
-						int count = 6;
-						if (Main.expertMode)
-						{
-							count = 12;
-						}
-						for (int i = 0; i < count; i++)
-						{
-							Vector2 v1 = new Vector2(0, 100).RotatedBy(i / (double)count * 2 * Math.PI);
-							Vector2 v2 = v1 + NPC.Center;
-							var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-							float myDamage = 50;
-							if (Main.expertMode)
-							{
-								myDamage = 75;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 100;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-					if (NPC.localAI[0] % 250 == 60)
-					{
-						int count = 9;
-						if (Main.expertMode)
-						{
-							count = 24;
-						}
-						for (int i = 0; i < count; i++)
-						{
-							Vector2 v1 = new Vector2(0, 150).RotatedBy(i / (double)count * 2 * Math.PI);
-							Vector2 v2 = v1 + NPC.Center;
-							var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-							float myDamage = 50;
-							if (Main.expertMode)
-							{
-								myDamage = 75;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 100;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-					if (NPC.localAI[0] % 250 == 90)
-					{
-						int count = 15;
-						if (Main.expertMode)
-						{
-							count = 36;
-						}
-						for (int i = 0; i < count; i++)
-						{
-							Vector2 v1 = new Vector2(0, 200).RotatedBy(i / (double)count * 2 * Math.PI);
-							Vector2 v2 = v1 + NPC.Center;
-							var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), v2, Vector2.zeroVector, ModContent.ProjectileType<DarkLantern>(), 50, 0f, player.whoAmI, 120 - NPC.localAI[0] % 250, (float)(i / (double)count * 2 * Math.PI));
-							float myDamage = 50;
-							if (Main.expertMode)
-							{
-								myDamage = 75;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 100;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-					if (NPC.localAI[0] % 250 > 120)
-					{
-						Vector2 v = player.Center + Lantern3RingCenter;
-						NPC.velocity += (v - NPC.Center - NPC.velocity) * 0.015f;
-						NPC.velocity *= 0.96f;
-						NPC.rotation = NPC.velocity.X * 0.02f;
-					}
-					RingCenterTrend = NPC.Center;
-					RingRadiusTrend = 1200;
-				}
-				else
-				{
-					NPC.velocity *= 0.95f;
-					NPC.rotation *= 0.85f;
-					if (NPC.localAI[0] >= 3029)
-					{
-						SwitchAttackTypeInPhase2();
-					}
-				}
+				Phase2_Layer3LanternRing(player);
 			}
 
 			// 落灯柱,临时向量0借为位移目标
-			if (NPC.localAI[0] >= 3100 && NPC.localAI[0] < 3600)
+			if (Timer >= 3100 && Timer < 3600)
 			{
-				if (NPC.localAI[0] == 3103)
-				{
-					for (int i = 0; i < 8; i++)
-					{
-						Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(Main.rand.NextFloat(-1500, 1500), -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, player.whoAmI, 0, 0);
-					}
-				}
-				NPC.rotation *= 0.9f;
-				NPC.velocity *= 0.9f;
-
-				if (NPC.localAI[0] % 100 < 30)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha += 20;
-				}
-				if (NPC.localAI[0] % 100 == 30)
-				{
-					Vector2 testPos = player.Center + new Vector2(0, -700).RotatedBy(Main.rand.NextFloat(1.4f, 2.1f) * (Main.rand.NextBool(2) ? 1 : -1));
-					int count = 0;
-					while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-					{
-						testPos.Y -= 100;
-						count++;
-						if (count > 10 || testPos.Y < 1000)
-						{
-							break;
-						}
-					}
-					NPC.Center = testPos;
-					RingCenterTrend = NPC.Center;
-				}
-				if (NPC.localAI[0] % 100 > 30 && NPC.localAI[0] % 100 < 50)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha -= 20;
-					if (NPC.alpha < 0)
-					{
-						NPC.alpha = 0;
-					}
-				}
-				if (NPC.localAI[0] % 100 == 50)
-				{
-					NPC.velocity *= 0;
-					NPC.alpha = 0;
-					int count = 9;
-					if (Main.expertMode)
-					{
-						count = 15;
-					}
-					for (int i = 0; i < count; i++)
-					{
-						Vector2 v0 = new Vector2(0, count).RotatedBy(i / (float)count * MathHelper.TwoPi);
-						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
-						float myDamage = 40;
-						if (Main.expertMode)
-						{
-							myDamage = 55;
-						}
-						if (Main.masterMode)
-						{
-							myDamage = 70;
-						}
-						p0.damage = (int)myDamage / 2;
-					}
-					if (Main.masterMode)
-					{
-						for (int i = 0; i < 15; i++)
-						{
-							Vector2 v0 = new Vector2(0, 8).RotatedBy((i + 0.5f) / 15f * MathHelper.TwoPi);
-							Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, player.whoAmI, 0, 0);
-							float myDamage = 40;
-							if (Main.expertMode)
-							{
-								myDamage = 55;
-							}
-							if (Main.masterMode)
-							{
-								myDamage = 70;
-							}
-							p0.damage = (int)myDamage / 2;
-						}
-					}
-				}
-				if (NPC.localAI[0] >= 3599)
-				{
-					SwitchAttackTypeInPhase2();
-				}
+				Phase2_FallingColumn(player);
 			}
-			if (NPC.localAI[0] >= 3600)
+			if (Timer >= 3600 && Timer < 4200)
+			{
+				Phase2_Rush(player);
+			}
+			if (Timer >= 4200)
 			{
 				SwitchAttackTypeInPhase2();
 			}
@@ -1004,6 +260,778 @@ public class LanternGhostKing : ModNPC
 
 		RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;
 		RingCenter = RingCenter * 0.99f + RingCenterTrend * 0.01f;
+	}
+
+	/// <summary>
+	/// Release golden line proj, ai[1] lent as a para for swing force.<br/>
+	/// 0-700
+	/// </summary>
+	/// <param name="target"></param>
+	public void GoldenLine(Player target)
+	{
+		float duration = Timer % 100;
+		if (duration < 50)
+		{
+			NPC.rotation = NPC.velocity.X / 120f;
+			Vector2 v = target.Center + new Vector2((float)Math.Sin(Main.time * 0.045f) * 500f, (float)Math.Sin(Main.time * 0.075f + 20) * 50f - 350) - NPC.Center;
+			NPC.velocity += v / v.Length() * 1f;
+			NPC.velocity *= 0.96f;
+		}
+		else if (duration >= 50 && duration < 60)
+		{
+			NPC.rotation = NPC.velocity.X / 120f;
+			NPC.velocity *= 0.8f;
+		}
+		else
+		{
+			if (duration == 60)
+			{
+				NPC.rotation = 0.6f;
+				NPC.ai[1] = -0.2f;
+				ShakeStrength = 25;
+			}
+			if (duration % 2 == 1)
+			{
+				Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+				float myDamage = 40;
+				if (Main.expertMode)
+				{
+					myDamage = 55;
+				}
+				if (Main.masterMode)
+				{
+					myDamage = 70;
+				}
+				p0.damage = (int)myDamage / 2;
+			}
+			NPC.rotation += NPC.ai[1];
+			NPC.ai[1] -= NPC.rotation * 0.07f;
+			NPC.rotation *= 0.9f;
+		}
+
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+	}
+
+	/// <summary>
+	/// Spawn 3 layers of lantern ring and release with a high speed then descenting gradually.<br/>
+	/// 700-1500
+	/// </summary>
+	/// <param name="target"></param>
+	public void Layer3LanternRing(Player target)
+	{
+		if (Timer % 250 == 0)
+		{
+			Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI);
+		}
+
+		if (Timer % 250 < 20)
+		{
+			NPC.velocity *= 0.95f;
+			NPC.rotation *= 0.95f;
+		}
+		if (Timer % 250 < 30 && Timer % 250 < 20)
+		{
+			NPC.velocity *= 0;
+			NPC.rotation *= 0.95f;
+		}
+		if (Timer % 250 == 1)
+		{
+			int myDamage = 50;
+			if (Main.expertMode)
+			{
+				myDamage = 75;
+			}
+			if (Main.masterMode)
+			{
+				myDamage = 100;
+			}
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WheelShapeLantern3Layer>(), myDamage, 0f, target.whoAmI, 0, 0);
+		}
+		if (Timer % 250 > 120)
+		{
+			Vector2 v = target.Center + Lantern3RingCenter + target.velocity * 30f;
+			NPC.velocity += (v - NPC.Center) / (v - NPC.Center).Length() * 0.25f;
+			if (NPC.velocity.Length() > 20f)
+			{
+				NPC.velocity *= 0.96f;
+			}
+		}
+		if ((Timer is 999 or 1249) && Main.rand.NextBool(3))
+		{
+			Timer = 1500;
+		}
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+	}
+
+	/// <summary>
+	/// Spawn a series of lantern bomb around.<br/>
+	/// 1500-1700
+	/// </summary>
+	/// <param name="target"></param>
+	public void LanternBombMatrix(Player target)
+	{
+		NPC.rotation *= 0.95f;
+		NPC.velocity *= 0.95f;
+		if (Timer == 1600)
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				for (int j = 0; j < i * 3; j++)
+				{
+					Vector2 v2 = new Vector2(0, i * 70 + 400).RotatedBy(j / (i * 3f) * MathHelper.TwoPi + i * 4);
+					var p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v2, Vector2.zeroVector, ModContent.ProjectileType<LanternBomb>(), 50, 0f, target.whoAmI, 0, 0);
+					float myDamage = 50;
+					if (Main.expertMode)
+					{
+						myDamage = 75;
+					}
+					if (Main.masterMode)
+					{
+						myDamage = 100;
+					}
+					p0.damage = (int)myDamage / 2;
+				}
+			}
+		}
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1000;
+	}
+
+	/// <summary>
+	/// Release a series of small lantern regularly.<br/>
+	/// 1700-2300
+	/// </summary>
+	/// <param name="target"></param>
+	public void SmallLanternRelease(Player target)
+	{
+		NPC.rotation *= 0.95f;
+		NPC.velocity *= 0.95f;
+		if (Timer == 1820)
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 150), Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
+		}
+		RingCenterTrend = NPC.Center + new Vector2(0, 150);
+		RingRadiusTrend = 1000;
+	}
+
+	/// <summary>
+	/// Spawn a series of lantern bomb around.<br/>
+	/// 2300-2900
+	/// </summary>
+	/// <param name="target"></param>
+	public void RotateAndRush(Player target)
+	{
+		int offsetTimer = Timer - 2300;
+		int dashTimer = offsetTimer % 60;
+		if (dashTimer < 10)
+		{
+			NPC.velocity *= 0.9f;
+		}
+		if (dashTimer == 10)
+		{
+			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 16f;
+			NPC.velocity += dir;
+		}
+		if (dashTimer >= 50)
+		{
+			NPC.velocity *= 0.9f;
+		}
+		NPC.rotation = NPC.velocity.X * 0.01f;
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1000;
+	}
+
+	/// <summary>
+	/// Summon little lanterns.<br/>
+	/// 0-400
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_SummonMinion(Player target)
+	{
+		NPC.defense = 1000;
+		int maxCount = 20;
+		if (Main.expertMode)
+		{
+			maxCount = 30;
+		}
+		if (Main.masterMode)
+		{
+			maxCount = 45;
+		}
+		if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < maxCount)
+		{
+			if (Timer < 388)
+			{
+				if (Timer % 7 == 0)
+				{
+					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
+				}
+			}
+		}
+
+		NPC.rotation *= 0.95f;
+		Vector2 v = target.Center + new Vector2(0, -350) - NPC.Center;
+		if (NPC.velocity.Length() < 9f)
+		{
+			NPC.velocity += v / v.Length() * 0.35f;
+			NPC.velocity.X += target.velocity.X * 0.07f;
+		}
+		NPC.velocity *= 0.96f;
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+		if (Timer >= 395)
+		{
+			if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) >= 1)
+			{
+				Timer = 395;
+			}
+			else
+			{
+				NPC.dontTakeDamage = false;
+				Timer = 405;
+				NPC.defense = 30;
+			}
+		}
+
+		NPC.rotation = NPC.velocity.X * 0.01f;
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+	}
+
+	/// <summary>
+	/// 5 Main flows of lantern river.<br/>
+	/// 400-1200
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_LanterRiver(Player target)
+	{
+		NPC.rotation *= 0.96f;
+		if (Timer == 406)
+		{
+			NPC.ai[1] = 1;
+			if (Main.rand.NextBool(2))
+			{
+				NPC.ai[1] = -1;
+			}
+		}
+		if (Timer < 430)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha += 20;
+		}
+		if (Timer == 430)
+		{
+			Vector2 testPos = target.Center + new Vector2(600 * NPC.ai[1], 0);
+			int count = 0;
+			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			{
+				testPos.Y -= 100;
+				count++;
+				if (count > 10 || testPos.Y < 1000)
+				{
+					break;
+				}
+			}
+			NPC.position = testPos;
+		}
+		if (Timer > 430 && Timer < 450)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha -= 20;
+			if (NPC.alpha < 0)
+			{
+				NPC.alpha = 0;
+			}
+		}
+		if (Timer == 450)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha = 0;
+			RingCenterTrend = NPC.Center;
+		}
+		if (Timer == 455)
+		{
+			int count = 3;
+			int damage = 45;
+			if (Main.expertMode)
+			{
+				count = 4;
+				damage = 67;
+			}
+			if (Main.masterMode)
+			{
+				count = 5;
+				damage = 85;
+			}
+			if (Main.masterMode)
+			{
+				float addValue = Main.rand.NextFloat(6.283f);
+				for (int x = 0; x < count; x++)
+				{
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 50) + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), damage, 0f, target.whoAmI, 0.02f, 0);
+					LanternFlow lanternF = p0.ModProjectile as LanternFlow;
+					lanternF.OwnerNPC = NPC;
+					lanternF.MinDisToNPC = 500;
+					lanternF.VelDecay = 0.995f;
+					lanternF.RotateSpeed = -0.0598575436f;
+					lanternF.BestRotateSpeed = 0;
+					lanternF.BestVelDecay = 0;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Lantern Rain.<br/>
+	/// 1200-1600
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_LanterRain(Player target)
+	{
+		NPC.rotation *= 0.96f;
+		if (Timer == 1206)
+		{
+			NPC.ai[1] = 1;
+			if (Main.rand.NextBool(2))
+			{
+				NPC.ai[1] = -1;
+			}
+		}
+		if (Timer < 1230)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha += 20;
+		}
+		if (Timer == 1230)
+		{
+			Vector2 testPos = target.Center + new Vector2(200 * NPC.ai[1], 0);
+			int count = 0;
+			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			{
+				testPos.Y -= 100;
+				count++;
+				if (count > 10 || testPos.Y < 1000)
+				{
+					break;
+				}
+			}
+			NPC.position = testPos;
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
+		}
+		if (Timer > 1230 && Timer < 1250)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha -= 20;
+			if (NPC.alpha < 0)
+			{
+				NPC.alpha = 0;
+			}
+		}
+		if (Timer == 1250)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha = 0;
+			RingCenterTrend = NPC.Center;
+		}
+
+		// 释放一波灯雨
+		if (Timer >= 1250 && Timer % 67 == 0)
+		{
+			for (int x = -10; x < 11; x++)
+			{
+				float deltaY = MathF.Sin(x + (float)Main.time * 0.2f) * 60;
+				float deltaY2 = MathF.Cos(x + (float)Main.time * 0.2f) * 60;
+				NPC npc0 = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 1000, ModContent.NPCType<ExplosiveLantern_growing>(), 0, 0f, 0, 0, 0);
+
+				npc0.Center = NPC.Center + new Vector2(x * 200 + Timer % 135 - 70, -700 + deltaY);
+				npc0.velocity = new Vector2(0, -deltaY2 * 0.005f);
+				npc0.damage = NPC.damage / 2;
+			}
+		}
+		if (Timer == 1599)
+		{
+			SwitchAttackTypeInPhase2();
+		}
+	}
+
+	/// <summary>
+	/// Swing, rush and release a series of star.<br/>
+	/// 1600-2000
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_SwingGoldenLines(Player target)
+	{
+		if (Timer == 1601)
+		{
+			NPC.ai[3] = 1;
+			if (Main.rand.NextBool(2))
+			{
+				NPC.ai[3] = -1;
+			}
+		}
+		if (Timer < 1630)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha += 20;
+		}
+		if (Timer == 1630)
+		{
+			Vector2 testPos = target.Center + new Vector2(600 * NPC.ai[3], 200);
+			int count = 0;
+			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			{
+				testPos.Y -= 100;
+				count++;
+				if (count > 10 || testPos.Y < 1000)
+				{
+					break;
+				}
+			}
+			TeleportTo(testPos);
+			RingCenterTrend = NPC.Center;
+		}
+		if (Timer > 1630 && Timer < 1650)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha -= 20;
+			if (NPC.alpha < 0)
+			{
+				NPC.alpha = 0;
+			}
+		}
+		if (Timer == 1650)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha = 0;
+			innerVector0 = NPC.Center + new Vector2(-NPC.ai[3] * 600, -200);
+			innerVector1 = new Vector2(NPC.ai[3] * 600, 200);
+		}
+		if (Timer > 1680 && Timer <= 1710)
+		{
+			float rotValue = (1710 - Timer) / 30f;
+			rotValue = MathF.Pow(rotValue, 3);
+			rotValue = 1 - rotValue;
+			rotValue *= 3.0f;
+			Vector2 addValue = innerVector1.RotatedBy(rotValue * NPC.ai[3]);
+			NPC.Center = innerVector0 + addValue;
+			NPC.rotation = MathF.Atan2(addValue.Y, addValue.X) - MathHelper.PiOver2;
+			if (Timer % 2 == 0)
+			{
+				Vector2 v0 = -Vector2.Normalize(addValue) * 10f;
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine3>(), 40, 0f, target.whoAmI, 0, 0);
+				float myDamage = 40;
+				if (Main.expertMode)
+				{
+					myDamage = 55;
+				}
+				if (Main.masterMode)
+				{
+					myDamage = 70;
+				}
+				p0.damage = (int)myDamage / 2;
+			}
+		}
+		if (Timer > 1710)
+		{
+			LeftRotation *= 0.9f;
+			RightRotation *= 0.9f;
+			NPC.rotation *= 0.7f;
+		}
+		if (Timer == 1739)
+		{
+			SwitchAttackTypeInPhase2();
+		}
+	}
+
+	/// <summary>
+	/// Release golden line proj, ai[1] lent as a para for swing force.<br/>
+	/// 2000-2300
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_GoldenLine(Player target)
+	{
+		float duration = Timer % 60;
+		if (duration < 30)
+		{
+			NPC.rotation = NPC.velocity.X / 120f;
+			Vector2 v = target.Center + new Vector2((float)Math.Sin(Main.time * 0.045f) * 500f, (float)Math.Sin(Main.time * 0.075f + 20) * 50f - 350) - NPC.Center;
+			NPC.velocity += Vector2.Normalize(v) * 1.3f;
+			NPC.velocity *= 0.96f;
+		}
+		else if (duration >= 30 && duration < 35)
+		{
+			NPC.rotation = NPC.velocity.X / 120f;
+			NPC.velocity *= 0.8f;
+		}
+		else
+		{
+			if (duration == 40)
+			{
+				NPC.ai[2] = 1;
+				if (Main.rand.NextBool(2))
+				{
+					NPC.ai[2] = -1;
+				}
+				NPC.rotation = 0.9f * NPC.ai[2];
+				NPC.ai[1] = -0.3f;
+				ShakeStrength = 25;
+			}
+			Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+			float myDamage = 40;
+			if (Main.expertMode)
+			{
+				myDamage = 55;
+			}
+			if (Main.masterMode)
+			{
+				myDamage = 70;
+			}
+			p0.damage = (int)myDamage / 2;
+			NPC.rotation += NPC.ai[1];
+			NPC.ai[1] -= NPC.rotation * 0.07f;
+			NPC.rotation *= 0.9f;
+		}
+
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+		if (Timer == 2299)
+		{
+			SwitchAttackTypeInPhase2();
+		}
+	}
+
+	/// <summary>
+	/// Spawn 3 layers of lantern ring and release with a high speed then descenting gradually.<br/>
+	/// 2400-3100
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_Layer3LanternRing(Player target)
+	{
+		if (Timer < 3000)
+		{
+			if (Timer % 250 == 0)
+			{
+				Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f));
+			}
+
+			if (Timer % 250 < 20)
+			{
+				NPC.velocity *= 0.95f;
+				NPC.rotation *= 0.85f;
+			}
+			if (Timer % 250 < 30 && Timer % 250 < 20)
+			{
+				NPC.velocity *= 0;
+				NPC.rotation *= 0.95f;
+			}
+			if (Timer % 250 == 1)
+			{
+				int myDamage = 50;
+				if (Main.expertMode)
+				{
+					myDamage = 75;
+				}
+				if (Main.masterMode)
+				{
+					myDamage = 100;
+				}
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WheelShapeLantern3Layer>(), myDamage, 0f, target.whoAmI, 0, 0);
+			}
+			if (Timer % 250 > 120)
+			{
+				Vector2 v = target.Center + Lantern3RingCenter;
+				NPC.velocity += (v - NPC.Center - NPC.velocity) * 0.015f;
+				NPC.velocity *= 0.96f;
+				NPC.rotation = NPC.velocity.X * 0.02f;
+			}
+			RingCenterTrend = NPC.Center;
+			RingRadiusTrend = 1200;
+		}
+		else
+		{
+			NPC.velocity *= 0.95f;
+			NPC.rotation *= 0.85f;
+			if (Timer >= 3029)
+			{
+				SwitchAttackTypeInPhase2();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Summon random verticle lantern flow column and release golden ray particles.
+	/// 3100-3600
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_FallingColumn(Player target)
+	{
+		if (Timer == 3103)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2((i - 3.5f) * 400, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, target.whoAmI, 0, 0);
+				p0.timeLeft = Main.rand.Next(580, 620);
+			}
+		}
+		NPC.rotation *= 0.9f;
+		NPC.velocity *= 0.9f;
+
+		if (Timer % 100 < 30)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha += 20;
+		}
+		if (Timer % 100 == 30)
+		{
+			Vector2 testPos = target.Center + new Vector2(0, -700).RotatedBy(Main.rand.NextFloat(1.4f, 2.1f) * (Main.rand.NextBool(2) ? 1 : -1));
+			int count = 0;
+			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			{
+				testPos.Y -= 100;
+				count++;
+				if (count > 10 || testPos.Y < 1000)
+				{
+					break;
+				}
+			}
+			TeleportTo(testPos);
+			RingCenterTrend = NPC.Center;
+		}
+		if (Timer % 100 > 30 && Timer % 100 < 50)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha -= 20;
+			if (NPC.alpha < 0)
+			{
+				NPC.alpha = 0;
+			}
+		}
+		if (Timer % 100 == 50)
+		{
+			NPC.velocity *= 0;
+			NPC.alpha = 0;
+			int count = 9;
+			if (Main.expertMode)
+			{
+				count = 15;
+			}
+			for (int i = 0; i < count; i++)
+			{
+				Vector2 v0 = new Vector2(0, count).RotatedBy(i / (float)count * MathHelper.TwoPi);
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+				float myDamage = 40;
+				if (Main.expertMode)
+				{
+					myDamage = 55;
+				}
+				if (Main.masterMode)
+				{
+					myDamage = 70;
+				}
+				p0.damage = (int)myDamage / 2;
+				GoldLanternLine gLL = p0.ModProjectile as GoldLanternLine;
+				if (gLL is not null)
+				{
+					gLL.Timer = Main.rand.Next(-10, 10);
+				}
+			}
+			if (Main.masterMode)
+			{
+				for (int i = 0; i < 15; i++)
+				{
+					Vector2 v0 = new Vector2(0, 8).RotatedBy((i + 0.5f) / 15f * MathHelper.TwoPi);
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+					float myDamage = 40;
+					if (Main.expertMode)
+					{
+						myDamage = 55;
+					}
+					if (Main.masterMode)
+					{
+						myDamage = 70;
+					}
+					p0.damage = (int)myDamage / 2;
+					GoldLanternLine gLL = p0.ModProjectile as GoldLanternLine;
+					if (gLL is not null)
+					{
+						gLL.Timer = Main.rand.Next(-10, 10);
+					}
+				}
+			}
+		}
+		if (Timer == 3599)
+		{
+			SwitchAttackTypeInPhase2();
+		}
+	}
+
+	/// <summary>
+	/// Long distance rush.<br/>
+	/// 3600-4200
+	/// </summary>
+	/// <param name="target"></param>
+	public void Phase2_Rush(Player target)
+	{
+		int offsetTimer = Timer - 3600;
+		int dashTimer = offsetTimer % 100;
+		if (dashTimer < 10)
+		{
+			NPC.velocity *= 0.9f;
+		}
+		if (dashTimer == 10)
+		{
+			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 25f;
+			NPC.velocity += dir;
+		}
+		if (dashTimer >= 55)
+		{
+			NPC.velocity *= 0.95f;
+		}
+		NPC.rotation = NPC.velocity.X * 0.01f;
+		RingCenterTrend = NPC.Center;
+		RingRadiusTrend = 1200;
+		if (Timer == 4199)
+		{
+			SwitchAttackTypeInPhase2();
+		}
+	}
+
+	public void TeleportTo(Vector2 destination)
+	{
+		NPC.Center = destination;
+
+		for (int i = 0; i < LanternTail.Masses.Length; i++)
+		{
+			LanternTail.Masses[i].Position += destination - NPC.Center;
+		}
+	}
+
+	public void PlayerDeadHealthRecovery()
+	{
+		bool allDie = true;
+		foreach (var player in Main.player)
+		{
+			if (player != null && player.active && !player.dead)
+			{
+				allDie = false;
+				return;
+			}
+		}
+		if (allDie)
+		{
+			if (NPC.life < NPC.lifeMax)
+			{
+				NPC.life += 10;
+			}
+			else
+			{
+				NPC.life = NPC.lifeMax;
+			}
+		}
 	}
 
 	/// <summary>
@@ -1135,21 +1163,7 @@ public class LanternGhostKing : ModNPC
 				Main.gore[gr19].timeLeft = 900;
 			}
 
-			var lanternExplosion = new LanternExplosion
-			{
-				velocity = Vector2.Zero,
-				Active = true,
-				Visible = true,
-				position = NPC.Center,
-				maxTime = Main.rand.Next(126, 136),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(2.45f, 2.8f) * 3, Main.rand.NextFloat(8f, 12f) },
-				FireBallVelocity = new Vector2[]
-				{
-					RandomVector2(2f, 0.01f),
-					RandomVector2(1f, 0.01f),
-				},
-			};
-			Ins.VFXManager.Add(lanternExplosion);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
 
 			for (int x = 0; x < 37; x++)
 			{
@@ -1173,29 +1187,33 @@ public class LanternGhostKing : ModNPC
 			if (Phase == 1)
 			{
 				Phase = 2;
-				NPC.localAI[0] = 0;
+				Timer = 0;
 			}
 		}
 	}
 
 	public void SwitchAttackTypeInPhase2()
 	{
-		switch (Main.rand.Next(5))
+		// Main.rand.Next(6)
+		switch (Main.rand.Next(6))
 		{
 			case 0:
-				NPC.localAI[0] = 1200;
+				Timer = 1200;
 				break;
 			case 1:
-				NPC.localAI[0] = 2000;
+				Timer = 2000;
 				break;
 			case 2:
-				NPC.localAI[0] = 1600;
+				Timer = 1600;
 				break;
 			case 3:
-				NPC.localAI[0] = 2400;
+				Timer = 2400;
 				break;
 			case 4:
-				NPC.localAI[0] = 3100;
+				Timer = 3100;
+				break;
+			case 5:
+				Timer = 3600;
 				break;
 		}
 	}
@@ -1216,78 +1234,25 @@ public class LanternGhostKing : ModNPC
 		DrawTail(spriteBatch);
 
 		// spriteBatch.Draw(tex, drawPos, CoreAndTailFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(CoreAndTailFrame.Width * 0.5f, 14), NPC.scale, SpriteEffects.None, 0);
-		spriteBatch.Draw(tex, drawPos, BodyFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()) * 0.85f, 0, BodyFrame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
-
-		spriteBatch.Draw(tex, drawPos, ExteriorFrameworkFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170), NPC.scale, SpriteEffects.None, 0);
-
-		// Vector2 originOfTexture = front.Size() * 0.5f;
-		// spriteBatch.Draw(back, NPC.Center - Main.screenPosition, null, GetColorRed(drawColor), NPC.rotation, originOfTexture, NPC.scale, SpriteEffects.None, 0f);
-
-		// DrawFlame();
-		// DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(-160, -20), LeftRotation);
-		// DrawVertexTexture(ModAsset.LanternGhostKing_side.Value, new Vector2(160, -20), RightRotation, true);
-
-		//// 第一阶段全屏炸雷时发光
-		// if (Phase == 1)
-		// {
-		// if (NPC.localAI[0] >= 1600 && NPC.localAI[0] < 1700)
-		// {
-		// float value = 1 - (NPC.localAI[0] - 1600) / 100f;
-		// value *= value;
-		// Color glowColor = new Color(value, value * value, value * value * value, 0);
-		// spriteBatch.Draw(left_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), LeftRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-		// spriteBatch.Draw(right_glow, NPC.Center - Main.screenPosition, null, GetColorRed(glowColor), RightRotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-
-		// Lighting.AddLight(NPC.Center + new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
-		// Lighting.AddLight(NPC.Center - new Vector2(64, 0), new Vector3(value * 0.5f, 0, 0));
-		// }
-		// }
-
-		// for (int i = 9; i >= 0; i--)
-		// {
-		// Color breadColor = Lighting.GetColor((NPC.Center / 16f).ToPoint() + new Point(5 - i, 8));
-		// breadColor *= 0.7f;
-		// breadColor.A = 255;
-		// spriteBatch.Draw(breads[i], NPC.Center - Main.screenPosition + new Vector2(MathF.Sin(i + (float)Main.time * 0.4f) * ShakeStrength, 0).RotatedBy(i), null, GetColorRed(breadColor), NPC.rotation + MathF.Sin(i + (float)Main.time * 0.6f) * 0.01f, originOfTexture, 1f, SpriteEffects.None, 0f);
-		// }
-		// Color shellColor = drawColor * 0.6f;
-		// shellColor.A = 255;
-
-		//// 第二阶段变透明
-		// if (Phase == 2)
-		// {
-		// if (NPC.localAI[0] >= 700)
-		// {
-		// float value = (NPC.localAI[0] - 700) / 100f;
-		// value = Math.Clamp(value, 0, 1);
-		// value *= value;
-		// shellColor = drawColor * (float)Utils.Lerp(0.6f, 1.2f, value);
-		// shellColor.R = (byte)(MathF.Pow(shellColor.R / 255f, (float)Utils.Lerp(1f, 0.2f, value)) * 255);
-		// shellColor.A = (byte)Utils.Lerp(255, 105, value);
-		// }
-		// }
-		// spriteBatch.Draw(front_face, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-		// shellColor = drawColor * 0.6f;
-		// shellColor.A = 255;
-		// spriteBatch.Draw(front, NPC.Center - Main.screenPosition, null, GetColorRed(shellColor), NPC.rotation, originOfTexture, 1f, SpriteEffects.None, 0f);
-
+		spriteBatch.Draw(tex, drawPos, BodyFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()) * 0.85f, NPC.rotation, BodyFrame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, drawPos, ExteriorFrameworkFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), LeftRotation, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170), NPC.scale, SpriteEffects.None, 0);
 		//// 第二阶段十字光辉
-		// if (Phase == 2)
-		// {
-		// if (NPC.localAI[0] >= 700)
-		// {
-		// float value = (NPC.localAI[0] - 700) / 100f;
-		// value = Math.Clamp(value, 0, 1);
-		// value *= value;
-		// Texture2D star = Commons.ModAsset.StarSlash.Value;
-		// Vector2 orig = star.Size() / 2f;
-		// Vector2 offset = new Vector2(0, 50);
-		// float value2 = (255 - NPC.alpha) / 255f;
-		// float mulSize = MathF.Sin((float)Main.timeForVisualEffects * 0.4f) * 0.05f + 1;
-		// spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), 0, orig, new Vector2(value, 0.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
-		// spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
-		// }
-		// }
+		if (Phase == 2)
+		{
+			if (Timer >= 700)
+			{
+				float value = (Timer - 700) / 100f;
+				value = Math.Clamp(value, 0, 1);
+				value *= value;
+				Texture2D star = Commons.ModAsset.StarSlash.Value;
+				Vector2 orig = star.Size() / 2f;
+				Vector2 offset = new Vector2(0, 50);
+				float value2 = (255 - NPC.alpha) / 255f;
+				float mulSize = MathF.Sin((float)Main.timeForVisualEffects * 0.4f) * 0.05f + 1;
+				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), 0, orig, new Vector2(value, 0.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
+				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
+			}
+		}
 	}
 
 	public Rope LanternTail = null;
@@ -1301,8 +1266,7 @@ public class LanternGhostKing : ModNPC
 			LanternTail = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
 			LanternGhostKingMassSpringSystem.AddMassSpringMesh(LanternTail);
 		}
-		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50);
-		LanternTail.ApplyForce();
+		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50).RotatedBy(NPC.rotation);
 		for (int i = 1; i < LanternTail.Masses.Length; i++)
 		{
 			float damping = 0.3f;
@@ -1317,103 +1281,9 @@ public class LanternGhostKing : ModNPC
 				damping *= toStart / 3f;
 			}
 			LanternTail.ApplyForceSpecial(i, -LanternTail.Masses[i].Velocity * damping);
+			LanternTail.ApplyForceSpecial(i, new Vector2(0, 13 * LanternTail.Masses[i].Value));
 		}
 		LanternGhostKingPBDSolver.Step(LanternGhostKingMassSpringSystem, 1f);
-
-		if (Main.mouseLeft && Main.mouseLeftRelease)
-		{
-			ExplodeEffect();
-		}
-	}
-
-	public void ExplodeEffect()
-	{
-		// for (int x = 0; x < 35; x++)
-		// {
-		// LargeFlame();
-		// }
-		// for (int x = 0; x < 75; x++)
-		// {
-		// SmallFlame();
-		// }
-		// Spark();
-		var explode = new LanternExplosionDustGroup
-		{
-			Active = true,
-			Visible = true,
-			Position = Main.MouseWorld,
-			MaxTime = 120,
-		};
-		Ins.VFXManager.Add(explode);
-	}
-
-	public void Spark()
-	{
-		for (int g = 0; g < 30; g++)
-		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 22f)).RotatedByRandom(MathHelper.TwoPi);
-			var spark = new FireSparkDust
-			{
-				velocity = newVelocity,
-				Active = true,
-				Visible = true,
-				position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
-				maxTime = Main.rand.Next(20, 40),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) },
-			};
-			Ins.VFXManager.Add(spark);
-		}
-
-		for (int g = 0; g < 20; g++)
-		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(6f, 22f)).RotatedByRandom(MathHelper.TwoPi);
-			var spark = new LanternGhostKing_SmokeSpike
-			{
-				Velocity = newVelocity,
-				Active = true,
-				Visible = true,
-				Position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(6.283) + newVelocity * 3,
-				MaxTime = Main.rand.Next(20, 40),
-				Scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)),
-			};
-			Ins.VFXManager.Add(spark);
-		}
-	}
-
-	public void LargeFlame()
-	{
-		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
-		var somg = new LanternFlameDust
-		{
-			velocity = newVelocity,
-			Active = true,
-			Visible = true,
-			position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(40), 0).RotatedByRandom(6.283),
-			maxTime = Main.rand.Next(60, 75),
-			scale = Main.rand.NextFloat(80f, 160f),
-			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
-		};
-		Ins.VFXManager.Add(somg);
-	}
-
-	public void SmallFlame()
-	{
-		Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(2f, 8f)).RotatedByRandom(MathHelper.TwoPi);
-		var somg = new LanternFlameDust
-		{
-			velocity = newVelocity,
-			Active = true,
-			Visible = true,
-			position = Main.MouseWorld + new Vector2(Main.rand.NextFloat(60), 0).RotatedByRandom(6.283),
-			maxTime = Main.rand.Next(30, 45),
-			scale = Main.rand.NextFloat(50f, 90f),
-			rotation = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
-		};
-		Ins.VFXManager.Add(somg);
 	}
 
 	public void DrawTail(SpriteBatch spriteBatch)
@@ -1421,12 +1291,12 @@ public class LanternGhostKing : ModNPC
 		if (LanternTail == null || LanternTail.Masses.Length <= 0)
 		{
 			return;
-		}
-		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
+		}	
 		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
 
+		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
 		float effectWidth = 100f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 1; i < LanternTail.Masses.Length; i++)
@@ -1439,8 +1309,6 @@ public class LanternGhostKing : ModNPC
 			Vector2 directionLeft = directionVec.RotatedBy(MathHelper.PiOver2) * effectWidth / 2f;
 			bars.Add(drawPos + directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(812f / tex.Width, (100f + value * 202f) / tex.Height, 0));
 			bars.Add(drawPos - directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(912f / tex.Width, (100f + value * 202f) / tex.Height, 0));
-
-			// spriteBatch.Draw(icon, LanternTail.Masses[i].Position - Main.screenPosition, null, Color.White, 0, icon.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		}
 		if (bars.Count > 0)
 		{
