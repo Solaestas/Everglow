@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
-using Terraria;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
@@ -141,6 +140,7 @@ public class LanternFlow : TrailingProjectile
 	{
 		base.OnKill(timeLeft);
 	}
+
 	public override void DrawTrail()
 	{
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
@@ -299,13 +299,22 @@ public class LanternFlow : TrailingProjectile
 
 	public override void DrawSelf()
 	{
+		float colorValue = 1f;
+		if (Projectile.timeLeft < 100)
+		{
+			colorValue = (Projectile.timeLeft - 80) / 20f;
+		}
+		if (Projectile.timeLeft < 80)
+		{
+			return;
+		}
 		Texture2D star = Commons.ModAsset.StarSlashGray.Value;
 		Texture2D spot = Commons.ModAsset.LightPoint2.Value;
-		Color drawColor = new Color(1f, 0.2f + 0.2f * MathF.Sin((float)Main.time * 0.03f + Projectile.whoAmI), 0, 0);
+		Color drawColor = new Color(1f, 0.2f + 0.2f * MathF.Sin((float)Main.time * 0.03f + Projectile.whoAmI), 0, 0) * colorValue;
 		var drawPos = Projectile.Center - Main.screenPosition;
 		Main.EntitySpriteDraw(star, drawPos, null, drawColor, 0, star.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		Main.EntitySpriteDraw(star, drawPos, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, 1f, SpriteEffects.None, 0);
-		Main.EntitySpriteDraw(spot, drawPos, null, new Color(1f, 0.8f, 0.7f, 0), 0, spot.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(spot, drawPos, null, new Color(1f, 0.8f, 0.7f, 0) * colorValue, 0, spot.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
 	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)

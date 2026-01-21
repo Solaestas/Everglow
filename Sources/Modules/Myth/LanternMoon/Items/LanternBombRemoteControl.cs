@@ -42,46 +42,92 @@ public class LanternBombRemoteControl : ModItem
 		return new Vector2(Main.rand.NextFloat(minLength, maxLength), 0).RotatedByRandom(MathHelper.TwoPi);
 	}
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	public void BrakeGoldenShieldEffect()
 	{
-		//ExplodeEffect(Main.MouseWorld);
-		Projectile.NewProjectileDirect(Item.GetSource_FromAI(),Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
-
-		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, player.whoAmI, Main.rand.Next(4), 0);
-
-		//float addValue = Main.rand.NextFloat(6.283f);
-		//for (int x = 0; x < 5; x++)
-		//{
-		//	float minDis = 600;
-		//	NPC target = null;
-		//	foreach(var npc in Main.npc)
-		//	{
-		//		if(npc != null && npc.active)
-		//		{
-		//			Vector2 dis = npc.Center - Main.MouseWorld;
-		//			if(dis.Length() < minDis)
-		//			{
-		//				minDis = dis.Length();
-		//				target = npc;
-		//			}
-		//		}
-		//	}
-		//	if(target != null)
-		//	{
-		//		Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), target.Center + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), 85, 0f, player.whoAmI, 0.02f, 0);
-		//		LanternFlow lanternF = p0.ModProjectile as LanternFlow;
-		//		lanternF.OwnerNPC = target;
-		//		lanternF.MinDisToNPC = 500;
-		//		lanternF.VelDecay = 0.995f;
-		//		lanternF.RotateSpeed = -0.0598575436f;
-		//		lanternF.BestRotateSpeed = 0;
-		//		lanternF.BestVelDecay = 0;
-		//	}
-		//}
-
-		//Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld + new Vector2(0, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, player.whoAmI, 0, 0);
-		return false;
+		for (int g = 0; g < 150; g++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2f;
+			var sparkFlame = new LanternGoldenShieldFragiles
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = Main.MouseWorld + offsetPos,
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				Rotate2Speed = Main.rand.NextFloat(-0.3f, 0.3f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(155, 200),
+				Scale = Main.rand.NextFloat(0.6f, 1.5f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(sparkFlame);
+		}
+		for (int x = 0; x < 72; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 4f;
+			var spark = new GoldenLineStar()
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = Main.MouseWorld + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(6, 40),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		BrakeGoldenShieldEffect();
+		// ExplodeEffect(Main.MouseWorld);
+		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
 
+		// Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, player.whoAmI, Main.rand.Next(4), 0);
+
+		// float addValue = Main.rand.NextFloat(6.283f);
+		// for (int x = 0; x < 5; x++)
+		// {
+		// float minDis = 600;
+		// NPC target = null;
+		// foreach(var npc in Main.npc)
+		// {
+		// if(npc != null && npc.active)
+		// {
+		// Vector2 dis = npc.Center - Main.MouseWorld;
+		// if(dis.Length() < minDis)
+		// {
+		// minDis = dis.Length();
+		// target = npc;
+		// }
+		// }
+		// }
+		// if(target != null)
+		// {
+		// Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), target.Center + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), 85, 0f, player.whoAmI, 0.02f, 0);
+		// LanternFlow lanternF = p0.ModProjectile as LanternFlow;
+		// lanternF.OwnerNPC = target;
+		// lanternF.MinDisToNPC = 500;
+		// lanternF.VelDecay = 0.995f;
+		// lanternF.RotateSpeed = -0.0598575436f;
+		// lanternF.BestRotateSpeed = 0;
+		// lanternF.BestVelDecay = 0;
+		// }
+		// }
+
+		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld + new Vector2(0, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, player.whoAmI, 0, 0);
+		return false;
+	}
 }

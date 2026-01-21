@@ -3,7 +3,7 @@ using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
+using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -17,16 +17,23 @@ public class LanternGhostKing : ModNPC
 	public Vector2 RingCenterTrend;
 	public Vector2 RingCenter;
 	public Vector2 Lantern3RingCenter;
+
 	public float RingRadius = 0;
 	public float RingRadiusTrend = 1800;
-
-	public float LeftRotation = 0;
-	public float RightRotation = 0;
-
+	public float FrameworkRotation = 0;
 	public float ShakeStrength = 2;
-	public int Phase = 1;
+	public float EffectValueZ = 0f;
+	public float GoldenShieldLerp = 0f;
+	public float GoldenShieldBrakeEffectTimer = 0;
+	public float GoldenShieldCrackResistInYAxis = 0.14f;
 
+	public int Phase = 1;
 	public int Timer = 0;
+
+	public Rectangle BodyFrame = new Rectangle(0, 82, 270, 174);
+	public Rectangle ExteriorFrameworkFrame = new Rectangle(272, 2, 538, 298);
+	public Rectangle CoreAndTailFrame = new Rectangle(912, 2, 100, 182);
+	public string ShaderType = "Normal";
 
 	public override void SetDefaults()
 	{
@@ -83,8 +90,7 @@ public class LanternGhostKing : ModNPC
 
 	public void UpdateDrawParameter()
 	{
-		LeftRotation = (float)Utils.Lerp(LeftRotation, NPC.rotation, 0.02f);
-		RightRotation = (float)Utils.Lerp(RightRotation, NPC.rotation, 0.02f);
+		FrameworkRotation = (float)Utils.Lerp(FrameworkRotation, NPC.rotation, 0.02f);
 		ShakeStrength = (float)Utils.Lerp(ShakeStrength, 2, 0.02f);
 	}
 
@@ -119,6 +125,27 @@ public class LanternGhostKing : ModNPC
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
+		if (GoldenShieldBrakeEffectTimer > 0)
+		{
+			GoldenShieldBrakeEffectTimer--;
+			if(GoldenShieldCrackResistInYAxis > 0)
+			{
+				GoldenShieldCrackResistInYAxis -= 0.002f;
+			}
+			EffectValueZ = 0.9f;
+			if (GoldenShieldBrakeEffectTimer == 30)
+			{
+				BrakeGoldenShieldEffect();
+				ShaderType = "Normal";
+				NPC.defense = 30;
+				GoldenShieldLerp = 1;
+				EffectValueZ = 0;
+			}
+		}
+		else
+		{
+			GoldenShieldBrakeEffectTimer = 0;
+		}
 		if (Timer > 14400)
 		{
 			NPC.ai[0] = (14680 - Timer) / 240f;
@@ -129,7 +156,7 @@ public class LanternGhostKing : ModNPC
 		}
 		UpdateTailRope();
 		PlayerDeadHealthRecovery();
-		Lighting.AddLight(NPC.Center, new Vector3(0.75f, 0.65f, 0.55f) * ((255 - NPC.alpha) / 255f));
+		Lighting.AddLight(NPC.Center, new Vector3(1.5f, 0.65f, 0.55f) * ((255 - NPC.alpha) / 255f) * 3);
 		if (!NearDie)
 		{
 			NPC.dontTakeDamage = false;
@@ -260,6 +287,53 @@ public class LanternGhostKing : ModNPC
 
 		RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;
 		RingCenter = RingCenter * 0.99f + RingCenterTrend * 0.01f;
+	}
+
+	public void BrakeGoldenShieldEffect()
+	{
+		for (int g = 0; g < 150; g++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2f;
+			var sparkFlame = new LanternGoldenShieldFragiles
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + offsetPos,
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				Rotate2Speed = Main.rand.NextFloat(-0.3f, 0.3f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(155, 200),
+				Scale = Main.rand.NextFloat(0.6f, 1.5f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(sparkFlame);
+		}
+		for (int x = 0; x < 72; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 4f;
+			var spark = new GoldenLineStar()
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(6, 40),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(spark);
+		}
 	}
 
 	/// <summary>
@@ -451,7 +525,6 @@ public class LanternGhostKing : ModNPC
 	/// <param name="target"></param>
 	public void Phase2_SummonMinion(Player target)
 	{
-		NPC.defense = 1000;
 		int maxCount = 20;
 		if (Main.expertMode)
 		{
@@ -463,11 +536,21 @@ public class LanternGhostKing : ModNPC
 		}
 		if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < maxCount)
 		{
-			if (Timer < 388)
+			if (Timer < 258)
 			{
-				if (Timer % 7 == 0)
+				NPC.defense = 1000;
+				if (Timer % 4 == 0)
 				{
 					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
+				}
+				ShaderType = "GoldenSheild";
+				if (GoldenShieldLerp < 0.6f)
+				{
+					GoldenShieldLerp += 0.012f;
+				}
+				if (EffectValueZ < 1.2f)
+				{
+					EffectValueZ = 1.2f;
 				}
 			}
 		}
@@ -482,18 +565,30 @@ public class LanternGhostKing : ModNPC
 		NPC.velocity *= 0.96f;
 		RingCenterTrend = NPC.Center;
 		RingRadiusTrend = 1200;
-		if (Timer >= 395)
+		if (Timer >= 260)
 		{
-			if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) >= 1)
+			int minionNumber = NPC.CountNPCS(ModContent.NPCType<EvilLantern>());
+			if (minionNumber >= 1)
 			{
-				Timer = 395;
+				Timer = 260;
+				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < 36)
+				{
+					EffectValueZ = minionNumber / 36f * 0.3f + 0.9f;
+				}
 			}
 			else
 			{
-				NPC.dontTakeDamage = false;
-				Timer = 405;
-				NPC.defense = 30;
+				if(Timer < 280)
+				{
+					Timer = 280;
+					EffectValueZ = 0.9f;
+					GoldenShieldBrakeEffectTimer = 100;
+				}
 			}
+		}
+		if (Timer >= 399)
+		{
+			Timer = 405;
 		}
 
 		NPC.rotation = NPC.velocity.X * 0.01f;
@@ -736,8 +831,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Timer > 1710)
 		{
-			LeftRotation *= 0.9f;
-			RightRotation *= 0.9f;
+			FrameworkRotation *= 0.9f;
 			NPC.rotation *= 0.7f;
 		}
 		if (Timer == 1739)
@@ -1165,20 +1259,6 @@ public class LanternGhostKing : ModNPC
 
 			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
 
-			for (int x = 0; x < 37; x++)
-			{
-				var flameDust = new FlameDust
-				{
-					velocity = RandomVector2(45f, 10f),
-					Active = true,
-					Visible = true,
-					position = NPC.Center,
-					maxTime = Main.rand.Next(26, 96),
-					ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) },
-				};
-				Ins.VFXManager.Add(flameDust);
-			}
-
 			// Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
 			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithPitchOffset(-1f), NPC.Center);
 		}
@@ -1218,10 +1298,6 @@ public class LanternGhostKing : ModNPC
 		}
 	}
 
-	public Rectangle BodyFrame = new Rectangle(0, 82, 270, 174);
-	public Rectangle ExteriorFrameworkFrame = new Rectangle(272, 2, 538, 298);
-	public Rectangle CoreAndTailFrame = new Rectangle(912, 2, 100, 182);
-
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		return false;
@@ -1230,12 +1306,33 @@ public class LanternGhostKing : ModNPC
 	public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
-		Vector2 drawPos = NPC.Center - screenPos;
+		Vector2 drawPos = NPC.Center;
 		DrawTail(spriteBatch);
 
-		// spriteBatch.Draw(tex, drawPos, CoreAndTailFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), 0, new Vector2(CoreAndTailFrame.Width * 0.5f, 14), NPC.scale, SpriteEffects.None, 0);
-		spriteBatch.Draw(tex, drawPos, BodyFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()) * 0.85f, NPC.rotation, BodyFrame.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0);
-		spriteBatch.Draw(tex, drawPos, ExteriorFrameworkFrame, Lighting.GetColor(NPC.Center.ToTileCoordinates()), LeftRotation, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170), NPC.scale, SpriteEffects.None, 0);
+		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+		Effect ef = ModAsset.LanternGhostKing_Shader.Value;
+		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.ZoomMatrix;
+		ef.Parameters["uTransform"].SetValue(model * projection);
+		ef.Parameters["size1"].SetValue(new Vector2(1f, 1 / 3f) * 4f);
+		ef.Parameters["size2"].SetValue(Vector2.One);
+		ef.Parameters["size3"].SetValue(Vector2.One);
+		ef.Parameters["lerpGolden"].SetValue(1 - GoldenShieldLerp);
+		ef.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.0005f);
+		ef.Parameters["warpScale"].SetValue(0f);
+		ef.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb_large.Value);
+		ef.CurrentTechnique.Passes[ShaderType].Apply();
+
+		DrawVertexTexture(tex, drawPos, BodyFrame, NPC.rotation, BodyFrame.Size() * 0.5f);
+
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+		ef.CurrentTechnique.Passes["Normal"].Apply();
+		DrawVertexTexture(tex, drawPos, ExteriorFrameworkFrame, FrameworkRotation, new Vector2(ExteriorFrameworkFrame.Width * 0.5f, 170));
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 		//// 第二阶段十字光辉
 		if (Phase == 2)
 		{
@@ -1291,7 +1388,7 @@ public class LanternGhostKing : ModNPC
 		if (LanternTail == null || LanternTail.Masses.Length <= 0)
 		{
 			return;
-		}	
+		}
 		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
@@ -1319,98 +1416,65 @@ public class LanternGhostKing : ModNPC
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
 		Lighting.AddLight(LanternTail.Masses[1].Position, new Vector3(1.25f, 1.05f, 1f));
-		spriteBatch.Draw(tex, LanternTail.Masses[1].Position - Main.screenPosition, CoreAndTailFrame, Color.White, (LanternTail.Masses[1].Position - LanternTail.Masses[0].Position).ToRotationSafe() - MathHelper.PiOver2, CoreAndTailFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, LanternTail.Masses[1].Position - Main.screenPosition, CoreAndTailFrame, Lighting.GetColor(LanternTail.Masses[1].Position.ToTileCoordinates()), (LanternTail.Masses[1].Position - LanternTail.Masses[0].Position).ToRotationSafe() - MathHelper.PiOver2, CoreAndTailFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
-	public void DrawVertexTexture(Texture2D tex, Vector2 offset, float rotation, bool flipH = false)
+	public void DrawVertexTexture(Texture2D tex, Vector2 position, Rectangle frame, float rotation, Vector2 origin, bool flipH = false)
 	{
-		float width = tex.Width;
-		float height = tex.Height;
-		Vector2 position = NPC.Center + offset.RotatedBy(rotation);
-		Vector2 v0 = position + new Vector2(-width, -height).RotatedBy(rotation) * 0.5f * NPC.scale;
-		Vector2 v1 = position + new Vector2(width, -height).RotatedBy(rotation) * 0.5f * NPC.scale;
-		Vector2 v2 = position + new Vector2(-width, height).RotatedBy(rotation) * 0.5f * NPC.scale;
-		Vector2 v3 = position + new Vector2(width, height).RotatedBy(rotation) * 0.5f * NPC.scale;
+		Vector2 vertex0 = new Vector2(frame.X, frame.Y);
+		Vector2 vertex1 = new Vector2(frame.X + frame.Width, frame.Y);
+		Vector2 vertex2 = new Vector2(frame.X, frame.Y + frame.Height);
+		Vector2 vertex3 = new Vector2(frame.X + frame.Width, frame.Y + frame.Height);
+
+		Vector3 coord0 = new Vector3(vertex0 / tex.Size(), EffectValueZ + GoldenShieldCrackResistInYAxis);
+		Vector3 coord1 = new Vector3(vertex1 / tex.Size(), EffectValueZ + GoldenShieldCrackResistInYAxis);
+		Vector3 coord2 = new Vector3(vertex2 / tex.Size(), EffectValueZ);
+		Vector3 coord3 = new Vector3(vertex3 / tex.Size(), EffectValueZ);
+
+		origin += new Vector2(frame.X, frame.Y);
+		Vector2 origintToVertex0 = vertex0 - origin;
+		Vector2 origintToVertex1 = vertex1 - origin;
+		Vector2 origintToVertex2 = vertex2 - origin;
+		Vector2 origintToVertex3 = vertex3 - origin;
+
+		Vector2 v0 = position + origintToVertex0.RotatedBy(rotation) * NPC.scale;
+		Vector2 v1 = position + origintToVertex1.RotatedBy(rotation) * NPC.scale;
+		Vector2 v2 = position + origintToVertex2.RotatedBy(rotation) * NPC.scale;
+		Vector2 v3 = position + origintToVertex3.RotatedBy(rotation) * NPC.scale;
 
 		float alpha = (255 - NPC.alpha) / 255f;
 
-		Color c0 = Lighting.GetColor((v0 / 16f).ToPoint()) * alpha;
-		Color c1 = Lighting.GetColor((v1 / 16f).ToPoint()) * alpha;
-		Color c2 = Lighting.GetColor((v2 / 16f).ToPoint()) * alpha;
-		Color c3 = Lighting.GetColor((v3 / 16f).ToPoint()) * alpha;
+		Color c0 = Lighting.GetColor(v0.ToTileCoordinates()) * alpha;
+		Color c1 = Lighting.GetColor(v1.ToTileCoordinates()) * alpha;
+		Color c2 = Lighting.GetColor(v2.ToTileCoordinates()) * alpha;
+		Color c3 = Lighting.GetColor(v3.ToTileCoordinates()) * alpha;
 
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(v0 - Main.screenPosition, c0, new Vector3(0, 0, 0)),
-			new Vertex2D(v1 - Main.screenPosition, c1, new Vector3(1, 0, 0)),
+			new Vertex2D(v0, c0, coord0),
+			new Vertex2D(v1, c1, coord1),
 
-			new Vertex2D(v2 - Main.screenPosition, c2, new Vector3(0, 1, 0)),
-			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(1, 1, 0)),
+			new Vertex2D(v2, c2, coord2),
+			new Vertex2D(v3, c3, coord3),
 		};
 		if (flipH)
 		{
 			bars = new List<Vertex2D>()
-		{
-			new Vertex2D(v0 - Main.screenPosition, c0, new Vector3(1, 0, 0)),
-			new Vertex2D(v1 - Main.screenPosition, c1, new Vector3(0, 0, 0)),
-
-			new Vertex2D(v2 - Main.screenPosition, c2, new Vector3(1, 1, 0)),
-			new Vertex2D(v3 - Main.screenPosition, c3, new Vector3(0, 1, 0)),
-		};
-		}
-		Main.graphics.GraphicsDevice.Textures[0] = tex;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-	}
-
-	public void DrawFlame()
-	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		var effect = ModAsset.LanternFlame_King.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb.Value);
-		Vector2 pos = NPC.Center + new Vector2(0, 80);
-		float timeValue = (float)(-Main.timeForVisualEffects * 0.001f);
-		effect.CurrentTechnique.Passes[0].Apply();
-		Main.graphics.graphicsDevice.Textures[0] = ModAsset.FlameLightMap.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.AnisotropicClamp;
-		Main.graphics.GraphicsDevice.Textures[1] = ModAsset.HeatMap_flameRing_lantern.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
-		Main.graphics.GraphicsDevice.Textures[2] = Commons.ModAsset.Noise_cell.Value;
-		Main.graphics.GraphicsDevice.SamplerStates[2] = SamplerState.AnisotropicClamp;
-		float flameWidth = 260f;
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int i = 0; i <= 10; i++)
-		{
-			Color color = GetColorRed(new Color(1f, 1f, 1f, 0));
-			if (i > 7)
 			{
-				color *= (10 - i) / 4f;
-			}
-			bars.Add(pos + new Vector2(flameWidth, -i * flameWidth / 17f), color, new Vector3(0, 1 - i / 10f, i / 100f + timeValue));
-			bars.Add(pos + new Vector2(0, -i * flameWidth / 17f), color, new Vector3(0.5f, 1 - i / 10f, i / 100f + timeValue));
-		}
+				new Vertex2D(v0, c0, coord1),
+				new Vertex2D(v1, c1, coord0),
 
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		bars = new List<Vertex2D>();
-		for (int i = 0; i <= 10; i++)
+				new Vertex2D(v2, c2, coord3),
+				new Vertex2D(v3, c3, coord2),
+			};
+		}
+		if (bars.Count > 0)
 		{
-			Color color = GetColorRed(new Color(1f, 1f, 1f, 0));
-			if (i > 7)
-			{
-				color *= (10 - i) / 4f;
-			}
-			bars.Add(pos + new Vector2(0, -i * flameWidth / 17f), color, new Vector3(0.5f, 1 - i / 10f, i / 100f + timeValue));
-			bars.Add(pos + new Vector2(-flameWidth, -i * flameWidth / 17f), color, new Vector3(1, 1 - i / 10f, i / 100f + timeValue));
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_turtleCrack_Inverse.Value;
+			Main.graphics.GraphicsDevice.Textures[2] = ModAsset.LanternGhostKing_Atlas_GoldenShield.Value;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
-
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
 	}
 
 	public Color GetColorRed(Color c0)
