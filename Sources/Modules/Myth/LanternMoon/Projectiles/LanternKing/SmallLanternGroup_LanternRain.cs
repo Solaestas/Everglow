@@ -25,7 +25,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 		Projectile.hostile = true;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 1500;
+		Projectile.timeLeft = 700;
 		Projectile.alpha = 0;
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
@@ -40,16 +40,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 
 	public void UpdateEntity()
 	{
-		float frequency = 3;
-		if (Main.expertMode)
-		{
-			frequency = 4;
-		}
-		if (Main.masterMode)
-		{
-			frequency = 6;
-		}
-		int continueTimer = 700;
+		int continueTimer = 300;
 		int releaseThrethod = 12;
 		if (Timer > 30)
 		{

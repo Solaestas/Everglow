@@ -49,15 +49,15 @@ public class LanternBombRemoteControl : ModItem
 			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
 			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
 			offsetPos.Y *= 85f / 135f;
-			Vector2 newVelocity = offsetPos / 2f;
+			Vector2 newVelocity = offsetPos / 2.4f;
 			var sparkFlame = new LanternGoldenShieldFragiles
 			{
 				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				Position = Main.MouseWorld + offsetPos,
-				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
-				Rotate2Speed = Main.rand.NextFloat(-0.3f, 0.3f),
+				RotateSpeed = Main.rand.NextFloat(-0.3f, 0.3f),
+				Rotate2Speed = Main.rand.NextFloat(-0.5f, 0.5f),
 				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
@@ -72,8 +72,8 @@ public class LanternBombRemoteControl : ModItem
 			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
 			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
 			offsetPos.Y *= 85f / 135f;
-			Vector2 newVelocity = offsetPos / 4f;
-			var spark = new GoldenLineStar()
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new LanternGoldenShieldStar()
 			{
 				Velocity = newVelocity,
 				Active = true,
@@ -81,9 +81,8 @@ public class LanternBombRemoteControl : ModItem
 				Position = Main.MouseWorld + offsetPos,
 				RotateSpeed = 0,
 				Rotation = 0,
-				MaxTime = Main.rand.Next(6, 40),
+				MaxTime = Main.rand.Next(50, 100),
 				Scale = Main.rand.NextFloat(0.5f, 1f),
-				Frame = Main.rand.Next(0, 4),
 			};
 			Ins.VFXManager.Add(spark);
 		}
@@ -91,7 +90,18 @@ public class LanternBombRemoteControl : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		BrakeGoldenShieldEffect();
+		var matrix = new LanternGhostKing_Wheel3Mark()
+		{
+			Active = true,
+			Visible = true,
+			Position = Main.MouseWorld,
+			Rotation = 0.585f,
+			MaxTime = 1500,
+			ExtraUpdate = 6,
+			Scale = 0.25f,
+		};
+		Ins.VFXManager.Add(matrix);
+		//BrakeGoldenShieldEffect();
 		// ExplodeEffect(Main.MouseWorld);
 		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
 

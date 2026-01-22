@@ -1,7 +1,7 @@
 namespace Everglow.Myth.LanternMoon.VFX;
 
 [Pipeline(typeof(WCSPipeline))]
-public class GoldenLineStar : Visual
+public class LanternGoldenShieldStar : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -21,10 +21,11 @@ public class GoldenLineStar : Visual
 	{
 		Timer++;
 		Position += Velocity;
-		Rotation += RotateSpeed;
-		Velocity *= 0.96f;
-		Scale *= 0.96f;
-		float colorSize = Scale * Fade / 255f * 16;
+		Velocity *= 0.9f;
+		Velocity += new Vector2(0, 1.5f * Scale);
+		Scale *= 0.98f;
+		RotateSpeed *= 0.98f;
+		float colorSize = Scale * Fade / 255f * 3;
 		Lighting.AddLight(Position, DrawColor.R * colorSize, DrawColor.G * colorSize, DrawColor.B * colorSize);
 		if (Timer > MaxTime)
 		{

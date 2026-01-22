@@ -26,6 +26,7 @@ public class LanternGhostKing : ModNPC
 	public float GoldenShieldLerp = 0f;
 	public float GoldenShieldBrakeEffectTimer = 0;
 	public float GoldenShieldCrackResistInYAxis = 0.14f;
+	public float RushDirectionPridiction = 0f;
 
 	public int Phase = 1;
 	public int Timer = 0;
@@ -145,14 +146,6 @@ public class LanternGhostKing : ModNPC
 		else
 		{
 			GoldenShieldBrakeEffectTimer = 0;
-		}
-		if (Timer > 14400)
-		{
-			NPC.ai[0] = (14680 - Timer) / 240f;
-		}
-		else
-		{
-			NPC.ai[0] = 1;
 		}
 		UpdateTailRope();
 		PlayerDeadHealthRecovery();
@@ -303,8 +296,8 @@ public class LanternGhostKing : ModNPC
 				Active = true,
 				Visible = true,
 				Position = NPC.Center + offsetPos,
-				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
-				Rotate2Speed = Main.rand.NextFloat(-0.3f, 0.3f),
+				RotateSpeed = Main.rand.NextFloat(-0.3f, 0.3f),
+				Rotate2Speed = Main.rand.NextFloat(-0.5f, 0.5f),
 				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
@@ -319,8 +312,8 @@ public class LanternGhostKing : ModNPC
 			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
 			Vector2 offsetPos = new Vector2(0, -value * 135).RotatedByRandom(2.6f);
 			offsetPos.Y *= 85f / 135f;
-			Vector2 newVelocity = offsetPos / 4f;
-			var spark = new GoldenLineStar()
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new LanternGoldenShieldStar()
 			{
 				Velocity = newVelocity,
 				Active = true,
@@ -328,9 +321,8 @@ public class LanternGhostKing : ModNPC
 				Position = NPC.Center + offsetPos,
 				RotateSpeed = 0,
 				Rotation = 0,
-				MaxTime = Main.rand.Next(6, 40),
+				MaxTime = Main.rand.Next(50, 100),
 				Scale = Main.rand.NextFloat(0.5f, 1f),
-				Frame = Main.rand.Next(0, 4),
 			};
 			Ins.VFXManager.Add(spark);
 		}
@@ -397,7 +389,18 @@ public class LanternGhostKing : ModNPC
 	{
 		if (Timer % 250 == 0)
 		{
-			Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI);
+			Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-0.25f, 0.25f) * Math.PI) + target.Center;
+			var matrix = new LanternGhostKing_Wheel3Mark()
+			{
+				Active = true,
+				Visible = true,
+				Position = Lantern3RingCenter,
+				Rotation = 0.585f,
+				MaxTime = 1500,
+				ExtraUpdate = 6,
+				Scale = 0.25f,
+			};
+			Ins.VFXManager.Add(matrix);
 		}
 
 		if (Timer % 250 < 20)
@@ -425,7 +428,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Timer % 250 > 120)
 		{
-			Vector2 v = target.Center + Lantern3RingCenter + target.velocity * 30f;
+			Vector2 v = Lantern3RingCenter - NPC.velocity * 30f;
 			NPC.velocity += (v - NPC.Center) / (v - NPC.Center).Length() * 0.25f;
 			if (NPC.velocity.Length() > 20f)
 			{
@@ -504,15 +507,35 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0.9f;
 		}
-		if (dashTimer == 10)
+		if (dashTimer == 10 && Timer > 2310)
 		{
-			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 16f;
+			Vector2 dir = new Vector2(1, 0).RotatedBy(RushDirectionPridiction).NormalizeSafe() * 16f;
 			NPC.velocity += dir;
+		}
+		if (dashTimer == 30 && Timer < 2870)
+		{
+			var matrix = new LanternGhostKing_Matrix()
+			{
+				Active = true,
+				Visible = true,
+				Position = Main.MouseWorld,
+				Rotation = 0.585f,
+				MaxTime = 300,
+				ExtraUpdate = 6,
+				Scale = 0.45f,
+				OwnerLanternGhostKing = NPC,
+			};
+			Ins.VFXManager.Add(matrix);
+		}
+		if (dashTimer >= 30)
+		{
+			RushDirectionPridiction = (target.Center - NPC.Center).ToRotation();
 		}
 		if (dashTimer >= 50)
 		{
 			NPC.velocity *= 0.9f;
 		}
+
 		NPC.rotation = NPC.velocity.X * 0.01f;
 		RingCenterTrend = NPC.Center;
 		RingRadiusTrend = 1000;
@@ -539,9 +562,13 @@ public class LanternGhostKing : ModNPC
 			if (Timer < 258)
 			{
 				NPC.defense = 1000;
-				if (Timer % 4 == 0)
+				if (Timer % 20 == 0)
 				{
-					NPC.NewNPC(null, (int)NPC.Center.X, (int)NPC.Center.Y + 100, ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
+					for(int k = 0;k < 5;k++)
+					{
+						NPC npc = NPC.NewNPCDirect(null, NPC.Center + new Vector2(0, 100), ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
+						npc.velocity = new Vector2(0, 16).RotatedBy(k / 5f * MathHelper.TwoPi + Main.time);
+					}
 				}
 				ShaderType = "GoldenSheild";
 				if (GoldenShieldLerp < 0.6f)
@@ -735,13 +762,13 @@ public class LanternGhostKing : ModNPC
 		// 释放一波灯雨
 		if (Timer >= 1250 && Timer % 67 == 0)
 		{
-			for (int x = -10; x < 11; x++)
+			for (int x = -3; x < 4; x++)
 			{
 				float deltaY = MathF.Sin(x + (float)Main.time * 0.2f) * 60;
 				float deltaY2 = MathF.Cos(x + (float)Main.time * 0.2f) * 60;
 				NPC npc0 = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 1000, ModContent.NPCType<ExplosiveLantern_growing>(), 0, 0f, 0, 0, 0);
 
-				npc0.Center = NPC.Center + new Vector2(x * 200 + Timer % 135 - 70, -700 + deltaY);
+				npc0.Center = NPC.Center + new Vector2(x * 600 + Timer % 135 - 70, -700 + deltaY);
 				npc0.velocity = new Vector2(0, -deltaY2 * 0.005f);
 				npc0.damage = NPC.damage / 2;
 			}
@@ -909,7 +936,18 @@ public class LanternGhostKing : ModNPC
 		{
 			if (Timer % 250 == 0)
 			{
-				Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f));
+				Lantern3RingCenter = new Vector2(0, -300).RotatedBy(Main.rand.NextFloat(-1.3f, 1.3f)) + target.Center;
+				var matrix = new LanternGhostKing_Wheel3Mark()
+				{
+					Active = true,
+					Visible = true,
+					Position = Lantern3RingCenter,
+					Rotation = 0.585f,
+					MaxTime = 1500,
+					ExtraUpdate = 6,
+					Scale = 0.25f,
+				};
+				Ins.VFXManager.Add(matrix);
 			}
 
 			if (Timer % 250 < 20)
@@ -937,7 +975,7 @@ public class LanternGhostKing : ModNPC
 			}
 			if (Timer % 250 > 120)
 			{
-				Vector2 v = target.Center + Lantern3RingCenter;
+				Vector2 v = Lantern3RingCenter - NPC.velocity * 30f;
 				NPC.velocity += (v - NPC.Center - NPC.velocity) * 0.015f;
 				NPC.velocity *= 0.96f;
 				NPC.rotation = NPC.velocity.X * 0.02f;
@@ -1076,10 +1114,29 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0.9f;
 		}
-		if (dashTimer == 10)
+		if (dashTimer == 10 && Timer > 3610)
 		{
 			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 25f;
 			NPC.velocity += dir;
+		}
+		if (dashTimer == 40 && Timer < 4140)
+		{
+			var matrix = new LanternGhostKing_Matrix()
+			{
+				Active = true,
+				Visible = true,
+				Position = Main.MouseWorld,
+				Rotation = 0.585f,
+				MaxTime = 300,
+				ExtraUpdate = 4,
+				Scale = 0.8f,
+				OwnerLanternGhostKing = NPC,
+			};
+			Ins.VFXManager.Add(matrix);
+		}
+		if (dashTimer >= 40)
+		{
+			RushDirectionPridiction = (target.Center - NPC.Center).ToRotation();
 		}
 		if (dashTimer >= 55)
 		{
@@ -1395,6 +1452,7 @@ public class LanternGhostKing : ModNPC
 
 		Texture2D tex = ModAsset.LanternGhostKing_Atlas.Value;
 		float effectWidth = 100f;
+		float alphaFade = (255 - NPC.alpha) / 255f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int i = 1; i < LanternTail.Masses.Length; i++)
 		{
@@ -1404,8 +1462,8 @@ public class LanternGhostKing : ModNPC
 			Vector2 directionVec = LanternTail.Masses[i].Position - LanternTail.Masses[i - 1].Position;
 			directionVec = directionVec.NormalizeSafe();
 			Vector2 directionLeft = directionVec.RotatedBy(MathHelper.PiOver2) * effectWidth / 2f;
-			bars.Add(drawPos + directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(812f / tex.Width, (100f + value * 202f) / tex.Height, 0));
-			bars.Add(drawPos - directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()), new Vector3(912f / tex.Width, (100f + value * 202f) / tex.Height, 0));
+			bars.Add(drawPos + directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()) * alphaFade, new Vector3(812f / tex.Width, (100f + value * 202f) / tex.Height, 0));
+			bars.Add(drawPos - directionLeft, Lighting.GetColor(LanternTail.Masses[i].Position.ToTileCoordinates()) * alphaFade, new Vector3(912f / tex.Width, (100f + value * 202f) / tex.Height, 0));
 		}
 		if (bars.Count > 0)
 		{
@@ -1416,7 +1474,7 @@ public class LanternGhostKing : ModNPC
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
 		Lighting.AddLight(LanternTail.Masses[1].Position, new Vector3(1.25f, 1.05f, 1f));
-		spriteBatch.Draw(tex, LanternTail.Masses[1].Position - Main.screenPosition, CoreAndTailFrame, Lighting.GetColor(LanternTail.Masses[1].Position.ToTileCoordinates()), (LanternTail.Masses[1].Position - LanternTail.Masses[0].Position).ToRotationSafe() - MathHelper.PiOver2, CoreAndTailFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		spriteBatch.Draw(tex, LanternTail.Masses[1].Position - Main.screenPosition, CoreAndTailFrame, Lighting.GetColor(LanternTail.Masses[1].Position.ToTileCoordinates()) * alphaFade, (LanternTail.Masses[1].Position - LanternTail.Masses[0].Position).ToRotationSafe() - MathHelper.PiOver2, CoreAndTailFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
 	public void DrawVertexTexture(Texture2D tex, Vector2 position, Rectangle frame, float rotation, Vector2 origin, bool flipH = false)

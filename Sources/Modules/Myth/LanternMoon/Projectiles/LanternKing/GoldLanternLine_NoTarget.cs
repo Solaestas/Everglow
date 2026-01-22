@@ -150,7 +150,6 @@ public class GoldLanternLine_NoTarget : ModProjectile
 					Rotation = 0,
 					MaxTime = Main.rand.Next(20, 40),
 					Scale = Main.rand.NextFloat(0.5f, 1f),
-					Frame = Main.rand.Next(0, 4),
 				};
 				Ins.VFXManager.Add(spark);
 			}
@@ -181,7 +180,6 @@ public class GoldLanternLine_NoTarget : ModProjectile
 					Rotation = 0,
 					MaxTime = Main.rand.Next(20, 40),
 					Scale = Main.rand.NextFloat(0.5f, 1f),
-					Frame = Main.rand.Next(0, 4),
 				};
 				Ins.VFXManager.Add(spark);
 			}
