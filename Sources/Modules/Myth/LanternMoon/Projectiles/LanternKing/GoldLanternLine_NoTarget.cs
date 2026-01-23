@@ -21,6 +21,7 @@ public class GoldLanternLine_NoTarget : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = true;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10240;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
@@ -30,6 +31,7 @@ public class GoldLanternLine_NoTarget : ModProjectile
 	public override void AI()
 	{
 		Timer++;
+		Projectile.velocity *= 0.98f;
 		LaserDirection = Projectile.ai[0];
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * Projectile.scale);
 	}

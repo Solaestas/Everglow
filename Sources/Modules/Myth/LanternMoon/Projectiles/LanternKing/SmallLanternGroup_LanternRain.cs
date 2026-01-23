@@ -133,12 +133,12 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 						}
 						for (int j = -4; j <= 4; j++)
 						{
-							int range = (int)(20 + 4 * MathF.Sin(Timer + j));
+							int range = (int)(25 + 4 * MathF.Sin(Timer + j));
 							for (int i = 0; i < range; i++)
 							{
 								MovingEntity entity = new MovingEntity();
-								entity.Position = Projectile.Center + new Vector2(j * 600 + offset, -1600);
-								entity.Velocity = Projectile.Center + new Vector2(j * 600 + offset, -1600);
+								entity.Position = Projectile.Center + new Vector2(j * 600 + offset, -1400);
+								entity.Velocity = Projectile.Center + new Vector2(j * 600 + offset, -1400);
 								entity.Scale = 1;
 								entity.Rotation = 0;
 								entity.RotationSpeed = 0;

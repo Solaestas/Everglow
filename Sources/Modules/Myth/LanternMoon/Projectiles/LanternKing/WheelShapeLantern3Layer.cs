@@ -255,7 +255,7 @@ public class WheelShapeLantern3Layer : ModProjectile
 			{
 				var bars0 = new List<Vertex2D>();
 				var arrayPos = ent.OldPositions.ToArray();
-				for (int j = 1; j < arrayPos.Count() - 1; ++j)
+				for (int j = 1; j < arrayPos.Count(); ++j)
 				{
 					// factor, among 0 to 1, usually for deciding the trail's texture.coord.X.
 					float mulFac = Timer / trailLength;
@@ -283,6 +283,10 @@ public class WheelShapeLantern3Layer : ModProjectile
 					if (j > 0)
 					{
 						dir = arrayPos[j] - arrayPos[j - 1];
+					}
+					else
+					{
+						dir = arrayPos[j] - ent.Position;
 					}
 					if (j <= 131 - Timer)
 					{

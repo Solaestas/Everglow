@@ -90,22 +90,22 @@ public class LanternBombRemoteControl : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		var matrix = new LanternGhostKing_Wheel3Mark()
-		{
-			Active = true,
-			Visible = true,
-			Position = Main.MouseWorld,
-			Rotation = 0.585f,
-			MaxTime = 1500,
-			ExtraUpdate = 6,
-			Scale = 0.25f,
-		};
-		Ins.VFXManager.Add(matrix);
+		//var matrix = new LanternGhostKing_Wheel3Mark()
+		//{
+		//	Active = true,
+		//	Visible = true,
+		//	Position = Main.MouseWorld,
+		//	Rotation = 0.585f,
+		//	MaxTime = 1500,
+		//	ExtraUpdate = 6,
+		//	Scale = 0.25f,
+		//};
+		//Ins.VFXManager.Add(matrix);
 		//BrakeGoldenShieldEffect();
 		// ExplodeEffect(Main.MouseWorld);
 		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
 
-		// Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, player.whoAmI, Main.rand.Next(4), 0);
+		Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, player.whoAmI, 2, 0);
 
 		// float addValue = Main.rand.NextFloat(6.283f);
 		// for (int x = 0; x < 5; x++)

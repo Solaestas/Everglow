@@ -335,7 +335,7 @@ public class LanternFlow : TrailingProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		for (int i = 50; i < Projectile.oldPos.Count(); i++)
+		for (int i = 5; i < Projectile.oldPos.Count(); i++)
 		{
 			if ((targetHitbox.Center() - (Projectile.oldPos[i] + new Vector2(Projectile.width, Projectile.height) * 0.5f)).Length() < TrailWidth * 0.3f)
 			{

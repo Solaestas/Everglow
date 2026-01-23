@@ -4,10 +4,12 @@ internal class LanternFlameRingPipeline : Pipeline
 {
 	public float Duration = 0;
 	public NPC OwnerLanternKing;
+
 	public override void Load()
 	{
 		effect = ModAsset.LanternFlameRing;
 	}
+
 	public override void BeginRender()
 	{
 		if (OwnerLanternKing == null || !OwnerLanternKing.active || OwnerLanternKing.type != ModContent.NPCType<LanternGhostKing>())
@@ -25,10 +27,10 @@ internal class LanternFlameRingPipeline : Pipeline
 		}
 		var effect = this.effect.Value;
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
+		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.Parameters["uNoise"].SetValue(Commons.ModAsset.Noise_rgb.Value);
-		if(OwnerLanternKing !=null && OwnerLanternKing.active && OwnerLanternKing.type == ModContent.NPCType<LanternGhostKing>())
+		if (OwnerLanternKing != null && OwnerLanternKing.active && OwnerLanternKing.type == ModContent.NPCType<LanternGhostKing>())
 		{
 			LanternGhostKing lanternGhostKing = OwnerLanternKing.ModNPC as LanternGhostKing;
 			if (lanternGhostKing != null)
@@ -61,6 +63,7 @@ internal class LanternFlameRingPipeline : Pipeline
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(LanternFlameRingPipeline), typeof(BloomPipeline))]
 internal class LanternFlameRingDust : Visual
 {
@@ -68,7 +71,9 @@ internal class LanternFlameRingDust : Visual
 	public float timer;
 	public float maxTime;
 	public float Radius;
+
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public override void OnSpawn()
 	{
 		if (OwnerLanternKing == null)
@@ -85,6 +90,7 @@ internal class LanternFlameRingDust : Visual
 			}
 		}
 	}
+
 	public override void Update()
 	{
 		if (OwnerLanternKing == null || !OwnerLanternKing.active)
@@ -121,11 +127,11 @@ internal class LanternFlameRingDust : Visual
 		float width = 150;
 		var color = new Color(1f, 1f, 1f, 0);
 		float mulColor = 1f;
-		if(Radius < 1000)
+		if (Radius < 1000)
 		{
 			width *= MathF.Max(0, (Radius - 500) / 500f);
 		}
-		if(timer > 120)
+		if (timer > 120)
 		{
 			mulColor *= (240 - timer) / 120f;
 		}
@@ -138,7 +144,7 @@ internal class LanternFlameRingDust : Visual
 			Vector2 outerPos = center + new Vector2(Radius + width, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
 			bars.Add(pos, color, new Vector3(i / 100f, 0.5f, 0 + timeValue));
 			bars.Add(outerPos, new Color(0f, 0f, 0f, 0), new Vector3(i / 100f, 1f, 0.05f + timeValue));
-			if(i % 5 == 0)
+			if (i % 5 == 0)
 			{
 				Lighting.AddLight(pos, new Vector3(1f, 0.5f, 0) * width / 200f * mulColor);
 			}

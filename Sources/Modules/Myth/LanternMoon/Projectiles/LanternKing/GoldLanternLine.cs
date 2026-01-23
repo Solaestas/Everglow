@@ -2,6 +2,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
@@ -21,6 +22,7 @@ public class GoldLanternLine : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = true;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10240;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
@@ -38,6 +40,10 @@ public class GoldLanternLine : ModProjectile
 		if(Timer == 80)
 		{
 			LaserDirection = (player.Center - Projectile.Center).ToRotation();
+		}
+		if(Timer == 100)
+		{
+			SoundEngine.PlaySound(SoundID.Item75, Projectile.Center);
 		}
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * Projectile.scale);
 	}

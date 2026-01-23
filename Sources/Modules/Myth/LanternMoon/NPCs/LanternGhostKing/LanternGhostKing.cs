@@ -129,7 +129,7 @@ public class LanternGhostKing : ModNPC
 		if (GoldenShieldBrakeEffectTimer > 0)
 		{
 			GoldenShieldBrakeEffectTimer--;
-			if(GoldenShieldCrackResistInYAxis > 0)
+			if (GoldenShieldCrackResistInYAxis > 0)
 			{
 				GoldenShieldCrackResistInYAxis -= 0.002f;
 			}
@@ -232,13 +232,13 @@ public class LanternGhostKing : ModNPC
 			}
 
 			// 千灯夜雨
-			if (Timer >= 1200 && Timer < 1600)
+			if (Timer >= 1200 && Timer < 1800)
 			{
 				Phase2_LanterRain(player);
 			}
 
 			// 甩出金丝 ai3借用存方向  临时向量0借为旋转中心,临时向量1借为转动半径
-			if (Timer >= 1600 && Timer < 2000)
+			if (Timer >= 1800 && Timer < 2000)
 			{
 				Phase2_SwingGoldenLines(player);
 			}
@@ -260,6 +260,8 @@ public class LanternGhostKing : ModNPC
 			{
 				Phase2_FallingColumn(player);
 			}
+
+			// 长距离冲刺附加火墙
 			if (Timer >= 3600 && Timer < 4200)
 			{
 				Phase2_Rush(player);
@@ -356,7 +358,7 @@ public class LanternGhostKing : ModNPC
 				NPC.ai[1] = -0.2f;
 				ShakeStrength = 25;
 			}
-			if (duration % 2 == 1)
+			if (duration % 2 == 1 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
 				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
@@ -413,7 +415,7 @@ public class LanternGhostKing : ModNPC
 			NPC.velocity *= 0;
 			NPC.rotation *= 0.95f;
 		}
-		if (Timer % 250 == 1)
+		if (Timer % 250 == 1 && Main.netMode != NetmodeID.MultiplayerClient)
 		{
 			int myDamage = 50;
 			if (Main.expertMode)
@@ -452,7 +454,7 @@ public class LanternGhostKing : ModNPC
 	{
 		NPC.rotation *= 0.95f;
 		NPC.velocity *= 0.95f;
-		if (Timer == 1600)
+		if (Timer == 1600 && Main.netMode != NetmodeID.MultiplayerClient)
 		{
 			for (int i = 0; i < 10; i++)
 			{
@@ -486,9 +488,18 @@ public class LanternGhostKing : ModNPC
 	{
 		NPC.rotation *= 0.95f;
 		NPC.velocity *= 0.95f;
-		if (Timer == 1820)
+		if (Timer == 1820 && Main.netMode != NetmodeID.MultiplayerClient)
 		{
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 150), Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
+			int myDamage = 20;
+			if (Main.expertMode)
+			{
+				myDamage = 25;
+			}
+			if (Main.masterMode)
+			{
+				myDamage = 40;
+			}
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 150), Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup>(), myDamage, 0f, target.whoAmI, Main.rand.Next(4), 0);
 		}
 		RingCenterTrend = NPC.Center + new Vector2(0, 150);
 		RingRadiusTrend = 1000;
@@ -564,7 +575,7 @@ public class LanternGhostKing : ModNPC
 				NPC.defense = 1000;
 				if (Timer % 20 == 0)
 				{
-					for(int k = 0;k < 5;k++)
+					for (int k = 0; k < 5; k++)
 					{
 						NPC npc = NPC.NewNPCDirect(null, NPC.Center + new Vector2(0, 100), ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
 						npc.velocity = new Vector2(0, 16).RotatedBy(k / 5f * MathHelper.TwoPi + Main.time);
@@ -584,9 +595,9 @@ public class LanternGhostKing : ModNPC
 
 		NPC.rotation *= 0.95f;
 		Vector2 v = target.Center + new Vector2(0, -350) - NPC.Center;
-		if (NPC.velocity.Length() < 9f)
+		if (NPC.velocity.Length() < 9f && GoldenShieldBrakeEffectTimer <= 0)
 		{
-			NPC.velocity += v / v.Length() * 0.35f;
+			NPC.velocity += v.NormalizeSafe() * 0.35f;
 			NPC.velocity.X += target.velocity.X * 0.07f;
 		}
 		NPC.velocity *= 0.96f;
@@ -605,7 +616,7 @@ public class LanternGhostKing : ModNPC
 			}
 			else
 			{
-				if(Timer < 280)
+				if (Timer < 280)
 				{
 					Timer = 280;
 					EffectValueZ = 0.9f;
@@ -688,7 +699,7 @@ public class LanternGhostKing : ModNPC
 				count = 5;
 				damage = 85;
 			}
-			if (Main.masterMode)
+			if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				float addValue = Main.rand.NextFloat(6.283f);
 				for (int x = 0; x < count; x++)
@@ -708,7 +719,7 @@ public class LanternGhostKing : ModNPC
 
 	/// <summary>
 	/// Lantern Rain.<br/>
-	/// 1200-1600
+	/// 1200-1800
 	/// </summary>
 	/// <param name="target"></param>
 	public void Phase2_LanterRain(Player target)
@@ -730,18 +741,22 @@ public class LanternGhostKing : ModNPC
 		if (Timer == 1230)
 		{
 			Vector2 testPos = target.Center + new Vector2(200 * NPC.ai[1], 0);
-			int count = 0;
-			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-			{
-				testPos.Y -= 100;
-				count++;
-				if (count > 10 || testPos.Y < 1000)
-				{
-					break;
-				}
-			}
+
+			// int count = 0;
+			// while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			// {
+			// testPos.Y -= 100;
+			// count++;
+			// if (count > 10 || testPos.Y < 1000)
+			// {
+			// break;
+			// }
+			// }
 			NPC.position = testPos;
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
+			if (Main.netMode != NetmodeID.MultiplayerClient)
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
+			}
 		}
 		if (Timer > 1230 && Timer < 1250)
 		{
@@ -773,7 +788,7 @@ public class LanternGhostKing : ModNPC
 				npc0.damage = NPC.damage / 2;
 			}
 		}
-		if (Timer == 1599)
+		if (Timer == 1799)
 		{
 			SwitchAttackTypeInPhase2();
 		}
@@ -781,12 +796,12 @@ public class LanternGhostKing : ModNPC
 
 	/// <summary>
 	/// Swing, rush and release a series of star.<br/>
-	/// 1600-2000
+	/// 1800-2000
 	/// </summary>
 	/// <param name="target"></param>
 	public void Phase2_SwingGoldenLines(Player target)
 	{
-		if (Timer == 1601)
+		if (Timer == 1801)
 		{
 			NPC.ai[3] = 1;
 			if (Main.rand.NextBool(2))
@@ -794,28 +809,29 @@ public class LanternGhostKing : ModNPC
 				NPC.ai[3] = -1;
 			}
 		}
-		if (Timer < 1630)
+		if (Timer < 1830)
 		{
 			NPC.velocity *= 0;
 			NPC.alpha += 20;
 		}
-		if (Timer == 1630)
+		if (Timer == 1830)
 		{
 			Vector2 testPos = target.Center + new Vector2(600 * NPC.ai[3], 200);
-			int count = 0;
-			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-			{
-				testPos.Y -= 100;
-				count++;
-				if (count > 10 || testPos.Y < 1000)
-				{
-					break;
-				}
-			}
+
+			// int count = 0;
+			// while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			// {
+			// testPos.Y -= 100;
+			// count++;
+			// if (count > 10 || testPos.Y < 1000)
+			// {
+			// break;
+			// }
+			// }
 			TeleportTo(testPos);
 			RingCenterTrend = NPC.Center;
 		}
-		if (Timer > 1630 && Timer < 1650)
+		if (Timer > 1830 && Timer < 1850)
 		{
 			NPC.velocity *= 0;
 			NPC.alpha -= 20;
@@ -824,23 +840,23 @@ public class LanternGhostKing : ModNPC
 				NPC.alpha = 0;
 			}
 		}
-		if (Timer == 1650)
+		if (Timer == 1850)
 		{
 			NPC.velocity *= 0;
 			NPC.alpha = 0;
 			innerVector0 = NPC.Center + new Vector2(-NPC.ai[3] * 600, -200);
 			innerVector1 = new Vector2(NPC.ai[3] * 600, 200);
 		}
-		if (Timer > 1680 && Timer <= 1710)
+		if (Timer > 1880 && Timer <= 1910)
 		{
-			float rotValue = (1710 - Timer) / 30f;
+			float rotValue = (1910 - Timer) / 30f;
 			rotValue = MathF.Pow(rotValue, 3);
 			rotValue = 1 - rotValue;
 			rotValue *= 3.0f;
 			Vector2 addValue = innerVector1.RotatedBy(rotValue * NPC.ai[3]);
 			NPC.Center = innerVector0 + addValue;
 			NPC.rotation = MathF.Atan2(addValue.Y, addValue.X) - MathHelper.PiOver2;
-			if (Timer % 2 == 0)
+			if (Timer % 2 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Vector2 v0 = -Vector2.Normalize(addValue) * 10f;
 				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine3>(), 40, 0f, target.whoAmI, 0, 0);
@@ -856,12 +872,12 @@ public class LanternGhostKing : ModNPC
 				p0.damage = (int)myDamage / 2;
 			}
 		}
-		if (Timer > 1710)
+		if (Timer > 1910)
 		{
 			FrameworkRotation *= 0.9f;
 			NPC.rotation *= 0.7f;
 		}
-		if (Timer == 1739)
+		if (Timer == 1939)
 		{
 			SwitchAttackTypeInPhase2();
 		}
@@ -901,17 +917,20 @@ public class LanternGhostKing : ModNPC
 				ShakeStrength = 25;
 			}
 			Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
-			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
-			float myDamage = 40;
-			if (Main.expertMode)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
-				myDamage = 55;
+				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0 * 6, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+				float myDamage = 40;
+				if (Main.expertMode)
+				{
+					myDamage = 55;
+				}
+				if (Main.masterMode)
+				{
+					myDamage = 70;
+				}
+				p0.damage = (int)myDamage / 2;
 			}
-			if (Main.masterMode)
-			{
-				myDamage = 70;
-			}
-			p0.damage = (int)myDamage / 2;
 			NPC.rotation += NPC.ai[1];
 			NPC.ai[1] -= NPC.rotation * 0.07f;
 			NPC.rotation *= 0.9f;
@@ -960,7 +979,7 @@ public class LanternGhostKing : ModNPC
 				NPC.velocity *= 0;
 				NPC.rotation *= 0.95f;
 			}
-			if (Timer % 250 == 1)
+			if (Timer % 250 == 1 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				int myDamage = 50;
 				if (Main.expertMode)
@@ -972,6 +991,23 @@ public class LanternGhostKing : ModNPC
 					myDamage = 100;
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WheelShapeLantern3Layer>(), myDamage, 0f, target.whoAmI, 0, 0);
+				for (int i = 0; i < 8; i++)
+				{
+					Vector2 vel = new Vector2(0, 12).RotatedBy(i / 8f * MathHelper.TwoPi);
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i + 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
+					GoldLanternLine_NoTarget gLLNT0 = p0.ModProjectile as GoldLanternLine_NoTarget;
+					if (gLLNT0 is not null)
+					{
+						gLLNT0.Timer = Main.rand.Next(-5, 5);
+					}
+
+					Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i - 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
+					GoldLanternLine_NoTarget gLLNT1 = p1.ModProjectile as GoldLanternLine_NoTarget;
+					if (gLLNT1 is not null)
+					{
+						gLLNT1.Timer = Main.rand.Next(-5, 5);
+					}
+				}
 			}
 			if (Timer % 250 > 120)
 			{
@@ -1005,8 +1041,11 @@ public class LanternGhostKing : ModNPC
 		{
 			for (int i = 0; i < 8; i++)
 			{
-				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2((i - 3.5f) * 400, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, target.whoAmI, 0, 0);
-				p0.timeLeft = Main.rand.Next(580, 620);
+				if (Main.netMode != NetmodeID.MultiplayerClient)
+				{
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2((i - 3.5f) * 400, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, target.whoAmI, 0, 0);
+					p0.timeLeft = Main.rand.Next(580, 620);
+				}
 			}
 		}
 		NPC.rotation *= 0.9f;
@@ -1020,16 +1059,16 @@ public class LanternGhostKing : ModNPC
 		if (Timer % 100 == 30)
 		{
 			Vector2 testPos = target.Center + new Vector2(0, -700).RotatedBy(Main.rand.NextFloat(1.4f, 2.1f) * (Main.rand.NextBool(2) ? 1 : -1));
-			int count = 0;
-			while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
-			{
-				testPos.Y -= 100;
-				count++;
-				if (count > 10 || testPos.Y < 1000)
-				{
-					break;
-				}
-			}
+
+			// while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
+			// {
+			// testPos.Y -= 100;
+			// count++;
+			// if (count > 10 || testPos.Y < 1000)
+			// {
+			// break;
+			// }
+			// }
 			TeleportTo(testPos);
 			RingCenterTrend = NPC.Center;
 		}
@@ -1051,27 +1090,30 @@ public class LanternGhostKing : ModNPC
 			{
 				count = 15;
 			}
-			for (int i = 0; i < count; i++)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
-				Vector2 v0 = new Vector2(0, count).RotatedBy(i / (float)count * MathHelper.TwoPi);
-				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
-				float myDamage = 40;
-				if (Main.expertMode)
+				for (int i = 0; i < count; i++)
 				{
-					myDamage = 55;
-				}
-				if (Main.masterMode)
-				{
-					myDamage = 70;
-				}
-				p0.damage = (int)myDamage / 2;
-				GoldLanternLine gLL = p0.ModProjectile as GoldLanternLine;
-				if (gLL is not null)
-				{
-					gLL.Timer = Main.rand.Next(-10, 10);
+					Vector2 v0 = new Vector2(0, count).RotatedBy(i / (float)count * MathHelper.TwoPi);
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 20) + v0, v0, ModContent.ProjectileType<GoldLanternLine>(), 40, 0f, target.whoAmI, 0, 0);
+					float myDamage = 40;
+					if (Main.expertMode)
+					{
+						myDamage = 55;
+					}
+					if (Main.masterMode)
+					{
+						myDamage = 70;
+					}
+					p0.damage = (int)myDamage / 2;
+					GoldLanternLine gLL = p0.ModProjectile as GoldLanternLine;
+					if (gLL is not null)
+					{
+						gLL.Timer = Main.rand.Next(-10, 10);
+					}
 				}
 			}
-			if (Main.masterMode)
+			if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				for (int i = 0; i < 15; i++)
 				{
@@ -1118,6 +1160,20 @@ public class LanternGhostKing : ModNPC
 		{
 			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 25f;
 			NPC.velocity += dir;
+		}
+		if (dashTimer == 10 && Timer < 4110 && Main.netMode != NetmodeID.MultiplayerClient)
+		{
+			var dir = (NPC.Center - target.Center).NormalizeSafe() * (RingRadius - 20);
+			float myDamage = 40;
+			if (Main.expertMode)
+			{
+				myDamage = 55;
+			}
+			if (Main.masterMode)
+			{
+				myDamage = 70;
+			}
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), RingCenter + dir, -dir.NormalizeSafe() * 15f, ModContent.ProjectileType<LanternFlameWall>(), (int)myDamage, 1, target.whoAmI);
 		}
 		if (dashTimer == 40 && Timer < 4140)
 		{
@@ -1314,7 +1370,10 @@ public class LanternGhostKing : ModNPC
 				Main.gore[gr19].timeLeft = 900;
 			}
 
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
+			if (Main.netMode != NetmodeID.MultiplayerClient)
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
+			}
 
 			// Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
 			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithPitchOffset(-1f), NPC.Center);
@@ -1332,7 +1391,7 @@ public class LanternGhostKing : ModNPC
 	public void SwitchAttackTypeInPhase2()
 	{
 		// Main.rand.Next(6)
-		switch (Main.rand.Next(6))
+		switch (5)
 		{
 			case 0:
 				Timer = 1200;
@@ -1350,6 +1409,7 @@ public class LanternGhostKing : ModNPC
 				Timer = 3100;
 				break;
 			case 5:
+				// Long distance rush
 				Timer = 3600;
 				break;
 		}
