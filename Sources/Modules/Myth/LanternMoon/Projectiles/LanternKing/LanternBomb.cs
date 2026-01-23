@@ -56,7 +56,7 @@ public class LanternBomb : ModProjectile
 		Projectile.velocity *= 0f;
 		if (Projectile.timeLeft < 90)
 		{
-			Projectile.scale += 0.05f;
+			Projectile.scale += 0.02f;
 		}
 		if (Projectile.timeLeft < 3)
 		{
@@ -111,10 +111,17 @@ public class LanternBomb : ModProjectile
 	{
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
-		var p = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 5);
+		float scale = 0.6f;
+		if(Main.expertMode)
+		{
+			scale = 0.7f;
+		}
+		if(Main.masterMode)
+		{
+			scale = 1.26f;
+		}
+		var p = Projectile.NewProjectileDirect(Projectile.GetSource_Death(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner, scale);
 		p.friendly = Projectile.friendly;
 		p.hostile = Projectile.hostile;
-
-		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), Projectile.Center);
 	}
 }

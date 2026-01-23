@@ -261,7 +261,7 @@ public class LanternGhostKing : ModNPC
 				Phase2_FallingColumn(player);
 			}
 
-			// 长距离冲刺附加火墙
+			// 长距离冲刺(附加火墙)
 			if (Timer >= 3600 && Timer < 4200)
 			{
 				Phase2_Rush(player);

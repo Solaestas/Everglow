@@ -155,7 +155,7 @@ public class ExplosiveLantern_growing : ModNPC
 		Ins.VFXManager.Add(gore5);
 		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
-		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5, NPC.target, 3);
+		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5, NPC.target, 1);
 		p.friendly = false;
 		p.hostile = true;
 		NPC.active = false;
