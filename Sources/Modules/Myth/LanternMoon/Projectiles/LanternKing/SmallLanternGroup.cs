@@ -44,7 +44,7 @@ public class SmallLanternGroup : ModProjectile
 		}
 		if (Main.masterMode)
 		{
-			frequency = 6;
+			frequency = 5;
 		}
 		int continueTimer = 250;
 		if (Timer < continueTimer)
@@ -125,7 +125,7 @@ public class SmallLanternGroup : ModProjectile
 					}
 					break;
 				case 3:
-					if (Timer % 30 == 0)
+					if (Timer % 75 == 0)
 					{
 						float timeValue = Timer;
 						timeValue = timeValue / continueTimer;

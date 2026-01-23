@@ -128,7 +128,7 @@ public class LanternFlameWall : ModProjectile
 			}
 			var phase = h - distance * 0.5f;
 			var toGap = MathF.Abs(phase - GapPosAndRange.X);
-			if (toGap < GapPosAndRange.Y * 1.5f)
+			if (toGap < GapPosAndRange.Y * 1.25f)
 			{
 				if(checkGapStart == Vector2.zeroVector)
 				{
@@ -137,7 +137,7 @@ public class LanternFlameWall : ModProjectile
 				}
 				var phaseNext = h + 1 - distance * 0.5f;
 				var toGapNext = MathF.Abs(phaseNext - GapPosAndRange.X);
-				if(toGapNext >= GapPosAndRange.Y * 1.5f)
+				if(toGapNext >= GapPosAndRange.Y * 1.25f)
 				{
 					if (checkGapEnd == Vector2.zeroVector)
 					{
@@ -145,7 +145,7 @@ public class LanternFlameWall : ModProjectile
 						GapEnd = checkGapEnd;
 					}
 				}
-				mulColor *= MathF.Max((toGap - GapPosAndRange.Y * 1f) / (GapPosAndRange.Y * 0.5f), 0.3f);
+				mulColor *= MathF.Max((toGap - GapPosAndRange.Y * 1f) / (GapPosAndRange.Y * 0.25f), 0.3f);
 			}
 			if (toGap < GapPosAndRange.Y)
 			{

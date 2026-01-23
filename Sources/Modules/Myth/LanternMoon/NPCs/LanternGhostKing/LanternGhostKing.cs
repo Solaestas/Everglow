@@ -202,17 +202,17 @@ public class LanternGhostKing : ModNPC
 			}
 
 			// 游离灯火
-			if (Timer >= 1700 && Timer < 2300)
+			if (Timer >= 1700 && Timer < 2400)
 			{
 				SmallLanternRelease(player);
 			}
 
 			// 短距离冲撞
-			if (Timer >= 2300 && Timer < 2900)
+			if (Timer >= 2400 && Timer < 3000)
 			{
 				RotateAndRush(player);
 			}
-			if (Timer >= 2898)
+			if (Timer >= 2998)
 			{
 				Timer = 0;
 			}
@@ -512,18 +512,18 @@ public class LanternGhostKing : ModNPC
 	/// <param name="target"></param>
 	public void RotateAndRush(Player target)
 	{
-		int offsetTimer = Timer - 2300;
+		int offsetTimer = Timer - 2400;
 		int dashTimer = offsetTimer % 60;
 		if (dashTimer < 10)
 		{
 			NPC.velocity *= 0.9f;
 		}
-		if (dashTimer == 10 && Timer > 2310)
+		if (dashTimer == 10 && Timer > 2410)
 		{
 			Vector2 dir = new Vector2(1, 0).RotatedBy(RushDirectionPridiction).NormalizeSafe() * 16f;
 			NPC.velocity += dir;
 		}
-		if (dashTimer == 30 && Timer < 2870)
+		if (dashTimer == 30 && Timer < 2970)
 		{
 			var matrix = new LanternGhostKing_Matrix()
 			{
@@ -781,9 +781,9 @@ public class LanternGhostKing : ModNPC
 			{
 				float deltaY = MathF.Sin(x + (float)Main.time * 0.2f) * 60;
 				float deltaY2 = MathF.Cos(x + (float)Main.time * 0.2f) * 60;
-				NPC npc0 = NPC.NewNPCDirect(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y - 1000, ModContent.NPCType<ExplosiveLantern_growing>(), 0, 0f, 0, 0, 0);
+				NPC npc0 = NPC.NewNPCDirect(NPC.GetSource_FromAI(), target.Center - new Vector2(0, 1000), ModContent.NPCType<ExplosiveLantern_growing>(), 0, 0f, 0, 0, 0);
 
-				npc0.Center = NPC.Center + new Vector2(x * 600 + Timer % 135 - 70, -700 + deltaY);
+				npc0.Center = target.Center + new Vector2(x * 600 + Timer % 135 - 70, -700 + deltaY);
 				npc0.velocity = new Vector2(0, -deltaY2 * 0.005f);
 				npc0.damage = NPC.damage / 2;
 			}
@@ -991,25 +991,28 @@ public class LanternGhostKing : ModNPC
 					myDamage = 100;
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WheelShapeLantern3Layer>(), myDamage, 0f, target.whoAmI, 0, 0);
-				for (int i = 0; i < 8; i++)
+				if(Main.expertMode)
 				{
-					Vector2 vel = new Vector2(0, 12).RotatedBy(i / 8f * MathHelper.TwoPi);
-					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i + 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
-					GoldLanternLine_NoTarget gLLNT0 = p0.ModProjectile as GoldLanternLine_NoTarget;
-					if (gLLNT0 is not null)
+					for (int i = 0; i < 8; i++)
 					{
-						gLLNT0.Timer = Main.rand.Next(-5, 5);
-					}
+						Vector2 vel = new Vector2(0, 12).RotatedBy(i / 8f * MathHelper.TwoPi);
+						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i + 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
+						GoldLanternLine_NoTarget gLLNT0 = p0.ModProjectile as GoldLanternLine_NoTarget;
+						if (gLLNT0 is not null)
+						{
+							gLLNT0.Timer = Main.rand.Next(-5, 5);
+						}
 
-					Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i - 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
-					GoldLanternLine_NoTarget gLLNT1 = p1.ModProjectile as GoldLanternLine_NoTarget;
-					if (gLLNT1 is not null)
-					{
-						gLLNT1.Timer = Main.rand.Next(-5, 5);
+						Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<GoldLanternLine_NoTarget>(), myDamage, 0f, target.whoAmI, (i - 0.22f) / 8f * MathHelper.TwoPi + MathHelper.PiOver2, 0);
+						GoldLanternLine_NoTarget gLLNT1 = p1.ModProjectile as GoldLanternLine_NoTarget;
+						if (gLLNT1 is not null)
+						{
+							gLLNT1.Timer = Main.rand.Next(-5, 5);
+						}
 					}
 				}
 			}
-			if (Timer % 250 > 120)
+			if (Timer % 250 > 120 && Timer > 2500)
 			{
 				Vector2 v = Lantern3RingCenter - NPC.velocity * 30f;
 				NPC.velocity += (v - NPC.Center - NPC.velocity) * 0.015f;
@@ -1058,7 +1061,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Timer % 100 == 30)
 		{
-			Vector2 testPos = target.Center + new Vector2(0, -700).RotatedBy(Main.rand.NextFloat(1.4f, 2.1f) * (Main.rand.NextBool(2) ? 1 : -1));
+			Vector2 testPos = target.Center + new Vector2(0, -700).RotatedBy((Main.rand.NextFloat(-0.3f, 0.3f) + MathHelper.PiOver2) * (Main.rand.NextBool(2) ? 1 : -1));
 
 			// while (Collision.SolidCollision(testPos - new Vector2(50), 100, 100))
 			// {
@@ -1161,19 +1164,20 @@ public class LanternGhostKing : ModNPC
 			Vector2 dir = (target.Center - NPC.Center).NormalizeSafe() * 25f;
 			NPC.velocity += dir;
 		}
-		if (dashTimer == 10 && Timer < 4110 && Main.netMode != NetmodeID.MultiplayerClient)
+		if (dashTimer == 10 && Timer < 4110 && Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
 		{
 			var dir = (NPC.Center - target.Center).NormalizeSafe() * (RingRadius - 20);
-			float myDamage = 40;
-			if (Main.expertMode)
+			float myDamage = 55;
+			float speed = 10f;
+			if(Main.masterMode)
 			{
-				myDamage = 55;
+				speed = 15f;
 			}
 			if (Main.masterMode)
 			{
 				myDamage = 70;
 			}
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), RingCenter + dir, -dir.NormalizeSafe() * 15f, ModContent.ProjectileType<LanternFlameWall>(), (int)myDamage, 1, target.whoAmI);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), RingCenter + dir, -dir.NormalizeSafe() * speed, ModContent.ProjectileType<LanternFlameWall>(), (int)myDamage, 1, target.whoAmI);
 		}
 		if (dashTimer == 40 && Timer < 4140)
 		{
@@ -1391,16 +1395,16 @@ public class LanternGhostKing : ModNPC
 	public void SwitchAttackTypeInPhase2()
 	{
 		// Main.rand.Next(6)
-		switch (5)
+		switch (Main.rand.Next(6))
 		{
 			case 0:
 				Timer = 1200;
 				break;
 			case 1:
-				Timer = 2000;
+				Timer = 1800;
 				break;
 			case 2:
-				Timer = 1600;
+				Timer = 2000;
 				break;
 			case 3:
 				Timer = 2400;
