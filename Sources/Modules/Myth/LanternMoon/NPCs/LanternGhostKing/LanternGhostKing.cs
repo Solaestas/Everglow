@@ -4,6 +4,7 @@ using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.VFX;
+using MathNet.Numerics;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -13,19 +14,20 @@ namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 public class LanternGhostKing : ModNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-	public bool NearDie = false;
 	public Vector2 RingCenterTrend;
 	public Vector2 RingCenter;
 	public Vector2 Lantern3RingCenter;
 
 	public float RingRadius = 0;
 	public float RingRadiusTrend = 1800;
+	public float RingFade = 0;
 	public float FrameworkRotation = 0;
 	public float ShakeStrength = 2;
 	public float EffectValueZ = 0f;
 	public float GoldenShieldLerp = 0f;
-	public float GoldenShieldBrakeEffectTimer = 0;
+	public float GoldenShieldBreakEffectTimer = 0;
 	public float GoldenShieldCrackResistInYAxis = 0.14f;
+	public float GoldenShieldBreakBloomValue = 0;
 	public float RushDirectionPridiction = 0f;
 
 	public int Phase = 1;
@@ -70,12 +72,13 @@ public class LanternGhostKing : ModNPC
 	{
 		Timer = 0;
 		Phase = 1;
+		RingFade = 240;
 		var spark = new LanternFlameRingDust
 		{
 			OwnerLanternKing = NPC,
 			Active = true,
 			Visible = true,
-			maxTime = 240,
+			MaxFade = 240,
 		};
 		Ins.VFXManager.Add(spark);
 		var warp = new LanternFlameRing_warpDust
@@ -83,7 +86,7 @@ public class LanternGhostKing : ModNPC
 			OwnerLanternKing = NPC,
 			Active = true,
 			Visible = true,
-			maxTime = 240,
+			MaxFade = 240,
 		};
 		Ins.VFXManager.Add(warp);
 		RingCenter = NPC.Center;
@@ -92,12 +95,11 @@ public class LanternGhostKing : ModNPC
 	public void UpdateDrawParameter()
 	{
 		FrameworkRotation = (float)Utils.Lerp(FrameworkRotation, NPC.rotation, 0.02f);
-		ShakeStrength = (float)Utils.Lerp(ShakeStrength, 2, 0.02f);
 	}
 
 	public void CheckPlayerTouchRing()
 	{
-		if (RingRadius < 1000)
+		if (RingFade > 0)
 		{
 			return;
 		}
@@ -120,48 +122,76 @@ public class LanternGhostKing : ModNPC
 		}
 	}
 
+	/// <summary>
+	/// Return true when cleared all the enemies before wave 14.
+	/// </summary>
+	/// <returns></returns>
+	public bool CanBeginAI()
+	{
+		return NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) < 1;
+	}
+
+	public float GoldenShieldBreakBloomValueFunction()
+	{
+		float value0 = 1.01f - GoldenShieldBreakBloomValue;
+		return (MathF.Sin(10 / value0) * 0.5f + 0.5f) * GoldenShieldBreakBloomValue;
+	}
+
+	public Vector4 BloomEffectColorV4()
+	{
+		Vector4 envC = Lighting.GetColor(NPC.Center.ToTileCoordinates()).ToVector4();
+		return Vector4.Lerp(envC, Vector4.One, GoldenShieldBreakBloomValueFunction());
+	}
+
 	public override void AI()
 	{
 		Timer += 1;
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
-		if (GoldenShieldBrakeEffectTimer > 0)
+		if (GoldenShieldBreakEffectTimer > 0)
 		{
-			GoldenShieldBrakeEffectTimer--;
+			GoldenShieldBreakEffectTimer--;
 			if (GoldenShieldCrackResistInYAxis > 0)
 			{
 				GoldenShieldCrackResistInYAxis -= 0.002f;
 			}
+			if(GoldenShieldBreakEffectTimer > 30)
+			{
+				if(GoldenShieldBreakEffectTimer % 4 == 1)
+				{
+					ShakerManager.AddShaker(NPC.Center, new Vector2(0, 1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30);
+				}
+				GoldenShieldBreakBloomValue += 0.014286f;
+			}
 			EffectValueZ = 0.9f;
-			if (GoldenShieldBrakeEffectTimer == 30)
+			if (GoldenShieldBreakEffectTimer == 30)
 			{
 				BrakeGoldenShieldEffect();
+				ShakerManager.AddShaker(NPC.Center, new Vector2(0, 1).RotatedByRandom(MathHelper.TwoPi), 100, 0.8f, 16, 0.9f, 0.8f, 300);
+				SoundEngine.PlaySound(SoundID.Shatter, NPC.Center);
+				NPC.HitSound = SoundID.NPCHit3;
 				ShaderType = "Normal";
 				NPC.defense = 30;
 				GoldenShieldLerp = 1;
 				EffectValueZ = 0;
+				GoldenShieldBreakBloomValue = 0;
 			}
 		}
 		else
 		{
-			GoldenShieldBrakeEffectTimer = 0;
+			GoldenShieldBreakEffectTimer = 0;
 		}
 		UpdateTailRope();
 		PlayerDeadHealthRecovery();
 		Lighting.AddLight(NPC.Center, new Vector3(1.5f, 0.65f, 0.55f) * ((255 - NPC.alpha) / 255f) * 3);
-		if (!NearDie)
-		{
-			NPC.dontTakeDamage = false;
-		}
-
 		if (Timer <= 1)
 		{
 			NPC.rotation = NPC.velocity.X / 120f;
 			Vector2 v = player.Center + new Vector2((float)Math.Sin(Timer / 40f) * 500f, (float)Math.Sin((Timer + 200) / 40f) * 50f - 350) - NPC.Center;
 			if (NPC.velocity.Length() < 9f)
 			{
-				NPC.velocity += v / v.Length() * 0.35f;
+				NPC.velocity += v.NormalizeSafe() * 0.35f;
 			}
 
 			NPC.velocity *= 0.96f;
@@ -169,7 +199,7 @@ public class LanternGhostKing : ModNPC
 			RingRadiusTrend = 1800;
 			if (Phase == 1 && NPC.life == NPC.lifeMax)
 			{
-				if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) >= 1)
+				if (!CanBeginAI())
 				{
 					Timer = 0;
 					NPC.dontTakeDamage = true;
@@ -178,6 +208,13 @@ public class LanternGhostKing : ModNPC
 		}
 		else
 		{
+			if(CanBeginAI())
+			{
+				if(RingFade > 0)
+				{
+					RingFade--;
+				}
+			}
 			NPC.dontTakeDamage = false;
 			CheckPlayerTouchRing();
 		}
@@ -342,7 +379,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.rotation = NPC.velocity.X / 120f;
 			Vector2 v = target.Center + new Vector2((float)Math.Sin(Main.time * 0.045f) * 500f, (float)Math.Sin(Main.time * 0.075f + 20) * 50f - 350) - NPC.Center;
-			NPC.velocity += v / v.Length() * 1f;
+			NPC.velocity += v.NormalizeSafe() * 1f;
 			NPC.velocity *= 0.96f;
 		}
 		else if (duration >= 50 && duration < 60)
@@ -356,7 +393,6 @@ public class LanternGhostKing : ModNPC
 			{
 				NPC.rotation = 0.6f;
 				NPC.ai[1] = -0.2f;
-				ShakeStrength = 25;
 			}
 			if (duration % 2 == 1 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
@@ -573,6 +609,7 @@ public class LanternGhostKing : ModNPC
 			if (Timer < 258)
 			{
 				NPC.defense = 1000;
+				NPC.HitSound = SoundID.NPCHit4;
 				if (Timer % 20 == 0)
 				{
 					for (int k = 0; k < 5; k++)
@@ -595,7 +632,7 @@ public class LanternGhostKing : ModNPC
 
 		NPC.rotation *= 0.95f;
 		Vector2 v = target.Center + new Vector2(0, -350) - NPC.Center;
-		if (NPC.velocity.Length() < 9f && GoldenShieldBrakeEffectTimer <= 0)
+		if (NPC.velocity.Length() < 9f && GoldenShieldBreakEffectTimer <= 0)
 		{
 			NPC.velocity += v.NormalizeSafe() * 0.35f;
 			NPC.velocity.X += target.velocity.X * 0.07f;
@@ -620,7 +657,7 @@ public class LanternGhostKing : ModNPC
 				{
 					Timer = 280;
 					EffectValueZ = 0.9f;
-					GoldenShieldBrakeEffectTimer = 100;
+					GoldenShieldBreakEffectTimer = 100;
 				}
 			}
 		}
@@ -653,7 +690,8 @@ public class LanternGhostKing : ModNPC
 		if (Timer < 430)
 		{
 			NPC.velocity *= 0;
-			NPC.alpha += 20;
+			NPC.alpha += 10;
+			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 430)
 		{
@@ -668,7 +706,7 @@ public class LanternGhostKing : ModNPC
 					break;
 				}
 			}
-			NPC.position = testPos;
+			TeleportTo(testPos);
 		}
 		if (Timer > 430 && Timer < 450)
 		{
@@ -681,6 +719,7 @@ public class LanternGhostKing : ModNPC
 		}
 		if (Timer == 450)
 		{
+			ShaderType = "Normal";
 			NPC.velocity *= 0;
 			NPC.alpha = 0;
 			RingCenterTrend = NPC.Center;
@@ -736,7 +775,8 @@ public class LanternGhostKing : ModNPC
 		if (Timer < 1230)
 		{
 			NPC.velocity *= 0;
-			NPC.alpha += 20;
+			NPC.alpha += 10;
+			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 1230)
 		{
@@ -752,7 +792,7 @@ public class LanternGhostKing : ModNPC
 			// break;
 			// }
 			// }
-			NPC.position = testPos;
+			TeleportTo(testPos);
 			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup_LanternRain>(), 50, 0f, target.whoAmI, Main.rand.Next(4), 0);
@@ -772,6 +812,7 @@ public class LanternGhostKing : ModNPC
 			NPC.velocity *= 0;
 			NPC.alpha = 0;
 			RingCenterTrend = NPC.Center;
+			ShaderType = "Normal";
 		}
 
 		// 释放一波灯雨
@@ -812,7 +853,8 @@ public class LanternGhostKing : ModNPC
 		if (Timer < 1830)
 		{
 			NPC.velocity *= 0;
-			NPC.alpha += 20;
+			NPC.alpha += 10;
+			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 1830)
 		{
@@ -844,6 +886,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha = 0;
+			ShaderType = "Normal";
 			innerVector0 = NPC.Center + new Vector2(-NPC.ai[3] * 600, -200);
 			innerVector1 = new Vector2(NPC.ai[3] * 600, 200);
 		}
@@ -914,7 +957,6 @@ public class LanternGhostKing : ModNPC
 				}
 				NPC.rotation = 0.9f * NPC.ai[2];
 				NPC.ai[1] = -0.3f;
-				ShakeStrength = 25;
 			}
 			Vector2 v0 = new Vector2(0, 24 * MathF.Abs(NPC.ai[1]) + 12).RotatedBy(Main.rand.NextFloat(-0.4f, 0.4f));
 			if (Main.netMode != NetmodeID.MultiplayerClient)
@@ -1057,7 +1099,8 @@ public class LanternGhostKing : ModNPC
 		if (Timer % 100 < 30)
 		{
 			NPC.velocity *= 0;
-			NPC.alpha += 20;
+			NPC.alpha += 10;
+			ShaderType = "DecayAndFade";
 		}
 		if (Timer % 100 == 30)
 		{
@@ -1088,6 +1131,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha = 0;
+			ShaderType = "Normal";
 			int count = 9;
 			if (Main.expertMode)
 			{
@@ -1256,7 +1300,7 @@ public class LanternGhostKing : ModNPC
 		if (NPC.life <= 0)
 		{
 			LanternMoon.NewWave();
-			LanternMoon.AccumulatedScore = 11200;
+			LanternMoon.AccumulatedScore = 10000;
 			for (int f = 0; f < 13; f++)
 			{
 				var gore2 = new EvilLanternGore3
@@ -1440,6 +1484,8 @@ public class LanternGhostKing : ModNPC
 		ef.Parameters["size1"].SetValue(new Vector2(1f, 1 / 3f) * 4f);
 		ef.Parameters["size2"].SetValue(Vector2.One);
 		ef.Parameters["size3"].SetValue(Vector2.One);
+		ef.Parameters["bloomEffectColor"].SetValue(BloomEffectColorV4());
+		ef.Parameters["npcAlpha"].SetValue(255 - NPC.alpha);
 		ef.Parameters["lerpGolden"].SetValue(1 - GoldenShieldLerp);
 		ef.Parameters["uTime"].SetValue((float)Main.timeForVisualEffects * 0.0005f);
 		ef.Parameters["warpScale"].SetValue(0f);
@@ -1470,6 +1516,11 @@ public class LanternGhostKing : ModNPC
 				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), 0, orig, new Vector2(value, 0.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
 				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
 			}
+		}
+		if(GoldenShieldBreakBloomValue > 0)
+		{
+			var bloom = ModAsset.LanternGhostKing_BodyBloom.Value;
+			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0.2f, 0) * GoldenShieldBreakBloomValueFunction(), 0, bloom.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
 		}
 	}
 

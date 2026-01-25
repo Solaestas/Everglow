@@ -4,8 +4,8 @@ namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 internal class LanternFlameRing_warpDust : Visual
 {
 	public NPC OwnerLanternKing;
-	public float timer;
-	public float maxTime;
+	public float Fade;
+	public float MaxFade;
 	public float Radius;
 
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
@@ -31,18 +31,18 @@ internal class LanternFlameRing_warpDust : Visual
 	{
 		if (OwnerLanternKing == null || !OwnerLanternKing.active)
 		{
-			timer++;
+			Fade++;
 		}
 		else
 		{
-			timer = 0;
 			LanternGhostKing lanternGhostKing = OwnerLanternKing.ModNPC as LanternGhostKing;
 			if (lanternGhostKing != null)
 			{
 				Radius = lanternGhostKing.RingRadius;
+				Fade = lanternGhostKing.RingFade;
 			}
 		}
-		if (timer >= maxTime)
+		if (Fade > MaxFade)
 		{
 			Active = false;
 		}
@@ -66,9 +66,9 @@ internal class LanternFlameRing_warpDust : Visual
 		{
 			width *= MathF.Max(0, (Radius - 500) / 500f);
 		}
-		if (timer > 120)
+		if (Fade > 120)
 		{
-			mulColor *= (240 - timer) / 120f;
+			mulColor *= (240 - Fade) / 120f;
 		}
 
 		float timeValue = (float)(-Main.timeForVisualEffects * 0.001f);

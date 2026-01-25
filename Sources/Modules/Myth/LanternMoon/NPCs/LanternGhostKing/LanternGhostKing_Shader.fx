@@ -4,9 +4,11 @@ sampler2D uImage2 : register(s2);
 float2 size1;
 float2 size2;
 float2 size3;
+float4 bloomEffectColor;
 float uTime;
 float lerpGolden;
 float warpScale;
+float npcAlpha;
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state
@@ -61,7 +63,7 @@ float4 PixelShaderFunction_GoldenShield(PSInput input) : COLOR0
 	}
 	else if (input.Texcoord.z > color1.r - 0.03)
 	{
-		return float4(1, 0.8, 0.4, 0) * input.Color;
+		return float4(1, 0.8, 0.4, 0) * bloomEffectColor;
 	}
 	else
 	{
@@ -78,13 +80,14 @@ float4 PixelShaderFunction_DecayAndFade(PSInput input) : COLOR0
 		return float4(0, 0, 0, 0);
 	}
 	float4 color1 = tex2D(uImage1, input.Texcoord.xy * size1);
-	if (input.Texcoord.z > color1.r)
+	float zValue = (255 - npcAlpha) / 255;
+	if (zValue > color1.r)
 	{
 		return float4(0, 0, 0, 0);
 	}
-	else if (input.Texcoord.z > color1.r - 0.5)
+	else if (zValue > color1.r - 0.5)
 	{
-		float value = (input.Texcoord.z - color1.r + 0.5) * 2;
+		float value = (zValue - color1.r + 0.5) * 2;
 		value = 1 - value;
 		value = smoothstep(0, 1, value);
 		float2 warp = tex2D(uNoiseSampler, input.Texcoord.xy * size3 + float2(0, uTime)).rg - float2(0.5, 0.5);

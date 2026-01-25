@@ -23,6 +23,8 @@ public class LanternFlameWall : ModProjectile
 
 	public float SpeedThrethod = 20f;
 
+	public float Decay = 1f;
+
 	public int Timer;
 
 	public override void OnSpawn(IEntitySource source)
@@ -41,6 +43,7 @@ public class LanternFlameWall : ModProjectile
 		Projectile.hostile = true;
 		Projectile.friendly = false;
 		Projectile.scale = 1;
+		Decay = 1f;
 	}
 
 	public override void AI()
@@ -49,6 +52,7 @@ public class LanternFlameWall : ModProjectile
 		Timer++;
 		var ringCenter = Projectile.Center;
 		var ringRadius = 20000f;
+		bool hasLanterKing = false;
 		foreach (var npc in Main.npc)
 		{
 			if (npc != null && npc.active && npc.type == ModContent.NPCType<LanternGhostKing>())
@@ -56,8 +60,18 @@ public class LanternFlameWall : ModProjectile
 				LanternGhostKing lKing = npc.ModNPC as LanternGhostKing;
 				ringCenter = lKing.RingCenter;
 				ringRadius = lKing.RingRadius;
+				hasLanterKing = true;
 				break;
 			}
+		}
+		if(!hasLanterKing)
+		{
+			Decay -= 0.01f;
+		}
+		if(Decay <= 0)
+		{
+			Projectile.Kill();
+			return;
 		}
 		Vector2 projToCenter = ringCenter - Projectile.Center;
 		if (projToCenter.Length() > ringRadius)
@@ -151,6 +165,7 @@ public class LanternFlameWall : ModProjectile
 			{
 				mulColor *= 0.3f;
 			}
+			mulColor *= Decay;
 			float flameLength = 256f;
 			if (h < 10)
 			{
@@ -206,9 +221,9 @@ public class LanternFlameWall : ModProjectile
 		Texture2D spot = Commons.ModAsset.LightPoint2.Value;
 		Color drawColor = new Color(1f, 0.8f + 0.2f * MathF.Sin((float)Main.time * 0.03f + Projectile.whoAmI), 0, 0);
 		var drawPos = pos - Main.screenPosition;
-		Main.EntitySpriteDraw(star, drawPos, null, drawColor, 0, star.Size() * 0.5f, 2f, SpriteEffects.None, 0);
-		Main.EntitySpriteDraw(star, drawPos, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, 2f, SpriteEffects.None, 0);
-		Main.EntitySpriteDraw(spot, drawPos, null, new Color(1f, 0.8f, 0.7f, 0), 0, spot.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, drawPos, null, drawColor, 0, star.Size() * 0.5f, 2f * Decay, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, drawPos, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, 2f * Decay, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(spot, drawPos, null, new Color(1f, 0.8f, 0.7f, 0), 0, spot.Size() * 0.5f, 2f * Decay, SpriteEffects.None, 0);
 	}
 
 	public void DrawWarp(VFXBatch spriteBatch)

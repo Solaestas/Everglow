@@ -1,8 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.LanternCommon;
-using Everglow.Myth.LanternMoon.Projectiles;
-using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
@@ -27,6 +24,17 @@ public class CylindricalLantern : ModNPC
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
 	}
+
+	//public override float SpawnChance(NPCSpawnInfo spawnInfo)
+	//{
+	//	YggdrasilTownBiome YggdrasilTownBiome = ModContent.GetInstance<YggdrasilTownBiome>();
+	//	if (!YggdrasilTownBiome.IsBiomeActive(Main.LocalPlayer))
+	//	{
+	//		return 0f;
+	//	}
+
+	//	return 3f;
+	//}
 
 	public override void OnSpawn(IEntitySource source)
 	{

@@ -1,7 +1,5 @@
 using Everglow.Commons.Mechanics.Events;
 using Everglow.Myth.LanternMoon.LanternCommon;
-using Everglow.Myth.LanternMoon.Projectiles;
-using Terraria.Localization;
 
 namespace Everglow.Myth.LanternMoon.Items;
 
@@ -20,7 +18,7 @@ public class BloodLamp : ModItem
 		Item.useTime = 1;
 		Item.autoReuse = false;
 		Item.consumable = true;
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.value = 10000;
 	}
 
