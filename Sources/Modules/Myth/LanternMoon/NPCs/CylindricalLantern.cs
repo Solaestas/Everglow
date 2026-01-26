@@ -63,7 +63,7 @@ public class CylindricalLantern : ModNPC
 			NPC.velocity = new Vector2(MathF.Sin(timeValue), MathF.Cos(timeValue * 2));
 		}
 		float distance = (player.Center - NPC.Center).Length();
-		if (TeleportTimer > TeleportMax || (distance < 220 && TeleportTimer > 120) || (distance < 800 && TeleportTimer > 120))
+		if (TeleportTimer > TeleportMax || (distance < 220 && TeleportTimer > 120) || (distance > 800))
 		{
 			TeleportTimer = 0;
 			FadeTimer = 60;

@@ -107,7 +107,7 @@ public class LanternBombRemoteControl : ModItem
 		// ExplodeEffect(Main.MouseWorld);
 		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
 
-		Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<CylindricalLantern_explosion>(), 50, 0f, player.whoAmI, 1, 0);
+		Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup>(),20, 0f, Main.myPlayer, Main.rand.Next(4), 0);
 
 		//float addValue = Main.rand.NextFloat(6.283f);
 		//for (int x = 0; x < 5; x++)

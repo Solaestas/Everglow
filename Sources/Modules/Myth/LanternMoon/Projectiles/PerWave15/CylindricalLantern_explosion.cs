@@ -1,4 +1,5 @@
 using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 
@@ -30,6 +31,7 @@ public class CylindricalLantern_explosion : ModProjectile
 			LargeFlame(Projectile.Center, 10);
 			Spark(Projectile.Center);
 			Projectile.hostile = true;
+			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.6f), Projectile.Center);
 		}
 	}
 

@@ -49,6 +49,7 @@ public class SmallLanternGroup : ModProjectile
 		int continueTimer = 250;
 		if (Timer < continueTimer)
 		{
+			Main.NewText(Projectile.ai[0]);
 			switch (Projectile.ai[0])
 			{
 				case 0:
