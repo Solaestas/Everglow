@@ -9,6 +9,8 @@ public class EvilLantern : ModNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 
+	public float LanternMoonScore = 1f;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 8;
@@ -128,9 +130,9 @@ public class EvilLantern : ModNPC
 				};
 				Ins.VFXManager.Add(gore5);
 			}
-			LanternMoon.AddPoint(15);
+			LanternMoon.AddPoint(LanternMoonScore);
 
-			for (int f = 0; f < 22; f++)
+			for (int f = 0; f < 8; f++)
 			{
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
 				Dust d = Dust.NewDustDirect(NPC.Center - new Vector2(4, 4) - new Vector2(4, 4), 8, 8, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default, Main.rand.NextFloat(0.6f, 1.8f));

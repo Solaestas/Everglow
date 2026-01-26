@@ -1,7 +1,7 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class RisingFirework : ModProjectile
 {
@@ -43,7 +43,7 @@ public class RisingFirework : ModProjectile
 			FireworkVisitor fireworkVisitor = player.GetModPlayer<FireworkVisitor>();
 			if (fireworkVisitor != null)
 			{
-				fireworkVisitor.BestFireworkView += ((Projectile.Center + new Vector2(0, 200)) - player.Center - fireworkVisitor.BestFireworkView) * 0.4f;
+				fireworkVisitor.BestFireworkView += (Projectile.Center + new Vector2(0, 200) - player.Center - fireworkVisitor.BestFireworkView) * 0.4f;
 			}
 		}
 		if (timeToKill > 0)
@@ -52,10 +52,10 @@ public class RisingFirework : ModProjectile
 			if (timeToKill == 80)
 			{
 				SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/FireworkExplosion"), Projectile.Center);
-				Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Firework6Inches>(), 50, 0f, Projectile.owner, 0, 0);
+				var p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Firework6Inches>(), 50, 0f, Projectile.owner, 0, 0);
 				if (p != null)
 				{
-					FireworkProjectile fireworkProjectile = p.ModProjectile as FireworkProjectile;
+					var fireworkProjectile = p.ModProjectile as FireworkProjectile;
 					if (fireworkProjectile != null)
 					{
 						fireworkProjectile.MoveSight = MoveSight;

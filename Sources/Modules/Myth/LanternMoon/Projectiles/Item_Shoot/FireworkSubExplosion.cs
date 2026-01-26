@@ -1,7 +1,7 @@
 using Terraria.Audio;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class FireworkSubExplosion : FireworkProjectile
 {
@@ -21,6 +21,7 @@ public class FireworkSubExplosion : FireworkProjectile
 		}
 		return false;
 	}
+
 	public override void SetDefaults()
 	{
 		Projectile.timeLeft = 600;
@@ -32,24 +33,27 @@ public class FireworkSubExplosion : FireworkProjectile
 		Projectile.ignoreWater = true;
 		Stars = new List<FlameTrail>();
 	}
+
 	public Color LegacyColor;
 	public Vector3 LegacyVelocity;
 	public Vector3 LegacyPosition;
 	public int LegacyStyle;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundEngine.PlaySound(SoundID.DD2_GoblinBomb.WithVolume(Main.rand.NextFloat(0.4f, 0.8f)).WithPitchOffset(Main.rand.NextFloat(-0.4f, 0.4f)), Projectile.Center + new Vector2(LegacyPosition.X, LegacyPosition.Y));
 		Timer = 0;
 	}
+
 	public override void SpawnStyle(int style)
 	{
-		Vector3 axis = new Vector3(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
+		var axis = new Vector3(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
 		float rot = Main.rand.NextFloat(6.283f);
 		int starsCount = 20;
 		Color color = LegacyColor;
 		switch (style)
 		{
-			//球状
+			// 球状
 			case 0:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -58,13 +62,14 @@ public class FireworkSubExplosion : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 3f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity + LegacyPosition, new List<Vector3>(), velocity + LegacyVelocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 0.7f, true);
+						var flame = new FlameTrail(-velocity + LegacyPosition, new List<Vector3>(), velocity + LegacyVelocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 0.7f, true);
 						flame.FlameTimer = Main.rand.Next(-20, 0);
 						Stars.Add(flame);
 					}
 				}
 				break;
-			//环状
+
+			// 环状
 			case 1:
 				if (style == 1)
 				{
@@ -76,7 +81,7 @@ public class FireworkSubExplosion : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length2 / starsCount * MathHelper.TwoPi) * length2, MathF.Sin(theta2 / (float)starsCount * MathF.PI), MathF.Sin(phi / length2 / starsCount * MathHelper.TwoPi) * length2) * 4f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, c0, Main.rand.NextFloat(0.85f, 1.15f) * 0.7f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, c0, Main.rand.NextFloat(0.85f, 1.15f) * 0.7f, true);
 						flame.FlameTimer = Main.rand.Next(-10, 0);
 						flame.ai[0] = 20;
 						Stars.Add(flame);
@@ -85,9 +90,10 @@ public class FireworkSubExplosion : FireworkProjectile
 				break;
 		}
 	}
+
 	public override void AI()
 	{
-		if(Timer == 0)
+		if (Timer == 0)
 		{
 			SpawnStyle(LegacyStyle);
 		}

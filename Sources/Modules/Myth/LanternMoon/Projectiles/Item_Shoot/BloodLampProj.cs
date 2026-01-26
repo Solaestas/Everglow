@@ -2,7 +2,7 @@ using Everglow.Commons.Coroutines;
 using ReLogic.Content;
 using Terraria.Audio;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class BloodLampProj : ModProjectile
 {

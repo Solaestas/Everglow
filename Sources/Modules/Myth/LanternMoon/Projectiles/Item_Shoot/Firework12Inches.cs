@@ -1,18 +1,18 @@
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class Firework12Inches : FireworkProjectile
 {
-	
 	public override void OnSpawn(IEntitySource source)
 	{
 		Timer = 0;
 		SpawnStyle(Main.rand.Next(13));
 	}
+
 	public override void SpawnStyle(int style)
 	{
-		Vector3 axis = new Vector3(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
+		var axis = new Vector3(Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f));
 		float rot = Main.rand.NextFloat(6.283f);
 		int starsCount = 200;
 		Color color = NormalColor();
@@ -23,7 +23,7 @@ public class Firework12Inches : FireworkProjectile
 		}
 		switch (style)
 		{
-			//球状
+			// 球状
 			case 0:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -32,13 +32,14 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 24f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
 						flame.FlameTimer = Main.rand.Next(-20, 0);
 						Stars.Add(flame);
 					}
 				}
 				break;
-			//环状
+
+			// 环状
 			case 1:
 				starsCount = 300;
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
@@ -50,7 +51,7 @@ public class Firework12Inches : FireworkProjectile
 						{
 							Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 27f * Main.rand.NextFloat(0.95f, 1.05f);
 							velocity = RodriguesRotate(velocity, axis, rot);
-							FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color1, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
+							var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color1, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
 							flame.FlameTimer = Main.rand.Next(-20, 0);
 							Stars.Add(flame);
 						}
@@ -68,7 +69,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//杂点
+
+			// 杂点
 			case 2:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -81,7 +83,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//三段球
+
+			// 三段球
 			case 3:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -94,7 +97,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//金色椰树
+
+			// 金色椰树
 			case 4:
 				starsCount = 150;
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
@@ -104,7 +108,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 24f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
 						flame.TrailStyle = 1;
 						flame.FlameTimer = Main.rand.Next(-10, 11);
 						flame.ai[0] = 20;
@@ -113,7 +117,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//椰树带心
+
+			// 椰树带心
 			case 5:
 				starsCount = 90;
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
@@ -123,7 +128,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 24f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
 						flame.TrailStyle = 1;
 						flame.FlameTimer = Main.rand.Next(-10, 11);
 						flame.ai[0] = 20;
@@ -138,14 +143,15 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 9f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.8f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.8f, true);
 						flame.FlameTimer = Main.rand.Next(-10, 11);
 						flame.ai[0] = 60;
 						Stars.Add(flame);
 					}
 				}
 				break;
-			//两半球
+
+			// 两半球
 			case 6:
 				for (int theta = -starsCount + 5; theta < 5; theta += 10)
 				{
@@ -168,7 +174,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//多个集束
+
+			// 多个集束
 			case 7:
 				starsCount = 100;
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
@@ -182,7 +189,7 @@ public class Firework12Inches : FireworkProjectile
 						for (int x = 0; x < 3; x++)
 						{
 							Vector3 newVel = Vector3.Normalize(RodriguesRotate(new Vector3(velocity.Y, -velocity.X, 0), velocity, x / 3f * MathHelper.TwoPi)) * 0.3f * Main.rand.NextFloat(0.85f, 1.15f);
-							FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity * 0.4f + newVel, color, Main.rand.NextFloat(0.85f, 1.15f) * 0.8f, true);
+							var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity * 0.4f + newVel, color, Main.rand.NextFloat(0.85f, 1.15f) * 0.8f, true);
 							flame.FlameTimer = Main.rand.Next(-10, 0);
 							flame.ai[0] = -30;
 							Stars.Add(flame);
@@ -190,7 +197,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//金环+核心
+
+			// 金环+核心
 			case 8:
 				if (style == 8)
 				{
@@ -212,7 +220,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length2 / starsCount * MathHelper.TwoPi) * length2, MathF.Sin(theta2 / (float)starsCount * MathF.PI), MathF.Sin(phi / length2 / starsCount * MathHelper.TwoPi) * length2) * 27f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
 						flame.TrailStyle = 1;
 						flame.FlameTimer = Main.rand.Next(-10, 11);
 						flame.ai[0] = 20;
@@ -221,7 +229,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//金色漏斗
+
+			// 金色漏斗
 			case 9:
 				if (style == 9)
 				{
@@ -233,7 +242,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length2 / starsCount * MathHelper.TwoPi) * length2, MathF.Sin(theta2 / (float)starsCount * MathF.PI), MathF.Sin(phi / length2 / starsCount * MathHelper.TwoPi) * length2) * 27f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, c0, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, c0, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
 						flame.FlameTimer = Main.rand.Next(-10, 0);
 						flame.ai[0] = 20;
 						Stars.Add(flame);
@@ -248,7 +257,7 @@ public class Firework12Inches : FireworkProjectile
 							velocity = RodriguesRotate(velocity, axis, rot);
 							if (Math.Abs(theta) > starsCount * 0.24f)
 							{
-								FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
+								var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, new Color(0, 0, 0, 0), Main.rand.NextFloat(0.85f, 1.15f) * 1f, true);
 								flame.TrailStyle = 1;
 								flame.FlameTimer = Main.rand.Next(-10, 11);
 								flame.ai[0] = 20;
@@ -259,7 +268,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//双层
+
+			// 双层
 			case 10:
 				starsCount = 150;
 				for (int theta = -starsCount; theta < starsCount; theta += 10)
@@ -284,7 +294,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//球状随机拖尾
+
+			// 球状随机拖尾
 			case 11:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -293,7 +304,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 24f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
 						flame.FlameTimer = Main.rand.Next(-20, 0);
 						if (Main.rand.NextBool(10))
 						{
@@ -307,7 +318,8 @@ public class Firework12Inches : FireworkProjectile
 					}
 				}
 				break;
-			//闪烁实验
+
+			// 闪烁实验
 			case 12:
 				for (int theta = -starsCount; theta <= starsCount; theta += 10)
 				{
@@ -316,7 +328,7 @@ public class Firework12Inches : FireworkProjectile
 					{
 						Vector3 velocity = new Vector3(MathF.Cos(phi / length / starsCount * MathHelper.TwoPi) * length, MathF.Sin(theta / (float)starsCount * MathF.PI), MathF.Sin(phi / length / starsCount * MathHelper.TwoPi) * length) * 24f * Main.rand.NextFloat(0.95f, 1.05f);
 						velocity = RodriguesRotate(velocity, axis, rot);
-						FlameTrail flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
+						var flame = new FlameTrail(-velocity, new List<Vector3>(), velocity, color, Main.rand.NextFloat(0.85f, 1.15f) * 1.4f, true);
 						flame.FlameTimer = Main.rand.Next(-60, -40);
 						flame.ai[3] = Main.rand.Next(20) - 20;
 						Stars.Add(flame);
@@ -325,11 +337,12 @@ public class Firework12Inches : FireworkProjectile
 				break;
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D flame = Commons.ModAsset.LightPoint.Value;
-		List<Vertex2D> trailBars0 = new List<Vertex2D>();
-		List<Vertex2D> trailBars1 = new List<Vertex2D>();
+		var trailBars0 = new List<Vertex2D>();
+		var trailBars1 = new List<Vertex2D>();
 		foreach (FlameTrail flameTrail in Stars)
 		{
 			if (flameTrail.Active)
@@ -340,11 +353,13 @@ public class Firework12Inches : FireworkProjectile
 				float scale;
 				Vector2 v2Pos = Projection2D(drawPos3D, new Vector2(Main.screenWidth, Main.screenHeight) / 2, 1000, out scale);
 
-
 				Vector3[] trailPos = flameTrail.OldPos.Reverse<Vector3>().ToArray();
 				int len = trailPos.Length;
 				if (len <= 2)
+				{
 					continue;
+				}
+
 				if (Ins.VisualQuality.High)
 				{
 					for (int i = 1; i < len; i++)
@@ -387,12 +402,14 @@ public class Firework12Inches : FireworkProjectile
 
 						if (flameTrail.TrailStyle == 1)
 						{
-							float zValue = (TrailLength - i) / (float)(TrailLength);
+							float zValue = (TrailLength - i) / (float)TrailLength;
 							if (flameTrail.FlameTimer > 60)
 							{
 								zValue -= (flameTrail.FlameTimer - 60) / 60f;
 								if (zValue < 0)
+								{
 									zValue = 0;
+								}
 							}
 							float width = 1f;
 							if (len < 75)
@@ -519,7 +536,9 @@ public class Firework12Inches : FireworkProjectile
 		Main.graphics.GraphicsDevice.Textures[0] = flame;
 		Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		if (trailBars0.Count > 3)
+		{
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trailBars0.ToArray(), 0, trailBars0.Count - 2);
+		}
 
 		if (trailBars1.Count > 3)
 		{

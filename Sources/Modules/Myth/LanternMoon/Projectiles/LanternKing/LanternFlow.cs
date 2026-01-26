@@ -21,7 +21,7 @@ public class LanternFlow : TrailingProjectile
 		Projectile.penetrate = -1;
 		Projectile.scale = 1f;
 		TrailLength = 400;
-		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 14400;
+		ProjectileID.Sets.DrawScreenCheckFluff[Projectile.type] = 20000;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		TrailColor = new Color(1f, 0.2f, 0f, 0f) * 0.3f;
 		TrailBackgroundDarkness = 0.3f;
@@ -134,6 +134,10 @@ public class LanternFlow : TrailingProjectile
 				}
 			}
 		}
+	}
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
+	{
 	}
 
 	public override void OnKill(int timeLeft)

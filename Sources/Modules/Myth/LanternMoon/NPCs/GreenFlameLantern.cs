@@ -8,23 +8,18 @@ using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class BloodLanternGhost_filled : ModNPC
+public class GreenFlameLantern : ModNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-
-	public override void SetStaticDefaults()
-	{
-		Main.npcFrameCount[NPC.type] = 8;
-	}
 
 	public override void SetDefaults()
 	{
 		NPC.damage = 75;
-		NPC.lifeMax = 906;
+		NPC.lifeMax = 630;
 		NPC.npcSlots = 2.5f;
 		NPC.width = 60;
 		NPC.height = 60;
-		NPC.defense = 24;
+		NPC.defense = 15;
 		NPC.value = 200;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.2f;

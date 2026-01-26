@@ -12,6 +12,8 @@ public class BloodLanternGhost : ModNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 
+	public float LanternMoonScore = 5f;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 8;
@@ -21,7 +23,7 @@ public class BloodLanternGhost : ModNPC
 	{
 		NPC.damage = 75;
 		NPC.lifeMax = 906;
-		NPC.npcSlots = 0.5f;
+		NPC.npcSlots = 2.5f;
 		NPC.width = 60;
 		NPC.height = 60;
 		NPC.defense = 24;
@@ -236,7 +238,7 @@ public class BloodLanternGhost : ModNPC
 			Ins.VFXManager.Add(gore5);
 		}
 
-		for (int f = 0; f < 22; f++)
+		for (int f = 0; f < 10; f++)
 		{
 			Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
 			int r = Dust.NewDust(NPC.Center - new Vector2(4, 4) - new Vector2(4, 4), 8, 8, ModContent.DustType<Dusts.Flame4>(), v3.X, v3.Y, 0, default, Main.rand.NextFloat(0.6f, 1.8f));
@@ -244,7 +246,7 @@ public class BloodLanternGhost : ModNPC
 			Main.dust[r].velocity = v3;
 		}
 		NPC.active = false;
-		LanternMoon.AddPoint(60);
+		LanternMoon.AddPoint(LanternMoonScore);
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

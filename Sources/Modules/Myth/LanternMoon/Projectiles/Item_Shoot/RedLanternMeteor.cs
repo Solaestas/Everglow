@@ -1,7 +1,7 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class RedLanternMeteor : TrailingProjectile
 {
@@ -50,7 +50,7 @@ public class RedLanternMeteor : TrailingProjectile
 
 	public override void DrawTrail()
 	{
-		List<Vector2> unSmoothPos = new List<Vector2>();
+		var unSmoothPos = new List<Vector2>();
 		for (int i = 0; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)

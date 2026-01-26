@@ -49,7 +49,6 @@ public class EventSystem : ModSystem
 		var sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin();
-
 		Main.DrawInvasionProgress();
 		if (Main.HealthBarDrawSettings != 0)
 		{

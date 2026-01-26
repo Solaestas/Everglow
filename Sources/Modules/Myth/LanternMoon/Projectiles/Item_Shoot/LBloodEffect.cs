@@ -1,8 +1,6 @@
-using Everglow.Myth.Common;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
-
-class LBloodEffect : ModProjectile
+public class LBloodEffect : ModProjectile
 {
 	public override void SetDefaults()
 	{
@@ -16,88 +14,112 @@ class LBloodEffect : ModProjectile
 		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 40;
 	}
-	Vector2 AIMpos = Vector2.Zero;
-	int TrueL = 1;
-	Vector2 Acc = Vector2.Zero;
-	float Omega = 0;
-	int AimProj = -1;
+
+	private Vector2 aIMpos = Vector2.Zero;
+	private int trueL = 1;
+	private Vector2 acc = Vector2.Zero;
+	private float omega = 0;
+	private int aimProj = -1;
+
 	public override ModProjectile Clone(Projectile projectile)
 	{
 		var clone = base.Clone(projectile) as LBloodEffect;
-		//值类型不必重新赋值
-		//AIMpos = Vector2.Zero;
-		//TrueL = 1;
-		//Acc = Vector2.Zero;
-		//Omega = 0;
-		//AimProj = -1;
+
+		// 值类型不必重新赋值
+		// AIMpos = Vector2.Zero;
+		// TrueL = 1;
+		// Acc = Vector2.Zero;
+		// Omega = 0;
+		// AimProj = -1;
 		return clone;
 	}
+
 	public override void AI()
 	{
-		if (Omega == 0)
-			Omega = Main.rand.NextFloat(-0.4f, 0.4f);
-		if (Projectile.timeLeft <= 160)
-			Omega *= 0.96f;
-		if (AimProj == -1)
+		if (omega == 0)
 		{
-			AIMpos = Main.projectile[(int)Projectile.ai[0]].Center;
+			omega = Main.rand.NextFloat(-0.4f, 0.4f);
+		}
+
+		if (Projectile.timeLeft <= 160)
+		{
+			omega *= 0.96f;
+		}
+
+		if (aimProj == -1)
+		{
+			aIMpos = Main.projectile[(int)Projectile.ai[0]].Center;
 			for (int f = 0; f < Main.projectile.Length; f++)
 			{
 				if (Main.projectile[f].active && Main.projectile[f].type == ModContent.ProjectileType<RedLanternMeteor>())
 				{
-					AimProj = f;
+					aimProj = f;
 					break;
 				}
 			}
 			if (Projectile.velocity.Length() > 7f)
+			{
 				Projectile.velocity *= 0.95f;
+			}
 		}
 		else
 		{
-			AIMpos = Main.projectile[AimProj].Center;
+			aIMpos = Main.projectile[aimProj].Center;
 		}
 
-		if (Projectile.timeLeft >= 140 && AimProj == -1)
+		if (Projectile.timeLeft >= 140 && aimProj == -1)
 		{
-			Acc = (AIMpos - Projectile.Center) / 530f;
-			Projectile.velocity += Acc;
+			acc = (aIMpos - Projectile.Center) / 530f;
+			Projectile.velocity += acc;
 			if (Projectile.timeLeft <= 160)
-				Projectile.velocity = Projectile.velocity.RotatedBy(Omega);
+			{
+				Projectile.velocity = Projectile.velocity.RotatedBy(omega);
+			}
 		}
 		else
 		{
-			Acc = (AIMpos - Projectile.Center) / 30f;
-			Projectile.velocity += Acc;
+			acc = (aIMpos - Projectile.Center) / 30f;
+			Projectile.velocity += acc;
 			float kv = Math.Clamp(Projectile.velocity.Length() / 3f, 1, 100);
 
-			Projectile.velocity = Projectile.velocity.RotatedBy(Omega / kv);
+			Projectile.velocity = Projectile.velocity.RotatedBy(omega / kv);
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		var bars = new List<Vertex2D>();
 		float width = 6;
 		if (Projectile.timeLeft < 60)
+		{
 			width = Projectile.timeLeft / 10f;
-		TrueL = 0;
+		}
+
+		trueL = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
-			TrueL++;
+			trueL++;
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 		}
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
+
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 
-			var factor = i / (float)TrueL;
+			var factor = i / (float)trueL;
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, new Color(255, 0, 0, 0), new Vector3(factor, 1, w)));
@@ -120,7 +142,6 @@ class LBloodEffect : ModProjectile
 				Vx.Add(bars[i + 2]);
 				Vx.Add(bars[i + 3]);
 			}
-
 		}
 		if (Vx.Count > 2)
 		{

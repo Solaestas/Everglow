@@ -1,8 +1,7 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Newtonsoft.Json.Linq;
 
-namespace Everglow.Myth.LanternMoon.Projectiles;
+namespace Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 
 public class FlameCylinder : TrailingProjectile
 {
@@ -36,11 +35,11 @@ public class FlameCylinder : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style == 0)
+		if (style == 0)
 		{
 			float value0 = index / (float)SmoothedOldPos.Count;
 			value0 = MathF.Sin(value0 * MathHelper.Pi);
-			Color drawC = Color.Lerp(Color.Transparent, Color.White, value0);
+			var drawC = Color.Lerp(Color.Transparent, Color.White, value0);
 			if (Projectile.timeLeft < 120)
 			{
 				drawC = Color.Lerp(Color.Transparent, drawC, Projectile.timeLeft / 120f);
@@ -50,7 +49,7 @@ public class FlameCylinder : TrailingProjectile
 		if (style == 1)
 		{
 			float value0 = 1 - index / (float)SmoothedOldPos.Count;
-			Color drawC = new Color(value0, value0 * value0 * 0.7f, value0 * value0 * value0 * 0.2f, 0);
+			var drawC = new Color(value0, value0 * value0 * 0.7f, value0 * value0 * value0 * 0.2f, 0);
 			if (Projectile.timeLeft < 120)
 			{
 				drawC = Color.Lerp(Color.Transparent, drawC, Projectile.timeLeft / 120f);

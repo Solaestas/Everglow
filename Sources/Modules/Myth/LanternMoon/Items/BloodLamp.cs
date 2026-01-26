@@ -28,6 +28,7 @@ public class BloodLamp : ModItem
 		if (!Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon && lMIE.CanActivate())
 		{
 			EventSystem.Activate(ModContent.GetInstance<LanternMoonInvasionEvent>());
+			lMIE.ProgressAlpha = 0f;
 			return true;
 		}
 		return false;

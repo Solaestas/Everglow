@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
-using ReLogic.Content;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
@@ -16,12 +15,12 @@ public abstract class ReplicaEvent : ModEvent
 	/// <summary>
 	/// 进度点数
 	/// </summary>
-	public int Progress;
+	public float Progress;
 
 	/// <summary>
 	/// 最大进度点数
 	/// </summary>
-	public int ProgressMax;
+	public float ProgressMax;
 	public float ProgressAlpha;
 	public int UIBarFadeTimer;
 
@@ -90,10 +89,10 @@ public abstract class ReplicaEvent : ModEvent
 			Rectangle r4 = new((int)vector.X - num2 / 2, (int)vector.Y - num3 / 2, num2, num3);
 			Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
 			string key = "Game.WaveMessage";
-			object arg = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Language.GetTextValue("Game.InvasionPoints", Progress);
+			object arg = ProgressMax != 0 ? (Progress / ProgressMax).ToString("##.##%") : Language.GetTextValue("Game.InvasionPoints", Progress);
 			string text2 = Language.GetTextValue(key, Wave, arg);
 			Texture2D value2 = TextureAssets.ColorBar.Value;
-			float num4 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+			float num4 = MathHelper.Clamp(Progress / ProgressMax, 0f, 1f);
 			if (ProgressMax == 0)
 			{
 				num4 = 1f;
@@ -115,13 +114,13 @@ public abstract class ReplicaEvent : ModEvent
 			Vector2 vector3 = new(Main.screenWidth - 120, Main.screenHeight - 40);
 			Rectangle r4 = new((int)vector3.X - num7 / 2, (int)vector3.Y - num8 / 2, num7, num8);
 			Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
-			string text3 = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Progress.ToString();
+			string text3 = ProgressMax != 0 ? (Progress / ProgressMax).ToString("##.##%") : Progress.ToString();
 			text3 = Language.GetTextValue("Game.WaveCleared", text3);
 			Texture2D value3 = TextureAssets.ColorBar.Value;
 			if (ProgressMax != 0)
 			{
 				Main.spriteBatch.Draw(value3, vector3, null, Color.White * ProgressAlpha, 0f, new Vector2(value3.Width / 2, 0f), num, SpriteEffects.None, 0f);
-				float num9 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+				float num9 = MathHelper.Clamp(Progress / ProgressMax, 0f, 1f);
 				Vector2 vector4 = FontAssets.MouseText.Value.MeasureString(text3);
 				float num10 = num;
 				if (vector4.Y > 22f)
