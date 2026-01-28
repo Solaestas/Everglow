@@ -11,9 +11,8 @@ using Terraria.DataStructures;
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
 [AutoloadBossHead]
-public class LanternGhostKing : ModNPC
+public class LanternGhostKing : LanternMoonNPC
 {
-	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 	public Vector2 RingCenterTrend;
 	public Vector2 RingCenter;
 	public Vector2 Lantern3RingCenter;
@@ -128,7 +127,15 @@ public class LanternGhostKing : ModNPC
 	/// <returns></returns>
 	public bool CanBeginAI()
 	{
-		return NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) + NPC.CountNPCS(ModContent.NPCType<BombLantern>()) + NPC.CountNPCS(ModContent.NPCType<CylindricalLantern>()) < 1;
+		int lanternMoonNPCCount = 0;
+		foreach (var npc in Main.npc)
+		{
+			if(npc != null && npc.active && npc.ModNPC is LanternMoonNPC)
+			{
+				lanternMoonNPCCount++;
+			}
+		}
+		return lanternMoonNPCCount <= 1;
 	}
 
 	public float GoldenShieldBreakBloomValueFunction()
@@ -691,6 +698,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha += 10;
+			NPC.dontTakeDamage = true;
 			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 430)
@@ -776,6 +784,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha += 10;
+			NPC.dontTakeDamage = true;
 			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 1230)
@@ -804,6 +813,7 @@ public class LanternGhostKing : ModNPC
 			NPC.alpha -= 20;
 			if (NPC.alpha < 0)
 			{
+				NPC.dontTakeDamage = false;
 				NPC.alpha = 0;
 			}
 		}
@@ -854,6 +864,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha += 10;
+			NPC.dontTakeDamage = true;
 			ShaderType = "DecayAndFade";
 		}
 		if (Timer == 1830)
@@ -879,6 +890,7 @@ public class LanternGhostKing : ModNPC
 			NPC.alpha -= 20;
 			if (NPC.alpha < 0)
 			{
+				NPC.dontTakeDamage = false;
 				NPC.alpha = 0;
 			}
 		}
@@ -1100,6 +1112,7 @@ public class LanternGhostKing : ModNPC
 		{
 			NPC.velocity *= 0;
 			NPC.alpha += 10;
+			NPC.dontTakeDamage = true;
 			ShaderType = "DecayAndFade";
 		}
 		if (Timer % 100 == 30)
@@ -1124,6 +1137,7 @@ public class LanternGhostKing : ModNPC
 			NPC.alpha -= 20;
 			if (NPC.alpha < 0)
 			{
+				NPC.dontTakeDamage = false;
 				NPC.alpha = 0;
 			}
 		}
@@ -1461,6 +1475,11 @@ public class LanternGhostKing : ModNPC
 				Timer = 3600;
 				break;
 		}
+	}
+
+	public override bool SpecialOnKill()
+	{
+		return false;
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

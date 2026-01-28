@@ -107,7 +107,22 @@ public class LanternBombRemoteControl : ModItem
 		// ExplodeEffect(Main.MouseWorld);
 		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
 
-		Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<SmallLanternGroup>(),20, 0f, Main.myPlayer, Main.rand.Next(4), 0);
+		//float minDis = 600;
+		//NPC target = null;
+		//foreach (var npc in Main.npc)
+		//{
+		//	if (npc != null && npc.active)
+		//	{
+		//		Vector2 dis = npc.Center - Main.MouseWorld;
+		//		if (dis.Length() < minDis)
+		//		{
+		//			minDis = dis.Length();
+		//			target = npc;
+		//		}
+		//	}
+		//}
+		//Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>(),20, 0f, Main.myPlayer);
+		//(p0.ModProjectile as LargeBloodLanternGhost_Tentacles).OwnerNPC = target;
 
 		//float addValue = Main.rand.NextFloat(6.283f);
 		//for (int x = 0; x < 5; x++)

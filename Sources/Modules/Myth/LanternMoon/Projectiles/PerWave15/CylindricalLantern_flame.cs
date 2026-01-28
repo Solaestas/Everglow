@@ -44,10 +44,10 @@ public class CylindricalLantern_flame : ModProjectile
 		{
 			targetPos = player.Center;
 		}
-		int continueTimer = 60;
+		int continueTimer = 120;
 		if (Timer < continueTimer)
 		{
-			if (Projectile.timeLeft % 7 == 0)
+			if (Projectile.timeLeft % 18 == 0)
 			{
 				var entity = new MovingEntity();
 				entity.Position = Projectile.Center;

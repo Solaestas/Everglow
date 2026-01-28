@@ -1,16 +1,11 @@
-using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.LanternMoon.LanternCommon;
+using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class CylindricalLantern : ModNPC
+public class CylindricalLantern : LanternMoonNPC
 {
-	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-
-	public float LanternMoonScore = 3f;
-
 	public float FadeTimer = 0f;
 
 	public float TeleportTimer = 0f;
@@ -24,14 +19,15 @@ public class CylindricalLantern : ModNPC
 		NPC.npcSlots = 2.5f;
 		NPC.width = 40;
 		NPC.height = 60;
-		NPC.defense = 0;
+		NPC.defense = 8;
 		NPC.value = 0;
 		NPC.aiStyle = -1;
-		NPC.knockBackResist = 0.2f;
+		NPC.knockBackResist = 0.7f;
 		NPC.dontTakeDamage = false;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
+		LanternMoonScore = 8f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -43,6 +39,11 @@ public class CylindricalLantern : ModNPC
 
 	public override void AI()
 	{
+		if (Main.dayTime)
+		{
+			NPC.velocity.Y += 1;
+			return;
+		}
 		TeleportTimer++;
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
@@ -65,10 +66,13 @@ public class CylindricalLantern : ModNPC
 		float distance = (player.Center - NPC.Center).Length();
 		if (TeleportTimer > TeleportMax || (distance < 220 && TeleportTimer > 120) || (distance > 800))
 		{
-			TeleportTimer = 0;
-			FadeTimer = 60;
-			NPC.velocity *= 0;
-			TeleportMax = Main.rand.NextFloat(360, 1000);
+			if(FadeTimer == 0)
+			{
+				TeleportTimer = 0;
+				FadeTimer = 60;
+				NPC.velocity *= 0;
+				TeleportMax = Main.rand.NextFloat(360, 1000);
+			}
 		}
 
 		// Fade and teleport
@@ -128,8 +132,28 @@ public class CylindricalLantern : ModNPC
 			Main.dust[r].noGravity = true;
 			Main.dust[r].velocity = v3;
 		}
+		for (int g = 0; g < 8; g++)
+		{
+			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+			string texturePath = ModAsset.LargeBloodLanternGhost_Gore_0_Mod;
+			if (texturePath is not null)
+			{
+				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+				texturePath += g;
+			}
+			var gore = new NormalGore
+			{
+				Velocity = vel,
+				Position = NPC.Center + vel,
+				Texture = ModContent.Request<Texture2D>(texturePath).Value,
+				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+				Scale = Main.rand.NextFloat(0.8f, 1.2f),
+				MaxTime = Main.rand.Next(300, 340),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			};
+			Ins.VFXManager.Add(gore);
+		}
 		NPC.active = false;
-		LanternMoon.AddPoint(LanternMoonScore);
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

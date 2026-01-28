@@ -8,7 +8,7 @@ using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class GreenFlameLantern : ModNPC
+public class GreenFlameLantern : LanternMoonNPC
 {
 	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 

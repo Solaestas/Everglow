@@ -1,16 +1,10 @@
 using Everglow.Myth.LanternMoon.Gores;
-using Everglow.Myth.LanternMoon.LanternCommon;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class EvilLantern : ModNPC
+public class EvilLantern : LanternMoonNPC
 {
-	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-
-	public float LanternMoonScore = 1f;
-
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 8;
@@ -26,11 +20,12 @@ public class EvilLantern : ModNPC
 		NPC.defense = 6;
 		NPC.value = 0;
 		NPC.aiStyle = -1;
-		NPC.knockBackResist = 0.6f;
+		NPC.knockBackResist = 0.9f;
 		NPC.dontTakeDamage = false;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
+		LanternMoonScore = 3f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -41,6 +36,13 @@ public class EvilLantern : ModNPC
 
 	public override void AI()
 	{
+		if (Main.dayTime)
+		{
+			NPC.velocity.Y += 1;
+			float lightValue = MathF.Sin(NPC.ai[0] * 0.03f + NPC.whoAmI) * 0.5f + 0.5f;
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.7f, 0.6f) * lightValue);
+			return;
+		}
 		NPC.TargetClosest(true);
 		Player player = Main.player[NPC.target];
 
@@ -52,15 +54,7 @@ public class EvilLantern : ModNPC
 		{
 			NPC.velocity += v / v.Length() * 0.35f;
 		}
-
 		NPC.velocity *= 0.96f;
-
-		if (Main.dayTime)
-		{
-			NPC.velocity.Y += 1;
-		}
-		float lightValue = MathF.Sin(NPC.ai[0] * 0.03f + NPC.whoAmI) * 0.5f + 0.5f;
-		Lighting.AddLight(NPC.Center, new Vector3(1f, 0.7f, 0.6f) * lightValue);
 	}
 
 	public override void FindFrame(int frameHeight)
@@ -130,8 +124,6 @@ public class EvilLantern : ModNPC
 				};
 				Ins.VFXManager.Add(gore5);
 			}
-			LanternMoon.AddPoint(LanternMoonScore);
-
 			for (int f = 0; f < 8; f++)
 			{
 				Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);

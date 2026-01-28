@@ -16,6 +16,8 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public List<int>[] WaveEnemiesType = new List<int>[40];
 
+	public Dictionary<int, float> NPCSpawnChance = new Dictionary<int, float>();
+
 	/// <summary>
 	/// Total point account from the beginning.
 	/// </summary>
@@ -29,32 +31,32 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 	public void Initialization()
 	{
 		// Total: 40 Waves
-		ScoreRequireOfWave[0] = 100;
-		ScoreRequireOfWave[1] = 150;
-		ScoreRequireOfWave[2] = 200;
-		ScoreRequireOfWave[3] = 250;
-		ScoreRequireOfWave[4] = 300;
-		ScoreRequireOfWave[5] = 400;
-		ScoreRequireOfWave[6] = 500;
-		ScoreRequireOfWave[7] = 500;
-		ScoreRequireOfWave[8] = 600; // 3000
-		ScoreRequireOfWave[9] = 600;
-		ScoreRequireOfWave[10] = 600;
-		ScoreRequireOfWave[11] = 800; // 5000
-		ScoreRequireOfWave[12] = 1000;
-		ScoreRequireOfWave[13] = 1500; // 7000
-		ScoreRequireOfWave[14] = 2500; // 10000
+		ScoreRequireOfWave[0] = 25;
+		ScoreRequireOfWave[1] = 40;
+		ScoreRequireOfWave[2] = 50;
+		ScoreRequireOfWave[3] = 80;
+		ScoreRequireOfWave[4] = 100;
+		ScoreRequireOfWave[5] = 160;
+		ScoreRequireOfWave[6] = 180;
+		ScoreRequireOfWave[7] = 200;
+		ScoreRequireOfWave[8] = 250;
+		ScoreRequireOfWave[9] = 300;
+		ScoreRequireOfWave[10] = 375;
+		ScoreRequireOfWave[11] = 450;
+		ScoreRequireOfWave[12] = 525;
+		ScoreRequireOfWave[13] = 675;
+		ScoreRequireOfWave[14] = 850;
 
-		ScoreRequireOfWave[15] = 1200;
-		ScoreRequireOfWave[16] = 1350;
-		ScoreRequireOfWave[17] = 1400;
-		ScoreRequireOfWave[18] = 1500;
-		ScoreRequireOfWave[19] = 1750;
-		ScoreRequireOfWave[20] = 2000; // 19200
-		ScoreRequireOfWave[21] = 2250;
-		ScoreRequireOfWave[22] = 2750;
-		ScoreRequireOfWave[23] = 3300; // 27500
-		ScoreRequireOfWave[24] = 6000; // 33500
+		ScoreRequireOfWave[15] = 1025;
+		ScoreRequireOfWave[16] = 1325;
+		ScoreRequireOfWave[17] = 1550;
+		ScoreRequireOfWave[18] = 2000;
+		ScoreRequireOfWave[19] = 2250;
+		ScoreRequireOfWave[20] = 2550;
+		ScoreRequireOfWave[21] = 2750;
+		ScoreRequireOfWave[22] = 3000;
+		ScoreRequireOfWave[23] = 3300;
+		ScoreRequireOfWave[24] = 4000;
 
 		ScoreRequireOfWave[25] = 4500;
 		ScoreRequireOfWave[26] = 5300;
@@ -65,28 +67,28 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		ScoreRequireOfWave[31] = 11500;
 		ScoreRequireOfWave[32] = 12600;
 		ScoreRequireOfWave[33] = 15000;
-		ScoreRequireOfWave[34] = 20000; // 131800
+		ScoreRequireOfWave[34] = 20000;
 
 		ScoreRequireOfWave[35] = 123500;
 		ScoreRequireOfWave[36] = 167800;
 		ScoreRequireOfWave[37] = 235500;
-		ScoreRequireOfWave[38] = 341400; // 1000000
+		ScoreRequireOfWave[38] = 341400;
 		ScoreRequireOfWave[39] = 0;
 
 		WaveEnemiesType[0] = new List<int>() { ModContent.NPCType<EvilLantern>() };
 		WaveEnemiesType[1] = new List<int>() { ModContent.NPCType<EvilLantern>() };
 		WaveEnemiesType[2] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[3] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>() };
+		WaveEnemiesType[3] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BloodLanternGhost>() };
 		WaveEnemiesType[4] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>() };
-		WaveEnemiesType[5] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>() };
-		WaveEnemiesType[6] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>() };
-		WaveEnemiesType[7] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>() };
-		WaveEnemiesType[8] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[9] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[10] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[11] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[12] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
-		WaveEnemiesType[13] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>() };
+		WaveEnemiesType[5] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[6] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[7] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[8] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[9] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[10] = new List<int>() { ModContent.NPCType<EvilLantern>(), ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[11] = new List<int>() { ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[12] = new List<int>() { ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
+		WaveEnemiesType[13] = new List<int>() { ModContent.NPCType<BombLantern>(), ModContent.NPCType<CylindricalLantern>(), ModContent.NPCType<LargeBloodLanternGhost>(), ModContent.NPCType<BloodLanternGhost>() };
 		WaveEnemiesType[14] = new List<int>() { ModContent.NPCType<LanternGhostKing>() };
 		WaveEnemiesType[15] = new List<int>() { ModContent.NPCType<EvilLantern>() };
 		WaveEnemiesType[16] = new List<int>() { ModContent.NPCType<EvilLantern>() };
@@ -113,6 +115,15 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		WaveEnemiesType[37] = new List<int>() { ModContent.NPCType<EvilLantern>() };
 		WaveEnemiesType[38] = new List<int>() { ModContent.NPCType<EvilLantern>() };
 		WaveEnemiesType[39] = new List<int>() { ModContent.NPCType<EvilLantern>() };
+
+		if(NPCSpawnChance is null)
+		{
+			NPCSpawnChance = new Dictionary<int, float>();
+		}
+		NPCSpawnChance.Add(ModContent.NPCType<EvilLantern>(), 1f);
+		NPCSpawnChance.Add(ModContent.NPCType<CylindricalLantern>(), 0.5f);
+		NPCSpawnChance.Add(ModContent.NPCType<BombLantern>(), 0.3f);
+		NPCSpawnChance.Add(ModContent.NPCType<LargeBloodLanternGhost>(), 0.25f);
 
 		var messageColor = new Color(175, 75, 255);
 		Color messageColor1 = Color.PaleGreen;

@@ -1,6 +1,6 @@
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class RedPackBomber : ModNPC
+public class RedPackBomber : LanternMoonNPC
 {
 	public override void SetStaticDefaults()
 	{

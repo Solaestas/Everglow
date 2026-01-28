@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Myth.LanternMoon.Gores;
-using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -8,10 +7,8 @@ using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
-public class BombLantern : ModNPC
+public class BombLantern : LanternMoonNPC
 {
-	public LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
-
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 4;
@@ -24,14 +21,15 @@ public class BombLantern : ModNPC
 		NPC.npcSlots = 0.5f;
 		NPC.width = 60;
 		NPC.height = 60;
-		NPC.defense = 10;
+		NPC.defense = 24;
 		NPC.value = 100;
 		NPC.aiStyle = -1;
-		NPC.knockBackResist = 0.2f;
+		NPC.knockBackResist = 0.5f;
 		NPC.dontTakeDamage = false;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
+		LanternMoonScore = 10f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -69,16 +67,21 @@ public class BombLantern : ModNPC
 
 	public override void AI()
 	{
+		if (Main.dayTime)
+		{
+			NPC.velocity.Y += 1;
+			return;
+		}
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
 		float timeValue = (float)(Main.time * 0.12f + NPC.whoAmI * 0.428571f);
 		if (DizzyTime < 0)
 		{
-			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f, 0.3f) * (MathF.Sin(timeValue) * 0.4f + 0.6f) * 0.1f);
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue * 0.03f) + 0.3f, 0.3f * MathF.Cos(timeValue * 0.03f) + 0.3f));
 		}
 		if (ExplosionTimer > 0)
 		{
-			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f, 0.3f) * (MathF.Sin(timeValue) * 0.4f + 0.6f) * 0.1f);
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue * 0.03f) + 0.3f, 0.3f * MathF.Cos(timeValue * 0.03f) + 0.3f));
 		}
 		if (ExplosionTimer > 0)
 		{
@@ -94,7 +97,7 @@ public class BombLantern : ModNPC
 				toPlayer = Vector2.Normalize(toPlayer) * 1000f;
 			}
 
-			if (toPlayer.Length() < 300)
+			if (toPlayer.Length() < 300 + 75 * MathF.Sin(NPC.whoAmI))
 			{
 				NPC.ai[1] = 1;
 				NPC.ai[0] = 0;
@@ -311,8 +314,6 @@ public class BombLantern : ModNPC
 			};
 			Ins.VFXManager.Add(gore5);
 		}
-		LanternMoon.AddPoint(15);
-
 		for (int f = 0; f < 22; f++)
 		{
 			Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -320,8 +321,29 @@ public class BombLantern : ModNPC
 			Main.dust[r].noGravity = true;
 			Main.dust[r].velocity = v3;
 		}
+
+		for (int g = 0; g < 7; g++)
+		{
+			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+			string texturePath = ModAsset.BombLantern_Gore_0_Mod;
+			if (texturePath is not null)
+			{
+				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+				texturePath += g;
+			}
+			var gore = new NormalGore
+			{
+				Velocity = vel,
+				Position = NPC.Center + vel,
+				Texture = ModContent.Request<Texture2D>(texturePath).Value,
+				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+				Scale = Main.rand.NextFloat(0.8f, 1.2f),
+				MaxTime = Main.rand.Next(300, 340),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			};
+			Ins.VFXManager.Add(gore);
+		}
 		NPC.active = false;
-		LanternMoon.AddPoint(60);
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

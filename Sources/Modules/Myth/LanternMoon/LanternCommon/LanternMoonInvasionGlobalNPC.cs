@@ -24,7 +24,12 @@ public class LanternMoonInvasionGlobalNPC : GlobalNPC
 				{
 					foreach (var type in LanternMoon.WaveEnemiesType[LanternMoon.Wave - 1])
 					{
-						pool.Add(type, 1);
+						float spawnRate = 1f;
+						if (LanternMoon.NPCSpawnChance.ContainsKey(type))
+						{
+							LanternMoon.NPCSpawnChance.TryGetValue(type, out spawnRate);
+						}
+						pool.Add(type, spawnRate);
 					}
 				}
 			}

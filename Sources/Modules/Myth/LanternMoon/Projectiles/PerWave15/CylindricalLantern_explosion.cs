@@ -151,8 +151,8 @@ public class CylindricalLantern_explosion : ModProjectile
 			Main.EntitySpriteDraw(star, drawPos + new Vector2(-40 * value, 0), null, drawColor, 0, star.Size() * 0.5f, new Vector2(1f, 4f), SpriteEffects.None, 0);
 
 			float value2 = MathF.Pow(Timer / 60f, 1f);
-			Main.EntitySpriteDraw(trail, drawPos + new Vector2(0, 360 * value2), null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.25f, 0.32f * value), SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(trail, drawPos + new Vector2(0, -360 * value2), null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.25f, 0.32f * value), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(trail, drawPos + new Vector2(0, 360 * value2), null, drawColor * (1 - value), MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.25f, 0.32f * value), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(trail, drawPos + new Vector2(0, -360 * value2), null, drawColor * (1 - value), MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.25f, 0.32f * value), SpriteEffects.None, 0);
 		}
 		if (Timer >= 60 && Timer < 90)
 		{
