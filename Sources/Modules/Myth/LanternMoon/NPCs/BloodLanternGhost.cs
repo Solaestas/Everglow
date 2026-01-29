@@ -1,4 +1,5 @@
 using Everglow.Myth.LanternMoon.Gores;
+using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
@@ -9,7 +10,7 @@ public class BloodLanternGhost : LanternMoonNPC
 
 	public int Timer;
 
-	public int TeleportTime = 300;
+	public int MoveTime = 300;
 
 	public override void SetStaticDefaults()
 	{
@@ -26,8 +27,7 @@ public class BloodLanternGhost : LanternMoonNPC
 		NPC.defense = 24;
 		NPC.value = 200;
 		NPC.aiStyle = -1;
-		NPC.knockBackResist = 0.8f;
-		NPC.dontTakeDamage = false;
+		NPC.knockBackResist = 1.5f;
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
@@ -75,14 +75,41 @@ public class BloodLanternGhost : LanternMoonNPC
 			}
 			StayPosition = player.Center + toPlayer;
 		}
-		if(Timer > 1)
+		if(Timer > 1 && Timer < 60)
 		{
 			NPC.Center = Vector2.Lerp(NPC.Center, StayPosition, 0.02f);
 		}
-		NPC.velocity *= 0.95f;
-		if (Timer > TeleportTime)
+		else
 		{
-			TeleportTime = Main.rand.Next(300, 500);
+			foreach (NPC npc in Main.npc)
+			{
+				if (npc != null && npc.active && npc != NPC)
+				{
+					if (npc.type == Type)
+					{
+						Vector2 v0 = NPC.Center - npc.Center;
+						if (v0.Length() < 60)
+						{
+							NPC.velocity += Vector2.Normalize(v0) * 2.5f;
+						}
+					}
+				}
+			}
+		}
+		if(Timer == 60)
+		{
+			NPC.velocity *= 0;
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.zeroVector, ModContent.ProjectileType<BloodLanternGhost_PowerBall>(), 20, 0f, Main.myPlayer);
+			BloodLanternGhost_PowerBall bLGPB = p0.ModProjectile as BloodLanternGhost_PowerBall;
+			if(bLGPB is not null)
+			{
+				bLGPB.OwnerNPC = NPC;
+			}
+		}
+		NPC.velocity *= 0.95f;
+		if (Timer > MoveTime)
+		{
+			MoveTime = Main.rand.Next(300, 500);
 			Timer = 0;
 		}
 	}

@@ -45,9 +45,9 @@ public class CylindricalLantern_flame : ModProjectile
 			targetPos = player.Center;
 		}
 		int continueTimer = 120;
-		if (Timer < continueTimer)
+		if (Timer <= continueTimer)
 		{
-			if (Projectile.timeLeft % 18 == 0)
+			if (Projectile.timeLeft % 60 == 0)
 			{
 				var entity = new MovingEntity();
 				entity.Position = Projectile.Center;
@@ -79,8 +79,8 @@ public class CylindricalLantern_flame : ModProjectile
 
 	public override void AI()
 	{
-		Timer++;
 		UpdateEntity();
+		Timer++;
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

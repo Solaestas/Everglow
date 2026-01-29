@@ -1,7 +1,3 @@
-
-
-using Spine;
-
 namespace Everglow.Myth.LanternMoon.LanternCommon;
 
 public class LanternMoonInvasionGlobalNPC : GlobalNPC
@@ -20,16 +16,13 @@ public class LanternMoonInvasionGlobalNPC : GlobalNPC
 			}
 			if (LanternMoon.Active && LanternMoon.Wave > 0 && LanternMoon.WaveEnemiesType[LanternMoon.Wave - 1] is not null)
 			{
-				if(LanternMoon.Wave != 15)
+				if (LanternMoon.Wave != 15)
 				{
-					foreach (var type in LanternMoon.WaveEnemiesType[LanternMoon.Wave - 1])
+					foreach (var typeAndChance in LanternMoon.WaveEnemiesType[LanternMoon.Wave - 1])
 					{
-						float spawnRate = 1f;
-						if (LanternMoon.NPCSpawnChance.ContainsKey(type))
-						{
-							LanternMoon.NPCSpawnChance.TryGetValue(type, out spawnRate);
-						}
-						pool.Add(type, spawnRate);
+						int type = typeAndChance.Type;
+						float rate = typeAndChance.Chance;
+						pool.Add(type, rate);
 					}
 				}
 			}
@@ -41,7 +34,7 @@ public class LanternMoonInvasionGlobalNPC : GlobalNPC
 	{
 		if (LanternMoon is not null && LanternMoon.Active)
 		{
-			if(spawnRate > 0)
+			if (spawnRate > 0)
 			{
 				spawnRate /= 15;
 				maxSpawns = 60;

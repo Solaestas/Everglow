@@ -121,7 +121,7 @@ public class LanternBombRemoteControl : ModItem
 		//		}
 		//	}
 		//}
-		//Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>(),20, 0f, Main.myPlayer);
+		Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(),20, 0f, Main.myPlayer, 1);
 		//(p0.ModProjectile as LargeBloodLanternGhost_Tentacles).OwnerNPC = target;
 
 		//float addValue = Main.rand.NextFloat(6.283f);

@@ -144,7 +144,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 								}
 							}
 						}
-						if (Timer > 500)
+						if (Timer > 200)
 						{
 							SwitchState();
 						}

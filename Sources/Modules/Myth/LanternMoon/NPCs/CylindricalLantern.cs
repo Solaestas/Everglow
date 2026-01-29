@@ -55,7 +55,7 @@ public class CylindricalLantern : LanternMoonNPC
 		NPC.velocity *= 0;
 		if (TeleportTimer == 30)
 		{
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<CylindricalLantern_flame>(), 23, 1f, player.whoAmI);
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<CylindricalLantern_flame>(), 9, 1f, player.whoAmI);
 		}
 		if (TeleportTimer > 100)
 		{
