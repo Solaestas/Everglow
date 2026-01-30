@@ -24,6 +24,8 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 
 	public int ClosingTimeMax = 300;
 
+	public Vector2 SummonPos = Vector2.zeroVector;
+
 	public override void SetDefaults()
 	{
 		NPC.damage = 75;
@@ -39,7 +41,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		LanternMoonScore = 15f;
+		LanternMoonScore = 35f;
 	}
 
 	public override void FindFrame(int frameHeight)
@@ -125,8 +127,12 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 				}
 			case (int)BehaviorState.Summon:
 				{
-					if (Timer < 25)
+					if (Timer < 35)
 					{
+						if(SummonPos != Vector2.zeroVector)
+						{
+							NPC.Center = Vector2.Lerp(NPC.Center, player.Center + SummonPos, 0.05f);
+						}
 						NPC.velocity *= 0.95f;
 					}
 					else
@@ -134,14 +140,11 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 						NPC.velocity *= 0;
 						if (Timer == 40)
 						{
-							for (int i = 0; i < 5; i++)
+							Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Matrix_Summon>(), 0, 0f, Main.myPlayer);
+							LargeBloodLanternGhost_Matrix_Summon lBLGMS = p1.ModProjectile as LargeBloodLanternGhost_Matrix_Summon;
+							if (lBLGMS is not null)
 							{
-								Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(0, -5).RotatedBy(i / 5f * MathHelper.TwoPi), ModContent.ProjectileType<LargeBloodLanternGhost_Minion>(), 20, 0f, Main.myPlayer);
-								LargeBloodLanternGhost_Minion lBLGM = p0.ModProjectile as LargeBloodLanternGhost_Minion;
-								if (lBLGM is not null)
-								{
-									lBLGM.OwnerNPC = NPC;
-								}
+								lBLGMS.OwnerNPC = NPC;
 							}
 						}
 						if (Timer > 200)
@@ -156,6 +159,17 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 					NPC.velocity *= 0.95f;
 					var toTarget = player.Center - NPC.Center - NPC.velocity;
 					NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * 0.1f + NPC.velocity * 0.9f;
+					if (NPC.velocity.Length() > 0.5f)
+					{
+						NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
+					}
+					if(Timer < 60)
+					{
+						if(toTarget.Length() > 200)
+						{
+							NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * 0.8f + NPC.velocity * 0.9f;
+						}
+					}
 					if (Timer == 60)
 					{
 						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>(), 20, 0f, Main.myPlayer);
@@ -177,7 +191,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 
 	public void SwitchState()
 	{
-		int newState = Main.rand.Next(2);
+		int newState = Main.rand.Next(3);
 		if (State == newState)
 		{
 			State = newState + 1;
@@ -189,6 +203,10 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 		else
 		{
 			State = newState;
+		}
+		if(State == 1)
+		{
+			SummonPos = new Vector2(0, -Main.rand.NextFloat(480, 540)).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 		}
 		ClosingTimeMax = Main.rand.Next(150, 300);
 		Timer = 0;

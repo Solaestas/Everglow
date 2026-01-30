@@ -63,6 +63,14 @@ public class CylindricalLantern_flame : ModProjectile
 			if (entity.Active)
 			{
 				entity.Position += entity.Velocity;
+				if (Collision.IsWorldPointSolid(entity.Position))
+				{
+					if(entity.TimeLeft > 30)
+					{
+						entity.TimeLeft = 30;
+					}
+					entity.Velocity *= 0;
+				}
 				entity.TimeLeft--;
 				if (entity.TimeLeft <= 0)
 				{

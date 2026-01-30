@@ -135,7 +135,7 @@ public class CylindricalLantern : LanternMoonNPC
 		for (int g = 0; g < 8; g++)
 		{
 			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
-			string texturePath = ModAsset.LargeBloodLanternGhost_Gore_0_Mod;
+			string texturePath = ModAsset.CylindricalLantern_Gore_0_Mod;
 			if (texturePath is not null)
 			{
 				texturePath = texturePath.Remove(texturePath.Length - 1, 1);

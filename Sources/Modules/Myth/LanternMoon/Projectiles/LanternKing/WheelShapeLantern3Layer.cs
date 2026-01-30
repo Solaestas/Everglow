@@ -49,14 +49,14 @@ public class WheelShapeLantern3Layer : ModProjectile
 			float frequency = 6;
 			if (Main.expertMode)
 			{
-				frequency = 12;
+				frequency = 9;
 			}
 			if (Timer is 60)
 			{
 				frequency = 9;
 				if (Main.expertMode)
 				{
-					frequency = 24;
+					frequency = 15;
 				}
 			}
 			if (Timer is 90)
@@ -64,7 +64,7 @@ public class WheelShapeLantern3Layer : ModProjectile
 				frequency = 15;
 				if (Main.expertMode)
 				{
-					frequency = 36;
+					frequency = 24;
 				}
 			}
 			float range = 50 + Timer / 30 * 50;

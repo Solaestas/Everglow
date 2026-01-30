@@ -1,11 +1,7 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Myth.LanternMoon.Gores;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Everglow.Myth.LanternMoon.VFX;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
@@ -16,6 +12,7 @@ public class GreenFlameLantern : LanternMoonNPC
 	public int Timer;
 
 	public int MoveTime = 300;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 5;
@@ -24,11 +21,11 @@ public class GreenFlameLantern : LanternMoonNPC
 	public override void SetDefaults()
 	{
 		NPC.damage = 75;
-		NPC.lifeMax = 630;
+		NPC.lifeMax = 1400;
 		NPC.npcSlots = 2.5f;
 		NPC.width = 60;
 		NPC.height = 60;
-		NPC.defense = 15;
+		NPC.defense = 55;
 		NPC.value = 200;
 		NPC.aiStyle = -1;
 		NPC.knockBackResist = 0.2f;
@@ -36,7 +33,7 @@ public class GreenFlameLantern : LanternMoonNPC
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		LanternMoonScore = 16;
+		LanternMoonScore = 40;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -86,9 +83,14 @@ public class GreenFlameLantern : LanternMoonNPC
 		if (Timer >= 60 && Timer % 150 == 0)
 		{
 			Vector2 v0 = new Vector2(0, 3).RotatedBy(Timer + NPC.whoAmI);
-			for(int i = 0;i < 4;i++)
+			for (int i = 0; i < 4; i++)
 			{
 				Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Top, v0.RotatedBy(i / 4f * MathHelper.TwoPi), ModContent.ProjectileType<GreenFlameProj>(), 20, 0f, Main.myPlayer);
+				GreenFlameProj gFP = p0.ModProjectile as GreenFlameProj;
+				if (gFP is not null)
+				{
+					gFP.OwnerNPC = NPC;
+				}
 			}
 		}
 		NPC.velocity *= 0.95f;
@@ -105,6 +107,11 @@ public class GreenFlameLantern : LanternMoonNPC
 
 	public override void OnKill()
 	{
+		KillEffect(NPC.Center);
+	}
+
+	public void KillEffect(Vector2 pos)
+	{
 		for (int g = 0; g < 12; g++)
 		{
 			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
@@ -117,7 +124,7 @@ public class GreenFlameLantern : LanternMoonNPC
 			var gore = new NormalGore
 			{
 				Velocity = vel,
-				Position = NPC.Center + vel,
+				Position = pos + vel * 6,
 				Texture = ModContent.Request<Texture2D>(texturePath).Value,
 				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
 				Scale = Main.rand.NextFloat(0.8f, 1.2f),
@@ -125,6 +132,115 @@ public class GreenFlameLantern : LanternMoonNPC
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 			};
 			Ins.VFXManager.Add(gore);
+		}
+
+		for (int g = 0; g < 20; g++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 15).RotatedByRandom(MathHelper.TwoPi);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2.4f;
+			offsetPos *= 6;
+			var sparkFlame = new GreenLanternFragment
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + offsetPos,
+				RotateSpeed = Main.rand.NextFloat(-0.3f, 0.3f),
+				Rotate2Speed = Main.rand.NextFloat(-0.5f, 0.5f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(105, 150),
+				Scale = Main.rand.NextFloat(0.6f, 1f),
+				Frame = Main.rand.Next(0, 4),
+				Gravity = true,
+			};
+			Ins.VFXManager.Add(sparkFlame);
+		}
+		for (int x = 0; x < 20; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 25).RotatedByRandom(MathHelper.TwoPi);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new GreenLanternRedStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(80, 160),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+				Gravity = true,
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		for (int x = 0; x < 15; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 12).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new GreenLanternCyanStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(0, -30) + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(50, 100),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		for (int u = 0; u < 15; u++)
+		{
+			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 16f).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new LanternFlameDust
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 45),
+				Scale = Main.rand.NextFloat(50f, 120f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int u = 0; u < 8; u++)
+		{
+			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 8f).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new GreenLanternFlame
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(0, -30) + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 45),
+				Scale = Main.rand.NextFloat(50f, 70f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 vel = new Vector2(0, -5).RotatedBy(i / 8f * MathHelper.TwoPi);
+			if (i % 2 == 1)
+			{
+				vel *= 0.65f;
+			}
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GreenFlameSharpCrystal>(), 20, 1, Main.myPlayer);
 		}
 	}
 

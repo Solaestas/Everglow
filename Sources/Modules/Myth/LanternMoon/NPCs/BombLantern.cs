@@ -29,7 +29,7 @@ public class BombLantern : LanternMoonNPC
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		LanternMoonScore = 10f;
+		LanternMoonScore = 18f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -74,14 +74,25 @@ public class BombLantern : LanternMoonNPC
 		}
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
-		float timeValue = (float)(Main.time * 0.12f + NPC.whoAmI * 0.428571f);
-		if (DizzyTime < 0)
+		float timeValue = (float)(Main.time * 0.12f + NPC.whoAmI * 0.428571f) * 0.3f;
+		if (DizzyTime <= 120)
 		{
-			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue * 0.03f) + 0.3f, 0.3f * MathF.Cos(timeValue * 0.03f) + 0.3f));
+			float value = 1f;
+			if(DizzyTime > 0)
+			{
+				value = 1 - DizzyTime / 120f;
+			}
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue) + 0.3f, 0.3f * MathF.Cos(timeValue) + 0.3f) * 1.8f * value);
+		}
+		if (DizzyLightUpTime > 0)
+		{
+			float value = DizzyLightUpTime / 15f;
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue) + 0.3f, 0.3f * MathF.Cos(timeValue) + 0.3f) * value * 6);
+			DizzyLightUpTime--;
 		}
 		if (ExplosionTimer > 0)
 		{
-			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue * 0.03f) + 0.3f, 0.3f * MathF.Cos(timeValue * 0.03f) + 0.3f));
+			Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(timeValue) + 0.3f, 0.3f * MathF.Cos(timeValue) + 0.3f));
 		}
 		if (ExplosionTimer > 0)
 		{
@@ -154,12 +165,14 @@ public class BombLantern : LanternMoonNPC
 						NPC.velocity.X *= -0.7f;
 						NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
 						DizzyTime = 240;
+						DizzyLightUpTime = 15;
 					}
 					if (Collision.SolidCollision(NPC.position + new Vector2(0, NPC.velocity.Y), NPC.width, NPC.height))
 					{
 						NPC.velocity.Y *= -0.7f;
 						NPC.ai[2] = Main.rand.NextFloat(-1.4f, 1.4f);
 						DizzyTime = 240;
+						DizzyLightUpTime = 15;
 					}
 				}
 			}
@@ -168,8 +181,12 @@ public class BombLantern : LanternMoonNPC
 				UpdateDizzyAI();
 			}
 		}
-		Tail0 = NPC.Center + new Vector2(0, 30).RotatedBy(NPC.rotation);
+		UpdateTail();
+	}
 
+	public void UpdateTail()
+	{
+		Tail0 = NPC.Center + new Vector2(0, 30).RotatedBy(NPC.rotation);
 		Vector2 addVecGrav = new Vector2(0, 10);
 		if (TileUtils.PlatformCollision(Tail1))
 		{
@@ -240,6 +257,7 @@ public class BombLantern : LanternMoonNPC
 		ExplosionTimer--;
 		NPC.scale += 0.01f;
 		NPC.velocity *= 0.92f;
+		UpdateTail();
 		if (ExplosionTimer > 20 && NPC.Center.Y > player.Center.Y)
 		{
 			NPC.velocity.Y -= 2.7f;
@@ -252,6 +270,7 @@ public class BombLantern : LanternMoonNPC
 	}
 
 	public int DizzyTime = -1;
+	public int DizzyLightUpTime = 0;
 	public int ExplosionTimer = -1;
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
@@ -275,45 +294,7 @@ public class BombLantern : LanternMoonNPC
 		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 55, 0.6f, NPC.target, 1);
 
 		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(0.4f), NPC.Center);
-		for (int f = 0; f < 2; f++)
-		{
-			var gore2 = new EvilLanternGore3
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center,
-			};
-			Ins.VFXManager.Add(gore2);
-			var gore3 = new EvilLanternGore4
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center,
-			};
-			Ins.VFXManager.Add(gore3);
-			var gore4 = new EvilLanternGore5
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center,
-			};
-			Ins.VFXManager.Add(gore4);
-			var gore5 = new EvilLanternGore6
-			{
-				Active = true,
-				Visible = true,
-				velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
-				noGravity = false,
-				position = NPC.Center,
-			};
-			Ins.VFXManager.Add(gore5);
-		}
+
 		for (int f = 0; f < 22; f++)
 		{
 			Vector2 v3 = new Vector2(0, Main.rand.NextFloat(0, 12f)).RotatedByRandom(MathHelper.TwoPi);
@@ -381,6 +362,16 @@ public class BombLantern : LanternMoonNPC
 		if (ExplosionTimer > 0)
 		{
 			float deathValue = 1 - ExplosionTimer / 30f;
+			Color glow1C = new Color(deathValue, deathValue * deathValue, deathValue * deathValue * deathValue, 0);
+			for (int t = 0; t < deathValue * 6; t++)
+			{
+				spriteBatch.Draw(glow1, NPC.Center - Main.screenPosition, NPC.frame, glow1C, NPC.rotation, new Vector2(72), NPC.scale, effects, 0);
+			}
+		}
+
+		if(DizzyLightUpTime > 0)
+		{
+			float deathValue = ExplosionTimer / 15f;
 			Color glow1C = new Color(deathValue, deathValue * deathValue, deathValue * deathValue * deathValue, 0);
 			for (int t = 0; t < deathValue * 6; t++)
 			{

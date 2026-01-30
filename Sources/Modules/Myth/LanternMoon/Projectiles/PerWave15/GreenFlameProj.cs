@@ -1,10 +1,14 @@
 using Everglow.Commons.Templates.Weapons;
+using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.VFX;
+using Terraria;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 
 public class GreenFlameProj : TrailingProjectile
 {
+	public NPC OwnerNPC;
+
 	public override void SetCustomDefaults()
 	{
 		TrailColor = new Color(0, 0.7f, 1, 0f);
@@ -16,14 +20,53 @@ public class GreenFlameProj : TrailingProjectile
 		TrailTextureBlack = Commons.ModAsset.Trail_10_black.Value;
 		TrailShader = Commons.ModAsset.Trailing.Value;
 		Projectile.timeLeft = 300;
+		Projectile.width = 10;
+		Projectile.height = 10;
 		Projectile.friendly = false;
 		Projectile.hostile = true;
 	}
 
 	public override void Behaviors()
 	{
-		Projectile.velocity = Projectile.velocity.RotatedBy(MathF.Sin((float)Main.time * 0.3f + Projectile.whoAmI) * 0.3f);
-		if(Projectile.timeLeft > 60)
+		float minDis = 120;
+		NPC targetNPC = null;
+		foreach (var npc in Main.npc)
+		{
+			if (npc is not null && npc.active)
+			{
+				if (npc.ModNPC is LanternMoonNPC && npc != OwnerNPC && npc.life < npc.lifeMax)
+				{
+					Vector2 toTarget = npc.Center - Projectile.Center;
+					if(toTarget.Length() < minDis)
+					{
+						minDis = toTarget.Length();
+						targetNPC = npc;
+					}
+				}
+			}
+		}
+		if(targetNPC is null)
+		{
+			Projectile.velocity = Projectile.velocity.RotatedBy(MathF.Sin((float)Main.time * 0.3f) * 0.3f);
+		}
+		else
+		{
+			Vector2 toTarget = targetNPC.Center - Projectile.Center - Projectile.velocity;
+			if(toTarget.Length() < 20 && TimeAfterEntityDestroy < 0)
+			{
+				int healAmount = Main.rand.Next(75, 125);
+				targetNPC.life += healAmount;
+				if(targetNPC.life > targetNPC.lifeMax)
+				{
+					targetNPC.life = targetNPC.lifeMax;
+				}
+				targetNPC.HealEffect(healAmount);
+				DestroyEntity();
+			}
+			toTarget = toTarget.NormalizeSafe() * 4f;
+			Projectile.velocity = Projectile.velocity * 0.9f + toTarget * 0.1f;
+		}
+		if (Projectile.timeLeft > 60)
 		{
 			Vector2 newVelocity = Projectile.velocity * 0.5f;
 			var sparkFlame = new GreenLanternFlameDust
@@ -68,7 +111,7 @@ public class GreenFlameProj : TrailingProjectile
 	public override void DrawSelf()
 	{
 		float fade = 1f;
-		if(Projectile.timeLeft < 60f)
+		if (Projectile.timeLeft < 60f)
 		{
 			fade *= Projectile.timeLeft / 60f;
 		}
@@ -98,7 +141,7 @@ public class GreenFlameProj : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style is 0 or 1)
+		if (style is 0 or 1)
 		{
 			float fade = 1f;
 			if (Projectile.timeLeft < 60f)

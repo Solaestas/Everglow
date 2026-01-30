@@ -220,7 +220,7 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public void UpdateWave15()
 	{
-		if (Wave15Boss == null || !Wave15Boss.active)
+		if (Wave15Boss == null || !Wave15Boss.active || Wave15Boss.type != ModContent.NPCType<LanternGhostKing>())
 		{
 			int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
 			int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);

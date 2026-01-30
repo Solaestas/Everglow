@@ -18,7 +18,10 @@ public class EventSystem : ModSystem
 		{
 			DrawInvasionProgress_Vanilla();
 		}
-
+		if (Main.HealthBarDrawSettings != 0)
+		{
+			Main.BigBossProgressBar.Draw(Main.spriteBatch);
+		}
 		return true;
 	});
 
@@ -50,11 +53,6 @@ public class EventSystem : ModSystem
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin();
 		Main.DrawInvasionProgress();
-		if (Main.HealthBarDrawSettings != 0)
-		{
-			Main.BigBossProgressBar.Draw(Main.spriteBatch);
-		}
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}

@@ -31,7 +31,7 @@ public class BloodLanternGhost : LanternMoonNPC
 		NPC.noGravity = true;
 		NPC.noTileCollide = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		LanternMoonScore = 12f;
+		LanternMoonScore = 22f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -66,13 +66,14 @@ public class BloodLanternGhost : LanternMoonNPC
 		Player player = Main.player[NPC.target];
 		if (StayPosition == Vector2.zeroVector || Timer == 1)
 		{
-			Vector2 toPlayer = player.Center - NPC.Center;
-			toPlayer = -toPlayer.NormalizeSafe() * Main.rand.NextFloat(180, 420);
-			toPlayer = toPlayer.RotatedByRandom(MathHelper.PiOver4);
-			if (toPlayer.Y > 0)
-			{
-				toPlayer.Y *= -1;
-			}
+			Vector2 toPlayer = new Vector2(0, -Main.rand.NextFloat(180, 420)).RotatedByRandom(0.75f);
+			//	player.Center - NPC.Center;
+			//toPlayer = -toPlayer.NormalizeSafe() * Main.rand.NextFloat(180, 420);
+			//toPlayer = toPlayer.RotatedByRandom(MathHelper.PiOver4);
+			//if (toPlayer.Y > 0)
+			//{
+			//	toPlayer.Y *= -1;
+			//}
 			StayPosition = player.Center + toPlayer;
 		}
 		if(Timer > 1 && Timer < 60)
@@ -106,6 +107,7 @@ public class BloodLanternGhost : LanternMoonNPC
 				bLGPB.OwnerNPC = NPC;
 			}
 		}
+		Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(Timer * 0.03f) + 0.3f, 0.3f * MathF.Cos(Timer * 0.03f) + 0.3f) * 0.6f);
 		NPC.velocity *= 0.95f;
 		if (Timer > MoveTime)
 		{

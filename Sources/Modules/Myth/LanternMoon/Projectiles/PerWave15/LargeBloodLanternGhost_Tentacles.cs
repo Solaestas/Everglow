@@ -1,5 +1,7 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.NPCs;
+using Terraria;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 
@@ -126,6 +128,34 @@ public class LargeBloodLanternGhost_Tentacles : ModProjectile
 		}
 		else
 		{
+			foreach(var tentacle in TentacleEntities)
+			{
+				for (int g = 0; g < 3; g++)
+				{
+					if (tentacle.Joints.Count > 8)
+					{
+						Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 3f, 0).RotatedByRandom(MathHelper.TwoPi);
+						string texturePath = ModAsset.LargeBloodLanternGhostTentacle_Gore_0_Mod;
+						if (texturePath is not null)
+						{
+							texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+							texturePath += g;
+						}
+						Vector2 pos = tentacle.Joints[^1] * g / 3f + Projectile.Center;
+						var gore = new NormalGore
+						{
+							Velocity = vel,
+							Position = pos,
+							Texture = ModContent.Request<Texture2D>(texturePath).Value,
+							RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+							Scale = Main.rand.NextFloat(0.8f, 1.2f),
+							MaxTime = Main.rand.Next(300, 340),
+							Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+						};
+						Ins.VFXManager.Add(gore);
+					}
+				}
+			}
 			Projectile.Kill();
 		}
 	}

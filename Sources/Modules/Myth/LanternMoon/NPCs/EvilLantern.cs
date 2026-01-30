@@ -67,60 +67,74 @@ public class EvilLantern : LanternMoonNPC
 	{
 		if (NPC.life <= 0)
 		{
-			var gore0 = new EvilLanternGore1
+			var gore0 = new BurningLanternGore
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
 				position = NPC.Center,
+				Texture = ModAsset.EvilLanternGore1S.Value,
+				DissolveAnimationTexture = ModAsset.EvilLanternGore1G.Value,
+				NoDissolvePartTexture = ModAsset.EvilLanternGore1B.Value,
 			};
 			Ins.VFXManager.Add(gore0);
-			var gore1 = new EvilLanternGore2
+			var gore1 = new BurningLanternGore
 			{
 				Active = true,
 				Visible = true,
 				velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
 				noGravity = false,
 				position = NPC.Center,
+				Texture = ModAsset.EvilLanternGore2S.Value,
+				DissolveAnimationTexture = ModAsset.EvilLanternGore2G.Value,
+				NoDissolvePartTexture = ModAsset.EvilLanternGore2B.Value,
 			};
 			Ins.VFXManager.Add(gore1);
 			for (int f = 0; f < 2; f++)
 			{
-				var gore2 = new EvilLanternGore3
+				var gore2 = new BurningLanternGore
 				{
 					Active = true,
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 					noGravity = false,
 					position = NPC.Center,
+					Texture = ModAsset.EvilLanternGore3S.Value,
+					DissolveAnimationTexture = ModAsset.EvilLanternGore3G.Value,
 				};
 				Ins.VFXManager.Add(gore2);
-				var gore3 = new EvilLanternGore4
+				var gore3 = new BurningLanternGore
 				{
 					Active = true,
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 					noGravity = false,
 					position = NPC.Center,
+					Texture = ModAsset.EvilLanternGore4S.Value,
+					DissolveAnimationTexture = ModAsset.EvilLanternGore4G.Value,
 				};
 				Ins.VFXManager.Add(gore3);
-				var gore4 = new EvilLanternGore5
+				var gore4 = new BurningLanternGore
 				{
 					Active = true,
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 					noGravity = false,
 					position = NPC.Center,
+					Texture = ModAsset.EvilLanternGore5S.Value,
+					DissolveAnimationTexture = ModAsset.EvilLanternGore5G.Value,
 				};
 				Ins.VFXManager.Add(gore4);
-				var gore5 = new EvilLanternGore6
+				var gore5 = new BurningLanternGore
 				{
 					Active = true,
 					Visible = true,
 					velocity = new Vector2(Main.rand.NextFloat(0, 21), 0).RotatedByRandom(6.283),
 					noGravity = false,
 					position = NPC.Center,
+					Texture = ModAsset.EvilLanternGore6S.Value,
+					DissolveAnimationTexture = ModAsset.EvilLanternGore6G.Value,
 				};
 				Ins.VFXManager.Add(gore5);
 			}

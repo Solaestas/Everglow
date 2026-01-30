@@ -1,4 +1,4 @@
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
@@ -89,72 +89,144 @@ public class LanternBombRemoteControl : ModItem
 		}
 	}
 
+	public void KillGreenLanternEffect(Vector2 pos)
+	{
+		for (int g = 0; g < 12; g++)
+		{
+			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+			string texturePath = ModAsset.GreenFlameLantern_Gore_0_Mod;
+			if (texturePath is not null)
+			{
+				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+				texturePath += g;
+			}
+			var gore = new NormalGore
+			{
+				Velocity = vel,
+				Position = pos + vel * 6,
+				Texture = ModContent.Request<Texture2D>(texturePath).Value,
+				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+				Scale = Main.rand.NextFloat(0.8f, 1.2f),
+				MaxTime = Main.rand.Next(300, 340),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			};
+			Ins.VFXManager.Add(gore);
+		}
+
+		for (int g = 0; g < 20; g++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 15).RotatedByRandom(MathHelper.TwoPi);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2.4f;
+			offsetPos *= 6;
+			var sparkFlame = new GreenLanternFragment
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + offsetPos,
+				RotateSpeed = Main.rand.NextFloat(-0.3f, 0.3f),
+				Rotate2Speed = Main.rand.NextFloat(-0.5f, 0.5f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 0.2f,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Rotation2 = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(105, 150),
+				Scale = Main.rand.NextFloat(0.6f, 1f),
+				Frame = Main.rand.Next(0, 4),
+				Gravity = true,
+			};
+			Ins.VFXManager.Add(sparkFlame);
+		}
+		for (int x = 0; x < 20; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 25).RotatedByRandom(MathHelper.TwoPi);
+			offsetPos.Y *= 85f / 135f;
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new GreenLanternRedStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(80, 160),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+				Gravity = true,
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		for (int x = 0; x < 15; x++)
+		{
+			float value = MathF.Pow(Main.rand.NextFloat(), 0.3f);
+			Vector2 offsetPos = new Vector2(0, -value * 12).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = offsetPos / 2f;
+			var spark = new GreenLanternCyanStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(0, -30) + offsetPos,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(50, 100),
+				Scale = Main.rand.NextFloat(0.5f, 1f),
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		for (int u = 0; u < 15; u++)
+		{
+			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 16f).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new LanternFlameDust
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 45),
+				Scale = Main.rand.NextFloat(50f, 120f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int u = 0; u < 8; u++)
+		{
+			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 8f).RotatedByRandom(MathHelper.TwoPi);
+			var somg = new GreenLanternFlame
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(0, -30) + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 45),
+				Scale = Main.rand.NextFloat(50f, 70f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+			};
+			Ins.VFXManager.Add(somg);
+		}
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 vel = new Vector2(0, -5).RotatedBy(i / 8f * MathHelper.TwoPi);
+			if (i % 2 == 1)
+			{
+				vel *= 0.65f;
+			}
+			Projectile.NewProjectileDirect(Item.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<GreenFlameSharpCrystal>(), 20, 1, Main.myPlayer);
+		}
+		Main.slimeRain = false;
+	}
+
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		//ShakerManager.AddShaker(Main.MouseWorld, new Vector2(0, 1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30); ;
-		//var matrix = new LanternGhostKing_Wheel3Mark()
-		//{
-		//	Active = true,
-		//	Visible = true,
-		//	Position = Main.MouseWorld,
-		//	Rotation = 0.585f,
-		//	MaxTime = 1500,
-		//	ExtraUpdate = 6,
-		//	Scale = 0.25f,
-		//};
-		//Ins.VFXManager.Add(matrix);
-		//BrakeGoldenShieldEffect();
-		// ExplodeEffect(Main.MouseWorld);
-		//Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 50, 0f, player.whoAmI);
-
-		//float minDis = 600;
-		//NPC target = null;
-		//foreach (var npc in Main.npc)
-		//{
-		//	if (npc != null && npc.active)
-		//	{
-		//		Vector2 dis = npc.Center - Main.MouseWorld;
-		//		if (dis.Length() < minDis)
-		//		{
-		//			minDis = dis.Length();
-		//			target = npc;
-		//		}
-		//	}
-		//}
-		Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(),20, 0f, Main.myPlayer, 1);
-		//(p0.ModProjectile as LargeBloodLanternGhost_Tentacles).OwnerNPC = target;
-
-		//float addValue = Main.rand.NextFloat(6.283f);
-		//for (int x = 0; x < 5; x++)
-		//{
-		//	float minDis = 600;
-		//	NPC target = null;
-		//	foreach (var npc in Main.npc)
-		//	{
-		//		if (npc != null && npc.active)
-		//		{
-		//			Vector2 dis = npc.Center - Main.MouseWorld;
-		//			if (dis.Length() < minDis)
-		//			{
-		//				minDis = dis.Length();
-		//				target = npc;
-		//			}
-		//		}
-		//	}
-		//	if (target != null)
-		//	{
-		//		Projectile p0 = Projectile.NewProjectileDirect(Item.GetSource_FromAI(), target.Center + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), 85, 0f, player.whoAmI, 0.02f, 0);
-		//		LanternFlow lanternF = p0.ModProjectile as LanternFlow;
-		//		lanternF.OwnerNPC = target;
-		//		lanternF.MinDisToNPC = 500;
-		//		lanternF.VelDecay = 0.995f;
-		//		lanternF.RotateSpeed = -0.0598575436f;
-		//		lanternF.BestRotateSpeed = 0;
-		//		lanternF.BestVelDecay = 0;
-		//	}
-		//}
-
-		// Projectile.NewProjectile(Item.GetSource_FromAI(), Main.MouseWorld + new Vector2(0, -600), Vector2.Zero, ModContent.ProjectileType<LanternFlowLine>(), 40, 0f, player.whoAmI, 0, 0);
+		KillGreenLanternEffect(Main.MouseWorld);
 		return false;
 	}
 }

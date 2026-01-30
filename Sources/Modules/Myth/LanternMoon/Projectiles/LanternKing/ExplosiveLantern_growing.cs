@@ -117,42 +117,6 @@ public class ExplosiveLantern_growing : ModNPC
 
 	public void Explosion()
 	{
-		var gore2 = new EvilLanternGore3
-		{
-			Active = true,
-			Visible = true,
-			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
-			noGravity = false,
-			position = NPC.Center,
-		};
-		Ins.VFXManager.Add(gore2);
-		var gore3 = new EvilLanternGore4
-		{
-			Active = true,
-			Visible = true,
-			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
-			noGravity = false,
-			position = NPC.Center,
-		};
-		Ins.VFXManager.Add(gore3);
-		var gore4 = new EvilLanternGore5
-		{
-			Active = true,
-			Visible = true,
-			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
-			noGravity = false,
-			position = NPC.Center,
-		};
-		Ins.VFXManager.Add(gore4);
-		var gore5 = new EvilLanternGore6
-		{
-			Active = true,
-			Visible = true,
-			velocity = new Vector2(Main.rand.NextFloat(0, 6), 0).RotatedByRandom(6.283),
-			noGravity = false,
-			position = NPC.Center,
-		};
-		Ins.VFXManager.Add(gore5);
 		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
 		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5, NPC.target, 1);

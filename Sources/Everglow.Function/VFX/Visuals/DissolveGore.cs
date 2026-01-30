@@ -56,8 +56,7 @@ public abstract class DissolveGore : VisualGore
 			new Vertex2D(v2, c2, new Vector3(0, 1, 0)),
 			new Vertex2D(v3, c3, new Vector3(1, 1, 0)),
 		};
-		Main.graphics.GraphicsDevice.Textures[0] = NoDissolvePartTexture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Ins.Batch.Draw(NoDissolvePartTexture, bars, PrimitiveType.TriangleStrip);
 	}
 
 	public virtual void DrawDissolvePart()
@@ -86,8 +85,6 @@ public abstract class DissolveGore : VisualGore
 			new Vertex2D(v2, c2, new Vector3(0, 1, alpha2)),
 			new Vertex2D(v3, c3, new Vector3(1, 1, alpha2)),
 		};
-		Main.graphics.GraphicsDevice.Textures[0] = texture;
-		Main.graphics.GraphicsDevice.Textures[1] = DissolveAnimationTexture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

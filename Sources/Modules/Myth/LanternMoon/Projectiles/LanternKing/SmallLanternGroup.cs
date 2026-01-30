@@ -72,7 +72,7 @@ public class SmallLanternGroup : ModProjectile
 					}
 					break;
 				case 1:
-					if (Projectile.timeLeft % 8 == 0)
+					if (Projectile.timeLeft % 12 == 0)
 					{
 						float timeValue = Timer;
 						timeValue = timeValue / continueTimer;
