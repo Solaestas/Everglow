@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<EnableModBuilder>true</EnableModBuilder>
 		<EnablePathGenerator>false</EnablePathGenerator>

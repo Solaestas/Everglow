@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Everglow.CodeAssist.CodeFixes/Everglow.CodeAssist.CodeFixes.csproj" />
+  <Project Path="Everglow.CodeAssist.Test/Everglow.CodeAssist.Test.csproj" />
+  <Project Path="Everglow.CodeAssist/Everglow.CodeAssist.csproj" />
+</Solution>

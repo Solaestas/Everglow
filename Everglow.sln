@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33402.96
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11415.280 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Everglow", "Sources\Everglow\Everglow.csproj", "{B04A95DB-25CE-45C4-B40B-BE8A795586B7}"
 EndProject
@@ -46,6 +46,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Sources\Directory.Build.props = Sources\Directory.Build.props
 		Sources\Directory.Build.targets = Sources\Directory.Build.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Everglow.CodeAssist", "Tools\Everglow.CodeAssist\Everglow.CodeAssist\Everglow.CodeAssist.csproj", "{F075473D-FE7A-5909-ADF2-A79EC1586F19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Everglow.CodeAssist.CodeFixes", "Tools\Everglow.CodeAssist\Everglow.CodeAssist.CodeFixes\Everglow.CodeAssist.CodeFixes.csproj", "{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Everglow.CodeAssist.Test", "Tools\Everglow.CodeAssist\Everglow.CodeAssist.Test\Everglow.CodeAssist.Test.csproj", "{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAssist", "CodeAssist", "{1B99A480-FA9C-4234-90B7-EACE96BEDA9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +133,18 @@ Global
 		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF477059-FD57-4862-834B-64C74F9D5BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F075473D-FE7A-5909-ADF2-A79EC1586F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F075473D-FE7A-5909-ADF2-A79EC1586F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F075473D-FE7A-5909-ADF2-A79EC1586F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F075473D-FE7A-5909-ADF2-A79EC1586F19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +162,9 @@ Global
 		{22C04480-AA0F-49C9-80D9-2391B1572A26} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{F24B50C1-414B-4026-858D-09CBA84794FA} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
 		{BF477059-FD57-4862-834B-64C74F9D5BAB} = {EC36C512-7234-45E6-ADFD-0D3D26F4FFBA}
+		{F075473D-FE7A-5909-ADF2-A79EC1586F19} = {1B99A480-FA9C-4234-90B7-EACE96BEDA9D}
+		{76E87AA6-CCF8-5C3C-AF54-A69C0C8DB3B3} = {1B99A480-FA9C-4234-90B7-EACE96BEDA9D}
+		{F8A6F4BE-4DC9-F2A6-0763-94C552572BDB} = {1B99A480-FA9C-4234-90B7-EACE96BEDA9D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A74DCF1-B2AD-4E60-813F-653D561E7E6A}
