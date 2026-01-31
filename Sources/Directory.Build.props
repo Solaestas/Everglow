@@ -20,6 +20,7 @@
     <AdditionalFiles Include="**\*.atlas" Pack="true" ModPath="%(Identity)" />
   </ItemGroup>
   <ItemGroup>
+	<PackageReference Include="tModLoader.CodeAssist" Version="0.1.*"/>
     <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.5.11" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
       <PrivateAssets>all</PrivateAssets>
@@ -30,5 +31,7 @@
     <Publicize Include="MonoMod.Utils" />
     <AdditionalFiles Include="**\*.obj;**\*.bmp;**\*.mapio" Pack="true" ModPath="%(Identity)" Exclude="bin\**\*;obj\**\*" />
     <AdditionalFiles Include="$(MSBuildThisFileFullPath)" Pack="false" Visible="false" />
+	<Analyzer Include="$(MSBuildThisFileDirectory)..\Tools\Everglow.CodeAssist.dll"/>
+	<Analyzer Include="$(MSBuildThisFileDirectory)..\Tools\Everglow.CodeAssist.CodeFixes.dll"/>
   </ItemGroup>
 </Project>
