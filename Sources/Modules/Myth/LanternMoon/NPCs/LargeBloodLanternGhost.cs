@@ -172,7 +172,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 					}
 					if (Timer == 60)
 					{
-						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>(), 20, 0f, Main.myPlayer);
+						Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>(), 60, 0f, Main.myPlayer);
 						LargeBloodLanternGhost_Tentacles lBLGT = p0.ModProjectile as LargeBloodLanternGhost_Tentacles;
 						if (lBLGT is not null)
 						{

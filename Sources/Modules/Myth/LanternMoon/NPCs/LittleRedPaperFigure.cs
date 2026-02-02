@@ -32,7 +32,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 	public override void SetDefaults()
 	{
 		NPC.damage = 25;
-		NPC.lifeMax = 250;
+		NPC.lifeMax = 150;
 		NPC.npcSlots = 1f;
 		NPC.width = 38;
 		NPC.height = 52;
@@ -42,7 +42,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		NPC.knockBackResist = 1.5f;
 		NPC.dontTakeDamage = false;
 		NPC.HitSound = SoundID.NPCHit3;
-		LanternMoonScore = 50f;
+		LanternMoonScore = 2f;
 	}
 
 	public override void FindFrame(int frameHeight)

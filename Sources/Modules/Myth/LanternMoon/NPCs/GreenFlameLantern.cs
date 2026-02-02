@@ -20,7 +20,7 @@ public class GreenFlameLantern : LanternMoonNPC
 
 	public override void SetDefaults()
 	{
-		NPC.damage = 75;
+		NPC.damage = 56;
 		NPC.lifeMax = 1400;
 		NPC.npcSlots = 2.5f;
 		NPC.width = 60;
