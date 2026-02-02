@@ -1,6 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.Mechanics.Miscs;
-using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
@@ -37,6 +37,7 @@ public class ShadowstrikeCaterpillar : Caterpillar
 			NPC.damage = 24;
 			NPC.value = 15;
 		}
+		DustType = ModContent.DustType<VerdantBlood>();
 	}
 
 	public override void OnSpawn(IEntitySource source)

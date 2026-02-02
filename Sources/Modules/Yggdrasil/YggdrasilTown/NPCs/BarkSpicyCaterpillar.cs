@@ -1,6 +1,6 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.Mechanics.Miscs;
-using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
@@ -38,6 +38,7 @@ public class BarkSpicyCaterpillar : Caterpillar
 			NPC.damage = 11;
 			NPC.value = 10;
 		}
+		DustType = ModContent.DustType<VerdantBlood>();
 	}
 
 	public override void OnSpawn(IEntitySource source)

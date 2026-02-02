@@ -1,7 +1,8 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.Mechanics.Miscs;
-using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
+using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
@@ -35,6 +36,7 @@ public class LampFruitBorer : Caterpillar
 			NPC.lifeMax = 66;
 			NPC.damage = 3;
 		}
+		DustType = -1;
 	}
 
 	public override void OnSpawn(IEntitySource source)
