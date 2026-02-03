@@ -33,10 +33,6 @@ public abstract class Caterpillar : ModNPC
 	/// </summary>
 	public List<Segment> Segments = new List<Segment>();
 
-	public override void SetStaticDefaults()
-	{
-	}
-
 	public override void SetDefaults()
 	{
 		NPCID.Sets.DontDoHardmodeScaling[Type] = true;
@@ -186,7 +182,6 @@ public abstract class Caterpillar : ModNPC
 		{
 			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 		}
-		base.ResetEffects();
 	}
 
 	public override void AI()
@@ -916,8 +911,6 @@ public abstract class Caterpillar : ModNPC
 		NPC.width = 10;
 		NPC.height = 10;
 		NPC.Center = v0;
-
-		base.ModifyIncomingHit(ref modifiers);
 	}
 
 	/// <summary>
@@ -946,7 +939,6 @@ public abstract class Caterpillar : ModNPC
 				NPC.position += Segments[2].Normal * Segments[2].SelfDirection * 50;
 			}
 		}
-		base.OnHitByProjectile(projectile, hit, damageDone);
 	}
 
 	/// <summary>
@@ -976,7 +968,6 @@ public abstract class Caterpillar : ModNPC
 				NPC.position += Segments[2].Normal * Segments[2].SelfDirection * 50;
 			}
 		}
-		base.OnHitByItem(player, item, hit, damageDone);
 	}
 
 	/// <summary>
@@ -1005,7 +996,6 @@ public abstract class Caterpillar : ModNPC
 		{
 			boundingBox = GetBoundingBox();
 		}
-		base.ModifyHoverBoundingBox(ref boundingBox);
 	}
 
 	/// <summary>
@@ -1022,7 +1012,6 @@ public abstract class Caterpillar : ModNPC
 				Dust.NewDustDirect(pos - new Vector2(SegmentHitBoxSize / 2), SegmentHitBoxSize / 2, SegmentHitBoxSize / 2, DustType);
 			}
 		}
-		base.HitEffect(hit);
 	}
 
 	/// <summary>
