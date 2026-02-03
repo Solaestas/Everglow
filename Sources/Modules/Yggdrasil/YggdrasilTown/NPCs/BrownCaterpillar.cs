@@ -13,6 +13,10 @@ public class BrownCaterpillar : Caterpillar
 	public override void SetStaticDefaults()
 	{
 		NPCSpawnManager.RegisterNPC(Type);
+	}
+
+	public override void SetDefaults()
+	{
 		DustType = ModContent.DustType<VerdantBlood>();
 	}
 
