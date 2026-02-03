@@ -258,7 +258,7 @@ public static class CollisionUtils
 		{
 			for (int j = 0; j < lines2.Length; j++)
 			{
-				if (DoLinesIntersect(lines1[i], lines1[(i + 1) % lines1.Length], lines2[j], lines2[(j + 1) % lines2.Length]))
+				if (MathUtils.DoLineSegmentsIntersectByAlgebra(lines1[i], lines1[(i + 1) % lines1.Length], lines2[j], lines2[(j + 1) % lines2.Length]))
 				{
 					return true;
 				}
@@ -299,31 +299,6 @@ public static class CollisionUtils
 			}
 		}
 		return false;
-	}
-
-	/// <summary>
-	/// 两线相交
-	/// </summary>
-	/// <param name="p1"></param>
-	/// <param name="p2"></param>
-	/// <param name="p3"></param>
-	/// <param name="p4"></param>
-	/// <returns></returns>
-	public static bool DoLinesIntersect(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4)
-	{
-		float denominator = (p4.Y - p3.Y) * (p2.X - p1.X) - (p4.X - p3.X) * (p2.Y - p1.Y);
-		float numerator1 = (p4.X - p3.X) * (p1.Y - p3.Y) - (p4.Y - p3.Y) * (p1.X - p3.X);
-		float numerator2 = (p2.X - p1.X) * (p1.Y - p3.Y) - (p2.Y - p1.Y) * (p1.X - p3.X);
-
-		if (denominator == 0)
-		{
-			return numerator1 == 0 && numerator2 == 0;
-		}
-
-		float r = numerator1 / denominator;
-		float s = numerator2 / denominator;
-
-		return r >= 0 && r <= 1 && s >= 0 && s <= 1;
 	}
 
 	public static bool Contain(this AABB aabb, Vector2 position)

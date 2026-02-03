@@ -31,9 +31,14 @@ public class HookManager : IHookManager
 		[CodeLayer.PostUpdateNPCs] = typeof(Action),
 		[CodeLayer.PostUpdateDusts] = typeof(Action),
 		[CodeLayer.PostUpdateInvasions] = typeof(Action),
+
+		[CodeLayer.PreEnterWorld_Single] = typeof(Action),
 		[CodeLayer.PostEnterWorld_Single] = typeof(Action),
-		[CodeLayer.PostExitWorld_Single] = typeof(Action),
+		[CodeLayer.PreEnterWorld_Server] = typeof(Action),
 		[CodeLayer.PostEnterWorld_Server] = typeof(Action),
+		[CodeLayer.PreSaveAndQuit] = typeof(Action),
+		[CodeLayer.PostSaveAndQuit] = typeof(Action),
+
 		[CodeLayer.ResolutionChanged] = typeof(Action<Vector2>),
 	};
 
