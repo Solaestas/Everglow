@@ -2,9 +2,7 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.PermanentBoosters;
-using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -12,6 +10,11 @@ namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 [NoGameModeScale]
 public class LampFruitBorer : Caterpillar
 {
+	public override void SetStaticDefaults()
+	{
+		NPCSpawnManager.RegisterNPC(Type);
+	}
+
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
@@ -39,11 +42,6 @@ public class LampFruitBorer : Caterpillar
 		DustType = -1;
 	}
 
-	public override void OnSpawn(IEntitySource source)
-	{
-		base.OnSpawn(source);
-	}
-
 	public override Rectangle GetDrawFrame(int Style)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
@@ -61,11 +59,6 @@ public class LampFruitBorer : Caterpillar
 			return new Rectangle(44, 0, 22, height);
 		}
 		return base.GetDrawFrame(Style);
-	}
-
-	public override void SetStaticDefaults()
-	{
-		NPCSpawnManager.RegisterNPC(Type);
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)

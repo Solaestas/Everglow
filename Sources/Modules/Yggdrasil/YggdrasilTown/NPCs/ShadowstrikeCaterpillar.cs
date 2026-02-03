@@ -4,7 +4,6 @@ using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
-using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -12,6 +11,11 @@ namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
 [NoGameModeScale]
 public class ShadowstrikeCaterpillar : Caterpillar
 {
+	public override void SetStaticDefaults()
+	{
+		NPCSpawnManager.RegisterNPC(Type);
+	}
+
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
@@ -40,11 +44,6 @@ public class ShadowstrikeCaterpillar : Caterpillar
 		DustType = ModContent.DustType<VerdantBlood>();
 	}
 
-	public override void OnSpawn(IEntitySource source)
-	{
-		base.OnSpawn(source);
-	}
-
 	public override Rectangle GetDrawFrame(int Style)
 	{
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
@@ -62,11 +61,6 @@ public class ShadowstrikeCaterpillar : Caterpillar
 			return new Rectangle(66, 0, 26, height);
 		}
 		return base.GetDrawFrame(Style);
-	}
-
-	public override void SetStaticDefaults()
-	{
-		NPCSpawnManager.RegisterNPC(Type);
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
