@@ -5,6 +5,7 @@ public class BurningLanternGore : DissolveGore
 {
 	public override void OnSpawn()
 	{
+		maxTime = 200;
 		base.OnSpawn();
 	}
 

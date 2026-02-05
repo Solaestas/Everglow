@@ -1,10 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Myth.LanternMoon.Gores;
-using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.VFX;
-using MathNet.Numerics;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -37,6 +35,10 @@ public class LanternGhostKing : LanternMoonNPC
 	public Rectangle ExteriorFrameworkFrame = new Rectangle(272, 2, 538, 298);
 	public Rectangle CoreAndTailFrame = new Rectangle(912, 2, 100, 182);
 	public string ShaderType = "Normal";
+
+	public Rope LanternTail = null;
+	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
+	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
 
 	public override void SetDefaults()
 	{
@@ -131,7 +133,7 @@ public class LanternGhostKing : LanternMoonNPC
 		int lanternMoonNPCCount = 0;
 		foreach (var npc in Main.npc)
 		{
-			if(npc != null && npc.active && npc.ModNPC is LanternMoonNPC)
+			if (npc != null && npc.active && npc.ModNPC is LanternMoonNPC)
 			{
 				lanternMoonNPCCount++;
 			}
@@ -164,9 +166,9 @@ public class LanternGhostKing : LanternMoonNPC
 			{
 				GoldenShieldCrackResistInYAxis -= 0.002f;
 			}
-			if(GoldenShieldBreakEffectTimer > 30)
+			if (GoldenShieldBreakEffectTimer > 30)
 			{
-				if(GoldenShieldBreakEffectTimer % 4 == 1)
+				if (GoldenShieldBreakEffectTimer % 4 == 1)
 				{
 					ShakerManager.AddShaker(NPC.Center, new Vector2(0, 1).RotatedByRandom(MathHelper.TwoPi), 6, 0.8f, 16, 0.9f, 0.8f, 30);
 				}
@@ -216,15 +218,15 @@ public class LanternGhostKing : LanternMoonNPC
 		}
 		else
 		{
-			if(CanBeginAI())
+			if (CanBeginAI())
 			{
-				if(RingFade > 0)
+				if (RingFade > 0)
 				{
 					RingFade--;
 				}
 			}
 			CheckPlayerTouchRing();
-			if(NPC.life == NPC.lifeMax)
+			if (NPC.life == NPC.lifeMax)
 			{
 				NPC.dontTakeDamage = false;
 			}
@@ -1049,7 +1051,7 @@ public class LanternGhostKing : LanternMoonNPC
 					myDamage = 100;
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WheelShapeLantern3Layer>(), myDamage, 0f, target.whoAmI, 0, 0);
-				if(Main.expertMode)
+				if (Main.expertMode)
 				{
 					for (int i = 0; i < 8; i++)
 					{
@@ -1101,7 +1103,7 @@ public class LanternGhostKing : LanternMoonNPC
 		if (Timer == 3103)
 		{
 			float distance = 600;
-			if(Main.expertMode)
+			if (Main.expertMode)
 			{
 				distance = 400;
 			}
@@ -1240,7 +1242,7 @@ public class LanternGhostKing : LanternMoonNPC
 			var dir = (NPC.Center - target.Center).NormalizeSafe() * (RingRadius - 20);
 			float myDamage = 55;
 			float speed = 8f;
-			if(Main.masterMode)
+			if (Main.masterMode)
 			{
 				speed = 10f;
 				myDamage = 70;
@@ -1371,15 +1373,15 @@ public class LanternGhostKing : LanternMoonNPC
 		// Main.rand.Next(6)
 		int value = Main.rand.Next(6);
 		int skillCount = 0;
-		foreach(var skill in OldSkillInPhase2)
+		foreach (var skill in OldSkillInPhase2)
 		{
-			if(skill == value)
+			if (skill == value)
 			{
 				skillCount++;
 			}
 		}
 		int safeTime = 0;
-		while(skillCount > OldSkillInPhase2.Count / 6f)
+		while (skillCount > OldSkillInPhase2.Count / 6f)
 		{
 			safeTime++;
 			value = Main.rand.Next(6);
@@ -1391,7 +1393,7 @@ public class LanternGhostKing : LanternMoonNPC
 					skillCount++;
 				}
 			}
-			if(safeTime > 10)
+			if (safeTime > 10)
 			{
 				break;
 			}
@@ -1480,16 +1482,12 @@ public class LanternGhostKing : LanternMoonNPC
 				spriteBatch.Draw(star, NPC.Center - Main.screenPosition + offset, null, new Color(1f, 0.7f, 0.5f, 0), MathHelper.PiOver2, orig, new Vector2(value, 2.5f * mulSize) * mulSize * value2, SpriteEffects.None, 0f);
 			}
 		}
-		if(GoldenShieldBreakBloomValue > 0)
+		if (GoldenShieldBreakBloomValue > 0)
 		{
 			var bloom = ModAsset.LanternGhostKing_BodyBloom.Value;
 			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0.2f, 0) * GoldenShieldBreakBloomValueFunction(), 0, bloom.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
 		}
 	}
-
-	public Rope LanternTail = null;
-	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
-	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
 
 	public void UpdateTailRope()
 	{
