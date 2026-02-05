@@ -123,8 +123,14 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		Wave = 1;
 		Main.NewText(Language.GetTextValue("Wave 1:" + GetWaveEnemiesMessage()), messageColor);
 		ProgressMax = ScoreRequireOfWave[0];
+		ProgressAlpha = 0f;
 		AccumulatedScore = 0;
 		Icon = ModAsset.LanternMoonIcon.Value;
+	}
+
+	public override bool CanActivate(params object[] args)
+	{
+		return !Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon && base.CanActivate();
 	}
 
 	public override void OnActivate(params object[] args)

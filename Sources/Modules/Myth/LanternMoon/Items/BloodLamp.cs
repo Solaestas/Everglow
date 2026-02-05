@@ -23,15 +23,7 @@ public class BloodLamp : ModItem
 
 	public override bool? UseItem(Player player)
 	{
-		LanternMoonInvasionEvent lMIE = ModContent.GetInstance<LanternMoonInvasionEvent>();
-		if (!Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon && lMIE.CanActivate())
-		{
-			EventSystem.Activate(ModContent.GetInstance<LanternMoonInvasionEvent>());
-			lMIE.ProgressAlpha = 0f;
-			return true;
-		}
-		return false;
-	}
+		EventSystem.Activate<LanternMoonInvasionEvent>();
 
 		return null;
 	}
