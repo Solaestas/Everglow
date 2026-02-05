@@ -7,15 +7,14 @@ public class BloodLamp : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.noUseGraphic = true;
 		Item.width = 38;
 		Item.height = 60;
 		Item.rare = ItemRarityID.Green;
 		Item.scale = 1;
 		Item.useStyle = ItemUseStyleID.HoldUp;
 		Item.useTurn = true;
-		Item.useAnimation = 1;
-		Item.useTime = 1;
+		Item.useAnimation = 30;
+		Item.useTime = 30;
 		Item.autoReuse = false;
 		Item.consumable = true;
 		Item.maxStack = Item.CommonMaxStack;
@@ -34,8 +33,7 @@ public class BloodLamp : ModItem
 		return false;
 	}
 
-	public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-	{
+		return null;
 	}
 
 	public override void AddRecipes()
