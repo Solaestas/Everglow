@@ -98,7 +98,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Accessories
                 OriginTarget?.Dispose();
                 AllocateRenderTarget();
             });
-            _exitHook = Ins.HookManager.AddHook(CodeLayer.PostExitWorld_Single, () =>
+            _exitHook = Ins.HookManager.AddHook(CodeLayer.PreSaveAndQuit, () =>
             {
                 ShellTarget?.Dispose();
                 OriginTarget?.Dispose();
