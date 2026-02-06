@@ -1,11 +1,12 @@
 using Everglow.Commons.Utilities.BuffHelpers;
+using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 
-public class ThunderSpell : ModProjectile
+public class CurseSpell : ModProjectile
 {
 	public float Timer = 0;
 
@@ -91,11 +92,12 @@ public class ThunderSpell : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<ThunderSpell_AttachPlayer>(), 0, 1.5f, target.whoAmI);
-		ThunderSpell_AttachPlayer tSAP = p0.ModProjectile as ThunderSpell_AttachPlayer;
-		tSAP.AttachedPlayer = target;
-		tSAP.OwnerNPC = OwnerNPC;
+		//Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CurseSpell_AttachPlayer>(), 0, 1.5f, target.whoAmI);
+		//CurseSpell_AttachPlayer tSAP = p0.ModProjectile as CurseSpell_AttachPlayer;
+		//tSAP.AttachedPlayer = target;
+		//tSAP.OwnerNPC = OwnerNPC;
 		target.AddBuff(ModContent.BuffType<ShortImmune3>(), 6);
+		target.AddBuff(ModContent.BuffType<UnfortuneCurse>(), 360);
 		KillEffect();
 		Projectile.Kill();
 		base.OnHitPlayer(target, info);
@@ -115,7 +117,7 @@ public class ThunderSpell : ModProjectile
 
 	public void KillEffect()
 	{
-		for (int k = 0; k < 16; k++)
+		for (int k = 0; k < 5; k++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(7f, 14f)).RotatedByRandom(MathHelper.TwoPi);
 			var spellPaper = new SpellPaperFragment
@@ -133,10 +135,10 @@ public class ThunderSpell : ModProjectile
 			};
 			Ins.VFXManager.Add(spellPaper);
 		}
-		for (int k = 0; k < 16; k++)
+		for (int k = 0; k < 12; k++)
 		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 12f)).RotatedByRandom(MathHelper.TwoPi);
-			var thunderSpark = new ThunderSpellDust
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellDust
 			{
 				Velocity = newVelocity,
 				Active = true,
@@ -144,9 +146,41 @@ public class ThunderSpell : ModProjectile
 				Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
 				Collided = false,
 				MaxTime = Main.rand.Next(45, 80),
-				Scale = Main.rand.NextFloat(1.5f, 6.2f),
+				Scale = Main.rand.NextFloat(0.5f, 1.2f),
 			};
-			Ins.VFXManager.Add(thunderSpark);
+			Ins.VFXManager.Add(CurseSpark);
+		}
+		for (int k = 0; k < 8; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellDust_blue_normal
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				Collided = false,
+				MaxTime = Main.rand.Next(25, 30),
+				Scale = 0,
+			};
+			Ins.VFXManager.Add(CurseSpark);
+		}
+
+		for (int k = 0; k < 16; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 4f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellSmoke_normal
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				MaxTime = Main.rand.Next(60, 125),
+				Scale = Main.rand.NextFloat(20f, 40f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), 0 },
+			};
+			Ins.VFXManager.Add(CurseSpark);
 		}
 	}
 
@@ -174,7 +208,7 @@ public class ThunderSpell : ModProjectile
 		}
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		Texture2D tex_shape = ModAsset.Spell_shape.Value;
-		Texture2D tex_glow = ModAsset.ThunderSpell_glow.Value;
+		Texture2D tex_glow = ModAsset.CurseSpell_glow.Value;
 		Texture2D bloom = ModAsset.Spell_bloom.Value;
 		float fade = 1f;
 		if (Projectile.timeLeft < 60f)
@@ -182,12 +216,12 @@ public class ThunderSpell : ModProjectile
 			fade = Projectile.timeLeft / 60f;
 		}
 		Color drawColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * fade;
-		Color bloomColor = bloomColor = Color.Lerp(new Color(1f, 0.7f, 0.5f, 0), new Color(1f, 0.6f, 0f, 0), MathF.Sin(Timer * 0.03f + Projectile.whoAmI) * 0.5f + 0.5f);
+		Color bloomColor = bloomColor = Color.Lerp(new Color(1f, 0f, 0.05f, 0), new Color(0.6f, 0f, 0f, 0), MathF.Sin(Timer * 0.03f + Projectile.whoAmI) * 0.5f + 0.5f);
 		Rectangle frame = new Rectangle(0, Projectile.frame * 60, 60, 60);
 		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, drawColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, effects, 0);
 		if (Timer < 12)
 		{
-			Color shapeColor = new Color(1f, 0.7f, 0.1f, 0) * ((12 - Timer) / 12f);
+			Color shapeColor = new Color(1f, 0f, 0.03f, 0) * ((12 - Timer) / 12f);
 			Main.EntitySpriteDraw(tex_shape, Projectile.Center - Main.screenPosition, frame, shapeColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, effects, 0);
 		}
 		Main.EntitySpriteDraw(tex_glow, Projectile.Center - Main.screenPosition, frame, new Color(1f, 0.7f, 0.1f, 0), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, effects, 0);

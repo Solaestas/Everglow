@@ -30,9 +30,9 @@ public class BurningLanternWreck : ModProjectile
 		Projectile.velocity.Y += 0.1f;
 		Projectile.velocity *= MathF.Pow(0.998f, Projectile.velocity.Length());
 		float length = Projectile.velocity.Length() / 8f;
-		if(length > 1)
+		if (length > 1)
 		{
-			for (int i = 0;i < length;i++)
+			for (int i = 0; i < length; i++)
 			{
 				SmallFlame(Projectile.Center - Projectile.velocity.NormalizeSafe() * i * 8, 3);
 			}
@@ -51,11 +51,11 @@ public class BurningLanternWreck : ModProjectile
 	public void SmallFlame(Vector2 pos, int count)
 	{
 		float timeDecay = 1f;
-		if(Projectile.timeLeft < 120)
+		if (Projectile.timeLeft < 120)
 		{
 			timeDecay = Projectile.timeLeft / 120f;
 		}
-		for(int i = 0;i < count;i++)
+		for (int i = 0; i < count; i++)
 		{
 			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
 			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 2f).RotatedByRandom(MathHelper.TwoPi);

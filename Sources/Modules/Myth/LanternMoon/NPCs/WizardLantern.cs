@@ -79,11 +79,24 @@ public class WizardLantern : LanternMoonNPC
 		if (Timer == 160)
 		{
 			NPC.velocity *= 0;
-			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WizardLantern_Matrix_Thunder>(), 0, 0f, Main.myPlayer);
-			WizardLantern_Matrix_Thunder wLMT = p1.ModProjectile as WizardLantern_Matrix_Thunder;
-			if (wLMT is not null)
+			switch (Main.rand.Next(2))
 			{
-				wLMT.OwnerNPC = NPC;
+				case 0:
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WizardLantern_Matrix_Thunder>(), 0, 0f, Main.myPlayer);
+					WizardLantern_Matrix_Thunder wLMT = p0.ModProjectile as WizardLantern_Matrix_Thunder;
+					if (wLMT is not null)
+					{
+						wLMT.OwnerNPC = NPC;
+					}
+					break;
+				case 1:
+					Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<WizardLantern_Matrix_Curse>(), 0, 0f, Main.myPlayer);
+					WizardLantern_Matrix_Curse wLMC = p1.ModProjectile as WizardLantern_Matrix_Curse;
+					if (wLMC is not null)
+					{
+						wLMC.OwnerNPC = NPC;
+					}
+					break;
 			}
 		}
 		if (Timer > 300)
