@@ -86,16 +86,21 @@ public class CurseSpell : ModProjectile
 				}
 			}
 		}
+		else
+		{
+			KillEffect();
+			Projectile.Kill();
+		}
 		Projectile.rotation = Projectile.velocity.X * 0.3f;
 		Projectile.hide = Projectile.velocity.X > 0;
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		//Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CurseSpell_AttachPlayer>(), 0, 1.5f, target.whoAmI);
-		//CurseSpell_AttachPlayer tSAP = p0.ModProjectile as CurseSpell_AttachPlayer;
-		//tSAP.AttachedPlayer = target;
-		//tSAP.OwnerNPC = OwnerNPC;
+		// Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<CurseSpell_AttachPlayer>(), 0, 1.5f, target.whoAmI);
+		// CurseSpell_AttachPlayer tSAP = p0.ModProjectile as CurseSpell_AttachPlayer;
+		// tSAP.AttachedPlayer = target;
+		// tSAP.OwnerNPC = OwnerNPC;
 		target.AddBuff(ModContent.BuffType<ShortImmune3>(), 6);
 		target.AddBuff(ModContent.BuffType<UnfortuneCurse>(), 360);
 		KillEffect();

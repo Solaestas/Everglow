@@ -1,3 +1,5 @@
+using Everglow.Myth.LanternMoon.NPCs;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 
 public class ThunderSpell_AttachPlayer : ModProjectile
@@ -65,21 +67,28 @@ public class ThunderSpell_AttachPlayer : ModProjectile
 		{
 			return;
 		}
-		float total = GetTotalCount();
-		if(total > 0)
+		if (OwnerNPC != null && OwnerNPC.active && OwnerNPC.type == ModContent.NPCType<WizardLantern>())
 		{
-			Projectile.Center = AttachedPlayer.Center + new Vector2(0, MathF.Sin((float)Main.time * 0.03f) * 10 + 80).RotatedBy(GetAttachOrder() / total * MathHelper.TwoPi + (float)Main.time * 0.03f);
-		}
-		if(total >= 3 && GetAttachOrder() == 2)
-		{
-			foreach (var proj in Main.projectile)
+			float total = GetTotalCount();
+			if (total > 0)
 			{
-				if (proj is not null && proj.active && proj.type == Type)
-				{
-					proj.Kill();
-				}
+				Projectile.Center = AttachedPlayer.Center + new Vector2(0, MathF.Sin((float)Main.time * 0.03f) * 10 + 80).RotatedBy(GetAttachOrder() / total * MathHelper.TwoPi + (float)Main.time * 0.03f);
 			}
-			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), AttachedPlayer.Bottom, Vector2.zeroVector, ModContent.ProjectileType<ThunderSpell_Thunder>(), 100, 1.5f, AttachedPlayer.whoAmI);
+			if (total >= 3 && GetAttachOrder() == 2)
+			{
+				foreach (var proj in Main.projectile)
+				{
+					if (proj is not null && proj.active && proj.type == Type)
+					{
+						proj.Kill();
+					}
+				}
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), AttachedPlayer.Bottom, Vector2.zeroVector, ModContent.ProjectileType<ThunderSpell_Thunder>(), 100, 1.5f, AttachedPlayer.whoAmI);
+			}
+		}
+		else
+		{
+			Projectile.Kill();
 		}
 	}
 
