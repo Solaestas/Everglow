@@ -1,6 +1,8 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
+using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
@@ -119,6 +121,110 @@ public class WizardLantern : LanternMoonNPC
 		}
 	}
 
+	public override void OnKill()
+	{
+		for (int k = 0; k < 16; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 16f)).RotatedByRandom(MathHelper.TwoPi);
+			var thunderSpark = new ThunderSpellDust
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				Collided = false,
+				MaxTime = Main.rand.Next(45, 80),
+				Scale = Main.rand.NextFloat(1.5f, 6.2f),
+			};
+			Ins.VFXManager.Add(thunderSpark);
+		}
+		for (int k = 0; k < 12; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 9f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellDust
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				Collided = false,
+				MaxTime = Main.rand.Next(45, 80),
+				Scale = Main.rand.NextFloat(0.5f, 1.2f),
+			};
+			Ins.VFXManager.Add(CurseSpark);
+		}
+		for (int k = 0; k < 8; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 9f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellDust_blue_normal
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				Collided = false,
+				MaxTime = Main.rand.Next(25, 30),
+				Scale = 0,
+			};
+			Ins.VFXManager.Add(CurseSpark);
+		}
+
+		for (int k = 0; k < 16; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			var CurseSpark = new CurseSpellSmoke_normal
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				MaxTime = Main.rand.Next(60, 125),
+				Scale = Main.rand.NextFloat(20f, 40f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), 0 },
+			};
+			Ins.VFXManager.Add(CurseSpark);
+		}
+		for (int g = 0; g < 15; g++)
+		{
+			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+			string texturePath = ModAsset.WizardLanternGore_0_Mod;
+			if (texturePath is not null)
+			{
+				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+				texturePath += g;
+			}
+			var gore = new NormalGore
+			{
+				Velocity = vel,
+				Position = NPC.Center + vel,
+				Texture = ModContent.Request<Texture2D>(texturePath).Value,
+				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+				Scale = Main.rand.NextFloat(0.8f, 1.2f),
+				MaxTime = Main.rand.Next(300, 340),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			};
+			Ins.VFXManager.Add(gore);
+		}
+		for (int k = 0; k < 16; k++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(1f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+			var WitchingSpark = new WitchingSpellDust
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = NPC.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotateSpeed = Main.rand.NextFloat(-0.4f, 0.4f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.02f, 0.05f) * (k % 2 - 0.5f) * 2,
+				MaxTime = Main.rand.Next(45, 80),
+				Scale = Main.rand.NextFloat(1.5f, 2f),
+			};
+			Ins.VFXManager.Add(WitchingSpark);
+		}
+	}
+
 	public Rope LanternCloak = null;
 	public static MassSpringSystem WizardLanternMassSpringSystem = new MassSpringSystem();
 	public static PBDSolver WizardLanternPBDSolver = new PBDSolver(8);
@@ -185,10 +291,6 @@ public class WizardLantern : LanternMoonNPC
 		{
 			return;
 		}
-		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
-		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-
 		Texture2D tex = ModAsset.WizardLantern_Cloak.Value;
 		float effectWidth = 48f;
 		float alphaFade = (255 - NPC.alpha) / 255f;
@@ -207,11 +309,19 @@ public class WizardLantern : LanternMoonNPC
 			{
 				directionVec = LanternCloak.Masses[i + 1].Position - LanternCloak.Masses[i].Position + new Vector2(0, 3);
 			}
+			if(directionVec.Length() > 200)
+			{
+				return;
+			}
 			directionVec = directionVec.NormalizeSafe();
 			Vector2 directionLeft = directionVec.RotatedBy(MathHelper.PiOver2) * effectWidth / 2f;
 			bars.Add(drawPos + directionLeft, Lighting.GetColor(LanternCloak.Masses[i].Position.ToTileCoordinates()) * alphaFade, new Vector3(0, value, 0));
 			bars.Add(drawPos - directionLeft, Lighting.GetColor(LanternCloak.Masses[i].Position.ToTileCoordinates()) * alphaFade, new Vector3(1, value, 0));
 		}
+		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+		spriteBatch.End();
+		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
+
 		if (bars.Count > 0)
 		{
 			Main.graphics.GraphicsDevice.Textures[0] = tex;

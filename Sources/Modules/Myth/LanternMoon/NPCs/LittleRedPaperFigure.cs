@@ -1,9 +1,4 @@
 using Everglow.Myth.LanternMoon.Buffs;
-using Everglow.Myth.LanternMoon.Gores;
-using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
-using Everglow.Myth.LanternMoon.VFX;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
@@ -47,7 +42,6 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 	public override void FindFrame(int frameHeight)
 	{
-
 		Timer++;
 		NPC.frame.Width = 52;
 		NPC.frame.Height = 52;
@@ -95,6 +89,10 @@ public class LittleRedPaperFigure : LanternMoonNPC
 	public override void AI()
 	{
 		NPC.TargetClosest(false);
+		if (NPC.target == -1)
+		{
+			return;
+		}
 		Player player = Main.player[NPC.target];
 		if (player.Center.X > NPC.Center.X)
 		{
@@ -117,9 +115,9 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		}
 		else if (State == (int)BehaviorState.Attach)
 		{
-			NPC.aiStyle = 0;
+			NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
 			NPC.knockBackResist = 0f;
-			NPC.Center = player.Center - Vector2.UnitY * 9 - (player.direction  == 1 ? 2*Vector2.UnitX : -2*Vector2.UnitX);
+			NPC.Center = player.Center - Vector2.UnitY * 9 - (player.direction == 1 ? 2 * Vector2.UnitX : -2 * Vector2.UnitX);
 			NPC.noGravity = true;
 			NPC.rotation = 0;
 		}
@@ -140,6 +138,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 			State = (int)BehaviorState.Fly;
 		}
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit)
 	{
 		if (State == (int)BehaviorState.Fighter)
@@ -147,6 +146,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 			State = (int)BehaviorState.Fly;
 		}
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
 	{
 		if (State == (int)BehaviorState.Attach)
@@ -157,14 +157,10 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		{
 			State = (int)BehaviorState.Attach;
 		}
-
-
-
 	}
 
 	public override void OnKill()
 	{
-
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -180,7 +176,6 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		{
 			spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, target.direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 		}
-
 
 		return false;
 	}
