@@ -33,9 +33,8 @@ public abstract class BurningGore : VisualGore
 	/// <summary>
 	/// 随机值
 	/// </summary>
-	public  float rand1 = Main.rand.NextFloat(40f, 60f);
-	public  float rand2 = Main.rand.NextFloat(40f, 60f);
-	public  float rand3 = Main.rand.NextFloat(1000f, 1500f);
+	public float[] ai;
+
 
 	public virtual void SetRandomValues()
 	{

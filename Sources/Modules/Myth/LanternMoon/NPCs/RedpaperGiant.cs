@@ -281,7 +281,7 @@ public class RedpaperGiant : LanternMoonNPC
 			if (texturePath is not null)
 			{
 				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
-				texturePath += g;
+				texturePath += 9;
 			}
 			var gore = new PaperGore
 			{
@@ -291,8 +291,9 @@ public class RedpaperGiant : LanternMoonNPC
 				Texture = ModContent.Request<Texture2D>(texturePath).Value,
 				rotateSpeed = vel.X / 8f,
 				scale = Main.rand.NextFloat(0.8f, 1.2f),
-				maxTime = Main.rand.Next(100, 240),
+				maxTime = Main.rand.Next(120, 360),
 				rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				ai = new float[] { Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(0, MathF.PI) },
 			};
 			Ins.VFXManager.Add(gore);
 		}

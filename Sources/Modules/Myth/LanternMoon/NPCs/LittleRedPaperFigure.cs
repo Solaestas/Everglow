@@ -311,8 +311,9 @@ public class LittleRedPaperFigure : LanternMoonNPC
 					Texture = ModContent.Request<Texture2D>(texturePath).Value,
 					rotateSpeed = vel.X / 8f,
 					scale = Main.rand.NextFloat(0.8f, 1.2f),
-					maxTime = Main.rand.Next(100, 240),
+					maxTime = Main.rand.Next(120, 360),
 					rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					ai = new float[] { Main.rand.NextFloat(-2,2), Main.rand.NextFloat(-MathF.PI, MathF.PI) },
 				};
 				Ins.VFXManager.Add(gore);
 			}
