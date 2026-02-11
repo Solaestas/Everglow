@@ -98,7 +98,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 	public override void AI()
 	{
-		NPC.TargetClosest(false);
+		NPC.TargetClosest();
 		if (NPC.target == -1)
 		{
 			return;
@@ -114,27 +114,28 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		}
 		Lighting.AddLight(NPC.Center, 0.4f, 0.05f, 0.05f);
 		if (State == (int)BehaviorState.Fighter)
+			
 		{
-			NPC.aiStyle = NPCAIStyleID.Fighter;
+			NPC.ai[0] = 0;
+			NPC.aiStyle = NPCAIStyleID.Fighter;//几千行代码有点难扒下来，先用现成的AIStyle代替，但看了一下把ai[0]设好能避免大部分问题
 			NPC.noGravity = false;
 			NPC.rotation = 0;
-			Main.NewText(1);
 		}
 		else if (State == (int)BehaviorState.Fly)
 		{
+			NPC.ai[0]= 1;
 			NPC.aiStyle = NPCAIStyleID.StarCell;
 			NPC.noGravity = true;
 			NPC.rotation = 0;
-			Main.NewText(2);
 		}
 		else if (State == (int)BehaviorState.Attach)
 		{
+			NPC.ai[0] = 0;
 			NPC.aiStyle = NPCAIStyleID.FaceClosestPlayer;
 			NPC.knockBackResist = 0f;
 			NPC.Center = player.Center - Vector2.UnitY * 9 - (player.direction == 1 ? 2 * Vector2.UnitX : -2 * Vector2.UnitX);
 			NPC.noGravity = true;
 			NPC.rotation = 0;
-			Main.NewText(3);
 		}
 		else if (State == (int)BehaviorState.Teleporting)
 		{
@@ -182,7 +183,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 				};
 				Ins.VFXManager.Add(spark);
 			}
-			Main.NewText(4);
+			NPC.rotation = 0;
 		}
 		Vector2 toTarget = player.Center - NPC.Center;
 		if (toTarget.Length() > 1000 && TeleportCooling <= 0)
