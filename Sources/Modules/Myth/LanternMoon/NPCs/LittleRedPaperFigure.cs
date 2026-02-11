@@ -1,4 +1,6 @@
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.LanternMoon.Buffs;
+using Everglow.Myth.LanternMoon.Gores;
 
 namespace Everglow.Myth.LanternMoon.NPCs;
 
@@ -14,6 +16,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		Fighter,
 		Fly,
 		Attach,
+		Teleporting,
 	}
 
 	public int State;
@@ -24,8 +27,15 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 	public Vector2 SummonPos = Vector2.zeroVector;
 
+	public int TeleportTimer = 0;
+
+	public int TeleportCooling = 0;
+
+	public int MaxTeleportTime = 60;
+
 	public override void SetDefaults()
 	{
+		NPC.friendly = false;
 		NPC.damage = 25;
 		NPC.lifeMax = 150;
 		NPC.npcSlots = 1f;
@@ -106,12 +116,16 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		if (State == (int)BehaviorState.Fighter)
 		{
 			NPC.aiStyle = NPCAIStyleID.Fighter;
+			NPC.noGravity = false;
+			NPC.rotation = 0;
+			Main.NewText(1);
 		}
 		else if (State == (int)BehaviorState.Fly)
 		{
 			NPC.aiStyle = NPCAIStyleID.StarCell;
 			NPC.noGravity = true;
 			NPC.rotation = 0;
+			Main.NewText(2);
 		}
 		else if (State == (int)BehaviorState.Attach)
 		{
@@ -120,8 +134,94 @@ public class LittleRedPaperFigure : LanternMoonNPC
 			NPC.Center = player.Center - Vector2.UnitY * 9 - (player.direction == 1 ? 2 * Vector2.UnitX : -2 * Vector2.UnitX);
 			NPC.noGravity = true;
 			NPC.rotation = 0;
+			Main.NewText(3);
+		}
+		else if (State == (int)BehaviorState.Teleporting)
+		{
+
+			TeleportTimer--;
+			if (TeleportTimer < 0)
+			{
+				NPC.aiStyle = NPCAIStyleID.Fighter;
+				State = (int)BehaviorState.Fighter;
+			}
+			NPC.velocity *= 0;
+			if (TeleportTimer == 30)
+			{
+				Teleport(player);
+			}
+			if (Main.rand.NextBool(3))
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 2f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new FireSparkDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-7f, 7f), 0).RotatedByRandom(6.283),
+					maxTime = Main.rand.Next(37, 45),
+					scale = Main.rand.NextFloat(0.1f, 12.0f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				};
+				Ins.VFXManager.Add(spark);
+			}
+			if (Main.rand.NextBool(3))
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(0f, 2f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new FireDust
+				{
+					velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+					maxTime = Main.rand.Next(5, 15),
+					scale = Main.rand.NextFloat(0.1f, 6.0f),
+					rotation = Main.rand.NextFloat(6.283f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
+				};
+				Ins.VFXManager.Add(spark);
+			}
+			Main.NewText(4);
+		}
+		Vector2 toTarget = player.Center - NPC.Center;
+		if (toTarget.Length() > 1000 && TeleportCooling <= 0)
+		{
+			TeleportTimer = MaxTeleportTime;
+			TeleportCooling = Main.rand.Next(260, 300);
+			State = (int)BehaviorState.Teleporting;
+		}
+		if (TeleportCooling > 0)
+		{
+			TeleportCooling--;
 		}
 	}
+
+	public void Teleport(Player player)
+	{
+		for (int i = 0; i < 1000; i++)
+		{
+			Vector2 checkPoint = player.Center + new Vector2(i + 300, 0).RotatedBy(Math.PI * (Math.Sin(i * 0.5f + NPC.whoAmI + Main.time) + 1) / 2);
+			if (!Collision.SolidCollision(checkPoint - NPC.Size * 0.5f, NPC.width, NPC.height))
+			{
+				for (int j = 0; j < 50; j++)
+				{
+					checkPoint += new Vector2(0, 10);
+					if (Collision.SolidCollision(checkPoint - NPC.Size * 0.5f, NPC.width, NPC.height))
+					{
+						if ((checkPoint - player.Center).Length() >= 300)
+						{
+							NPC.Center = checkPoint + new Vector2(0, 0);
+							NPC.rotation = 0;
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
 
 	public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 	{
@@ -159,8 +259,64 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		}
 	}
 
+	public float OverTileHeight(Vector2 pos)
+	{
+		float value = 0f;
+		int checkCount = 0;
+		while (Collision.IsWorldPointSolid(pos + new Vector2(0, value)))
+		{
+			value -= 8;
+			checkCount++;
+			if (checkCount > 100)
+			{
+				return -9999999;
+			}
+		}
+		if (checkCount > 0)
+		{
+			return value + 8;
+		}
+		while (!Collision.IsWorldPointSolid(pos + new Vector2(0, value)))
+		{
+			value += 8;
+			checkCount++;
+			if (checkCount > 100)
+			{
+				return 9999999;
+			}
+		}
+		return value - 8;
+	}
+
+
 	public override void OnKill()
 	{
+		for (int g = 0; g < 4; g++)
+		{
+			if (Main.rand.NextBool(3))
+			{
+				Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+				string texturePath = ModAsset.LittleRedPaperFigure_Gore_0_Mod;
+				if (texturePath is not null)
+				{
+					texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+					texturePath += g;
+				}
+				var gore = new PaperGore
+				{
+					LightValue = 0.15f,
+					velocity = vel,
+					position = NPC.Center + vel,
+					Texture = ModContent.Request<Texture2D>(texturePath).Value,
+					rotateSpeed = vel.X / 8f,
+					scale = Main.rand.NextFloat(0.8f, 1.2f),
+					maxTime = Main.rand.Next(100, 240),
+					rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				};
+				Ins.VFXManager.Add(gore);
+			}
+		}
+		base.OnKill();
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -170,7 +326,16 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		Texture2D texture = ModAsset.LittleRedPaperFigure.Value;
 		if (State != (int)BehaviorState.Attach && !target.creativeGodMode)
 		{
-			spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+			if (State == (int)BehaviorState.Teleporting)
+			{
+				drawColor = drawColor * ((float)Math.Abs(TeleportTimer - MaxTeleportTime / 2) / (MaxTeleportTime / 2));
+				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+			}
+			else
+			{
+				spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() * 0.5f, NPC.scale, NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+			}
+
 		}
 		if (State == (int)BehaviorState.Attach)
 		{
@@ -179,4 +344,5 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 		return false;
 	}
+
 }
