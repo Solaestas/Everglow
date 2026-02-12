@@ -1,3 +1,6 @@
+using Everglow.Myth.LanternMoon.Projectiles.Weapons;
+using Terraria.DataStructures;
+
 namespace Everglow.Myth.LanternMoon.Items;
 
 /// <summary>
@@ -10,17 +13,37 @@ public class LanternSword : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.damage = 13;
-		Item.DamageType = DamageClass.Melee;
-		Item.width = 56;
-		Item.height = 56;
-		Item.useTime = 20;
-		Item.useAnimation = 20;
 		Item.useStyle = ItemUseStyleID.Swing;
-		Item.knockBack = 5f;
-		Item.value = Item.sellPrice(0, 0, 0, 70);
+		Item.width = 52;
+		Item.height = 56;
+		Item.useAnimation = 16;
+		Item.useTime = 16;
+		Item.knockBack = 3f;
+		Item.damage = 15;
 		Item.rare = ItemRarityID.White;
+		Item.autoReuse = true;
 		Item.UseSound = SoundID.Item1;
-		Item.autoReuse = false;
+		Item.DamageType = DamageClass.Melee;
+		Item.noUseGraphic = true;
+		Item.noMelee = true;
+		Item.shootSpeed = 5f;
+		Item.shoot = ModContent.ProjectileType<LanternSword_Proj>();
+		Item.value = 3600;
+	}
+
+	public override bool CanUseItem(Player player)
+	{
+		Item.useTime = (int)(18f / player.meleeSpeed);
+		Item.useAnimation = (int)(18f / player.meleeSpeed);
+		return player.ownedProjectileCounts[Item.shoot] < 1;
+	}
+
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		if (player.ownedProjectileCounts[Item.shoot] < 1)
+		{
+			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
+		}
+		return false;
 	}
 }
