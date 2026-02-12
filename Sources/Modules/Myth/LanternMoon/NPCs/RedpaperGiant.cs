@@ -67,10 +67,10 @@ public class RedpaperGiant : LanternMoonNPC
 			int frameNumber = (int)(NPC.frameCounter / 8f) % 3;
 			NPC.frame = new Rectangle(0, frameHeight * frameNumber, frameHeight, frameHeight);
 		}
-		if(State == (int)BehaviorState.Attack)
+		if (State == (int)BehaviorState.Attack)
 		{
 			int frameNumber = (int)((MaxAttackTime - AttackTimer) / (float)MaxAttackTime * 13);
-			if(frameNumber > 12)
+			if (frameNumber > 12)
 			{
 				frameNumber = 12;
 			}
@@ -150,7 +150,7 @@ public class RedpaperGiant : LanternMoonNPC
 						TeleportCooling = Main.rand.Next(260, 300);
 						State = (int)BehaviorState.Teleporting;
 					}
-					if(TeleportCooling > 0)
+					if (TeleportCooling > 0)
 					{
 						TeleportCooling--;
 					}
@@ -196,7 +196,7 @@ public class RedpaperGiant : LanternMoonNPC
 				{
 					FlipTimer = 0;
 					AttackTimer--;
-					if(AttackTimer <= 0)
+					if (AttackTimer <= 0)
 					{
 						State = (int)BehaviorState.CloseTarget;
 					}
@@ -207,7 +207,7 @@ public class RedpaperGiant : LanternMoonNPC
 						frameNumber = 12;
 					}
 					frameNumber += 3;
-					if(frameNumber is 7 or 10 or 11 or 13)
+					if (frameNumber is 7 or 10 or 11 or 13)
 					{
 						Lighting.AddLight(NPC.Center, new Vector3(1f, 0f, 0f));
 					}
@@ -227,10 +227,10 @@ public class RedpaperGiant : LanternMoonNPC
 						State = (int)BehaviorState.CloseTarget;
 					}
 					NPC.velocity *= 0;
-					if(TeleportTimer == 18)
+					if (TeleportTimer == 18)
 					{
 						float dis = Main.rand.NextFloat(120, 180);
-						if(FlyCooling > 0)
+						if (FlyCooling > 0)
 						{
 							dis = Main.rand.NextFloat(320, 380);
 						}
@@ -276,26 +276,29 @@ public class RedpaperGiant : LanternMoonNPC
 	{
 		for (int g = 0; g < 9; g++)
 		{
-			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
-			string texturePath = ModAsset.RedpaperGiantGore_0_Mod;
-			if (texturePath is not null)
+			if (Main.rand.NextBool(2))
 			{
-				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
-				texturePath += 9;
+				Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 6f, 0).RotatedByRandom(MathHelper.TwoPi);
+				string texturePath = ModAsset.RedpaperGiantGore_0_Mod;
+				if (texturePath is not null)
+				{
+					texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+					texturePath += g;
+				}
+				var gore = new PaperGore
+				{
+					LightValue = 0.15f,
+					velocity = vel,
+					position = NPC.Center + vel,
+					Texture = ModContent.Request<Texture2D>(texturePath).Value,
+					rotateSpeed = vel.X / 8f,
+					scale = Main.rand.NextFloat(0.8f, 1.2f),
+					maxTime = Main.rand.Next(120, 360),
+					rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					ai = new float[] { Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(0, MathF.PI) },
+				};
+				Ins.VFXManager.Add(gore);
 			}
-			var gore = new PaperGore
-			{
-				LightValue = 0.15f,
-				velocity = vel,
-				position = NPC.Center + vel,
-				Texture = ModContent.Request<Texture2D>(texturePath).Value,
-				rotateSpeed = vel.X / 8f,
-				scale = Main.rand.NextFloat(0.8f, 1.2f),
-				maxTime = Main.rand.Next(120, 360),
-				rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-				ai = new float[] { Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(0, MathF.PI) },
-			};
-			Ins.VFXManager.Add(gore);
 		}
 	}
 

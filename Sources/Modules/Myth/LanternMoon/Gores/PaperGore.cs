@@ -33,7 +33,7 @@ public class PaperGore : BurningGore
 					Active = true,
 					Visible = true,
 					position = position + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), 0).RotatedByRandom(6.283) * (1-timevalue) * width,
-					maxTime = Main.rand.Next(37, 45),
+					maxTime = Main.rand.Next(37, 45)*(1 - timevalue),
 					scale = Main.rand.NextFloat(0.1f, 12.0f) * (1 - timevalue),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
@@ -49,7 +49,7 @@ public class PaperGore : BurningGore
 					Active = true,
 					Visible = true,
 					position = position + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), 0).RotatedByRandom(6.283) * (1 - timevalue) * width,
-					maxTime = Main.rand.Next(5, 15),
+					maxTime = Main.rand.Next(5, 15) * (1 - timevalue),
 					scale = Main.rand.NextFloat(0.1f, 6.0f) * (1 - timevalue),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }
@@ -78,7 +78,6 @@ public class PaperGore : BurningGore
 		Color c2 = Lighting.GetColor((v2 / 16f).ToPoint()) * alpha;
 		Color c3 = Lighting.GetColor((v3 / 16f).ToPoint()) * alpha;
 
-		
 		timevalue = MathF.Asin(timevalue * 2 - 1) / MathF.PI + 0.5f;
 
 		List<Vertex2D> bars = new List<Vertex2D>()

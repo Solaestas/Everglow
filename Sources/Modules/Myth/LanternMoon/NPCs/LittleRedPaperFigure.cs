@@ -294,9 +294,9 @@ public class LittleRedPaperFigure : LanternMoonNPC
 	{
 		for (int g = 0; g < 4; g++)
 		{
-			if (Main.rand.NextBool(3))
+			if (Main.rand.NextBool(2))
 			{
-				Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 8f, 0).RotatedByRandom(MathHelper.TwoPi);
+				Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 5f, 0).RotatedByRandom(MathHelper.TwoPi);
 				string texturePath = ModAsset.LittleRedPaperFigure_Gore_0_Mod;
 				if (texturePath is not null)
 				{
