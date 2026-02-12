@@ -25,6 +25,7 @@ public class Charred : ModBuff
 		}
 
 		npc.lifeRegen -= LifeRegenReductionFromDot;
+		npc.SetLifeRegenExpectedLossPerSecond(LifeRegenReductionFromDot);
 
 		if (Main.rand.NextBool(4))
 		{

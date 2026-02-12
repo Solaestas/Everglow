@@ -51,7 +51,7 @@ public class RoadSignPost_ToArena : ModTile, ISceneTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		//Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		//Tile tile = TileUtils.SafeGetTile(i, j);
 		//if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		//{
 		//	Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -78,7 +78,7 @@ public class RoadSignPost_ToArena : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			RoadSignPost_ToArenaVFX rSV = new RoadSignPost_ToArenaVFX { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

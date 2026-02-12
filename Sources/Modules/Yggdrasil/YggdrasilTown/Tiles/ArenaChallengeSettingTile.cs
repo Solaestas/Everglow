@@ -44,7 +44,7 @@ public class ArenaChallengeSettingTile : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			NPCBossTagsSystem nCTS = new NPCBossTagsSystem { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

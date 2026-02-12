@@ -54,14 +54,14 @@ public class MeltingButton : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		tile.TileFrameX = 0;
 		base.NearbyEffects(i, j, closer);
 	}
 
 	public override void MouseOver(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		tile.TileFrameX = 18;
 		string text = "Meltdown";
 		Main.instance.MouseText(text, ItemRarityID.Red);

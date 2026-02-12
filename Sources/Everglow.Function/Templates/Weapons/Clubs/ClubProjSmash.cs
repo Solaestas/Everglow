@@ -150,9 +150,9 @@ public abstract class ClubProjSmash : MeleeProj
 				bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 				bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
 				if (Collision.SolidCollision(Player.BottomLeft, Player.width, 64) // Normal
-					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, 16)) // Platform
-					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, 0))
-					|| TileCollisionUtils.PlatformCollision(Player.Bottom + new Vector2(0, -16))
+					|| TileUtils.PlatformCollision(Player.Bottom + new Vector2(0, 16)) // Platform
+					|| TileUtils.PlatformCollision(Player.Bottom + new Vector2(0, 0))
+					|| TileUtils.PlatformCollision(Player.Bottom + new Vector2(0, -16))
 					|| ((Player.waterWalk || Player.waterWalk2) // Water walker
 						&& Main.tile[bottomPos].LiquidAmount > 0
 						&& !Player.wet))

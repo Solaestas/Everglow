@@ -79,17 +79,17 @@ public class FurnaceTrapDoor_VFX : Visual
 
 	public void CloseTrapDoor(int i, int j)
 	{
-		Tile thisTile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile thisTile = TileUtils.SafeGetTile(i, j);
 		int startX = i - thisTile.TileFrameX / 18;
 		int startY = j - thisTile.TileFrameY / 18;
-		var firstTile = YggdrasilWorldGeneration.SafeGetTile(startX, startY);
+		var firstTile = TileUtils.SafeGetTile(startX, startY);
 		if (firstTile.TileType == ModContent.TileType<FurnaceTrapDoor_Open>())
 		{
 			for (int x = 0; x < 8; x++)
 			{
 				for (int y = 0; y < 2; y++)
 				{
-					var checkTile = YggdrasilWorldGeneration.SafeGetTile(startX + x, startY + y);
+					var checkTile = TileUtils.SafeGetTile(startX + x, startY + y);
 					checkTile.TileType = (ushort)ModContent.TileType<FurnaceTrapDoor>();
 					checkTile.TileFrameX = (short)(x * 18);
 					checkTile.TileFrameY = (short)(y * 18);
@@ -100,17 +100,17 @@ public class FurnaceTrapDoor_VFX : Visual
 
 	public void OpenTrapDoor(int i, int j)
 	{
-		Tile thisTile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile thisTile = TileUtils.SafeGetTile(i, j);
 		int startX = i - thisTile.TileFrameX / 18;
 		int startY = j - thisTile.TileFrameY / 18;
-		var firstTile = YggdrasilWorldGeneration.SafeGetTile(startX, startY);
+		var firstTile = TileUtils.SafeGetTile(startX, startY);
 		if (firstTile.TileType == ModContent.TileType<FurnaceTrapDoor>())
 		{
 			for (int x = 0; x < 8; x++)
 			{
 				for (int y = 0; y < 2; y++)
 				{
-					var checkTile = YggdrasilWorldGeneration.SafeGetTile(startX + x, startY + y);
+					var checkTile = TileUtils.SafeGetTile(startX + x, startY + y);
 					checkTile.TileType = (ushort)ModContent.TileType<FurnaceTrapDoor_Open>();
 					checkTile.TileFrameX = (short)(x * 18);
 					checkTile.TileFrameY = (short)(y * 18);

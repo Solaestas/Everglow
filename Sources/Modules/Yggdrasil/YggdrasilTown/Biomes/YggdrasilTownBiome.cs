@@ -70,7 +70,7 @@ public class YggdrasilTownBiome : ModBiome
 			{
 				for (int y = Main.maxTilesY - 2000; y < Main.maxTilesY - 20; y++)
 				{
-					Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					if (tile.TileType == ModContent.TileType<YggdrasilCommandBlock>())
 					{
 						if (tile.TileFrameX == 0)

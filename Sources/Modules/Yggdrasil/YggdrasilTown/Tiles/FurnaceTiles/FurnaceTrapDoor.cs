@@ -57,10 +57,10 @@ public class FurnaceTrapDoor : ModTile
 
 	public void OpenTrapDoor(int i, int j)
 	{
-		Tile thisTile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile thisTile = TileUtils.SafeGetTile(i, j);
 		int startX = i - thisTile.TileFrameX / 18;
 		int startY = j - thisTile.TileFrameY / 18;
-		var firstTile = YggdrasilWorldGeneration.SafeGetTile(startX, startY);
+		var firstTile = TileUtils.SafeGetTile(startX, startY);
 		if (firstTile.TileType == Type)
 		{
 			var trapDoorVFX = new FurnaceTrapDoor_VFX

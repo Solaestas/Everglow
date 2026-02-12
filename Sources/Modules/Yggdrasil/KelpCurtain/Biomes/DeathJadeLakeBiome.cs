@@ -17,7 +17,7 @@ public class DeathJadeLakeBiome : ModBiome
 		int checkX = Main.maxTilesX / 2;
 		for (int j = 0; j < 1000; j++)
 		{
-			var tile = YggdrasilWorldGeneration.SafeGetTile(checkX, checkY + j);
+			var tile = TileUtils.SafeGetTile(checkX, checkY + j);
 			if (tile.LiquidAmount > 0)
 			{
 				LiquidSurfaceY = (checkY + j) * 16f + 16 - tile.LiquidAmount / 16f; // LiquidAmount 0 ~255
@@ -32,7 +32,7 @@ public class DeathJadeLakeBiome : ModBiome
 			int valueX = checkX;
 			for (int x = checkX; x < Main.maxTilesX * 0.8f; x++)
 			{
-				var tileBound = YggdrasilWorldGeneration.SafeGetTile(x, checkBoundY);
+				var tileBound = TileUtils.SafeGetTile(x, checkBoundY);
 				if(tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
 				{
 					valueX = x;

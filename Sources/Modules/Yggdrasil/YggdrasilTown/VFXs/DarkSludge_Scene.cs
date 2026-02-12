@@ -31,7 +31,7 @@ public class DarkSludge_Scene : ForegroundVFX
 			MaxX = originTile.X;
 			while (MinX > 0)
 			{
-				if (YggdrasilWorldGeneration.SafeGetTile(MinX, originTile.Y).TileType == ModContent.TileType<DarkSludge>() && YggdrasilWorldGeneration.SafeGetTile(MinX, originTile.Y - 1).TileType != ModContent.TileType<DarkSludge>())
+				if (TileUtils.SafeGetTile(MinX, originTile.Y).TileType == ModContent.TileType<DarkSludge>() && TileUtils.SafeGetTile(MinX, originTile.Y - 1).TileType != ModContent.TileType<DarkSludge>())
 				{
 					MinX--;
 				}
@@ -42,7 +42,7 @@ public class DarkSludge_Scene : ForegroundVFX
 			}
 			while (MaxX < Main.maxTilesX)
 			{
-				if (YggdrasilWorldGeneration.SafeGetTile(MaxX, originTile.Y).TileType == ModContent.TileType<DarkSludge>() && YggdrasilWorldGeneration.SafeGetTile(MaxX, originTile.Y - 1).TileType != ModContent.TileType<DarkSludge>())
+				if (TileUtils.SafeGetTile(MaxX, originTile.Y).TileType == ModContent.TileType<DarkSludge>() && TileUtils.SafeGetTile(MaxX, originTile.Y - 1).TileType != ModContent.TileType<DarkSludge>())
 				{
 					MaxX++;
 				}

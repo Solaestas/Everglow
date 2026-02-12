@@ -38,11 +38,11 @@ public abstract class VisualGore : Visual
 		{
 			float velocityValue = velocity.Length() / 25f;
 			velocityValue = Math.Clamp(velocityValue, 0.0f, 1.0f);
-			if (TileCollisionUtils.PlatformCollision(position + new Vector2(velocity.X, 0)))
+			if (TileUtils.PlatformCollision(position + new Vector2(velocity.X, 0)))
 			{
 				velocity.X *= -0.75f * velocityValue;
 			}
-			if (TileCollisionUtils.PlatformCollision(position + new Vector2(0, velocity.Y)))
+			if (TileUtils.PlatformCollision(position + new Vector2(0, velocity.Y)))
 			{
 				velocity.Y *= -0.75f * velocityValue;
 			}

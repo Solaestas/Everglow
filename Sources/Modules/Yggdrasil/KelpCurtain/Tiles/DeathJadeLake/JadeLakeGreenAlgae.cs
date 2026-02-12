@@ -27,7 +27,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		Tile bottomTile = YggdrasilWorldGeneration.SafeGetTile(i, j + 1);
+		Tile bottomTile = TileUtils.SafeGetTile(i, j + 1);
 		Tile tile = Main.tile[i, j];
 		if (tile.HasTile && tile.TileType == Type)
 		{
@@ -36,7 +36,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 				int deltaY = 0;
 				while (true)
 				{
-					Tile topTile = YggdrasilWorldGeneration.SafeGetTile(i, j - deltaY);
+					Tile topTile = TileUtils.SafeGetTile(i, j - deltaY);
 					if (topTile.HasTile && topTile.TileType == Type && j - deltaY > 0)
 					{
 						WorldGen.KillTile(i, j - deltaY, false, false, true);
@@ -76,7 +76,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 		if (tile2.TileType != tile.TileType && !tile2.HasTile)
 		{
 			int length = 0;
-			while (YggdrasilWorldGeneration.SafeGetTile(i, j + length).TileType == tile.TileType)
+			while (TileUtils.SafeGetTile(i, j + length).TileType == tile.TileType)
 			{
 				length++;
 				if (length >= 31)
@@ -103,7 +103,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 		{
 			for (int y = 1; y < 30; y++)
 			{
-				Tile stepDown = YggdrasilWorldGeneration.SafeGetTile(i, j + y);
+				Tile stepDown = TileUtils.SafeGetTile(i, j + y);
 				if (stepDown.TileType != Type)
 				{
 					TileFluentDrawManager.AddFluentPoint(this, i, j + y - 1);

@@ -19,7 +19,7 @@ public class RichOxygenSpongeWall : ModWall
 		{
 			for (int y = -1;y < 2; y++)
 			{
-				Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(x + i, y + j);
+				Tile checkTile = TileUtils.SafeGetTile(x + i, y + j);
 				if(!checkTile.HasTile)
 				{
 					WorldGen.PlaceTile(x + i, y + j, ModContent.TileType<RichOxygenSponge>());

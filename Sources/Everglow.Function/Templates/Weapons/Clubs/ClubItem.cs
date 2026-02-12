@@ -74,7 +74,7 @@ public abstract class ClubItem : ModItem
 			Point bottomPos = pos.ToTileCoordinates();
 			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-			if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+			if (TileUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
 			{
 				return false;
 			}
@@ -85,7 +85,7 @@ public abstract class ClubItem : ModItem
 			Point bottomPos = pos.ToTileCoordinates();
 			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
 			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-			if (TileCollisionUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+			if (TileUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
 			{
 				return true;
 			}

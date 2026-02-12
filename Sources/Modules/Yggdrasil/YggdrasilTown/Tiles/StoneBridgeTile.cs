@@ -45,7 +45,7 @@ public class StoneBridgeTile : ModTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			StoneBridge_fence sBF = new StoneBridge_fence { position = new Vector2(i, j - 3) * 16 - new Vector2(0, 14), Active = true, Visible = true, originTile = new Point(i, j), originType = ModContent.TileType<StoneBridgeTile>() };

@@ -18,7 +18,7 @@ public class FireflyInferno : ModBuff
 		int buffDamage = (int)(5 + npc.velocity.Length() * 8);
 
 		npc.lifeRegen = -buffDamage;
-		npc.lifeRegenExpectedLossPerSecond = (int)(1 + npc.velocity.Length() * 2.4f);
+		npc.SetLifeRegenExpectedLossPerSecond((int)(1 + npc.velocity.Length() * 2.4f));
 
 		if(Main.rand.NextBool(4))
 		{

@@ -61,8 +61,8 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 			var handler = element.Handler;
 
 			var buildUpColor = Color.Lerp(Color.White * 0.85f, lightColor, 0.3f);
-			var durationColor = Color.Lerp(Color.Gray, lightColor, 0.3f);
-			var backgroundColor = Color.Lerp(handler.Color, lightColor, 0.5f);
+			var durationColor = Color.Lerp(new Color(0.3f, 0.3f, 0.3f, 1f), lightColor, 0.3f);
+			var backgroundColor = handler.Color;
 			float modifiedX = ((activeElementDebuffCount - 1) / 2f - drawedElementDebuffCount) * scale * 20;
 			var drawPosition = drawCenter + new Vector2(modifiedX, -10 * scale);
 			var buffBarScale = scale * 0.06f;
@@ -70,17 +70,17 @@ public partial class ElementalDebuffGlobalNPC : GlobalNPC
 			// Draw element debuff icons and VFXs
 			if (element.Proc)
 			{
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, 1 - element.TimeProgress, durationColor, backgroundColor, buffBarScale, handler.Texture.Value);
 				var breakingTime = (handler.Duration - element.TimeLeft) / MathF.Min(30, handler.Duration);
 				if (breakingTime < 1f)
 				{
 					ValueBarHelper.DrawBreakOutEffect(spriteBatch, drawPosition, breakingTime, buffBarScale);
 				}
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.TimeProgress, durationColor, backgroundColor, buffBarScale, handler.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 			else if (element.HasBuildUp)
 			{
-				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, element.BuildUpProgress, buildUpColor, backgroundColor, buffBarScale, handler.Texture.Value);
+				ValueBarHelper.DrawCircleValueBar(spriteBatch, drawPosition, 1 - element.BuildUpProgress, buildUpColor, backgroundColor, buffBarScale, handler.Texture.Value);
 				drawedElementDebuffCount++;
 			}
 		}

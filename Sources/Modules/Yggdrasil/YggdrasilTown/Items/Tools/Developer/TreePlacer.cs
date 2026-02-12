@@ -45,8 +45,8 @@ internal class TreePlacer : ModItem
 
 		for (int g = 0; g < Height; g++)
 		{
-			Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j - g);
-			Tile tileRight = YggdrasilWorldGeneration.SafeGetTile(i + 1, j - g);
+			Tile tile = TileUtils.SafeGetTile(i, j - g);
+			Tile tileRight = TileUtils.SafeGetTile(i + 1, j - g);
 			if(!YggdrasilWorldGeneration.ChestSafe(i, j - g - 1) || !YggdrasilWorldGeneration.ChestSafe(i + 1, j - g - 1))
 			{
 				Height = g + 1;

@@ -49,7 +49,7 @@ public class RustBronzeTreasureChest_Lock : ModTile
 
 	public override ushort GetMapOption(int i, int j)
 	{
-		return (ushort)(YggdrasilWorldGeneration.SafeGetTile(i, j).TileFrameX / 36);
+		return (ushort)(TileUtils.SafeGetTile(i, j).TileFrameX / 36);
 	}
 
 	public override LocalizedText DefaultContainerName(int frameX, int frameY)
@@ -67,7 +67,7 @@ public class RustBronzeTreasureChest_Lock : ModTile
 	{
 		int left = i;
 		int top = j;
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX % 36 != 0)
 		{
 			left--;
@@ -116,7 +116,7 @@ public class RustBronzeTreasureChest_Lock : ModTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY % 36 == 0)
 		{
 			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
@@ -159,25 +159,25 @@ public class RustBronzeTreasureChest_Lock : ModTile
 
 	public Tile UnLockLeft(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY % 36 / 18);
-		Tile targetTile = YggdrasilWorldGeneration.SafeGetTile(topLeftPoint + new Point(-20, -75));
+		Tile targetTile = TileUtils.SafeGetTile(topLeftPoint + new Point(-20, -75));
 		return targetTile;
 	}
 
 	public Tile UnLockRight(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY % 36 / 18);
-		Tile targetTile = YggdrasilWorldGeneration.SafeGetTile(topLeftPoint + new Point(20, -75));
+		Tile targetTile = TileUtils.SafeGetTile(topLeftPoint + new Point(20, -75));
 		return targetTile;
 	}
 
 	public Tile UnLockUp(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY % 36 / 18);
-		Tile targetTile = YggdrasilWorldGeneration.SafeGetTile(topLeftPoint + new Point(0, -105));
+		Tile targetTile = TileUtils.SafeGetTile(topLeftPoint + new Point(0, -105));
 		return targetTile;
 	}
 

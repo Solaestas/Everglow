@@ -88,7 +88,7 @@ public class Union_Y_Stairs : ShapeDataTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 900 && tile.TileFrameY == 900)
 		{
 			Union_Y_Stairs_Front uYSF = new Union_Y_Stairs_Front { position = new Vector2(i, j) * 16 + new Vector2(0, -70), Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

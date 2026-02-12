@@ -33,7 +33,7 @@ public class DeathFlame : ModBuff
 			}
 		}
 		int BuffDamage = (int)((1 - npc.life / (float)npc.lifeMax) * 400 + npc.defense + 40);
-		npc.lifeRegenExpectedLossPerSecond = BuffDamage / 24;
+		npc.SetLifeRegenExpectedLossPerSecond(BuffDamage / 24);
 		npc.lifeRegen = -BuffDamage;
 		if (npc.life + npc.lifeRegen / 40 <= 0 && npc.active && !npc.dontTakeDamage)
 		{

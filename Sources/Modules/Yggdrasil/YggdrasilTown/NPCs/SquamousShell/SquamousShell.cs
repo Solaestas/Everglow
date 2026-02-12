@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Skeleton2D;
 using Everglow.Commons.Skeleton2D.Reader;
 using Everglow.Commons.Skeleton2D.Renderer;
@@ -11,7 +12,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
 using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Bosses.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.BossDrops;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -222,7 +222,7 @@ public class SquamousShell : ModNPC
 		Player target = Main.player[NPC.target];
 
 		// if target no stand in solid top.
-		if (!TileCollisionUtils.PlatformCollision(target.Bottom) && !TileCollisionUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position,target.width, target.height + 48))
+		if (!TileUtils.PlatformCollision(target.Bottom) && !TileUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position,target.width, target.height + 48))
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(NextAttack()));
 			yield break;
@@ -241,12 +241,12 @@ public class SquamousShell : ModNPC
 		}
 
 		// Stand on ground
-		if (!Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !TileCollisionUtils.PlatformCollision(NPC.Bottom))
+		if (!Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !TileUtils.PlatformCollision(NPC.Bottom))
 		{
 			for (int t = 0; t < 300; t++)
 			{
 				NPC.position.Y += 10;
-				if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+				if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileUtils.PlatformCollision(NPC.Bottom))
 				{
 					NPC.position.Y -= 10;
 					NPC.velocity *= 0;
@@ -298,15 +298,15 @@ public class SquamousShell : ModNPC
 			// accleration
 			if (Math.Abs(NPC.velocity.X) < maxSpeed)
 			{
-				if (Collision.SolidCollision(NPC.Center + new Vector2(50, 80), 0, 0) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+				if (Collision.SolidCollision(NPC.Center + new Vector2(50, 80), 0, 0) || TileUtils.PlatformCollision(NPC.Bottom))
 				{
 					NPC.velocity.X += direction * acceleration / 3f;
 				}
-				if (Collision.SolidCollision(NPC.Center + new Vector2(0, 80), 0, 0) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+				if (Collision.SolidCollision(NPC.Center + new Vector2(0, 80), 0, 0) || TileUtils.PlatformCollision(NPC.Bottom))
 				{
 					NPC.velocity.X += direction * acceleration / 3f;
 				}
-				if (Collision.SolidCollision(NPC.Center + new Vector2(-50, 80), 0, 0) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+				if (Collision.SolidCollision(NPC.Center + new Vector2(-50, 80), 0, 0) || TileUtils.PlatformCollision(NPC.Bottom))
 				{
 					NPC.velocity.X += direction * acceleration / 3f;
 				}
@@ -410,7 +410,7 @@ public class SquamousShell : ModNPC
 		}
 		for (int k = 0; k < 30; k++)
 		{
-			if (!Collision.SolidCollision(NPC.Bottom + new Vector2(0, 2), 2, 2) || !TileCollisionUtils.PlatformCollision(NPC.Bottom))
+			if (!Collision.SolidCollision(NPC.Bottom + new Vector2(0, 2), 2, 2) || !TileUtils.PlatformCollision(NPC.Bottom))
 			{
 				NPC.position.Y += 6;
 			}
@@ -421,7 +421,7 @@ public class SquamousShell : ModNPC
 		}
 		for (int k = 0; k < 30; k++)
 		{
-			if (Collision.SolidCollision(NPC.Bottom + new Vector2(0, -2), 2, 2) || !TileCollisionUtils.PlatformCollision(NPC.Bottom))
+			if (Collision.SolidCollision(NPC.Bottom + new Vector2(0, -2), 2, 2) || !TileUtils.PlatformCollision(NPC.Bottom))
 			{
 				NPC.position.Y -= 6;
 			}
@@ -471,7 +471,7 @@ public class SquamousShell : ModNPC
 		int count = 0;
 
 		// 确保位置正确
-		while (Collision.SolidCollision(NPC.BottomLeft - new Vector2(0, 4), NPC.width, 8) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+		while (Collision.SolidCollision(NPC.BottomLeft - new Vector2(0, 4), NPC.width, 8) || TileUtils.PlatformCollision(NPC.Bottom))
 		{
 			count++;
 			NPC.position.Y -= 2f;
@@ -598,12 +598,12 @@ public class SquamousShell : ModNPC
 		int waitCount = 0;
 
 		// Stand on ground
-		if (!Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !TileCollisionUtils.PlatformCollision(NPC.Bottom))
+		if (!Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !TileUtils.PlatformCollision(NPC.Bottom))
 		{
 			for (int t = 0; t < 300; t++)
 			{
 				NPC.position.Y += 10;
-				if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileCollisionUtils.PlatformCollision(NPC.Bottom))
+				if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileUtils.PlatformCollision(NPC.Bottom))
 				{
 					NPC.position.Y -= 10;
 					NPC.velocity *= 0;
@@ -1617,7 +1617,7 @@ public class SquamousShell : ModNPC
 		}
 		Player target = Main.player[NPC.target];
 		float randAttack = Main.rand.NextFloat(0, 20);
-		if (!TileCollisionUtils.PlatformCollision(target.Bottom) && !TileCollisionUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position, target.width, target.height + 48))
+		if (!TileUtils.PlatformCollision(target.Bottom) && !TileUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position, target.width, target.height + 48))
 		{
 			if (MathF.Abs(target.Center.X - NPC.Center.X) > 700)
 			{

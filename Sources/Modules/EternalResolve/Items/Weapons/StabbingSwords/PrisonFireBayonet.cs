@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class PrisonFireBayonet : StabbingSwordItem
+	public class PrisonFireBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//点燃敌人！
@@ -16,7 +16,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Orange;
 			Item.value = Item.sellPrice(0, 1, 12, 0);
 			Item.shoot = ModContent.ProjectileType<PrisonFireBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<PrisonFireBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}

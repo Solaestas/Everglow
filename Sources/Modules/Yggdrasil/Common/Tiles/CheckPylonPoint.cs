@@ -26,9 +26,9 @@ public class CheckPylonPoint : ModItem
 				pointX = (int)(WorldGen.genRand.Next(80, 240) * (WorldGen.genRand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
 				for (int y = 160; y < Main.maxTilesY / 3; y++)
 				{
-					if (SafeGetTile(pointX, y).HasTile && SafeGetTile(pointX, y).TileType != TileID.Trees)
+					if (TileUtils.SafeGetTile(pointX, y).HasTile && TileUtils.SafeGetTile(pointX, y).TileType != TileID.Trees)
 					{
-						if (SafeGetTile(pointX, y - 1).HasTile)
+						if (TileUtils.SafeGetTile(pointX, y - 1).HasTile)
 						{
 							y -= 2;
 						}

@@ -40,7 +40,7 @@ public class OrichalcumPedal : ModProjectile
 
 	public override void AI()
 	{
-		if (TileCollisionUtils.PlatformCollision(Projectile.Center))
+		if (TileUtils.PlatformCollision(Projectile.Center))
 		{
 			Projectile.velocity = Vector2.Zero;
 			Projectile.alpha += 10;

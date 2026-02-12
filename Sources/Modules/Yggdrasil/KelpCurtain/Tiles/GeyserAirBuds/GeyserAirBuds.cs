@@ -102,7 +102,7 @@ public class GeyserAirBuds : ModTile, ITileFluentlyDrawn // 继承ITileFluentlyD
 		{
 			for (int y = 0; y < 2; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+				Tile tile = TileUtils.SafeGetTile(i + x, j + y);
 				if (tile.TileType == Type)
 				{
 					tile.TileType = (ushort)ModContent.TileType<GeyserAirBudsPlatform>();

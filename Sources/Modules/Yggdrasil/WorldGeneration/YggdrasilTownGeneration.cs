@@ -168,7 +168,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = center.Y - 60; y < center.Y + radious; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				float color = PerlinPixel2[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 1024), Math.Clamp((y - center.Y + radious) / 2, 0, 1024)] / 255f;
 				float distance = new Vector2((x - center.X) * 0.6667f, y - center.Y).Length() / 200f;
 				if (color + distance > 1.5f)
@@ -206,25 +206,25 @@ public class YggdrasilTownGeneration
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
 
 		// 源晶塔
-		PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
-		PlaceFrameImportantTiles(1257, startY, 3, 1, ModContent.TileType<StoneBridgeTile>(), 0, 18);
-		PlaceFrameImportantTiles(1253, startY + 7, 7, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
+		TileUtils.PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
+		TileUtils.PlaceFrameImportantTiles(1257, startY, 3, 1, ModContent.TileType<StoneBridgeTile>(), 0, 18);
+		TileUtils.PlaceFrameImportantTiles(1253, startY + 7, 7, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
 		{
 			if (x % 20 == 0)
 			{
-				PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
+				TileUtils.PlaceFrameImportantTiles(x, startY, 20, 1, ModContent.TileType<StoneBridgeTile>(), 0, 0);
 
-				PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
+				TileUtils.PlaceFrameImportantTiles(x, startY + 7, 20, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 			}
 		}
-		PlaceFrameImportantTiles(1440, startY, 8, 1, ModContent.TileType<StoneBridgeTile>(), 0, 54);
+		TileUtils.PlaceFrameImportantTiles(1440, startY, 8, 1, ModContent.TileType<StoneBridgeTile>(), 0, 54);
 
-		PlaceFrameImportantTiles(1440, startY - 3, 4, 3, ModContent.TileType<DilapidatedDangerSigns4x3>(), 0, 0);
+		TileUtils.PlaceFrameImportantTiles(1440, startY - 3, 4, 3, ModContent.TileType<DilapidatedDangerSigns4x3>(), 0, 0);
 
-		PlaceFrameImportantTiles(1440, startY + 7, 12, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
+		TileUtils.PlaceFrameImportantTiles(1440, startY + 7, 12, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 
-		PlaceFrameImportantTiles(1470, startY + 7, 16, 1, ModContent.TileType<StoneBridgeTile>(), 0, 72);
+		TileUtils.PlaceFrameImportantTiles(1470, startY + 7, 16, 1, ModContent.TileType<StoneBridgeTile>(), 0, 72);
 	}
 
 	/// <summary>
@@ -273,7 +273,7 @@ public class YggdrasilTownGeneration
 			{
 				point += velocity;
 				oldPoints.Add(point);
-				if (SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
+				if (TileUtils.SafeGetTile((int)(point + velocity * 30).X, (int)(point + velocity).Y).HasTile)
 				{
 					point -= velocity;
 					velocity.X *= -1;
@@ -314,7 +314,7 @@ public class YggdrasilTownGeneration
 						float aValue = PerlinPixelB[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 8f;
 						if (v0.Length() < radious - aValue)
 						{
-							Tile tile = SafeGetTile(x, y);
+							Tile tile = TileUtils.SafeGetTile(x, y);
 							tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 							if (v0.Length() < radious - aValue - 2)
 							{
@@ -354,7 +354,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = center.Y - radious; y < center.Y - 60; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				float color = PerlinPixel2[Math.Clamp((int)(x - center.X + radious * 1.5f) / 3, 0, 1024), Math.Clamp((y - center.Y + radious) / 2, 0, 1024)] / 255f;
 				float distance = new Vector2((x - center.X) * 0.6667f, y - center.Y).Length() / 200f;
 				if (color + distance is > 1.5f and < 2f)
@@ -381,7 +381,7 @@ public class YggdrasilTownGeneration
 	{
 		// int startX = AzureGrottoCenterX;
 		// int bottomY = 11000;
-		// while (!SafeGetTile(startX, bottomY).HasTile)
+		// while (!TileUtils.SafeGetTile(startX, bottomY).HasTile)
 		// {
 		// bottomY++;
 		// if (bottomY > 11900)
@@ -426,7 +426,7 @@ public class YggdrasilTownGeneration
 		// }
 		// int finalX = x + startX;
 		// int finalY = bottomY - y + y1;
-		// Tile tile = SafeGetTile(finalX, finalY);
+		// Tile tile = TileUtils.SafeGetTile(finalX, finalY);
 		// if (!tile.HasTile)
 		// {
 		// tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -440,11 +440,11 @@ public class YggdrasilTownGeneration
 		// tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// }
-		// else if (SafeGetTile(finalX, finalY + 5).HasTile)
+		// else if (TileUtils.SafeGetTile(finalX, finalY + 5).HasTile)
 		// {
 		// for (int y2 = 0; y2 < 6; y2++)
 		// {
-		// Tile tile2 = SafeGetTile(finalX, finalY + y2);
+		// Tile tile2 = TileUtils.SafeGetTile(finalX, finalY + y2);
 		// tile2.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// break;
@@ -457,7 +457,7 @@ public class YggdrasilTownGeneration
 		// {
 		// int finalX = x + startX;
 		// int finalY = bottomY - y + y1;
-		// Tile tile = SafeGetTile(finalX, finalY);
+		// Tile tile = TileUtils.SafeGetTile(finalX, finalY);
 		// if (!tile.HasTile)
 		// {
 		// tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -478,7 +478,7 @@ public class YggdrasilTownGeneration
 		// {
 		// int finalX = x + startX;
 		// int finalY = bottomY - y;
-		// Tile tile = SafeGetTile(finalX, finalY);
+		// Tile tile = TileUtils.SafeGetTile(finalX, finalY);
 		// tile.LiquidType = LiquidID.Water;
 		// tile.LiquidAmount = 255;
 		// }
@@ -525,16 +525,16 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = upY; y < downY; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
-				Tile tileUp = SafeGetTile(x, y - 1);
-				Tile tileUp1 = SafeGetTile(x - 1, y - 1);
-				Tile tileUp2 = SafeGetTile(x - 2, y - 1);
-				Tile tileUp3 = SafeGetTile(x - 3, y - 1);
-				Tile tileUp4 = SafeGetTile(x - 4, y - 1);
-				Tile tileLeft1 = SafeGetTile(x - 1, y);
-				Tile tileLeft2 = SafeGetTile(x - 2, y);
-				Tile tileLeft3 = SafeGetTile(x - 3, y);
-				Tile tileLeft4 = SafeGetTile(x - 4, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
+				Tile tileUp = TileUtils.SafeGetTile(x, y - 1);
+				Tile tileUp1 = TileUtils.SafeGetTile(x - 1, y - 1);
+				Tile tileUp2 = TileUtils.SafeGetTile(x - 2, y - 1);
+				Tile tileUp3 = TileUtils.SafeGetTile(x - 3, y - 1);
+				Tile tileUp4 = TileUtils.SafeGetTile(x - 4, y - 1);
+				Tile tileLeft1 = TileUtils.SafeGetTile(x - 1, y);
+				Tile tileLeft2 = TileUtils.SafeGetTile(x - 2, y);
+				Tile tileLeft3 = TileUtils.SafeGetTile(x - 3, y);
+				Tile tileLeft4 = TileUtils.SafeGetTile(x - 4, y);
 				if (tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
 				{
 					continue;
@@ -597,11 +597,11 @@ public class YggdrasilTownGeneration
 			{
 				if (GenRand.NextBool(1500))
 				{
-					Tile tile = SafeGetTile(x, y);
-					Tile tileUp = SafeGetTile(x, y - 1);
-					Tile tileDown = SafeGetTile(x, y + 1);
-					Tile tileLeft = SafeGetTile(x - 1, y);
-					Tile tileRight = SafeGetTile(x + 1, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
+					Tile tileUp = TileUtils.SafeGetTile(x, y - 1);
+					Tile tileDown = TileUtils.SafeGetTile(x, y + 1);
+					Tile tileLeft = TileUtils.SafeGetTile(x - 1, y);
+					Tile tileRight = TileUtils.SafeGetTile(x + 1, y);
 					if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
 						if (tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
@@ -631,16 +631,16 @@ public class YggdrasilTownGeneration
 			{
 				if ((center - new Vector2(x, y)).Length() <= range)
 				{
-					Tile tile = SafeGetTile(x, y);
-					Tile tileUp = SafeGetTile(x, y - 1);
-					Tile tileUp1 = SafeGetTile(x - 1, y - 1);
-					Tile tileUp2 = SafeGetTile(x - 2, y - 1);
-					Tile tileUp3 = SafeGetTile(x - 3, y - 1);
-					Tile tileUp4 = SafeGetTile(x - 4, y - 1);
-					Tile tileLeft1 = SafeGetTile(x - 1, y);
-					Tile tileLeft2 = SafeGetTile(x - 2, y);
-					Tile tileLeft3 = SafeGetTile(x - 3, y);
-					Tile tileLeft4 = SafeGetTile(x - 4, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
+					Tile tileUp = TileUtils.SafeGetTile(x, y - 1);
+					Tile tileUp1 = TileUtils.SafeGetTile(x - 1, y - 1);
+					Tile tileUp2 = TileUtils.SafeGetTile(x - 2, y - 1);
+					Tile tileUp3 = TileUtils.SafeGetTile(x - 3, y - 1);
+					Tile tileUp4 = TileUtils.SafeGetTile(x - 4, y - 1);
+					Tile tileLeft1 = TileUtils.SafeGetTile(x - 1, y);
+					Tile tileLeft2 = TileUtils.SafeGetTile(x - 2, y);
+					Tile tileLeft3 = TileUtils.SafeGetTile(x - 3, y);
+					Tile tileLeft4 = TileUtils.SafeGetTile(x - 4, y);
 					if (tile.LiquidAmount > 0 || tileUp.LiquidAmount > 0 || tileUp1.LiquidAmount > 0 || tileUp2.LiquidAmount > 0 || tileUp3.LiquidAmount > 0 || tileUp4.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft1.LiquidAmount > 0 || tileLeft2.LiquidAmount > 0 || tileLeft3.LiquidAmount > 0 || tileLeft4.LiquidAmount > 0)
 					{
 						continue;
@@ -651,7 +651,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(3))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 4, y, 5, 3))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 4, y, 5, 3))
 								{
 									PlaceLargeCyanVineOre(x - 4, y - 3);
 								}
@@ -664,7 +664,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(12))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y + 1, 4, 3))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y + 1, 4, 3))
 								{
 									PlaceMiddleCyanVineOre(x - 2, y - 2);
 								}
@@ -677,7 +677,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(12))
 							{
-								if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y, 3, 2))
+								if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(x - 2, y, 3, 2))
 								{
 									PlaceSmallCyanVineOre(x - 2, y - 2);
 								}
@@ -690,7 +690,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(6))
 							{
-								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 2, y - 1, 3, 2))
+								if (TileUtils.CanPlaceMultiBenethTowardsDownRight(x - 2, y - 1, 3, 2))
 								{
 									PlaceSmallUpCyanVineOre(x - 2, y);
 								}
@@ -703,7 +703,7 @@ public class YggdrasilTownGeneration
 						{
 							if (GenRand.NextBool(3))
 							{
-								if (TileCollisionUtils.CanPlaceMultiBenethTowardsDownRight(x - 4, y - 1, 5, 3))
+								if (TileUtils.CanPlaceMultiBenethTowardsDownRight(x - 4, y - 1, 5, 3))
 								{
 									PlaceLargeUpCyanVineOre(x - 4, y);
 								}
@@ -721,11 +721,11 @@ public class YggdrasilTownGeneration
 				{
 					if (GenRand.NextBool(3000))
 					{
-						Tile tile = SafeGetTile(x, y);
-						Tile tileUp = SafeGetTile(x, y - 1);
-						Tile tileDown = SafeGetTile(x, y + 1);
-						Tile tileLeft = SafeGetTile(x - 1, y);
-						Tile tileRight = SafeGetTile(x + 1, y);
+						Tile tile = TileUtils.SafeGetTile(x, y);
+						Tile tileUp = TileUtils.SafeGetTile(x, y - 1);
+						Tile tileDown = TileUtils.SafeGetTile(x, y + 1);
+						Tile tileLeft = TileUtils.SafeGetTile(x - 1, y);
+						Tile tileRight = TileUtils.SafeGetTile(x + 1, y);
 						if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
 						{
 							if (tileUp.LiquidAmount <= 0 && tileDown.LiquidAmount <= 0 && tileLeft.LiquidAmount <= 0 && tileRight.LiquidAmount <= 0)
@@ -781,7 +781,7 @@ public class YggdrasilTownGeneration
 									return new Vector2D(startX, startY);
 								}
 							}
-							Tile tile = SafeGetTile(j, k);
+							Tile tile = TileUtils.SafeGetTile(j, k);
 							if (ChestSafe(j, k))
 							{
 								if (tile.TileType == type)
@@ -801,7 +801,7 @@ public class YggdrasilTownGeneration
 									return new Vector2D(startX, startY);
 								}
 							}
-							Tile tileSafe = SafeGetTile((int)(j + (xVel + xDir) * 3), (int)(k + (yVel + yDir) * 3));
+							Tile tileSafe = TileUtils.SafeGetTile((int)(j + (xVel + xDir) * 3), (int)(k + (yVel + yDir) * 3));
 							if (tile.TileType != type)
 							{
 								return new Vector2D(startX, startY);
@@ -875,7 +875,7 @@ public class YggdrasilTownGeneration
 		// int step = Math.Sign(deltaX);
 		// int startX = 600 + deltaX;
 		// int startY = 11632;
-		// while (SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
+		// while (TileUtils.SafeGetTile(startX, startY + 1).TileType == TileID.GrayBrick)
 		// {
 		// startX += step;
 		// }
@@ -906,7 +906,7 @@ public class YggdrasilTownGeneration
 		// {
 		// if (new Vector2(x0, y0).Length() < radius)
 		// {
-		// Tile tile = SafeGetTile(x0 + x, y0 + y);
+		// Tile tile = TileUtils.SafeGetTile(x0 + x, y0 + y);
 		// tile.HasTile = false;
 		// }
 		// }
@@ -921,7 +921,7 @@ public class YggdrasilTownGeneration
 		// {
 		// rotatedTimes = 0;
 		// Vector2 probePos = position + velocity * 50;
-		// if ((!SafeGetTile((int)probePos.X, (int)probePos.Y).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
+		// if ((!TileUtils.SafeGetTile((int)probePos.X, (int)probePos.Y).HasTile && position.Y > 11451) || probePos.X > 1200 || probePos.X < 0)
 		// {
 		// rotatedTimes = 40;
 		// step *= -1;
@@ -941,7 +941,7 @@ public class YggdrasilTownGeneration
 		// velocity.X *= 1.12f;
 		// }
 		// Vector2 probePosII = position + velocity * 5;
-		// if (SafeGetTile((int)probePosII.X, (int)probePosII.Y).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
+		// if (TileUtils.SafeGetTile((int)probePosII.X, (int)probePosII.Y).TileType != ModContent.TileType<StoneScaleWood>() && y < 11451)
 		// {
 		// continueEmpty++;
 		// }
@@ -979,7 +979,7 @@ public class YggdrasilTownGeneration
 			for (int j = 0; j < height; j++)
 			{
 				Point pos = new Point(i, j) + topLeft;
-				Tile tile = SafeGetTile(pos);
+				Tile tile = TileUtils.SafeGetTile(pos);
 				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
 
 				// float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
@@ -1011,7 +1011,7 @@ public class YggdrasilTownGeneration
 			for (int j = 0; j < height; j++)
 			{
 				Point pos = new Point(i, j) + topLeft;
-				Tile tile = SafeGetTile(pos);
+				Tile tile = TileUtils.SafeGetTile(pos);
 				float noiseValue = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
 				if (j >= height - value + noiseValue * 25)
 				{
@@ -1034,7 +1034,7 @@ public class YggdrasilTownGeneration
 		// {
 		// int x = 430 + i;
 		// int y = Main.maxTilesY - 400 + 91 + j;
-		// Tile tile = SafeGetTile(x, y);
+		// Tile tile = TileUtils.SafeGetTile(x, y);
 		// if (!tile.HasTile && tile.wall <= 0)
 		// {
 		// tile.wall = WallID.Ebonwood;
@@ -1054,11 +1054,11 @@ public class YggdrasilTownGeneration
 
 		// first cable joint
 		// WorldGenMisc.PlaceRope(930, Main.maxTilesY - 326, 1000, Main.maxTilesY - 339, ModContent.TileType<CableCarJoint>());
-		// Tile firstJoint = SafeGetTile(1000, Main.maxTilesY - 339);
+		// Tile firstJoint = TileUtils.SafeGetTile(1000, Main.maxTilesY - 339);
 		// firstJoint.TileFrameX = 0;
 		// for (int j = 1; j < 100; j++)
 		// {
-		// Tile tile = SafeGetTile(1000, Main.maxTilesY - 339 + j);
+		// Tile tile = TileUtils.SafeGetTile(1000, Main.maxTilesY - 339 + j);
 		// if (tile.HasTile)
 		// {
 		// break;
@@ -1071,7 +1071,7 @@ public class YggdrasilTownGeneration
 		// }
 		// for (int j = 1; j < 100; j++)
 		// {
-		// Tile tile = SafeGetTile(930, Main.maxTilesY - 326 + j);
+		// Tile tile = TileUtils.SafeGetTile(930, Main.maxTilesY - 326 + j);
 		// if (tile.HasTile)
 		// {
 		// break;
@@ -1095,12 +1095,12 @@ public class YggdrasilTownGeneration
 		// WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
 		// if (x > tunnelLeftX + 60)
 		// {
-		// Tile joint = SafeGetTile(lastPosX, lastPosY);
+		// Tile joint = TileUtils.SafeGetTile(lastPosX, lastPosY);
 		// joint.TileFrameX = 36;
 		// }
 		// for (int j = 1; j < 100; j++)
 		// {
-		// Tile tile = SafeGetTile(x, y - j);
+		// Tile tile = TileUtils.SafeGetTile(x, y - j);
 		// if (tile.HasTile)
 		// {
 		// break;
@@ -1134,16 +1134,16 @@ public class YggdrasilTownGeneration
 		// if (lastPosX != 0 && lastPosY != 0)
 		// {
 		// WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
-		// Tile joint = SafeGetTile(x, y);
+		// Tile joint = TileUtils.SafeGetTile(x, y);
 		// joint.TileFrameX = 0;
 		// if (x == tunntelpherLeftX)
 		// {
-		// joint = SafeGetTile(lastPosX, lastPosY);
+		// joint = TileUtils.SafeGetTile(lastPosX, lastPosY);
 		// joint.TileFrameX = 36;
 		// }
 		// for (int j = 1; j < 100; j++)
 		// {
-		// Tile tile = SafeGetTile(x, y + j);
+		// Tile tile = TileUtils.SafeGetTile(x, y + j);
 		// if (tile.HasTile)
 		// {
 		// break;
@@ -1167,11 +1167,11 @@ public class YggdrasilTownGeneration
 		// if (lastPosX != 0 && lastPosY != 0)
 		// {
 		// WorldGenMisc.PlaceRope(lastPosX, lastPosY, x, y, ModContent.TileType<CableCarJoint>());
-		// Tile joint = SafeGetTile(x, y);
+		// Tile joint = TileUtils.SafeGetTile(x, y);
 		// joint.TileFrameX = 0;
 		// for (int j = 1; j < 100; j++)
 		// {
-		// Tile tile = SafeGetTile(x, y + j);
+		// Tile tile = TileUtils.SafeGetTile(x, y + j);
 		// if (tile.HasTile)
 		// {
 		// break;
@@ -1204,7 +1204,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = upBound; y <= bottomBound; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				Vector2 toCenter = Center - new Vector2(x, y);
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
@@ -1288,7 +1288,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = upBound; y <= bottomBound; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				Vector2 toCenter = Center - new Vector2(x, y);
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
@@ -1377,7 +1377,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = checkY - 30; y <= checkY + 30; y++)
 					{
-						Tile tile = SafeGetTile(x, y);
+						Tile tile = TileUtils.SafeGetTile(x, y);
 						float addXValue = 0;
 						float addYValue = PerlinPixelG[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 255f * 0.5f;
 						if (tile.WallType == ModContent.WallType<StoneDragonScaleWoodWall>())
@@ -1420,7 +1420,7 @@ public class YggdrasilTownGeneration
 									for (int u = 0; u < 5; u++)
 									{
 										pos += vel;
-										Tile tile = SafeGetTile((int)pos.X, (int)pos.Y);
+										Tile tile = TileUtils.SafeGetTile((int)pos.X, (int)pos.Y);
 										tile.TileType = (ushort)ModContent.TileType<FemaleLampWood>();
 										tile.HasTile = true;
 									}
@@ -1435,7 +1435,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = checkY - 50; y <= checkY + 50; y++)
 					{
-						Tile tile = SafeGetTile(x, y);
+						Tile tile = TileUtils.SafeGetTile(x, y);
 						if (tile.TileType == (ushort)ModContent.TileType<FemaleLampWood>())
 						{
 							tile.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
@@ -1453,7 +1453,7 @@ public class YggdrasilTownGeneration
 						float bValue = Math.Abs(checkY - y) / 120f - 0.1f + Math.Max(0, Math.Abs(checkX - x) / 120f - 0.6f);
 						if (aValue + bValue < 0.2f)
 						{
-							Tile tile = SafeGetTile(x, y);
+							Tile tile = TileUtils.SafeGetTile(x, y);
 							tile.TileType = (ushort)ModContent.TileType<YggdrasilGrayRock>();
 							tile.HasTile = true;
 						}
@@ -1524,10 +1524,10 @@ public class YggdrasilTownGeneration
 
 						for (int j = 0; j < 50; j++)
 						{
-							Tile topLeft = SafeGetTile(x + xj - halfWidth, y + yj - roomHeight);
-							Tile topRight = SafeGetTile(x + xj + halfWidth, y + yj - roomHeight);
-							Tile bottomLeft = SafeGetTile(x + xj - halfWidth, y + yj);
-							Tile bottomRight = SafeGetTile(x + xj + halfWidth, y + yj);
+							Tile topLeft = TileUtils.SafeGetTile(x + xj - halfWidth, y + yj - roomHeight);
+							Tile topRight = TileUtils.SafeGetTile(x + xj + halfWidth, y + yj - roomHeight);
+							Tile bottomLeft = TileUtils.SafeGetTile(x + xj - halfWidth, y + yj);
+							Tile bottomRight = TileUtils.SafeGetTile(x + xj + halfWidth, y + yj);
 
 							if (!topLeft.HasTile && !topRight.HasTile &&
 								bottomLeft.HasTile && (bottomLeft.TileType == ModContent.TileType<DarkForestGrass>() || bottomLeft.TileType == ModContent.TileType<DarkForestSoil>()) &&
@@ -1569,7 +1569,7 @@ public class YggdrasilTownGeneration
 						{
 							for (int yi = y + yj; yi < y + yj + 5; yi++)
 							{
-								Tile tileBottomGrass = SafeGetTile(xi, yi);
+								Tile tileBottomGrass = TileUtils.SafeGetTile(xi, yi);
 								tileBottomGrass.TileType = (ushort)ModContent.TileType<DarkForestGrass>();
 								tileBottomGrass.HasTile = true;
 							}
@@ -1587,12 +1587,12 @@ public class YggdrasilTownGeneration
 					for (int y = checkY - 40; y <= checkY + 10; y++)
 					{
 						float valueG = PerlinPixelG[(int)(x * 2.24f) % 1024, (int)(y * 2.24) % 1024] / 255f;
-						Tile tile0 = SafeGetTile(x, y);
-						Tile tile1 = SafeGetTile(x + 1, y);
-						Tile tile2 = SafeGetTile(x, y + 1);
-						Tile tile3 = SafeGetTile(x + 1, y + 1);
-						Tile tile4 = SafeGetTile(x, y - 1);
-						Tile tile5 = SafeGetTile(x + 1, y - 1);
+						Tile tile0 = TileUtils.SafeGetTile(x, y);
+						Tile tile1 = TileUtils.SafeGetTile(x + 1, y);
+						Tile tile2 = TileUtils.SafeGetTile(x, y + 1);
+						Tile tile3 = TileUtils.SafeGetTile(x + 1, y + 1);
+						Tile tile4 = TileUtils.SafeGetTile(x, y - 1);
+						Tile tile5 = TileUtils.SafeGetTile(x + 1, y - 1);
 
 						// 罐子
 						if (valueG > 0.4f)
@@ -1603,11 +1603,11 @@ public class YggdrasilTownGeneration
 								{
 									if (GenRand.NextBool(2))
 									{
-										PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), GenRand.Next(6) * 36);
+										TileUtils.PlaceFrameImportantTiles(x, y - 1, 2, 2, ModContent.TileType<LampWoodPot>(), GenRand.Next(6) * 36);
 									}
 									else
 									{
-										PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, GenRand.Next(3) * 36, 36);
+										TileUtils.PlaceFrameImportantTiles(x, y - 1, 2, 2, TileID.Pots, GenRand.Next(3) * 36, 36);
 									}
 								}
 							}
@@ -1628,7 +1628,7 @@ public class YggdrasilTownGeneration
 					{
 						for (int y0 = -radiusI; y0 <= radiusI; y0++)
 						{
-							Tile tile = SafeGetTile(checkTrunk + mesaOffset + new Vector2(x0, y0));
+							Tile tile = TileUtils.SafeGetTile(checkTrunk + mesaOffset + new Vector2(x0, y0));
 							float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
 							if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 							{
@@ -1672,7 +1672,7 @@ public class YggdrasilTownGeneration
 						float distanceToWood = To100NearestTileTypeBlockDistance((int)placePos.X, (int)placePos.Y, ModContent.TileType<FemaleLampWood>());
 						if (distanceToLeaves > 7 && jointWidth > 2 && distanceToWood <= 2)
 						{
-							Tile tile = SafeGetTile(placePos);
+							Tile tile = TileUtils.SafeGetTile(placePos);
 							if (tile.wall != ModContent.WallType<FemaleLampWoodWall>())
 							{
 								tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
@@ -1837,7 +1837,7 @@ public class YggdrasilTownGeneration
 				}
 				if (aValue + bValue < 0.8f)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					if (aValue + bValue < 0.75f)
 					{
@@ -1867,7 +1867,7 @@ public class YggdrasilTownGeneration
 				cValue = MathF.Pow(cValue, 0.9f);
 				if (aValue + bValue < cValue)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					tile.HasTile = true;
 				}
@@ -1887,7 +1887,7 @@ public class YggdrasilTownGeneration
 				cValue = MathF.Pow(cValue, 0.9f);
 				if (aValue * 0.3f + bValue < cValue)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.HasTile = false;
 				}
 			}
@@ -1911,7 +1911,7 @@ public class YggdrasilTownGeneration
 				{
 					bValue += (thick - value * 240) / 60f;
 				}
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (tile.HasTile)
 				{
 					bValue += 1f;
@@ -1943,7 +1943,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 
-		PlaceFrameImportantTiles(step2X + 236, step2Y - 3, 20, 10, ModContent.TileType<SquamousShellSeal>());
+		TileUtils.PlaceFrameImportantTiles(step2X + 236, step2Y - 3, 20, 10, ModContent.TileType<SquamousShellSeal>());
 	}
 
 	/// <summary>
@@ -2019,8 +2019,8 @@ public class YggdrasilTownGeneration
 				{
 					for (int y0 = -radiusI; y0 <= radiusI; y0++)
 					{
-						Tile tile = SafeGetTile(basePos + new Vector2(x0, y0));
-						Tile tileUp = SafeGetTile(basePos + new Vector2(x0, y0 - 1));
+						Tile tile = TileUtils.SafeGetTile(basePos + new Vector2(x0, y0));
+						Tile tileUp = TileUtils.SafeGetTile(basePos + new Vector2(x0, y0 - 1));
 						float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
 						if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 						{
@@ -2073,7 +2073,7 @@ public class YggdrasilTownGeneration
 						{
 							for (int v = 0; v < 4; v++)
 							{
-								var tile = SafeGetTile((int)posCell.X + h, (int)posCell.Y - 2 + v);
+								var tile = TileUtils.SafeGetTile((int)posCell.X + h, (int)posCell.Y - 2 + v);
 								if (!tile.HasTile)
 								{
 									tile.TileType = (ushort)ModContent.TileType<TwilightGrassBlock>();
@@ -2100,10 +2100,10 @@ public class YggdrasilTownGeneration
 					for (int y0 = -radiusI; y0 <= radiusI; y0++)
 					{
 						int height = GenRand.Next(7, 60);
-						Tile tile = SafeGetTile(basePos + new Vector2(x0, y0));
+						Tile tile = TileUtils.SafeGetTile(basePos + new Vector2(x0, y0));
 						if (tile.TileType == ModContent.TileType<TwilightGrassBlock>())
 						{
-							if (GenRand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight((int)basePos.X + x0 - 3, (int)basePos.Y + y0, 8, height))
+							if (GenRand.NextBool(3) && TileUtils.CanPlaceMultiAtTopTowardsUpRight((int)basePos.X + x0 - 3, (int)basePos.Y + y0, 8, height))
 							{
 								TreePlacer.BuildTwilightTree((int)basePos.X + x0, (int)basePos.Y + y0 - 1, height);
 							}
@@ -2137,7 +2137,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y0 = -radiusI; y0 <= radiusI; y0++)
 			{
-				Tile tile = SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
+				Tile tile = TileUtils.SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
 				float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
 				if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 				{
@@ -2167,7 +2167,7 @@ public class YggdrasilTownGeneration
 				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
 				if (aValue < 0.4f)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
 					tile.HasTile = true;
 				}
@@ -2180,7 +2180,7 @@ public class YggdrasilTownGeneration
 				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
 				if (aValue < 0.4f)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
 					tile.HasTile = true;
 				}
@@ -2202,10 +2202,10 @@ public class YggdrasilTownGeneration
 			for (int y0 = -radiusI; y0 <= radiusI; y0++)
 			{
 				int height = GenRand.Next(7, 60);
-				Tile tile = SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
+				Tile tile = TileUtils.SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
 				if (tile.TileType == ModContent.TileType<TwilightGrassBlock>())
 				{
-					if (GenRand.NextBool(3) && TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
+					if (GenRand.NextBool(3) && TileUtils.CanPlaceMultiAtTopTowardsUpRight(centerX + x0 - 3, centerY + y0, 8, height))
 					{
 						TreePlacer.BuildTwilightTree(centerX + x0, centerY + y0 - 1, height);
 					}
@@ -2250,7 +2250,7 @@ public class YggdrasilTownGeneration
 				// for (int i = 0; i < randLampCount; i++)
 				// {
 				// int lampX = roomOriginX + (int)(36f / randLampCount * (i + 0.5f) - 18f + GenRand.Next(-2, 3));
-				// var tile = SafeGetTile(lampX, roomOriginY - 9);
+				// var tile = TileUtils.SafeGetTile(lampX, roomOriginY - 9);
 				// tile.TileType = (ushort)ModContent.TileType<HangingFluoriteLamp>();
 				// tile.HasTile = true;
 				// tile.TileFrameY = (short)GenRand.Next(2, 30);
@@ -2299,13 +2299,13 @@ public class YggdrasilTownGeneration
 				{
 					KillRectangleAreaOfTile(roomOriginX + 18, roomOriginY + 2, roomOriginX + 31, roomOriginY + 9);
 					PlaceRectangleAreaOfBlock(roomOriginX + 19, roomOriginY + 2, roomOriginX + 22, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
-					PlaceFrameImportantTiles(roomOriginX + 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+					TileUtils.PlaceFrameImportantTiles(roomOriginX + 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
 				}
 				if (x == 2)
 				{
 					KillRectangleAreaOfTile(roomOriginX - 31, roomOriginY + 2, roomOriginX - 18, roomOriginY + 9);
 					PlaceRectangleAreaOfBlock(roomOriginX - 22, roomOriginY + 2, roomOriginX - 19, roomOriginY + 6, ModContent.TileType<GreenRelicBrick>());
-					PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
+					TileUtils.PlaceFrameImportantTiles(roomOriginX - 20, roomOriginY + 7, 1, 3, TileID.ClosedDoor, 0, 918);
 				}
 
 				// PlaceTwilightLegacyBiomeChest(roomOriginX, roomOriginY + 9);
@@ -2314,7 +2314,7 @@ public class YggdrasilTownGeneration
 
 		// 清理中央垂直通道
 		KillRectangleAreaOfTile(centerX - 18, centerY - 100 + 12 - 9, centerX + 18, centerY + 146);
-		PlaceFrameImportantTiles(centerX - 1, centerY + 144, 3, 3, ModContent.TileType<GreenRelicSlotTable>());
+		TileUtils.PlaceFrameImportantTiles(centerX - 1, centerY + 144, 3, 3, ModContent.TileType<GreenRelicSlotTable>());
 
 		// 副塔 60 * 120
 		int directionSubTower = GenRand.NextBool() ? 1 : -1;
@@ -2329,7 +2329,7 @@ public class YggdrasilTownGeneration
 				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
 				if (aValue < 0.4f)
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
 					tile.HasTile = true;
 				}
@@ -2381,7 +2381,7 @@ public class YggdrasilTownGeneration
 			{
 				int checkX = subTowerCenterX - 25 + x * 10;
 				int checkY = subTowerCenterY - 55 + y * 10;
-				Tile tile = SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 				if ((x + y) % 2 == 1)
 				{
 					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_Trap>();
@@ -2401,7 +2401,7 @@ public class YggdrasilTownGeneration
 			{
 				int checkX = subTowerCenterX - 20 + x * 10;
 				int checkY = subTowerCenterY - 50 + y * 10;
-				Tile tile = SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 				tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick_plating>();
 				if (x == 2 && y == 0)
 				{
@@ -2445,7 +2445,7 @@ public class YggdrasilTownGeneration
 			int y = centerY + 180;
 			for (int y0 = 10; y0 < 50; y0++)
 			{
-				Tile tile = SafeGetTile(centerX + x0, y + y0);
+				Tile tile = TileUtils.SafeGetTile(centerX + x0, y + y0);
 				if (!tile.HasTile)
 				{
 					float height = 0.15f;
@@ -2538,8 +2538,8 @@ public class YggdrasilTownGeneration
 				canBuild = false;
 			}
 		}
-		bool leftwall = SafeGetTile(x, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
-		bool rightwall = SafeGetTile(x + roomWidth, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
+		bool leftwall = TileUtils.SafeGetTile(x, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
+		bool rightwall = TileUtils.SafeGetTile(x + roomWidth, y - roomHeight).wall == ModContent.WallType<StoneDragonScaleWoodWall>();
 		if (canBuild)
 		{
 			QuickBuild(x, y - roomHeight, mapIOPath);
@@ -2550,7 +2550,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int j = y - roomHeight; j <= y; j++)
 					{
-						var tile = SafeGetTile(i, j);
+						var tile = TileUtils.SafeGetTile(i, j);
 						if (tile.wall <= 0)
 						{
 							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
@@ -2564,7 +2564,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int j = y - roomHeight; j <= y; j++)
 					{
-						var tile = SafeGetTile(i, j);
+						var tile = TileUtils.SafeGetTile(i, j);
 						if (tile.wall <= 0)
 						{
 							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
@@ -2577,12 +2577,12 @@ public class YggdrasilTownGeneration
 			int maxHeight = GenRand.Next(10, 30);
 			for (int i = x; i <= x + roomWidth; i++)
 			{
-				var tile = SafeGetTile(i, y - 2);
+				var tile = TileUtils.SafeGetTile(i, y - 2);
 				if (tile.TileType == 124)
 				{
 					for (int j = 0; j < 30; j++)
 					{
-						var tile2 = SafeGetTile(i, y + j);
+						var tile2 = TileUtils.SafeGetTile(i, y + j);
 						if (tile2.HasTile && tile2.TileType != 124)
 						{
 							break;
@@ -2603,7 +2603,7 @@ public class YggdrasilTownGeneration
 							{
 								for (int h = 0; h < 100; h++)
 								{
-									var tile3 = SafeGetTile(i + h, y + j);
+									var tile3 = TileUtils.SafeGetTile(i + h, y + j);
 									if (tile3.HasTile && tile2.TileType != 124)
 									{
 										break;
@@ -2622,7 +2622,7 @@ public class YggdrasilTownGeneration
 							{
 								for (int h = 0; h < 100; h++)
 								{
-									var tile3 = SafeGetTile(i - h, y + j);
+									var tile3 = TileUtils.SafeGetTile(i - h, y + j);
 									if (tile3.HasTile && tile2.TileType != 124)
 									{
 										break;
@@ -2653,17 +2653,17 @@ public class YggdrasilTownGeneration
 		switch (style)
 		{
 			case 0:
-				PlaceFrameImportantTiles(x, y - 5, 1, 5, ModContent.TileType<DoubleArmsChineseStreetLamp>());
+				TileUtils.PlaceFrameImportantTiles(x, y - 5, 1, 5, ModContent.TileType<DoubleArmsChineseStreetLamp>());
 				break;
 			case 1:
 				PlaceRectangleAreaOfWall(x, y - 5, x, y, WallID.BambooFence);
-				Tile tile0 = SafeGetTile(x, y - 5);
+				Tile tile0 = TileUtils.SafeGetTile(x, y - 5);
 				int tile1Dir = x + 1;
 				if (ai0 % 2 == 0)
 				{
 					tile1Dir = x - 1;
 				}
-				Tile tile1 = SafeGetTile(tile1Dir, y - 5);
+				Tile tile1 = TileUtils.SafeGetTile(tile1Dir, y - 5);
 				tile0.TileType = TileID.Platforms;
 				tile0.frameY = 786;
 				tile0.HasTile = true;
@@ -2675,7 +2675,7 @@ public class YggdrasilTownGeneration
 				{
 					lanternType = 936;
 				}
-				PlaceFrameImportantTiles(tile1Dir, y - 4, 1, 2, TileID.HangingLanterns, 0, lanternType);
+				TileUtils.PlaceFrameImportantTiles(tile1Dir, y - 4, 1, 2, TileID.HangingLanterns, 0, lanternType);
 				break;
 			case 2:
 				int lampStyle = 918;
@@ -2701,7 +2701,7 @@ public class YggdrasilTownGeneration
 					lampStyle = 108;
 					lampStyleX = 36;
 				}
-				PlaceFrameImportantTiles(x, y - 3, 1, 3, TileID.Lamps, lampStyleX, lampStyle);
+				TileUtils.PlaceFrameImportantTiles(x, y - 3, 1, 3, TileID.Lamps, lampStyleX, lampStyle);
 				break;
 		}
 	}
@@ -2860,7 +2860,7 @@ public class YggdrasilTownGeneration
 
 			// 左侧
 			bool canPlaceLeft = true;
-			while (SafeGetTile(startX - 1, placeY).HasTile)
+			while (TileUtils.SafeGetTile(startX - 1, placeY).HasTile)
 			{
 				placeY++;
 				if (placeY - startY > 5)
@@ -2873,7 +2873,7 @@ public class YggdrasilTownGeneration
 			{
 				for (int y = placeY; y <= placeY + 2; y++)
 				{
-					Tile check = SafeGetTile(x, y);
+					Tile check = TileUtils.SafeGetTile(x, y);
 					if (check.HasTile)
 					{
 						canPlaceLeft = false;
@@ -2882,13 +2882,13 @@ public class YggdrasilTownGeneration
 			}
 			if (canPlaceLeft)
 			{
-				PlaceFrameImportantTiles(startX - 2, placeY, 2, 3, type);
+				TileUtils.PlaceFrameImportantTiles(startX - 2, placeY, 2, 3, type);
 			}
 
 			// 右侧
 			bool canPlaceRight = true;
 			placeY = startY;
-			while (SafeGetTile(endX + 1, placeY).HasTile)
+			while (TileUtils.SafeGetTile(endX + 1, placeY).HasTile)
 			{
 				placeY++;
 				if (placeY - startY > 5)
@@ -2901,7 +2901,7 @@ public class YggdrasilTownGeneration
 			{
 				for (int y = placeY; y <= placeY + 2; y++)
 				{
-					Tile check = SafeGetTile(x, y);
+					Tile check = TileUtils.SafeGetTile(x, y);
 					if (check.HasTile)
 					{
 						canPlaceRight = false;
@@ -2910,7 +2910,7 @@ public class YggdrasilTownGeneration
 			}
 			if (canPlaceRight)
 			{
-				PlaceFrameImportantTiles(endX + 1, placeY, 2, 3, type, 36);
+				TileUtils.PlaceFrameImportantTiles(endX + 1, placeY, 2, 3, type, 36);
 			}
 		}
 
@@ -2919,7 +2919,7 @@ public class YggdrasilTownGeneration
 		for (int x = endX + 1; x < endX + 5; x++)
 		{
 			int y = endY;
-			Tile tile = SafeGetTile(x, y);
+			Tile tile = TileUtils.SafeGetTile(x, y);
 			if (!tile.HasTile)
 			{
 				hasEndXDoor = false;
@@ -2928,13 +2928,13 @@ public class YggdrasilTownGeneration
 		}
 		if (hasEndXDoor)
 		{
-			PlaceFrameImportantTiles(endX, endY - 3, 1, 3, TileID.ClosedDoor);
+			TileUtils.PlaceFrameImportantTiles(endX, endY - 3, 1, 3, TileID.ClosedDoor);
 		}
 		bool hasStartXDoor = true;
 		for (int x = startX - 1; x > startX - 5; x--)
 		{
 			int y = endY;
-			Tile tile = SafeGetTile(x, y);
+			Tile tile = TileUtils.SafeGetTile(x, y);
 			if (!tile.HasTile)
 			{
 				hasStartXDoor = false;
@@ -2943,7 +2943,7 @@ public class YggdrasilTownGeneration
 		}
 		if (hasStartXDoor)
 		{
-			PlaceFrameImportantTiles(startX, endY - 3, 1, 3, TileID.ClosedDoor);
+			TileUtils.PlaceFrameImportantTiles(startX, endY - 3, 1, 3, TileID.ClosedDoor);
 		}
 		DistributeChineseStyleDecorations(startX, startY, endX, endY);
 	}
@@ -2978,7 +2978,7 @@ public class YggdrasilTownGeneration
 				PlaceRectangleAreaOfBlock(middleCutX, startY, middleCutX, endY - 3, TileID.DynastyWood);
 
 				// 横向分割需要加门
-				PlaceFrameImportantTiles(middleCutX, endY - 3, 1, 3, TileID.ClosedDoor);
+				TileUtils.PlaceFrameImportantTiles(middleCutX, endY - 3, 1, 3, TileID.ClosedDoor);
 
 				DistributeChineseStyleDecorations(startX, startY, middleCutX, endY);
 				DistributeChineseStyleDecorations(middleCutX, startY, endX, endY);
@@ -2989,8 +2989,8 @@ public class YggdrasilTownGeneration
 		for (int x = startX; x < endX; x++)
 		{
 			int y = endY + 1;
-			Tile tile = SafeGetTile(x, y);
-			Tile tileUp = SafeGetTile(x, y - 2);
+			Tile tile = TileUtils.SafeGetTile(x, y);
+			Tile tileUp = TileUtils.SafeGetTile(x, y - 2);
 			if (tile.wall != 0 && !tile.HasTile && tileUp.wall != 0 && !tileUp.HasTile)
 			{
 				emptyBottomX.Add(x);
@@ -3037,7 +3037,7 @@ public class YggdrasilTownGeneration
 			foreach (int x in continuePlatforms[createPlatformIndex])
 			{
 				int y = endY;
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.TileType = TileID.Platforms;
 				tile.TileFrameY = 342;
 				tile.TileFrameX = 0;
@@ -3050,7 +3050,7 @@ public class YggdrasilTownGeneration
 					tile.TileFrameX = 216;
 				}
 
-				tile.wall = SafeGetTile(x, y - 1).wall;
+				tile.wall = TileUtils.SafeGetTile(x, y - 1).wall;
 			}
 		}
 
@@ -3082,7 +3082,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = startY; y <= endY; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (!Forced)
 				{
 					if (x == startX || x == endX || y == startY || y == endY)
@@ -3124,11 +3124,11 @@ public class YggdrasilTownGeneration
 	public static void CreateSlantCable(int x, int y, int direction, int type, int density = 12, int maxStep = 65535)
 	{
 		int count = 0;
-		while (!SafeGetTile(x, y).HasTile || count <= 2)
+		while (!TileUtils.SafeGetTile(x, y).HasTile || count <= 2)
 		{
 			count++;
-			Tile tile1 = SafeGetTile(x, y);
-			Tile tile2 = SafeGetTile(x + direction, y);
+			Tile tile1 = TileUtils.SafeGetTile(x, y);
+			Tile tile2 = TileUtils.SafeGetTile(x + direction, y);
 			tile1.HasTile = true;
 			tile1.TileType = (ushort)type;
 			if (direction == -1)
@@ -3161,9 +3161,9 @@ public class YggdrasilTownGeneration
 			{
 				for (int y0 = 0; y0 < count; y0++)
 				{
-					Tile tile3 = SafeGetTile(x + direction, y - y0);
+					Tile tile3 = TileUtils.SafeGetTile(x + direction, y - y0);
 					tile3.wall = WallID.Shadewood;
-					if (y0 % (density * 2) == density - 1 && !SafeGetTile(x + direction, y - y0).HasTile)
+					if (y0 % (density * 2) == density - 1 && !TileUtils.SafeGetTile(x + direction, y - y0).HasTile)
 					{
 						CreateSlantCable(x + direction, y - y0, direction, type, density, density - 1);
 						CreateSlantCable(x + direction * 0, y - y0, -direction, type, density, density - 1);
@@ -3319,7 +3319,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 0; y < 3; y++)
 					{
-						var tile = SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 						{
 							continue;
@@ -3367,7 +3367,7 @@ public class YggdrasilTownGeneration
 						tile.HasTile = true;
 						if (x == 0 && y == 2)
 						{
-							var tile2 = SafeGetTile(i + x - 1, j + y + 1);
+							var tile2 = TileUtils.SafeGetTile(i + x - 1, j + y + 1);
 							tile2.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 							tile2.HasTile = true;
 						}
@@ -3379,7 +3379,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 						if (x == 4 && y == 1)
 						{
 							continue;
@@ -3426,7 +3426,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 0; y < 3; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 						{
 							continue;
@@ -3471,7 +3471,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 1)
 						{
@@ -3507,7 +3507,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 
 						if (x == 3 && y == 1)
 						{
@@ -3534,7 +3534,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 1; y < 3; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 1)
 						{
@@ -3591,7 +3591,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 						if (x == 0 && y == 0)
 						{
 							continue;
@@ -3617,7 +3617,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 0)
 						{
@@ -3657,7 +3657,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = 0; y < 2; y++)
 					{
-						var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+						var tile = TileUtils.SafeGetTile(i + x, j + y);
 
 						if (x == 0 && y == 0)
 						{
@@ -3708,13 +3708,13 @@ public class YggdrasilTownGeneration
 		{
 			case 0:
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(i + 1, j);
+					var tile = TileUtils.SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 18;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = YggdrasilWorldGeneration.SafeGetTile(i + 1, j + 1);
+					var tileII = TileUtils.SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
@@ -3725,13 +3725,13 @@ public class YggdrasilTownGeneration
 				break;
 			case 1:
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(i + 1, j);
+					var tile = TileUtils.SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 72;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = YggdrasilWorldGeneration.SafeGetTile(i + 1, j + 1);
+					var tileII = TileUtils.SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
@@ -3740,26 +3740,26 @@ public class YggdrasilTownGeneration
 				break;
 			case 2:
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(i + 1, j);
+					var tile = TileUtils.SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 126;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = YggdrasilWorldGeneration.SafeGetTile(i + 1, j + 1);
+					var tileII = TileUtils.SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
 					tileII.HasTile = true;
 
-					var tileIII = YggdrasilWorldGeneration.SafeGetTile(i, j);
+					var tileIII = TileUtils.SafeGetTile(i, j);
 					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIII.TileFrameX = 0;
 					tileIII.TileFrameY = 0;
 					tileIII.Slope = SlopeType.SlopeUpRight;
 					tileIII.HasTile = true;
 
-					var tileIV = YggdrasilWorldGeneration.SafeGetTile(i + 2, j);
+					var tileIV = TileUtils.SafeGetTile(i + 2, j);
 					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIV.TileFrameX = 36;
 					tileIV.TileFrameY = 0;
@@ -3769,26 +3769,26 @@ public class YggdrasilTownGeneration
 				break;
 			case 3:
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(i + 1, j);
+					var tile = TileUtils.SafeGetTile(i + 1, j);
 					tile.TileType = (ushort)ModContent.TileType<CyanVineOreSmallUp>();
 					tile.TileFrameX = 180;
 					tile.TileFrameY = 0;
 					tile.HasTile = true;
 
-					var tileII = YggdrasilWorldGeneration.SafeGetTile(i + 1, j + 1);
+					var tileII = TileUtils.SafeGetTile(i + 1, j + 1);
 					tileII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileII.TileFrameX = 18;
 					tileII.TileFrameY = 18;
 					tileII.Slope = SlopeType.SlopeUpRight;
 					tileII.HasTile = true;
 
-					var tileIII = YggdrasilWorldGeneration.SafeGetTile(i, j);
+					var tileIII = TileUtils.SafeGetTile(i, j);
 					tileIII.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIII.TileFrameX = 0;
 					tileIII.TileFrameY = 0;
 					tileIII.HasTile = true;
 
-					var tileIV = YggdrasilWorldGeneration.SafeGetTile(i + 2, j);
+					var tileIV = TileUtils.SafeGetTile(i + 2, j);
 					tileIV.TileType = (ushort)ModContent.TileType<CyanVineOreTile>();
 					tileIV.TileFrameX = 36;
 					tileIV.TileFrameY = 0;
@@ -3810,7 +3810,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = 0; y < 3; y++)
 			{
-				var tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+				var tile = TileUtils.SafeGetTile(i + x, j + y);
 				if (x == 1 && y == 2)
 				{
 					continue;
@@ -3871,7 +3871,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int j = 0; j < 2; j++)
 			{
-				Tile tile = SafeGetTile(i + x, y - j);
+				Tile tile = TileUtils.SafeGetTile(i + x, y - j);
 				if (tile.HasTile)
 				{
 					tile.ClearEverything();
@@ -4055,7 +4055,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int j = 0; j < 2; j++)
 			{
-				Tile tile = SafeGetTile(i + x, y - j);
+				Tile tile = TileUtils.SafeGetTile(i + x, y - j);
 				if (tile.HasTile)
 				{
 					tile.ClearEverything();

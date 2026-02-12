@@ -927,7 +927,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 				int y = 170;
 				for (int x = 20; x < Main.maxTilesX - 20; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}
@@ -937,7 +937,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 				int y = 185;
 				for (int x = 20; x < Main.maxTilesX - 20; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}
@@ -947,14 +947,14 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 				int y = 170;
 				for (int x = 20; x < Main.maxTilesX / 2; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}
 				y = 185;
 				for (int x = 20; x < Main.maxTilesX / 2; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}
@@ -964,14 +964,14 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 				int y = 170;
 				for (int x = Main.maxTilesX / 2; x < Main.maxTilesX - 20; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}
 				y = 185;
 				for (int x = Main.maxTilesX / 2; x < Main.maxTilesX - 20; x++)
 				{
-					var tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+					var tile = TileUtils.SafeGetTile(x, y);
 					tile.TileType = 0;
 					tile.HasTile = false;
 				}

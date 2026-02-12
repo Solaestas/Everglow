@@ -63,7 +63,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 			{
 				for (int y = -1; y < 2; y++)
 				{
-					Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + x + spreadX, j + y + spreadY);
+					Tile checkTile = TileUtils.SafeGetTile(i + x + spreadX, j + y + spreadY);
 					if (checkTile.HasTile && (checkTile.TileType == ModContent.TileType<DarkForestSoil>() || checkTile.TileType == Type))
 					{
 						blockCount++;
@@ -80,7 +80,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 			}
 			if (Main.rand.Next(9, 18) < blockCount)
 			{
-				Tile checkTile = YggdrasilWorldGeneration.SafeGetTile(i + spreadX, j + spreadY);
+				Tile checkTile = TileUtils.SafeGetTile(i + spreadX, j + spreadY);
 				if (checkTile.TileType == ModContent.TileType<DarkForestSoil>())
 				{
 					checkTile.TileType = Type;
@@ -91,7 +91,7 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 		switch (Main.rand.Next(18))
 		{
 			case 0:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
 				{
 					PlaceTree(i, j - 1, height);
 				}
@@ -100,27 +100,27 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 				switch (Main.rand.Next(4))
 				{
 					case 0:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 2, 2))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 2, 2))
 						{
-							YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 2, 2, ModContent.TileType<TwilightBlueCrystal_5>(), 36 * Main.rand.Next(4), 0);
+							TileUtils.PlaceFrameImportantTilesAbove(i, j, 2, 2, ModContent.TileType<TwilightBlueCrystal_5>(), 36 * Main.rand.Next(4), 0);
 						}
 						break;
 					case 1:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 						{
-							YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<TwilightBlueCrystal_4>(), 54 * Main.rand.Next(2), 0);
+							TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<TwilightBlueCrystal_4>(), 54 * Main.rand.Next(2), 0);
 						}
 						break;
 					case 2:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 1))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 1))
 						{
-							YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 1, ModContent.TileType<TwilightBlueCrystal_3>(), 54 * Main.rand.Next(2), 0);
+							TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 1, ModContent.TileType<TwilightBlueCrystal_3>(), 54 * Main.rand.Next(2), 0);
 						}
 						break;
 					case 3:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 3))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 3))
 						{
-							YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 3, ModContent.TileType<TwilightBlueCrystal_2>(), 54 * Main.rand.Next(2), 0);
+							TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 3, ModContent.TileType<TwilightBlueCrystal_2>(), 54 * Main.rand.Next(2), 0);
 						}
 						break;
 				}
@@ -129,14 +129,14 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 				switch (Main.rand.Next(2))
 				{
 					case 0:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 7))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 9, 7))
 						{
 							var tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_0>()) as TwilightBlueCrystal_0;
 							tBC.PlaceOriginAtBottomLeft(i, j - 1);
 						}
 						break;
 					case 1:
-						if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 7))
+						if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 7))
 						{
 							var tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_1>()) as TwilightBlueCrystal_1;
 							tBC.PlaceOriginAtBottomLeft(i, j - 1);
@@ -145,13 +145,13 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 				}
 				break;
 			case 3:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
 				{
 					PlaceTree(i, j - 1, height);
 				}
 				break;
 			case 4:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i - 4, j, 8, height))
 				{
 					PlaceTree(i, j - 1, height);
 				}
@@ -159,86 +159,86 @@ public class TwilightGrassBlock : ModTile, ISceneTile
 			case 5:
 				if (Main.rand.NextBool(6))
 				{
-					if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 3))
+					if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 3))
 					{
-						YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 3, ModContent.TileType<TwilightBlueCrystalFlower>(), 72 * Main.rand.Next(2), 0);
+						TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 3, ModContent.TileType<TwilightBlueCrystalFlower>(), 72 * Main.rand.Next(2), 0);
 					}
 				}
 				break;
 			case 6:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
 				}
 				break;
 			case 7:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 1, 2))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 1, 1, ModContent.TileType<Twilight_Grass>(), 18 * Main.rand.Next(6));
 				}
 				break;
 			case 8:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
 				{
 					var tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_6>()) as TwilightBlueCrystal_6;
 					tBC.PlaceOriginAtBottomLeft(i, j - 1);
 				}
 				break;
 			case 9:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
 				{
 					var tBC = TileLoader.GetTile(ModContent.TileType<TwilightBlueCrystal_6>()) as TwilightBlueCrystal_6;
 					tBC.PlaceOriginAtBottomLeft(i, j - 1);
 				}
 				break;
 			case 10:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 4))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 8, 4))
 				{
 					var twilight_Stone_8x4 = TileLoader.GetTile(ModContent.TileType<Twilight_Stone_8x4>()) as Twilight_Stone_8x4;
 					twilight_Stone_8x4.PlaceOriginAtBottomLeft(i, j - 1);
 				}
 				break;
 			case 11:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 5))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 5))
 				{
 					var t0 = TileLoader.GetTile(ModContent.TileType<TwilightStone_0>()) as TwilightStone_0;
 					t0.PlaceOriginAtBottomLeft(i, j - 1);
 				}
 				break;
 			case 12:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 3))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 3))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 3, ModContent.TileType<TwilightStone_2>(), 0);
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 3, ModContent.TileType<TwilightStone_2>(), 0);
 				}
 				break;
 			case 13:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 5, 3))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 5, 3, ModContent.TileType<TwilightStone_1>(), 90 * Main.rand.Next(4));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 5, 3, ModContent.TileType<TwilightStone_1>(), 90 * Main.rand.Next(4));
 				}
 				break;
 			case 14:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 3, 2))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInTwilight>(), 54 * Main.rand.Next(2));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 3, 2, ModContent.TileType<BrokenBoxInTwilight>(), 54 * Main.rand.Next(2));
 				}
 				break;
 			case 15:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 1))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 4, 1))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 4, 1, ModContent.TileType<Twilight_Stone_4x1>(), 72 * Main.rand.Next(2));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 4, 1, ModContent.TileType<Twilight_Stone_4x1>(), 72 * Main.rand.Next(2));
 				}
 				break;
 			case 16:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 1))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 1))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 1, ModContent.TileType<Twilight_Stone_6x1>(), 0);
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 6, 1, ModContent.TileType<Twilight_Stone_6x1>(), 0);
 				}
 				break;
 			case 17:
-				if (TileCollisionUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 2))
+				if (TileUtils.CanPlaceMultiAtTopTowardsUpRight(i, j, 6, 2))
 				{
-					YggdrasilWorldGeneration.PlaceFrameImportantTilesAbove(i, j, 6, 2, ModContent.TileType<Twilight_Stone_6x2>(), 108 * Main.rand.Next(2));
+					TileUtils.PlaceFrameImportantTilesAbove(i, j, 6, 2, ModContent.TileType<Twilight_Stone_6x2>(), 108 * Main.rand.Next(2));
 				}
 				break;
 		}

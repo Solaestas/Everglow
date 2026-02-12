@@ -20,7 +20,7 @@ public class MainWorldGeneratioin_Yggdrasil
 		for (int a = 0; a < 12; a++)
 		{
 			pylonBottom.Y++;
-			if (SafeGetTile(pylonBottom.X, pylonBottom.Y).HasTile)
+			if (TileUtils.SafeGetTile(pylonBottom.X, pylonBottom.Y).HasTile)
 			{
 				pylonBottom.Y -= 1;
 				break;
@@ -46,9 +46,9 @@ public class MainWorldGeneratioin_Yggdrasil
 			pointX = (int)(WorldGen.genRand.Next(80, 240) * (WorldGen.genRand.Next(2) - 0.5f) * 2 - 20 + Main.maxTilesX / 2);
 			for (int y = 160; y < Main.maxTilesY / 3; y++)
 			{
-				if (SafeGetTile(pointX, y).HasTile && SafeGetTile(pointX, y).TileType != TileID.Trees)
+				if (TileUtils.SafeGetTile(pointX, y).HasTile && TileUtils.SafeGetTile(pointX, y).TileType != TileID.Trees)
 				{
-					if (SafeGetTile(pointX, y - 1).HasTile)
+					if (TileUtils.SafeGetTile(pointX, y - 1).HasTile)
 					{
 						y -= 2;
 					}
@@ -66,7 +66,7 @@ public class MainWorldGeneratioin_Yggdrasil
 		{
 			for (int j = y0; j < y1; j++)
 			{
-				Tile tile = SafeGetTile(i, j);
+				Tile tile = TileUtils.SafeGetTile(i, j);
 				if (tile.TileType == 21 || tile.TileType == 467 || TileID.Sets.BasicChest[tile.TileType])
 				{
 					return false;
@@ -91,10 +91,10 @@ public class MainWorldGeneratioin_Yggdrasil
 
 		int x = point.X;
 		int y = point.Y;
-		var leftTile = SafeGetTile(x, y);
-		var rightTile = SafeGetTile(x + width, y);
-		var leftTileUp = SafeGetTile(x, y - 1);
-		var rightTileUp = SafeGetTile(x + width, y - 1);
+		var leftTile = TileUtils.SafeGetTile(x, y);
+		var rightTile = TileUtils.SafeGetTile(x + width, y);
+		var leftTileUp = TileUtils.SafeGetTile(x, y - 1);
+		var rightTileUp = TileUtils.SafeGetTile(x + width, y - 1);
 		if ((!leftTileUp.HasTile || leftTileUp.TileType == 3) && (!rightTileUp.HasTile || rightTileUp.TileType == 3))
 		{
 			if (leftTile.HasTile && rightTile.HasTile)

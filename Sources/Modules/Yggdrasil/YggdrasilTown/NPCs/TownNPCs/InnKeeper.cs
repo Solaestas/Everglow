@@ -404,7 +404,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 
 		for (int i = 0; i < 500; i++)
 		{
-			if (!Collision.SolidCollision(targetPos + new Vector2(-10), 20, 20) && !TileCollisionUtils.PlatformCollision(targetPos))
+			if (!Collision.SolidCollision(targetPos + new Vector2(-10), 20, 20) && !TileUtils.PlatformCollision(targetPos))
 			{
 				targetPos.Y += 2;
 			}
@@ -429,7 +429,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 		NPC.Center = targetPos;
 		for (int i = 0; i < 100; i++)
 		{
-			if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileCollisionUtils.PlatformCollision(NPC.position, NPC.width, NPC.height))
+			if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height) || TileUtils.PlatformCollision(NPC.position, NPC.width, NPC.height))
 			{
 				NPC.position.Y -= 2;
 			}

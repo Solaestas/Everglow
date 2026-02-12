@@ -1,6 +1,7 @@
 using Everglow.Commons.Coroutines;
 using Everglow.Commons.CustomTiles;
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Myth.TheTusk.Items;
 using Everglow.Myth.TheTusk.Items.Accessories;
@@ -449,7 +450,7 @@ public class BloodTusk : ModNPC
 			}
 			for (int j = 0; j < 25 * 25 / distance; j++)
 			{
-				Vector2 leftNormal = -TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8);
+				Vector2 leftNormal = -TileUtils.GetTopographicGradient(leftSpikePos, 8);
 				for (int k = 0; k < 15; k++)
 				{
 					if (!Collision.SolidCollision(leftSpikePos, 0, 0))
@@ -466,9 +467,9 @@ public class BloodTusk : ModNPC
 					}
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
-				leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * distance * 4;
+				leftSpikePos += TileUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * distance * 4;
 
-				Vector2 rightNormal = -TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8);
+				Vector2 rightNormal = -TileUtils.GetTopographicGradient(rightSpikePos, 8);
 				for (int k = 0; k < 15; k++)
 				{
 					if (!Collision.SolidCollision(rightSpikePos, 0, 0))
@@ -485,7 +486,7 @@ public class BloodTusk : ModNPC
 					}
 				}
 				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
-				rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * distance * 4;
+				rightSpikePos += TileUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * distance * 4;
 			}
 			uint waitTime = 110;
 			if (Main.expertMode)
@@ -519,7 +520,7 @@ public class BloodTusk : ModNPC
 		}
 		for (int i = 0; i < 240 / waitTime; i++)
 		{
-			Vector2 leftNormal = -TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8);
+			Vector2 leftNormal = -TileUtils.GetTopographicGradient(leftSpikePos, 8);
 			for (int k = 0; k < 15; k++)
 			{
 				if (!Collision.SolidCollision(leftSpikePos, 0, 0))
@@ -537,9 +538,9 @@ public class BloodTusk : ModNPC
 			}
 			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
 			p0.timeLeft = Main.rand.Next(101, 110);
-			leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * 30;
+			leftSpikePos += TileUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * 30;
 
-			Vector2 rightNormal = -TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8);
+			Vector2 rightNormal = -TileUtils.GetTopographicGradient(rightSpikePos, 8);
 			for (int k = 0; k < 15; k++)
 			{
 				if (!Collision.SolidCollision(rightSpikePos, 0, 0))
@@ -557,7 +558,7 @@ public class BloodTusk : ModNPC
 			}
 			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
 			p1.timeLeft = Main.rand.Next(101, 110);
-			rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * 30;
+			rightSpikePos += TileUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * 30;
 			yield return new WaitForFrames(waitTime);
 		}
 	}
@@ -581,7 +582,7 @@ public class BloodTusk : ModNPC
 		}
 		for (int i = 0; i < 60 * 160 / distance; i++)
 		{
-			Vector2 leftNormal = -TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8);
+			Vector2 leftNormal = -TileUtils.GetTopographicGradient(leftSpikePos, 8);
 			for (int k = 0; k < 15; k++)
 			{
 				if (!Collision.SolidCollision(leftSpikePos, 0, 0))
@@ -599,9 +600,9 @@ public class BloodTusk : ModNPC
 			}
 			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), leftSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
 			p0.timeLeft = Main.rand.Next(101, 110);
-			leftSpikePos += TileCollisionUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * distance;
+			leftSpikePos += TileUtils.GetTopographicGradient(leftSpikePos, 8).RotatedBy(-MathHelper.PiOver2) * distance;
 
-			Vector2 rightNormal = -TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8);
+			Vector2 rightNormal = -TileUtils.GetTopographicGradient(rightSpikePos, 8);
 			for (int k = 0; k < 15; k++)
 			{
 				if (!Collision.SolidCollision(rightSpikePos, 0, 0))
@@ -619,7 +620,7 @@ public class BloodTusk : ModNPC
 			}
 			Projectile p1 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), rightSpikePos, Vector2.zeroVector, GetTusk_groundType(), GetDamage(30), 1, NPC.target);
 			p1.timeLeft = Main.rand.Next(101, 110);
-			rightSpikePos += TileCollisionUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * distance;
+			rightSpikePos += TileUtils.GetTopographicGradient(rightSpikePos, 8).RotatedBy(MathHelper.PiOver2) * distance;
 			yield return new WaitForFrames(2);
 		}
 	}
@@ -1197,7 +1198,7 @@ public class BloodTusk : ModNPC
 	public IEnumerator<ICoroutineInstruction> GiantJaw()
 	{
 		Player player = Main.player[NPC.target];
-		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom - TileCollisionUtils.GetTopographicGradient(NPC.Bottom, 6) * 10, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom - TileUtils.GetTopographicGradient(NPC.Bottom, 6) * 10, Vector2.zeroVector, ModContent.ProjectileType<Living_Jawbone_Huge_ground_Wave>(), GetDamage(150), 1, NPC.target);
 		yield return new WaitForFrames(30);
 	}
 

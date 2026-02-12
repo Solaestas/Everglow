@@ -92,7 +92,7 @@ public class VFXManager : IVFXManager
 			}
 		}
 		_ = hookManager.AddHook(CodeLayer.PostUpdateEverything, Update, "VFX Update");
-		_ = hookManager.AddHook(CodeLayer.PostExitWorld_Single, Clear, "VFX Clear");
+		_ = hookManager.AddHook(CodeLayer.PreSaveAndQuit, Clear, "VFX Clear");
 		mainThread.AddTask(() => tempRenderTarget = Ins.RenderTargetPool.GetRenderTarget2D());
 		foreach (var visual in Ins.ModuleManager.CreateInstances<IVisual>())
 		{

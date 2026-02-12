@@ -36,7 +36,7 @@ public class MythrilClub_smash : ClubProjSmash
 					p0.timeLeft = Math.Abs(i * 8) + 120 + j * 2;
 					int count = 0;
 					Vector2 checkPoint = Projectile.Center + new Vector2(i * 90 + Main.rand.NextFloat(-45, 45), 60);
-					while (TileCollisionUtils.PlatformCollision(checkPoint))
+					while (TileUtils.PlatformCollision(checkPoint))
 					{
 						count++;
 						checkPoint += new Vector2(0, -8);
@@ -46,7 +46,7 @@ public class MythrilClub_smash : ClubProjSmash
 						}
 					}
 					count = 0;
-					while (!TileCollisionUtils.PlatformCollision(checkPoint) && !TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(0, 8)))
+					while (!TileUtils.PlatformCollision(checkPoint) && !TileUtils.PlatformCollision(checkPoint + new Vector2(0, 8)))
 					{
 						count++;
 						checkPoint += new Vector2(0, 8);
@@ -80,7 +80,7 @@ public class MythrilClub_smash : ClubProjSmash
 					p0.timeLeft = Math.Abs(i * 8) + 120 + j * 2;
 					int count = 0;
 					Vector2 checkPoint = Projectile.Center + new Vector2(i * 90 + Main.rand.NextFloat(-45, 45), 60);
-					while (TileCollisionUtils.PlatformCollision(checkPoint))
+					while (TileUtils.PlatformCollision(checkPoint))
 					{
 						count++;
 						checkPoint += new Vector2(0, -8);
@@ -90,7 +90,7 @@ public class MythrilClub_smash : ClubProjSmash
 						}
 					}
 					count = 0;
-					while (!TileCollisionUtils.PlatformCollision(checkPoint) && !TileCollisionUtils.PlatformCollision(checkPoint + new Vector2(0, 8)))
+					while (!TileUtils.PlatformCollision(checkPoint) && !TileUtils.PlatformCollision(checkPoint + new Vector2(0, 8)))
 					{
 						count++;
 						checkPoint += new Vector2(0, 8);

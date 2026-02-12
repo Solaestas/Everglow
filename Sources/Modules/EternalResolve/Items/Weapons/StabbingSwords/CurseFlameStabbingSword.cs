@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class CurseFlameStabbingSword : StabbingSwordItem
+	public class CurseFlameStabbingSword : StabbingSwordItem
 	{
 		//TODO:翻译
 		//用诅咒火焰点燃敌人！
@@ -14,8 +14,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 14, 56, 75);
 			Item.shoot = ModContent.ProjectileType<CurseFlameStabbingSword_Pro>();
-			StabMulDamage = 4f;
-			staminaCost = 0.82f;
+			PowerfulStabDamageFlat = 4f;
+			StaminaCost = 0.82f;
 			PowerfulStabProj = ModContent.ProjectileType<CurseFlameStabbingSword_Pro_Stab>();
 			base.SetDefaults();
 		}

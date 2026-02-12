@@ -19,7 +19,7 @@ public class SpongeOxygenBubble_Small : ModDust
 			dust.velocity += toOwner / 1000f * mulAcc;
 			dust.velocity *= 0.99f;
 			dust.position += dust.velocity;
-			Tile dustPosTile = YggdrasilWorldGeneration.SafeGetTile(dust.position.ToTileCoordinates());
+			Tile dustPosTile = TileUtils.SafeGetTile(dust.position.ToTileCoordinates());
 			if (dust.position.Y % 16 > dustPosTile.LiquidAmount / 16f)
 			{
 				dust.active = false;
@@ -35,7 +35,7 @@ public class SpongeOxygenBubble_Small : ModDust
 			{
 				dust.active = false;
 			}
-			Tile dustPosTile = YggdrasilWorldGeneration.SafeGetTile(dust.position.ToTileCoordinates());
+			Tile dustPosTile = TileUtils.SafeGetTile(dust.position.ToTileCoordinates());
 			if (dust.position.Y % 16 > dustPosTile.LiquidAmount / 16f)
 			{
 				dust.active = false;

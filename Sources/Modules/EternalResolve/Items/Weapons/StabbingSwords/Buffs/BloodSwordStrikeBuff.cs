@@ -1,5 +1,3 @@
-using Terraria;
-
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Buffs;
 
 public class BloodSwordStrikeBuff : ModBuff

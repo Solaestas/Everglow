@@ -106,7 +106,7 @@ public class MyceliumTiles : Visual
 	public void DrawTilePiece(Point pos)
 	{
 		List<Vertex2DMycelium> bars = new List<Vertex2DMycelium>();
-		var tile = YggdrasilWorldGeneration.SafeGetTile(pos);
+		var tile = TileUtils.SafeGetTile(pos);
 		var texTile = TextureAssets.Tile[tile.TileType].Value;
 		var addPos = RootPos - pos;
 		float zValue = MathF.Pow(MyceliumAmount / 256f, 6) * 19.9f;
@@ -183,7 +183,7 @@ public class MyceliumTiles : Visual
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
 				Point point = new Point(checkX, checkY);
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
 				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
