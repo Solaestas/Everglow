@@ -11,8 +11,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 {
 	public float CurrentTrailFade = 1f;
 
-	public Queue<float> OldTrailFade = new Queue<float>();
-
 	public bool EnableSphereCoordDraw = false;
 
 	public Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
@@ -35,8 +33,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		{
 			DrawReferenceSphere(RadialDistance);
 		}
-		DrawWeapon(WeaponAxis, MainAxis, new Vector3(0, 0, CenterZ));
+		DrawWeapon(WeaponAxis, MainAxis * 0.15f, new Vector3(0, 0, CenterZ));
 		DrawTrail();
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 
@@ -138,67 +139,64 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void DrawTrail()
 	{
-		if (OldArrowTips_Smoothed is null)
+		for (int k = SlashEffects.Count - 1; k >= 0; k--)
 		{
-			return;
-		}
-		Color origColor = new Color(1f, 1f, 1f, 0);
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null)
+			{
+				continue;
+			}
+			if (!sEffect.Active)
+			{
+				continue;
+			}
+			Color origColor = new Color(1f, 1f, 1f, 0);
 
-		// Draw Line
-		// for (int k = 0; k < 3; k++)
-		// {
-		// Vector2 width = new Vector2(0, 2).RotatedBy(k / 3f * MathHelper.TwoPi);
-		// List<Vertex2D> trails = new List<Vertex2D>();
-		// for (int i = 0; i < OldArrowTips_Smoothed.Count; i++)
-		// {
-		// Vector3 currentPos3D = OldArrowTips_Smoothed[i];
-		// Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
-		// float size = GetSizeZ(currentPos3D.Z);
-		// Color drawColor = origColor * (i / (float)OldArrowTips_Smoothed.Count);
-		// trails.Add(currentPos + ScreenPositionOffset + width * size, drawColor, new Vector3(0.5f, 0.5f, 0));
-		// trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f, 0));
-		// }
-		// if (trails.Count >= 4)
-		// {
-		// Main.graphics.graphicsDevice.Textures[0] = ModAsset.StarSlashGray.Value;
-		// Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails.ToArray(), 0, trails.Count - 2);
-		// }
-		// }
+			// Draw Slash
+			List<Vertex2D> trails_black = new List<Vertex2D>();
+			List<Vertex2D> trails = new List<Vertex2D>();
+			List<Vertex2D> trails_tip = new List<Vertex2D>();
+			float timeValue = 0; // -(float)Main.time * 0.03f;
+			for (int i = 0; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
+				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
 
-		// Draw Slash
-		List<Vertex2D> trails = new List<Vertex2D>();
-		List<Vertex2D> trails_tip = new List<Vertex2D>();
-		for (int i = 0; i < OldArrowTips_Smoothed.Count; i++)
-		{
-			Vector3 currentPos3D = OldArrowTips_Smoothed[i] + new Vector3(0, 0, CenterZ);
-			Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector3 currentPos3D_Edge = sEffect.SlashTrail_Smoothed[i] * 0.6f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Edge = Project(currentPos3D_Edge, ProjectionMatrix);
 
-			Vector3 currentPos3D_Edge = OldArrowTips_Smoothed[i] * 0.6f + new Vector3(0, 0, CenterZ);
-			Vector2 currentPos_Edge = Project(currentPos3D_Edge, ProjectionMatrix);
+				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
 
-			Vector3 currentPos3D_Inner = OldArrowTips_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-			Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Color drawColor_dark = Color.White * (i / (float)sEffect.SlashTrail_Smoothed.Count);
+				Color drawColor = origColor * (i / (float)sEffect.SlashTrail_Smoothed.Count);
+				float value = 1 - i / (float)sEffect.SlashTrail_Smoothed.Count;
+				float fade = GetFade(i, sEffect);
 
-			Color drawColor = origColor * (i / (float)OldArrowTips_Smoothed.Count);
-			float value = 1 - i / (float)OldArrowTips_Smoothed.Count;
-			float timeValue = -(float)Main.time * 0.03f;
-			float fade = GetFade(i);
+				trails_black.Add(currentPos + ScreenPositionOffset, drawColor_dark * value * fade, new Vector3(value + timeValue, 1f, 0));
+				trails_black.Add(currentPos_Inner + ScreenPositionOffset, drawColor_dark * value * fade * 0, new Vector3(value + timeValue, 0f, 0));
 
-			trails.Add(currentPos + ScreenPositionOffset, drawColor * value * fade, new Vector3(1f, value + timeValue, 0));
-			trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor * value * fade * 0, new Vector3(0f, value + timeValue, 0));
+				trails.Add(currentPos + ScreenPositionOffset, drawColor * value * fade, new Vector3(value + timeValue, 1f, 0));
+				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor * value * fade * 0, new Vector3(value + timeValue, 0f, 0));
 
-			trails_tip.Add(currentPos + ScreenPositionOffset, drawColor * fade, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
-			trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor * fade, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
-		}
-		if (trails.Count >= 4)
-		{
-			Main.graphics.graphicsDevice.Textures[0] = ModAsset.Noise_flame_3.Value;
-			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails.ToArray(), 0, trails.Count - 2);
-		}
-		if (trails_tip.Count >= 4)
-		{
-			Main.graphics.graphicsDevice.Textures[0] = ModAsset.StarSlash.Value;
-			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_tip.ToArray(), 0, trails_tip.Count - 2);
+				trails_tip.Add(currentPos + ScreenPositionOffset, drawColor * fade, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
+				trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor * fade, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
+			}
+			if (trails_black.Count >= 4)
+			{
+				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Noise_flame_3_black.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_black.ToArray(), 0, trails_black.Count - 2);
+			}
+			if (trails.Count >= 4)
+			{
+				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Noise_flame_3.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails.ToArray(), 0, trails.Count - 2);
+			}
+			if (trails_tip.Count >= 4)
+			{
+				Main.graphics.graphicsDevice.Textures[0] = ModAsset.StarSlash.Value;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_tip.ToArray(), 0, trails_tip.Count - 2);
+			}
 		}
 	}
 
@@ -282,11 +280,21 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 	}
 
-	public float GetFade(int indexInSmootheTrail)
+	public float GetFade(int indexInSmootheTrail, SlashEffect sEffect)
 	{
-		float value = indexInSmootheTrail / (float)OldArrowTips_Smoothed.Count * OldTrailFade.Count;
-		int index = (int)Math.Clamp(value, 0, OldTrailFade.Count - 1);
-		return OldTrailFade.ToArray()[index];
+		float value = indexInSmootheTrail / (float)sEffect.SlashTrail_Smoothed.Count * sEffect.SlashFade.Count;
+		if(sEffect.SlashFade is null || sEffect.SlashFade.Count == 0)
+		{
+			return 0f;
+		}
+		float fade = 1f;
+		float fadeThrethod = 24f;
+		if (sEffect.Timer >= sEffect.MaxTime - fadeThrethod)
+		{
+			fade *= 1 - (sEffect.Timer - sEffect.MaxTime + fadeThrethod) / fadeThrethod;
+		}
+		int index = (int)Math.Clamp(value, 0, sEffect.SlashFade.Count - 1);
+		return sEffect.SlashFade.ToArray()[index] * fade;
 	}
 
 	public void DrawBloom()
@@ -295,36 +303,56 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		if (OldArrowTips_Smoothed is null)
+		float timeValue = 0;
+		for (int k = 0; k < SlashEffects.Count; k++)
 		{
-			return;
-		}
-		List<Vertex2D> trails = new List<Vertex2D>();
-
-		for (int i = 0; i < OldArrowTips_Smoothed.Count; i++)
-		{
-			Vector3 currentPos3D = OldArrowTips_Smoothed[i] * 0.95f + new Vector3(0, 0, CenterZ);
-			Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
-
-			Vector3 currentPos3D_Inner = OldArrowTips_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-			Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
-
-			Vector2 warpDir = currentPos.RotatedBy(MathHelper.PiOver2).NormalizeSafe() * 10f;
-			if (i >= 1)
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null)
 			{
-				Vector3 currentPos3D_Old = OldArrowTips_Smoothed[i - 1] + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Old = Project(currentPos3D_Old, ProjectionMatrix);
-				warpDir = currentPos - currentPos_Old;
+				continue;
 			}
-			warpDir *= 0.05f;
-			float value = 1 - i / (float)OldArrowTips_Smoothed.Count;
-			float timeValue = -(float)Main.time * 0.03f;
-			Color drawColor = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, (1 - value) * 0.1f * GetFade(i), 0);
-			Color drawColorInner = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, 0, 0);
+			if (!sEffect.Active)
+			{
+				continue;
+			}
+			List<Vertex2D> trails = new List<Vertex2D>();
 
-			trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(1f, value + timeValue, 0));
-			trails.Add(currentPos_Inner + ScreenPositionOffset, drawColorInner, new Vector3(0f, value + timeValue, 0));
+			for (int i = 0; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
+				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+
+				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+
+				Vector2 warpDir = Vector2.zeroVector;
+				if (i >= 1)
+				{
+					Vector3 currentPos3D_Old = sEffect.SlashTrail_Smoothed[i - 1] + new Vector3(0, 0, CenterZ);
+					Vector2 currentPos_Old = Project(currentPos3D_Old, ProjectionMatrix);
+					warpDir = currentPos_Old - currentPos;
+				}
+				float warpThrethod = 220;
+				if(warpDir.Length() > warpThrethod)
+				{
+					warpDir = warpDir.SafeNormalize(Vector2.zeroVector) * warpThrethod;
+				}
+				warpDir *= 0.5f / warpThrethod;
+				float value = 1 - i / (float)sEffect.SlashTrail_Smoothed.Count;
+				float fade = 1f;
+				float fadeThrethod = 24f;
+				if (sEffect.Timer >= sEffect.MaxTime - fadeThrethod)
+				{
+					fade *= 1 - (sEffect.Timer - sEffect.MaxTime + fadeThrethod) / fadeThrethod;
+				}
+				Color drawColor = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, (1 - value) * 1f * fade, 1);
+				Color drawColorInner = new Color(0.5f + warpDir.X, 0.5f + warpDir.Y, 0, 1);
+
+				trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(value + timeValue, 1f, 0));
+				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColorInner, new Vector3(value + timeValue, 0f, 0));
+			}
+
+			spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
 		}
-		spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
 	}
 }

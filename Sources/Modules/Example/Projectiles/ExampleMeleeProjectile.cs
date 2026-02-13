@@ -9,14 +9,16 @@ public class ExampleMeleeProjectile : MeleeProj_3D
 {
 	public override void OnSpawn(IEntitySource source)
 	{
-		EnableSphereCoordDraw = true;
+		EnableSphereCoordDraw = false;
 	}
 
 	public override void SetDefaults()
 	{
+		base.SetDefaults();
 		Projectile.width = 82;
 		Projectile.height = 82;
 		Projectile.tileCollide = false;
+		Projectile.friendly = true;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 5;
 	}

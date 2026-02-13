@@ -5,6 +5,35 @@ namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
+	public struct SlashEffect
+	{
+		public Queue<Vector3> SlashTrail;
+
+		public List<Vector3> SlashTrail_Smoothed;
+
+		public Queue<float> SlashFade;
+
+		public int Timer;
+
+		public int MaxTime;
+
+		public int TrailMax;
+
+		public bool Active;
+
+		public float RotateSpeed;
+
+		public float TrailFade;
+
+		public Vector3 MainAxis;
+
+		public Vector3 WeaponAxis;
+
+		public Vector3 RotationAxis;
+	}
+
+	public List<SlashEffect> SlashEffects = new List<SlashEffect>();
+
 	public int WeaponItemType;
 
 	public int MaxTrail = 30;
@@ -33,11 +62,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public float AzimuthalAngle => SphericalCoordPos.Z;
 
+	public float WeaponLength = 60;
+
 	public Vector2 ScreenPositionOffset => Projectile.Center - Main.screenPosition;
-
-	public Queue<Vector3> OldArrowTips = new Queue<Vector3>();
-
-	public List<Vector3> OldArrowTips_Smoothed = new List<Vector3>();
 
 	public int CurrentAttackType = 0;
 
@@ -57,6 +84,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Projectile.hide = true;
 		Projectile.aiStyle = -1;
 		Projectile.height = Projectile.width = 120;
+		Projectile.penetrate = -1;
 	}
 
 	public override void AI()
@@ -66,62 +94,98 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		CenterZ = 1620;
 		DevelopersAdjust();
 		Trail();
-		AmendCoord();
 	}
 
 	public void Trail()
 	{
-		if(RotateSpeed <= 0.005f)
+		UpdateSlashEffects();
+	}
+
+	public void AddSlashEffect(int maxTime = 60, int trailMax = 60)
+	{
+		SlashEffect sEffect = new SlashEffect() { };
+		sEffect.Active = true;
+		sEffect.Timer = 0;
+		sEffect.MaxTime = maxTime;
+		sEffect.TrailMax = trailMax;
+		sEffect.SlashFade = new Queue<float>();
+		sEffect.SlashTrail = new Queue<Vector3>();
+		sEffect.SlashTrail_Smoothed = new List<Vector3>();
+		sEffect.TrailFade = 0;
+		sEffect.MainAxis = MainAxis;
+		sEffect.WeaponAxis = WeaponAxis;
+		sEffect.RotateSpeed = RotateSpeed;
+		sEffect.RotationAxis = RotatedAxis;
+		SlashEffects.Add(sEffect);
+	}
+
+	public void UpdateSlashEffects()
+	{
+		for (int k = SlashEffects.Count - 1; k >= 0; k--)
 		{
-			OldTrailFade.Clear();
-			OldArrowTips.Clear();
+			SlashEffect sEffect = SlashEffects[k];
+			sEffect.Timer++;
+			if (sEffect.Timer > sEffect.MaxTime)
+			{
+				sEffect.Active = false;
+			}
+			sEffect.TrailFade = sEffect.RotateSpeed * 3;
+			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
+			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
+			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * WeaponLength;
+			if (sEffect.SlashFade is null)
+			{
+				sEffect.SlashFade = new Queue<float>();
+			}
+			if (sEffect.SlashTrail is null)
+			{
+				sEffect.SlashTrail = new Queue<Vector3>();
+			}
+			if (sEffect.SlashTrail_Smoothed is null)
+			{
+				sEffect.SlashTrail_Smoothed = new List<Vector3>();
+			}
+			if (sEffect.Timer < sEffect.MaxTime)
+			{
+				sEffect.SlashFade.Enqueue(sEffect.TrailFade);
+				sEffect.SlashTrail.Enqueue(sEffect.WeaponAxis);
+			}
+			if (sEffect.SlashFade.Count > sEffect.TrailMax)
+			{
+				sEffect.SlashFade.Dequeue();
+			}
+			if (sEffect.SlashTrail.Count > sEffect.TrailMax)
+			{
+				sEffect.SlashTrail.Dequeue();
+			}
+			if (sEffect.SlashTrail.Count > 3)
+			{
+				sEffect.SlashTrail_Smoothed = GraphicsUtils.Smooth(sEffect.SlashTrail);
+			}
+			SlashEffects[k] = sEffect;
+			if (!sEffect.Active)
+			{
+				SlashEffects.RemoveAt(k);
+			}
 		}
-		OldTrailFade.Enqueue(CurrentTrailFade);
-		if (OldTrailFade.Count > MaxTrail)
-		{
-			OldTrailFade.Dequeue();
-		}
-		OldArrowTips.Enqueue(WeaponAxis);
-		if (OldArrowTips.Count > MaxTrail)
-		{
-			OldArrowTips.Dequeue();
-		}
-		OldArrowTips_Smoothed = GraphicsUtils.Smooth(OldArrowTips);
 	}
 
 	public void DevelopersAdjust()
 	{
-		//float rotSpeed = 0.03f;
-		//if (Owner.controlUp)
-		//{
-		//	SphericalCoordPos.Y += rotSpeed;
-		//}
-		//if (Owner.controlDown)
-		//{
-		//	SphericalCoordPos.Y -= rotSpeed;
-		//}
-		//if (Owner.controlLeft)
-		//{
-		//	SphericalCoordPos.Z += rotSpeed;
-		//}
-		//if (Owner.controlRight)
-		//{
-		//	SphericalCoordPos.Z -= rotSpeed;
-		//}
-		// RotatedByMouseAxis();
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		float meleeSpeed = Owner.meleeSpeed;
+		CurrentTrailFade = RotateSpeed * 3;
+		RotateMainAxis(RotateSpeed * 0.35f, RotatedAxis, ref MainAxis);
+		RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
+		BindWeaponAxis();
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			RotatedAxis = new Vector3(Main.rand.NextFloat(-1, 1), -1 / 3f, Main.rand.NextFloat(-1, 1));
 			RotatedAxis = Vector3.Normalize(RotatedAxis);
 			RotateToPerpendicular(RotatedAxis, ref MainAxis);
-			RotateSpeed = 2.5f;
+			RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed;
 			CurrentTrailFade = 0;
+			AddSlashEffect();
 		}
-
-		CurrentTrailFade = RotateSpeed * 3;
-		RotateMainAxis(RotateSpeed * 0.35f);
-		BindWeaponAxis();
-		RotateSpeed *= 0.88f;
 	}
 
 	public void FollowMouse()
@@ -137,7 +201,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		Vector3 toMouse = new Vector3(Main.MouseScreen - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f, 0) - new Vector3(0, 0, CenterZ * 0.1f);
 		RotatedAxis = Vector3.Normalize(toMouse) * 120f;
-		RotateMainAxis(value * 0.35f);
+		RotateMainAxis(value * 0.35f, RotatedAxis, ref MainAxis);
 	}
 
 	public virtual void CheckHeldItem()
@@ -161,28 +225,36 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Projectile.velocity *= 0;
 	}
 
-	public virtual void AmendCoord()
-	{
-		//if(SphericalCoordPos.Y < 0)
-		//{
-		//	SphericalCoordPos.Y = MathF.Abs(SphericalCoordPos.Y);
-		//}
-		//if(SphericalCoordPos.Y > MathHelper.Pi)
-		//{
-		//	SphericalCoordPos.Y = MathHelper.TwoPi - SphericalCoordPos.Y;
-		//}
-		//if(SphericalCoordPos.Z > MathHelper.Pi)
-		//{
-		//	SphericalCoordPos.Z -= MathHelper.TwoPi;
-		//}
-		//if (SphericalCoordPos.Z < -MathHelper.Pi)
-		//{
-		//	SphericalCoordPos.Z += MathHelper.TwoPi;
-		//}
-	}
-
 	public virtual void BindWeaponAxis()
 	{
-		WeaponAxis = MainAxis + MainAxisDirection * 120f;
+		WeaponAxis = MainAxis + MainAxisDirection * WeaponLength;
+	}
+
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		for (int k = 0; k < SlashEffects.Count; k++)
+		{
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null || sEffect.RotateSpeed < 0.1f || sEffect.SlashTrail_Smoothed.Count < 7 || !sEffect.Active)
+			{
+				continue;
+			}
+
+			for (int i = sEffect.SlashTrail_Smoothed.Count - 6; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
+				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+
+				Vector2 worldPos = Projectile.Center + currentPos;
+				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
+				if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, worldPos, worldPos_Inner, 48))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

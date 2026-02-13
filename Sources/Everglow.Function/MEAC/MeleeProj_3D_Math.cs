@@ -101,15 +101,88 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		rotateAxis = Vector3.Transform(rotateAxis, rotation);
 	}
 
-	public void RotateMainAxis(float angle)
+	public void RotateMainAxis(float angle, Vector3 rotatedAxis, ref Vector3 mainAxis)
 	{
-		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(RotatedAxis), angle);
-		MainAxis = Vector3.Transform(MainAxis, rotation);
+		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(rotatedAxis), angle);
+		mainAxis = Vector3.Transform(mainAxis, rotation);
 		WeaponAxis = Vector3.Transform(WeaponAxis, rotation);
 	}
 
 	public float GetSizeZ(float coordZ)
 	{
 		return CenterZ / coordZ;
+	}
+
+	/// <summary>
+	/// Solve f(x) = x * e^x = y for x, given y. Only the principal branch is implemented, which is the one used in most cases. The input y must be greater than -1/e.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentOutOfRangeException"></exception>
+	public static float LambertW0(double x)
+	{
+		const double e = Math.E;
+		const double eps = 1e-12;
+
+		if (x < -1 / e - eps)
+		{
+			throw new ArgumentOutOfRangeException(nameof(x), "x must be greater than -1/e");
+		}
+		if (x == 0)
+		{
+			return 0;
+		}
+		if (Math.Abs(x - (-1 / e)) < eps)
+		{
+			return -1;
+		}
+
+		double w;
+		if (x > 0)
+		{
+			w = Math.Log(1 + x);
+		}
+		else
+		{
+			w = -1 + Math.Sqrt(2 * (1 + Math.E * x));
+		}
+
+		// 4 times Newton iteration to refine the approximation
+		for (int i = 0; i < 4; i++)
+		{
+			double ew = Math.Exp(w);
+			double wew = w * ew;
+			double f = wew - x;
+			double df = ew * (w + 1);
+			w -= f / df;
+		}
+		return (float)w;
+	}
+
+	// Rotation Speed Curve
+	public const double BaseMeleeSpeed = 2.5;
+	public const double BaseDecaySpeed = 0.88;
+	public const int MaxTime = 60;
+
+	/// <summary>
+	/// A const value, if change the BaseMeleeSpeed, BaseDecaySpeed or MaxTime, this value should be recalculated. It represents the integral of the rotation speed curve over time, which is used to solve for the decay coefficient b when given a new melee speed a.
+	/// </summary>
+	private static readonly double FixedIntegral =
+		(Math.Pow(BaseDecaySpeed, MaxTime) - 1) / Math.Log(BaseDecaySpeed) * BaseMeleeSpeed;
+
+	/// <summary>
+	/// Input a new meleeSpeed and output b value.
+	/// </summary>
+	public static float SolveB(double newMeleeSpeed)
+	{
+		double a = newMeleeSpeed;
+		double K = FixedIntegral;
+
+		double t = MaxTime * a / K;
+		double arg = -t * Math.Exp(-t);
+		double w = LambertW0(arg);
+		double b = Math.Exp(-w / MaxTime - a / K);
+
+		return (float)b;
 	}
 }
