@@ -97,11 +97,21 @@ public class RedpaperGiant : LanternMoonNPC
 		{
 			return;
 		}
+		if (State == (int)BehaviorState.Teleporting)
+		{
+
+		}
+		else
+		{
+
+		}
+
 		Player player = Main.player[NPC.target];
 		switch (State)
 		{
 			case (int)BehaviorState.CloseTarget:
 				{
+					Lighting.AddLight(NPC.Center, 0.4f, 0.05f, 0.05f);
 					int oldDir = NPC.direction;
 					if (NPC.velocity.X > 0)
 					{
@@ -194,6 +204,7 @@ public class RedpaperGiant : LanternMoonNPC
 				}
 			case (int)BehaviorState.Attack:
 				{
+					Lighting.AddLight(NPC.Center, 0.4f, 0.05f, 0.05f);
 					FlipTimer = 0;
 					AttackTimer--;
 					if (AttackTimer <= 0)
@@ -238,6 +249,8 @@ public class RedpaperGiant : LanternMoonNPC
 						teleportPos.Y += OverTileHeight(teleportPos) - 30;
 						NPC.Center = teleportPos;
 					}
+					Vector3 LightColor = new Vector3(0.4f, 0.05f, 0.05f) * ((float)Math.Abs(TeleportTimer - MaxTeleportTime / 2) / (MaxTeleportTime / 2));
+					Lighting.AddLight(NPC.Center, LightColor);
 					break;
 				}
 		}
@@ -292,7 +305,7 @@ public class RedpaperGiant : LanternMoonNPC
 					position = NPC.Center + vel,
 					Texture = ModContent.Request<Texture2D>(texturePath).Value,
 					rotateSpeed = vel.X / 8f,
-					scale = Main.rand.NextFloat(0.8f, 1.2f),
+					scale = Main.rand.NextFloat(1f, 1.25f),
 					maxTime = Main.rand.Next(120, 360),
 					rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 					ai = new float[] { Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(0, MathF.PI) },

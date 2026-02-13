@@ -19,9 +19,9 @@ public class PaperGore : BurningGore
 		float timevalue = (float)timer / (float)maxTime;
 		rotateSpeed = velocity.X / 80f;
 		velocity = velocity.RotatedBy(MathF.Sin(timevalue * MathF.PI * 0.025f * ai[0]));
-		velocity += new Vector2(MathF.Sin(timevalue * MathF.PI * 0.035f * ai[0]),0);
+		velocity += new Vector2(MathF.Sin(timevalue * MathF.PI * 0.035f * ai[0]), Math.Abs(MathF.Cos(timevalue * MathF.PI * 0.035f * ai[0])) * 0.01f);
 		base.Update();
-		
+
 		if (timevalue > 0.25f)
 		{
 			if (Main.rand.NextBool(3))
@@ -32,8 +32,8 @@ public class PaperGore : BurningGore
 					velocity = newVelocity + velocity * Main.rand.NextFloat(0f, 1f),
 					Active = true,
 					Visible = true,
-					position = position + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), 0).RotatedByRandom(6.283) * (1-timevalue) * width,
-					maxTime = Main.rand.Next(37, 45)*(1 - timevalue),
+					position = position + new Vector2(Main.rand.NextFloat(-0.5f, 0.5f), 0).RotatedByRandom(6.283) * (1 - timevalue) * width,
+					maxTime = Main.rand.Next(37, 45) * (1 - timevalue),
 					scale = Main.rand.NextFloat(0.1f, 12.0f) * (1 - timevalue),
 					rotation = Main.rand.NextFloat(6.283f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.01f, 0.01f) }

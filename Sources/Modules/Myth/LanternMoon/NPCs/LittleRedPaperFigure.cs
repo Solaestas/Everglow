@@ -114,16 +114,16 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		}
 		Lighting.AddLight(NPC.Center, 0.4f, 0.05f, 0.05f);
 		if (State == (int)BehaviorState.Fighter)
-			
+
 		{
 			NPC.ai[0] = 0;
-			NPC.aiStyle = NPCAIStyleID.Fighter;//几千行代码有点难扒下来，先用现成的AIStyle代替，但看了一下把ai[0]设好能避免大部分问题
+			NPC.aiStyle = NPCAIStyleID.Fighter; // 几千行代码有点难扒下来，先用现成的AIStyle代替，但看了一下把ai[0]设好能避免大部分问题
 			NPC.noGravity = false;
 			NPC.rotation = 0;
 		}
 		else if (State == (int)BehaviorState.Fly)
 		{
-			NPC.ai[0]= 1;
+			NPC.ai[0] = 1;
 			NPC.aiStyle = NPCAIStyleID.StarCell;
 			NPC.noGravity = true;
 			NPC.rotation = 0;
@@ -139,7 +139,6 @@ public class LittleRedPaperFigure : LanternMoonNPC
 		}
 		else if (State == (int)BehaviorState.Teleporting)
 		{
-
 			TeleportTimer--;
 			if (TeleportTimer < 0)
 			{
@@ -159,7 +158,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = NPC.Center + new Vector2(Main.rand.NextFloat(-7f, 7f), 0).RotatedByRandom(6.283),
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-35f, 35f), 0).RotatedByRandom(6.283),
 					maxTime = Main.rand.Next(37, 45),
 					scale = Main.rand.NextFloat(0.1f, 12.0f),
 					rotation = Main.rand.NextFloat(6.283f),
@@ -175,7 +174,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 					velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					position = NPC.Center + new Vector2(Main.rand.NextFloat(-6f, 6f), 0).RotatedByRandom(6.283),
+					position = NPC.Center + new Vector2(Main.rand.NextFloat(-30f, 30f), 0).RotatedByRandom(6.283),
 					maxTime = Main.rand.Next(5, 15),
 					scale = Main.rand.NextFloat(0.1f, 6.0f),
 					rotation = Main.rand.NextFloat(6.283f),
@@ -292,7 +291,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 	public override void OnKill()
 	{
-		for (int g = 0; g < 4; g++)
+		for (int g = 0; g < 8; g++)
 		{
 			if (Main.rand.NextBool(2))
 			{
@@ -310,10 +309,10 @@ public class LittleRedPaperFigure : LanternMoonNPC
 					position = NPC.Center + vel,
 					Texture = ModContent.Request<Texture2D>(texturePath).Value,
 					rotateSpeed = vel.X / 8f,
-					scale = Main.rand.NextFloat(0.8f, 1.2f),
+					scale = Main.rand.NextFloat(1f, 1.25f),
 					maxTime = Main.rand.Next(120, 360),
 					rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-					ai = new float[] { Main.rand.NextFloat(-2,2), Main.rand.NextFloat(-MathF.PI, MathF.PI) },
+					ai = new float[] { Main.rand.NextFloat(-2, 2), Main.rand.NextFloat(-MathF.PI, MathF.PI) },
 				};
 				Ins.VFXManager.Add(gore);
 			}

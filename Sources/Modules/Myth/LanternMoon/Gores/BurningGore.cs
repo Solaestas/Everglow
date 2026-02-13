@@ -72,7 +72,7 @@ public abstract class BurningGore : VisualGore
 				if (!noGravity)
 				{
 					velocity.Y += LightValue;
-					velocity.X += Main.windSpeedCurrent / width * 20f;
+					velocity.X += Main.windSpeedCurrent / width * 15f;
 				}
 			}
 		}
@@ -81,7 +81,7 @@ public abstract class BurningGore : VisualGore
 			if (!noGravity)
 			{
 				velocity.Y += LightValue;
-				velocity.X += Main.windSpeedCurrent / width * 20f;
+				velocity.X += Main.windSpeedCurrent / width * 15f;
 			}
 		}
 
