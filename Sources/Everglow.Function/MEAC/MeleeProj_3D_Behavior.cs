@@ -198,7 +198,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	{
 		float value = (MathF.Sin((float)Main.time * 0.13f) + 1) / 2f;
 		value = MathF.Pow(value, 3) + 0.5f;
-
 		Vector3 toMouse = new Vector3(Main.MouseScreen - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f, 0) - new Vector3(0, 0, CenterZ * 0.1f);
 		RotatedAxis = Vector3.Normalize(toMouse) * 120f;
 		RotateMainAxis(value * 0.35f, RotatedAxis, ref MainAxis);
