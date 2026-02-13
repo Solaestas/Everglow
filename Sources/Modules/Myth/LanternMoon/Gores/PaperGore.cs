@@ -63,8 +63,7 @@ public class PaperGore : BurningGore
 	{
 		float timevalue = (float)timer / (float)maxTime;
 		float flipflag = MathF.Cos(rotation * ai[0] + ai[1]);
-		Main.NewText(rotateSpeed);
-		Main.NewText(flipflag);	
+
 
 		Vector2 v0 = position + new Vector2(-width * flipflag, -height).RotatedBy(rotation) * 0.5f * scale;
 		Vector2 v1 = position + new Vector2(width * flipflag, -height).RotatedBy(rotation) * 0.5f * scale;
