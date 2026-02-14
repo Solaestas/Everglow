@@ -2,6 +2,17 @@ namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
+	/// <summary>
+	/// Return a 2D position of the weapon tip projected from 3D space, which can be used for player arm rotation and slash effect drawing. The position is relative to the projectile center, so adding Projectile.Center will get the world position.
+	/// </summary>
+	/// <returns></returns>
+	public Vector2 CurrentWeaponTipPosition()
+	{
+		Vector3 currentPos3D = WeaponAxis + new Vector3(0, 0, CenterZ);
+		Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+		return currentPos;
+	}
+
 	public static Vector2 Project(Vector3 point, Matrix ProjectionMatrix)
 	{
 		Vector4 homogenousPoint = Vector4.Transform(new Vector4(point, 1), ProjectionMatrix);

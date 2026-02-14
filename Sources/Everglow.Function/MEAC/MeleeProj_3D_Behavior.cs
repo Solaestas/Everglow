@@ -1,5 +1,7 @@
 using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.Shaders;
 
 namespace Everglow.Commons.MEAC;
 
@@ -105,6 +107,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		CenterZ = 1620;
 		DevelopersAdjust();
 		Update();
+		HoldWeapon();
+		ProduceWaterRipples(new Vector2(CurrentWeaponTipPosition().Length(), 30));
 	}
 
 	public void Update()
@@ -139,7 +143,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		float meleeSpeed = Owner.meleeSpeed;
 		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
 		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
-		RotatedAxis = new Vector3(mouseDir, Main.rand.NextFloat(0.2f, 1f));//new Vector3(Main.rand.NextFloat(-1, 1), -1 / 3f, Main.rand.NextFloat(-1, 1));
+		RotatedAxis = new Vector3(mouseDir, Main.rand.NextFloat(0.2f, 1f));
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
 		MainAxis = new Vector3((60 + WeaponLength) * Owner.direction, 0, 0);
 		RotateToPerpendicular(RotatedAxis, ref MainAxis);
@@ -266,42 +270,5 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual void BindWeaponAxis()
 	{
 		WeaponAxis = MainAxis + MainAxisDirection * WeaponLength;
-	}
-
-	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-	{
-		for (int k = 0; k < SlashEffects.Count; k++)
-		{
-			SlashEffect sEffect = SlashEffects[k];
-			if (sEffect.SlashTrail_Smoothed is null || Math.Abs(sEffect.RotateSpeed) < 0.1f || sEffect.SlashTrail_Smoothed.Count < 3 || !sEffect.Active)
-			{
-				continue;
-			}
-
-			// Using a polygon of the last several vertices of the slash trail to detect collision, which can better fit the actual slash area and avoid missing targets when the slash is fast.
-			List<Vector2> attackPolygon = [];
-			int start = sEffect.SlashTrail_Smoothed.Count - 16;
-			start = Math.Max(start, 0);
-			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
-			{
-				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
-				Vector2 worldPos = Projectile.Center + currentPos;
-				attackPolygon.Add(worldPos);
-			}
-			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
-			{
-				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
-				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
-				attackPolygon.Add(worldPos_Inner);
-			}
-
-			if (MathUtils.IntersectsPolygonAABB(attackPolygon, targetHitbox.TopLeft(), targetHitbox.BottomRight()))
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 }

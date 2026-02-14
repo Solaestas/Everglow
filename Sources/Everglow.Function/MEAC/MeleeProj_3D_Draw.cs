@@ -2,6 +2,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
+using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.GameContent;
 
@@ -12,6 +13,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public float CurrentTrailFade = 1f;
 
 	public bool EnableSphereCoordDraw = false;
+
+	public bool SelfLuminous = false;
+
+	public Color SlashColor = new Color(1f, 1f, 1f, 0);
 
 	public Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
 			MathHelper.PiOver4,
@@ -147,8 +152,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			{
 				continue;
 			}
-			Color origColor = new Color(1f, 1f, 1f, 0);
-
 			// Draw Slash
 			List<Vertex2D> trails_black = new List<Vertex2D>();
 			List<Vertex2D> trails = new List<Vertex2D>();
@@ -165,19 +168,21 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
 				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
 
-				Color drawColor_dark = Color.White * (i / (float)sEffect.SlashTrail_Smoothed.Count);
-				Color drawColor = origColor * (i / (float)sEffect.SlashTrail_Smoothed.Count);
-				float value = 1 - i / (float)sEffect.SlashTrail_Smoothed.Count;
+				float value = i / (float)sEffect.SlashTrail_Smoothed.Count;
 				float fade = GetFade(i, sEffect);
+				Color drawColor_dark = GetTrailColor(0, currentPos + Projectile.Center, i, ref value, fade);
+				Color drawColor_dark_Inner = GetTrailColor(0, currentPos_Inner + Projectile.Center, i, ref value, 0);
+				Color drawColor = GetTrailColor(1, currentPos + Projectile.Center, i, ref value, fade);
+				Color drawColor_Inner = GetTrailColor(1, currentPos_Inner + Projectile.Center, i, ref value, 0);
 
-				trails_black.Add(currentPos + ScreenPositionOffset, drawColor_dark * value * fade, new Vector3(value + timeValue, 1f, 0));
-				trails_black.Add(currentPos_Inner + ScreenPositionOffset, drawColor_dark * value * fade * 0, new Vector3(value + timeValue, 0f, 0));
+				trails_black.Add(currentPos + ScreenPositionOffset, drawColor_dark, new Vector3(value + timeValue, 1f, 0));
+				trails_black.Add(currentPos_Inner + ScreenPositionOffset, drawColor_dark_Inner, new Vector3(value + timeValue, 0f, 0));
 
-				trails.Add(currentPos + ScreenPositionOffset, drawColor * value * fade, new Vector3(value + timeValue, 1f, 0));
-				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor * value * fade * 0, new Vector3(value + timeValue, 0f, 0));
+				trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(value + timeValue, 1f, 0));
+				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor_Inner, new Vector3(value + timeValue, 0f, 0));
 
-				trails_tip.Add(currentPos + ScreenPositionOffset, drawColor * fade, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
-				trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor * fade, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
+				trails_tip.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
+				trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor_Inner, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
 			}
 			if (trails_black.Count >= 4)
 			{
@@ -195,6 +200,69 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_tip.ToArray(), 0, trails_tip.Count - 2);
 			}
 		}
+	}
+
+	/// <summary>
+	/// Get the color while adding trailing primitives.Allow adding custon logics for trail color.<br></br>
+	/// style == 0: Black background<br></br>
+	/// style == 1: Normal<br></br>
+	/// style == 2: Bloom
+	/// <br></br>
+	/// style >= 3: Custom
+	/// </summary>
+	/// <param name="style"></param>
+	/// <param name="worldPos"></param>
+	/// <param name="index"></param>
+	/// <param name="factor"></param>
+	/// <returns></returns>
+	public virtual Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
+	{
+		Color drawColor = Color.White;
+		if(style == 0)
+		{
+			drawColor *= factor * extraValue0;
+		}
+		if (style == 1)
+		{
+			drawColor = SlashColor;
+			drawColor *= factor * extraValue0;
+			if (!SelfLuminous)
+			{
+				Color lightC = Lighting.GetColor(worldPos.ToTileCoordinates());
+				drawColor.R = (byte)(lightC.R * drawColor.R / 255f);
+				drawColor.G = (byte)(lightC.G * drawColor.G / 255f);
+				drawColor.B = (byte)(lightC.B * drawColor.B / 255f);
+			}
+		}
+		return drawColor;
+	}
+
+	/// <summary>
+	/// Allow you modify the trailing coords.<br></br>
+	/// phase:0,1→bars0;<br></br>
+	/// phase:2,3→bars1;<br></br>
+	/// phase:4,5→bars2;<br></br>
+	/// timeValue default to Tiemr * 0.05f
+	/// </summary>
+	/// <param name="factor"></param>
+	/// <param name="timeValue"></param>
+	/// <param name="phase"></param>
+	/// <param name="widthValue"></param>
+	/// <returns></returns>
+	public virtual Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
+	{
+		float x = factor + timeValue;
+		float y = 1;
+		float z = widthValue;
+		if (phase == 2)
+		{
+			y = 0;
+		}
+		if (phase % 2 == 1)
+		{
+			y = 0.5f;
+		}
+		return new Vector3(x, y, z);
 	}
 
 	public virtual void DrawWeapon(Vector3 start, Vector3 end, Vector3 offset)
@@ -296,6 +364,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void DrawBloom()
 	{
+		if(SelfLuminous)
+		{
+
+		}
 	}
 
 	public void DrawWarp(VFXBatch spriteBatch)
