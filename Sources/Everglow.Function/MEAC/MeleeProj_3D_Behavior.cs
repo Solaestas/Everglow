@@ -1,4 +1,5 @@
 using Everglow.Commons.Utilities;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Shaders;
@@ -13,11 +14,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		public List<Vector3> SlashTrail_Smoothed;
 
+		public List<NPC> HasHitNPCs;
+
 		public Queue<float> SlashFade;
-
-		public float Timer;
-
-		public int MaxTime;
 
 		public int TrailMax;
 
@@ -28,6 +27,12 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		public float RotateSpeed;
 
 		public float TrailFade;
+
+		public float Timer;
+
+		public float MaxTime;
+
+		public float NextAttackTime;
 
 		public Vector3 MainAxis;
 
@@ -40,9 +45,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public int WeaponItemType;
 
-	public int MaxTrail = 30;
-
-	public float CenterZ = 200;
+	public int CurrentAttackType = 0;
 
 	/// <summary>
 	/// MainAxis will spin around this.<br/>
@@ -62,6 +65,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public Vector2 ScreenPositionOffset => Projectile.Center - Main.screenPosition;
 
+	public float CenterZ = 1620;
+
 	public float RadialDistance => SphericalCoordPos.X;
 
 	public float PolarAngle => SphericalCoordPos.Y;
@@ -69,8 +74,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public float AzimuthalAngle => SphericalCoordPos.Z;
 
 	public float WeaponLength = 60;
-
-	public int CurrentAttackType = 0;
 
 	public float AttackTimer;
 
@@ -98,6 +101,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Projectile.aiStyle = -1;
 		Projectile.height = Projectile.width = 120;
 		Projectile.penetrate = -1;
+		Projectile.extraUpdates = 1;
+		Projectile.localNPCHitCooldown = 1;
+		Projectile.usesLocalNPCImmunity = true;
 	}
 
 	public override void AI()
@@ -111,25 +117,40 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		ProduceWaterRipples(new Vector2(CurrentWeaponTipPosition().Length(), 30));
 	}
 
-	public void Update()
+	public virtual void Update()
 	{
 		float meleeSpeed = GetMeleeSpeed();
 		TrailSlashEffects();
-		CurrentTrailFade = RotateSpeed * 3;
 		RotateMainAxis(RotateSpeed * 0.35f, RotatedAxis, ref MainAxis);
 		RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
 		BindWeaponAxis();
 		if (Owner.controlUseItem)
 		{
+			Visible = true;
 			AttackTimer += meleeSpeed;
-			if (AttackTimer > MaxAttackTime * 0.6f)
+			if (SlashEffects.Count > 0)
+			{
+				SlashEffect minTimerEffect = SlashEffects.OrderBy(e => e.Timer).First();
+				if(minTimerEffect.Timer >= minTimerEffect.NextAttackTime)
+				{
+					NewAttack();
+				}
+			}
+			else
 			{
 				NewAttack();
 			}
 		}
+		else
+		{
+			if (SlashEffects.Count <= 0)
+			{
+				Visible = false;
+			}
+		}
 	}
 
-	public void NewAttack()
+	public virtual void NewAttack()
 	{
 		if(Main.MouseWorld.X > Owner.Center.X)
 		{
@@ -142,26 +163,30 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		AttackTimer = 0;
 		float meleeSpeed = Owner.meleeSpeed;
 		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
-		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
-		RotatedAxis = new Vector3(mouseDir, Main.rand.NextFloat(0.2f, 1f));
+		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector);
+		Vector2 mouseRight = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
+		RotatedAxis = new Vector3(mouseRight, Main.rand.NextFloat(0.2f, 1f));
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
-		MainAxis = new Vector3((60 + WeaponLength) * Owner.direction, 0, 0);
+		MainAxis = new Vector3(-mouseDir * (60 + WeaponLength), 0);
 		RotateToPerpendicular(RotatedAxis, ref MainAxis);
-		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction;
-		CurrentTrailFade = 0;
-		AddSlashEffect();
+		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction * Owner.gravDir;
+		var ss = new SoundStyle(ModAsset.TrueMeleeSlash_Mod);
+		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed), Projectile.Center);
+		AddSlashEffect(60, 24);
 	}
 
-	public void AddSlashEffect(int maxTime = 60, int trailMax = 60)
+	public virtual void AddSlashEffect(float maxTime = 60, float nextAttackTime = 36, int trailMax = 60)
 	{
 		SlashEffect sEffect = new SlashEffect() { };
 		sEffect.Active = true;
 		sEffect.Timer = 0;
 		sEffect.MaxTime = maxTime;
 		sEffect.TrailMax = trailMax;
+		sEffect.NextAttackTime = nextAttackTime;
 		sEffect.SlashFade = new Queue<float>();
 		sEffect.SlashTrail = new Queue<Vector3>();
 		sEffect.SlashTrail_Smoothed = new List<Vector3>();
+		sEffect.HasHitNPCs = new List<NPC>();
 		sEffect.TrailFade = 0;
 		sEffect.MainAxis = MainAxis;
 		sEffect.WeaponAxis = WeaponAxis;
@@ -171,7 +196,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		SlashEffects.Add(sEffect);
 	}
 
-	public void TrailSlashEffects()
+	public virtual void TrailSlashEffects()
 	{
 		float meleeSpeed = GetMeleeSpeed();
 		for (int k = SlashEffects.Count - 1; k >= 0; k--)
@@ -182,7 +207,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			{
 				sEffect.Active = false;
 			}
-			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3);
+			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3.5f / meleeSpeed);
 			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
 			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * meleeSpeed);
 			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * WeaponLength;
@@ -223,12 +248,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 	}
 
-	public void DevelopersAdjust()
+	public virtual void DevelopersAdjust()
 	{
-		if (Main.mouseLeft && Main.mouseLeftRelease)
-		{
-			NewAttack();
-		}
 	}
 
 	public void FollowMouse()

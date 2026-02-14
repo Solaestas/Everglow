@@ -10,6 +10,8 @@ public class ExampleMeleeProjectile : MeleeProj_3D
 	public override void OnSpawn(IEntitySource source)
 	{
 		EnableSphereCoordDraw = false;
+		SlashColor = new Color(0.5f, 0.4f, 0, 0);
+
 	}
 
 	public override void SetDefaults()

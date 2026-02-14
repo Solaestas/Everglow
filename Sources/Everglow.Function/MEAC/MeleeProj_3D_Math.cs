@@ -2,6 +2,10 @@ namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
+	// Rotation Speed Curve
+	public double BaseMeleeSpeed = 1.4;
+	public double BaseDecaySpeed = 0.93;
+
 	/// <summary>
 	/// Return a 2D position of the weapon tip projected from 3D space, which can be used for player arm rotation and slash effect drawing. The position is relative to the projectile center, so adding Projectile.Center will get the world position.
 	/// </summary>
@@ -170,16 +174,18 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return (float)w;
 	}
 
-	// Rotation Speed Curve
-	public double BaseMeleeSpeed = 2.5;
-	public double BaseDecaySpeed = 0.88;
-
 	/// <summary>
 	/// A const value, if change the BaseMeleeSpeed, BaseDecaySpeed or MaxAttackTime, this value should be recalculated. It represents the integral of the rotation speed curve over time, which is used to solve for the decay coefficient b when given a new melee speed a.
 	/// </summary>
 	private double FixedIntegral()
 	{
-		return (Math.Pow(BaseDecaySpeed, MaxAttackTime) - 1) / Math.Log(BaseDecaySpeed) * BaseMeleeSpeed;
+		double maxTime = 60;
+		if (SlashEffects.Count > 0)
+		{
+			SlashEffect minTimerEffect = SlashEffects.OrderBy(e => e.Timer).First();
+			maxTime = minTimerEffect.MaxTime;
+		}
+		return (Math.Pow(BaseDecaySpeed, maxTime) - 1) / Math.Log(BaseDecaySpeed) * BaseMeleeSpeed;
 	}
 
 	/// <summary>
@@ -187,13 +193,19 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	/// </summary>
 	public float SolveB(double newMeleeSpeed)
 	{
+		double maxTime = 60;
+		if (SlashEffects.Count > 0)
+		{
+			SlashEffect minTimerEffect = SlashEffects.OrderBy(e => e.Timer).First();
+			maxTime = minTimerEffect.MaxTime;
+		}
 		double a = newMeleeSpeed;
 		double K = FixedIntegral();
 
-		double t = MaxAttackTime * a / K;
+		double t = maxTime * a / K;
 		double arg = -t * Math.Exp(-t);
 		double w = LambertW0(arg);
-		double b = Math.Exp(-w / MaxAttackTime - a / K);
+		double b = Math.Exp(-w / maxTime - a / K);
 
 		return (float)b;
 	}

@@ -2,19 +2,21 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.GameContent;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
 {
-	public float CurrentTrailFade = 1f;
-
 	public bool EnableSphereCoordDraw = false;
 
 	public bool SelfLuminous = false;
+
+	public bool Visible = true;
+
+	public float ReflectionSharpValue = 1f;
 
 	public Color SlashColor = new Color(1f, 1f, 1f, 0);
 
@@ -31,6 +33,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		if (!Visible)
+		{
+			return false;
+		}
 		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -45,6 +51,52 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
+		for (int k = SlashEffects.Count - 1; k >= 0; k--)
+		{
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null || !sEffect.Active)
+			{
+				continue;
+			}
+			int starIndex = sEffect.SlashTrail_Smoothed.Count - 1;
+			if (starIndex < 0)
+			{
+				continue;
+			}
+			Vector3 wldPos3D = sEffect.SlashTrail_Smoothed[starIndex] + new Vector3(0, 0, CenterZ);
+			Vector2 wldPos = Project(wldPos3D, ProjectionMatrix) + Projectile.Center;
+			float starScale = 1f;
+			Color starColor = SlashColor;
+			float threthod = 40;
+			if(sEffect.Timer > sEffect.MaxTime - threthod)
+			{
+				float value = 1 - (sEffect.Timer - sEffect.MaxTime + threthod) / threthod;
+				value -= 0.2f;
+				if (value < 0)
+				{
+					value = 0;
+				}
+				starColor *= value;
+				value -= 0.5f;
+				if(value < 0)
+				{
+					value = 0;
+				}
+				starScale *= value;
+			}
+			if (!SelfLuminous)
+			{
+				Color lightC = Lighting.GetColor(wldPos.ToTileCoordinates());
+				starColor.R = (byte)(lightC.R * starColor.R / 255f);
+				starColor.G = (byte)(lightC.G * starColor.G / 255f);
+				starColor.B = (byte)(lightC.B * starColor.B / 255f);
+			}
+			starColor *= 1.2f;
+			Texture2D star = ModAsset.StarSlash.Value;
+			Main.spriteBatch.Draw(star, wldPos - Main.screenPosition, null, starColor, 0, star.Size() * 0.5f,starScale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star, wldPos - Main.screenPosition, null, starColor, MathHelper.PiOver2, star.Size() * 0.5f, starScale, SpriteEffects.None, 0);
+		}
+
 		return false;
 	}
 
@@ -144,18 +196,17 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		for (int k = SlashEffects.Count - 1; k >= 0; k--)
 		{
 			SlashEffect sEffect = SlashEffects[k];
-			if (sEffect.SlashTrail_Smoothed is null)
+			if (sEffect.SlashTrail_Smoothed is null || !sEffect.Active)
 			{
 				continue;
 			}
-			if (!sEffect.Active)
-			{
-				continue;
-			}
+
 			// Draw Slash
 			List<Vertex2D> trails_black = new List<Vertex2D>();
 			List<Vertex2D> trails = new List<Vertex2D>();
+			List<Vertex2D> trails_tip_black = new List<Vertex2D>();
 			List<Vertex2D> trails_tip = new List<Vertex2D>();
+			List<Vertex2D> trails_reflection = new List<Vertex2D>();
 			float timeValue = 0; // -(float)Main.time * 0.03f;
 			for (int i = 0; i < sEffect.SlashTrail_Smoothed.Count; i++)
 			{
@@ -174,6 +225,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Color drawColor_dark_Inner = GetTrailColor(0, currentPos_Inner + Projectile.Center, i, ref value, 0);
 				Color drawColor = GetTrailColor(1, currentPos + Projectile.Center, i, ref value, fade);
 				Color drawColor_Inner = GetTrailColor(1, currentPos_Inner + Projectile.Center, i, ref value, 0);
+				Color drawColor_Edge = GetTrailColor(3, currentPos + Projectile.Center, i, ref value, fade);
+				Color drawColor_reflection = GetTrailColor(4, currentPos + Projectile.Center, i, ref value, fade);
+				Color drawColor_reflection_Inner = GetTrailColor(4, currentPos_Inner + Projectile.Center, i, ref value, 0);
 
 				trails_black.Add(currentPos + ScreenPositionOffset, drawColor_dark, new Vector3(value + timeValue, 1f, 0));
 				trails_black.Add(currentPos_Inner + ScreenPositionOffset, drawColor_dark_Inner, new Vector3(value + timeValue, 0f, 0));
@@ -181,24 +235,30 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				trails.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(value + timeValue, 1f, 0));
 				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColor_Inner, new Vector3(value + timeValue, 0f, 0));
 
-				trails_tip.Add(currentPos + ScreenPositionOffset, drawColor, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
+				trails_tip_black.Add(currentPos + ScreenPositionOffset, drawColor_dark, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
+				trails_tip_black.Add(currentPos_Edge + ScreenPositionOffset, drawColor_dark_Inner, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
+
+				trails_tip.Add(currentPos + ScreenPositionOffset, drawColor_Edge, new Vector3(0.5f, 0.5f + value * 0.5f, 0));
 				trails_tip.Add(currentPos_Edge + ScreenPositionOffset, drawColor_Inner, new Vector3(0.3f, 0.5f + value * 0.5f, 0));
+
+				trails_reflection.Add(currentPos + ScreenPositionOffset, drawColor_reflection, new Vector3(value + timeValue, 1f, 0));
+				trails_reflection.Add(currentPos_Inner + ScreenPositionOffset, drawColor_reflection_Inner, new Vector3(value + timeValue, 0f, 0));
 			}
-			if (trails_black.Count >= 4)
-			{
-				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Noise_flame_3_black.Value;
-				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_black.ToArray(), 0, trails_black.Count - 2);
-			}
-			if (trails.Count >= 4)
-			{
-				Main.graphics.graphicsDevice.Textures[0] = ModAsset.Noise_flame_3.Value;
-				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails.ToArray(), 0, trails.Count - 2);
-			}
-			if (trails_tip.Count >= 4)
-			{
-				Main.graphics.graphicsDevice.Textures[0] = ModAsset.StarSlash.Value;
-				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, trails_tip.ToArray(), 0, trails_tip.Count - 2);
-			}
+			DrawSlashVertices(trails_black, ModAsset.Noise_flame_3_black.Value);
+			DrawSlashVertices(trails, ModAsset.Noise_flame_3.Value);
+			DrawSlashVertices(trails_tip, ModAsset.StarSlash.Value);
+			DrawSlashVertices(trails_tip_black, ModAsset.StarSlash_black.Value);
+			DrawSlashVertices(trails_tip, ModAsset.StarSlash.Value);
+			DrawSlashVertices(trails_reflection, ModAsset.Noise_flame_3.Value);
+		}
+	}
+
+	public void DrawSlashVertices(List<Vertex2D> bars, Texture2D texture)
+	{
+		if (bars.Count >= 4)
+		{
+			Main.graphics.graphicsDevice.Textures[0] = texture;
+			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 	}
 
@@ -206,9 +266,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	/// Get the color while adding trailing primitives.Allow adding custon logics for trail color.<br></br>
 	/// style == 0: Black background<br></br>
 	/// style == 1: Normal<br></br>
-	/// style == 2: Bloom
-	/// <br></br>
-	/// style >= 3: Custom
+	/// style == 2: Bloom<br></br>
+	/// style == 3: Edge<br></br>
+	/// style == 4: Reflection<br></br>
+	/// style >= 5: Custom
 	/// </summary>
 	/// <param name="style"></param>
 	/// <param name="worldPos"></param>
@@ -218,11 +279,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
 		Color drawColor = Color.White;
-		if(style == 0)
+		if (style == 0)
 		{
 			drawColor *= factor * extraValue0;
 		}
-		if (style == 1)
+		if (style == 1 || style == 3 || style == 4)
 		{
 			drawColor = SlashColor;
 			drawColor *= factor * extraValue0;
@@ -232,6 +293,16 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				drawColor.R = (byte)(lightC.R * drawColor.R / 255f);
 				drawColor.G = (byte)(lightC.G * drawColor.G / 255f);
 				drawColor.B = (byte)(lightC.B * drawColor.B / 255f);
+			}
+			if (style == 3)
+			{
+				drawColor *= 1.7f;
+			}
+			if (style == 4)
+			{
+				float rot = (worldPos - Projectile.Center).ToRotation() - (float)Main.time * 0.01f;
+				drawColor *= MathF.Pow(Math.Max(0, 0.5f + 0.5f * MathF.Cos(rot * 2)), 16) * 0.4f * ReflectionSharpValue * MathF.Pow(extraValue0, 2);
+				drawColor.A = 0;
 			}
 		}
 		return drawColor;
@@ -348,7 +419,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public float GetFade(int indexInSmootheTrail, SlashEffect sEffect)
 	{
 		float value = indexInSmootheTrail / (float)sEffect.SlashTrail_Smoothed.Count * sEffect.SlashFade.Count;
-		if(sEffect.SlashFade is null || sEffect.SlashFade.Count == 0)
+		if (sEffect.SlashFade is null || sEffect.SlashFade.Count == 0)
 		{
 			return 0f;
 		}
@@ -364,9 +435,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void DrawBloom()
 	{
-		if(SelfLuminous)
+		if (SelfLuminous)
 		{
-
 		}
 	}
 
@@ -402,7 +472,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 					warpDir = currentPos_Old - currentPos;
 				}
 				float warpThrethod = 220;
-				if(warpDir.Length() > warpThrethod)
+				if (warpDir.Length() > warpThrethod)
 				{
 					warpDir = warpDir.SafeNormalize(Vector2.zeroVector) * warpThrethod;
 				}
@@ -421,7 +491,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColorInner, new Vector3(value + timeValue, 0f, 0));
 			}
 
-			if(trails.Count > 2)
+			if (trails.Count > 2)
 			{
 				spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
 			}
