@@ -13,11 +13,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		public Queue<float> SlashFade;
 
-		public int Timer;
+		public float Timer;
 
 		public int MaxTime;
 
 		public int TrailMax;
+
+		public int Direction;
 
 		public bool Active;
 
@@ -56,6 +58,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public Vector3 MainAxisDirection => Vector3.Normalize(MainAxis);
 
+	public Vector2 ScreenPositionOffset => Projectile.Center - Main.screenPosition;
+
 	public float RadialDistance => SphericalCoordPos.X;
 
 	public float PolarAngle => SphericalCoordPos.Y;
@@ -64,15 +68,22 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public float WeaponLength = 60;
 
-	public Vector2 ScreenPositionOffset => Projectile.Center - Main.screenPosition;
-
 	public int CurrentAttackType = 0;
 
 	public float AttackTimer;
 
-	public float CurrentAttackSpeed;
+	public float MaxAttackTime = 60;
 
 	public float RotateSpeed = 0;
+
+	public float GetMeleeSpeed()
+	{
+		if (Owner is null || !Owner.active || Owner.dead)
+		{
+			return 1;
+		}
+		return Owner.GetAttackSpeed(DamageClass.Melee);
+	}
 
 	public override void OnSpawn(IEntitySource source)
 	{
@@ -93,12 +104,48 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		CheckHeldItem();
 		CenterZ = 1620;
 		DevelopersAdjust();
-		Trail();
+		Update();
 	}
 
-	public void Trail()
+	public void Update()
 	{
-		UpdateSlashEffects();
+		float meleeSpeed = GetMeleeSpeed();
+		TrailSlashEffects();
+		CurrentTrailFade = RotateSpeed * 3;
+		RotateMainAxis(RotateSpeed * 0.35f, RotatedAxis, ref MainAxis);
+		RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
+		BindWeaponAxis();
+		if (Owner.controlUseItem)
+		{
+			AttackTimer += meleeSpeed;
+			if (AttackTimer > MaxAttackTime * 0.6f)
+			{
+				NewAttack();
+			}
+		}
+	}
+
+	public void NewAttack()
+	{
+		if(Main.MouseWorld.X > Owner.Center.X)
+		{
+			Owner.direction = 1;
+		}
+		else
+		{
+			Owner.direction = -1;
+		}
+		AttackTimer = 0;
+		float meleeSpeed = Owner.meleeSpeed;
+		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
+		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
+		RotatedAxis = new Vector3(mouseDir, Main.rand.NextFloat(0.2f, 1f));//new Vector3(Main.rand.NextFloat(-1, 1), -1 / 3f, Main.rand.NextFloat(-1, 1));
+		RotatedAxis = Vector3.Normalize(RotatedAxis);
+		MainAxis = new Vector3((60 + WeaponLength) * Owner.direction, 0, 0);
+		RotateToPerpendicular(RotatedAxis, ref MainAxis);
+		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction;
+		CurrentTrailFade = 0;
+		AddSlashEffect();
 	}
 
 	public void AddSlashEffect(int maxTime = 60, int trailMax = 60)
@@ -116,22 +163,24 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		sEffect.WeaponAxis = WeaponAxis;
 		sEffect.RotateSpeed = RotateSpeed;
 		sEffect.RotationAxis = RotatedAxis;
+		sEffect.Direction = Owner.direction;
 		SlashEffects.Add(sEffect);
 	}
 
-	public void UpdateSlashEffects()
+	public void TrailSlashEffects()
 	{
+		float meleeSpeed = GetMeleeSpeed();
 		for (int k = SlashEffects.Count - 1; k >= 0; k--)
 		{
 			SlashEffect sEffect = SlashEffects[k];
-			sEffect.Timer++;
+			sEffect.Timer += meleeSpeed;
 			if (sEffect.Timer > sEffect.MaxTime)
 			{
 				sEffect.Active = false;
 			}
-			sEffect.TrailFade = sEffect.RotateSpeed * 3;
+			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3);
 			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
-			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
+			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * meleeSpeed);
 			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * WeaponLength;
 			if (sEffect.SlashFade is null)
 			{
@@ -172,19 +221,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void DevelopersAdjust()
 	{
-		float meleeSpeed = Owner.meleeSpeed;
-		CurrentTrailFade = RotateSpeed * 3;
-		RotateMainAxis(RotateSpeed * 0.35f, RotatedAxis, ref MainAxis);
-		RotateSpeed *= SolveB(BaseMeleeSpeed * Owner.meleeSpeed);
-		BindWeaponAxis();
 		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
-			RotatedAxis = new Vector3(Main.rand.NextFloat(-1, 1), -1 / 3f, Main.rand.NextFloat(-1, 1));
-			RotatedAxis = Vector3.Normalize(RotatedAxis);
-			RotateToPerpendicular(RotatedAxis, ref MainAxis);
-			RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed;
-			CurrentTrailFade = 0;
-			AddSlashEffect();
+			NewAttack();
 		}
 	}
 
@@ -234,24 +273,33 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		for (int k = 0; k < SlashEffects.Count; k++)
 		{
 			SlashEffect sEffect = SlashEffects[k];
-			if (sEffect.SlashTrail_Smoothed is null || sEffect.RotateSpeed < 0.1f || sEffect.SlashTrail_Smoothed.Count < 7 || !sEffect.Active)
+			if (sEffect.SlashTrail_Smoothed is null || Math.Abs(sEffect.RotateSpeed) < 0.1f || sEffect.SlashTrail_Smoothed.Count < 3 || !sEffect.Active)
 			{
 				continue;
 			}
 
-			for (int i = sEffect.SlashTrail_Smoothed.Count - 6; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			// Using a polygon of the last several vertices of the slash trail to detect collision, which can better fit the actual slash area and avoid missing targets when the slash is fast.
+			List<Vector2> attackPolygon = [];
+			int start = sEffect.SlashTrail_Smoothed.Count - 16;
+			start = Math.Max(start, 0);
+			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
 			{
 				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
 				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 worldPos = Projectile.Center + currentPos;
+				attackPolygon.Add(worldPos);
+			}
+			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
 				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
-
-				Vector2 worldPos = Projectile.Center + currentPos;
 				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
-				if (CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, worldPos, worldPos_Inner, 48))
-				{
-					return true;
-				}
+				attackPolygon.Add(worldPos_Inner);
+			}
+
+			if (MathUtils.IntersectsPolygonAABB(attackPolygon, targetHitbox.TopLeft(), targetHitbox.BottomRight()))
+			{
+				return true;
 			}
 		}
 		return false;

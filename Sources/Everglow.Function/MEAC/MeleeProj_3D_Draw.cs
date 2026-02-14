@@ -40,9 +40,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-
-		// Texture2D tex = ModAsset.SwirlPoint.Value;
-		// Main.EntitySpriteDraw(tex,Projectile.Center - Main.screenPosition,null,Color.White,0,tex.Size() * 0.5f,1,SpriteEffects.None,0);
 		return false;
 	}
 
@@ -352,7 +349,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				trails.Add(currentPos_Inner + ScreenPositionOffset, drawColorInner, new Vector3(value + timeValue, 0f, 0));
 			}
 
-			spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
+			if(trails.Count > 2)
+			{
+				spriteBatch.Draw(ModAsset.Noise_flame_3.Value, trails, PrimitiveType.TriangleStrip);
+			}
 		}
 	}
 }

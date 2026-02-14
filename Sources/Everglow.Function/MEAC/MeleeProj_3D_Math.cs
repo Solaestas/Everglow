@@ -119,7 +119,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	/// <param name="x"></param>
 	/// <returns></returns>
 	/// <exception cref="ArgumentOutOfRangeException"></exception>
-	public static float LambertW0(double x)
+	public float LambertW0(double x)
 	{
 		const double e = Math.E;
 		const double eps = 1e-12;
@@ -160,28 +160,29 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	}
 
 	// Rotation Speed Curve
-	public const double BaseMeleeSpeed = 2.5;
-	public const double BaseDecaySpeed = 0.88;
-	public const int MaxTime = 60;
+	public double BaseMeleeSpeed = 2.5;
+	public double BaseDecaySpeed = 0.88;
 
 	/// <summary>
-	/// A const value, if change the BaseMeleeSpeed, BaseDecaySpeed or MaxTime, this value should be recalculated. It represents the integral of the rotation speed curve over time, which is used to solve for the decay coefficient b when given a new melee speed a.
+	/// A const value, if change the BaseMeleeSpeed, BaseDecaySpeed or MaxAttackTime, this value should be recalculated. It represents the integral of the rotation speed curve over time, which is used to solve for the decay coefficient b when given a new melee speed a.
 	/// </summary>
-	private static readonly double FixedIntegral =
-		(Math.Pow(BaseDecaySpeed, MaxTime) - 1) / Math.Log(BaseDecaySpeed) * BaseMeleeSpeed;
+	private double FixedIntegral()
+	{
+		return (Math.Pow(BaseDecaySpeed, MaxAttackTime) - 1) / Math.Log(BaseDecaySpeed) * BaseMeleeSpeed;
+	}
 
 	/// <summary>
 	/// Input a new meleeSpeed and output b value.
 	/// </summary>
-	public static float SolveB(double newMeleeSpeed)
+	public float SolveB(double newMeleeSpeed)
 	{
 		double a = newMeleeSpeed;
-		double K = FixedIntegral;
+		double K = FixedIntegral();
 
-		double t = MaxTime * a / K;
+		double t = MaxAttackTime * a / K;
 		double arg = -t * Math.Exp(-t);
 		double w = LambertW0(arg);
-		double b = Math.Exp(-w / MaxTime - a / K);
+		double b = Math.Exp(-w / MaxAttackTime - a / K);
 
 		return (float)b;
 	}
