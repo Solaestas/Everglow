@@ -1,3 +1,6 @@
+using Everglow.Myth.LanternMoon.VFX;
+using Spine;
+
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
 public class LanternYoyo_fireYoyo : ModProjectile
@@ -44,7 +47,6 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		}
 		else
 		{
-			Projectile.velocity *= 0;
 			Projectile.Center = targetPos;
 		}
 		Projectile.rotation += 0.05f;
@@ -63,7 +65,37 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		return index;
 	}
 
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => base.OnHitNPC(target, hit, damageDone);
+	public override void OnKill(int timeLeft)
+	{
+		if(timeLeft > 0)
+		{
+			for (int g = 0; g < 12; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(7f, 10f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new LanternExplosionSpark
+				{
+					Velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+					RotateSpeed = Main.rand.NextFloat(-0.7f, 0.7f),
+					VelocityRotateSpeed = Main.rand.NextFloat(0.05f, 0.25f) * (g % 2 - 0.5f) * 2,
+					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					MaxTime = Main.rand.Next(30, 60),
+					Scale = Main.rand.NextFloat(2f, 3f),
+					Frame = Main.rand.Next(0, 4),
+				};
+				Ins.VFXManager.Add(spark);
+			}
+		}
+		base.OnKill(timeLeft);
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		target.AddBuff(BuffID.OnFire, 150);
+		base.OnHitNPC(target, hit, damageDone);
+	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
