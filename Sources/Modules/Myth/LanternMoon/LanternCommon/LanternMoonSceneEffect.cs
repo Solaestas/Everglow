@@ -1,10 +1,10 @@
-using Everglow.Commons.Mechanics.Events;
-
 namespace Everglow.Myth.LanternMoon.LanternCommon;
 
 public class LanternMoonSceneEffect : ModSceneEffect
 {
-	public override int Music => MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Mod);
+	public int MusicTimer = 0;
+
+	public override int Music => ModContent.GetInstance<LanternMoonInvasionEvent>().SwitchMusic();
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 

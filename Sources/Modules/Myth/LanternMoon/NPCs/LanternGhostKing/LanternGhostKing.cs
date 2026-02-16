@@ -62,7 +62,6 @@ public class LanternGhostKing : LanternMoonNPC
 		NPC.noTileCollide = true;
 		NPC.dontTakeDamage = true;
 		NPC.HitSound = SoundID.NPCHit3;
-		Music = MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Mod);
 	}
 
 	public override bool CheckActive()
@@ -155,6 +154,7 @@ public class LanternGhostKing : LanternMoonNPC
 
 	public override void AI()
 	{
+		Music = LanternMoon.SwitchMusic();
 		Timer += 1;
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
@@ -213,6 +213,11 @@ public class LanternGhostKing : LanternMoonNPC
 				{
 					Timer = 0;
 					NPC.dontTakeDamage = true;
+				}
+				else
+				{
+					LanternMoon.Boss15Started = true;
+					LanternMoon.MusicTimer = 0;
 				}
 			}
 		}
@@ -1325,6 +1330,7 @@ public class LanternGhostKing : LanternMoonNPC
 	{
 		if (NPC.life <= 0)
 		{
+			LanternMoon.Boss15Ended = true;
 			LanternMoon.NewWave();
 			LanternMoon.AccumulatedScore = LanternMoon.ScoreRequireOfWave.Take(15).Sum();
 

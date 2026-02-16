@@ -19,15 +19,33 @@ public class LanternYoyoProjectile : YoyoProjectile
 		base.AI();
 		Timer++;
 		Player player = Main.player[Projectile.owner];
-		if (Timer % 30 == 0 && player.ownedProjectileCounts[ModContent.ProjectileType<LanternYoyo_fireYoyo>()] < 5)
+		if (Timer % 20 == 0 && ProjectileOwnFireYoyoCount() < 5)
 		{
-			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GapCenter, Vector2.zeroVector, ModContent.ProjectileType<LanternYoyo_fireYoyo>(), (int)(Projectile.damage * 0.6f), 2f, Projectile.owner);
+			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GapCenter, Vector2.zeroVector, ModContent.ProjectileType<LanternYoyo_fireYoyo>(), (int)(Projectile.damage * 1.6f), 2f, Projectile.owner);
 			LanternYoyo_fireYoyo lYfY = p0.ModProjectile as LanternYoyo_fireYoyo;
 			if(lYfY is not null)
 			{
 				lYfY.MainProjYoyo = Projectile;
 			}
 		}
+		Lighting.AddLight(Projectile.Center, new Vector3(1.2f, 0f, 0));
+	}
+
+	public int ProjectileOwnFireYoyoCount()
+	{
+		int count = 0;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj is not null && proj.active && proj.type == ModContent.ProjectileType<LanternYoyo_fireYoyo>())
+			{
+				LanternYoyo_fireYoyo lYfY = proj.ModProjectile as LanternYoyo_fireYoyo;
+				if (lYfY is not null && lYfY.MainProjYoyo == Projectile)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 
 	public override void DrawYoyo_String(Vector2 playerHeldPos = default)
@@ -87,6 +105,17 @@ public class LanternYoyoProjectile : YoyoProjectile
 		Main.spriteBatch.Draw(star, gapCenter - Main.screenPosition, null, new Color(0.5f, 0.15f, 0, 0), 0, star.Size() * 0.5f, new Vector2(0.25f), SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(star, gapCenter - Main.screenPosition, null, new Color(0.5f, 0.15f, 0, 0), MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(0.25f, 0.4f), SpriteEffects.None, 0f);
 		Main.spriteBatch.Draw(spot, gapCenter - Main.screenPosition, null, new Color(0.5f, 0.15f, 0, 0), MathHelper.PiOver2, spot.Size() * 0.5f, 1f, SpriteEffects.None, 0f);
+		if(ProjectileOwnFireYoyoCount() < 5)
+		{
+			float releaseTimer = Math.Max(0, Timer % 20 - 6);
+			float releaseScale = releaseTimer / 13f;
+			Color drawColor = Color.Lerp(new Color(1f, 0.48f, 0.1f, 0), new Color(1f, 1f, 0.7f, 0), MathF.Sin((float)Main.time * 0.08f + Projectile.whoAmI) * 0.5f + 0.5f);
+			Lighting.AddLight(gapCenter, new Vector3(drawColor.R, drawColor.G * 0.7f, drawColor.B * 0.5f) / 300f);
+			Texture2D fireYoyo = ModAsset.LanternYoyo_fireYoyo.Value;
+			Main.EntitySpriteDraw(spot, gapCenter - Main.screenPosition, null, drawColor, MathHelper.PiOver2, spot.Size() * 0.5f, releaseScale * 2f, SpriteEffects.None, 0f);
+			Main.EntitySpriteDraw(fireYoyo, gapCenter - Main.screenPosition, null, drawColor, Projectile.rotation, tex.Size() * 0.5f, releaseScale, SpriteEffects.None, 0);
+		}
+
 		Lighting.AddLight(gapCenter, new Vector3(0.75f, 0.23f, 0));
 		DrawLanternLine(player, gapStart, gapEnd, 6, 2);
 	}

@@ -9,6 +9,12 @@ namespace Everglow.Myth.LanternMoon.LanternCommon;
 
 public class LanternMoonInvasionEvent : ReplicaEvent
 {
+	public int MusicTimer;
+
+	public bool Boss15Started = false;
+
+	public bool Boss15Ended = false;
+
 	/// <summary>
 	/// Point value for completing the current wave
 	/// </summary>
@@ -31,6 +37,9 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public void Initialization()
 	{
+		MusicTimer = 0;
+		Boss15Started = false;
+		Boss15Ended = false;
 		// Total: 40 Waves
 		ScoreRequireOfWave[0] = 25;
 		ScoreRequireOfWave[1] = 40;
@@ -148,6 +157,7 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public override void Update()
 	{
+		MusicTimer++;
 		if (Main.dayTime)
 		{
 			innerActive = false;
@@ -171,6 +181,37 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 	{
 		text = "Lantern Moon";
 		base.ModifyInvasionProgress(ref text, ref c);
+	}
+
+	public int SwitchMusic()
+	{
+		if (Wave < 15 || (Wave == 15 && !Boss15Started))
+		{
+			if (MusicTimer < 48 * 60)
+			{
+				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Head_Mod);
+			}
+			else
+			{
+				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
+			}
+		}
+		if (Wave >= 15 && Boss15Started)
+		{
+			if (MusicTimer < 34 * 60)
+			{
+				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Head_Mod);
+			}
+			else if(!Boss15Ended)
+			{
+				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Loop_Mod);
+			}
+			else
+			{
+				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
+			}
+		}
+		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
 	}
 
 	public string GetWaveEnemiesMessage()

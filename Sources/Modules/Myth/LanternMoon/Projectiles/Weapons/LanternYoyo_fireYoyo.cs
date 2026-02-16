@@ -7,6 +7,8 @@ public class LanternYoyo_fireYoyo : ModProjectile
 {
 	public Projectile MainProjYoyo = null;
 
+	public bool FoundTarget = false;
+
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
@@ -22,6 +24,10 @@ public class LanternYoyo_fireYoyo : ModProjectile
 
 	public override void AI()
 	{
+		if(Projectile.wet && !Projectile.lavaWet)
+		{
+			Projectile.Kill();
+		}
 		if (MainProjYoyo is null || !MainProjYoyo.active || MainProjYoyo.type != ModContent.ProjectileType<LanternYoyoProjectile>())
 		{
 			if (Projectile.timeLeft > 60)
@@ -30,24 +36,50 @@ public class LanternYoyo_fireYoyo : ModProjectile
 			}
 			return;
 		}
-		int index = AllocateIndex();
-		if (index >= 5)
+		var target = Projectile.FindTargetWithinRange(100);
+		if (target is not null)
 		{
-			if (Projectile.timeLeft > 60)
-			{
-				Projectile.timeLeft = 60;
-			}
-			return;
-		}
-		Vector2 targetPos = MainProjYoyo.Center + new Vector2(0, 1).RotatedBy((float)Main.time * 0.06f + index * MathHelper.TwoPi / 5f) * 90;
-		Vector2 toTarget = targetPos - Projectile.Center;
-		if (toTarget.Length() > 13)
-		{
-			Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * 6.5f;
+			FoundTarget = true;
+			Vector2 toNPCTarget = target.Center - Projectile.Center;
+			toNPCTarget = toNPCTarget.NormalizeSafe() * 13f;
+			Projectile.velocity = Projectile.velocity * 0.92f + toNPCTarget * 0.08f;
 		}
 		else
 		{
-			Projectile.Center = targetPos;
+			if(FoundTarget)
+			{
+				if (Projectile.timeLeft > 60)
+				{
+					Projectile.timeLeft = 60;
+				}
+			}
+		}
+
+		if(!FoundTarget)
+		{
+			int index = AllocateIndex();
+			if (index >= 5)
+			{
+				if (Projectile.timeLeft > 60)
+				{
+					Projectile.timeLeft = 60;
+				}
+				return;
+			}
+			Vector2 targetPos = MainProjYoyo.Center + new Vector2(0, 1).RotatedBy((float)Main.time * 0.06f + index * MathHelper.TwoPi / 5f) * 90;
+			Vector2 toTarget = targetPos - Projectile.Center;
+			if (toTarget.Length() > 130)
+			{
+				Projectile.velocity = toTarget / 20f;
+			}
+			else if (toTarget.Length() > 13)
+			{
+				Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * 6.5f;
+			}
+			else
+			{
+				Projectile.Center = targetPos;
+			}
 		}
 		Projectile.rotation += 0.05f;
 	}
@@ -59,7 +91,11 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		{
 			if (proj is not null && proj.active && proj.type == Type && proj.whoAmI < Projectile.whoAmI)
 			{
-				index++;
+				LanternYoyo_fireYoyo lYfY = proj.ModProjectile as LanternYoyo_fireYoyo;
+				if (lYfY is not null && lYfY.MainProjYoyo == MainProjYoyo)
+				{
+					index++;
+				}
 			}
 		}
 		return index;
@@ -69,23 +105,42 @@ public class LanternYoyo_fireYoyo : ModProjectile
 	{
 		if(timeLeft > 0)
 		{
-			for (int g = 0; g < 12; g++)
+			for (int g = 0; g < 6; g++)
 			{
-				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(7f, 10f)).RotatedByRandom(MathHelper.TwoPi);
-				var spark = new LanternExplosionSpark
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(12f, 20f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new HitEffectSpark
 				{
 					Velocity = newVelocity,
 					Active = true,
 					Visible = true,
-					Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
-					RotateSpeed = Main.rand.NextFloat(-0.7f, 0.7f),
-					VelocityRotateSpeed = Main.rand.NextFloat(0.05f, 0.25f) * (g % 2 - 0.5f) * 2,
-					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-					MaxTime = Main.rand.Next(30, 60),
-					Scale = Main.rand.NextFloat(2f, 3f),
-					Frame = Main.rand.Next(0, 4),
+					Position = Projectile.Center,
+					MaxTime = Main.rand.Next(16, 20),
+					DrawColor = new Color(1f, 0.4f, 0, 0),
+					LightFlat = 1f,
+					SpeedDecay = 0.8f,
+					GravityAcc = 0.15f,
+					SelfLight = true,
+					Scale = Main.rand.NextFloat(16f, 28f),
 				};
 				Ins.VFXManager.Add(spark);
+			}
+			for (int g = 0; g < 6; g++)
+			{
+				float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+				Vector2 newVelocity = new Vector2(0, sqrtSpeed * 2).RotatedByRandom(MathHelper.TwoPi);
+				var somg = new LanternFlameDust
+				{
+					Velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
+					MaxTime = Main.rand.Next(30, 45),
+					Scale = Main.rand.NextFloat(32f, 48f),
+					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+				};
+				Ins.VFXManager.Add(somg);
 			}
 		}
 		base.OnKill(timeLeft);

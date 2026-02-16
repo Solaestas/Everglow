@@ -14,6 +14,7 @@ public class MillionLightStaff : ModItem
 	public override void SetDefaults()
 	{
 		Item.useStyle = ItemUseStyleID.Shoot;
+		Item.staff[Type] = true;
 		Item.width = 50;
 		Item.height = 50;
 		Item.useAnimation = 16;
@@ -37,7 +38,7 @@ public class MillionLightStaff : ModItem
 		{
 			Vector2 pos = player.Center + new Vector2(Main.rand.NextFloat(-300, 300), -1000);
 			Vector2 vel = Main.MouseWorld - pos;
-			vel = vel.NormalizeSafe() * 28f;
+			vel = vel.NormalizeSafe() * Main.rand.NextFloat(22f, 30f);
 			vel = vel.RotatedByRandom(0.14f);
 			Projectile p0 = Projectile.NewProjectileDirect(source, pos, vel, type, damage, knockback, player.whoAmI);
 		}
