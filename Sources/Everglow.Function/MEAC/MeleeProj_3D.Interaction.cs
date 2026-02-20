@@ -64,10 +64,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Vector2 old_worldPos = Projectile.Center + oldPos;
 				Vector3 oldPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
 				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix);
-				Vector2 worldPos_Inner = Projectile.Center + oldPos_Inner;
+				Vector2 old_worldPos_Inner = Projectile.Center + oldPos_Inner;
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
 				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
-				Vector2 old_worldPos_Inner = Projectile.Center + currentPos_Inner;
+				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
 				attackPolygon.Add(worldPos);
 				attackPolygon.Add(worldPos_Inner);
 				attackPolygon.Add(old_worldPos_Inner);
@@ -105,15 +105,40 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public override void CutTiles()
 	{
-		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
-		Vector2 beamStartPos = Projectile.Center;
-		Vector2 beamEndPos = beamStartPos + CurrentWeaponTipPosition();
-		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+		for (int k = 0; k < SlashEffects.Count; k++)
+		{
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null || Math.Abs(sEffect.RotateSpeed) < 0.1f || sEffect.SlashTrail_Smoothed.Count < 3 || !sEffect.Active)
+			{
+				continue;
+			}
+
+			// Using a polygon of the last several vertices of the slash trail to detect collision, which can better fit the actual slash area and avoid missing targets when the slash is fast.
+			int start = sEffect.SlashTrail_Smoothed.Count - 16;
+			start = Math.Max(start, 1);
+			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
+				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] * 1.1f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 worldPos = Projectile.Center + currentPos;
+				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
+
+				DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+				var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
+				Vector2 beamStartPos = Projectile.Center;
+				Vector2 beamEndPos = beamStartPos + CurrentWeaponTipPosition();
+				Utils.PlotTileLine(worldPos_Inner, worldPos, WeaponLength * 0.5f, cut);
+			}
+		}
 	}
 
 	public void ScreenShake()
 	{
-		ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+		if(MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
+		{
+			ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+		}
 	}
 }
