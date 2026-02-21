@@ -116,11 +116,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		rotateAxis = Vector3.Transform(rotateAxis, rotation);
 	}
 
-	public void RotateMainAxis(float angle, Vector3 rotatedAxis, ref Vector3 mainAxis)
+	public static void RotateMainAxis(float angle, Vector3 rotatedAxis, ref Vector3 mainAxis)
 	{
 		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(rotatedAxis), angle);
 		mainAxis = Vector3.Transform(mainAxis, rotation);
-		WeaponAxis = Vector3.Transform(WeaponAxis, rotation);
 	}
 
 	public float GetSizeZ(float coordZ)

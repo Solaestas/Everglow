@@ -1,8 +1,8 @@
+using Everglow.Commons.MEAC.VFX;
 using Everglow.Commons.Utilities;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.GameContent.Shaders;
+using Terraria.Map;
 
 namespace Everglow.Commons.MEAC;
 
@@ -131,7 +131,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			if (SlashEffects.Count > 0)
 			{
 				SlashEffect minTimerEffect = SlashEffects.OrderBy(e => e.Timer).First();
-				if(minTimerEffect.Timer >= minTimerEffect.NextAttackTime)
+				if (minTimerEffect.Timer >= minTimerEffect.NextAttackTime)
 				{
 					NewAttack();
 				}
@@ -152,7 +152,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void NewAttack()
 	{
-		if(Main.MouseWorld.X > Owner.Center.X)
+		if (Main.MouseWorld.X > Owner.Center.X)
 		{
 			Owner.direction = 1;
 		}
@@ -209,8 +209,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			}
 			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3.5f / meleeSpeed);
 			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
-			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * meleeSpeed);
+			Vector3 oldWeaponAxis = sEffect.WeaponAxis;
 			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * WeaponLength;
+			if(sEffect.Timer >= 2 && sEffect.Timer <= MaxAttackTime - 4)
+			{
+				AddDust(oldWeaponAxis, oldWeaponAxis * 0.5f, sEffect.RotationAxis, sEffect.RotateSpeed);
+			}
+			sEffect.RotateSpeed *= SolveB(BaseMeleeSpeed * meleeSpeed);
 			if (sEffect.SlashFade is null)
 			{
 				sEffect.SlashFade = new Queue<float>();
@@ -245,6 +250,52 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			{
 				SlashEffects.RemoveAt(k);
 			}
+		}
+	}
+
+	public virtual void AddDust(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed)
+	{
+		float maxCount = Math.Abs(rotationSpeed) * 100;
+		float mulScale = 1;
+		if(maxCount < 40)
+		{
+			mulScale *= maxCount / 40f;
+		}
+		float rotSpeed = rotationSpeed / maxCount;
+		for (int i = 0; i < maxCount; i++)
+		{
+			if (Main.rand.NextBool(10))
+			{
+				float randValue = MathF.Sqrt(Main.rand.NextFloat());
+				var melee_dust = new MeleeProj_3D_Dust()
+				{
+					Active = true,
+					Visible = true,
+					Position_Space = oldAxisTip * randValue + oldAxisTail * (1 - randValue),
+					MaxTime = Main.rand.NextFloat(30, 60),
+					Scale = Main.rand.NextFloat(0.1f, 0.8f) * mulScale * (randValue + 1f),
+					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					RotSpeed = rotationSpeed * 0.05f * Main.rand.NextFloat(0.8f, 1.2f),
+					RotAxis = rotationAxis,
+					ParentProj = this,
+				};
+				melee_dust.RegisterBehavior(CustomDustBehavior);
+				melee_dust.RegisterDraw(CustomDustDraw);
+				Ins.VFXManager.Add(melee_dust);
+			}
+			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTip);
+			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTail);
+		}
+	}
+
+	public virtual void CustomDustBehavior(MeleeProj_3D_Dust dust)
+	{
+		dust.RotSpeed *= 0.89f;
+		dust.Scale *= 0.92f;
+		if (dust.Scale < 0.01f)
+		{
+			dust.Active = false;
+			return;
 		}
 	}
 
