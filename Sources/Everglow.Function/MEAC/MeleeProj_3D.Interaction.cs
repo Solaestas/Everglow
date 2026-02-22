@@ -32,7 +32,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			minTimerEffect.HasHitNPCs.Add(target);
 		}
 		ScreenShake();
-		base.OnHitNPC(target, hit, damageDone);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -75,23 +74,29 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				if (MathUtils.IntersectsPolygonAABB(attackPolygon, targetHitbox.TopLeft(), targetHitbox.BottomRight()))
 				{
 					float hitRot = (currentPos - oldPos).ToRotationSafe() + MathHelper.PiOver2;
-					var slash = new TrueMeleeHitSlash
-					{
-						Active = true,
-						Visible = true,
-						Position = targetHitbox.Center(),
-						MaxTime = 30,
-						Scale = 0.6f,
-						Rotation = hitRot,
-						SelfLuminous = SelfLuminous,
-						SlashColor = SlashColor,
-					};
-					Ins.VFXManager.Add(slash);
+					Vector2 pos = targetHitbox.Center();
+					HitNPCVFXEffect(hitRot,pos);
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public virtual void HitNPCVFXEffect(float hitRotation, Vector2 hitPos)
+	{
+		var slash = new TrueMeleeHitSlash
+		{
+			Active = true,
+			Visible = true,
+			Position = hitPos,
+			MaxTime = 30,
+			Scale = 0.6f,
+			Rotation = hitRotation,
+			SelfLuminous = SelfLuminous,
+			SlashColor = SlashColor,
+		};
+		Ins.VFXManager.Add(slash);
 	}
 
 	public virtual void ProduceWaterRipples(Vector2 beamDims)

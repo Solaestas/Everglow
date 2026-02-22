@@ -1,3 +1,5 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.MEAC;
 
 public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warpStyle2, IBloomProjectile
@@ -77,45 +79,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return newRing;
 	}
 
-	public static Vector3 SphericalToCartesian(Vector3 sphericalCoordinates)
-	{
-		float r = sphericalCoordinates.X;
-		float theta = sphericalCoordinates.Y;
-		float phi = sphericalCoordinates.Z;
-
-		float z = r * (float)Math.Sin(theta) * (float)Math.Cos(phi);
-		float x = r * (float)Math.Sin(theta) * (float)Math.Sin(phi);
-		float y = r * (float)Math.Cos(theta);
-
-		return new Vector3(x, y, z);
-	}
-
-	public static Vector3 CartesianToSpherical(Vector3 cartesianCoordinates)
-	{
-		double x = cartesianCoordinates.X;
-		double y = cartesianCoordinates.Y;
-		double z = cartesianCoordinates.Z;
-
-		double r = Math.Sqrt(x * x + y * y + z * z);
-		double theta = Math.Acos(y / r);
-
-		double phi = MathHelper.PiOver2 - Math.Atan(z / x);
-		if (x < 0)
-		{
-			phi = -Math.Atan(z / x) - MathHelper.PiOver2;
-		}
-		return new Vector3((float)r, (float)theta, (float)phi);
-	}
-
-	public void RotateToPerpendicular(Vector3 fixAxis, ref Vector3 rotateAxis)
-	{
-		Vector3 perpendicularAxis = Vector3.Normalize(Vector3.Cross(fixAxis, rotateAxis));
-		float angle = Vector3.Dot(fixAxis, rotateAxis) / fixAxis.Length() / rotateAxis.Length();
-		angle = MathF.Acos(angle);
-		Quaternion rotation = Quaternion.CreateFromAxisAngle(perpendicularAxis, MathHelper.PiOver2 - angle);
-		rotateAxis = Vector3.Transform(rotateAxis, rotation);
-	}
-
 	public static void RotateMainAxis(float angle, Vector3 rotatedAxis, ref Vector3 mainAxis)
 	{
 		Quaternion rotation = Quaternion.CreateFromAxisAngle(Vector3.Normalize(rotatedAxis), angle);
@@ -125,52 +88,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public float GetSizeZ(float coordZ)
 	{
 		return CenterZ / coordZ;
-	}
-
-	/// <summary>
-	/// Solve f(x) = x * e^x = y for x, given y. Only the principal branch is implemented, which is the one used in most cases. The input y must be greater than -1/e.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <returns></returns>
-	/// <exception cref="ArgumentOutOfRangeException"></exception>
-	public float LambertW0(double x)
-	{
-		const double e = Math.E;
-		const double eps = 1e-12;
-
-		if (x < -1 / e - eps)
-		{
-			throw new ArgumentOutOfRangeException(nameof(x), "x must be greater than -1/e");
-		}
-		if (x == 0)
-		{
-			return 0;
-		}
-		if (Math.Abs(x - (-1 / e)) < eps)
-		{
-			return -1;
-		}
-
-		double w;
-		if (x > 0)
-		{
-			w = Math.Log(1 + x);
-		}
-		else
-		{
-			w = -1 + Math.Sqrt(2 * (1 + Math.E * x));
-		}
-
-		// 4 times Newton iteration to refine the approximation
-		for (int i = 0; i < 4; i++)
-		{
-			double ew = Math.Exp(w);
-			double wew = w * ew;
-			double f = wew - x;
-			double df = ew * (w + 1);
-			w -= f / df;
-		}
-		return (float)w;
 	}
 
 	/// <summary>
@@ -203,7 +120,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		double t = maxTime * a / K;
 		double arg = -t * Math.Exp(-t);
-		double w = LambertW0(arg);
+		double w = MathUtils.LambertW0(arg);
 		double b = Math.Exp(-w / maxTime - a / K);
 
 		return (float)b;

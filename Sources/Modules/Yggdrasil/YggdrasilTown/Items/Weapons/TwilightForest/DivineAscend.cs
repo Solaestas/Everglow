@@ -16,23 +16,22 @@ public class DivineAscend : ModItem
 		Item.damage = 27;
 		Item.knockBack = 3;
 
-		Item.useStyle = ItemUseStyleID.Shoot;
-		Item.UseSound = SoundID.Item1;
-		Item.useTime = Item.useAnimation = 28;
-		Item.autoReuse = true;
-		Item.noUseGraphic = true;
-		Item.noMelee = true;
-
 		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.buyPrice(gold: 3);
 
 		Item.shoot = ModContent.ProjectileType<DivineAscendProj>();
 	}
 
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	public override void HoldItem(Player player)
 	{
-		Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
-
-		return false;
+		if (player.ownedProjectileCounts[Item.shoot] <= 0)
+		{
+			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromAI(), player.Center, Vector2.zeroVector, Item.shoot, 60, 6, player.whoAmI);
+			MeleeProj_3D m3 = proj.ModProjectile as MeleeProj_3D;
+			if (m3 != null)
+			{
+				m3.WeaponItemType = Type;
+			}
+		}
 	}
 }

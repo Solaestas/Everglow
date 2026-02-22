@@ -11,7 +11,6 @@ public class ExampleMeleeProjectile : MeleeProj_3D
 	{
 		EnableSphereCoordDraw = false;
 		SlashColor = new Color(0.5f, 0.4f, 0, 0);
-
 	}
 
 	public override void SetDefaults()
@@ -23,10 +22,5 @@ public class ExampleMeleeProjectile : MeleeProj_3D
 		Projectile.friendly = true;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 5;
-	}
-
-	public override void AI()
-	{
-		base.AI();
 	}
 }

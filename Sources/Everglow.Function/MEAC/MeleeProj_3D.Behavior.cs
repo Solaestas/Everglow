@@ -53,7 +53,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	/// </summary>
 	public Vector3 RotatedAxis = new Vector3(0, -1, 0);
 
-	public Vector3 SphericalCoordPos => CartesianToSpherical(MainAxis);
+	public Vector3 SphericalCoordPos => MathUtils.CartesianToSpherical(MainAxis);
 
 	public Vector3 MainAxisWithDepth => MainAxis + new Vector3(0, 0, CenterZ);
 
@@ -168,7 +168,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		RotatedAxis = new Vector3(mouseRight, Main.rand.NextFloat(0.2f, 1f));
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
 		MainAxis = new Vector3(-mouseDir * (60 + WeaponLength), 0);
-		RotateToPerpendicular(RotatedAxis, ref MainAxis);
+		MathUtils.RotateToPerpendicular(RotatedAxis, ref MainAxis);
 		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction * Owner.gravDir;
 		var ss = new SoundStyle(ModAsset.TrueMeleeSlash_Mod);
 		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed), Projectile.Center);
