@@ -13,15 +13,15 @@ public class DivineAscendProj : MeleeProj_3D
 		SlashColor = new Color(0.83f, 0.74f, 0.38f, 0);
 	}
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
 		Projectile.width = 82;
 		Projectile.height = 82;
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 5;
+		WeaponLength = 84;
 	}
 
 	public override void HitNPCVFXEffect(float hitRotation, Vector2 hitPos)

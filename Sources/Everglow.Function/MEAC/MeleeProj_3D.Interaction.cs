@@ -134,7 +134,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
 				Vector2 beamStartPos = Projectile.Center;
 				Vector2 beamEndPos = beamStartPos + CurrentWeaponTipPosition();
-				Utils.PlotTileLine(worldPos_Inner, worldPos, WeaponLength * 0.5f, cut);
+				Utils.PlotTileLine(worldPos_Inner, worldPos, GetWeaponLength() * 0.5f, cut);
 			}
 		}
 	}

@@ -13,14 +13,15 @@ public class ExampleMeleeProjectile : MeleeProj_3D
 		SlashColor = new Color(0.5f, 0.4f, 0, 0);
 	}
 
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		base.SetDefaults();
 		Projectile.width = 82;
 		Projectile.height = 82;
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 5;
+		BaseMeleeSpeed = 2.7;
+		BaseDecaySpeed = 0.86;
 	}
 }

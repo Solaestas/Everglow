@@ -9,6 +9,7 @@ public class ExampleMeleeItem : ModItem
 	{
 		Item.width = 82;
 		Item.damage = 200;
+		Item.useTime = Item.useAnimation = 12;
 		Item.shoot = ModContent.ProjectileType<ExampleMeleeProjectile>();
 	}
 
