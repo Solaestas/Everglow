@@ -231,7 +231,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			{
 				sEffect.Active = false;
 			}
-			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3.5f / meleeSpeed);
+			sEffect.TrailFade = Math.Abs(sEffect.RotateSpeed * 3.5f / (float)(BaseMeleeSpeed / 1.4) / meleeSpeed);
 			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
 			Vector3 oldWeaponAxis = sEffect.WeaponAxis;
 			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * GetWeaponLength();
@@ -280,11 +280,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual void AddDust(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed, float trailFade)
 	{
 		float maxCount = Math.Abs(rotationSpeed) * 100;
-		float mulScale = 1;
-		if(maxCount < 40)
-		{
-			mulScale *= maxCount / 40f;
-		}
 		float rotSpeed = rotationSpeed / maxCount;
 		for (int i = 0; i < maxCount; i++)
 		{
@@ -297,7 +292,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 					Visible = true,
 					Position_Space = oldAxisTip * randValue + oldAxisTail * (1 - randValue),
 					MaxTime = Main.rand.NextFloat(30, 60),
-					Scale = Main.rand.NextFloat(0.1f, 0.8f) * mulScale * (randValue + 1f) * trailFade,
+					Scale = Main.rand.NextFloat(0.1f, 0.8f) * (randValue + 1f) * trailFade * 0.37f,
 					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 					RotSpeed = rotationSpeed * 0.05f * Main.rand.NextFloat(0.8f, 1.2f),
 					RotAxis = rotationAxis,
