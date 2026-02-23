@@ -1,9 +1,9 @@
 using Everglow.Commons.Coroutines;
-using Everglow.Yggdrasil.YggdrasilTown.Dusts;
+using Everglow.Commons.Utilities;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 
-namespace Everglow.Yggdrasil.Common.NPCs;
+namespace Everglow.Commons.Templates.Enemies;
 
 public abstract class Caterpillar : ModNPC
 {
@@ -32,10 +32,6 @@ public abstract class Caterpillar : ModNPC
 	/// 体节
 	/// </summary>
 	public List<Segment> Segments = new List<Segment>();
-
-	public override void SetStaticDefaults()
-	{
-	}
 
 	public override void SetDefaults()
 	{
@@ -109,9 +105,14 @@ public abstract class Caterpillar : ModNPC
 	public bool Crawl_2 = false;
 
 	/// <summary>
-	/// 体节碰撞大小
+	/// 体节碰撞大小，默认40
 	/// </summary>
 	public int SegmentHitBoxSize = 40;
+
+	/// <summary>
+	/// 受击粒子类型，默认-1表示没有粒子
+	/// </summary>
+	public int DustType = -1;
 
 	/// <summary>
 	/// 体节行为大小
@@ -181,7 +182,6 @@ public abstract class Caterpillar : ModNPC
 		{
 			_caterpillarCoroutine.StartCoroutine(new Coroutine(Crawling()));
 		}
-		base.ResetEffects();
 	}
 
 	public override void AI()
@@ -911,8 +911,6 @@ public abstract class Caterpillar : ModNPC
 		NPC.width = 10;
 		NPC.height = 10;
 		NPC.Center = v0;
-
-		base.ModifyIncomingHit(ref modifiers);
 	}
 
 	/// <summary>
@@ -941,7 +939,6 @@ public abstract class Caterpillar : ModNPC
 				NPC.position += Segments[2].Normal * Segments[2].SelfDirection * 50;
 			}
 		}
-		base.OnHitByProjectile(projectile, hit, damageDone);
 	}
 
 	/// <summary>
@@ -971,7 +968,6 @@ public abstract class Caterpillar : ModNPC
 				NPC.position += Segments[2].Normal * Segments[2].SelfDirection * 50;
 			}
 		}
-		base.OnHitByItem(player, item, hit, damageDone);
 	}
 
 	/// <summary>
@@ -1000,7 +996,6 @@ public abstract class Caterpillar : ModNPC
 		{
 			boundingBox = GetBoundingBox();
 		}
-		base.ModifyHoverBoundingBox(ref boundingBox);
 	}
 
 	/// <summary>
@@ -1009,12 +1004,14 @@ public abstract class Caterpillar : ModNPC
 	/// <param name="hit"></param>
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		for (int j = 0; j < Segments.Count; j++)
+		if(DustType != -1)
 		{
-			Vector2 pos = NPC.Center + Segments[j].SelfPosition;
-			Dust.NewDustDirect(pos - new Vector2(SegmentHitBoxSize / 2), SegmentHitBoxSize / 2, SegmentHitBoxSize / 2, ModContent.DustType<VerdantBlood>());
+			for (int j = 0; j < Segments.Count; j++)
+			{
+				Vector2 pos = NPC.Center + Segments[j].SelfPosition;
+				Dust.NewDustDirect(pos - new Vector2(SegmentHitBoxSize / 2), SegmentHitBoxSize / 2, SegmentHitBoxSize / 2, DustType);
+			}
 		}
-		base.HitEffect(hit);
 	}
 
 	/// <summary>

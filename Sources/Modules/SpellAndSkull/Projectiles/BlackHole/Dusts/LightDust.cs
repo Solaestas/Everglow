@@ -2,7 +2,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Everglow.Commons.VFX.Visuals;
 
-namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dust;
+namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
 
 
 [Pipeline(typeof(WCSPipeline))]

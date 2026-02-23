@@ -40,16 +40,41 @@ public class HookSystem : ModSystem
 		On_Main.DrawProjectiles += Main_DrawProjectiles;
 		On_Main.DrawNPCs += Main_DrawNPCs;
 		On_LegacyPlayerRenderer.DrawPlayers += LegacyPlayerRenderer_DrawPlayers;
-		On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
 
-		On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
-		On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
+		On_WorldGen.playWorld += WorldGen_playWorld;
+		On_WorldGen.playWorldCallBack += WorldGen_playWorldCallBack;
+		On_WorldGen.serverLoadWorld += WorldGen_serverLoadWorld;
 		On_WorldGen.serverLoadWorldCallBack += WorldGen_serverLoadWorldCallBack;
+		On_WorldGen.SaveAndQuit += WorldGen_SaveAndQuit;
+		On_WorldGen.SaveAndQuitCallBack += On_WorldGen_SaveAndQuitCallBack;
+
+		On_Main.DrawMiscMapIcons += Main_DrawMiscMapIcons;
 		On_Main.DrawBG += Main_DrawBG;
 		On_Main.DrawBackground += Main_DrawBackground;
 		On_Main.DoDraw_WallsTilesNPCs += Main_DoDraw_WallsTilesNPCs;
 		On_FilterManager.EndCapture += On_FilterManager_EndCapture;
 		Main.OnResolutionChanged += Main_OnResolutionChanged;
+	}
+
+	public override void Unload()
+	{
+		On_Main.DrawDust -= Main_DrawDust;
+		On_Main.DrawProjectiles -= Main_DrawProjectiles;
+		On_Main.DrawNPCs -= Main_DrawNPCs;
+		On_LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
+
+		On_WorldGen.playWorld -= WorldGen_playWorld;
+		On_WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
+		On_WorldGen.serverLoadWorld -= WorldGen_serverLoadWorld;
+		On_WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
+		On_WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
+		On_WorldGen.SaveAndQuitCallBack -= On_WorldGen_SaveAndQuitCallBack;
+
+		On_Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
+		On_Main.DrawBG -= Main_DrawBG;
+		On_Main.DrawBackground -= Main_DrawBackground;
+		On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
+		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 	}
 
 	private void On_FilterManager_EndCapture(On_FilterManager.orig_EndCapture orig, FilterManager self, RenderTarget2D finalTexture, RenderTarget2D screenTarget1, RenderTarget2D screenTarget2, Color clearColor)
@@ -96,23 +121,6 @@ public class HookSystem : ModSystem
 	public void RemoveHook(IHookHandler handler)
 	{
 		_manager.RemoveHook(handler);
-	}
-
-	public override void Unload()
-	{
-		On_Main.DrawDust -= Main_DrawDust;
-		On_Main.DrawProjectiles -= Main_DrawProjectiles;
-		On_Main.DrawNPCs -= Main_DrawNPCs;
-		On_LegacyPlayerRenderer.DrawPlayers -= LegacyPlayerRenderer_DrawPlayers;
-		On_WorldGen.playWorldCallBack -= WorldGen_playWorldCallBack;
-
-		On_WorldGen.SaveAndQuit -= WorldGen_SaveAndQuit;
-		On_Main.DrawMiscMapIcons -= Main_DrawMiscMapIcons;
-		On_WorldGen.serverLoadWorldCallBack -= WorldGen_serverLoadWorldCallBack;
-		On_Main.DrawBG -= Main_DrawBG;
-		On_Main.DrawBackground -= Main_DrawBackground;
-		On_Main.DoDraw_WallsTilesNPCs -= Main_DoDraw_WallsTilesNPCs;
-		Main.OnResolutionChanged -= Main_OnResolutionChanged;
 	}
 
 	private void LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, IEnumerable<Player> players)
@@ -205,21 +213,40 @@ public class HookSystem : ModSystem
 		}
 	}
 
+	private void WorldGen_playWorld(On_WorldGen.orig_playWorld orig)
+	{
+		orig();
+		Invoke(CodeLayer.PreEnterWorld_Single);
+	}
+
 	private void WorldGen_playWorldCallBack(On_WorldGen.orig_playWorldCallBack orig, object threadContext)
 	{
 		orig(threadContext);
 		Invoke(CodeLayer.PostEnterWorld_Single);
 	}
 
-	private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
+	private Task WorldGen_serverLoadWorld(On_WorldGen.orig_serverLoadWorld orig)
 	{
-		orig(callback);
-		Invoke(CodeLayer.PostExitWorld_Single);
+		var task = orig();
+		Invoke(CodeLayer.PreEnterWorld_Server);
+		return task;
 	}
 
 	private void WorldGen_serverLoadWorldCallBack(On_WorldGen.orig_serverLoadWorldCallBack orig)
 	{
 		orig();
 		Invoke(CodeLayer.PostEnterWorld_Server);
+	}
+
+	private void WorldGen_SaveAndQuit(On_WorldGen.orig_SaveAndQuit orig, Action callback)
+	{
+		orig(callback);
+		Invoke(CodeLayer.PreSaveAndQuit);
+	}
+
+	private void On_WorldGen_SaveAndQuitCallBack(On_WorldGen.orig_SaveAndQuitCallBack orig, object threadContext)
+	{
+		orig(threadContext);
+		Invoke(CodeLayer.PostSaveAndQuit);
 	}
 }
