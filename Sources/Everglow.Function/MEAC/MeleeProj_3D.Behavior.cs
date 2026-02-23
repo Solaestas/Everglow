@@ -2,7 +2,6 @@ using Everglow.Commons.MEAC.VFX;
 using Everglow.Commons.Utilities;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Map;
 
 namespace Everglow.Commons.MEAC;
 
@@ -104,12 +103,16 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Projectile.extraUpdates = 1;
 		Projectile.localNPCHitCooldown = 1;
 		Projectile.usesLocalNPCImmunity = true;
+		Projectile.noEnchantmentVisuals = true;
 		WeaponLength = 60;
 		BaseMeleeSpeed = 1.4;
 		BaseDecaySpeed = 0.93;
 		SetCustomDefaults();
 	}
 
+	/// <summary>
+	/// Suggest values: WeaponLength, BaseMeleeSpeed, BaseDecaySpeed, Projectile properties (width, height, etc).<br/>
+	/// </summary>
 	public virtual void SetCustomDefaults()
 	{
 	}
@@ -161,9 +164,9 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public float GetWeaponLength()
 	{
 		float outputLength = WeaponLength;
-		if(Owner is not null)
+		if (Owner is not null)
 		{
-			if(Owner.HeldItem is not null)
+			if (Owner.HeldItem is not null)
 			{
 				outputLength *= Owner.GetAdjustedItemScale(Owner.HeldItem);
 			}
@@ -235,7 +238,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			RotateMainAxis(sEffect.RotateSpeed * 0.35f, sEffect.RotationAxis, ref sEffect.MainAxis);
 			Vector3 oldWeaponAxis = sEffect.WeaponAxis;
 			sEffect.WeaponAxis = sEffect.MainAxis + Vector3.Normalize(sEffect.MainAxis) * GetWeaponLength();
-			if(sEffect.Timer >= 2 && sEffect.Timer <= MaxAttackTime - 4)
+			if (sEffect.Timer >= 2 && sEffect.Timer <= MaxAttackTime - 4)
 			{
 				AddDust(oldWeaponAxis, oldWeaponAxis * 0.5f, sEffect.RotationAxis, sEffect.RotateSpeed, sEffect.TrailFade);
 			}
@@ -301,6 +304,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				melee_dust.RegisterBehavior(CustomDustBehavior);
 				melee_dust.RegisterDraw(CustomDustDraw);
 				Ins.VFXManager.Add(melee_dust);
+			}
+
+			// Enchantment Effects
+			if (Main.rand.NextBool(40))
+			{
+				// Vector2 enchantDustPos = Vector2.Min(oldAxisTail, oldAxisTip);
+				// Projectile.EmitEnchantmentVisualsAt(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
 			}
 			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTip);
 			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTail);

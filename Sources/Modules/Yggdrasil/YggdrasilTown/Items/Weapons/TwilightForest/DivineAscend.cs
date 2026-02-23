@@ -6,10 +6,6 @@ public class DivineAscend : MeleeItem_3D
 {
 	public override void SetCustomDefaults()
 	{
-		Item.width = 84;
-		Item.height = 84;
-
-		Item.DamageType = DamageClass.Melee;
 		Item.damage = 27;
 		Item.knockBack = 3;
 
