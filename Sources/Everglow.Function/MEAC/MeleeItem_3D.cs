@@ -13,9 +13,6 @@ public abstract class MeleeItem_3D : ModItem
 		Item.autoReuse = false;
 
 		// These are just example values, you can change them in derived classes
-		var texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-		Item.width = texture.Width;
-		Item.height = texture.Height;
 		Item.damage = 24;
 		Item.knockBack = 3;
 		Item.useTime = Item.useAnimation = 24;
