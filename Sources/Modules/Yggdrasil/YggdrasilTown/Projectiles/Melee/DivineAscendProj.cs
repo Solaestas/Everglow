@@ -24,7 +24,7 @@ public class DivineAscendProj : MeleeProj_3D
 		WeaponLength = 84;
 	}
 
-	public override void HitNPCVFXEffect(float hitRotation, Vector2 hitPos)
+	public override void HitNPCVFX(float hitRotation, Vector2 hitPos)
 	{
 		DivineAscendHitStar dAHS = new DivineAscendHitStar();
 		dAHS.Active = true;

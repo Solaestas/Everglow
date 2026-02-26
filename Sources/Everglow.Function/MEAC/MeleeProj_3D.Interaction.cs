@@ -75,7 +75,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				{
 					float hitRot = (currentPos - oldPos).ToRotationSafe() + MathHelper.PiOver2;
 					Vector2 pos = targetHitbox.Center();
-					HitNPCVFXEffect(hitRot,pos);
+					HitNPCVFX(hitRot,pos);
 					return true;
 				}
 			}
@@ -83,7 +83,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return false;
 	}
 
-	public virtual void HitNPCVFXEffect(float hitRotation, Vector2 hitPos)
+	public virtual void HitNPCVFX(float hitRotation, Vector2 hitPos)
 	{
 		var slash = new TrueMeleeHitSlash
 		{
