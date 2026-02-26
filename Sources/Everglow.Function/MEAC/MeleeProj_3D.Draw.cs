@@ -106,7 +106,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual void CustomDustDraw(MeleeProj_3D_Dust dust)
 	{
 		Vector3 wldPos3D = dust.Position_Space + new Vector3(0, 0, CenterZ);
-		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix) + Projectile.Center;
+		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix()) + Projectile.Center;
 		Texture2D tex_black = ModAsset.NormalDust_small_black.Value;
 		Texture2D tex = ModAsset.NormalDust_small.Value;
 		var dustColor = SlashColor;

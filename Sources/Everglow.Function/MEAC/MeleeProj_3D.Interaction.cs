@@ -62,11 +62,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Vector2 oldPos = Project(oldPos3D, ProjectionMatrix());
 				Vector2 old_worldPos = Projectile.Center + oldPos;
 				Vector3 oldPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix);
+				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix());
 				Vector2 worldPos_Inner = Projectile.Center + oldPos_Inner;
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
-				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
+				Vector2 old_worldPos_Inner = Projectile.Center + currentPos_Inner;
 				attackPolygon.Add(worldPos);
 				attackPolygon.Add(worldPos_Inner);
 				attackPolygon.Add(old_worldPos_Inner);
@@ -124,10 +124,10 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
 			{
 				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] * 1.1f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
 				Vector2 worldPos = Projectile.Center + currentPos;
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
 				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
 
 				DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
