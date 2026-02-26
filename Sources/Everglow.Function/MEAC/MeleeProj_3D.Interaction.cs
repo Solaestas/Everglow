@@ -32,7 +32,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			minTimerEffect.HasHitNPCs.Add(target);
 		}
 		ScreenShake();
-		base.OnHitNPC(target, hit, damageDone);
 	}
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
@@ -63,11 +62,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				Vector2 oldPos = Project(oldPos3D, ProjectionMatrix());
 				Vector2 old_worldPos = Projectile.Center + oldPos;
 				Vector3 oldPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix());
+				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix);
 				Vector2 worldPos_Inner = Projectile.Center + oldPos_Inner;
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
-				Vector2 old_worldPos_Inner = Projectile.Center + currentPos_Inner;
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
 				attackPolygon.Add(worldPos);
 				attackPolygon.Add(worldPos_Inner);
 				attackPolygon.Add(old_worldPos_Inner);
@@ -75,23 +74,29 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				if (MathUtils.IntersectsPolygonAABB(attackPolygon, targetHitbox.TopLeft(), targetHitbox.BottomRight()))
 				{
 					float hitRot = (currentPos - oldPos).ToRotationSafe() + MathHelper.PiOver2;
-					var slash = new TrueMeleeHitSlash
-					{
-						Active = true,
-						Visible = true,
-						Position = targetHitbox.Center(),
-						MaxTime = 30,
-						Scale = 0.6f,
-						Rotation = hitRot,
-						SelfLuminous = SelfLuminous,
-						SlashColor = SlashColor,
-					};
-					Ins.VFXManager.Add(slash);
+					Vector2 pos = targetHitbox.Center();
+					HitNPCVFXEffect(hitRot,pos);
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	public virtual void HitNPCVFXEffect(float hitRotation, Vector2 hitPos)
+	{
+		var slash = new TrueMeleeHitSlash
+		{
+			Active = true,
+			Visible = true,
+			Position = hitPos,
+			MaxTime = 30,
+			Scale = 0.6f,
+			Rotation = hitRotation,
+			SelfLuminous = SelfLuminous,
+			SlashColor = SlashColor,
+		};
+		Ins.VFXManager.Add(slash);
 	}
 
 	public virtual void ProduceWaterRipples(Vector2 beamDims)
@@ -105,15 +110,40 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public override void CutTiles()
 	{
-		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-		var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
-		Vector2 beamStartPos = Projectile.Center;
-		Vector2 beamEndPos = beamStartPos + CurrentWeaponTipPosition();
-		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
+		for (int k = 0; k < SlashEffects.Count; k++)
+		{
+			SlashEffect sEffect = SlashEffects[k];
+			if (sEffect.SlashTrail_Smoothed is null || Math.Abs(sEffect.RotateSpeed) < 0.1f || sEffect.SlashTrail_Smoothed.Count < 3 || !sEffect.Active)
+			{
+				continue;
+			}
+
+			// Using a polygon of the last several vertices of the slash trail to detect collision, which can better fit the actual slash area and avoid missing targets when the slash is fast.
+			int start = sEffect.SlashTrail_Smoothed.Count - 16;
+			start = Math.Max(start, 1);
+			for (int i = start; i < sEffect.SlashTrail_Smoothed.Count; i++)
+			{
+				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] * 1.1f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 worldPos = Projectile.Center + currentPos;
+				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 worldPos_Inner = Projectile.Center + currentPos_Inner;
+
+				DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
+				var cut = new Terraria.Utils.TileActionAttempt(DelegateMethods.CutTiles);
+				Vector2 beamStartPos = Projectile.Center;
+				Vector2 beamEndPos = beamStartPos + CurrentWeaponTipPosition();
+				Utils.PlotTileLine(worldPos_Inner, worldPos, GetWeaponLength() * 0.5f, cut);
+			}
+		}
 	}
 
 	public void ScreenShake()
 	{
-		ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+		if(MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
+		{
+			ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+		}
 	}
 }

@@ -142,4 +142,50 @@ public static partial class MathUtils
 	{
 		return Factorial(n) / (Factorial(m) * Factorial(n - m));
 	}
+
+	/// <summary>
+	/// Solve f(x) = x * e^x = y for x, given y. Only the principal branch is implemented, which is the one used in most cases. The input y must be greater than -1/e.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentOutOfRangeException"></exception>
+	public static float LambertW0(double x)
+	{
+		const double e = Math.E;
+		const double eps = 1e-12;
+
+		if (x < -1 / e - eps)
+		{
+			throw new ArgumentOutOfRangeException(nameof(x), "x must be greater than -1/e");
+		}
+		if (x == 0)
+		{
+			return 0;
+		}
+		if (Math.Abs(x - (-1 / e)) < eps)
+		{
+			return -1;
+		}
+
+		double w;
+		if (x > 0)
+		{
+			w = Math.Log(1 + x);
+		}
+		else
+		{
+			w = -1 + Math.Sqrt(2 * (1 + Math.E * x));
+		}
+
+		// 4 times Newton iteration to refine the approximation
+		for (int i = 0; i < 4; i++)
+		{
+			double ew = Math.Exp(w);
+			double wew = w * ew;
+			double f = wew - x;
+			double df = ew * (w + 1);
+			w -= f / df;
+		}
+		return (float)w;
+	}
 }

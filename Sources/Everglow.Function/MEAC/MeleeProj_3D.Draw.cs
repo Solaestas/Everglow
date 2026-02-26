@@ -1,10 +1,10 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.MEAC.VFX;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using ReLogic.Graphics;
 using Terraria.GameContent;
-using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.MEAC;
 
@@ -101,6 +101,28 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 
 		return false;
+	}
+
+	public virtual void CustomDustDraw(MeleeProj_3D_Dust dust)
+	{
+		Vector3 wldPos3D = dust.Position_Space + new Vector3(0, 0, CenterZ);
+		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix) + Projectile.Center;
+		Texture2D tex_black = ModAsset.NormalDust_small_black.Value;
+		Texture2D tex = ModAsset.NormalDust_small.Value;
+		var dustColor = SlashColor;
+		if (!SelfLuminous)
+		{
+			Color lightC = Lighting.GetColor(wldPos.ToTileCoordinates());
+			dustColor.R = (byte)(lightC.R * dustColor.R / 255f);
+			dustColor.G = (byte)(lightC.G * dustColor.G / 255f);
+			dustColor.B = (byte)(lightC.B * dustColor.B / 255f);
+		}
+		float colorVariation = MathF.Sin((dust.MaxTime - dust.Timer) * 1f) + 1;
+		colorVariation *= 0.5f;
+		colorVariation = MathF.Pow(colorVariation, 1);
+		dustColor *= ReflectionSharpValue * 5f * colorVariation;
+		Ins.Batch.Draw(tex_black, wldPos, null, Color.White * 0.3f, dust.Rotation, tex_black.Size() * 0.5f, dust.Scale, SpriteEffects.None);
+		Ins.Batch.Draw(tex, wldPos, null, dustColor, dust.Rotation, tex.Size() * 0.5f, dust.Scale, SpriteEffects.None);
 	}
 
 	public void DrawReferenceSphere(float radius = 120f)
