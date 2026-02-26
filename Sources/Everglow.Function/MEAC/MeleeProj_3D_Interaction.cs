@@ -57,16 +57,16 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			{
 				List<Vector2> attackPolygon = [];
 				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
 				Vector2 worldPos = Projectile.Center + currentPos;
 				Vector3 oldPos3D = sEffect.SlashTrail_Smoothed[i - 1] + new Vector3(0, 0, CenterZ);
-				Vector2 oldPos = Project(oldPos3D, ProjectionMatrix);
+				Vector2 oldPos = Project(oldPos3D, ProjectionMatrix());
 				Vector2 old_worldPos = Projectile.Center + oldPos;
 				Vector3 oldPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix);
+				Vector2 oldPos_Inner = Project(oldPos3D_Inner, ProjectionMatrix());
 				Vector2 worldPos_Inner = Projectile.Center + oldPos_Inner;
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
 				Vector2 old_worldPos_Inner = Projectile.Center + currentPos_Inner;
 				attackPolygon.Add(worldPos);
 				attackPolygon.Add(worldPos_Inner);

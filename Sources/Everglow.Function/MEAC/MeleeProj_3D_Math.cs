@@ -13,13 +13,18 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public Vector2 CurrentWeaponTipPosition()
 	{
 		Vector3 currentPos3D = WeaponAxis + new Vector3(0, 0, CenterZ);
-		Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+		Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
 		return currentPos;
 	}
 
 	public static Vector2 Project(Vector3 point, Matrix ProjectionMatrix)
 	{
 		Vector4 homogenousPoint = Vector4.Transform(new Vector4(point, 1), ProjectionMatrix);
+
+
+		int Size = Math.Min(Main.screenWidth, Main.screenHeight);
+
+		float SizeCorrectionFlag = 1000f/ Main.screenHeight; // 1000 is a randomly made-up magic number
 
 		// Normalized Device Coordinates
 		if (homogenousPoint.W != 0)
@@ -30,7 +35,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			float xScreen = xNDC * Main.screenWidth / 2f;
 			float yScreen = yNDC * Main.screenHeight / 2f;
 
-			return new Vector2(xScreen, yScreen);
+			return new Vector2(xScreen, yScreen)*SizeCorrectionFlag;
 		}
 		throw new InvalidOperationException("W component of the projected point is zero.");
 	}

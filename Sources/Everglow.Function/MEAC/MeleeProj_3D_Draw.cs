@@ -20,11 +20,14 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public Color SlashColor = new Color(1f, 1f, 1f, 0);
 
-	public Matrix ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
+	public Matrix ProjectionMatrix()
+	{
+		 return Matrix.CreatePerspectiveFieldOfView(
 			MathHelper.PiOver4,
 			Main.screenWidth / (float)Main.screenHeight,
 			0.1f,
 			2000f);
+	} 
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
@@ -64,11 +67,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				continue;
 			}
 			Vector3 wldPos3D = sEffect.SlashTrail_Smoothed[starIndex] + new Vector3(0, 0, CenterZ);
-			Vector2 wldPos = Project(wldPos3D, ProjectionMatrix) + Projectile.Center;
+			Vector2 wldPos = Project(wldPos3D, ProjectionMatrix()) + Projectile.Center;
 			float starScale = 1f;
 			Color starColor = SlashColor;
 			float threthod = 40;
-			if(sEffect.Timer > sEffect.MaxTime - threthod)
+			if (sEffect.Timer > sEffect.MaxTime - threthod)
 			{
 				float value = 1 - (sEffect.Timer - sEffect.MaxTime + threthod) / threthod;
 				value -= 0.2f;
@@ -78,7 +81,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				}
 				starColor *= value;
 				value -= 0.5f;
-				if(value < 0)
+				if (value < 0)
 				{
 					value = 0;
 				}
@@ -93,7 +96,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			}
 			starColor *= 1.2f;
 			Texture2D star = ModAsset.StarSlash.Value;
-			Main.spriteBatch.Draw(star, wldPos - Main.screenPosition, null, starColor, 0, star.Size() * 0.5f,starScale, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(star, wldPos - Main.screenPosition, null, starColor, 0, star.Size() * 0.5f, starScale, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, wldPos - Main.screenPosition, null, starColor, MathHelper.PiOver2, star.Size() * 0.5f, starScale, SpriteEffects.None, 0);
 		}
 
@@ -131,7 +134,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		List<Vector2> shearRing = new List<Vector2>();
 		for (int i = 0; i < basicRing.Count; i++)
 		{
-			Vector2 ringPos = Project(new Vector3(basicRing[i], CenterZ), ProjectionMatrix);
+			Vector2 ringPos = Project(new Vector3(basicRing[i], CenterZ), ProjectionMatrix());
 			shearRing.Add(ringPos);
 		}
 		List<Vertex2D> shearSurface = new List<Vertex2D>();
@@ -174,8 +177,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public void Draw3DLine(Vector3 start, Vector3 end, Color drawColor, Vector3 offset)
 	{
 		List<Vertex2D> arrow = new List<Vertex2D>();
-		Vector2 start2 = Project(start + offset, ProjectionMatrix);
-		Vector2 end2 = Project(end + offset, ProjectionMatrix);
+		Vector2 start2 = Project(start + offset, ProjectionMatrix());
+		Vector2 end2 = Project(end + offset, ProjectionMatrix());
 		Vector2 arrowWidth = (start2 - end2).NormalizeSafe().RotatedBy(MathHelper.PiOver2);
 		float startScale = GetSizeZ((start + offset).Z);
 		float endScale = GetSizeZ((end + offset).Z);
@@ -211,13 +214,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			for (int i = 0; i < sEffect.SlashTrail_Smoothed.Count; i++)
 			{
 				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
 
 				Vector3 currentPos3D_Edge = sEffect.SlashTrail_Smoothed[i] * 0.6f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Edge = Project(currentPos3D_Edge, ProjectionMatrix);
+				Vector2 currentPos_Edge = Project(currentPos3D_Edge, ProjectionMatrix());
 
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
 
 				float value = i / (float)sEffect.SlashTrail_Smoothed.Count;
 				float fade = GetFade(i, sEffect);
@@ -339,8 +342,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual void DrawWeapon(Vector3 start, Vector3 end, Vector3 offset)
 	{
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-		Vector2 arrowTip = Project(start + offset, ProjectionMatrix);
-		Vector2 center = Project(end + offset, ProjectionMatrix);
+		Vector2 arrowTip = Project(start + offset, ProjectionMatrix());
+		Vector2 center = Project(end + offset, ProjectionMatrix());
 		Vector2 middle = (arrowTip + center) / 2f;
 		float width = tex.Size().Length() / 2f;
 		Vector2 dirWidth = (arrowTip - center).NormalizeSafe().RotatedBy(MathHelper.PiOver2) * width;
@@ -373,7 +376,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			for (int i = 0; i <= curve.Count; i++)
 			{
 				Vector3 ringPos3D = curve[i % curve.Count];
-				Vector2 ringPos2D = Project(ringPos3D, ProjectionMatrix);
+				Vector2 ringPos2D = Project(ringPos3D, ProjectionMatrix());
 				var drawColor2 = drawColor;
 				if (ringPos3D.Z > CenterZ)
 				{
@@ -399,7 +402,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			for (int i = 0; i <= curve.Count; i++)
 			{
 				Vector3 ringPos3D = curve[i % curve.Count];
-				Vector2 ringPos2D = Project(ringPos3D, ProjectionMatrix);
+				Vector2 ringPos2D = Project(ringPos3D, ProjectionMatrix());
 				var drawColor2 = drawColor;
 				if ((ringPos3D.Z - CenterZ) * MainAxis.Z < 0)
 				{
@@ -459,16 +462,16 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			for (int i = 0; i < sEffect.SlashTrail_Smoothed.Count; i++)
 			{
 				Vector3 currentPos3D = sEffect.SlashTrail_Smoothed[i] + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix);
+				Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
 
 				Vector3 currentPos3D_Inner = sEffect.SlashTrail_Smoothed[i] * 0.2f + new Vector3(0, 0, CenterZ);
-				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix);
+				Vector2 currentPos_Inner = Project(currentPos3D_Inner, ProjectionMatrix());
 
 				Vector2 warpDir = Vector2.zeroVector;
 				if (i >= 1)
 				{
 					Vector3 currentPos3D_Old = sEffect.SlashTrail_Smoothed[i - 1] + new Vector3(0, 0, CenterZ);
-					Vector2 currentPos_Old = Project(currentPos3D_Old, ProjectionMatrix);
+					Vector2 currentPos_Old = Project(currentPos3D_Old, ProjectionMatrix());
 					warpDir = currentPos_Old - currentPos;
 				}
 				float warpThrethod = 220;
