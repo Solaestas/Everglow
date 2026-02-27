@@ -19,6 +19,10 @@ public class MeleeProj_3D_Configs : ModConfig
 	[DefaultValue(false)]
 	public bool MeleeWeaponProjectBindWithScreen_Behavior;
 
+	[DefaultValue(MathHelper.PiOver4)]
+	[Range(MathHelper.Pi/6f, MathHelper.Pi/3f)]
+	public float FOV_Angle;
+
 	public static bool ShouldMeleeWeaponScreenShake
 	{
 		get
@@ -40,6 +44,14 @@ public class MeleeProj_3D_Configs : ModConfig
 		get
 		{
 			return ModContent.GetInstance<MeleeProj_3D_Configs>().MeleeWeaponProjectBindWithScreen_Behavior;
+		}
+	}
+
+	public static float AngleofFOV
+	{
+		get
+		{
+			return ModContent.GetInstance<MeleeProj_3D_Configs>().FOV_Angle;
 		}
 	}
 }
