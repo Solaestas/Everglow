@@ -19,14 +19,41 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return currentPos;
 	}
 
-	public static Vector2 Project(Vector3 point, Matrix ProjectionMatrix)
+	public Matrix PerspectiveMatrix()
+	{
+		Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
+		return
+			Matrix.CreateTranslation(new Vector3(0, 0, -400))
+						* Matrix.CreateLookAt(
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / 1f, 0),
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / 1f, 500),
+					new Vector3(0, 1, 0))
+			;
+	}
+
+	public Vector2 Project(Vector3 point, Matrix ProjectionMatrix, [System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
+	{
+
+		if ((callerFilePath.Contains("MeleeProj_3D.Draw.cs") || callerFilePath.Contains("MeleeProj_3D.Posture.cs") )&& MeleeProj_3D_Configs.IsMeleeWeaponProjectBindWithScreen_Draw)
+		{
+			return ProjectBindWithScreen(point, ProjectionMatrix)*0.75f;
+		}
+		if (callerFilePath.Contains("MeleeProj_3D.Behavior.cs") && MeleeProj_3D_Configs.IsMeleeWeaponProjectBindWithScreen_Behavior)
+		{
+			return ProjectBindWithScreen(point, ProjectionMatrix) * 0.75f;
+		}
+		return ProjectBindWithProj(point, ProjectionMatrix);
+
+
+	}
+
+	public Vector2 ProjectBindWithProj(Vector3 point, Matrix ProjectionMatrix)
 	{
 		Vector4 homogenousPoint = Vector4.Transform(new Vector4(point, 1), ProjectionMatrix);
 
-
 		int Size = Math.Min(Main.screenWidth, Main.screenHeight);
 
-		float SizeCorrectionFlag = 1000f/ Main.screenHeight; // 1000 is a randomly made-up magic number
+		float SizeCorrectionFlag = 1000f / Main.screenHeight; // 1000 is a randomly made-up magic number
 
 		// Normalized Device Coordinates
 		if (homogenousPoint.W != 0)
@@ -37,7 +64,33 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			float xScreen = xNDC * Main.screenWidth / 2f;
 			float yScreen = yNDC * Main.screenHeight / 2f;
 
-			return new Vector2(xScreen, yScreen)*SizeCorrectionFlag;
+			return new Vector2(xScreen, yScreen) * SizeCorrectionFlag;
+		}
+		throw new InvalidOperationException("W component of the projected point is zero.");
+	}
+
+	public Vector2 ProjectBindWithScreen(Vector3 point, Matrix ProjectionMatrix)
+	{
+		Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
+		Vector4 homogenousPoint = Vector4.Transform(new Vector4(point, 1), PerspectiveMatrix());
+		homogenousPoint = Vector4.Transform(homogenousPoint, ProjectionMatrix);
+
+		int Size = Math.Min(Main.screenWidth, Main.screenHeight);
+
+		float SizeCorrectionFlag = 1000f / Main.screenHeight; // 750 is a randomly made-up magic number
+
+		// Normalized Device Coordinates
+		if (homogenousPoint.W != 0)
+		{
+			float xNDC = -homogenousPoint.X / homogenousPoint.W;
+			float yNDC = homogenousPoint.Y / homogenousPoint.W;
+
+			float xScreen = xNDC * Main.screenWidth / 2f;
+			float yScreen = yNDC * Main.screenHeight / 2f;
+
+			return new Vector2(xScreen, yScreen) * SizeCorrectionFlag + (lookat - Projectile.Center);
+
+
 		}
 		throw new InvalidOperationException("W component of the projected point is zero.");
 	}
