@@ -184,22 +184,38 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		{
 			Owner.direction = -1;
 		}
-		AttackTimer = 0;
-		float meleeSpeed = Owner.meleeSpeed;
+
 		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
 		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector);
-		Vector2 mouseRight = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
-		RotatedAxis = new Vector3(mouseRight, Main.rand.NextFloat(0.2f, 1f));
+		AttackTimer = 0;
+		float meleeSpeed = Owner.meleeSpeed;
+		Attack_RotativeSwing(mouseDir, meleeSpeed);
+
+		var ss = new SoundStyle(ModAsset.TrueMeleeSlash_Mod);
+		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed), Projectile.Center);
+		float itemUseTime = Owner.HeldItem.useTime;
+		float maxTime = itemUseTime / 0.4f;
+		AddSlashEffect(maxTime, itemUseTime, (int)(maxTime + 1));
+	}
+
+	public virtual void Attack_RotativeSwing(Vector2 mouseDir, float meleeSpeed)
+	{
+		Vector2 mouseDir_90Deg = mouseDir.SafeNormalize(Vector2.zeroVector).RotatedBy(MathHelper.PiOver2);
+		RotatedAxis = new Vector3(mouseDir_90Deg, Main.rand.NextFloat(0.2f, 1f));
 		RotatedAxis = Vector3.Normalize(RotatedAxis);
 		MainAxis = new Vector3(-mouseDir * (60 + GetWeaponLength()), 0);
 		MathUtils.RotateToPerpendicular(RotatedAxis, ref MainAxis);
 		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction * Owner.gravDir;
-		var ss = new SoundStyle(ModAsset.TrueMeleeSlash_Mod);
-		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed), Projectile.Center);
+	}
 
-		float itemUseTime = Owner.HeldItem.useTime;
-		float maxTime = itemUseTime / 0.4f;
-		AddSlashEffect(maxTime, itemUseTime, (int)(maxTime + 1));
+	public virtual void Attack_2_Side_Swing(Vector2 mouseDir, float meleeSpeed)
+	{
+		Vector2 mouseDir_2side = new Vector2(Math.Sign(mouseDir.X) * 30, 1f).NormalizeSafe();
+		RotatedAxis = new Vector3(mouseDir_2side, 100f);
+		RotatedAxis = Vector3.Normalize(RotatedAxis);
+		MainAxis = new Vector3(-mouseDir_2side * (60 + GetWeaponLength()), 0);
+		MathUtils.RotateToPerpendicular(RotatedAxis, ref MainAxis);
+		RotateSpeed = (float)BaseMeleeSpeed * meleeSpeed * Owner.direction * Owner.gravDir * 0.75f;
 	}
 
 	public virtual void AddSlashEffect(float maxTime, float nextAttackTime, int trailMax)
@@ -328,16 +344,25 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 	}
 
+	/// <summary>
+	/// Only for developers to adjust the behavior. Will not be called every tick, only when the projectile is spawned or when the attack is triggered. You can use it to adjust the MainAxis, RotatedAxis, RotateSpeed, etc. to make the attack look better. You can also use it to test new features without affecting the normal behavior of the projectile.
+	/// </summary>
 	public virtual void DevelopersAdjust()
 	{
 	}
 
+	/// <summary>
+	/// For developers only; allow weapon orientation to follow the mouse pointer(<see cref="MainAxis"/> maintaining length at 240);
+	/// </summary>
 	public void FollowMouse()
 	{
 		Vector3 toMouse = new Vector3(Main.MouseScreen - new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f, 0) - new Vector3(0, 0, CenterZ * 0.1f);
 		MainAxis = Vector3.Normalize(toMouse) * 240f;
 	}
 
+	/// <summary>
+	/// Rotate the weapon around the 3D axis pointing to the mouse.
+	/// </summary>
 	public void RotatedByMouseAxis()
 	{
 		float value = (MathF.Sin((float)Main.time * 0.13f) + 1) / 2f;
