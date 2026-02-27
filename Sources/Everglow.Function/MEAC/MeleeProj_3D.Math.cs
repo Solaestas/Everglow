@@ -23,20 +23,20 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	{
 		Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 		return
-			Matrix.CreateTranslation(new Vector3(0, 0, -400))
+			Matrix.CreateTranslation(new Vector3(0, 0, 500f * 1 / MathF.Tan(MeleeProj_3D_Configs.AngleofFOV * 0.5f) - 1625f))
 						* Matrix.CreateLookAt(
-					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / 1f, 0),
-					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / 1f, 500),
-					new Vector3(0, 1, 0))
+					new Vector3((Projectile.Center.X - lookat.X) / 1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
+					new Vector3((Projectile.Center.X - lookat.X) / 1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
+					new Vector3(0, -1, 0))
 			;
 	}
 
 	public Vector2 Project(Vector3 point, Matrix ProjectionMatrix, [System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = "")
 	{
 
-		if ((callerFilePath.Contains("MeleeProj_3D.Draw.cs") || callerFilePath.Contains("MeleeProj_3D.Posture.cs") )&& MeleeProj_3D_Configs.IsMeleeWeaponProjectBindWithScreen_Draw)
+		if ((callerFilePath.Contains("MeleeProj_3D.Draw.cs") || callerFilePath.Contains("MeleeProj_3D.Posture.cs")) && MeleeProj_3D_Configs.IsMeleeWeaponProjectBindWithScreen_Draw)
 		{
-			return ProjectBindWithScreen(point, ProjectionMatrix)*0.75f;
+			return ProjectBindWithScreen(point, ProjectionMatrix) * 0.75f;
 		}
 		if (callerFilePath.Contains("MeleeProj_3D.Behavior.cs") && MeleeProj_3D_Configs.IsMeleeWeaponProjectBindWithScreen_Behavior)
 		{
@@ -83,7 +83,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		if (homogenousPoint.W != 0)
 		{
 			float xNDC = -homogenousPoint.X / homogenousPoint.W;
-			float yNDC = homogenousPoint.Y / homogenousPoint.W;
+			float yNDC = -homogenousPoint.Y / homogenousPoint.W;
 
 			float xScreen = xNDC * Main.screenWidth / 2f;
 			float yScreen = yNDC * Main.screenHeight / 2f;

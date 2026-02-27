@@ -23,7 +23,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public Matrix ProjectionMatrix()
 	{
 		 return Matrix.CreatePerspectiveFieldOfView(
-			MathHelper.PiOver4,
+			MeleeProj_3D_Configs.AngleofFOV,
 			Main.screenWidth / (float)Main.screenHeight,
 			0.1f,
 			2000f);
