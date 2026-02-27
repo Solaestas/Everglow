@@ -23,11 +23,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	{
 		Vector2 lookat = Main.screenPosition + Main.ScreenSize.ToVector2() / 2;
 		return
-			Matrix.CreateTranslation(new Vector3(0, 0, 500f * 1 / MathF.Tan(MeleeProj_3D_Configs.AngleofFOV * 0.5f) - 1625f))
+			Matrix.CreateTranslation(new Vector3(0, 0, 500f * 1 / MathF.Tan(MeleeProj_3D_Configs.AngleofFOV * 0.5f) - 1125f))
 						* Matrix.CreateLookAt(
-					new Vector3((Projectile.Center.X - lookat.X) / 1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
-					new Vector3((Projectile.Center.X - lookat.X) / 1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
-					new Vector3(0, -1, 0))
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 500),
+					new Vector3((Projectile.Center.X - lookat.X) / -1f, (Projectile.Center.Y - lookat.Y) / -1f, 0),
+					new Vector3(0, 1, 0))
 			;
 	}
 
@@ -53,7 +53,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		int Size = Math.Min(Main.screenWidth, Main.screenHeight);
 
-		float SizeCorrectionFlag = 1000f / Main.screenHeight; // 1000 is a randomly made-up magic number
+		float SizeCorrectionFlag = 1000f / Main.screenHeight *  MeleeProj_3D_Configs.AngleofFOV / MathHelper.PiOver4; // 1000 is a randomly made-up magic number
 
 		// Normalized Device Coordinates
 		if (homogenousPoint.W != 0)
