@@ -14,11 +14,16 @@ public class MissionGlobalNPC : GlobalNPC
 	/// </summary>
 	public static event Action<NPC> GlobalOnKillNPCEvent;
 
+	public static void TriggerOnKillNPCEvent(NPC npc)
+	{
+		OnKillNPCEvent.Invoke(npc);
+	}
+
 	public override void OnKill(NPC npc)
 	{
 		if (Main.netMode == NetmodeID.SinglePlayer)
 		{
-			ClientOnKill(npc);
+			SingleOnKill(npc);
 		}
 		else if (Main.netMode == NetmodeID.Server)
 		{
@@ -30,13 +35,13 @@ public class MissionGlobalNPC : GlobalNPC
 	{
 		if (npc.lastInteraction == Main.myPlayer && !NetUtils.IsServer)
 		{
-			OnKillNPCEvent?.Invoke(npc);
+			//OnKillNPCEvent?.Invoke(npc);
 		}
 
 		return base.SpecialOnKill(npc);
 	}
 
-	public void ClientOnKill(NPC npc)
+	public void SingleOnKill(NPC npc)
 	{
 		GlobalOnKillNPCEvent?.Invoke(npc);
 	}

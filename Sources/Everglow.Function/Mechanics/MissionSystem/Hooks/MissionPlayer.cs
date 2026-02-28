@@ -1,15 +1,22 @@
 using Everglow.Commons.Mechanics.MissionSystem.Core;
 using Everglow.Commons.Mechanics.MissionSystem.Enums;
 using Everglow.Commons.Mechanics.MissionSystem.Tests;
+using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.MissionSystem.Hooks;
 
 public class MissionPlayer : ModPlayer
 {
+	/// <summary>
+	/// Called on local client only.
+	/// </summary>
 	public static event Action<Item> OnPickupEvent;
 
-	public static event Action<Item> GlobalOnPickupEvent;
+	/// <summary>
+	/// Called on local client only.
+	/// </summary>
+	public static event Action<Player, Item> OnDropSelectedItemEvent;
 
 	private MissionManagerData missionManagerData;
 
@@ -18,6 +25,11 @@ public class MissionPlayer : ModPlayer
 	/// <br/>Set to <c>true</c> after data applying, to <c>false</c> after player loading.
 	/// </summary>
 	private bool missionManagerDataInitialized = false;
+
+	public override void Load()
+	{
+		On_Player.DropSelectedItem_int_refItem += On_Player_DropSelectedItem_int_refItem;
+	}
 
 	public override void OnEnterWorld()
 	{
@@ -62,18 +74,26 @@ public class MissionPlayer : ModPlayer
 
 	public override bool OnPickup(Item item)
 	{
-		if (Player.whoAmI == Main.myPlayer)
-		{
-			OnPickupEvent?.Invoke(item);
-		}
-
-		GlobalOnPickupEvent?.Invoke(item);
-
+		OnPickupEvent?.Invoke(item);
 		return true;
+	}
+
+	private void On_Player_DropSelectedItem_int_refItem(On_Player.orig_DropSelectedItem_int_refItem orig, Player self, int slot, ref Item theItemWeDrop)
+	{
+		orig(self, slot, ref theItemWeDrop);
+		OnDropSelectedItemEvent?.Invoke(self, theItemWeDrop);
 	}
 
 	public override void OnConsumeAmmo(Item weapon, Item ammo)
 	{
 		MissionGlobalItem.InvokeOnConsumeItemEvent(ammo, Player);
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if (!NetUtils.IsServer && Player.whoAmI == Main.myPlayer && !target.active)
+		{
+			MissionGlobalNPC.TriggerOnKillNPCEvent(target);
+		}
 	}
 }

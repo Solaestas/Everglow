@@ -139,23 +139,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// <remarks>
 	/// Should only be changed in <see cref="MissionManager"/> to keep the mission syncing to its pool collection.
 	/// </remarks>
-	public PoolType PoolType
-	{
-		get => poolType;
-		set
-		{
-			if (value == PoolType.Accepted)
-			{
-				Activate();
-			}
-			else
-			{
-				Deactivate();
-			}
-
-			poolType = value;
-		}
-	}
+	public PoolType PoolType { get; set; }
 
 	/// <summary>
 	/// 任务类型
@@ -339,7 +323,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	public virtual MissionIconGroup GetIcons(MissionIconGroup iconGroup)
 	{
 		iconGroup.Add(MissionSourceIcon.Create(Source, SubSource));
-		for(var i = Objectives.First; i != null; i = i.Next)
+		for (var i = Objectives.First; i != null; i = i.Next)
 		{
 			i.GetObjectivesIcon(iconGroup);
 		}
