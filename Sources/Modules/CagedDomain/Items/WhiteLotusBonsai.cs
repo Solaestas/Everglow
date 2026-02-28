@@ -10,7 +10,7 @@ public class WhiteLotusBonsai : ModItem
         Item.height = 64;
         Item.maxStack = 999;
         Item.value = 10000;
-        Item.rare = ItemUseStyleID.Swing;
+        Item.rare = ItemRarityID.Blue;
         Item.autoReuse = true;
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = true;

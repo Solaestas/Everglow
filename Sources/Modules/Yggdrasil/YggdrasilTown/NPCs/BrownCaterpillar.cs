@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Miscs;
-using Everglow.Yggdrasil.Common.NPCs;
+using Everglow.Commons.Templates.Enemies;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
@@ -13,6 +13,11 @@ public class BrownCaterpillar : Caterpillar
 	public override void SetStaticDefaults()
 	{
 		NPCSpawnManager.RegisterNPC(Type);
+	}
+
+	public override void SetDefaults()
+	{
+		DustType = ModContent.DustType<VerdantBlood>();
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
