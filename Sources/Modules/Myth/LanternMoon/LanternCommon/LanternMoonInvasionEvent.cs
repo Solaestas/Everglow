@@ -185,33 +185,33 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public int SwitchMusic()
 	{
-		if (Wave < 15 || (Wave == 15 && !Boss15Started))
-		{
-			if (MusicTimer < 48 * 60)
-			{
-				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Head_Mod);
-			}
-			else
-			{
-				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
-			}
-		}
-		if (Wave >= 15 && Boss15Started)
-		{
-			if (MusicTimer < 34 * 60)
-			{
-				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Head_Mod);
-			}
-			else if(!Boss15Ended)
-			{
-				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Loop_Mod);
-			}
-			else
-			{
-				return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
-			}
-		}
-		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
+		//if (Wave < 15 || (Wave == 15 && !Boss15Started))
+		//{
+		//	if (MusicTimer < 48 * 60)
+		//	{
+		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Head_Mod);
+		//	}
+		//	else
+		//	{
+		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
+		//	}
+		//}
+		//if (Wave >= 15 && Boss15Started)
+		//{
+		//	if (MusicTimer < 34 * 60)
+		//	{
+		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Head_Mod);
+		//	}
+		//	else if(!Boss15Ended)
+		//	{
+		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Loop_Mod);
+		//	}
+		//	else
+		//	{
+		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
+		//	}
+		//}
+		return MusicLoader.GetMusicSlot(ModAsset.Silent_30s_Mod);
 	}
 
 	public string GetWaveEnemiesMessage()
