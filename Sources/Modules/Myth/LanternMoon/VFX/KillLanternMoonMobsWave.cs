@@ -1,7 +1,7 @@
 namespace Everglow.Myth.LanternMoon.VFX;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
-public class RedLanternWave : Visual
+public class KillLanternMoonMobsWave : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
@@ -33,19 +33,45 @@ public class RedLanternWave : Visual
 		for (int r = 0; r <= count; r++)
 		{
 			Vector2 radius = new Vector2(Range, 0).RotatedBy(r * MathHelper.TwoPi / count);
+			Vector2 endPos = radius * 0.75f;
+			float endCoord = 1;
+			if (radius.Length() < 200)
+			{
+				endPos = Vector2.zeroVector;
+				endCoord = radius.Length() / 200f;
+			}
+
 			bars.Add(Position + radius, drawColor, new Vector3(r / (float)count * 3, 0, 0));
-			bars.Add(Position + radius * 0.5f, drawColor, new Vector3(r / (float)count * 3, 1, 0));
+			bars.Add(Position + endPos, drawColor, new Vector3(r / (float)count * 3, endCoord, 0));
 		}
 		Ins.Batch.Draw(Commons.ModAsset.Wave_full_black.Value, bars, PrimitiveType.TriangleStrip);
 
 		bars = new List<Vertex2D>();
-		drawColor = Color.Lerp(new Color(1f, 0f, 0f, 0f), new Color(1f, 0.9f, 0.6f, 0),  MathF.Pow(Fade, 2)) * Fade;
+		drawColor = Color.Lerp(new Color(0.5f, 0f, 0f, 0f), new Color(1f, 0.3f, 0.3f, 0),  MathF.Pow(Fade, 2)) * Fade;
 		for (int r = 0; r <= count; r++)
 		{
 			Vector2 radius = new Vector2(Range, 0).RotatedBy(r * MathHelper.TwoPi / count);
+			Vector2 endPos = radius * 0.75f;
+			float endCoord = 1;
+			if (radius.Length() < 200)
+			{
+				endPos = Vector2.zeroVector;
+				endCoord = radius.Length() / 200f;
+			}
+
 			bars.Add(Position + radius, drawColor, new Vector3(r / (float)count * 3, 0, 0));
-			bars.Add(Position + radius * 0.5f, drawColor, new Vector3(r / (float)count * 3, 1, 0));
+			bars.Add(Position + endPos, drawColor, new Vector3(r / (float)count * 3, endCoord, 0));
 		}
 		Ins.Batch.Draw(Commons.ModAsset.Wave_full.Value, bars, PrimitiveType.TriangleStrip);
+
+		bars = new List<Vertex2D>();
+		drawColor = Color.Lerp(new Color(0.5f, 0f, 0f, 0f), new Color(1f, 0.2f, 0.1f, 0), MathF.Pow(Fade, 2)) * Fade;
+		for (int r = 0; r <= count; r++)
+		{
+			Vector2 radius = new Vector2(Range, 0).RotatedBy(r * MathHelper.TwoPi / count);
+			bars.Add(Position + radius * 0.96f, drawColor, new Vector3(r / (float)count * 3, Range * 0.001f * 0.96f, 0));
+			bars.Add(Position + radius * 0.25f, drawColor * 0, new Vector3(r / (float)count * 3, Range * 0.001f * 0.23f, 0));
+		}
+		Ins.Batch.Draw(Commons.ModAsset.Noise_flame_3.Value, bars, PrimitiveType.TriangleStrip);
 	}
 }

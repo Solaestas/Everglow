@@ -138,7 +138,8 @@ public class LanternGhostKing : LanternMoonNPC
 				lanternMoonNPCCount++;
 			}
 		}
-		return lanternMoonNPCCount <= 1;
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		return lanternMoonNPCCount <= 1 && musicSystem.Wave15StartTimer >= 32 * 60 - 2;
 	}
 
 	public float GoldenShieldBreakBloomValueFunction()
@@ -160,6 +161,11 @@ public class LanternGhostKing : LanternMoonNPC
 		UpdateDrawParameter();
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		if(musicSystem.Wave15StartTimer == 15 * 60)
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 150), Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 75000, 0, Main.myPlayer);
+		}
 		if (GoldenShieldBreakEffectTimer > 0)
 		{
 			GoldenShieldBreakEffectTimer--;
@@ -235,11 +241,6 @@ public class LanternGhostKing : LanternMoonNPC
 			}
 			CheckPlayerTouchRing();
 		}
-		if(LanternMoon.Boss15Started && LanternMoon.MusicTimer == 14 * 60)
-		{
-			//StartMainMelody();
-		}
-
 		if (Phase == 1)
 		{
 			// 闪烁金线 ai1借用为晃动力
@@ -346,31 +347,7 @@ public class LanternGhostKing : LanternMoonNPC
 	public void FormalStartEffect()
 	{
 		LanternMoon.Boss15Started = true;
-		LanternMoon.MusicTimer = 0;
 		NPC.dontTakeDamage = false;
-		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-		for(int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
-		{
-			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
-		}
-		//musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Accompaniment_Loop_Mod, 60, true);
-		//musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Percussion_Loop_Mod, 60, true);
-		//musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_15_Transition_Mod, false);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_15_Accompaniment_Loop_Mod, true);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_15_Melody_Loop_Mod, true);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_15_Percussion_Loop_Mod, true);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_15_Transition_Mod, false);
-	}
-
-	public void StartMainMelody()
-	{
-		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-		for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
-		{
-			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
-		}
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_15_Melody_Head_Mod, false);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_15_Transition_Mod, false);
 	}
 
 	public void BrakeGoldenShieldEffect()

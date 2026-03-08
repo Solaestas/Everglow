@@ -172,6 +172,7 @@ public abstract class MusicHelper : ModSystem
 
 		var dInst = new DynamicSoundEffectInstance(soundTrackInfo.WavFrequency, wavChannels);
 		soundTrackInfo.Track = dInst;
+		StartMusicEffect(path);
 		return soundTrackInfo;
 	}
 
@@ -257,6 +258,17 @@ public abstract class MusicHelper : ModSystem
 							bands[k] = bands[k] / 100f;
 						}
 						inst.FFTBands = bands;
+						if(inst.VFX is not null)
+						{
+							inst.VFX.Visible = true;
+						}
+					}
+					else
+					{
+						if (inst.VFX is not null)
+						{
+							inst.VFX.Visible = false;
+						}
 					}
 				}
 			}
@@ -283,6 +295,10 @@ public abstract class MusicHelper : ModSystem
 	{
 		UpdateMusic();
 		base.PreUpdateTime();
+	}
+
+	public virtual void StartMusicEffect(string path)
+	{
 	}
 
 	public virtual void EndMusicEffect(string path)

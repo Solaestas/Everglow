@@ -9,8 +9,6 @@ namespace Everglow.Myth.LanternMoon.LanternCommon;
 
 public class LanternMoonInvasionEvent : ReplicaEvent
 {
-	public int MusicTimer;
-
 	public bool Boss15Started = false;
 
 	public bool Boss15Ended = false;
@@ -37,7 +35,6 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public void Initialization()
 	{
-		MusicTimer = 0;
 		Boss15Started = false;
 		Boss15Ended = false;
 
@@ -161,8 +158,32 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 	public void StartMusic()
 	{
 		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_Accompaniment_Head_Mod, false);
-		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_Percussion_Head_Mod, false);
+		musicSystem.Wave15StartTimer = 360000;
+		for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
+		{
+			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
+		}
+		if(Wave <= 14)
+		{
+			musicSystem.StartMusic(ModAsset.LanternMoonMusic_Pre15_Accompaniment_Head_Mod, 3, false);
+			musicSystem.StartMusic(ModAsset.LanternMoonMusic_Pre15_Percussion_Head_Mod, 3, false);
+		}
+		else if(Wave == 15)
+		{
+			musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Accompaniment_Loop_Mod, 3, true);
+			musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Melody_Loop_Mod, 3, true);
+			musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Percussion_Loop_Mod, 3, true);
+		}
+	}
+
+	public void StartWave15Music()
+	{
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		musicSystem.Wave15StartTimer = 0;
+		for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
+		{
+			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
+		}
 	}
 
 	public void EndMusic()
@@ -180,6 +201,7 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 			}
 			musicSystem.CustomMusicCues[i] = inst;
 		}
+		musicSystem.Wave15StartTimer = 360000;
 	}
 
 	public bool ShouldReinitialize()
@@ -196,7 +218,6 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		{
 			StartMusic();
 		}
-		MusicTimer++;
 		if (Main.dayTime)
 		{
 			innerActive = false;
@@ -276,13 +297,19 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public void UpdateWave15()
 	{
-		if (Wave15Boss == null || !Wave15Boss.active || Wave15Boss.type != ModContent.NPCType<LanternGhostKing>())
+		if ((Wave15Boss == null || !Wave15Boss.active || Wave15Boss.type != ModContent.NPCType<LanternGhostKing>()) && innerActive)
 		{
 			int x0 = (int)(Main.screenPosition.X - Main.offScreenRange - 150);
 			int x1 = (int)(Main.screenPosition.X + Main.screenWidth + Main.offScreenRange + 150);
 			int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
 
 			Wave15Boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<LanternGhostKing>());
+			LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+			if (musicSystem is not null)
+			{
+				musicSystem.Wave15StartTimer = 0;
+				StartWave15Music();
+			}
 		}
 		else
 		{

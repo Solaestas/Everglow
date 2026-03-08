@@ -12,6 +12,10 @@ public class VisualizedMusicTrack : Visual
 {
 	public SoundTrackInfo MusicCue;
 
+	public int OldMusicPos = 0;
+
+	public int PauseTime = 0;
+
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
 	public override void Update()
@@ -20,6 +24,19 @@ public class VisualizedMusicTrack : Visual
 		{
 			Active = false;
 		}
+		if ((int)MusicCue.WavReader.BaseStream.Position == OldMusicPos)
+		{
+			PauseTime++;
+		}
+		else
+		{
+			PauseTime = 0;
+		}
+		if(PauseTime >= 60)
+		{
+			Active = false;
+		}
+		OldMusicPos = (int)MusicCue.WavReader.BaseStream.Position;
 	}
 
 	public override void Draw()
