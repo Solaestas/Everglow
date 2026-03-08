@@ -40,6 +40,7 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		MusicTimer = 0;
 		Boss15Started = false;
 		Boss15Ended = false;
+
 		// Total: 40 Waves
 		ScoreRequireOfWave[0] = 25;
 		ScoreRequireOfWave[1] = 40;
@@ -148,6 +149,39 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		base.OnActivate();
 	}
 
+	/// <summary>
+	/// Disable vanilla music, use empty ogg instead.
+	/// </summary>
+	/// <returns></returns>
+	public int SwitchMusic()
+	{
+		return MusicLoader.GetMusicSlot(ModAsset.SilentOGG_Mod);
+	}
+
+	public void StartMusic()
+	{
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_Accompaniment_Head_Mod, false);
+		musicSystem.PlayMusic(ModAsset.LanternMoonMusic_Pre15_Percussion_Head_Mod, false);
+	}
+
+	public void EndMusic()
+	{
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
+		{
+			var inst = musicSystem.CustomMusicCues[i];
+			var track = inst.Track;
+			if (track != null)
+			{
+				inst.Fade = true;
+				inst.FadeValue = -1f / 300;
+				inst.Track = track;
+			}
+			musicSystem.CustomMusicCues[i] = inst;
+		}
+	}
+
 	public bool ShouldReinitialize()
 	{
 		bool flag0 = Wave == 0 || ScoreRequireOfWave[0] == 0 || Icon == null;
@@ -157,10 +191,16 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 
 	public override void Update()
 	{
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		if (musicSystem is not null && musicSystem.CustomMusicCues.Count <= 0 && innerActive)
+		{
+			StartMusic();
+		}
 		MusicTimer++;
 		if (Main.dayTime)
 		{
 			innerActive = false;
+			EndMusic();
 		}
 		if (ShouldReinitialize())
 		{
@@ -181,37 +221,6 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 	{
 		text = "Lantern Moon";
 		base.ModifyInvasionProgress(ref text, ref c);
-	}
-
-	public int SwitchMusic()
-	{
-		//if (Wave < 15 || (Wave == 15 && !Boss15Started))
-		//{
-		//	if (MusicTimer < 48 * 60)
-		//	{
-		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Head_Mod);
-		//	}
-		//	else
-		//	{
-		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
-		//	}
-		//}
-		//if (Wave >= 15 && Boss15Started)
-		//{
-		//	if (MusicTimer < 34 * 60)
-		//	{
-		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Head_Mod);
-		//	}
-		//	else if(!Boss15Ended)
-		//	{
-		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_15_Loop_Mod);
-		//	}
-		//	else
-		//	{
-		//		return MusicLoader.GetMusicSlot(ModAsset.LanternMoonMusic_Pre15_Loop_Mod);
-		//	}
-		//}
-		return MusicLoader.GetMusicSlot(ModAsset.Silent_30s_Mod);
 	}
 
 	public string GetWaveEnemiesMessage()

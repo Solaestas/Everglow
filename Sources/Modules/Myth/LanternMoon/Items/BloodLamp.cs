@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Events;
+using Everglow.Myth.Common;
 using Everglow.Myth.LanternMoon.LanternCommon;
 
 namespace Everglow.Myth.LanternMoon.Items;
@@ -24,7 +25,6 @@ public class BloodLamp : ModItem
 	public override bool? UseItem(Player player)
 	{
 		EventSystem.Activate<LanternMoonInvasionEvent>();
-
 		return null;
 	}
 
