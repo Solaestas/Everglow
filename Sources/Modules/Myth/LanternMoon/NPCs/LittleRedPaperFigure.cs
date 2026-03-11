@@ -98,6 +98,13 @@ public class LittleRedPaperFigure : LanternMoonNPC
 
 	public override void AI()
 	{
+		if (Main.dayTime)
+		{
+			NPC.aiStyle = -1;
+			NPC.noTileCollide = true;
+			NPC.velocity.Y += 0.1f;
+		}
+
 		NPC.TargetClosest();
 		if (NPC.target == -1)
 		{
@@ -196,6 +203,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 			TeleportCooling--;
 		}
 	}
+
 
 	public void Teleport(Player player)
 	{

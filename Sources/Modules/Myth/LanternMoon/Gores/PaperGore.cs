@@ -20,6 +20,7 @@ public class PaperGore : BurningGore
 		rotateSpeed = velocity.X / 80f;
 		velocity = velocity.RotatedBy(MathF.Sin(timevalue * MathF.PI * 0.025f * ai[0]));
 		velocity += new Vector2(MathF.Sin(timevalue * MathF.PI * 0.035f * ai[0]), Math.Abs(MathF.Cos(timevalue * MathF.PI * 0.035f * ai[0])) * 0.01f);
+		velocity.X *= 0.99f;
 		base.Update();
 
 		if (timevalue > 0.25f)
