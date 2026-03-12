@@ -8,7 +8,8 @@ public class DivineAscend : MeleeItem_3D
 	{
 		Item.damage = 27;
 		Item.knockBack = 3;
-
+		Item.width = 84;
+		Item.height = 84;
 		Item.rare = ItemRarityID.Blue;
 		Item.value = Item.buyPrice(gold: 3);
 

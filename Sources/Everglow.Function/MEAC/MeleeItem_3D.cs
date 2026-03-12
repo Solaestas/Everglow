@@ -16,6 +16,7 @@ public abstract class MeleeItem_3D : ModItem
 		Item.damage = 24;
 		Item.knockBack = 3;
 		Item.useTime = Item.useAnimation = 24;
+		Item.width = Item.height = 48;
 		Item.rare = ItemRarityID.White;
 		Item.value = 15000;
 
@@ -23,7 +24,7 @@ public abstract class MeleeItem_3D : ModItem
 	}
 
 	/// <summary>
-	/// Suggest value: [shoot], damage, useTime, useAnimation, rare, value, knockBack.<br/>
+	/// Suggest value: [shoot], damage, useTime, useAnimation, width, height, rare, value, knockBack.<br/>
 	/// </summary>
 	public virtual void SetCustomDefaults()
 	{
