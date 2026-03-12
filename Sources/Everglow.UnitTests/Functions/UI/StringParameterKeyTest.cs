@@ -33,7 +33,7 @@ public class StringParameterKeyTest
 		var key = "TestKey";
 		var StringParameterKey = new StringParameterKey(key);
 
-		Assert.AreNotEqual(key, StringParameterKey);
+		Assert.AreNotEqual(key, StringParameterKey.Value);
 	}
 
 	[TestMethod]
