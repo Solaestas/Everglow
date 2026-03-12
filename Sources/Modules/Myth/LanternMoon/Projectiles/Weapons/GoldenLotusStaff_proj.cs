@@ -12,6 +12,10 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 
 	public int DashTimer = 0;
 
+	public int NoTrailTimer = 0;
+
+	public int CombineForm7Timer = 0;
+
 	public bool SplitInto7 = false;
 
 	public float SplitFade = 1f;
@@ -29,13 +33,15 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 		Projectile.friendly = true;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 10;
+		Projectile.minion = true;
+		Projectile.minionSlots = 1;
 		TrailTexture = Commons.ModAsset.Trail_9.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_9_black.Value;
 	}
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		SplitCooling = Main.rand.Next(360, 600);
+		SplitCooling = Main.rand.Next(120, 180);
 		base.OnSpawn(source);
 	}
 
@@ -63,6 +69,19 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 				return;
 			}
 		}
+		if ((Owner.Center - Projectile.Center).Length() > 2000)
+		{
+			NoTrailTimer = TrailLength * 2;
+			Projectile.Center = Owner.Center;
+		}
+		if (NoTrailTimer > 0)
+		{
+			NoTrailTimer--;
+		}
+		if (CombineForm7Timer > 0)
+		{
+			CombineForm7Timer--;
+		}
 		NPC target = Projectile.FindTargetWithinRange(300);
 		if (target is null)
 		{
@@ -75,6 +94,7 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 				if (AllSubProjsReadyToConbine())
 				{
 					SplitInto7 = false;
+					CombineForm7Timer = TrailLength;
 					Projectile.friendly = true;
 					SplitCooling = Main.rand.Next(360, 600);
 				}
@@ -82,26 +102,19 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 		}
 		else
 		{
+			if ((target.Center - Owner.Center).Length() > 1300)
+			{
+				return;
+			}
 			if (!SplitInto7)
 			{
-				ChaseTarget(target);
-				// Split and hide
-				if (SplitCooling == 0)
+				if (ShouldSplit())
 				{
-					SplitCooling = 9999999;
-					SplitInto7 = true;
-					Projectile.friendly = false;
-					for (int k = 0; k < 7; k++)
-					{
-						Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenLotusStaff_subproj>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner);
-						GoldenLotusStaff_subproj gLSsp = p0.ModProjectile as GoldenLotusStaff_subproj;
-						if (gLSsp is not null)
-						{
-							gLSsp.ParentProj = Projectile;
-							gLSsp.MaxTime = 720;
-							gLSsp.Timer = 0;
-						}
-					}
+					SplitAndHide();
+				}
+				else
+				{
+					ChaseTarget(target);
 				}
 			}
 			else
@@ -109,7 +122,7 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 				IdleMove();
 			}
 		}
-		if(SplitInto7)
+		if (SplitInto7)
 		{
 			if (SplitFade > 0)
 			{
@@ -118,6 +131,23 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 			else
 			{
 				SplitFade = 0f;
+			}
+			if (GetLowDefNPCCount() <= 0)
+			{
+				foreach (var proj in Main.projectile)
+				{
+					if (proj is not null && proj.active && proj.type == ModContent.ProjectileType<GoldenLotusStaff_subproj>())
+					{
+						GoldenLotusStaff_subproj gLSsp = proj.ModProjectile as GoldenLotusStaff_subproj;
+						if (gLSsp is not null && gLSsp.ParentProj == Projectile)
+						{
+							if (gLSsp.Timer < gLSsp.MaxTime - 60)
+							{
+								gLSsp.Timer = gLSsp.MaxTime - 60;
+							}
+						}
+					}
+				}
 			}
 		}
 		else
@@ -133,10 +163,123 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 		}
 	}
 
+	public bool ShouldSplit()
+	{
+		if (SplitCooling == 0)
+		{
+			if (GetLowDefNPCCount() >= 3 && (GetHighDefNPCCount() < 0 || (SameProjCount() > 0 && SameProjHasSplitCount() == 0)))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int SameProjCount()
+	{
+		int count = 0;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj is not null & proj.active && proj.owner == Projectile.owner && proj.type == Type)
+			{
+				if (proj != Projectile)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public int SameProjHasSplitCount()
+	{
+		int count = 0;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj is not null & proj.active && proj.owner == Projectile.owner && proj.type == Type)
+			{
+				if (proj != Projectile)
+				{
+					GoldenLotusStaff_proj gLSp = proj.ModProjectile as GoldenLotusStaff_proj;
+					if (gLSp is not null)
+					{
+						if (gLSp.SplitInto7)
+						{
+							count++;
+						}
+					}
+				}
+			}
+		}
+		return count;
+	}
+
+	public int GetLowDefNPCCount()
+	{
+		int lowDefTargetCount = 0;
+		foreach (var npc in Main.npc)
+		{
+			if (npc is not null && npc.active)
+			{
+				if (npc.CanBeChasedBy(Projectile))
+				{
+					if ((npc.Center - Projectile.Center).Length() < 800 && (npc.Center - Owner.Center).Length() < 1300)
+					{
+						if (npc.defense < 15)
+						{
+							lowDefTargetCount++;
+						}
+					}
+				}
+			}
+		}
+		return lowDefTargetCount;
+	}
+
+	public int GetHighDefNPCCount()
+	{
+		int highDefTargetCount = 0;
+		foreach (var npc in Main.npc)
+		{
+			if (npc is not null && npc.active)
+			{
+				if (npc.CanBeChasedBy(Projectile))
+				{
+					if ((npc.Center - Projectile.Center).Length() < 800 && (npc.Center - Owner.Center).Length() < 1300)
+					{
+						if (npc.defense > 30)
+						{
+							highDefTargetCount++;
+						}
+					}
+				}
+			}
+		}
+		return highDefTargetCount;
+	}
+
+	public void SplitAndHide()
+	{
+		SplitCooling = 9999999;
+		SplitInto7 = true;
+		Projectile.friendly = false;
+		for (int k = 0; k < 7; k++)
+		{
+			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GoldenLotusStaff_subproj>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner);
+			GoldenLotusStaff_subproj gLSsp = p0.ModProjectile as GoldenLotusStaff_subproj;
+			if (gLSsp is not null)
+			{
+				gLSsp.ParentProj = Projectile;
+				gLSsp.MaxTime = 720;
+				gLSsp.Timer = 0;
+			}
+		}
+	}
+
 	public void ChaseTarget(NPC target)
 	{
 		var targetPos = target.Center;
-		Vector2 toNPCTarget = targetPos - Projectile.Center - Projectile.velocity;
+		Vector2 toNPCTarget = targetPos + target.velocity - Projectile.Center - Projectile.velocity;
 		if (toNPCTarget.Length() > 300)
 		{
 			Vector2 targetVel = toNPCTarget.NormalizeSafe() * 15f;
@@ -264,6 +407,17 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 			Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, frame, new Color(1f, 1f, 1f, 0) * value, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
 		}
 		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, drawColor, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		if (CombineForm7Timer > 0)
+		{
+			Texture2D shape = ModAsset.GoldenLotusStaff_proj_shape.Value;
+			Texture2D shape_black = ModAsset.GoldenLotusStaff_proj_shape_black.Value;
+			float value = CombineForm7Timer / 30f;
+			Main.EntitySpriteDraw(shape_black, Projectile.Center - Main.screenPosition, frame, Color.White * value, Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+			if (CombineForm7Timer % 6 < 3)
+			{
+				Main.EntitySpriteDraw(shape, Projectile.Center - Main.screenPosition, frame, Color.Lerp(Color.White * value, drawColor, 0.5f), Projectile.rotation, frame.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+			}
+		}
 	}
 
 	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue)
@@ -284,26 +438,43 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
+		float teleportFade = 1;
+		if (NoTrailTimer > 0)
+		{
+			teleportFade = TrailLength - NoTrailTimer;
+			teleportFade /= 30f;
+			teleportFade = Math.Clamp(teleportFade, 0, 1);
+		}
+		if (CombineForm7Timer > 0)
+		{
+			float value = TrailLength - CombineForm7Timer;
+			value /= 30f;
+			value = Math.Clamp(value, 0, 1);
+			if (value < teleportFade)
+			{
+				teleportFade = value;
+			}
+		}
 		if (style == 1)
 		{
 			Color goldenEnv = Lighting.GetColor(worldPos.ToTileCoordinates(), new Color(0.4f, 0.3f, 0.02f, 0));
 			goldenEnv.A = 0;
 			goldenEnv *= 1.4f;
-			if(DashTimer > 0 && DashTimer < 24)
+			if (DashTimer > 0 && DashTimer < 24)
 			{
 				float value = 1 - DashTimer / 24f;
 				goldenEnv = Color.Lerp(goldenEnv, new Color(1f, 0.9f, 0.6f, 0), value);
 			}
-			return Color.Lerp(goldenEnv, Color.Transparent, factor) * SplitFade;
+			return Color.Lerp(goldenEnv, Color.Transparent, factor) * SplitFade * teleportFade;
 		}
 		if (style == 0)
 		{
-			return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1) * 0.25f * SplitFade;
+			return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1) * 0.25f * SplitFade * teleportFade;
 		}
 		if (style == 2)
 		{
 			Color warpColor = base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
-			warpColor.B = (byte)(warpColor.B * SplitFade);
+			warpColor.B = (byte)(warpColor.B * SplitFade * teleportFade);
 			if (SplitFade == 0)
 			{
 				warpColor *= 0;

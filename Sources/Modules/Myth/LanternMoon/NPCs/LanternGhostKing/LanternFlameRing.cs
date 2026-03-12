@@ -89,9 +89,9 @@ public class LanternFlameRingDust : Visual
 		for (int i = 0; i <= 500; i++)
 		{
 			Vector2 pos = center + new Vector2(Radius, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
-			Vector2 innerrPos = center + new Vector2(Radius - width * 0.3f, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
+			Vector2 innerPos = center + new Vector2(Radius - width * 0.3f, 0).RotatedBy(i / 500f * MathHelper.TwoPi);
 			bars.Add(pos, color, new Vector3(i / 100f + 0.3f + timeValue * 2, 0.5f, 0 + timeValue));
-			bars.Add(innerrPos, new Color(0f, 0f, 0f, 0), new Vector3(i / 100f + 0.36f + timeValue * 2, 1f, 0.05f + timeValue));
+			bars.Add(innerPos, new Color(0f, 0f, 0f, 0), new Vector3(i / 100f + 0.36f + timeValue * 2, 1f, 0.05f + timeValue));
 		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}

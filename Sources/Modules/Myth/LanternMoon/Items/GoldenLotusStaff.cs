@@ -1,3 +1,4 @@
+using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 using Terraria.DataStructures;
 
@@ -33,6 +34,7 @@ public class GoldenLotusStaff : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
+		player.AddBuff(ModContent.BuffType<GoldenLotusStaff_Buff>(), 6);
 		return base.Shoot(player, source, position, velocity, type, damage, knockback);
 	}
 }

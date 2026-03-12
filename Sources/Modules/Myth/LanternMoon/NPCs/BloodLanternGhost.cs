@@ -108,6 +108,21 @@ public class BloodLanternGhost : LanternMoonNPC
 			}
 		}
 		Lighting.AddLight(NPC.Center, new Vector3(1f, 0.3f * MathF.Sin(Timer * 0.03f) + 0.3f, 0.3f * MathF.Cos(Timer * 0.03f) + 0.3f) * 0.6f);
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc != NPC)
+			{
+				if (npc.type == ModContent.NPCType<NPCs.LanternGhostKing.LanternGhostKing>())
+				{
+					Vector2 v0 = NPC.Center - npc.Center;
+					if (v0.Length() < 400)
+					{
+						NPC.velocity += Vector2.Normalize(v0) * 2.5f;
+						break;
+					}
+				}
+			}
+		}
 		NPC.velocity *= 0.95f;
 		if (Timer > MoveTime)
 		{

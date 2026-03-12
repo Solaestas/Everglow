@@ -1,6 +1,8 @@
 using Everglow.Commons.Mechanics.Events;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Everglow.Myth.LanternMoon.VFX;
+using Spine;
 
 namespace Everglow.Myth.LanternMoon.Items;
 
@@ -33,14 +35,15 @@ public class BloodLamp : ModItem
 		}
 		if(Main.mouseRight && Main.mouseRightRelease)
 		{
-			//LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-			//for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
-			//{
-			//	var inst = musicSystem.CustomMusicCues[i];
-			//	inst.Active = false;
-			//	musicSystem.CustomMusicCues[i] = inst;
-			//}
-			//musicSystem.Wave15StartTimer = 360000;
+			var redWave = new LanternGhostKingPowerAbsorbWave
+			{
+				Position = Main.MouseWorld,
+				Timer = 0,
+				MaxTime = 60 * 8,
+				Active = true,
+				Visible = true,
+			};
+			Ins.VFXManager.Add(redWave);
 		}
 	}
 

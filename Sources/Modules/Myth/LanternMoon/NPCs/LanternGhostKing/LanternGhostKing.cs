@@ -92,6 +92,17 @@ public class LanternGhostKing : LanternMoonNPC
 		};
 		Ins.VFXManager.Add(warp);
 		RingCenter = NPC.Center;
+		for (int t = 0; t < 2; t++)
+		{
+			float value = t - 0.5f;
+			value *= 2;
+			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(-200 * value, 0), Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingPower>(), 0, 0, Main.myPlayer, value);
+			LanternGhostKingPower l0 = p0.ModProjectile as LanternGhostKingPower;
+			if (l0 is not null)
+			{
+				l0.OwnerNPC = NPC;
+			}
+		}
 	}
 
 	public void UpdateDrawParameter()
@@ -139,7 +150,7 @@ public class LanternGhostKing : LanternMoonNPC
 			}
 		}
 		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-		return lanternMoonNPCCount <= 1 && musicSystem.Wave15StartTimer >= 32 * 60 - 2;
+		return lanternMoonNPCCount <= 1 && musicSystem.Wave15StartTimer >= 15 * 60;
 	}
 
 	public float GoldenShieldBreakBloomValueFunction()
@@ -162,9 +173,14 @@ public class LanternGhostKing : LanternMoonNPC
 		NPC.TargetClosest(false);
 		Player player = Main.player[NPC.target];
 		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-		if(musicSystem.Wave15StartTimer == 15 * 60)
+		if (musicSystem.Wave15StartTimer == 14 * 60 + 10)
 		{
 			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 150), Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 75000, 0, Main.myPlayer);
+			NPC.alpha = 180;
+		}
+		if (musicSystem.Wave15StartTimer == 15 * 60)
+		{
+			NPC.alpha = 0;
 		}
 		if (GoldenShieldBreakEffectTimer > 0)
 		{
@@ -206,24 +222,48 @@ public class LanternGhostKing : LanternMoonNPC
 		{
 			NPC.rotation = NPC.velocity.X / 120f;
 			Vector2 v = player.Center + new Vector2((float)Math.Sin(Timer / 40f) * 500f, (float)Math.Sin((Timer + 200) / 40f) * 50f - 350) - NPC.Center;
-			if (NPC.velocity.Length() < 9f)
+			if (musicSystem.Wave15StartTimer < 4 * 60 || musicSystem.Wave15StartTimer > 22 * 60)
 			{
-				NPC.velocity += v.NormalizeSafe() * 0.35f;
+				if (NPC.velocity.Length() < 9f)
+				{
+					NPC.velocity += v.NormalizeSafe() * 0.35f;
+				}
+			}
+			else
+			{
+				NPC.velocity *= 0.8f;
+			}
+
+			if(musicSystem.Wave15StartTimer == 7 * 60)
+			{
+				var redWave = new LanternGhostKingPowerAbsorbWave
+				{
+					Position = NPC.Center + new Vector2(0, 150),
+					Timer = 0,
+					MaxTime = 60 * 8,
+					Active = true,
+					Visible = true,
+				};
+				Ins.VFXManager.Add(redWave);
 			}
 
 			NPC.velocity *= 0.96f;
 			RingCenterTrend = NPC.Center;
-			RingRadiusTrend = 1800;
+			RingRadiusTrend = 900;
 			if (Phase == 1 && NPC.life == NPC.lifeMax)
 			{
 				if (!CanBeginAI())
 				{
 					Timer = 0;
 					NPC.dontTakeDamage = true;
+					if (musicSystem.Wave15StartTimer < 14 * 60)
+					{
+						NPC.alpha = 200;
+					}
 				}
 				else
 				{
-					if(!LanternMoon.Boss15Started)
+					if (!LanternMoon.Boss15Started)
 					{
 						FormalStartEffect();
 					}
@@ -236,7 +276,7 @@ public class LanternGhostKing : LanternMoonNPC
 			{
 				if (RingFade > 0)
 				{
-					RingFade--;
+					RingFade-=10;
 				}
 			}
 			CheckPlayerTouchRing();

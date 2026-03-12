@@ -119,6 +119,21 @@ public class WizardLantern : LanternMoonNPC
 		{
 			Timer = 0;
 		}
+		foreach (NPC npc in Main.npc)
+		{
+			if (npc != null && npc.active && npc != NPC)
+			{
+				if (npc.type == ModContent.NPCType<NPCs.LanternGhostKing.LanternGhostKing>())
+				{
+					Vector2 v0 = NPC.Center - npc.Center;
+					if (v0.Length() < 400)
+					{
+						NPC.velocity += Vector2.Normalize(v0) * 2.5f;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	public override void OnKill()

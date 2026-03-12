@@ -117,8 +117,7 @@ public class ExplosiveLantern_growing : ModNPC
 
 	public void Explosion()
 	{
-		ScreenShaker Gsplayer = Main.player[NPC.target].GetModPlayer<ScreenShaker>();
-		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
+		ShakerManager.AddShaker(NPC.Center, new Vector2(0, -1), 40, 30f, 160, 0.9f, 0.8f, 120);
 		var p = Projectile.NewProjectileDirect(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion>(), 40, 5, NPC.target, 1);
 		p.friendly = false;
 		p.hostile = true;

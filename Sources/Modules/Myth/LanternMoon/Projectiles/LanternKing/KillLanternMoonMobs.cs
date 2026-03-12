@@ -1,5 +1,6 @@
 using Everglow.Myth.LanternMoon.NPCs;
 using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
+using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
 
@@ -8,6 +9,8 @@ namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 {
 	public int Timer = 0;
+
+	public static List<int> KillProjectileType = new List<int>();
 
 	public override void SetDefaults()
 	{
@@ -25,6 +28,7 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
+		EliminateProj();
 		Timer++;
 		base.AI();
 	}
@@ -32,6 +36,24 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		Wave(Projectile.Center);
+		KillProjectileType.Add(ModContent.ProjectileType<BloodLanternGhost_PowerBall>());
+		//KillProjectileType.Add(ModContent.ProjectileType<BloodLanternGhost_PowerBall_Explosion>());
+		KillProjectileType.Add(ModContent.ProjectileType<CurseSpell>());
+		//KillProjectileType.Add(ModContent.ProjectileType<CylindricalLantern_explosion>());
+		KillProjectileType.Add(ModContent.ProjectileType<GreenFlameProj>());
+		KillProjectileType.Add(ModContent.ProjectileType<CylindricalLantern_flame>());
+		KillProjectileType.Add(ModContent.ProjectileType<GreenFlameSharpCrystal>());
+		KillProjectileType.Add(ModContent.ProjectileType<LargeBloodLanternGhost_Matrix_Summon>());
+		KillProjectileType.Add(ModContent.ProjectileType<LargeBloodLanternGhost_Minion>());
+		KillProjectileType.Add(ModContent.ProjectileType<LargeBloodLanternGhost_Tentacles>());
+		KillProjectileType.Add(ModContent.ProjectileType<RedpaperGiantAttackProj>());
+		KillProjectileType.Add(ModContent.ProjectileType<ThunderSpell>());
+		KillProjectileType.Add(ModContent.ProjectileType<ThunderSpell_AttachPlayer>());
+		KillProjectileType.Add(ModContent.ProjectileType<ThunderSpell_Thunder>());
+		KillProjectileType.Add(ModContent.ProjectileType<WitchingSpell>());
+		KillProjectileType.Add(ModContent.ProjectileType<WizardLantern_Matrix_Curse>());
+		KillProjectileType.Add(ModContent.ProjectileType<WizardLantern_Matrix_Thunder>());
+		KillProjectileType.Add(ModContent.ProjectileType<WizardLantern_Matrix_Witching>());
 	}
 
 	public void Wave(Vector2 pos)
@@ -42,7 +64,7 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 			Speed = 60,
 			Range = 0,
 			Timer = 0,
-			MaxTime = 60,
+			MaxTime = 120,
 			SpeedDecay = 1f,
 			Active = true,
 			Visible = true,
@@ -97,6 +119,24 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 		DrawWarpTexCircle_VFXBatch(sb, Timer * 60, width * 10, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 4000f);
 	}
 
+	public void EliminateProj()
+	{
+		float maxDistance = 60 * Timer;
+		foreach (var proj in Main.projectile)
+		{
+			if(proj is not null && proj.active)
+			{
+				if (KillProjectileType.Contains(proj.type))
+				{
+					if ((proj.Center - Projectile.Center).Length() < maxDistance)
+					{
+						proj.Kill();
+					}
+				}
+			}
+		}
+	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float maxDistance = 60 * Timer;
@@ -112,8 +152,23 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 		bool flag = target.ModNPC is not null && target.ModNPC is LanternMoonNPC && target.type != ModContent.NPCType<LanternGhostKing>();
 		if(flag)
 		{
-			//target.active = false;
+			target.value = 0;
 		}
 		return flag;
+	}
+
+	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+	{
+		if(target.life > 0)
+		{
+			target.active = false;
+		}
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<SphereLanternProj>(), 20, 1, Projectile.owner);
+		base.OnHitNPC(target, hit, damageDone);
+	}
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		base.ModifyHitNPC(target, ref modifiers);
 	}
 }

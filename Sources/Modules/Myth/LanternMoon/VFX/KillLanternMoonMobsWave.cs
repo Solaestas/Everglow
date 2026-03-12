@@ -12,13 +12,12 @@ public class KillLanternMoonMobsWave : Visual
 	public float MaxTime;
 	public float SpeedDecay;
 
-	public float Fade => 1 - Timer / MaxTime;
+	public float Fade => 1f;
 
 	public override void Update()
 	{
 		Timer++;
-		Range += Speed;
-		Speed *= SpeedDecay;
+		Range = MathF.Pow(Timer / 90f, 8) * 3600f;
 		if (Timer > MaxTime)
 		{
 			Active = false;
