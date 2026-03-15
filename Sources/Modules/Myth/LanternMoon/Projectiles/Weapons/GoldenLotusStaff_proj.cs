@@ -355,34 +355,37 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		var star = new HitStarAndWave
+		if(target.type != NPCID.TargetDummy && DashTimer > 0)
 		{
-			Active = true,
-			Visible = true,
-			Position = Projectile.Center,
-			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-			MaxTime = Main.rand.Next(20, 30),
-			Scale = Main.rand.NextFloat(1.6f, 2f),
-		};
-		Ins.VFXManager.Add(star);
-		for (int g = 0; g < 12; g++)
-		{
-			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(23f, 40f)).RotatedByRandom(MathHelper.TwoPi);
-			var spark = new HitEffectSpark
+			var star = new HitStarAndWave
 			{
-				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				Position = Projectile.Center,
-				MaxTime = Main.rand.Next(12, 16),
-				DrawColor = new Color(0.8f, 0.8f, 0, 0),
-				LightFlat = 0f,
-				SpeedDecay = 0.9f,
-				GravityAcc = 0.0f,
-				SelfLight = false,
-				Scale = Main.rand.NextFloat(20f, 30f),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(20, 30),
+				Scale = Main.rand.NextFloat(1.6f, 2f),
 			};
-			Ins.VFXManager.Add(spark);
+			Ins.VFXManager.Add(star);
+			for (int g = 0; g < 12; g++)
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(23f, 40f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new HitEffectSpark
+				{
+					Velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					Position = Projectile.Center,
+					MaxTime = Main.rand.Next(12, 16),
+					DrawColor = new Color(0.8f, 0.8f, 0, 0),
+					LightFlat = 0f,
+					SpeedDecay = 0.9f,
+					GravityAcc = 0.0f,
+					SelfLight = false,
+					Scale = Main.rand.NextFloat(20f, 30f),
+				};
+				Ins.VFXManager.Add(spark);
+			}
 		}
 	}
 
