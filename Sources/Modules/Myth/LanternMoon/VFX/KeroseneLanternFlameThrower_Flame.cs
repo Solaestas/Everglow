@@ -18,7 +18,6 @@ public class KeroseneLanternFlameThrower_Flame : Visual
 	{
 		Position += Velocity;
 		Velocity *= 0.9f;
-
 		if (Scale < 160)
 		{
 			Scale += 2f;
@@ -26,6 +25,7 @@ public class KeroseneLanternFlameThrower_Flame : Visual
 		Timer++;
 		if (Collision.SolidCollision(Position - new Vector2(10), 20, 20) || TileUtils.SafeGetTile(Position.ToTileCoordinates()).LiquidAmount > 0)
 		{
+			Velocity *= 0.1f;
 			Timer += 10;
 		}
 		Rotation += RotateSpeed;

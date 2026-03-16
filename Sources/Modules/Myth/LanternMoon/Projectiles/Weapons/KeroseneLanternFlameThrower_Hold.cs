@@ -2,6 +2,8 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.Items;
+using Terraria.Audio;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
@@ -26,6 +28,12 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		TextureRotation = 0;
 		MaxRotationSpeed = 0.05f;
 		DepartLength = 20;
+		DrawOffset = new Vector2(-6, -8);
+	}
+
+	public override void OnSpawn(IEntitySource source)
+	{
+		SoundEngine.PlaySound(new SoundStyle(ModAsset.Flamethrower_begin_Mod), Projectile.Center);
 	}
 
 	public override void AI()
@@ -33,7 +41,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		Timer++;
 		float shootSpeed = GetShootSpeed();
 		Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * shootSpeed;
-		Vector2 pos = Projectile.Center + vel.NormalizeSafe() * (32 - shootSpeed);
+		Vector2 pos = Projectile.Center + vel.NormalizeSafe() * (32 - shootSpeed) + DrawOffset;
 		var sub = new SubProj
 		{
 			Pos = pos,
@@ -48,10 +56,13 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		for (int k = 0; k < ShootProjPos.Count; k++)
 		{
 			var proj = ShootProjPos[k];
-			proj.Pos += proj.Vel;
-			if (proj.Active && (Collision.SolidCollision(proj.Pos - new Vector2(10), 20, 20) || TileUtils.SafeGetTile(proj.Pos.ToTileCoordinates()).LiquidAmount > 0))
+			for(int i = 0;i < 2;i++)
 			{
-				proj.Active = false;
+				proj.Pos += proj.Vel * 0.5f;
+				if (proj.Active && (Collision.SolidCollision(proj.Pos - new Vector2(10), 20, 20) || TileUtils.SafeGetTile(proj.Pos.ToTileCoordinates()).LiquidAmount > 0))
+				{
+					proj.Active = false;
+				}
 			}
 			ShootProjPos[k] = proj;
 		}
@@ -71,8 +82,18 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		}
 		Vector2 mouseToPlayer = Main.MouseWorld - ArmRootPos;
 		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
+		float powerRate = 1;
+		if (player.HeldItem is not null && player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>())
+		{
+			KeroseneLanternFlameThrower kLFT = player.HeldItem.ModItem as KeroseneLanternFlameThrower;
+			powerRate = (kLFT.PowerRate - 0.5f) * 2f;
+		}
 		if (player.controlUseItem)
 		{
+			if (Timer % (int)(45 * 2.5f / (powerRate + 2)) == (int)(15 * 2.5f / (powerRate + 2)))
+			{
+				SoundEngine.PlaySound(new SoundStyle(ModAsset.Flamethrower_cycle_Mod).WithPitchOffset(powerRate), Projectile.Center);
+			}
 			float addRot = -MathF.Asin(Vector3.Cross(new Vector3(mouseToPlayer, 0), new Vector3(new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75), 0)).Z);
 			addRot *= LerpFactorOfRotation;
 			if (Math.Abs(addRot) > MaxRotationSpeed)
@@ -86,16 +107,18 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 			if (Math.Abs(addRot) > 0.02f)
 			{
 				Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * shootSpeed;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60 + DrawOffset, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
 			else if (Timer % 2 == 1)
 			{
 				Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * shootSpeed;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60 + DrawOffset, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 			}
 		}
 		else
 		{
+			SoundEngine.StopTrackedSounds();
+			SoundEngine.PlaySound(new SoundStyle(ModAsset.Flamethrower_end_Mod).WithPitchOffset(Math.Clamp(powerRate, -1, 0)), Projectile.Center);
 		}
 		player.direction = dir;
 	}
@@ -159,7 +182,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 			Main.spriteBatch.Begin(sBS);
 		}
 
-		Main.spriteBatch.Draw(texMain, drawCenter, null, lightColor, rot, texMain.Size() / 2f, 1f, se, 0);
+		Main.spriteBatch.Draw(texMain, drawCenter, null, lightColor, rot, texMain.Size() * 0.5f, 1f, se, 0);
 	}
 
 	public void DrawWarp(VFXBatch spriteBatch)
@@ -168,7 +191,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		{
 			return;
 		}
-		Texture2D warpTex = Commons.ModAsset.Trail_20.Value;
+		Texture2D warpTex = Commons.ModAsset.Trail_21.Value;
 		var bars0 = new List<Vertex2D>();
 		var bars1 = new List<Vertex2D>();
 		var bars2 = new List<Vertex2D>();
@@ -192,7 +215,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		float trailLength = 20;
 
 		// If dark, the Color.White will be proper.
-		float trailWidth = 90;
+		float trailWidth = 158;
 		if (style == 1)
 		{
 			trailWidth = 120;
