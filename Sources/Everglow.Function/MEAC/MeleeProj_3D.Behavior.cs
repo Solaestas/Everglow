@@ -177,6 +177,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void NewAttack()
 	{
+		CurrentAttackType++;
 		if (Main.MouseWorld.X > Owner.Center.X)
 		{
 			Owner.direction = 1;
@@ -192,8 +193,12 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		float meleeSpeed = Owner.meleeSpeed;
 		Attack_RotativeSwing(mouseDir, meleeSpeed);
 
-		var ss = new SoundStyle(ModAsset.TrueMeleeSlash_Mod);
-		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed), Projectile.Center);
+		var ss = new SoundStyle(ModAsset.TrueMeleeSword_Mod);
+		if(CurrentAttackType % 2 == 1)
+		{
+			ss = new SoundStyle(ModAsset.TrueMeleeSwordSwap_Mod);
+		}
+		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed - 1f + Main.rand.NextFloat(-0.15f, 0.15f)), Projectile.Center);
 		float itemUseTime = Owner.HeldItem.useTime;
 		float maxTime = itemUseTime / 0.4f;
 		AddSlashEffect(maxTime, itemUseTime, (int)(maxTime + 1));

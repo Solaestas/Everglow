@@ -13,8 +13,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public void HoldWeapon()
 	{
-		Vector3 currentPos3D = WeaponAxis + new Vector3(0, 0, CenterZ);
-		Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
-		Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, currentPos.ToRotation() - MathHelper.PiOver2);
+		if (Visible)
+		{
+			Vector3 currentPos3D = WeaponAxis + new Vector3(0, 0, CenterZ);
+			Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
+			Owner.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, currentPos.ToRotation() - MathHelper.PiOver2);
+		}
 	}
 }
