@@ -104,6 +104,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Projectile.localNPCHitCooldown = 1;
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.noEnchantmentVisuals = true;
+		Projectile.DamageType = DamageClass.Melee;
 		WeaponLength = 60;
 		BaseMeleeSpeed = 1.4;
 		BaseDecaySpeed = 0.93;
@@ -298,6 +299,13 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void AddDust(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed, float trailFade)
 	{
+		//foreach (var dust in Main.dust)
+		//{
+		//	if (dust is not null && dust.active)
+		//	{
+		//		Main.NewText(dust.type);
+		//	}
+		//}
 		float maxCount = Math.Abs(rotationSpeed) * 100;
 		float rotSpeed = rotationSpeed / maxCount;
 		for (int i = 0; i < maxCount; i++)
@@ -323,13 +331,93 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			}
 
 			// Enchantment Effects
-			if (Main.rand.NextBool(40))
+			EnchantmentDustEffect(oldAxisTip, oldAxisTail, rotationAxis, rotationSpeed, trailFade, Owner.meleeEnchant);
+			if (Owner.magmaStone)
 			{
-				// Vector2 enchantDustPos = Vector2.Min(oldAxisTail, oldAxisTip);
-				// Projectile.EmitEnchantmentVisualsAt(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+				EnchantmentDustEffect(oldAxisTip, oldAxisTail, rotationAxis, rotationSpeed, trailFade, 3);
 			}
 			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTip);
 			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTail);
+		}
+	}
+
+	public virtual void EnchantmentDustEffect(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed, float trailFade, int type)
+	{
+		if (type <= 0)
+		{
+			return;
+		}
+		float maxCount = Math.Abs(rotationSpeed) * 100;
+		float rotSpeed = rotationSpeed / maxCount;
+		int freq = 40;
+		float size = 1f;
+		float rotSpeedMin = 0.2f;
+		float rotSpeedMax = 0.4f;
+		float spinSpeed = 0.01f;
+		int maxTimeMin = 10;
+		int maxTimeMax = 30;
+		switch (type)
+		{
+			case 1:
+				rotSpeedMin = -0.1f;
+				rotSpeedMax = 0.1f;
+				maxTimeMin = 40;
+				maxTimeMax = 60;
+				size = 1.2f;
+				freq = 120;
+				break;
+			case 4:
+				freq = 90;
+				size = 0.5f;
+				break;
+			case 5:
+				freq = 150;
+				size = 0.75f;
+				spinSpeed = 0.05f;
+				break;
+			case 6:
+				freq = 50;
+				size = 0.75f;
+				break;
+			case 7:
+				freq = 100;
+				maxTimeMin = 60;
+				maxTimeMax = 120;
+				break;
+			case 8:
+				rotSpeedMin = -0.05f;
+				rotSpeedMax = 0.05f;
+				maxTimeMin = 30;
+				maxTimeMax = 40;
+				size = 1.2f;
+				freq = 120;
+				break;
+		}
+		if (Main.rand.NextBool(freq))
+		{
+			float mulMaxTime = 1f;
+			if (trailFade < 1f)
+			{
+				mulMaxTime = trailFade;
+			}
+			float randValue = MathF.Sqrt(Main.rand.NextFloat());
+			var melee_dust = new MeleeProj_3D_Dust()
+			{
+				Active = true,
+				Visible = true,
+				Position_Space = oldAxisTip * randValue + oldAxisTail * (1 - randValue),
+				MaxTime = Main.rand.NextFloat(maxTimeMin, maxTimeMax) * mulMaxTime,
+				Scale = Main.rand.NextFloat(0.4f, 0.6f) * size * (randValue + 1f) * 1.6f,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				RotSpeed = rotationSpeed * spinSpeed * Main.rand.NextFloat(0.8f, 1.2f),
+				RotAxis = rotationAxis,
+				ParentProj = this,
+				EnchantmentType = type,
+				ai = new float[] { Main.rand.NextFloat(rotSpeedMin, rotSpeedMax), -2, Main.rand.Next(3), Main.rand.Next(4) },
+			};
+			melee_dust.RegisterBehavior(EnchantmentDustBehavior);
+			melee_dust.RegisterDraw(EnchantmentDustDraw);
+			Ins.VFXManager.Add(melee_dust);
 		}
 	}
 
@@ -337,6 +425,52 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	{
 		dust.RotSpeed *= 0.89f;
 		dust.Scale *= 0.92f;
+		if (dust.Scale < 0.01f)
+		{
+			dust.Active = false;
+			return;
+		}
+	}
+
+	public virtual void EnchantmentDustBehavior(MeleeProj_3D_Dust dust)
+	{
+		Vector3 wldPos3D = dust.Position_Space + new Vector3(0, 0, CenterZ);
+		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix()) + Projectile.Center;
+		float lightMul = 1f;
+		if (dust.MaxTime - dust.Timer < 10)
+		{
+			lightMul = (dust.MaxTime - dust.Timer) / 10f;
+		}
+		dust.Rotation += dust.ai[0];
+		switch (dust.EnchantmentType)
+		{
+			case 1: // Venom
+				break;
+			case 2: // Cursed Flames
+				Lighting.AddLight(wldPos, new Vector3(0.3f, 0.9f, 0.1f) * dust.Scale * lightMul);
+				dust.Position_Space.Y += dust.ai[1];
+				dust.ai[1] *= 0.9f;
+				break;
+			case 3: // Fire
+				Lighting.AddLight(wldPos, new Vector3(1f, 0.5f, 0.15f) * dust.Scale * lightMul);
+				dust.Position_Space.Y += dust.ai[1];
+				dust.ai[1] *= 0.9f;
+				break;
+			case 4: // Gold
+				Lighting.AddLight(wldPos, new Vector3(0.8f, 0.8f, 0.4f) * dust.Scale * lightMul);
+				break;
+			case 5: // Ichor
+				Lighting.AddLight(wldPos, new Vector3(0.8f, 0.8f, 0.1f) * dust.Scale * lightMul * 2);
+				break;
+			case 6: // Nanites
+				Lighting.AddLight(wldPos, new Vector3(0.6f, 0.7f, 0.8f) * dust.Scale * lightMul * 0.75f);
+				break;
+			case 7: // Party
+				dust.Position_Space.Y += 1f;
+				break;
+			case 8: // Poison
+				break;
+		}
 		if (dust.Scale < 0.01f)
 		{
 			dust.Active = false;

@@ -22,12 +22,12 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public Matrix ProjectionMatrix()
 	{
-		 return Matrix.CreatePerspectiveFieldOfView(
-			MeleeProj_3D_Configs.AngleofFOV,
-			Main.screenWidth / (float)Main.screenHeight,
-			0.1f,
-			2000f);
-	} 
+		return Matrix.CreatePerspectiveFieldOfView(
+		   MeleeProj_3D_Configs.AngleofFOV,
+		   Main.screenWidth / (float)Main.screenHeight,
+		   0.1f,
+		   2000f);
+	}
 
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
@@ -123,6 +123,71 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		dustColor *= ReflectionSharpValue * 5f * colorVariation;
 		Ins.Batch.Draw(tex_black, wldPos, null, Color.White * 0.3f, dust.Rotation, tex_black.Size() * 0.5f, dust.Scale, SpriteEffects.None);
 		Ins.Batch.Draw(tex, wldPos, null, dustColor, dust.Rotation, tex.Size() * 0.5f, dust.Scale, SpriteEffects.None);
+	}
+
+	public virtual void EnchantmentDustDraw(MeleeProj_3D_Dust dust)
+	{
+		Vector3 wldPos3D = dust.Position_Space + new Vector3(0, 0, CenterZ);
+		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix()) + Projectile.Center;
+		Texture2D tex = TextureAssets.Dust.Value;
+		Rectangle frame = new Rectangle(0, (int)(dust.ai[2] * 10), 10, 10);
+		Color dustColor = new Color(1f, 1f, 1f, 0.5f);
+		float sizeMul = 1f;
+		if (dust.MaxTime - dust.Timer < 10)
+		{
+			sizeMul = (dust.MaxTime - dust.Timer) / 10f;
+		}
+
+		// Ins.Batch.Draw(tex_black, wldPos, null, Color.White, dust.Rotation, tex_black.Size() * 0.5f, dust.Scale * sizeMul, SpriteEffects.None);
+		switch (dust.EnchantmentType)
+		{
+			case 1: // Venom
+				frame.X = (DustID.Venom % 100) * 10;
+				frame.Y += (DustID.Venom - (DustID.Venom % 100)) / 100 * 30;
+				dustColor = Lighting.GetColor(wldPos.ToTileCoordinates()) * 0.5f;
+				dustColor.A = 150;
+				sizeMul = MathF.Sin(dust.Timer / dust.MaxTime * MathHelper.Pi);
+				break;
+			case 2: // Cursed Flames
+				frame.X = DustID.CursedTorch * 10;
+				break;
+			case 3: // Fire
+				frame.X = DustID.Torch * 10;
+				break;
+			case 4: // Gold
+				frame.X = (DustID.GoldCoin % 100) * 10;
+				frame.Y += (DustID.GoldCoin - (DustID.GoldCoin % 100)) / 100 * 30;
+				dustColor = Lighting.GetColor(wldPos.ToTileCoordinates()) * 0.5f;
+				dustColor.A = 150;
+				break;
+			case 5: // Ichor
+				frame.X = (DustID.Ichor % 100) * 10;
+				frame.Y += (DustID.Ichor - (DustID.Ichor % 100)) / 100 * 30;
+				break;
+			case 6: // Nanites
+				frame.X = (DustID.IceTorch % 100) * 10;
+				frame.Y += (DustID.IceTorch - (DustID.IceTorch % 100)) / 100 * 30;
+				break;
+			case 7: // Party
+				int type = 139; // confetti
+				type += (int)dust.ai[3];
+				frame.X = (type % 100) * 10;
+				frame.Y += (type - (type % 100)) / 100 * 30;
+				dustColor = Lighting.GetColor(wldPos.ToTileCoordinates());
+				if (dust.MaxTime - dust.Timer < 30)
+				{
+					sizeMul = (dust.MaxTime - dust.Timer) / 30f;
+				}
+				break;
+			case 8: // Poison
+				frame.X = (DustID.Poisoned % 100) * 10;
+				frame.Y += (DustID.Poisoned - (DustID.Poisoned % 100)) / 100 * 30;
+				dustColor = Lighting.GetColor(wldPos.ToTileCoordinates()) * 0.5f;
+				dustColor.A = 150;
+				sizeMul = MathF.Sin(dust.Timer / dust.MaxTime * MathHelper.Pi);
+				break;
+		}
+		Ins.Batch.Draw(tex, wldPos, frame, dustColor, dust.Rotation, frame.Size() * 0.5f, dust.Scale * sizeMul, SpriteEffects.None);
 	}
 
 	public void DrawReferenceSphere(float radius = 120f)

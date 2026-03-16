@@ -11,6 +11,8 @@ public class MeleeProj_3D_Dust : Visual
 
 	public Vector3 Position_Space;
 
+	public Queue<Vector3> OldPos_Space;
+
 	public Vector3 RotAxis;
 
 	public MeleeProj_3D ParentProj;
@@ -26,6 +28,8 @@ public class MeleeProj_3D_Dust : Visual
 	public float MaxTime;
 
 	public float[] ai;
+
+	public int EnchantmentType = 0;
 
 	public bool SelfLuminous;
 
