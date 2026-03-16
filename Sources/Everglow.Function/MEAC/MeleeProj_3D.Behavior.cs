@@ -385,6 +385,8 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				size = 0.75f;
 				break;
 			case 7:
+				rotSpeedMin = -0.1f;
+				rotSpeedMax = 0.1f;
 				freq = 100;
 				maxTimeMin = 60;
 				maxTimeMax = 120;
