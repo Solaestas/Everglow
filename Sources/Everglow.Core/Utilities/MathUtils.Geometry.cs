@@ -33,6 +33,110 @@ public static partial class MathUtils
 	}
 
 	/// <summary>
+	/// 2D 多边形与 AABB 是否相交
+	/// </summary>
+	public static bool IntersectsPolygonAABB(List<Vector2> polygonVertices, Vector2 aabbMin, Vector2 aabbMax)
+	{
+		if (polygonVertices == null || polygonVertices.Count < 3)
+		{
+			return false;
+		}
+
+		// 1. 手动计算多边形 AABB，与目标 AABB 快速排斥
+		if (!ComputePolygonAABBAndQuickReject(polygonVertices, aabbMin, aabbMax))
+		{
+			return false;
+		}
+
+		// 2. 多边形任意顶点在 AABB 内
+		foreach (var p in polygonVertices)
+		{
+			if (IsPointInAABB(p, aabbMin, aabbMax))
+			{
+				return true;
+			}
+		}
+
+		// 3. AABB 四个角点是否在多边形内
+		Vector2[] aabbCorners =
+		{
+			new(aabbMin.X, aabbMin.Y),
+			new(aabbMax.X, aabbMin.Y),
+			new(aabbMax.X, aabbMax.Y),
+			new(aabbMin.X, aabbMax.Y),
+		};
+
+		foreach (var c in aabbCorners)
+		{
+			if (IsPointInPolygon(polygonVertices, c))
+			{
+				return true;
+			}
+		}
+
+		// 4. 多边形边 与 AABB 边 是否相交
+		int count = polygonVertices.Count;
+		for (int i = 0; i < count; i++)
+		{
+			Vector2 a = polygonVertices[i];
+			Vector2 b = polygonVertices[(i + 1) % count];
+
+			for (int j = 0; j < 4; j++)
+			{
+				Vector2 c = aabbCorners[j];
+				Vector2 d = aabbCorners[(j + 1) % 4];
+				if (DoLineSegmentsIntersectByOrientation(a, b, c, d))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// 点是否在 AABB 内部（含边界）
+	/// </summary>
+	public static bool IsPointInAABB(Vector2 p, Vector2 aabbMin, Vector2 aabbMax)
+	{
+		return p.X >= aabbMin.X && p.X <= aabbMax.X
+			&& p.Y >= aabbMin.Y && p.Y <= aabbMax.Y;
+	}
+
+	/// <summary>
+	/// 手动计算多边形 AABB，并做快速排斥
+	/// </summary>
+	public static bool ComputePolygonAABBAndQuickReject(List<Vector2> poly, Vector2 aabbMin, Vector2 aabbMax)
+	{
+		float minX = poly[0].X;
+		float maxX = poly[0].X;
+		float minY = poly[0].Y;
+		float maxY = poly[0].Y;
+
+		foreach (var v in poly)
+		{
+			minX = MathF.Min(minX, v.X);
+			maxX = MathF.Max(maxX, v.X);
+			minY = MathF.Min(minY, v.Y);
+			maxY = MathF.Max(maxY, v.Y);
+		}
+
+		// 两个 AABB 不重叠 → 快速返回 false
+		if (maxX < aabbMin.X || minX > aabbMax.X)
+		{
+			return false;
+		}
+
+		if (maxY < aabbMin.Y || minY > aabbMax.Y)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	/// <summary>
 	/// 判断点是否在多边形内（含边界），同时校验多边形有效性（无相交边）
 	/// </summary>
 	/// <param name="polygon">多边形顶点列表（按索引连接，最后一个连0号）</param>

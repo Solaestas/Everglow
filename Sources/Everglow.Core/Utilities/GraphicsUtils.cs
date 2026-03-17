@@ -143,6 +143,113 @@ public static class GraphicsUtils
 	}
 
 	/// <summary>
+	/// 根据输入点的List获得一个使用CatmullRom样条平滑过后的路径
+	/// </summary>
+	/// <param name="origPath"></param>
+	/// <param name="precision">
+	/// null : 根据角度差自动适配取点个数<br/>
+	/// not null ：最少为2
+	/// </param>
+	/// <returns></returns>
+	public static List<Vector3> CatmullRom(IEnumerable<Vector3> origPath, int? precision = null)
+	{
+		int count = origPath.Count();
+		if (count <= 2)
+		{
+			return origPath.ToList();
+		}
+
+		var path = new Vector3[count + 2];
+		var it = origPath.GetEnumerator();
+		int index = 0;
+		while (it.MoveNext())
+		{
+			path[++index] = it.Current;
+		}
+
+		// 头尾增加两个不影响曲线效果的点
+		path[0] = path[1] * 2 - path[2];
+		path[^1] = path[^2] * 2 - path[^3];
+
+		List<Vector3> result = new(count * 3);
+
+		for (int i = 1; i < count; i++)
+		{
+			Vector3 dirCurrent = Vector3.Normalize(path[i] - path[i - 1]);
+			Vector3 dirNext = Vector3.Normalize(path[i + 2] - path[i + 1]);
+
+			float angle = Vector3.Dot(dirCurrent, dirNext);
+
+			// 确保 angle 在 -1 到 1 之间
+			angle = MathHelper.Clamp(angle, -1f, 1f);
+
+			float rotCurrent = MathF.Acos(angle); // 计算夹角
+			float rotNext = rotCurrent; // 根据需要，你可能想用不同的方法计算 rotNext
+
+			int dom;
+
+			if (precision is null)
+			{
+				// 根据当前和下一个节点所代表的向量的旋转差异来增加采样数量
+				if (float.IsNaN(rotCurrent) || float.IsNaN(rotNext))
+				{
+					dom = 2;
+				}
+				else
+				{
+					float dis = Math.Abs(rotCurrent - rotNext);
+					dom = (int)((dis >= MathHelper.Pi ? MathHelper.TwoPi - dis : dis) / 0.22f + 2);
+				}
+			}
+			else
+			{
+				dom = precision.Value;
+			}
+			float factor = 1.0f / dom;
+			for (float j = 0; j < 1.0f; j += factor)
+			{
+				result.Add(Vector3.CatmullRom(path[i - 1], path[i], path[i + 1], path[i + 2], j));
+			}
+		}
+		result.Add(path[^2]);
+		return result;
+	}
+
+	/// <summary>
+	/// Use <see cref="CatmullRom(IEnumerable{Vector3}, int?)"/> to smooth a list of <see cref="Vector3"/>.
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns><c>null</c> if the result is too short to draw.</returns>
+	public static List<Vector3> Smooth(this IEnumerable<Vector3> vectors)
+	{
+		List<Vector3> smoothedTrailVecs = GraphicsUtils.CatmullRom(vectors);
+		var smoothedTrail = smoothedTrailVecs[..^1];
+		if (vectors.Any())
+		{
+			smoothedTrail.Add(vectors.Last());
+		}
+
+		int length = smoothedTrail.Count;
+		if (length <= 3)
+		{
+			return null;
+		}
+
+		return smoothedTrail;
+	}
+
+	/// <summary>
+	/// Use <see cref="CatmullRom(IEnumerable{Vector3}, int?)"/> to smooth a list of <see cref="Vector3"/>.
+	/// </summary>
+	/// <param name="vectors"></param>
+	/// <returns><c>null</c> if the result is too short to draw.</returns>
+	public static bool Smooth(this IEnumerable<Vector3> vectors, out List<Vector3> result)
+	{
+		result = Smooth(vectors);
+		return result is not null;
+	}
+
+	/// <summary>
 	/// 根据输入点的List获得一条贝塞尔曲线
 	/// </summary>
 	/// <param name="origPath"></param>
