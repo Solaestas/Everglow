@@ -1,183 +1,73 @@
-using Everglow.Commons.DataStructures;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
-public class LanternSword_Proj : MeleeProj
+public class LanternSword_Proj : MeleeProj_3D
 {
-	public override void SetDef()
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MeleeProjectiles;
+
+	public override void OnSpawn(IEntitySource source)
 	{
+		EnableSphereCoordDraw = false;
+		SlashColor = new Color(0.85f, 0.02f, 0.06f, 0);
+	}
+
+	public override void SetCustomDefaults()
+	{
+		Projectile.width = 82;
+		Projectile.height = 82;
+		Projectile.tileCollide = false;
+		Projectile.friendly = true;
 		Projectile.aiStyle = -1;
-		Projectile.timeLeft = 30;
-		Projectile.extraUpdates = 1;
-		Projectile.scale = 1f;
-		Projectile.hostile = false;
-		Projectile.friendly = true;
-		Projectile.tileCollide = false;
-		Projectile.ignoreWater = true;
-		Projectile.penetrate = -1;
-		Projectile.usesLocalNPCImmunity = true;
-		Projectile.localNPCHitCooldown = 15;
-		Projectile.DamageType = DamageClass.Melee;
-
-		Projectile.width = 80;
-		Projectile.height = 80;
-		Projectile.tileCollide = false;
-		Projectile.friendly = true;
-		longHandle = false;
-		maxAttackType = 0;
-		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
-		autoEnd = false;
+		Projectile.timeLeft = 5;
+		WeaponLength = 84;
 	}
 
-	public override string TrailShapeTex()
+	public override void HitNPCVFX(float hitRotation, Vector2 hitPos)
 	{
-		return Commons.ModAsset.Melee_Mod;
+		// DivineAscendHitStar dAHS = new DivineAscendHitStar();
+		// dAHS.Active = true;
+		// dAHS.Visible = true;
+		// dAHS.Position = hitPos;
+		// dAHS.Rotation = hitRotation;
+		// dAHS.Scale = 1f;
+		// dAHS.MaxTime = 12;
+		// Ins.VFXManager.Add(dAHS);
+
+		// for (int k = 0; k < 8; k++)
+		// {
+		// DivineAscendHitSpark dAHSp = new DivineAscendHitSpark();
+		// dAHSp.Active = true;
+		// dAHSp.Visible = true;
+		// dAHSp.Position = hitPos;
+		// dAHSp.Scale = Main.rand.NextFloat(0.1f, 0.3f);
+		// dAHSp.MaxTime = Main.rand.NextFloat(30, 60);
+		// dAHSp.Velocity = new Vector2(Main.rand.NextFloat(6, 48), 0).RotatedBy(hitRotation - MathHelper.PiOver2 + Main.rand.NextFloat(-0.5f, 0.5f));
+		// dAHSp.ai = [Main.rand.NextFloat(MathHelper.TwoPi)];
+		// Ins.VFXManager.Add(dAHSp);
+		// }
 	}
 
-	public override string TrailColorTex()
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		return ModAsset.LanternSword_Proj_meleeColor_Mod;
-	}
-
-	public override float TrailAlpha(float factor)
-	{
-		return base.TrailAlpha(factor) * 1.25f;
-	}
-
-	public override BlendState TrailBlendState()
-	{
-		return BlendState.NonPremultiplied;
-	}
-
-	public override void End()
-	{
-		Player player = Main.player[Projectile.owner];
-		player.legFrame = new Rectangle(0, 0, player.legFrame.Width, player.legFrame.Height);
-		player.fullRotation = 0;
-		player.legRotation = 0;
-		player.legPosition = Vector2.Zero;
-		Projectile.Kill();
-		player.GetModPlayer<MEACPlayer>().isUsingMeleeProj = false;
-	}
-
-	public override void AI()
-	{
-		Player player = Main.player[Projectile.owner];
-		base.AI();
-		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
-		Tplayer.HideLeg = true;
-		useSlash = true;
-		float timeMul = 1 / player.meleeSpeed;
-		if (currantAttackType == 0)
+		if(style == 3)
 		{
-			if (timer < 3 * timeMul)// 前摇
+			Color drawColor = new Color(1f, 0.7f, 0.1f, 0);
+			drawColor *= factor * extraValue0;
+			if (!SelfLuminous)
 			{
-				useSlash = false;
-				LockPlayerDir(player);
-				float targetRot = -MathHelper.PiOver2 - player.direction * 0.7f;
-				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(80, targetRot, 2f), 0.7f);
-				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainAxisDirection.ToRotation();
+				Color lightC = Lighting.GetColor(worldPos.ToTileCoordinates());
+				drawColor.R = (byte)(lightC.R * drawColor.R / 255f);
+				drawColor.G = (byte)(lightC.G * drawColor.G / 255f);
+				drawColor.B = (byte)(lightC.B * drawColor.B / 255f);
 			}
-			if (timer == (int)(20 * timeMul))
-			{
-				AttSound(SoundID.Item1);
-			}
-
-			if (timer > 3 * timeMul && timer < 24 * timeMul)
-			{
-				canHit = true;
-				Projectile.rotation += Projectile.spriteDirection * 0.21f / timeMul;
-				mainAxisDirection = Vector2Elipse(80, Projectile.rotation, 0.6f);
-			}
-
-			if (timer > 40 * timeMul)
-			{
-				player.fullRotation = 0;
-				player.legRotation = 0;
-				NextAttackType();
-			}
+			drawColor *= 1.7f;
+			float rot = (worldPos - Projectile.Center).ToRotation() - (float)Main.time * 0.01f;
+			float factorHighlight = factor * 3;
+			drawColor *= MathF.Max(MathF.Pow(Math.Max(0, 0.5f + 0.5f * MathF.Cos(rot * 2)), 16) * 0.4f * ReflectionSharpValue * MathF.Pow(extraValue0, 2), factorHighlight);
+			drawColor.A = 0;
+			return drawColor;
 		}
-	}
-
-	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-	{
-		modifiers.FinalDamage -= target.defense;
-		base.ModifyHitNPC(target, ref modifiers);
-	}
-
-	public override void OnKill(int timeLeft)
-	{
-		Player player = Main.player[Projectile.owner];
-		player.fullRotation = 0;
-	}
-
-	public override void DrawTrail(Color color)
-	{
-		Color lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16));
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
-		var SmoothTrail = new List<Vector2>();
-		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
-		{
-			SmoothTrail.Add(smoothTrail_current[x]);
-		}
-
-		if (slashTrail.Count != 0)
-		{
-			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
-		}
-
-		int length = SmoothTrail.Count;
-		if (length <= 3)
-		{
-			return;
-		}
-
-		Vector2[] trail = SmoothTrail.ToArray();
-		var bars = new List<Vertex2D>();
-
-		for (int i = 0; i < length; i++)
-		{
-			float factor = i / (length + 1f);
-			float w = TrailAlpha(factor);
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.15f * Projectile.scale, lightColor, new Vector3(factor, 1, 0f)));
-			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, lightColor, new Vector3(factor, 0, w)));
-		}
-		bars.Add(new Vertex2D(Projectile.Center + mainAxisDirection * 0.15f * Projectile.scale, lightColor, new Vector3(1, 1, 0f)));
-		bars.Add(new Vertex2D(Projectile.Center + mainAxisDirection * Projectile.scale, lightColor, new Vector3(1, 0, 1)));
-
-		SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
-
-		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
-		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
-
-		MeleeTrail.Parameters["tex0"].SetValue(Commons.ModAsset.Melee.Value);
-		MeleeTrail.Parameters["tex1"].SetValue(ModAsset.LanternSword_Proj_meleeColor.Value);
-		MeleeTrail.CurrentTechnique.Passes[0].Apply();
-
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(sBS);
-	}
-
-	public override void DrawWarp(VFXBatch spriteBatch) => base.DrawWarp(spriteBatch);
-
-	public override void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default, Vector2 drawScale = default, Texture2D glowTexture = null)
-	{
-		drawScale = new Vector2(-0.1f, 1.02f);
-		base.DrawSelf(spriteBatch, lightColor, diagonal, drawScale, glowTexture);
-	}
-
-	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-	{
-		base.OnHitNPC(target, hit, damageDone);
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 	}
 }

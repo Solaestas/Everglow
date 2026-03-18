@@ -7,43 +7,17 @@ namespace Everglow.Myth.LanternMoon.Items;
 /// Mark target with a lantern label.
 /// Do at least 500 damage to a labeled target will remove the label and trigger an explosion.
 /// </summary>
-public class LanternSword : ModItem
+public class LanternSword : MeleeItem_3D
 {
-	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
-
-	public override void SetDefaults()
+	public override void SetCustomDefaults()
 	{
-		Item.useStyle = ItemUseStyleID.Swing;
-		Item.width = 52;
-		Item.height = 56;
-		Item.useAnimation = 16;
-		Item.useTime = 16;
-		Item.knockBack = 3f;
-		Item.damage = 15;
-		Item.rare = ItemRarityID.White;
-		Item.autoReuse = true;
-		Item.UseSound = SoundID.Item1;
-		Item.DamageType = DamageClass.Melee;
-		Item.noUseGraphic = true;
-		Item.noMelee = true;
-		Item.shootSpeed = 5f;
+		Item.damage = 140;
+		Item.knockBack = 3;
+		Item.width = 50;
+		Item.height = 50;
+		Item.rare = ItemRarityID.Lime;
+		Item.value = 15000;
+
 		Item.shoot = ModContent.ProjectileType<LanternSword_Proj>();
-		Item.value = 3600;
-	}
-
-	public override bool CanUseItem(Player player)
-	{
-		Item.useTime = (int)(18f / player.meleeSpeed);
-		Item.useAnimation = (int)(18f / player.meleeSpeed);
-		return player.ownedProjectileCounts[Item.shoot] < 1;
-	}
-
-	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-	{
-		if (player.ownedProjectileCounts[Item.shoot] < 1)
-		{
-			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 0f, 0f);
-		}
-		return false;
 	}
 }

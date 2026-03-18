@@ -148,7 +148,11 @@ public class KeroseneLanternFlameThrower_Shoot : ModProjectile
 		return true;
 	}
 
-	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => base.ModifyHitNPC(target, ref modifiers);
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		target.AddBuff(BuffID.OnFire3, 180);
+		base.ModifyHitNPC(target, ref modifiers);
+	}
 
 	public override bool PreDraw(ref Color lightColor)
 	{
