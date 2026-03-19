@@ -1,5 +1,6 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.Items;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
@@ -12,13 +13,19 @@ public class GildingRevolver_Proj : HandholdProjectile
 
 	public int ReloadCooling = 0;
 
-	public int NormalBulletsCount;
+	public int NormalBulletsCount = 0;
 
-	public int LanternBulletCount;
+	public int LanternBulletCount = 0;
 
 	public int UsedBulletsCount = 0;
 
 	public int LanternBulletTimer = 0;
+
+	public int LanternBulletCooling = 0;
+
+	public int LanternBulletCoolingMax = 600;
+
+	public bool MouseInLanternZone = false;
 
 	public override void SetDef()
 	{
@@ -38,18 +45,48 @@ public class GildingRevolver_Proj : HandholdProjectile
 
 	public override void AI()
 	{
+		NormalBulletsCount = (int)(NormalBulletTimer / 20f);
 		if (ReloadCooling <= 0)
 		{
 			if (NormalBulletTimer < 120)
 			{
-				NormalBulletTimer += 3;
+				NormalBulletTimer += 6;
 			}
 		}
 		else
 		{
 			ReloadCooling--;
 		}
+		if (LanternBulletCooling <= 0)
+		{
+			if (LanternBulletTimer <= 6)
+			{
+				LanternBulletTimer++;
+			}
+			else
+			{
+				LanternBulletCount = 1;
+			}
+		}
+		else
+		{
+			LanternBulletCount = 0;
+			LanternBulletTimer = 0;
+			LanternBulletCooling--;
+		}
 		Timer++;
+		MouseInLanternZone = false;
+		foreach (var proj in Main.projectile)
+		{
+			if (proj is not null && proj.active && proj.type == ModContent.ProjectileType<LanternZone>() && proj.owner == Projectile.owner)
+			{
+				if ((Main.MouseWorld - proj.Center).Length() < 70)
+				{
+					MouseInLanternZone = true;
+					break;
+				}
+			}
+		}
 		base.AI();
 	}
 
@@ -75,29 +112,31 @@ public class GildingRevolver_Proj : HandholdProjectile
 				Projectile.timeLeft = 2;
 			}
 		}
-		if (player.controlUseItem)
+		if (player.controlUseItem && player.altFunctionUse == 0)
 		{
-			ReloadCooling = 30;
 			Projectile.hide = false;
 			ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
-			if (player.itemTime == player.itemTimeMax && NormalBulletTimer >= 20)
+			if (MouseInLanternZone && player.itemTime == player.itemTimeMax)
+			{
+				ShootPhantom();
+			}
+			else if (player.itemTime == player.itemTimeMax && (NormalBulletTimer >= 120 || (ReloadCooling > 0 && NormalBulletTimer >= 6)))
 			{
 				Shoot();
 				NormalBulletTimer -= 20;
+				ReloadCooling = 10;
 			}
 		}
-		else if (player.controlUseTile)
+		else if (player.controlUseItem && player.altFunctionUse == 2)
 		{
 			Projectile.hide = false;
-			if(LanternBulletCount == 0)
+			ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
+			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
+			if (player.itemTime == player.itemTimeMax && LanternBulletCount >= 1)
 			{
-				LanternBulletTimer++;
-				if(LanternBulletTimer > 30)
-				{
-					LanternBulletCount = 1;
-					LanternBulletTimer = 0;
-				}
+				Shoot_RightClick();
+				LanternBulletCooling = LanternBulletCoolingMax;
 			}
 		}
 		else
@@ -118,11 +157,41 @@ public class GildingRevolver_Proj : HandholdProjectile
 		GildingRevolver gildingRevolver = item.ModItem as GildingRevolver;
 		if (gildingRevolver is not null && gildingRevolver.ShootType >= 0)
 		{
-			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * player.HeldItem.shootSpeed;
-			Vector2 addPos = new Vector2(0, -2).RotatedBy(Projectile.rotation - MathHelper.PiOver4);
+			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, gildingRevolver.ShootType, item.damage, item.knockBack, Projectile.owner);
 			UsedBulletsCount++;
+			if(NormalBulletsCount == 6 || NormalBulletsCount == 3)
+			{
+				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed;
+				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternFlameBullet>(), item.damage, item.knockBack, Projectile.owner);
+			}
 		}
+	}
+
+	private void ShootPhantom()
+	{
+		SoundEngine.PlaySound(SoundID.Item101);
+		Player player = Main.player[Projectile.owner];
+		Item item = player.HeldItem;
+		if (item is null)
+		{
+			return;
+		}
+		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe().RotatedByRandom(0.03f) * player.HeldItem.shootSpeed * 1.5f;
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternPhantomBullet>(), (int)(item.damage * 0.7f), item.knockBack, Projectile.owner);
+	}
+
+	private void Shoot_RightClick()
+	{
+		Player player = Main.player[Projectile.owner];
+		Item item = player.HeldItem;
+		if (item is null)
+		{
+			return;
+		}
+		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe() * player.HeldItem.shootSpeed * 1.5f;
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternZoneBullet>(), item.damage, item.knockBack, Projectile.owner);
+		UsedBulletsCount++;
 	}
 
 	public override bool PreDraw(ref Color lightColor)
@@ -150,18 +219,49 @@ public class GildingRevolver_Proj : HandholdProjectile
 		var textureUI = ModAsset.GildingRevolver_Proj_Bullets.Value;
 		Rectangle darkFrame = new Rectangle(0, 0, 92, 30);
 		Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(0, -50), darkFrame, Color.White, 0, darkFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
-		for (int k = 0; k < 6; k++)
+		if (!MouseInLanternZone)
 		{
-			if (NormalBulletTimer < (k + 1) * 20 - 5)
+			for (int k = 0; k < 6; k++)
 			{
-				break;
+				if (NormalBulletTimer < (k + 1) * 20 - 5)
+				{
+					break;
+				}
+				Rectangle normalFrame = new Rectangle(0, 32, 10, 26);
+				if (k % 3 == 2)
+				{
+					normalFrame = new Rectangle(12, 32, 10, 26);
+				}
+				if (NormalBulletTimer < (k + 1) * 20)
+				{
+					normalFrame = new Rectangle(40, 32, 10, 26);
+				}
+				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			}
-			Rectangle normalFrame = new Rectangle(0, 32, 10, 26);
-			if (NormalBulletTimer < (k + 1) * 20)
+		}
+		else
+		{
+			for (int k = 0; k < 6; k++)
 			{
-				normalFrame = new Rectangle(40, 32, 10, 26);
+				Rectangle normalFrame = new Rectangle(68, 32, 10, 26);
+				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			}
-			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+		if (LanternBulletTimer > 2)
+		{
+			Rectangle lanternbulletFrame = new Rectangle(52, 30, 14, 30);
+			if (LanternBulletTimer >= 6)
+			{
+				lanternbulletFrame = new Rectangle(24, 30, 14, 30);
+			}
+			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, -49), lanternbulletFrame, Color.White, 0, lanternbulletFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+		else if (LanternBulletCooling > 0)
+		{
+			Rectangle lanternbulletFrameCooling = new Rectangle(52, 30, 14, 30);
+			int duration = (int)(30f * LanternBulletCooling / LanternBulletCoolingMax);
+			Rectangle lanternbulletFrameCooling_Draw = new Rectangle(52, 60 - duration, 14, duration);
+			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, -50 + 30 - duration), lanternbulletFrameCooling_Draw, Color.White * 0.5f, 0, lanternbulletFrameCooling.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		}
 	}
 }

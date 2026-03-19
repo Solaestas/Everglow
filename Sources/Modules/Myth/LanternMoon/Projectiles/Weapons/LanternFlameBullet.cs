@@ -1,0 +1,43 @@
+namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
+
+public class LanternFlameBullet : ModProjectile
+{
+	public override void SetDefaults()
+	{
+		Projectile.timeLeft = 3600;
+		Projectile.width = 10;
+		Projectile.height = 10;
+		Projectile.friendly = true;
+		Projectile.hostile = false;
+		Projectile.tileCollide = true;
+		Projectile.ignoreWater = false;
+		Projectile.penetrate = 1;
+		Projectile.aiStyle = -1;
+	}
+
+	public override void AI()
+	{
+		Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Torch, Projectile.velocity * 0.3f);
+		dust.noGravity = true;
+		Projectile.rotation = Projectile.velocity.ToRotationSafe();
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.6f, 0.6f));
+	}
+
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		target.AddBuff(BuffID.OnFire3, 300);
+		base.ModifyHitNPC(target, ref modifiers);
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D black = ModAsset.LanternBullet_black.Value;
+		Texture2D bullet = ModContent.Request<Texture2D>(Texture).Value;
+		Texture2D bloom = ModAsset.LanternFlameBullet_bloom.Value;
+
+		Main.EntitySpriteDraw(black, Projectile.Center - Main.screenPosition, null, Color.White * 0.5f, Projectile.rotation, black.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(bullet, Projectile.Center - Main.screenPosition, null, Color.White * 0.75f, Projectile.rotation, bullet.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		//Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, bloom.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		return false;
+	}
+}
