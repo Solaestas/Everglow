@@ -82,12 +82,23 @@ public class PolygonDrawerVisual : Visual
 			}
 		}
 		Color color = new Color(0.2f, 0.2f, 0.2f, 0);
-		if (IsPointInPolygon(PolygonVertices, Main.MouseWorld))
+
+		// if (IsPointInPolygon(PolygonVertices, Main.MouseWorld))
+		// {
+		// color = new Color(0.2f, 0.2f, 1f, 0);
+		// Main.instance.MouseText("Inside");
+		// }
+		if (IntersectsPolygonAABB(PolygonVertices, Main.MouseWorld - new Vector2(16), Main.MouseWorld + new Vector2(16)))
 		{
 			color = new Color(0.2f, 0.2f, 1f, 0);
-			Main.instance.MouseText("Inside");
+			Main.instance.MouseText("AABB Intersect");
 		}
-		Ins.Batch.Draw(tex, Main.MouseWorld, null, color, 0, tex.Size() * 0.5f, 2f, SpriteEffects.None);
+
+		// Ins.Batch.Draw(tex, Main.MouseWorld, null, color, 0, tex.Size() * 0.5f, 2f, SpriteEffects.None);
+		DrawLine(Main.MouseWorld + new Vector2(-16, -16), Main.MouseWorld + new Vector2(16, -16));
+		DrawLine(Main.MouseWorld + new Vector2(16, -16), Main.MouseWorld + new Vector2(16, 16));
+		DrawLine(Main.MouseWorld + new Vector2(16, 16), Main.MouseWorld + new Vector2(-16, 16));
+		DrawLine(Main.MouseWorld + new Vector2(-16, 16), Main.MouseWorld + new Vector2(-16, -16));
 	}
 
 	public void DrawLine(Vector2 pos0, Vector2 pos1)
