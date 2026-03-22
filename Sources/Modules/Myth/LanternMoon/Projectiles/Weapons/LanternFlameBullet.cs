@@ -13,12 +13,17 @@ public class LanternFlameBullet : ModProjectile
 		Projectile.ignoreWater = false;
 		Projectile.penetrate = 1;
 		Projectile.aiStyle = -1;
+		Projectile.extraUpdates = 4;
 	}
 
 	public override void AI()
 	{
-		Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Torch, Projectile.velocity * 0.3f);
-		dust.noGravity = true;
+		if(Projectile.timeLeft < 3597)
+		{
+			Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Torch, Projectile.velocity * 0.3f);
+			dust.scale = 1.2f;
+			dust.noGravity = true;
+		}
 		Projectile.rotation = Projectile.velocity.ToRotationSafe();
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.6f, 0.6f));
 	}
@@ -29,15 +34,19 @@ public class LanternFlameBullet : ModProjectile
 		base.ModifyHitNPC(target, ref modifiers);
 	}
 
+	public override void OnKill(int timeLeft)
+	{
+		base.OnKill(timeLeft);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Lantern_ExplosionEffect>(), Projectile.damage, 2, Projectile.owner, 3);
+	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D black = ModAsset.LanternBullet_black.Value;
 		Texture2D bullet = ModContent.Request<Texture2D>(Texture).Value;
-		Texture2D bloom = ModAsset.LanternFlameBullet_bloom.Value;
 
 		Main.EntitySpriteDraw(black, Projectile.Center - Main.screenPosition, null, Color.White * 0.5f, Projectile.rotation, black.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		Main.EntitySpriteDraw(bullet, Projectile.Center - Main.screenPosition, null, Color.White * 0.75f, Projectile.rotation, bullet.Size() * 0.5f, 1f, SpriteEffects.None, 0);
-		//Main.EntitySpriteDraw(bloom, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), Projectile.rotation, bloom.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		return false;
 	}
 }

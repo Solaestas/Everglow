@@ -91,6 +91,11 @@ public class RedpaperGiant : LanternMoonNPC
 
 	public override void AI()
 	{
+		if (Main.dayTime)
+		{
+			NPC.velocity.Y += 1;
+			return;
+		}
 		Timer++;
 		NPC.TargetClosest(false);
 		if (NPC.target == -1)

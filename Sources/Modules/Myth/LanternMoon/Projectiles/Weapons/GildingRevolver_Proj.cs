@@ -45,7 +45,6 @@ public class GildingRevolver_Proj : HandholdProjectile
 
 	public override void AI()
 	{
-		NormalBulletsCount = (int)(NormalBulletTimer / 20f);
 		if (ReloadCooling <= 0)
 		{
 			if (NormalBulletTimer < 120)
@@ -74,6 +73,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 			LanternBulletTimer = 0;
 			LanternBulletCooling--;
 		}
+		NormalBulletsCount = (int)(NormalBulletTimer / 20f);
 		Timer++;
 		MouseInLanternZone = false;
 		foreach (var proj in Main.projectile)
@@ -121,7 +121,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 			{
 				ShootPhantom();
 			}
-			else if (player.itemTime == player.itemTimeMax && (NormalBulletTimer >= 120 || (ReloadCooling > 0 && NormalBulletTimer >= 6)))
+			else if (player.itemTime == player.itemTimeMax && (NormalBulletTimer >= 120/*None bullet*/ || (ReloadCooling > 0 && NormalBulletTimer >= 6)/*Have bullet*/))
 			{
 				Shoot();
 				NormalBulletTimer -= 20;
@@ -160,9 +160,9 @@ public class GildingRevolver_Proj : HandholdProjectile
 			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, gildingRevolver.ShootType, item.damage, item.knockBack, Projectile.owner);
 			UsedBulletsCount++;
-			if(NormalBulletsCount == 6 || NormalBulletsCount == 3)
+			if (NormalBulletsCount == 6 || NormalBulletsCount == 3)
 			{
-				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed;
+				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed / 4f;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternFlameBullet>(), item.damage, item.knockBack, Projectile.owner);
 			}
 		}

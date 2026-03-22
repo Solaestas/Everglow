@@ -105,43 +105,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 	{
 		if(timeLeft > 0)
 		{
-			for (int g = 0; g < 6; g++)
-			{
-				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(12f, 20f)).RotatedByRandom(MathHelper.TwoPi);
-				var spark = new HitEffectSpark
-				{
-					Velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					Position = Projectile.Center,
-					MaxTime = Main.rand.Next(16, 20),
-					DrawColor = new Color(1f, 0.4f, 0, 0),
-					LightFlat = 1f,
-					SpeedDecay = 0.8f,
-					GravityAcc = 0.15f,
-					SelfLight = true,
-					Scale = Main.rand.NextFloat(16f, 28f),
-				};
-				Ins.VFXManager.Add(spark);
-			}
-			for (int g = 0; g < 6; g++)
-			{
-				float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
-				Vector2 newVelocity = new Vector2(0, sqrtSpeed * 2).RotatedByRandom(MathHelper.TwoPi);
-				var somg = new LanternFlameDust
-				{
-					Velocity = newVelocity,
-					Active = true,
-					Visible = true,
-					Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
-					MaxTime = Main.rand.Next(30, 45),
-					Scale = Main.rand.NextFloat(32f, 48f),
-					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-					RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
-				};
-				Ins.VFXManager.Add(somg);
-			}
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Lantern_ExplosionEffect>(), Projectile.damage, 2, Projectile.owner, 3);
 		}
 		base.OnKill(timeLeft);
 	}

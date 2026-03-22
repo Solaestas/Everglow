@@ -56,7 +56,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		for (int k = 0; k < ShootProjPos.Count; k++)
 		{
 			var proj = ShootProjPos[k];
-			for(int i = 0;i < 2;i++)
+			for (int i = 0; i < 2; i++)
 			{
 				proj.Pos += proj.Vel * 0.5f;
 				if (proj.Active && (Collision.SolidCollision(proj.Pos - new Vector2(10), 20, 20) || TileUtils.SafeGetTile(proj.Pos.ToTileCoordinates()).LiquidAmount > 0))
@@ -81,7 +81,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 			dir = -1;
 		}
 		Vector2 mouseToPlayer = Main.MouseWorld - ArmRootPos;
-		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
+		mouseToPlayer = mouseToPlayer.NormalizeSafe();
 		float powerRate = 1;
 		if (player.HeldItem is not null && player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>())
 		{
@@ -126,10 +126,10 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 	public float GetShootSpeed()
 	{
 		Player player = Main.player[Projectile.owner];
-		if(player.HeldItem is not null && player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>())
+		if (player.HeldItem is not null && player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>())
 		{
 			KeroseneLanternFlameThrower kLFT = player.HeldItem.ModItem as KeroseneLanternFlameThrower;
-			if(kLFT is not null)
+			if (kLFT is not null)
 			{
 				return (kLFT.PowerRate + 0.2f) * 36f * player.HeldItem.shootSpeed;
 			}
@@ -220,7 +220,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		{
 			trailWidth = 120;
 		}
-		if(GetShootSpeed() < 15f)
+		if (GetShootSpeed() < 15f)
 		{
 			trailWidth *= GetShootSpeed() / 15f;
 		}
