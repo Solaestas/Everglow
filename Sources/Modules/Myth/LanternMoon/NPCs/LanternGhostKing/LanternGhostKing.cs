@@ -1,11 +1,15 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Myth.LanternMoon.Gores;
+using Everglow.Myth.LanternMoon.Items;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.VFX;
+using Everglow.Myth.TheFirefly.Items.BossDrops;
+using Everglow.Myth.TheFirefly.Items.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
@@ -382,6 +386,15 @@ public class LanternGhostKing : LanternMoonNPC
 
 		RingRadius = RingRadius * 0.99f + RingRadiusTrend * 0.01f;
 		RingCenter = RingCenter * 0.99f + RingCenterTrend * 0.01f;
+	}
+
+	public override void ModifyNPCLoot(NPCLoot npcLoot)
+	{
+		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBag_LanternGhostKing>()));
+		//npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<MothRelic>()));
+		var rule = new LeadingConditionRule(new Conditions.NotExpert());
+		rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<GildingRevolver>(), ModContent.ItemType<LanternYoyo>(), ModContent.ItemType<MillionLightStaff>(), ModContent.ItemType<GoldenLotusStaff>(), ModContent.ItemType<KeroseneLanternFlameThrower>(), ModContent.ItemType<LanternSword>()));
+		npcLoot.Add(rule);
 	}
 
 	public void FormalStartEffect()
