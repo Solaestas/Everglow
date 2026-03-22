@@ -161,6 +161,12 @@ public class YggdrasilWorldPylon : BaseModPylon<YggdrasilWorldPylonTileEntity>
 {
 	public override int DropItemType => ModContent.ItemType<YggdrasilWorldPylon_Item>();
 
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
+
 	public override void PostSetDefaults() => AddMapEntry(new Color(255, 255, 227));
 
 	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
