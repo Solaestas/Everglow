@@ -89,6 +89,12 @@ public class LanternSword_Slash : ModProjectile
 		return false;
 	}
 
+	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+	{
+		modifiers.Defense *= 2f;
+		base.ModifyHitNPC(target, ref modifiers);
+	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		if (target.life <= 0)
@@ -111,14 +117,14 @@ public class LanternSword_Slash : ModProjectile
 					}
 				}
 			}
-			if(nextTarget is not null)
+			if (nextTarget is not null)
 			{
-				foreach(var proj in Main.projectile)
+				foreach (var proj in Main.projectile)
 				{
-					if(proj is not null && proj.active && proj.owner == Projectile.owner && proj.type==ModContent.ProjectileType<LanternSword_Proj>())
+					if (proj is not null && proj.active && proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<LanternSword_Proj>())
 					{
 						LanternSword_Proj lSP = proj.ModProjectile as LanternSword_Proj;
-						if(lSP is not null)
+						if (lSP is not null)
 						{
 							lSP.NextTarget = nextTarget;
 							lSP.NextTargetAvailableTimer = 180;
@@ -140,7 +146,7 @@ public class LanternSword_Slash : ModProjectile
 				float timeLeft = (slash.MaxTime - slash.Timer) / (float)slash.MaxTime;
 				float sizeMul = 2f;
 				var drawColor = new Color(1f, 0.8f, 0.3f, 0);
-				if(slash.Timer >= 3)
+				if (slash.Timer >= 3)
 				{
 					drawColor = new Color(1f, 0, 0, 0);
 					sizeMul = 1f;

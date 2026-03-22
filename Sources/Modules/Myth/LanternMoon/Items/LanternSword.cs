@@ -20,4 +20,17 @@ public class LanternSword : MeleeItem_3D
 
 		Item.shoot = ModContent.ProjectileType<LanternSword_Proj>();
 	}
+
+	public override void HoldItem(Player player)
+	{
+		if (player.ownedProjectileCounts[Item.shoot] <= 0)
+		{
+			Projectile proj = Projectile.NewProjectileDirect(player.GetSource_FromAI(), player.Center, Vector2.zeroVector, Item.shoot, Item.damage, Item.knockBack, player.whoAmI);
+			MeleeProj_3D m3 = proj.ModProjectile as MeleeProj_3D;
+			if (m3 != null)
+			{
+				m3.WeaponItemType = Type;
+			}
+		}
+	}
 }

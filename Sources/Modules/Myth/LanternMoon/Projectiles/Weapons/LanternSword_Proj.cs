@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -72,35 +73,6 @@ public class LanternSword_Proj : MeleeProj_3D
 		}
 	}
 
-	public void NewAttackSpecial()
-	{
-		CurrentAttackType = 0;
-
-		// if (Main.MouseWorld.X > Owner.Center.X)
-		// {
-		// Owner.direction = 1;
-		// }
-		// else
-		// {
-		// Owner.direction = -1;
-		// }
-		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
-		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector);
-		AttackTimer = 0;
-		float meleeSpeed = Owner.meleeSpeed;
-		Attack_RotativeSwing(mouseDir, meleeSpeed);
-
-		var ss = new SoundStyle(Commons.ModAsset.TrueMeleeSword_Mod);
-		if (CurrentAttackType % 2 == 1)
-		{
-			ss = new SoundStyle(Commons.ModAsset.TrueMeleeSwordSwap_Mod);
-		}
-		SoundEngine.PlaySound(ss.WithPitchOffset(meleeSpeed - 1f + Main.rand.NextFloat(-0.15f, 0.15f)), Projectile.Center);
-		float itemUseTime = Owner.HeldItem.useTime;
-		float maxTime = itemUseTime / 0.4f;
-		AddSlashEffect(maxTime, itemUseTime, (int)(maxTime + 1));
-	}
-
 	public override void HitNPCVFX(float hitRotation, Vector2 hitPos)
 	{
 		LanternSwordHitStar lSHS = new LanternSwordHitStar();
@@ -151,6 +123,7 @@ public class LanternSword_Proj : MeleeProj_3D
 
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
+		modifiers.Defense *= 2f;
 		base.ModifyHitNPC(target, ref modifiers);
 	}
 
@@ -190,6 +163,11 @@ public class LanternSword_Proj : MeleeProj_3D
 			{
 				Texture2D mark = ModAsset.LanternSword_NextTargetMark.Value;
 				float timeValue = (float)Main.timeForVisualEffects % 30;
+				float fade = 1f;
+				if (NextTargetAvailableTimer < 60)
+				{
+					fade *= NextTargetAvailableTimer / 60f;
+				}
 				float rot = 0;
 				Color drawColor = new Color(1f, 0f, 0, 0.5f);
 				if (timeValue < 10)
@@ -212,15 +190,51 @@ public class LanternSword_Proj : MeleeProj_3D
 					rotDir = -1;
 					moveVec.X *= -1;
 				}
-				if (timeValue is >= 12 && timeValue < 18)
+				Vector2 drawPos = NextTarget.Center - Main.screenPosition - moveVec;
+				if (timeValue is >= 13 && timeValue < 18)
 				{
 					drawColor = Color.White;
 					float moveValue = (timeValue - 12) / 6f * MathHelper.Pi;
 					moveValue = MathF.Sin(moveValue);
-					Main.EntitySpriteDraw(mark, NextTarget.Center - Main.screenPosition - moveVec + new Vector2(16 * moveValue, 0), null, drawColor * 0.3f, MarkRotation * rotDir, origin, 0.75f, spd, 0);
-					Main.EntitySpriteDraw(mark, NextTarget.Center - Main.screenPosition - moveVec + new Vector2(-16f * moveValue, 0), null, drawColor * 0.3f, MarkRotation * rotDir, origin, 0.75f, spd, 0);
+					Main.EntitySpriteDraw(mark, drawPos + new Vector2(16 * moveValue, 0), null, drawColor * 0.3f, MarkRotation * rotDir, origin, 0.75f, spd, 0);
+					Main.EntitySpriteDraw(mark, drawPos + new Vector2(-16f * moveValue, 0), null, drawColor * 0.3f, MarkRotation * rotDir, origin, 0.75f, spd, 0);
 				}
-				Main.EntitySpriteDraw(mark, NextTarget.Center - Main.screenPosition - moveVec, null, drawColor, MarkRotation * rotDir, origin, 0.75f, spd, 0);
+				Main.EntitySpriteDraw(mark, drawPos, null, drawColor, MarkRotation * rotDir, origin, 0.75f, spd, 0);
+
+				drawPos = NextTarget.Center;
+				drawColor.A = 0;
+				List<Vertex2D> bars = new List<Vertex2D>();
+				for (int i = 0; i <= 80; i++)
+				{
+					float range = NextTargetAvailableTimer;
+					Vector2 radius = new Vector2(0, range).RotatedBy(i / 80f * MathHelper.TwoPi);
+					Vector2 radius_out = new Vector2(0, range + (180 - range) * 0.5f).RotatedBy(i / 80f * MathHelper.TwoPi);
+					float xCoord = i / 80f + NextTargetAvailableTimer / 80f;
+
+					bars.Add(drawPos + radius, drawColor, new Vector3(xCoord, 1, fade));
+					bars.Add(drawPos + radius_out, drawColor, new Vector3(xCoord, 0, fade));
+				}
+				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
+				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
+				SpriteBatchState sBS = Main.spriteBatch.GetState().Value;
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+				Effect effect0 = ModAsset.WizardLantern_Thunder_Matrix_Shader.Value;
+				effect0.Parameters["uTransform"].SetValue(model * projection);
+				effect0.Parameters["size1"].SetValue(Vector2.One);
+				effect0.CurrentTechnique.Passes[0].Apply();
+
+				if (bars.Count > 0)
+				{
+					Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_perlin.Value;
+					Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Textures_Star.Value;
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+				}
+
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(sBS);
 			}
 		}
 		base.PostDraw(lightColor);
