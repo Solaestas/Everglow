@@ -1,17 +1,16 @@
-using Everglow.Yggdrasil.Common.Tiles;
+using Everglow.Commons.TileHelper;
 using Terraria.DataStructures;
-using Terraria.ObjectData;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
-public class MainWorldGeneratioin_Yggdrasil
+public class MainWorldGeneration_Yggdrasil
 {
 	public static void BuildYggdrasilPylonRelic()
 	{
 		Point16 yggdrasilPylonPoint = YggdrasilPylonPos();
 		string mapIOPath = ModAsset.PylonToYggdrasil_16x16_Path;
-		var mapIO = new Commons.TileHelper.MapIO(yggdrasilPylonPoint.X, yggdrasilPylonPoint.Y);
+		var mapIO = new MapIO(yggdrasilPylonPoint.X, yggdrasilPylonPoint.Y);
 		int mapIOHeight = mapIO.ReadHeight(ModIns.Mod.GetFileStream(mapIOPath));
 		if (yggdrasilPylonPoint != new Point16(-1, -1))
 		{
@@ -21,7 +20,7 @@ public class MainWorldGeneratioin_Yggdrasil
 		{
 			yggdrasilPylonPoint = YggdrasilPylonPos_II();
 			mapIOPath = ModAsset.PylonToYggdrasil_Cloud_21x22_Path;
-			mapIO = new Commons.TileHelper.MapIO(yggdrasilPylonPoint.X, yggdrasilPylonPoint.Y);
+			mapIO = new MapIO(yggdrasilPylonPoint.X, yggdrasilPylonPoint.Y);
 			mapIOHeight = mapIO.ReadHeight(ModIns.Mod.GetFileStream(mapIOPath));
 			QuickBuild(yggdrasilPylonPoint.X, yggdrasilPylonPoint.Y - mapIOHeight / 2 - 5, mapIOPath);
 		}
