@@ -52,9 +52,29 @@ public class ElementalDebuffRegistry : ModSystem
 	private static void RegisterAllElementalDebuffs()
 	{
 		Type baseType = typeof(ElementalDebuffHandler);
-		foreach (var (modName, modTypes) in ModLoader.Mods
-			.Select(m => (m.Name, m.Code.GetTypes().AsEnumerable()))
-			.Concat([(nameof(Everglow), Ins.ModuleManager.Types)]))
+
+		var types = new Dictionary<string, IEnumerable<Type>>();
+		types.Add(nameof(Everglow), Ins.ModuleManager.Types);
+
+		foreach (var mod in ModLoader.Mods.Where(m => m.Name != nameof(Everglow)))
+		{
+			var modName = mod.Name;
+			try
+			{
+				var asm = mod.Code;
+				var modTypes = asm.GetTypes();
+				types.Add(modName, modTypes);
+			}
+			catch (ReflectionTypeLoadException ex)
+			{
+				// Protection code for solving exceptions occurring in unknown cases. Provided by 3375930833(QQ).
+				// Mods:
+				// https://github.com/TheFifthCircle/WrathOfTheGodsPublic MonoStereo.Dependencies
+				Ins.Logger.Error(ex);
+			}
+		}
+
+		foreach (var (modName, modTypes) in types)
 		{
 			foreach (var modType in modTypes.Where(t => t.IsSubclassOf(baseType) && !t.IsAbstract))
 			{
