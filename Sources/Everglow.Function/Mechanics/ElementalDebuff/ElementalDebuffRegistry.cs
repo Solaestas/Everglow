@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Cooldown;
+using System.Reflection;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
@@ -78,7 +78,7 @@ public class ElementalDebuffRegistry : ModSystem
 		{
 			foreach (var modType in modTypes.Where(t => t.IsSubclassOf(baseType) && !t.IsAbstract))
 			{
-				string baseID = (string)modType.GetProperty(nameof(CooldownBase.ID))?.GetValue(null) ?? modName + "_" + modType.Name;
+				string baseID = (string)modType.GetProperty(nameof(ElementalDebuffHandler.ID))?.GetValue(null) ?? modName + "_" + modType.Name;
 				nameToType.TryAdd(baseID, modType);
 				Register(baseID);
 			}
