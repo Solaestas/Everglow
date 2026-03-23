@@ -1,7 +1,9 @@
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing.VFXs;
+using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+
 public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
@@ -16,54 +18,205 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		Projectile.penetrate = -1;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
+
 	public override void AI()
 	{
 		float value = Projectile.timeLeft / 20f;
 		Lighting.AddLight(Projectile.Center, new Vector3(value * 3.5f, value * value * 1.5f, value * value * value));
 		base.AI();
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
-		float mulSize = 1f;
-		if(Main.expertMode)
+		SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithVolumeScale(Projectile.ai[0] / 2.4f), Projectile.Center);
+		ExplodeEffect(Projectile.Center);
+	}
+
+	public void ExplodeEffect(Vector2 pos)
+	{
+		for (int x = 0; x < 15 * Projectile.ai[0]; x++)
 		{
-			mulSize = 1.8f;
+			SmallFlame(pos);
 		}
-		if (Main.masterMode)
+		for (int x = 0; x < 15 * Projectile.ai[0]; x++)
 		{
-			mulSize = 2.4f;
+			LargeFlame(pos);
 		}
-		mulSize *= Projectile.ai[0] / 5f;
-		var lanternExplosion = new LanternExplosion
+
+		Spark(pos);
+		Wave(pos);
+	}
+
+	public void Wave(Vector2 pos)
+	{
+		var wave = new WarpLanternWave
 		{
-			velocity = Vector2.Zero,
+			Position = pos,
+			Speed = 25f * Projectile.ai[0],
+			Range = 0,
+			Timer = 0,
+			MaxTime = 30,
+			SpeedDecay = 0.9f,
 			Active = true,
 			Visible = true,
-			position = Projectile.Center,
-			maxTime = Main.rand.Next(26, 36),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(2.45f, 2.8f) * mulSize, Main.rand.NextFloat(8f, 12f) },
-			FireBallVelocity = new Vector2[]
-			{
-				RandomVector2(2f, 0.01f),
-				RandomVector2(1f, 0.01f)
-			}
 		};
-		Ins.VFXManager.Add(lanternExplosion);
+		Ins.VFXManager.Add(wave);
 
-		for (int x = 0; x < 5 * mulSize; x++)
+		var redWave = new RedLanternWave
 		{
-			var flameDust = new FlameDust
+			Position = pos,
+			Speed = 25f * Projectile.ai[0],
+			Range = 0,
+			Timer = 0,
+			MaxTime = 30,
+			SpeedDecay = 0.9f,
+			Active = true,
+			Visible = true,
+		};
+		Ins.VFXManager.Add(redWave);
+	}
+
+	public void Spark(Vector2 pos)
+	{
+		for (int g = 0; g < 20 * Projectile.ai[0]; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(9f, 16f) * Projectile.ai[0]).RotatedByRandom(MathHelper.TwoPi);
+			var sparkFlame = new LanternRedPaperFlame
 			{
-				velocity = RandomVector2(25f, 10f) * mulSize * 0.7f,
+				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
-				position = Projectile.Center,
-				maxTime = Main.rand.Next(26, 96),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), 0, Main.rand.NextFloat(1f, 3.4f) }
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = Main.rand.NextFloat(-1.2f, 1.2f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.15f, 0.45f) * (g % 2 - 0.5f) * 2,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(45, 60),
+				Scale = Main.rand.NextFloat(3f, 12f),
+				Frame = Main.rand.Next(0, 4),
 			};
-			Ins.VFXManager.Add(flameDust);
+			Ins.VFXManager.Add(sparkFlame);
+		}
+
+		for (int g = 0; g < 32 * Projectile.ai[0]; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(17f, 30f) * Projectile.ai[0]).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new LanternExplosionSpark
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = Main.rand.NextFloat(-0.7f, 0.7f),
+				VelocityRotateSpeed = Main.rand.NextFloat(0.05f, 0.25f) * (g % 2 - 0.5f) * 2,
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				MaxTime = Main.rand.Next(30, 60),
+				Scale = Main.rand.NextFloat(2f, 3f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(spark);
+		}
+
+		for (int g = 0; g < 6; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 15f)).RotatedByRandom(MathHelper.TwoPi);
+			var sparkStar = new LanternExplosionSparkStar
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				RotateSpeed = 0,
+				Rotation = 0,
+				MaxTime = Main.rand.Next(20, 40),
+				Scale = Main.rand.NextFloat(0.5f, 2.6f),
+				Frame = Main.rand.Next(0, 4),
+			};
+			Ins.VFXManager.Add(sparkStar);
+		}
+
+		for (int g = 0; g < 30; g++)
+		{
+			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(10f, 18f) * Projectile.ai[0]).RotatedByRandom(MathHelper.TwoPi);
+			var spark = new LanternGhostKing_SmokeSpike
+			{
+				Velocity = newVelocity,
+				Active = true,
+				Visible = true,
+				Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi) + newVelocity * 3,
+				MaxTime = Main.rand.Next(10, 30),
+				Scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(1f, 25.0f)) * Projectile.ai[0],
+			};
+			Ins.VFXManager.Add(spark);
+		}
+		for (int g = 0; g < 2; g++)
+		{
+			float scale = 100f;
+			int maxTime = 50;
+			float rot = Main.rand.NextFloat(MathHelper.TwoPi);
+			if (g == 1)
+			{
+				maxTime = 50;
+				scale = 100f * Projectile.ai[0];
+				rot += MathHelper.Pi;
+			}
+			if (g == 0)
+			{
+				maxTime = 30;
+				scale = 150f * Projectile.ai[0];
+			}
+			var blackLine = new LanternExplosionDecayBlackLines
+			{
+				Position = pos,
+				Timer = 0,
+				MaxTime = maxTime,
+				Scale = scale,
+				Rotation = rot,
+				ai = new float[] { Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f), scale / 6f },
+				Active = true,
+				Visible = true,
+			};
+			Ins.VFXManager.Add(blackLine);
 		}
 	}
+
+	public void LargeFlame(Vector2 pos)
+	{
+		float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+		Vector2 newVelocity = new Vector2(0, sqrtSpeed * 8).RotatedByRandom(MathHelper.TwoPi) * Projectile.ai[0];
+		var somg = new LanternFlameDust
+		{
+			Velocity = newVelocity,
+			Active = true,
+			Visible = true,
+			Position = pos + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
+			MaxTime = Main.rand.Next(60, 75) * MathF.Pow(Projectile.ai[0], 0.5f),
+			Scale = Main.rand.NextFloat(160f, 240f) * Projectile.ai[0],
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+		};
+		Ins.VFXManager.Add(somg);
+	}
+
+	public void SmallFlame(Vector2 pos)
+	{
+		float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
+		Vector2 newVelocity = new Vector2(0, sqrtSpeed * 16f).RotatedByRandom(MathHelper.TwoPi) * Projectile.ai[0];
+		var somg = new LanternFlameDust
+		{
+			Velocity = newVelocity,
+			Active = true,
+			Visible = true,
+			Position = pos + new Vector2(Main.rand.NextFloat(30), 0).RotatedByRandom(MathHelper.TwoPi),
+			MaxTime = Main.rand.Next(30, 45) * MathF.Pow(Projectile.ai[0], 0.5f),
+			Scale = Main.rand.NextFloat(50f, 120f) * Projectile.ai[0],
+			Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
+			ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
+		};
+		Ins.VFXManager.Add(somg);
+	}
+
 	public Vector2 RandomVector2(float maxLength, float minLength = 0)
 	{
 		if (maxLength <= minLength)
@@ -72,10 +225,12 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		}
 		return new Vector2(Main.rand.NextFloat(minLength, maxLength), 0).RotatedByRandom(6.283);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return false;
 	}
+
 	private void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radius, float width, Vector2 center, Texture2D tex, float warpStrength, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -101,8 +256,11 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch sb)
 	{
 		float value = (30 - Projectile.timeLeft) / 15f;
@@ -111,25 +269,21 @@ public class DarkLanternBombExplosion : ModProjectile, IWarpProjectile
 		Texture2D t = Commons.ModAsset.NoiseWave.Value;
 		float width = 15;
 		if (Projectile.timeLeft < 15)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		DrawWarpTexCircle_VFXBatch(sb, value * value * 80 + 90, width * 8, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 4000f);
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		float maxDistance = 70;
-		if (Main.expertMode)
-		{
-			maxDistance = 82;
-		}
-		if (Main.masterMode)
-		{
-			maxDistance = 150;
-		}
-		maxDistance *= Projectile.ai[0] / 5f;
-		bool checkCenter(Vector2 pos)
+		float maxDistance = 120;
+		maxDistance *= Projectile.ai[0];
+		bool CheckCenter(Vector2 pos)
 		{
 			return (pos - projHitbox.Center()).Length() < maxDistance / 0.9f;
 		}
-		return checkCenter(targetHitbox.TopLeft()) || checkCenter(targetHitbox.TopRight()) || checkCenter(targetHitbox.BottomLeft()) || checkCenter(targetHitbox.BottomRight());
+		return CheckCenter(targetHitbox.TopLeft()) || CheckCenter(targetHitbox.TopRight()) || CheckCenter(targetHitbox.BottomLeft()) || CheckCenter(targetHitbox.BottomRight());
 	}
 }

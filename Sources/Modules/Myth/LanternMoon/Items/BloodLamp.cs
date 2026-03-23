@@ -1,6 +1,8 @@
+using Everglow.Commons.Mechanics.Events;
 using Everglow.Myth.LanternMoon.LanternCommon;
-using Everglow.Myth.LanternMoon.Projectiles;
-using Terraria.Localization;
+using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+using Everglow.Myth.LanternMoon.VFX;
+using Spine;
 
 namespace Everglow.Myth.LanternMoon.Items;
 
@@ -8,57 +10,58 @@ public class BloodLamp : ModItem
 {
 	public override void SetDefaults()
 	{
-		Item.noUseGraphic = true;
 		Item.width = 38;
 		Item.height = 60;
 		Item.rare = ItemRarityID.Green;
 		Item.scale = 1;
 		Item.useStyle = ItemUseStyleID.HoldUp;
 		Item.useTurn = true;
-		Item.useAnimation = 1;
-		Item.useTime = 1;
+		Item.useAnimation = 30;
+		Item.useTime = 30;
 		Item.autoReuse = false;
 		Item.consumable = true;
-		Item.maxStack = 999;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.value = 10000;
 	}
+
+	public override void HoldItem(Player player)
+	{
+		if (Main.mouseMiddle && Main.mouseMiddleRelease)
+		{
+			Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 75000, 0, Main.myPlayer);
+			//LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+
+			//musicSystem.Wave15StartTimer = 0;
+		}
+		if(Main.mouseRight && Main.mouseRightRelease)
+		{
+			var redWave = new LanternGhostKingPowerAbsorbWave
+			{
+				Position = Main.MouseWorld,
+				Timer = 0,
+				MaxTime = 60 * 8,
+				Active = true,
+				Visible = true,
+			};
+			Ins.VFXManager.Add(redWave);
+		}
+	}
+
 	public override bool? UseItem(Player player)
 	{
-		for (int x = 0; x < Main.maxProjectiles; x++)
-		{
-			if (Main.projectile[x].type == ModContent.ProjectileType<BloodLampProj>() && Main.projectile[x].active)
-				return false;
-		}
-		LanternMoonProgress LanternMoon = ModContent.GetInstance<LanternMoonProgress>();
-		if (!LanternMoon.OnLanternMoon && !Main.dayTime && !Main.snowMoon && !Main.pumpkinMoon)
-		{
-			Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center + new Vector2(12, 0) * player.direction, new Vector2(16, 0) * player.direction, ModContent.ProjectileType<BloodLampProj>(), 0, 0, player.whoAmI);
-			LanternMoon.OnLanternMoon = true;
-			LanternMoon.Point = 0;
-			LanternMoon.WavePoint = 0;
-			LanternMoon.Wave = 0;
-			var messageColor = new Color(175, 75, 255);
-			Color messageColor1 = Color.PaleGreen;
-			Main.NewText(Language.GetTextValue("Lantern Moon is raising..."), messageColor1);
-			Main.NewText(Language.GetTextValue("Wave 1:"), messageColor);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		musicSystem.Wave15StartTimer = 360000;
+		EventSystem.Activate<LanternMoonInvasionEvent>();
+		return true;
 	}
-	public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
-	{
 
+	public override void AddRecipes()
+	{
+		CreateRecipe()
+		   .AddIngredient(ItemID.ChineseLantern, 1)
+		   .AddIngredient(ItemID.FlowerofFire, 10)
+		   .AddIngredient(ItemID.Ectoplasm, 5)
+		   .AddTile(TileID.DemonAltar)
+		   .Register();
 	}
-	/*public override void AddRecipes()
-        {
-            CreateRecipe()
-               .AddIngredient(344, 1)
-               .AddIngredient(ItemID.Torch, 1)
-               .AddIngredient(ModContent.ItemType<Items.Flowers.RedFlame>(), 8)
-               .AddTile(26)
-               .Register();
-        }*/
 }
