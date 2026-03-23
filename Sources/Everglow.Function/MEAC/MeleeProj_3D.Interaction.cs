@@ -18,7 +18,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			}
 			else
 			{
-				return true;
+				return base.CanHitNPC(target);
 			}
 		}
 		return false;
