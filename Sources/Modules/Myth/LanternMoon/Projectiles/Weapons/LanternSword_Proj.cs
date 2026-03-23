@@ -25,6 +25,7 @@ public class LanternSword_Proj : MeleeProj_3D
 		Projectile.height = 82;
 		Projectile.tileCollide = false;
 		Projectile.friendly = true;
+		Projectile.hostile = false;
 		Projectile.aiStyle = -1;
 		Projectile.timeLeft = 5;
 		WeaponLength = 84;

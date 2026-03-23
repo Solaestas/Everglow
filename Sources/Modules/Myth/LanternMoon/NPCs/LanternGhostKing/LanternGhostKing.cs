@@ -391,7 +391,7 @@ public class LanternGhostKing : LanternMoonNPC
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
 		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<TreasureBag_LanternGhostKing>()));
-		//npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<MothRelic>()));
+		npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Relic_LanternGhostKing>()));
 		var rule = new LeadingConditionRule(new Conditions.NotExpert());
 		rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<GildingRevolver>(), ModContent.ItemType<LanternYoyo>(), ModContent.ItemType<MillionLightStaff>(), ModContent.ItemType<GoldenLotusStaff>(), ModContent.ItemType<KeroseneLanternFlameThrower>(), ModContent.ItemType<LanternSword>()));
 		npcLoot.Add(rule);
