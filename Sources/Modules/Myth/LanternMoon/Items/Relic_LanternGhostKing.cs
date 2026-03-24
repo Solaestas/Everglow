@@ -13,7 +13,7 @@ public class Relic_LanternGhostKing : ModItem
 		Item.useAnimation = 20;
 		Item.master = true;
 		Item.useTime = 20;
-		Item.maxStack = 99;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.rare = ItemRarityID.White;
 		Item.value = Item.sellPrice(0, 1, 0, 0);
 		Item.useAnimation = 15;

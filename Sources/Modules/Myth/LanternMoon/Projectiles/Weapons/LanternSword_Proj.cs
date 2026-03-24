@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.MEAC.VFX;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -54,7 +55,25 @@ public class LanternSword_Proj : MeleeProj_3D
 					{
 						slashVel = new Vector2(-12f, 0);
 					}
-					Owner.Center = TeleportDestination(NextTarget);
+					Owner.Center = des;
+					SoundEngine.PlaySound(new SoundStyle(ModAsset.LanternSwordTeleportation_Mod), Owner.Center);
+					for (int i = 0; i < 24; i++)
+					{
+						var dust = new LanternSwordDust
+						{
+							Active = true,
+							Visible = true,
+							Position = Owner.Center + new Vector2(Main.rand.NextFloat(-45, 45), 0),
+							Velocity = new Vector2(Main.rand.NextFloat(-1, 1), Main.rand.NextFloat(-6, 0)),
+							Frame = Main.rand.Next(4),
+							Scale = Main.rand.NextFloat(2f, 5f),
+							MaxTime = Main.rand.Next(45, 75),
+							RotateSpeed = Main.rand.NextFloat(-0.15f, 0.15f),
+							VelocityRotateSpeed = Main.rand.NextFloat(-0.05f, 0.05f),
+							Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+						};
+						Ins.VFXManager.Add(dust);
+					}
 					Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Owner.Center, slashVel, ModContent.ProjectileType<LanternSword_Slash>(), Projectile.damage, 2f, Projectile.owner);
 					NextTarget = null;
 				}
@@ -64,7 +83,7 @@ public class LanternSword_Proj : MeleeProj_3D
 
 	public Vector2 TeleportDestination(NPC target)
 	{
-		if(target.velocity.X > 0)
+		if (target.velocity.X > 0)
 		{
 			return target.Left + new Vector2(-20, 0);
 		}
@@ -115,7 +134,12 @@ public class LanternSword_Proj : MeleeProj_3D
 			drawColor *= 1.7f;
 			float rot = (worldPos - Projectile.Center).ToRotation() - (float)Main.time * 0.01f;
 			float factorHighlight = factor * 3;
-			drawColor *= MathF.Max(MathF.Pow(Math.Max(0, 0.5f + 0.5f * MathF.Cos(rot * 2)), 16) * 0.4f * ReflectionSharpValue * MathF.Pow(extraValue0, 2), factorHighlight);
+			float mulValue = MathF.Max(MathF.Pow(Math.Max(0, 0.5f + 0.5f * MathF.Cos(rot * 2)), 16) * 0.4f * ReflectionSharpValue * MathF.Pow(extraValue0, 2), factorHighlight);
+			drawColor *= mulValue;
+			if (mulValue < 1f)
+			{
+				drawColor.G = drawColor.B = 0;
+			}
 			drawColor.A = 0;
 			return drawColor;
 		}
@@ -163,6 +187,7 @@ public class LanternSword_Proj : MeleeProj_3D
 			if (!Collision.SolidCollision(des - new Vector2(8, 16), 16, 16))
 			{
 				Texture2D mark = ModAsset.LanternSword_NextTargetMark.Value;
+				Texture2D mark_black = ModAsset.LanternSword_NextTargetMark_black.Value;
 				float timeValue = (float)Main.timeForVisualEffects % 30;
 				float fade = 1f;
 				if (NextTargetAvailableTimer < 60)
@@ -187,11 +212,12 @@ public class LanternSword_Proj : MeleeProj_3D
 				if (NextTarget.velocity.X < 0)
 				{
 					spd = SpriteEffects.FlipHorizontally;
-					origin = new Vector2(mark.Width , 0);
+					origin = new Vector2(mark.Width, 0);
 					rotDir = -1;
 					moveVec.X *= -1;
 				}
 				Vector2 drawPos = NextTarget.Center - Main.screenPosition - moveVec;
+				Main.EntitySpriteDraw(mark_black, drawPos, null, Color.White, MarkRotation * rotDir, origin, 0.75f, spd, 0);
 				if (timeValue is >= 13 && timeValue < 18)
 				{
 					drawColor = Color.White;
@@ -205,6 +231,7 @@ public class LanternSword_Proj : MeleeProj_3D
 				drawPos = NextTarget.Center;
 				drawColor.A = 0;
 				List<Vertex2D> bars = new List<Vertex2D>();
+				List<Vertex2D> bars_b = new List<Vertex2D>();
 				for (int i = 0; i <= 80; i++)
 				{
 					float range = NextTargetAvailableTimer;
@@ -212,8 +239,11 @@ public class LanternSword_Proj : MeleeProj_3D
 					Vector2 radius_out = new Vector2(0, range + (180 - range) * 0.5f).RotatedBy(i / 80f * MathHelper.TwoPi);
 					float xCoord = i / 80f + NextTargetAvailableTimer / 80f;
 
-					bars.Add(drawPos + radius, drawColor, new Vector3(xCoord, 1, fade));
-					bars.Add(drawPos + radius_out, drawColor, new Vector3(xCoord, 0, fade));
+					bars_b.Add(drawPos + radius, Color.White, new Vector3(xCoord, 0.6f, fade));
+					bars_b.Add(drawPos + radius_out, Color.White, new Vector3(xCoord, 0.4f, fade));
+
+					bars.Add(drawPos + radius, drawColor, new Vector3(xCoord, 0.6f, fade));
+					bars.Add(drawPos + radius_out, drawColor, new Vector3(xCoord, 0.4f, fade));
 				}
 				var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 				var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition, 0)) * Main.GameViewMatrix.TransformationMatrix;
@@ -225,6 +255,14 @@ public class LanternSword_Proj : MeleeProj_3D
 				effect0.Parameters["uTransform"].SetValue(model * projection);
 				effect0.Parameters["size1"].SetValue(Vector2.One);
 				effect0.CurrentTechnique.Passes[0].Apply();
+
+
+				if (bars_b.Count > 0)
+				{
+					Main.graphics.GraphicsDevice.Textures[1] = Commons.ModAsset.Noise_perlin.Value;
+					Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Star_black.Value;
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars_b.ToArray(), 0, bars_b.Count - 2);
+				}
 
 				if (bars.Count > 0)
 				{
@@ -239,5 +277,65 @@ public class LanternSword_Proj : MeleeProj_3D
 			}
 		}
 		base.PostDraw(lightColor);
+	}
+
+	public override void AddDust(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed, float trailFade)
+	{
+		float maxCount = Math.Abs(rotationSpeed) * 100;
+		float rotSpeed = rotationSpeed / maxCount;
+		for (int i = 0; i < maxCount; i++)
+		{
+			if (Main.rand.NextBool(10))
+			{
+				float randValue = MathF.Sqrt(Main.rand.NextFloat());
+				var melee_dust = new MeleeProj_3D_Dust()
+				{
+					Active = true,
+					Visible = true,
+					Position_Space = oldAxisTip * randValue + oldAxisTail * (1 - randValue),
+					MaxTime = Main.rand.NextFloat(30, 60),
+					Scale = Main.rand.NextFloat(0.1f, 0.8f) * (randValue + 1f) * trailFade * 0.37f,
+					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+					RotSpeed = rotationSpeed * 0.05f * Main.rand.NextFloat(0.8f, 1.2f),
+					RotAxis = rotationAxis,
+					ParentProj = this,
+					ai = new float[] { Main.rand.NextFloat(6) },
+				};
+				melee_dust.RegisterBehavior(CustomDustBehavior);
+				melee_dust.RegisterDraw(CustomDustDraw);
+				Ins.VFXManager.Add(melee_dust);
+			}
+
+			// Enchantment Effects
+			EnchantmentDustEffect(oldAxisTip, oldAxisTail, rotationAxis, rotationSpeed, trailFade, Owner.meleeEnchant);
+			if (Owner.magmaStone)
+			{
+				EnchantmentDustEffect(oldAxisTip, oldAxisTail, rotationAxis, rotationSpeed, trailFade, 3);
+			}
+			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTip);
+			RotateMainAxis(rotSpeed, rotationAxis, ref oldAxisTail);
+		}
+	}
+
+	public override void CustomDustDraw(MeleeProj_3D_Dust dust)
+	{
+		Vector3 wldPos3D = dust.Position_Space + new Vector3(0, 0, CenterZ);
+		Vector2 wldPos = Project(wldPos3D, ProjectionMatrix()) + Projectile.Center;
+		Texture2D tex = ModAsset.LanternSwordDust.Value;
+		var dustColor = SlashColor;
+		if (!SelfLuminous)
+		{
+			Color lightC = Lighting.GetColor(wldPos.ToTileCoordinates());
+			dustColor.R = (byte)(lightC.R * dustColor.R / 255f);
+			dustColor.G = (byte)(lightC.G * dustColor.G / 255f);
+			dustColor.B = (byte)(lightC.B * dustColor.B / 255f);
+		}
+		dustColor.A = 255;
+		float colorVariation = MathF.Sin((dust.MaxTime - dust.Timer) * 1f) + 1;
+		colorVariation *= 0.5f;
+		colorVariation = MathF.Pow(colorVariation, 1);
+		dustColor *= ReflectionSharpValue * 5f * colorVariation;
+		Rectangle frame = new Rectangle((int)dust.ai[0] * 7, 0, 7, 7);
+		Ins.Batch.Draw(tex, wldPos, frame, dustColor, dust.Rotation, frame.Size() * 0.5f, dust.Scale, SpriteEffects.None);
 	}
 }
