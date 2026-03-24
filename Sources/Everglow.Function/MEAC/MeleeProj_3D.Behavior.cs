@@ -304,13 +304,6 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void AddDust(Vector3 oldAxisTip, Vector3 oldAxisTail, Vector3 rotationAxis, float rotationSpeed, float trailFade)
 	{
-		//foreach (var dust in Main.dust)
-		//{
-		//	if (dust is not null && dust.active)
-		//	{
-		//		Main.NewText(dust.type);
-		//	}
-		//}
 		float maxCount = Math.Abs(rotationSpeed) * 100;
 		float rotSpeed = rotationSpeed / maxCount;
 		for (int i = 0; i < maxCount; i++)
