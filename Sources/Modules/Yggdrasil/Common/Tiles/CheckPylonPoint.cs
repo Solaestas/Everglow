@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using static Everglow.Yggdrasil.WorldGeneration.MainWorldGeneratioin_Yggdrasil;
+using static Everglow.Yggdrasil.WorldGeneration.MainWorldGeneration_Yggdrasil;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.Common.Tiles;

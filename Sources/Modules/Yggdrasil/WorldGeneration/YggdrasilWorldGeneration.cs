@@ -51,7 +51,7 @@ public class YggdrasilWorldGeneration : ModSystem
 		public override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
 		{
 			progress.Message = "Inserting Yggdrasil Relic...";
-			MainWorldGeneratioin_Yggdrasil.BuildYggdrasilPylonRelic();
+			MainWorldGeneration_Yggdrasil.BuildYggdrasilPylonRelic();
 		}
 	}
 
