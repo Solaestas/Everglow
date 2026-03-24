@@ -435,11 +435,18 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		float width = tex.Size().Length() / 2f;
 		Vector2 dirWidth = (arrowTip - center).NormalizeSafe().RotatedBy(MathHelper.PiOver2) * width;
 
+		int middleCoord0 = 0;
+		int middleCoord1 = 1;
+		if(Owner.direction == 1)
+		{
+			(middleCoord0, middleCoord1) = (middleCoord1, middleCoord0);
+		}
+
 		List<Vertex2D> weapon = new List<Vertex2D>();
 		AddVertex(weapon, center + ScreenPositionOffset, new Vector3(0, 1, 0));
-		AddVertex(weapon, middle + dirWidth + ScreenPositionOffset, new Vector3(0, 0, 0));
+		AddVertex(weapon, middle + dirWidth + ScreenPositionOffset, new Vector3(middleCoord0, middleCoord0, 0));
 
-		AddVertex(weapon, middle - dirWidth + ScreenPositionOffset, new Vector3(1, 1, 0));
+		AddVertex(weapon, middle - dirWidth + ScreenPositionOffset, new Vector3(middleCoord1, middleCoord1, 0));
 		AddVertex(weapon, arrowTip + ScreenPositionOffset, new Vector3(1, 0, 0));
 
 		if (weapon.Count >= 4)
