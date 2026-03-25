@@ -143,7 +143,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	{
 		if(MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
 		{
-			ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+			ShakerManager.AddShaker(Owner.MountedCenter + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
 		}
 	}
 }

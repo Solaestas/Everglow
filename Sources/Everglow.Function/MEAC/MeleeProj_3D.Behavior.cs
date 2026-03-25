@@ -178,7 +178,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 	public virtual void NewAttack()
 	{
 		CurrentAttackType++;
-		if (Main.MouseWorld.X > Owner.Center.X)
+		if (Main.MouseWorld.X > Owner.MountedCenter.X)
 		{
 			Owner.direction = 1;
 		}
@@ -187,7 +187,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			Owner.direction = -1;
 		}
 
-		Vector2 mouseDir = Main.MouseWorld - Owner.Center;
+		Vector2 mouseDir = Main.MouseWorld - Owner.MountedCenter;
 		mouseDir = mouseDir.SafeNormalize(Vector2.zeroVector);
 		AttackTimer = 0;
 		float meleeSpeed = Owner.meleeSpeed;
@@ -523,7 +523,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		{
 			Projectile.Kill();
 		}
-		Projectile.Center = Owner.Center;
+		Projectile.Center = Owner.MountedCenter;
 		Projectile.velocity *= 0;
 	}
 
