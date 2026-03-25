@@ -5,8 +5,6 @@ using Everglow.Myth.LanternMoon.Items;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.VFX;
-using Everglow.Myth.TheFirefly.Items.BossDrops;
-using Everglow.Myth.TheFirefly.Items.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
@@ -238,7 +236,7 @@ public class LanternGhostKing : LanternMoonNPC
 				NPC.velocity *= 0.8f;
 			}
 
-			if(musicSystem.Wave15StartTimer == 7 * 60)
+			if (musicSystem.Wave15StartTimer == 7 * 60)
 			{
 				var redWave = new LanternGhostKingPowerAbsorbWave
 				{
@@ -280,7 +278,7 @@ public class LanternGhostKing : LanternMoonNPC
 			{
 				if (RingFade > 0)
 				{
-					RingFade-=10;
+					RingFade -= 10;
 				}
 			}
 			CheckPlayerTouchRing();
