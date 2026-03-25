@@ -1,4 +1,5 @@
 using Everglow.Commons.Templates.Weapons.Yoyos;
+using Terraria.Audio;
 using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
@@ -21,6 +22,24 @@ public class LanternYoyoProjectile : YoyoProjectile
 		Player player = Main.player[Projectile.owner];
 		if (Timer % 20 == 0 && ProjectileOwnFireYoyoCount() < 5)
 		{
+			SoundStyle sound;
+			switch (Main.rand.Next(3))
+			{
+				case 0:
+					sound = new SoundStyle(ModAsset.LanternYoyo_FireBallSpawn0_Mod);
+					break;
+				case 1:
+					sound = new SoundStyle(ModAsset.LanternYoyo_FireBallSpawn1_Mod);
+					break;
+				case 2:
+					sound = new SoundStyle(ModAsset.LanternYoyo_FireBallSpawn2_Mod);
+					break;
+				default:
+					sound = new SoundStyle(ModAsset.LanternYoyo_FireBallSpawn0_Mod);
+					break;
+			}
+
+			SoundEngine.PlaySound(sound, GapCenter);
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GapCenter, Vector2.zeroVector, ModContent.ProjectileType<LanternYoyo_fireYoyo>(), (int)(Projectile.damage * 1.6f), 2f, Projectile.owner);
 			LanternYoyo_fireYoyo lYfY = p0.ModProjectile as LanternYoyo_fireYoyo;
 			if(lYfY is not null)

@@ -1,8 +1,5 @@
 using Everglow.Commons.Mechanics.Events;
 using Everglow.Myth.LanternMoon.LanternCommon;
-using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
-using Everglow.Myth.LanternMoon.VFX;
-using Spine;
 
 namespace Everglow.Myth.LanternMoon.Items;
 
@@ -26,25 +23,22 @@ public class BloodLamp : ModItem
 
 	public override void HoldItem(Player player)
 	{
-		if (Main.mouseMiddle && Main.mouseMiddleRelease)
-		{
-			Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 75000, 0, Main.myPlayer);
-			//LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-
-			//musicSystem.Wave15StartTimer = 0;
-		}
-		if(Main.mouseRight && Main.mouseRightRelease)
-		{
-			var redWave = new LanternGhostKingPowerAbsorbWave
-			{
-				Position = Main.MouseWorld,
-				Timer = 0,
-				MaxTime = 60 * 8,
-				Active = true,
-				Visible = true,
-			};
-			Ins.VFXManager.Add(redWave);
-		}
+		// if (Main.mouseMiddle && Main.mouseMiddleRelease)
+		// {
+		// Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 75000, 0, Main.myPlayer);
+		// }
+		// if(Main.mouseRight && Main.mouseRightRelease)
+		// {
+		// var redWave = new LanternGhostKingPowerAbsorbWave
+		// {
+		// Position = Main.MouseWorld,
+		// Timer = 0,
+		// MaxTime = 60 * 8,
+		// Active = true,
+		// Visible = true,
+		// };
+		// Ins.VFXManager.Add(redWave);
+		// }
 	}
 
 	public override bool? UseItem(Player player)

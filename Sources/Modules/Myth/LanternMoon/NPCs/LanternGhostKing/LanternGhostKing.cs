@@ -1392,42 +1392,6 @@ public class LanternGhostKing : LanternMoonNPC
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		if (NPC.life <= 0)
-		{
-			LanternMoon.Boss15Ended = true;
-			LanternMoon.NewWave();
-			LanternMoon.AccumulatedScore = LanternMoon.ScoreRequireOfWave.Take(15).Sum();
-
-			for (int g = 0; g < 24; g++)
-			{
-				Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 36f, 0).RotatedByRandom(MathHelper.TwoPi);
-				string texturePath = ModAsset.LanternGhostKing_Gore_0_Mod;
-				if (texturePath is not null)
-				{
-					texturePath = texturePath.Remove(texturePath.Length - 1, 1);
-					texturePath += g;
-				}
-				var gore = new NormalGore
-				{
-					Velocity = vel,
-					Position = NPC.Center + vel,
-					Texture = ModContent.Request<Texture2D>(texturePath).Value,
-					RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
-					Scale = Main.rand.NextFloat(0.8f, 1.2f),
-					MaxTime = Main.rand.Next(300, 340),
-					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
-				};
-				Ins.VFXManager.Add(gore);
-			}
-
-			if (Main.netMode != NetmodeID.MultiplayerClient)
-			{
-				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
-			}
-
-			// Projectile.NewProjectile(NPC.GetSource_Death(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<DarkLanternBombExplosion_II>(), 10000, 10);
-			SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact.WithPitchOffset(-1f), NPC.Center);
-		}
 		if (NPC.life < NPC.lifeMax / 2)
 		{
 			if (Phase == 1)
@@ -1436,6 +1400,59 @@ public class LanternGhostKing : LanternMoonNPC
 				Timer = 0;
 			}
 		}
+	}
+
+	public override void OnKill()
+	{
+		LanternMoon.Boss15Ended = true;
+		LanternMoon.NewWave();
+		LanternMoon.AccumulatedScore = LanternMoon.ScoreRequireOfWave.Take(15).Sum();
+
+		for (int g = 0; g < 24; g++)
+		{
+			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 36f, 0).RotatedByRandom(MathHelper.TwoPi);
+			string texturePath = ModAsset.LanternGhostKing_Gore_0_Mod;
+			if (texturePath is not null)
+			{
+				texturePath = texturePath.Remove(texturePath.Length - 1, 1);
+				texturePath += g;
+			}
+			var gore = new NormalGore
+			{
+				Velocity = vel,
+				Position = NPC.Center + vel,
+				Texture = ModContent.Request<Texture2D>(texturePath).Value,
+				RotateSpeed = Main.rand.NextFloat(-0.2f, 0.2f),
+				Scale = Main.rand.NextFloat(0.8f, 1.2f),
+				MaxTime = Main.rand.Next(300, 340),
+				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+			};
+			Ins.VFXManager.Add(gore);
+		}
+
+		if (Main.netMode != NetmodeID.MultiplayerClient)
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<LanternGhostKingExplosion>(), 150, 0f, Main.myPlayer);
+		}
+		SoundStyle sound;
+		switch (Main.rand.Next(3))
+		{
+			case 0:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Explode0_Mod);
+				break;
+			case 1:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Explode1_Mod);
+				break;
+			case 2:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Explode2_Mod);
+				break;
+			default:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Explode0_Mod);
+				break;
+		}
+
+		SoundEngine.PlaySound(sound, NPC.Center);
+		base.OnKill();
 	}
 
 	public void SwitchAttackTypeInPhase2()

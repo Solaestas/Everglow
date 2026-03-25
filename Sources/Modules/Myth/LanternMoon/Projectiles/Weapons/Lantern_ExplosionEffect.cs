@@ -1,4 +1,5 @@
 using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
@@ -11,7 +12,7 @@ public class Lantern_ExplosionEffect : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.timeLeft = 30;
+		Projectile.timeLeft = 10;
 		Projectile.width = 60;
 		Projectile.height = 60;
 		Projectile.friendly = true;
@@ -26,6 +27,24 @@ public class Lantern_ExplosionEffect : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		SoundStyle sound;
+		switch (Main.rand.Next(3))
+		{
+			case 0:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Burst0_Mod);
+				break;
+			case 1:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Burst1_Mod);
+				break;
+			case 2:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Burst2_Mod);
+				break;
+			default:
+				sound = new SoundStyle(ModAsset.LanternYoyo_Burst0_Mod);
+				break;
+		}
+
+		SoundEngine.PlaySound(sound, Projectile.Center);
 		for (int g = 0; g < 6; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(12f, 20f)).RotatedByRandom(MathHelper.TwoPi);
@@ -68,7 +87,7 @@ public class Lantern_ExplosionEffect : ModProjectile
 	public override void AI()
 	{
 		Timer++;
-		if(Timer > 2)
+		if (Timer > 2)
 		{
 			Projectile.friendly = false;
 		}
@@ -78,5 +97,15 @@ public class Lantern_ExplosionEffect : ModProjectile
 	{
 		target.AddBuff(BuffID.OnFire3, 200);
 		base.ModifyHitNPC(target, ref modifiers);
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D star = Commons.ModAsset.StarSlash.Value;
+		float timeValue = Projectile.timeLeft / 10f;
+		Color drawColor = Color.Lerp(new Color(0.7f, 0.1f, 0f, 0), new Color(1f, 1f, 1f, 0), timeValue);
+		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale), SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, 0, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale) * 0.75f, SpriteEffects.None, 0);
+		return false;
 	}
 }
