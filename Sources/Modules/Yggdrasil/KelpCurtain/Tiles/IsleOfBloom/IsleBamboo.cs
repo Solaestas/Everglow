@@ -8,7 +8,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
 
 public class IsleBamboo : ModTile, ITileFluentlyDrawn
 {
-	public const int MaxLength = 72;
+	public const int MaxLength = 60;
 
 	public override void PostSetDefaults()
 	{
@@ -260,7 +260,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 
 			var drawPos = drawCenterPos + lastOffset;
 			var tileSpriteEffect = SpriteEffects.None;
-			if(j > 0)
+			if(j > 1)
 			{
 				if (lastTileDis <= 0 || lastTileDis > 11)
 				{
@@ -272,8 +272,8 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				if(j == 0)
 				{
 					int value = RandomHashValue(tilePos.X);
-					frame = new Rectangle(18 * (value % 3), 32 * (value % 2), 18, 32);
-					origin = new Vector2(9, 32);
+					frame = new Rectangle(18 * (value % 3), 34 * (value % 2), 18, 34);
+					origin = new Vector2(9, 34);
 					spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 				}
 			}
