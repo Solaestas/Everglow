@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Cooldown;
+using Terraria.ModLoader.Core;
 
 namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
@@ -52,13 +52,22 @@ public class ElementalDebuffRegistry : ModSystem
 	private static void RegisterAllElementalDebuffs()
 	{
 		Type baseType = typeof(ElementalDebuffHandler);
-		foreach (var (modName, modTypes) in ModLoader.Mods
-			.Select(m => (m.Name, m.Code.GetTypes().AsEnumerable()))
-			.Concat([(nameof(Everglow), Ins.ModuleManager.Types)]))
+		var seen = new HashSet<Type>();
+
+		var allSources = ModLoader.Mods
+			.Select(m => (m.Name, AssemblyManager.GetLoadableTypes(m.Code).AsEnumerable()))
+			.Concat([(nameof(Everglow), Ins.ModuleManager.Types)]);
+
+		foreach (var (modName, modTypes) in allSources)
 		{
 			foreach (var modType in modTypes.Where(t => t.IsSubclassOf(baseType) && !t.IsAbstract))
 			{
-				string baseID = (string)modType.GetProperty(nameof(CooldownBase.ID))?.GetValue(null) ?? modName + "_" + modType.Name;
+				if (!seen.Add(modType)) // Make sure we don't register the same type twice
+				{
+					continue;
+				}
+
+				string baseID = (string)modType.GetProperty(nameof(ElementalDebuffHandler.ID))?.GetValue(null) ?? modName + "_" + modType.Name;
 				nameToType.TryAdd(baseID, modType);
 				Register(baseID);
 			}
