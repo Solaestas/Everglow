@@ -1,0 +1,132 @@
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.Drawing;
+using Terraria.ObjectData;
+
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
+
+public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverScreenDrawn
+{
+	public override void SetStaticDefaults()
+	{
+		Main.tileFrameImportant[Type] = true;
+		Main.tileNoAttach[Type] = true;
+		Main.tileLavaDeath[Type] = true;
+		Main.tileLighted[Type] = true;
+		Main.tileSolid[Type] = false;
+		Main.tileNoFail[Type] = true;
+		DustType = ModContent.DustType<IslePeachTree_Sawdust>();
+
+		// Placement - Standard Chandelier Setup Below
+		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+		TileObjectData.newTile.Height = 1;
+		TileObjectData.newTile.Width = 10;
+		TileObjectData.newTile.CoordinateHeights = new int[] { 16, };
+		TileObjectData.newTile.StyleHorizontal = true;
+		TileObjectData.newTile.DrawYOffset = 0;
+		TileObjectData.newTile.StyleMultiplier = 2;
+		TileObjectData.newTile.AnchorBottom = AnchorData.Empty; // Clear out existing bottom anchor inherited from Style1x1 temporarily so that we don't have to set it to empty in each of the alternates.
+
+		var SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 0);
+
+		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+		TileObjectData.newAlternate.Origin = new Point16(0, 1);
+		TileObjectData.newAlternate.AnchorLeft = SolidOrSolidSideAnchor1TilesLong;
+		TileObjectData.newAlternate.Style = 1;
+		TileObjectData.addAlternate(1);
+
+		TileObjectData.newTile.Origin = new Point16(4, 1);
+		TileObjectData.newTile.AnchorRight = SolidOrSolidSideAnchor1TilesLong;
+		TileObjectData.addTile(Type);
+		AnimationFrameHeight = 18;
+		AddMapEntry(new Color(137, 99, 99));
+		HitSound = SoundID.Dig;
+	}
+
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = fail ? 1 : 3;
+	}
+
+	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		if(!ITileOffsetOverScreenDrawn.SpecialTilePositon.Contains(new Point(i, j)))
+		{
+			ITileOffsetOverScreenDrawn.SpecialTilePositon.Add(new Point(i, j));
+		}
+		Tile tile = TileUtils.SafeGetTile(i, j);
+		if (tile.TileFrameX is 162 or 180)
+		{
+			TileFluentDrawManager.AddFluentPoint(this, i, j);
+		}
+		return false;
+	}
+
+	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
+	{
+		// Tile tile = TileUtils.SafeGetTile(i, j);
+		// if (tile.TileFrameX is 72 or 90)
+		// {
+		// TileFluentDrawManager.AddFluentPoint(this, i, j);
+		// }
+		base.DrawEffects(i, j, spriteBatch, ref drawData);
+	}
+
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		DrawPeachTree(pos, pos.ToWorldCoordinates() - screenPosition, spriteBatch, tileDrawing);
+	}
+
+	/// <summary>
+	/// Draw a piece of peach blossom
+	/// </summary>
+	private void DrawPeachTree(Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
+		var tile = TileUtils.SafeGetTile(tilePos);
+		Texture2D tex = ModAsset.IslePeachTree_side_tree.Value;
+
+		// 回声涂料
+		if (!TileDrawing.IsVisible(tile))
+		{
+			return;
+		}
+
+		int paint = Main.tile[tilePos].TileColor;
+		tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.IslePeachTree_side_tree_Path, Type, 1, paint, tileDrawing);
+		tex ??= ModAsset.IslePeachTree_side_tree.Value;
+
+		float windCycle = 0;
+		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+		{
+			windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y, tileDrawing._sunflowerWindCounter) * 0.25f;
+		}
+
+		int totalPushTime = 140;
+		float pushForcePerFrame = 0.96f;
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		windCycle += highestWindGridPushComplex * 0.25f;
+		float rotation = windCycle * 0.01f;
+
+		var tileLight = Lighting.GetColor(tilePos);
+
+		// 支持发光涂料
+		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y, tile, Type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+		tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.X, tilePos.Y, tile, Type, 0, 0, tileLight);
+
+		var frame = new Rectangle(0, 0, 412, 200);
+		var origin = new Vector2(390, 179);
+		if (tile.TileFrameX == 180)
+		{
+			frame = new Rectangle(416, 0, 412, 200);
+			origin = new Vector2(21, 179);
+		}
+
+		var drawPos = drawCenterPos;
+		var tileSpriteEffect = SpriteEffects.None;
+		spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+	}
+
+	int ITileOffsetOverScreenDrawn.TileOffsetScreenRange() => 480;
+}

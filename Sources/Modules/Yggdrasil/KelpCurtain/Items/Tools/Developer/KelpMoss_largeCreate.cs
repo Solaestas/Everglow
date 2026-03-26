@@ -8,7 +8,7 @@ public class KelpMoss_largeCreate : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.DefaultToPlaceableTile(ModContent.TileType<IsleBamboo>());
+		Item.DefaultToPlaceableTile(ModContent.TileType<IslePeachTree_side>());
 		Item.width = 16;
 		Item.height = 16;
 	}

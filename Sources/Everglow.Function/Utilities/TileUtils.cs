@@ -96,4 +96,28 @@ public partial class TileUtils
 		TileObjectData.newTile.Origin = new Point16(width / 2, height / 2);
 		TileObjectData.newTile.StyleHorizontal = true;
 	}
+
+	public static int GetFixedRandomNumber(int x, int y, int max = 1024)
+	{
+		Random random = new Random(SafeGetTile(x, y).GetHashCode());
+		return random.Next(0, max);
+	}
+
+	public static int GetFixedRandomNumber(Point point, int max = 1024)
+	{
+		Random random = new Random(SafeGetTile(point).GetHashCode());
+		return random.Next(0, max);
+	}
+
+	public static int GetFixedRandomNumber(Tile tile, int max = 1024)
+	{
+		Random random = new Random(tile.GetHashCode());
+		return random.Next(0, max);
+	}
+
+	public static int GetFixedRandomNumber(int seed, int max = 1024)
+	{
+		Random random = new Random(seed);
+		return random.Next(0, max);
+	}
 }

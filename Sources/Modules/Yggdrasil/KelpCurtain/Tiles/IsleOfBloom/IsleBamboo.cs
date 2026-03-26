@@ -1,7 +1,9 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Terraria;
 using Terraria.GameContent.Drawing;
+using Terraria.ModLoader.IO;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
@@ -74,7 +76,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 		if (tile2.TileType != tile.TileType && !tile2.HasTile)
 		{
 			int length = 0;
-			int maxLengthHere = MaxLength - RandomHashValue(i);
+			int maxLengthHere = MaxLength - (TileUtils.GetFixedRandomNumber(tile) % 10);
 			while (TileUtils.SafeGetTile(i, j + length).TileType == tile.TileType)
 			{
 				length++;
@@ -123,7 +125,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
-		else if (j == (Main.screenPosition + new Vector2(0, Main.screenHeight)).ToTileCoordinates().Y)
+		else if (j == (Main.screenPosition + new Vector2(0, Main.screenHeight / Main.GameViewMatrix.Zoom.Y + Main.offScreenRange + 160)).ToTileCoordinates().Y)
 		{
 			for (int y = 1; y < MaxLength; y++)
 			{
@@ -164,8 +166,8 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				break;
 			}
 		}
-		float natureBendValue = RandomHashValue(tilePos.X) - 4.5f;
-		natureBendValue += MathF.Sin((float)(Main.time * 0.03f + RandomHashValue(tilePos.X) / 9f * MathHelper.PiOver2)) * Math.Clamp(Main.windSpeedCurrent, 0, 1);
+		float natureBendValue = (TileUtils.GetFixedRandomNumber(tilePos.X, tilePos.Y) % 10) - 4.5f;
+		natureBendValue += MathF.Sin((float)(Main.time * 0.03f + (TileUtils.GetFixedRandomNumber(tilePos.X, tilePos.Y) % 10) / 9f * MathHelper.PiOver2)) * Math.Clamp(Main.windSpeedCurrent, 0, 1);
 		if (height < 20)
 		{
 			natureBendValue *= 0;
@@ -271,7 +273,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 			{
 				if(j == 0)
 				{
-					int value = RandomHashValue(tilePos.X);
+					int value = TileUtils.GetFixedRandomNumber(tile);
 					frame = new Rectangle(18 * (value % 3), 34 * (value % 2), 18, 34);
 					origin = new Vector2(9, 34);
 					spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
@@ -293,7 +295,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 					Vector2 leaf_drawPos = jointOffset + drawPos;
 					float sub_rot_Left = GetRotationLeaf(tileDrawing, tilePos.X - 1, tilePos.Y - j, rotation);
 					float sub_rot_Right = GetRotationLeaf(tileDrawing, tilePos.X + 1, tilePos.Y - j, rotation);
-					switch (RandomHashValue(j + tilePos.X))
+					switch (TileUtils.GetFixedRandomNumber(tile) % 10)
 					{
 						case 0: // Left0
 							spriteBatch.Draw(tex, leaf_drawPos, leftLeafFrame, tileLight, sub_rot_Left, new Vector2(38, 9), 1f, tileSpriteEffect, 0f);
@@ -352,7 +354,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 					var leafFrame = new Rectangle(276, 184, 130, 54);
 					Vector2 leaf_drawPos = jointOffset + drawPos;
 					float sub_rot = GetRotationLeaf(tileDrawing, tilePos.X, tilePos.Y - j, rotation);
-					switch (RandomHashValue(j + tilePos.X) % 2)
+					switch (TileUtils.GetFixedRandomNumber(tile) % 2)
 					{
 						case 0:
 							spriteBatch.Draw(tex, leaf_drawPos, leafFrame, tileLight, sub_rot, new Vector2(70, 24), 1f, tileSpriteEffect, 0f);
@@ -378,7 +380,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 					Vector2 anchorPos = new Vector2(72, 18);
 					Vector2 leaf_drawPos = jointOffset + drawPos;
 					float sub_rot = GetRotationLeaf_LargeLeaves(tileDrawing, tilePos.X, tilePos.Y - j, rotation);
-					switch (RandomHashValue(j + tilePos.X) % 3)
+					switch (TileUtils.GetFixedRandomNumber(tile) % 3)
 					{
 						case 0:
 							break;
@@ -396,7 +398,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 					var leafFrame_front = leafFrame;
 					leafFrame_front.X -= 172;
 					SpriteEffects spriteEffects = SpriteEffects.None;
-					if (RandomHashValue(j) % 2 == 0)
+					if (TileUtils.GetFixedRandomNumber(tile) % 2 == 0)
 					{
 						spriteEffects = SpriteEffects.FlipHorizontally;
 					}
@@ -414,7 +416,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				float coordY = (lastTileDis - 1) / 11f * frame_top.Height / tex.Height;
 				float coordX1 = 548f / tex.Width;
 				float coordX2 = 440f / tex.Width;
-				if (RandomHashValue(tilePos.X) % 2 == 1)
+				if (TileUtils.GetFixedRandomNumber(tilePos) % 2 == 1)
 				{
 					(coordX2, coordX1) = (coordX1, coordX2);
 				}
@@ -456,10 +458,5 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 		float sub_windCycle = windCycle + sub_highestWindGridPushComplex * 1.5f;
 		float sub_rot = rotation + sub_windCycle * 0.05f;
 		return sub_rot;
-	}
-
-	public int RandomHashValue(int value)
-	{
-		return value.GetHashCode() % 10;
 	}
 }

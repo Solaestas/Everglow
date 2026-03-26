@@ -1,4 +1,5 @@
 using System.Reflection;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.VFX;
 using MonoMod.Cil;
 using Terraria.GameContent.Drawing;
@@ -56,6 +57,27 @@ public class CableTile_HangingTile_GlobaDrawing : GlobalTile
 				{
 					int type = Main.tile[tilePos].type;
 					TileLoader.PreDraw(tilePos.X, tilePos.Y, type, Main.spriteBatch);
+				}
+			}
+		}
+
+		foreach (var offestScreenTile in TileLoader.tiles.OfType<ITileOffsetOverScreenDrawn>())
+		{
+			foreach (var tilePos in ITileOffsetOverScreenDrawn.SpecialTilePositon)
+			{
+				var worldPos = tilePos.ToWorldCoordinates();
+				if (VFXManager.InScreen(worldPos, offestScreenTile.TileOffsetScreenRange()) && (tilePos.X < firstTileX - 2 || tilePos.X >= lastTileX + 2 || tilePos.Y < firstTileY || tilePos.Y >= lastTileY + 4))
+				{
+					var tile = Main.tile[tilePos];
+					if(tile.HasTile && TileLoader.GetTile(tile.type) is ITileOffsetOverScreenDrawn)
+					{
+						int type = tile.type;
+						TileLoader.PreDraw(tilePos.X, tilePos.Y, type, Main.spriteBatch);
+					}
+					else
+					{
+						ITileOffsetOverScreenDrawn.SpecialTilePositon.Remove(tilePos);
+					}
 				}
 			}
 		}
