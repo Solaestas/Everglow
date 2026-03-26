@@ -28,7 +28,7 @@ public class Lantern_ExplosionEffect : ModProjectile
 	public override void OnSpawn(IEntitySource source)
 	{
 		SoundStyle sound;
-		switch (Main.rand.Next(3))
+		switch (Projectile.whoAmI % 3)
 		{
 			case 0:
 				sound = new SoundStyle(ModAsset.LanternYoyo_Burst0_Mod);
@@ -44,7 +44,7 @@ public class Lantern_ExplosionEffect : ModProjectile
 				break;
 		}
 
-		SoundEngine.PlaySound(sound, Projectile.Center);
+		SoundEngine.PlaySound(sound.WithVolume(Main.rand.NextFloat(0.7f, 0.9f)), Projectile.Center);
 		for (int g = 0; g < 6; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(12f, 20f)).RotatedByRandom(MathHelper.TwoPi);
@@ -64,18 +64,18 @@ public class Lantern_ExplosionEffect : ModProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		for (int g = 0; g < 6; g++)
+		for (int g = 0; g < 18; g++)
 		{
 			float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
-			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 2).RotatedByRandom(MathHelper.TwoPi);
+			Vector2 newVelocity = new Vector2(0, sqrtSpeed * 5).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new LanternFlameDust
 			{
 				Velocity = newVelocity,
 				Active = true,
 				Visible = true,
 				Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
-				MaxTime = Main.rand.Next(30, 45),
-				Scale = Main.rand.NextFloat(32f, 48f),
+				MaxTime = Main.rand.Next(30, 60),
+				Scale = Main.rand.NextFloat(32f, 88f),
 				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 				RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
 				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
@@ -102,10 +102,14 @@ public class Lantern_ExplosionEffect : ModProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D star = Commons.ModAsset.StarSlash.Value;
-		float timeValue = Projectile.timeLeft / 10f;
+		float timeValue = Projectile.timeLeft / 6f;
 		Color drawColor = Color.Lerp(new Color(0.7f, 0.1f, 0f, 0), new Color(1f, 1f, 1f, 0), timeValue);
-		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale), SpriteEffects.None, 0);
-		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, 0, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale) * 0.75f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale) * 1.25f, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, 0, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale) * 1f, SpriteEffects.None, 0);
+		for (int k = 0; k < 3; k++)
+		{
+			Main.EntitySpriteDraw(star, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.whoAmI + MathHelper.Pi / 3f * k * 2, star.Size() * 0.5f, new Vector2(timeValue, Projectile.scale) * 0.75f, SpriteEffects.None, 0);
+		}
 		return false;
 	}
 }

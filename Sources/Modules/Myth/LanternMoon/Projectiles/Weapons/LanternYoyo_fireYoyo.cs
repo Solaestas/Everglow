@@ -28,6 +28,24 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		{
 			Projectile.Kill();
 		}
+		if (Projectile.timeLeft < 30)
+		{
+			var spark = new HitEffectSpark
+			{
+				Velocity = Projectile.velocity,
+				Active = true,
+				Visible = true,
+				Position = Projectile.Center,
+				MaxTime = Main.rand.Next(16, 20),
+				DrawColor = new Color(1f, 0.4f, 0, 0),
+				LightFlat = 1f,
+				SpeedDecay = 0.8f,
+				GravityAcc = 0.15f,
+				SelfLight = true,
+				Scale = Main.rand.NextFloat(16f, 28f),
+			};
+			Ins.VFXManager.Add(spark);
+		}
 		if (MainProjYoyo is null || !MainProjYoyo.active || MainProjYoyo.type != ModContent.ProjectileType<LanternYoyoProjectile>())
 		{
 			if (Projectile.timeLeft > 60)
@@ -55,7 +73,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 			}
 		}
 
-		if(!FoundTarget)
+		if (!FoundTarget)
 		{
 			int index = AllocateIndex();
 			if (index >= 5)
@@ -103,7 +121,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		if(timeLeft > 0)
+		if(timeLeft > 15)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Lantern_ExplosionEffect>(), Projectile.damage, 2, Projectile.owner, 3);
 		}
@@ -120,14 +138,15 @@ public class LanternYoyo_fireYoyo : ModProjectile
 	{
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		Color drawColor = Color.Lerp(new Color(1f, 0.48f, 0.1f, 0), new Color(1f, 1f, 0.7f, 0), MathF.Sin((float)Main.time * 0.08f + Projectile.whoAmI) * 0.5f + 0.5f);
+		float drawSize = 1f;
 		if(Projectile.timeLeft < 60)
 		{
-			drawColor *= Projectile.timeLeft / 60f;
+			drawSize *= Projectile.timeLeft / 60f;
 		}
 		Lighting.AddLight(Projectile.Center, new Vector3(drawColor.R, drawColor.G * 0.7f, drawColor.B * 0.5f) / 300f);
 		Texture2D spot = Commons.ModAsset.LightPoint2.Value;
-		Main.EntitySpriteDraw(spot, Projectile.Center - Main.screenPosition, null, drawColor, MathHelper.PiOver2, spot.Size() * 0.5f, 2f, SpriteEffects.None, 0f);
-		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(spot, Projectile.Center - Main.screenPosition, null, drawColor, MathHelper.PiOver2, spot.Size() * 0.5f, 2f * drawSize, SpriteEffects.None, 0f);
+		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, drawColor, Projectile.rotation, tex.Size() * 0.5f, Projectile.scale * drawSize, SpriteEffects.None, 0);
 		return false;
 	}
 }

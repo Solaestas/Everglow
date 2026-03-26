@@ -23,7 +23,7 @@ public class LanternYoyoProjectile : YoyoProjectile
 		if (Timer % 20 == 0 && ProjectileOwnFireYoyoCount() < 5)
 		{
 			SoundStyle sound;
-			switch (Main.rand.Next(3))
+			switch (ProjectileOwnFireYoyoCount() % 3)
 			{
 				case 0:
 					sound = new SoundStyle(ModAsset.LanternYoyo_FireBallSpawn0_Mod);
@@ -39,7 +39,7 @@ public class LanternYoyoProjectile : YoyoProjectile
 					break;
 			}
 
-			SoundEngine.PlaySound(sound, GapCenter);
+			SoundEngine.PlaySound(sound.WithVolume(Main.rand.NextFloat(0.4f, 0.6f)), GapCenter);
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), GapCenter, Vector2.zeroVector, ModContent.ProjectileType<LanternYoyo_fireYoyo>(), (int)(Projectile.damage * 1.6f), 2f, Projectile.owner);
 			LanternYoyo_fireYoyo lYfY = p0.ModProjectile as LanternYoyo_fireYoyo;
 			if(lYfY is not null)
