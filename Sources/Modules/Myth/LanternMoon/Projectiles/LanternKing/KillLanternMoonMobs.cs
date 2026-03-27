@@ -10,6 +10,8 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 {
 	public int Timer = 0;
 
+	public float Range = 0;
+
 	public static List<int> KillProjectileType = new List<int>();
 
 	public override void SetDefaults()
@@ -21,7 +23,7 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 		Projectile.friendly = true;
 		Projectile.ignoreWater = true;
 		Projectile.tileCollide = false;
-		Projectile.timeLeft = 30;
+		Projectile.timeLeft = 120;
 		Projectile.penetrate = -1;
 		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 	}
@@ -30,6 +32,7 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 	{
 		EliminateProj();
 		Timer++;
+		Range = MathF.Pow(Timer / 90f, 8) * 3600f;
 		base.AI();
 	}
 
@@ -37,9 +40,11 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 	{
 		Wave(Projectile.Center);
 		KillProjectileType.Add(ModContent.ProjectileType<BloodLanternGhost_PowerBall>());
-		//KillProjectileType.Add(ModContent.ProjectileType<BloodLanternGhost_PowerBall_Explosion>());
+
+		// KillProjectileType.Add(ModContent.ProjectileType<BloodLanternGhost_PowerBall_Explosion>());
 		KillProjectileType.Add(ModContent.ProjectileType<CurseSpell>());
-		//KillProjectileType.Add(ModContent.ProjectileType<CylindricalLantern_explosion>());
+
+		// KillProjectileType.Add(ModContent.ProjectileType<CylindricalLantern_explosion>());
 		KillProjectileType.Add(ModContent.ProjectileType<GreenFlameProj>());
 		KillProjectileType.Add(ModContent.ProjectileType<CylindricalLantern_flame>());
 		KillProjectileType.Add(ModContent.ProjectileType<GreenFlameSharpCrystal>());
@@ -81,7 +86,9 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 	{
 		var circle = new List<Vertex2D>();
 		Color color = new Color(0f, 0f, 0f, 0f);
-		for (int h = 0; h < radius / 2; h += 1)
+		int count = (int)(radius / 5f);
+		count = Math.Min(count, 1000);
+		for (int h = 0; h < count; h += 1)
 		{
 			float colorR = (h / radius * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
 			float color2R = ((h + 1) / radius * MathF.PI * 4 + (float)addRot + 1.57f) % (MathF.PI * 2f) / (MathF.PI * 2f);
@@ -115,16 +122,15 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 		{
 			width = Projectile.timeLeft;
 		}
-
-		DrawWarpTexCircle_VFXBatch(sb, Timer * 60, width * 10, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 4000f);
+		DrawWarpTexCircle_VFXBatch(sb, Range, width * 10, Projectile.Center - Main.screenPosition, t, Projectile.timeLeft / 12000f);
 	}
 
 	public void EliminateProj()
 	{
-		float maxDistance = 60 * Timer;
+		float maxDistance = Range;
 		foreach (var proj in Main.projectile)
 		{
-			if(proj is not null && proj.active)
+			if (proj is not null && proj.active)
 			{
 				if (KillProjectileType.Contains(proj.type))
 				{
@@ -139,18 +145,18 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		float maxDistance = 60 * Timer;
-		bool CheckCenter(Vector2 pos)
-		{
-			return (pos - projHitbox.Center()).Length() < maxDistance / 0.9f;
-		}
 		return CheckCenter(targetHitbox.TopLeft()) || CheckCenter(targetHitbox.TopRight()) || CheckCenter(targetHitbox.BottomLeft()) || CheckCenter(targetHitbox.BottomRight());
+	}
+
+	public bool CheckCenter(Vector2 pos)
+	{
+		return (pos - Projectile.Center).Length() < Range / 0.9f;
 	}
 
 	public override bool? CanHitNPC(NPC target)
 	{
 		bool flag = target.ModNPC is not null && target.ModNPC is LanternMoonNPC && target.type != ModContent.NPCType<LanternGhostKing>();
-		if(flag)
+		if (flag)
 		{
 			target.value = 0;
 		}
@@ -159,7 +165,7 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(target.life > 0)
+		if (target.life > 0)
 		{
 			target.active = false;
 		}

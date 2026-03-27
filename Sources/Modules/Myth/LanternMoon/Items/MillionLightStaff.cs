@@ -34,7 +34,7 @@ public class MillionLightStaff : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		for (int k = 0; k < 7; k++)
+		for (int k = 0; k < 4; k++)
 		{
 			Vector2 pos = player.Center + new Vector2(Main.rand.NextFloat(-300, 300), -1000);
 			Vector2 vel = Main.MouseWorld - pos;

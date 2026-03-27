@@ -819,12 +819,12 @@ public class LanternGhostKing : LanternMoonNPC
 				count = 5;
 				damage = 85;
 			}
-			if (Main.masterMode && Main.netMode != NetmodeID.MultiplayerClient)
+			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				float addValue = Main.rand.NextFloat(6.283f);
 				for (int x = 0; x < count; x++)
 				{
-					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 50) + new Vector2(2000, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / 5f * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), damage, 0f, target.whoAmI, 0.02f, 0);
+					Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 50) + new Vector2(2000, 0).RotatedBy(x / (float)count * MathHelper.TwoPi + addValue), new Vector2(-11, 0).RotatedBy(x / (float)count * MathHelper.TwoPi + addValue), ModContent.ProjectileType<LanternFlow>(), damage, 0f, target.whoAmI, 0.02f, 0);
 					LanternFlow lanternF = p0.ModProjectile as LanternFlow;
 					lanternF.OwnerNPC = NPC;
 					lanternF.MinDisToNPC = 500;

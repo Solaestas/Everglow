@@ -1,5 +1,6 @@
 using Everglow.Commons.Templates.Weapons;
 using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
@@ -53,9 +54,10 @@ public class MillionLightStaff_Proj : TrailingProjectile
 		}
 		if (Style == 1)
 		{
+			Projectile.extraUpdates = 3;
 			TrailTexture = Commons.ModAsset.Trail_10.Value;
 			TrailTextureBlack = Commons.ModAsset.Trail_10_black.Value;
-			TrailLength = 16;
+			TrailLength = 32;
 			TrailWidth = 15;
 			Projectile.damage = (int)(Projectile.damage * 1.5f);
 		}
@@ -116,12 +118,12 @@ public class MillionLightStaff_Proj : TrailingProjectile
 		}
 		if (Style == 1)
 		{
-			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 		}
 		if (Timer > 30)
 		{
 			Projectile.tileCollide = true;
 		}
+		Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 	}
 
 	public override void DestroyEntityEffect()
@@ -147,24 +149,42 @@ public class MillionLightStaff_Proj : TrailingProjectile
 				};
 				Ins.VFXManager.Add(spark);
 			}
-			for (int g = 0; g < 12; g++)
+			for (int g = 0; g < 24; g++)
 			{
 				float sqrtSpeed = MathF.Sqrt(Main.rand.NextFloat(1f));
-				Vector2 newVelocity = new Vector2(0, sqrtSpeed * 6).RotatedByRandom(MathHelper.TwoPi);
+				Vector2 newVelocity = new Vector2(0, sqrtSpeed * 12).RotatedByRandom(MathHelper.TwoPi);
 				var somg = new LanternFlameDust
 				{
 					Velocity = newVelocity,
 					Active = true,
 					Visible = true,
 					Position = Projectile.Center + new Vector2(Main.rand.NextFloat(20), 0).RotatedByRandom(MathHelper.TwoPi),
-					MaxTime = Main.rand.Next(30, 45),
-					Scale = Main.rand.NextFloat(64f, 96f),
+					MaxTime = Main.rand.Next(30, 60),
+					Scale = Main.rand.NextFloat(64f, 120f),
 					Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
 					RotateSpeed = Main.rand.NextFloat(-0.8f, 0.8f),
 					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), 0 },
 				};
 				Ins.VFXManager.Add(somg);
 			}
+			SoundStyle sound;
+			switch (Projectile.whoAmI % 3)
+			{
+				case 0:
+					sound = new SoundStyle(ModAsset.LanternYoyo_Burst0_Mod);
+					break;
+				case 1:
+					sound = new SoundStyle(ModAsset.LanternYoyo_Burst1_Mod);
+					break;
+				case 2:
+					sound = new SoundStyle(ModAsset.LanternYoyo_Burst2_Mod);
+					break;
+				default:
+					sound = new SoundStyle(ModAsset.LanternYoyo_Burst0_Mod);
+					break;
+			}
+
+			SoundEngine.PlaySound(sound.WithPitchOffset(-0.5f), Projectile.Center);
 		}
 		if (Style == 1)
 		{
@@ -173,9 +193,9 @@ public class MillionLightStaff_Proj : TrailingProjectile
 				Active = true,
 				Visible = true,
 				Position = Projectile.Center,
-				Rotation = Main.rand.NextFloat(MathHelper.TwoPi),
+				Rotation = Projectile.oldVelocity.ToRotation(),
 				MaxTime = Main.rand.Next(20, 30),
-				Scale = Main.rand.NextFloat(1.2f, 1.6f),
+				Scale = Main.rand.NextFloat(0.7f, 0.96f),
 			};
 			Ins.VFXManager.Add(star);
 			for (int g = 0; g < 6; g++)

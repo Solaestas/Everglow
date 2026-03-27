@@ -1,4 +1,5 @@
 using Everglow.Myth.LanternMoon.Gores;
+using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.Projectiles.PerWave15;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.DataStructures;
@@ -226,7 +227,8 @@ public class LanternBombRemoteControl : ModItem
 
 	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 	{
-		KillGreenLanternEffect(Main.MouseWorld);
+		Projectile.NewProjectileDirect(Item.GetSource_FromAI(), Main.MouseWorld, Vector2.zeroVector, ModContent.ProjectileType<KillLanternMoonMobs>(), 20, 1, Main.myPlayer);
+		//KillGreenLanternEffect(Main.MouseWorld);
 		return false;
 	}
 }
