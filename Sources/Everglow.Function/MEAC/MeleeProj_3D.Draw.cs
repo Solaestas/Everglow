@@ -530,10 +530,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		return sEffect.SlashFade.ToArray()[index] * fade;
 	}
 
-	public void DrawBloom()
+	public virtual void DrawBloom()
 	{
 		if (SelfLuminous)
 		{
+			DrawTrail();
 		}
 	}
 
