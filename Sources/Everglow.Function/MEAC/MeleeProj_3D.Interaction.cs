@@ -18,7 +18,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 			}
 			else
 			{
-				return true;
+				return base.CanHitNPC(target);
 			}
 		}
 		return false;
@@ -101,15 +101,22 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void ProduceWaterRipples(Vector2 beamDims)
 	{
-		var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
-		float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
-		Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(CurrentWeaponTipPosition().ToRotation());
-		Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
-		shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, CurrentWeaponTipPosition().ToRotation());
+		if(!Main.dedServ)
+		{
+			var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
+			float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+			Vector2 ripplePos = Projectile.Center + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(CurrentWeaponTipPosition().ToRotation());
+			Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+			shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, CurrentWeaponTipPosition().ToRotation());
+		}
 	}
 
 	public override void CutTiles()
 	{
+		if (!Visible)
+		{
+			return;
+		}
 		for (int k = 0; k < SlashEffects.Count; k++)
 		{
 			SlashEffect sEffect = SlashEffects[k];
@@ -139,11 +146,11 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		}
 	}
 
-	public void ScreenShake()
+	public virtual void ScreenShake()
 	{
 		if(MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
 		{
-			ShakerManager.AddShaker(Owner.Center + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
+			ShakerManager.AddShaker(Owner.MountedCenter + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
 		}
 	}
 }
