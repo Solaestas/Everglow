@@ -2,12 +2,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Everglow.Commons.VFX.Visuals;
 
-<<<<<<<< HEAD:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/VFXs/LightDust.cs
-namespace Everglow.SpellAndSkull.Projectiles.BlackHole.VFXs;
-========
 namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
->>>>>>>> origin/master:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/Dusts/LightDust.cs
-
 
 [Pipeline(typeof(WCSPipeline))]
 internal class LightDust : Particle
@@ -15,6 +10,7 @@ internal class LightDust : Particle
 	public int time;
 	public int time_max;
 	public Color drawColor;
+
 	public override void AI()
 	{
 		time++;
@@ -24,12 +20,15 @@ internal class LightDust : Particle
 			scale *= 0.9f;
 		}
 		if (time > time_max)
+		{
 			Kill();
+		}
 		else
 		{
 			velocity = velocity.RotatedBy(0.05f);
 		}
 	}
+
 	public override void Draw()
 	{
 		Texture2D tex = ModAsset.Ball.Value;

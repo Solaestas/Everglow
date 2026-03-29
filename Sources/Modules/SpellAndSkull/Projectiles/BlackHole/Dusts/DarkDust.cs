@@ -2,17 +2,14 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Everglow.Commons.VFX.Visuals;
 
-<<<<<<<< HEAD:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/VFXs/DarkDust.cs
-namespace Everglow.SpellAndSkull.Projectiles.BlackHole.VFXs;
-========
 namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
->>>>>>>> origin/master:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/Dusts/DarkDust.cs
 
 [Pipeline(typeof(WCSPipeline))]
 internal class DarkDust : Particle
 {
 	public int time;
 	public int time_max;
+
 	public override void AI()
 	{
 		time++;
@@ -22,12 +19,15 @@ internal class DarkDust : Particle
 			scale *= 0.9f;
 		}
 		if (time > time_max)
+		{
 			Kill();
+		}
 		else
 		{
 			velocity = velocity.RotatedBy(0.05f);
 		}
 	}
+
 	public override void Draw()
 	{
 		Texture2D tex = ModAsset.BlackDust.Value;
