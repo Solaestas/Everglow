@@ -151,4 +151,40 @@ public static partial class TileUtils
 		normal = Utils.SafeNormalize(normal, Vector2.zeroVector);
 		return normal;
 	}
+
+	/// <summary>
+	/// Return false if any tile exist inside the area from pos to (pos + size).
+	/// </summary>
+	/// <param name="pos"></param>
+	/// <param name="size"></param>
+	/// <returns></returns>
+	public static bool IsAreaEmpty(Point pos, Point size)
+	{
+		for (int i = 0; i < size.X; i++)
+		{
+			for (int j = 0; j < size.Y; j++)
+			{
+				var check = pos + new Point(i, j);
+				var tile = SafeGetTile(check);
+				if (tile.HasTile)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// Return false if any tile exist inside the area from (x, y) to (x + width, y + height).
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	/// <returns></returns>
+	public static bool IsAreaEmpty(int x, int y, int width, int height)
+	{
+		return IsAreaEmpty(new Point(x, y), new Point(width, height));
+	}
 }

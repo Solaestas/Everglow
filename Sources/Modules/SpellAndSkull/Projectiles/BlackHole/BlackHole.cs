@@ -1,6 +1,6 @@
 using Everglow.Commons.Vertex;
 using Everglow.SpellAndSkull.Common;
-using Everglow.SpellAndSkull.Projectiles.BlackHole.VFXs;
+using Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 

@@ -2,7 +2,11 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 using Everglow.Commons.VFX.Visuals;
 
+<<<<<<<< HEAD:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/VFXs/LightDust.cs
 namespace Everglow.SpellAndSkull.Projectiles.BlackHole.VFXs;
+========
+namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
+>>>>>>>> origin/master:Sources/Modules/SpellAndSkull/Projectiles/BlackHole/Dusts/LightDust.cs
 
 
 [Pipeline(typeof(WCSPipeline))]
