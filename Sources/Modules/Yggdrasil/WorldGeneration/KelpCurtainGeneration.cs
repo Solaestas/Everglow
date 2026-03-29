@@ -498,7 +498,7 @@ public class KelpCurtainGeneration
 			lakeBottomY += CheckSpaceDown(lakeCenterX, lakeBottomY);
 			float xLength = xBoundRight - xBoundLeft;
 			float height = (MathF.Sin((x - xBoundLeft) / xLength * MathHelper.TwoPi - MathHelper.PiOver2) + 1) * 465f;
-			float heightMax = lakeBottomY - lakeSurfaceY + GetPerlinPixeG(x, 15) * 16;
+			float heightMax = lakeBottomY - lakeSurfaceY + GetPerlinPixelG(x, 15) * 16;
 			height = MathF.Min(heightMax, height);
 			for (int y = 0; y < height; y++)
 			{
@@ -532,7 +532,7 @@ public class KelpCurtainGeneration
 		for (int x = xBoundLeft; x < xBoundRight; x++)
 		{
 			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
-			halfHeight += GetPerlinPixeG(x, 60) * 16f;
+			halfHeight += GetPerlinPixelG(x, 60) * 16f;
 			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
 			if (x >= xBoundRight - 30)
 			{

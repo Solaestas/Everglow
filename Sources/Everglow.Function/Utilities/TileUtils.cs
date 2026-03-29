@@ -11,52 +11,12 @@ public partial class TileUtils
 
 	public static Tile SafeGetTile(Point point) => SafeGetTile(point.X, point.Y);
 
-	public static Tile SafeGetTile(Vector2 vector) => SafeGetTile((int)vector.X, (int)vector.Y);
-
 	/// <summary>
-	/// 以[x,y]为左上顶点放置大件连续物块,此类物块必须是18x18(不算分隔线就16x16)一帧的
+	/// The vector is expected to be the tile coordinate, not world coordinate. (i.e. vector.X is expected to be i, and vector.Y is expected to be j)
 	/// </summary>
-	/// <param name="path"></param>
+	/// <param name="vector"></param>
 	/// <returns></returns>
-	public static void PlaceFrameImportantTiles(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
-	{
-		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
-		{
-			return;
-		}
-
-		for (int i = 0; i < width; i++)
-		{
-			for (int j = 0; j < height; j++)
-			{
-				Tile tile = Main.tile[x + i, y + j];
-				tile.TileType = (ushort)type;
-				tile.TileFrameX = (short)(i * 18 + startX);
-				tile.TileFrameY = (short)(j * 18 + startY);
-				tile.HasTile = true;
-			}
-		}
-	}
-
-	public static void PlaceFrameImportantTilesAbove(int x, int y, int width, int height, int type, int startX = 0, int startY = 0)
-	{
-		if (x > Main.maxTilesX - width || x < 0 || y > Main.maxTilesY - height || y < 0)
-		{
-			return;
-		}
-
-		for (int i = 0; i < width; i++)
-		{
-			for (int j = 0; j < height; j++)
-			{
-				Tile tile = Main.tile[x + i, y + j - height];
-				tile.TileType = (ushort)type;
-				tile.TileFrameX = (short)(i * 18 + startX);
-				tile.TileFrameY = (short)(j * 18 + startY);
-				tile.HasTile = true;
-			}
-		}
-	}
+	public static Tile SafeGetTile(Vector2 vector) => SafeGetTile((int)vector.X, (int)vector.Y);
 
 	public static void DefaultToMultiTileAnchorBottom(int width, int height)
 	{

@@ -63,8 +63,9 @@ public class CableTile_HangingTile_GlobaDrawing : GlobalTile
 
 		foreach (var offestScreenTile in TileLoader.tiles.OfType<ITileOffsetOverScreenDrawn>())
 		{
-			foreach (var tilePos in ITileOffsetOverScreenDrawn.SpecialTilePositon)
+			for(int x = ITileOffsetOverScreenDrawn.SpecialTilePositon.Count - 1;x >= 0;x--)
 			{
+				var tilePos = ITileOffsetOverScreenDrawn.SpecialTilePositon[x];
 				var worldPos = tilePos.ToWorldCoordinates();
 				if (VFXManager.InScreen(worldPos, offestScreenTile.TileOffsetScreenRange()) && (tilePos.X < firstTileX - 2 || tilePos.X >= lastTileX + 2 || tilePos.Y < firstTileY || tilePos.Y >= lastTileY + 4))
 				{

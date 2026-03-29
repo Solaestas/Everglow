@@ -81,7 +81,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static float GetPerlinPixeG(float x, float y)
+	public static float GetPerlinPixelG(float x, float y)
 	{
 		return PerlinPixelG[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
@@ -1302,35 +1302,24 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					if (ChestSafe(center + new Vector2(x, y)))
 					{
-						if (force)
+						if (type == -2)
 						{
-							if (type == -2)
-							{
-								tile.ClearEverything();
-							}
-							else if (type == -1)
-							{
-								tile.HasTile = false;
-							}
-							else
+							tile.ClearEverything();
+						}
+						else if (type == -1)
+						{
+							tile.HasTile = false;
+						}
+						else if (type >= 0)
+						{
+							if (force)
 							{
 								tile.TileType = (ushort)type;
 								tile.HasTile = true;
 							}
-						}
-						else
-						{
-							if (!tile.HasTile)
+							else
 							{
-								if (type == -2)
-								{
-									tile.ClearEverything();
-								}
-								else if (type == -1)
-								{
-									tile.HasTile = false;
-								}
-								else
+								if (!tile.HasTile)
 								{
 									tile.TileType = (ushort)type;
 									tile.HasTile = true;
@@ -1341,6 +1330,18 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Set a center and radius of a circle in tile coordinate, and (type >= 0, place that type of tile, type = -1,clear tiles; tile = -2,clear everything).
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void CircleTile(Point center, float radius, int type, bool force = false)
+	{
+		CircleTile(center.ToVector2(), radius, type, force);
 	}
 
 	/// <summary>
@@ -1374,22 +1375,22 @@ public class YggdrasilWorldGeneration : ModSystem
 				Tile tile = TileUtils.SafeGetTile(center + new Vector2(x, y));
 				if (new Vector2(x, y).Length() <= radius)
 				{
-					if (force)
+					if (type == -1)
 					{
-						if (type == -1)
+						tile.ClearEverything();
+					}
+					else if (type >= 0)
+					{
+						if (force)
 						{
-							tile.ClearEverything();
+							tile.wall = (ushort)type;
 						}
 						else
 						{
-							tile.wall = (ushort)type;
-						}
-					}
-					else
-					{
-						if (tile.wall == 0)
-						{
-							tile.wall = (ushort)type;
+							if ( tile.wall <= 0)
+							{
+								tile.wall = (ushort)type;
+							}
 						}
 					}
 				}
@@ -1412,7 +1413,8 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	/// 圆心半径,布设不规则圆形物块(小于半径),=-1清理物块,-2清理全部
+	/// Transform the tile within the circle(center, radius) to the type, but with a random noise affect on the bound.<br/>
+	/// force = true, directly set the tile to the type; force = false, only set the tile to the type when there is no tile. <br/>
 	/// </summary>
 	/// <param name="center"></param>
 	/// <param name="radius"></param>
@@ -1433,30 +1435,42 @@ public class YggdrasilWorldGeneration : ModSystem
 				{
 					if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
 					{
-						if (force)
+						if (type == -1)
 						{
-							if (type == -1)
+							tile.ClearEverything();
+						}
+						else if(type >= 0)
+						{
+							if (force)
 							{
-								tile.ClearEverything();
+								tile.TileType = (ushort)type;
+								tile.HasTile = true;
 							}
 							else
 							{
-								tile.TileType = (ushort)type;
-								tile.HasTile = true;
-							}
-						}
-						else
-						{
-							if (!tile.HasTile)
-							{
-								tile.TileType = (ushort)type;
-								tile.HasTile = true;
+								if (!tile.HasTile)
+								{
+									tile.TileType = (ushort)type;
+									tile.HasTile = true;
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// 圆心半径,布设不规则圆形物块(小于半径),=-1清理物块,-2清理全部
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void CircleTileWithRandomNoise(Point center, float radius, int type, float noiseSize = 10f, bool force = false)
+	{
+		CircleTileWithRandomNoise(center.ToVector2(), radius, type, noiseSize, force);
 	}
 
 	public static void CircleTileWithRandomNoise(Vector2 pointA, Vector2 pointB, int type, float noiseSize = 10f, bool force = false)

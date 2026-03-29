@@ -304,6 +304,48 @@ public static partial class MathUtils
 	}
 
 	/// <summary>
+	/// 获取2D多边形包围盒（AABB）
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns></returns>
+	public static Rectangle GetPolygonAABBBound_Rectangle(List<Vector2> polygon)
+	{
+		if (polygon == null || polygon.Count < 3)
+		{
+			return Rectangle.emptyRectangle;
+		}
+
+		Vector4 v4 = GetPolygonAABBBound_Vector4(polygon);
+		return new Rectangle((int)v4.X, (int)v4.Y, (int)(v4.Z - v4.X), (int)(v4.W - v4.Y));
+	}
+
+	/// <summary>
+	/// 获取2D多边形包围盒（AABB）
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns>(minX, minY, maxX, maxY) 的 Vector4 结构</returns>
+	public static Vector4 GetPolygonAABBBound_Vector4(List<Vector2> polygon)
+	{
+		if (polygon == null || polygon.Count < 3)
+		{
+			return Vector4.zero;
+		}
+
+		float minX = float.MaxValue;
+		float minY = float.MaxValue;
+		float maxX = float.MinValue;
+		float maxY = float.MinValue;
+		foreach (Vector2 p in polygon)
+		{
+			minX = MathF.Min(minX, p.X);
+			minY = MathF.Min(minY, p.Y);
+			maxX = MathF.Max(maxX, p.X);
+			maxY = MathF.Max(maxY, p.Y);
+		}
+		return new Vector4(minX, minY, maxX, maxY);
+	}
+
+	/// <summary>
 	/// 校验多边形边是否相交（相邻边除外，避免自相交多边形）(未完成)
 	/// </summary>
 	[Obsolete]

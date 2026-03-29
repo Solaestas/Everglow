@@ -202,7 +202,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				}
 			}
 			ushort type = tile.TileType;
-			int jointStyle = 4 - j % 5;
+			int jointStyle = 4 - (j + TileUtils.GetFixedRandomNumber(tilePos.X)) % 5;
 			var frame = new Rectangle(3 + 12 * jointStyle, 116, 10, 18);
 			if (lastTileDis > 0)
 			{
@@ -275,7 +275,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				{
 					int value = TileUtils.GetFixedRandomNumber(tile);
 					frame = new Rectangle(18 * (value % 3), 34 * (value % 2), 18, 34);
-					origin = new Vector2(9, 34);
+					origin = new Vector2(08, 34);
 					spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 				}
 			}
