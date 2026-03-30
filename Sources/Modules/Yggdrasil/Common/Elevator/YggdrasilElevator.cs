@@ -25,21 +25,22 @@ public class YggdrasilElevator : Commons.Templates.Furniture.Elevator.Elevator
 		{
 			Lighting.AddLight((int)(Position.X / 16f) + 1, (int)(Position.Y / 16f) - 3, 1f, 0.8f, 0f);
 		}
-
-		return true;
-	}
-
-	public override bool PreDrawElevatorCable(Color lightColor)
-	{
 		Texture2D frame = LampOn
 			? ModAsset.SkyTreeLiftShellLightOn.Value
 			: ModAsset.SkyTreeLiftShellLightOff.Value;
 		Main.spriteBatch.Draw(frame, Box.Center - Main.screenPosition + new Vector2(0, -46), null, lightColor, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		if (LampOn)
+		{
+			var glow = ModAsset.SkyTreeLiftShellLight_Glow.Value;
+			var bloom = ModAsset.SkyTreeLiftShellLight_Bloom.Value;
+			Main.spriteBatch.Draw(glow, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(bloom, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		}
 
 		var lampGlowColor = new Color(255, 255, 255, 0);
+
 		// var lampGlowTexture = ;
 		// Main.spriteBatch.Draw(lampGlowTexture, Box.Center - Main.screenPosition + new Vector2(0, -46), null, lampGlowColor, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-
 		Texture2D liftRopeTop = ModAsset.SkyTreeLiftRope.Value;
 		Main.spriteBatch.Draw(liftRopeTop, Box.Center - Main.screenPosition + new Vector2(0, -110), null, lightColor, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
 
@@ -63,6 +64,11 @@ public class YggdrasilElevator : Commons.Templates.Furniture.Elevator.Elevator
 			}
 		}
 
+		return true;
+	}
+
+	public override bool PreDrawElevatorCable(Color lightColor)
+	{
 		return true;
 	}
 }

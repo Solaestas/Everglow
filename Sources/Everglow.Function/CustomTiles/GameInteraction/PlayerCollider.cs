@@ -86,7 +86,7 @@ public class PlayerCollider : ModPlayer, IEntityCollider<Player>
 
 	public void OnLeave()
 	{
-		if (-Entity.velocity.Y > Player.jumpSpeed)
+		if (-Entity.velocity.Y * Player.gravDir > Player.jumpSpeed)
 		{
 			ForceJump();
 		}
