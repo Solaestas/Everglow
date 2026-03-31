@@ -34,7 +34,7 @@ public class YggdrasilElevator : Commons.Templates.Furniture.Elevator.Elevator
 			var glow = ModAsset.SkyTreeLiftShellLight_Glow.Value;
 			var bloom = ModAsset.SkyTreeLiftShellLight_Bloom.Value;
 			Main.spriteBatch.Draw(glow, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(bloom, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(bloom, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0) * 0.7f, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
 		}
 
 		var lampGlowColor = new Color(255, 255, 255, 0);

@@ -2,6 +2,7 @@ using Everglow.Commons.CustomTiles.Abstracts;
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles;
 
@@ -27,9 +28,10 @@ public class ColliderManager : ILoadable
 		On_Collision.TileCollision += Collision_TileCollision;
 		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
 		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
+		On_Collision.IsWorldPointSolid += On_Collision_IsWorldPointSolid;
 
 		// TODO: Step hook.
-		// On_Collision.StepUp += Collision_StepUp;
+		On_Collision.StepUp += Collision_StepUp;
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
@@ -210,60 +212,89 @@ public class ColliderManager : ILoadable
 	}
 
 	// TODO: StepHook, when player try to move on the CustomTile, it should be stepped to the top.
-	// private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
-	// {
-	// orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
-	// if (!Enable || !EnableHook)
-	// {
-	// CustomTileStepUp(ref position, ref velocity, width, height, ref gfxOffY, gravDir);
-	// }
-	// }
+	private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
+	{
+		orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
+		if (!Enable || !EnableHook)
+		{
+			CustomTileStepUp(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
+		}
+	}
 
-	// private void CustomTileStepUp(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float gfxOffY, int gravDir = 1)
-	// {
-	// float ascendValue = 0;
-	// if (Instance is null || MathF.Abs(velocity.X) < 1e-5)
-	// {
-	// return;
-	// }
-	// float maxAscend = 20;
-	// AABB entityBoxNow = new AABB(position, new Vector2(width, height));
-	// AABB entityBoxNext = new AABB(position + velocity, new Vector2(width, height));
-	// if (gravDir == 1)
-	// {
-	// foreach (var customTile in rigidbody.OfType<BoxEntity>())
-	// {
-	// if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow) && customTile.Box.Top > entityBoxNext.Bottom - maxAscend && entityBoxNext.Bottom - customTile.Box.Top > ascendValue)
-	// {
-	// ascendValue = entityBoxNext.Bottom - customTile.Box.Top;
-	// }
-	// }
-	// if (ascendValue > 0)
-	// {
-	// position.Y -= ascendValue * 2;
-	// gfxOffY += ascendValue * 2;
-	// }
-	// }
-	// else
-	// {
-	// // up-side-down
-	// foreach (var customTile in rigidbody.OfType<BoxEntity>())
-	// {
-	// if (Intersect(entityBoxNext) && !Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && customTile.Box.Bottom - entityBoxNext.Top > ascendValue)
-	// {
-	// ascendValue = customTile.Box.Bottom - entityBoxNext.Top;
-	// }
-	// }
-	// if (ascendValue > 0)
-	// {
-	// position.Y += ascendValue;
-	// gfxOffY -= ascendValue;
-	// }
-	// }
-	// }
+	private void CustomTileStepUp(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
+	{
+		float oldPosY = position.Y;
+		float ascendValue = 0;
+		if (Instance is null || MathF.Abs(velocity.X) < 1e-5)
+		{
+			return;
+		}
+		float maxAscend = 20;
+		AABB entityBoxNow = new AABB(position, new Vector2(width, height));
+		AABB entityBoxNext = new AABB(position + velocity, new Vector2(width, height));
+		float customTileTop = 0;
+		if (gravDir == 1)
+		{
+			foreach (var customTile in rigidbodies.OfType<BoxEntity>())
+			{
+				if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow) && customTile.Box.Top > entityBoxNext.Bottom - maxAscend && entityBoxNext.Bottom - customTile.Box.Top > ascendValue)
+				{
+					customTileTop = customTile.Box.Top;
+					ascendValue = customTile.Box.Top - entityBoxNext.Bottom;
+				}
+			}
+			if (customTileTop != 0)
+			{
+				gfxOffY += position.Y + (float)height - customTileTop;
+				position.Y = customTileTop - (float)height - 2;
+			}
+		}
+		else
+		{
+			// up-side-down
+			foreach (var customTile in rigidbodies.OfType<BoxEntity>())
+			{
+				if (Intersect(entityBoxNext) && !Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && customTile.Box.Bottom - entityBoxNext.Top > ascendValue)
+				{
+					ascendValue = customTile.Box.Bottom - entityBoxNext.Top;
+				}
+			}
+			if (ascendValue > 0)
+			{
+				position.Y += ascendValue;
+				gfxOffY -= ascendValue;
+			}
+		}
+		if (Math.Abs(position.Y - oldPosY) > 9)
+		{
+			stepSpeed = 2;
+		}
+		else
+		{
+			stepSpeed = 1;
+		}
+	}
 	#endregion
 
 	#region Collision Hooks
+
+	private bool On_Collision_IsWorldPointSolid(On_Collision.orig_IsWorldPointSolid orig, Vector2 pos, bool treatPlatformsAsNonSolid)
+	{
+		if (!Enable || !EnableHook)
+		{
+			return orig(pos, treatPlatformsAsNonSolid);
+		}
+		bool collision_with_custom_tile = false;
+		foreach (var entity in rigidbodies)
+		{
+			if (entity.Intersect(new AABB(pos, Vector2.One)))
+			{
+				collision_with_custom_tile = true;
+				break;
+			}
+		}
+		return orig(pos, treatPlatformsAsNonSolid) || collision_with_custom_tile;
+	}
 
 	private void Collision_LaserScan(On_Collision.orig_LaserScan orig, Vector2 samplingPoint, Vector2 directionUnit, float samplingWidth, float maxDistance, float[] samples)
 	{
