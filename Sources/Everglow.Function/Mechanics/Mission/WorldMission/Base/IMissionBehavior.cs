@@ -25,7 +25,7 @@ public interface IMissionBehavior
 
 	public void Unlock();
 
-	public bool CheckComplete();
+	public void Complete();
 
 	public void Update();
 
