@@ -8,9 +8,9 @@ public interface IMissionBehavior
 
 	public float Progress { get; }
 
-	public MissionObjectiveContainer_New Objectives { get; }
+	public WorldMissionObjectiveContainer Objectives { get; }
 
-	public ObjectiveBase CurrentObjective { get; }
+	public WorldObjectiveBase CurrentObjective { get; }
 
 	public int Time { get; }
 

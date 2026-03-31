@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
-public class TestMissionTime : MissionBase_New
+public class TestMissionTime : WorldMissionBase
 {
 	public override string Name => nameof(TestMissionTime);
 
@@ -13,7 +13,7 @@ public class TestMissionTime : MissionBase_New
 		Objectives.Add(new TestMissionTimeObjective());
 	}
 
-	public class TestMissionTimeObjective : ObjectiveBase
+	public class TestMissionTimeObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
 

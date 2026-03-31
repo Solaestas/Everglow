@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract partial class MissionBase_New : IMissionBehavior
+public abstract partial class WorldMissionBase : IMissionBehavior
 {
 	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
 
@@ -10,9 +10,9 @@ public abstract partial class MissionBase_New : IMissionBehavior
 
 	public virtual float Progress => 1;
 
-	public MissionObjectiveContainer_New Objectives { get; } = new();
+	public WorldMissionObjectiveContainer Objectives { get; } = new();
 
-	public ObjectiveBase CurrentObjective { get; protected set; }
+	public WorldObjectiveBase CurrentObjective { get; protected set; }
 
 	public int Time { get; protected set; }
 
@@ -53,7 +53,7 @@ public abstract partial class MissionBase_New : IMissionBehavior
 		int timeLimit = (this as IMissionMetadata).TimeLimit;
 		if (timeLimit > 0)
 		{
-			Time += MissionManager_New.UpdateInterval;
+			Time += WorldMissionManager.UpdateInterval;
 			if (Time >= TimeLimit)
 			{
 				Time = TimeLimit;

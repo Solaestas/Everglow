@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
-public class TestGeneralLifeCycle : MissionBase_New
+public class TestGeneralLifeCycle : WorldMissionBase
 {
 	public override string Name => nameof(TestGeneralLifeCycle);
 
@@ -11,7 +11,7 @@ public class TestGeneralLifeCycle : MissionBase_New
 		Objectives.Add(new TestGeneralMissionLifeCycleObjective());
 	}
 
-	public class TestGeneralMissionLifeCycleObjective : ObjectiveBase
+	public class TestGeneralMissionLifeCycleObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => true;
 

@@ -3,28 +3,28 @@ using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission;
 
-public class MissionObjectiveContainer_New
+public class WorldMissionObjectiveContainer
 {
-	public MissionObjectiveContainer_New() => AllObjectives = [];
+	public WorldMissionObjectiveContainer() => AllObjectives = [];
 
-	public ObjectiveBase this[int index] => AllObjectives[index];
+	public WorldObjectiveBase this[int index] => AllObjectives[index];
 
-	public List<ObjectiveBase> AllObjectives { get; private set; }
+	public List<WorldObjectiveBase> AllObjectives { get; private set; }
 
 	/// <summary>
 	/// The first objective.
 	/// </summary>
-	public ObjectiveBase First { get; private set; }
+	public WorldObjectiveBase First { get; private set; }
 
 	/// <summary>
 	/// The last objective.
 	/// </summary>
-	private ObjectiveBase Last { get; set; }
+	private WorldObjectiveBase Last { get; set; }
 
-	public ObjectiveBase FirstIncomplete => AllObjectives.Count != 0 ?
+	public WorldObjectiveBase FirstIncomplete => AllObjectives.Count != 0 ?
 		AllObjectives.First(x => !x.Completed) : null;
 
-	public MissionObjectiveContainer_New Add(ObjectiveBase objective)
+	public WorldMissionObjectiveContainer Add(WorldObjectiveBase objective)
 	{
 		objective.ObjectiveID = AllObjectives.Count;
 		objective.OnInitialize(); // On create hook
@@ -52,7 +52,7 @@ public class MissionObjectiveContainer_New
 	/// </summary>
 	/// <param name="tasks">The array of objectives will be in the parallel objective</param>
 	/// <returns></returns>
-	public MissionObjectiveContainer_New AddParallel(params ObjectiveBase[] objectives)
+	public WorldMissionObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
 	{
 		return Add(new ParallelObjective_New(objectives));
 	}
@@ -62,7 +62,7 @@ public class MissionObjectiveContainer_New
 	/// </summary>
 	/// <param name="branches"></param>
 	/// <returns></returns>
-	public MissionObjectiveContainer_New AddBranches(params MissionObjectiveContainer_New[] branches)
+	public WorldMissionObjectiveContainer AddBranches(params WorldMissionObjectiveContainer[] branches)
 	{
 		// foreach (var builder in branches)
 		// {
@@ -73,9 +73,9 @@ public class MissionObjectiveContainer_New
 		return Add(branchingObjective);
 	}
 
-	public void CombineWith(MissionObjectiveContainer_New data)
+	public void CombineWith(WorldMissionObjectiveContainer data)
 	{
-		foreach (ObjectiveBase objective in data.AllObjectives)
+		foreach (WorldObjectiveBase objective in data.AllObjectives)
 		{
 			objective.ObjectiveID = AllObjectives.Count;
 			AllObjectives.Add(objective);

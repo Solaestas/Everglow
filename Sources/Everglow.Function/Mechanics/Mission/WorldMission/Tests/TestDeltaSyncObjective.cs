@@ -3,7 +3,7 @@ using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
-public class TestDeltaSyncObjective : ObjectiveBase, IDeltaSyncObjective
+public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 {
 	public override bool CheckCompletion() => false;
 
@@ -32,7 +32,7 @@ public class TestDeltaSyncObjective : ObjectiveBase, IDeltaSyncObjective
 	}
 }
 
-public class TestDeltaSyncMission : MissionBase_New
+public class TestDeltaSyncMission : WorldMissionBase
 {
 	public override string Name => nameof(TestDeltaSyncMission);
 

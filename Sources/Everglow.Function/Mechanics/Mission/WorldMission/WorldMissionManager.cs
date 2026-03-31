@@ -5,7 +5,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission;
 
-public class MissionManager_New
+public class WorldMissionManager
 {
 	// Add a config option for update interval if necessary.
 #if DEBUG
@@ -14,15 +14,15 @@ public class MissionManager_New
 	public const int UpdateInterval = 30;
 #endif
 
-	public static MissionManager_New Instance => ModContent.GetInstance<MissionSystem_New>().Manager;
+	public static WorldMissionManager Instance => ModContent.GetInstance<WorldMissionSystem>().Manager;
 
 	private IGameStateProvider _gameState;
 
-	private List<MissionBase_New> _missions = [];
+	private List<WorldMissionBase> _missions = [];
 
 	private int UpdateTimer => (int)_gameState.TimeForVisualEffects;
 
-	public MissionManager_New()
+	public WorldMissionManager()
 	{
 		_gameState = GameStateProvider.Default;
 	}
@@ -32,7 +32,7 @@ public class MissionManager_New
 	/// </summary>
 	/// <param name="gameStateProvider"></param>
 	/// <param name="missions"></param>
-	public MissionManager_New(IGameStateProvider gameStateProvider)
+	public WorldMissionManager(IGameStateProvider gameStateProvider)
 	{
 		_gameState = gameStateProvider;
 	}
@@ -48,10 +48,10 @@ public class MissionManager_New
 			.Distinct();
 		foreach (var (modName, modTypes) in source)
 		{
-			foreach (var mT in modTypes.Where(t => t.IsSubclassOf(typeof(MissionBase_New)) && !t.IsAbstract))
+			foreach (var mT in modTypes.Where(t => t.IsSubclassOf(typeof(WorldMissionBase)) && !t.IsAbstract))
 			{
 				var mission = Activator.CreateInstance(mT);
-				_missions.Add(mission as MissionBase_New);
+				_missions.Add(mission as WorldMissionBase);
 			}
 		}
 		Main.OnTickForInternalCodeOnly += Update;
@@ -124,20 +124,20 @@ public class MissionManager_New
 #endif
 	}
 
-	public MissionBase_New GetMission(int whoAmI) =>
+	public WorldMissionBase GetMission(int whoAmI) =>
 		_missions.FirstOrDefault(m => m.WhoAmI == whoAmI);
 
-	public MissionBase_New GetMission(string name) =>
+	public WorldMissionBase GetMission(string name) =>
 		_missions.FirstOrDefault(m => m.Name == name);
 
-	public MissionBase_New GetMission<T>()
-		where T : MissionBase_New =>
+	public WorldMissionBase GetMission<T>()
+		where T : WorldMissionBase =>
 		_missions.OfType<T>().FirstOrDefault();
 
-	public IEnumerable<MissionBase_New> GetMissions(WorldMissionState state) =>
+	public IEnumerable<WorldMissionBase> GetMissions(WorldMissionState state) =>
 		_missions.Where(m => m.State == state);
 
-	public void AddMission(MissionBase_New mission)
+	public void AddMission(WorldMissionBase mission)
 	{
 		if (_missions.Any(m => m.Name == mission.Name))
 		{
@@ -166,7 +166,7 @@ public class MissionManager_New
 		return true;
 	}
 
-	public bool ActivateMission(MissionBase_New mission)
+	public bool ActivateMission(WorldMissionBase mission)
 	{
 		if (mission.State == WorldMissionState.Active)
 		{
@@ -188,14 +188,14 @@ public class MissionManager_New
 		return true;
 	}
 
-	public void GiveRewards(MissionBase_New mission)
+	public void GiveRewards(WorldMissionBase mission)
 	{
 		// The request for giving rewards should be sent to server first for validation
 		// before the actual method to give rewards is called.
 		throw new NotImplementedException();
 	}
 
-	public bool ResetMission(MissionBase_New mission)
+	public bool ResetMission(WorldMissionBase mission)
 	{
 		throw new NotImplementedException();
 	}

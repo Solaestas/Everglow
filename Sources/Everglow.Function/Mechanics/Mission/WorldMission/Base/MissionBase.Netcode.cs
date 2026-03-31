@@ -3,7 +3,7 @@ using Everglow.Commons.Netcode.Packets;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract partial class MissionBase_New : IMissionNetcode
+public abstract partial class WorldMissionBase : IMissionNetcode
 {
 	public virtual void NetSend(BinaryWriter writer)
 	{

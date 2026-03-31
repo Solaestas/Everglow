@@ -2,11 +2,11 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission;
 
-public class MissionSystem_New : ModSystem
+public class WorldMissionSystem : ModSystem
 {
 	private const string MissionManagerKey = "MissionManagerData";
 
-	public MissionManager_New Manager;
+	public WorldMissionManager Manager;
 
 	public override void Load()
 	{

@@ -3,17 +3,17 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class ParallelObjective_New : ObjectiveBase
+public class ParallelObjective_New : WorldObjectiveBase
 {
-	private IEnumerable<ObjectiveBase> _objectives;
+	private IEnumerable<WorldObjectiveBase> _objectives;
 
-	public IEnumerable<ObjectiveBase> Objectives => _objectives;
+	public IEnumerable<WorldObjectiveBase> Objectives => _objectives;
 
 	public ParallelObjective_New()
 	{
 	}
 
-	public ParallelObjective_New(params ObjectiveBase[] objectives)
+	public ParallelObjective_New(params WorldObjectiveBase[] objectives)
 	{
 		_objectives = objectives;
 	}
@@ -74,7 +74,7 @@ public class ParallelObjective_New : ObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase_New mission)
+	public override void Activate(WorldMissionBase mission)
 	{
 		foreach (var objective in _objectives)
 		{
@@ -95,12 +95,12 @@ public class ParallelObjective_New : ObjectiveBase
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		MissionBase_New.LoadObjectives(tag, Objectives);
+		WorldMissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		MissionBase_New.SaveObjectives(tag, Objectives);
+		WorldMissionBase.SaveObjectives(tag, Objectives);
 	}
 }

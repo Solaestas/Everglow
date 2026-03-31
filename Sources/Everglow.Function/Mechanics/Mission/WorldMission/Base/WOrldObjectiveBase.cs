@@ -3,9 +3,9 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract class ObjectiveBase
+public abstract class WorldObjectiveBase
 {
-	public ObjectiveBase()
+	public WorldObjectiveBase()
 	{
 	}
 
@@ -13,12 +13,12 @@ public abstract class ObjectiveBase
 
 	public int ObjectiveID { get; set; }
 
-	public ObjectiveBase Next { get; set; }
+	public WorldObjectiveBase Next { get; set; }
 
 	public virtual float Progress { get; } = 1f;
 
 	/// <summary>
-	/// Objective rewards, different from <see cref="MissionBase_New.RewardItems"/>
+	/// Objective rewards, different from <see cref="WorldMissionBase.RewardItems"/>
 	/// </summary>
 	public List<Item> RewardItems { get; } = [];
 
@@ -27,7 +27,7 @@ public abstract class ObjectiveBase
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="MissionObjectiveContainer_New.Add(ObjectiveBase)"/>.
+	/// Invoked by <see cref="WorldMissionObjectiveContainer.Add(WorldObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()
@@ -53,7 +53,7 @@ public abstract class ObjectiveBase
 			{
 				foreach (var item in RewardItems)
 				{
-					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(MissionBase_New.RewardItemsSourceContext), item, item.stack);
+					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(WorldMissionBase.RewardItemsSourceContext), item, item.stack);
 				}
 
 				RewardClaimed = true;
@@ -68,7 +68,7 @@ public abstract class ObjectiveBase
 		Completed = false;
 	}
 
-	public virtual void Activate(MissionBase_New sourceMission)
+	public virtual void Activate(WorldMissionBase sourceMission)
 	{
 	}
 

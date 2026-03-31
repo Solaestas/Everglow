@@ -25,7 +25,7 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 	{
 		var missionId = reader.ReadInt32();
 		var objectiveId = reader.ReadInt32();
-		var mission = MissionManager_New.Instance.GetMission(missionId);
+		var mission = WorldMissionManager.Instance.GetMission(missionId);
 		var objective = mission.Objectives[objectiveId];
 		if (objective is IDeltaSyncObjective deltaSyncObjective)
 		{
@@ -41,7 +41,7 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 	public void Send(BinaryWriter writer)
 	{
 		writer.Write(_missionWhoAmI); // Mission id
-		writer.Write((syncObjective as ObjectiveBase).ObjectiveID); // Objective id
+		writer.Write((syncObjective as WorldObjectiveBase).ObjectiveID); // Objective id
 		syncObjective.SendDelta(writer);
 	}
 

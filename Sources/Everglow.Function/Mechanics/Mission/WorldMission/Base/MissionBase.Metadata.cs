@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract partial class MissionBase_New : IMissionMetadata
+public abstract partial class WorldMissionBase : IMissionMetadata
 {
 	public abstract string Name { get; }
 

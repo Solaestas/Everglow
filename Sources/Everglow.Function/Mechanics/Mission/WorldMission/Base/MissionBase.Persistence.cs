@@ -2,7 +2,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract partial class MissionBase_New : IMissionPersistence
+public abstract partial class WorldMissionBase : IMissionPersistence
 {
 	private const string StateKey = nameof(State);
 	private const string TimeKey = nameof(Time);
@@ -35,7 +35,7 @@ public abstract partial class MissionBase_New : IMissionPersistence
 		LoadObjectives(tag, Objectives.AllObjectives);
 	}
 
-	public static void LoadObjectives(TagCompound tag, IEnumerable<ObjectiveBase> objectives)
+	public static void LoadObjectives(TagCompound tag, IEnumerable<WorldObjectiveBase> objectives)
 	{
 		if (tag.TryGet<IList<TagCompound>>(ObjectivesSaveKey, out var oTags))
 		{
@@ -61,7 +61,7 @@ public abstract partial class MissionBase_New : IMissionPersistence
 		SaveObjectives(tag, Objectives.AllObjectives);
 	}
 
-	public static void SaveObjectives(TagCompound tag, IEnumerable<ObjectiveBase> objectives)
+	public static void SaveObjectives(TagCompound tag, IEnumerable<WorldObjectiveBase> objectives)
 	{
 		var oTags = new List<TagCompound>();
 		foreach (var o in objectives)

@@ -3,19 +3,19 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class BranchingObjective_New : ObjectiveBase
+public class BranchingObjective_New : WorldObjectiveBase
 {
 	public BranchingObjective_New()
 	{
 		Objectives = [];
 	}
 
-	public BranchingObjective_New(ObjectiveBase[] objectives)
+	public BranchingObjective_New(WorldObjectiveBase[] objectives)
 	{
 		Objectives = objectives;
 	}
 
-	public IEnumerable<ObjectiveBase> Objectives { get; }
+	public IEnumerable<WorldObjectiveBase> Objectives { get; }
 
 	// TODO: This progress calculation is bad
 	public override float Progress => Objectives.Max(x => x.Progress);
@@ -35,7 +35,7 @@ public class BranchingObjective_New : ObjectiveBase
 			throw new InvalidDataException("Parallel objective or branching objective should not nest in itself or other.");
 		}
 
-		foreach (ObjectiveBase objective in Objectives)
+		foreach (WorldObjectiveBase objective in Objectives)
 		{
 			if (objective.CheckCompletion())
 			{
@@ -56,9 +56,9 @@ public class BranchingObjective_New : ObjectiveBase
 
 	public override bool CheckCompletion() => Objectives.Any(x => x.CheckCompletion());
 
-	public override void Activate(MissionBase_New fromQuest)
+	public override void Activate(WorldMissionBase fromQuest)
 	{
-		foreach (ObjectiveBase objective in Objectives)
+		foreach (WorldObjectiveBase objective in Objectives)
 		{
 			objective.Activate(fromQuest);
 		}
@@ -67,7 +67,7 @@ public class BranchingObjective_New : ObjectiveBase
 
 	public override void Deactivate()
 	{
-		foreach (ObjectiveBase objective in Objectives)
+		foreach (WorldObjectiveBase objective in Objectives)
 		{
 			objective.Deactivate();
 		}
@@ -126,7 +126,7 @@ public class BranchingObjective_New : ObjectiveBase
 	{
 		base.ResetProgress();
 		Next = null;
-		foreach (ObjectiveBase objective in Objectives)
+		foreach (WorldObjectiveBase objective in Objectives)
 		{
 			objective.ResetProgress();
 		}
@@ -136,13 +136,13 @@ public class BranchingObjective_New : ObjectiveBase
 	{
 		base.LoadData(tag);
 
-		MissionBase_New.LoadObjectives(tag, Objectives);
+		WorldMissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
 
-		MissionBase_New.SaveObjectives(tag, Objectives);
+		WorldMissionBase.SaveObjectives(tag, Objectives);
 	}
 }

@@ -17,7 +17,7 @@ public class MissionManagerTest
 		public bool GamePaused => false;
 	}
 
-	private class TestMission1 : MissionBase_New
+	private class TestMission1 : WorldMissionBase
 	{
 		public override string Name => nameof(TestMission1);
 	}
@@ -25,13 +25,13 @@ public class MissionManagerTest
 	[TestMethod]
 	public void GetMissionTest()
 	{
-		var manager = new MissionManager_New(new TestStateProvider());
+		var manager = new WorldMissionManager(new TestStateProvider());
 		manager.AddMission(new TestMission1());
 		var m = manager.GetMission<TestMission1>();
 		Assert.IsNotNull(m);
 	}
 
-	private class TestMission2 : MissionBase_New
+	private class TestMission2 : WorldMissionBase
 	{
 		public TestMission2()
 		{
@@ -48,7 +48,7 @@ public class MissionManagerTest
 	{
 		var provider = new TestStateProvider();
 		provider.TimeForVisualEffects = 60;
-		var manager = new MissionManager_New(provider);
+		var manager = new WorldMissionManager(provider);
 		manager.AddMission(new TestMission2());
 		var m = manager.GetMission<TestMission2>();
 		Assert.IsNotNull(m);
