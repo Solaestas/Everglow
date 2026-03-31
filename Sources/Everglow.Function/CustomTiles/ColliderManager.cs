@@ -2,7 +2,6 @@ using Everglow.Commons.CustomTiles.Abstracts;
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.DataStructures;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles;
 
@@ -29,23 +28,16 @@ public class ColliderManager : ILoadable
 		On_Collision.SolidCollision_Vector2_int_int += Collision_SolidCollision_Vector2_int_int;
 		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
 		On_Collision.IsWorldPointSolid += On_Collision_IsWorldPointSolid;
-
-		// TODO: Step hook.
 		On_Collision.StepUp += Collision_StepUp;
+
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawToMap);
 	}
 
-	public void Unload()
-	{
-		rigidbodies = null;
+	public void Unload() => rigidbodies = null;
 
-		On_Collision.LaserScan -= Collision_LaserScan;
-		On_Collision.TileCollision -= Collision_TileCollision;
-		On_Collision.SolidCollision_Vector2_int_int -= Collision_SolidCollision_Vector2_int_int;
-		On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
-	}
+	// Now support automatical unload.// On_Collision.LaserScan -= Collision_LaserScan;// On_Collision.TileCollision -= Collision_TileCollision;// On_Collision.SolidCollision_Vector2_int_int -= Collision_SolidCollision_Vector2_int_int;// On_Collision.SolidCollision_Vector2_int_int_bool -= Collision_SolidCollision_Vector2_int_int_bool;
 
 	/// <summary>
 	/// Adds the rigid entity to the collection, enabling the manager if it is not already enabled.
@@ -245,8 +237,8 @@ public class ColliderManager : ILoadable
 			}
 			if (customTileTop != 0)
 			{
-				gfxOffY += position.Y + (float)height - customTileTop;
-				position.Y = customTileTop - (float)height - 2;
+				gfxOffY += position.Y + height - customTileTop;
+				position.Y = customTileTop - height - 2;
 			}
 		}
 		else

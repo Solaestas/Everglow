@@ -1,3 +1,4 @@
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
@@ -38,12 +39,16 @@ public abstract class Elevator : BoxEntity
 
 	public float CurrentSpeed = 0f;
 
+	/// <summary>
+	/// No more than 50f.
+	/// </summary>
 	public float MaxSpeed = 5f;
 
 	/// <summary>
-	/// During accelerating / decelerating, the <see cref="CurrentSpeed"/> will +/- this value per tick.
+	/// During accelerating / decelerating, the <see cref="CurrentSpeed"/> will +/- this value per tick.<br/>
+	/// No less than 0.15f.
 	/// </summary>
-	public float Acceleration = 0.1f;
+	public float Acceleration = 0.25f;
 
 	/// <summary>
 	/// The direction this elevator is moving. A value of 1 means the elevator is moving downward. -1 means moving upward.
@@ -51,6 +56,8 @@ public abstract class Elevator : BoxEntity
 	public int CurrentMoveDirection { get; protected set; } = 1;
 
 	public int NextStopTileY { get; protected set; } = -1;
+
+	public int AccelerateDirection = 0;
 
 	/// <summary>
 	/// Timer for a stop elevator.
@@ -69,6 +76,7 @@ public abstract class Elevator : BoxEntity
 
 	public override void AI()
 	{
+		MaxSpeed = 50f;
 		if (TileUtils.SafeGetTile(WinchCoord).TileType != WinchTileType)
 		{
 			Kill();
@@ -99,39 +107,78 @@ public abstract class Elevator : BoxEntity
 		}
 		else if (MoveState == State.Move)
 		{
-			var distToTargetY = Math.Abs(NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top));
-			if (distToTargetY <= 1f)
+			var distToTargetY = (NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top)) * CurrentMoveDirection;
+			if (distToTargetY <= Math.Max(CurrentSpeed, 1))
 			{
-				StopElevator(300);
-
+				if(CurrentSpeed <= 1)
+				{
+					StopElevator(300);
+					AccelerateDirection = 0;
+				}
+				else
+				{
+					CurrentSpeed = distToTargetY * 0.99f;
+					Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
+				}
 				return;
 			}
 
 			float requiredDecelerateDistance = (CurrentSpeed * CurrentSpeed) / (2 * Acceleration);
-			if (distToTargetY <= requiredDecelerateDistance)
+			if (AccelerateDirection == 0)
 			{
-				// Decelerate
-				CurrentSpeed -= Acceleration;
-
-				if (CurrentSpeed < 0f)
+				if (distToTargetY <= requiredDecelerateDistance)
 				{
-					CurrentSpeed = 0f;
+					// Decelerate
+					AccelerateDirection = -1;
 				}
-			}
-			else if (CurrentSpeed < MaxSpeed)
-			{
-				// Accelerate
-				CurrentSpeed += Acceleration;
-
-				if (CurrentSpeed > MaxSpeed)
+				else if (CurrentSpeed < MaxSpeed)
 				{
-					CurrentSpeed = MaxSpeed;
+					// Accelerate
+					AccelerateDirection = 1;
 				}
 			}
 			else
 			{
 				// Max Speed Uniform Motion
-				CurrentSpeed = MaxSpeed;
+				if(AccelerateDirection == 1)
+				{
+					if (distToTargetY <= requiredDecelerateDistance)
+					{
+						// Decelerate
+						AccelerateDirection = -1;
+					}
+				}
+				if(CurrentSpeed <= 0.05f)
+				{
+					AccelerateDirection = 0;
+					CurrentSpeed = 0;
+				}
+				if(CurrentSpeed >= MaxSpeed)
+				{
+					CurrentSpeed = MaxSpeed;
+				}
+			}
+
+			switch (AccelerateDirection)
+			{
+				case -1:
+					CurrentSpeed -= Acceleration;
+					if (CurrentSpeed < 0f)
+					{
+						CurrentSpeed = 0f;
+					}
+					break;
+				case 0:
+					// Uniform motion, no need to update target
+					break;
+				case 1:
+					// Accelerating, keep target updated in case of unexpected obstacle
+					CurrentSpeed += Acceleration;
+					if (CurrentSpeed > MaxSpeed)
+					{
+						CurrentSpeed = MaxSpeed;
+					}
+					break;
 			}
 
 			Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
@@ -168,7 +215,7 @@ public abstract class Elevator : BoxEntity
 		int startTileY = dir == 1 ? Box.Bottom.ToTileCoordinate() : Box.Top.ToTileCoordinate();
 		var a = Box.Bottom.ToTileCoordinate();
 		var b = Box.Top.ToTileCoordinate();
-		int scanRange = 2000;
+		int scanRange = 10000;
 		if (LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
 			scanRange = Math.Min(scanRange, LengthRestrict.ToTileCoordinate());
@@ -215,7 +262,7 @@ public abstract class Elevator : BoxEntity
 		int startTileX = Position.X.ToTileCoordinate();
 		int startTileY = dir == 1 ? Box.Bottom.ToTileCoordinate() : Box.Top.ToTileCoordinate();
 
-		int scanRange = 2000;
+		int scanRange = 10000;
 		if (LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
 			scanRange = Math.Min(scanRange, LengthRestrict.ToTileCoordinate());
@@ -273,7 +320,7 @@ public abstract class Elevator : BoxEntity
 	private bool CanMove(int dir)
 	{
 		int target = GetNextTileOnPathY(dir);
-		float dist = Math.Abs(target * 16 - (dir == 1 ? Box.Bottom : Box.Top));
+		float dist = (target * 16 - (dir == 1 ? Box.Bottom : Box.Top)) * CurrentMoveDirection;
 		return dist > 4f;
 	}
 
@@ -342,156 +389,4 @@ public abstract class Elevator : BoxEntity
 	}
 
 	#endregion
-
-	public void StepUp(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
-	{
-		int dir = 0;
-		if (velocity.X < 0f)
-		{
-			dir = -1;
-		}
-		if (velocity.X > 0f)
-		{
-			dir = 1;
-		}
-		Vector2 nextPos = position;
-		nextPos.X += velocity.X;
-		int tilePosFront = (int)((nextPos.X + width / 2 + (width / 2 + 1) * dir) / 16f);
-		int tilePosY = (int)((nextPos.Y + 0.1) / 16.0);
-		if (gravDir == 1)
-		{
-			tilePosY = (int)((nextPos.Y + height - 1f) / 16f);
-		}
-		int heightToTilePos = height / 16 + ((height % 16 != 0) ? 1 : 0);
-		bool flag = true;
-		bool flag2 = true;
-		if (Main.tile[tilePosFront, tilePosY] == null)
-		{
-			return;
-		}
-		for (int i = 1; i < heightToTilePos + 2; i++)
-		{
-			if (!WorldGen.InWorld(tilePosFront, tilePosY - i * gravDir, 0) || Main.tile[tilePosFront, tilePosY - i * gravDir] == null)
-			{
-				return;
-			}
-		}
-		if (!WorldGen.InWorld(tilePosFront - dir, tilePosY - heightToTilePos * gravDir, 0) || Main.tile[tilePosFront - dir, tilePosY - heightToTilePos * gravDir] == null)
-		{
-			return;
-		}
-		Tile tile;
-		for (int j = 2; j < heightToTilePos + 1; j++)
-		{
-			if (!WorldGen.InWorld(tilePosFront, tilePosY - j * gravDir, 0) || Main.tile[tilePosFront, tilePosY - j * gravDir] == null)
-			{
-				return;
-			}
-			tile = Main.tile[tilePosFront, tilePosY - j * gravDir];
-
-			// No tile or non-solid tile or solid top tile (platform) is ok
-			flag = flag && (!tile.nactive() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]);
-		}
-		tile = Main.tile[tilePosFront - dir, tilePosY - heightToTilePos * gravDir];
-
-		// No tile or non-solid tile or solid top tile (platform) is ok
-		flag2 = flag2 && (!tile.nactive() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]);
-		bool flag3 = true;
-		bool flag4 = true;
-		bool flag5 = true;
-		Tile tile2;
-		if (gravDir == 1)
-		{
-			if (Main.tile[tilePosFront, tilePosY - gravDir] == null || Main.tile[tilePosFront, tilePosY - (heightToTilePos + 1) * gravDir] == null)
-			{
-				return;
-			}
-			tile = Main.tile[tilePosFront, tilePosY - gravDir];
-			tile2 = Main.tile[tilePosFront, tilePosY - (heightToTilePos + 1) * gravDir];
-
-			// No tile or non-solid tile or solid top tile (platform) or sloped tile that doesn't block the path is ok. If it's a half brick, then the tile below it also needs to be non-solid or solid top tile (platform).
-			flag3 = flag3 && (!tile.nactive() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type] || (tile.slope() == 1 && position.X + width / 2 > tilePosFront * 16) || (tile.slope() == 2 && position.X + width / 2 < tilePosFront * 16 + 16) || (tile.halfBrick() && (!tile2.nactive() || !Main.tileSolid[tile2.type] || Main.tileSolidTop[tile2.type])));
-			tile = Main.tile[tilePosFront, tilePosY];
-			tile2 = Main.tile[tilePosFront, tilePosY - 1];
-			if (specialChecksMode == 1)
-			{
-				flag5 = !TileID.Sets.IgnoredByNpcStepUp[tile.type];
-			}
-
-			// Active tile that is solid and not a solid top tile (platform) is not ok. A sloped tile is not ok if the slope would block the path. If it's a solid top tile (platform) that can be stood on, then the tile below it needs to be non-solid or non-active. If it's a half brick, then it's not ok.
-			flag4 = flag4 && ((tile.nactive() && (!tile.topSlope() || (tile.slope() == 1 && position.X + width / 2 < tilePosFront * 16) || (tile.slope() == 2 && position.X + width / 2 > tilePosFront * 16 + 16)) && (!tile.topSlope() || position.Y + height > tilePosY * 16) && ((Main.tileSolid[tile.type] && !Main.tileSolidTop[tile.type]) || (holdsMatching && ((Main.tileSolidTop[tile.type] && tile.frameY == 0) || TileID.Sets.Platforms[tile.type]) && (!Main.tileSolid[tile2.type] || !tile2.nactive()) && flag5))) || (tile2.halfBrick() && tile2.nactive()));
-			flag4 &= !Main.tileSolidTop[tile.type] || !Main.tileSolidTop[tile2.type];
-		}
-		else
-		{
-			tile = Main.tile[tilePosFront, tilePosY - gravDir];
-			tile2 = Main.tile[tilePosFront, tilePosY - (heightToTilePos + 1) * gravDir];
-			flag3 = flag3 && (!tile.nactive() || !Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type] || tile.slope() != 0 || (tile.halfBrick() && (!tile2.nactive() || !Main.tileSolid[tile2.type] || Main.tileSolidTop[tile2.type])));
-			tile = Main.tile[tilePosFront, tilePosY];
-			tile2 = Main.tile[tilePosFront, tilePosY + 1];
-			flag4 = flag4 && ((tile.nactive() && ((Main.tileSolid[tile.type] && !Main.tileSolidTop[tile.type]) || (holdsMatching && Main.tileSolidTop[tile.type] && tile.frameY == 0 && (!Main.tileSolid[tile2.type] || !tile2.nactive())))) || (tile2.halfBrick() && tile2.nactive()));
-		}
-		if (tilePosFront * 16 >= nextPos.X + width || tilePosFront * 16 + 16 <= nextPos.X)
-		{
-			return;
-		}
-		if (gravDir == 1)
-		{
-			if (!flag4 || !flag3 || !flag || !flag2)
-			{
-				return;
-			}
-			float tilePosY_World = tilePosY * 16;
-			if (Main.tile[tilePosFront, tilePosY - 1].halfBrick())
-			{
-				tilePosY_World -= 8f;
-			}
-			else if (Main.tile[tilePosFront, tilePosY].halfBrick())
-			{
-				tilePosY_World += 8f;
-			}
-			if (tilePosY_World >= nextPos.Y + height)
-			{
-				return;
-			}
-			float MoveUp = nextPos.Y + height - tilePosY_World;
-			if ((double)MoveUp <= 16.1)
-			{
-				gfxOffY += position.Y + height - tilePosY_World;
-				position.Y = tilePosY_World - height;
-				if (MoveUp < 9f)
-				{
-					stepSpeed = 1f;
-					return;
-				}
-				stepSpeed = 2f;
-				return;
-			}
-		}
-		else
-		{
-			if (!flag4 || !flag3 || !flag || !flag2 || Main.tile[tilePosFront, tilePosY].bottomSlope() || TileID.Sets.Platforms[tile2.type])
-			{
-				return;
-			}
-			float tilePosY_World_1_Below = tilePosY * 16 + 16;
-			if (tilePosY_World_1_Below <= nextPos.Y)
-			{
-				return;
-			}
-			float MoveUp_Grav = tilePosY_World_1_Below - nextPos.Y;
-			if ((double)MoveUp_Grav <= 16.1)
-			{
-				gfxOffY -= tilePosY_World_1_Below - position.Y;
-				position.Y = tilePosY_World_1_Below;
-				velocity.Y = 0f;
-				if (MoveUp_Grav < 9f)
-				{
-					stepSpeed = 1f;
-					return;
-				}
-				stepSpeed = 2f;
-			}
-		}
-	}
 }

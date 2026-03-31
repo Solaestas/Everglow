@@ -10,7 +10,7 @@ public class YggdrasilElevator : Commons.Templates.Furniture.Elevator.Elevator
 
 	public override string ElevatorCableTexture => ModAsset.Rope_Mod;
 
-	public override string ElevatorTexture => ModAsset.SkyTreeLift_Mod;
+	public override string ElevatorTexture => ModAsset.YggdrasilElevator_Mod;
 
 	public override int ElevatorCableJointOffset => 125;
 
