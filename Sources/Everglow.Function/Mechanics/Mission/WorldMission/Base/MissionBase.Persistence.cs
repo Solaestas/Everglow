@@ -4,13 +4,32 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 public abstract partial class MissionBase_New : IMissionPersistence
 {
-	public static string ObjectivesSaveKey => nameof(Objectives);
+	private const string StateKey = nameof(State);
+	private const string TimeKey = nameof(Time);
+	private const string RewardKey = nameof(RewardClaimed);
+	private const string RewardPlayerKey = nameof(RewardClaimedPlayers);
+	private const string ObjectivesSaveKey = nameof(Objectives);
 
 	public void LoadData(TagCompound tag)
 	{
-		if (tag.TryGet<int>(nameof(Time), out var mt))
+		if (tag.TryGet<int>(StateKey, out var ms))
+		{
+			State = (WorldMissionState)ms;
+		}
+
+		if (tag.TryGet<int>(TimeKey, out var mt))
 		{
 			Time = mt;
+		}
+
+		if (tag.TryGet<bool>(RewardKey, out var rc))
+		{
+			RewardClaimed = rc;
+		}
+
+		if (tag.TryGet<IList<string>>(RewardPlayerKey, out var rp))
+		{
+			RewardClaimedPlayers = rp.ToHashSet();
 		}
 
 		LoadObjectives(tag, Objectives.AllObjectives);
@@ -34,7 +53,10 @@ public abstract partial class MissionBase_New : IMissionPersistence
 
 	public void SaveData(TagCompound tag)
 	{
-		tag.Add(nameof(Time), Time);
+		tag.Add(StateKey, (int)State);
+		tag.Add(TimeKey, Time);
+		tag.Add(RewardKey, RewardClaimed);
+		tag.Add(RewardPlayerKey, RewardClaimedPlayers.ToList());
 
 		SaveObjectives(tag, Objectives.AllObjectives);
 	}

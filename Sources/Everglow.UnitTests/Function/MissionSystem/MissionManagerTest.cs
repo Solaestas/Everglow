@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission;
-using Everglow.Commons.Mechanics.MissionSystem_New;
+using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 
@@ -35,7 +35,7 @@ public class MissionManagerTest
 	{
 		public TestMission2()
 		{
-			MissionState = WorldMissionState.Active;
+			State = WorldMissionState.Active;
 		}
 
 		public override string Name => nameof(TestMission2);
@@ -59,11 +59,11 @@ public class MissionManagerTest
 
 			if (i < 20)
 			{
-				Assert.AreEqual(WorldMissionState.Active, m.MissionState);
+				Assert.AreEqual(WorldMissionState.Active, m.State);
 			}
 			else
 			{
-				Assert.AreEqual(WorldMissionState.Failed, m.MissionState);
+				Assert.AreEqual(WorldMissionState.Failed, m.State);
 			}
 		}
 	}

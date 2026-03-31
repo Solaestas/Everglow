@@ -4,7 +4,7 @@ public interface IMissionBehavior
 {
 	public int WhoAmI { get; }
 
-	public WorldMissionState MissionState { get; }
+	public WorldMissionState State { get; }
 
 	public float Progress { get; }
 
@@ -14,7 +14,7 @@ public interface IMissionBehavior
 
 	public int Time { get; }
 
-	public bool Resettable { get; }
+	public bool Retriable { get; }
 
 	/// <summary>
 	/// A flag indicating whether the mission reward has been claimed.
@@ -23,13 +23,15 @@ public interface IMissionBehavior
 	/// </summary>
 	public bool RewardClaimed { get; }
 
+	public void Unlock();
+
 	public bool CheckComplete();
 
 	public void Update();
 
-	public void OnComplete();
+	public void Retry();
 
-	public void OnExpire();
+	public void GiveRewards();
 
 	public void Activate();
 
@@ -38,4 +40,12 @@ public interface IMissionBehavior
 	public void Reset();
 
 	public void ResetProgress();
+
+	public void OnUnlock();
+
+	public void OnComplete();
+
+	public void OnExpire();
+
+	public void OnReset();
 }

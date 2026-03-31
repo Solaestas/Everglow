@@ -7,16 +7,26 @@ public abstract partial class MissionBase_New : IMissionNetcode
 {
 	public virtual void NetSend(BinaryWriter writer)
 	{
-		writer.Write((int)MissionState);
+		writer.Write((int)State);
 		writer.Write(Time);
 		writer.Write(RewardClaimed);
+		writer.Write(RewardClaimedPlayers.Count);
+		foreach (var player in RewardClaimedPlayers)
+		{
+			writer.Write(player);
+		}
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
 	{
-		MissionState = (WorldMissionState)reader.ReadInt32();
+		State = (WorldMissionState)reader.ReadInt32(); // TODO: What to do if the state is different?
 		Time = reader.ReadInt32();
 		RewardClaimed = reader.ReadBoolean();
+		int rewardPlayerCount = reader.ReadInt32();
+		for (int i = 0; i < rewardPlayerCount; i++)
+		{
+			RewardClaimedPlayers.Add(reader.ReadString());
+		}
 	}
 
 	public void OnMPSync()

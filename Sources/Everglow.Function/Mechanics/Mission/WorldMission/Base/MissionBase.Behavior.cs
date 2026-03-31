@@ -6,9 +6,9 @@ public abstract partial class MissionBase_New : IMissionBehavior
 
 	public int WhoAmI { get; internal set; }
 
-	public WorldMissionState MissionState { get; protected set; }
+	public WorldMissionState State { get; protected set; } = WorldMissionState.Locked;
 
-	public float Progress => throw new NotImplementedException();
+	public virtual float Progress => 1;
 
 	public MissionObjectiveContainer_New Objectives { get; } = new();
 
@@ -16,11 +16,22 @@ public abstract partial class MissionBase_New : IMissionBehavior
 
 	public int Time { get; protected set; }
 
-	public bool Resettable => MissionState == WorldMissionState.Failed;
+	public bool Retriable => true;
 
 	public bool RewardClaimed { get; protected set; }
 
-	public HashSet<string> RewardClaimedPlayers { get; } = [];
+	public HashSet<string> RewardClaimedPlayers { get; protected set; } = [];
+
+	public void Unlock()
+	{
+		// Unlcok mission == net needed
+		State = WorldMissionState.Active;
+
+		Activate();
+		OnUnlock();
+
+		Main.NewText($"[{DisplayName}]任务已解锁", 150, 150, 250);
+	}
 
 	public void Activate()
 	{
@@ -34,20 +45,24 @@ public abstract partial class MissionBase_New : IMissionBehavior
 		CurrentObjective?.Deactivate();
 	}
 
-	public bool CheckComplete() => throw new NotImplementedException();
+	public virtual bool CheckComplete() => true;
 
 	public void Update()
 	{
-		// Handle time limit
+		// Handle time limit == net needed
 		int timeLimit = (this as IMissionMetadata).TimeLimit;
 		if (timeLimit > 0)
 		{
-			Time++;
+			Time += MissionManager_New.UpdateInterval;
 			if (Time >= TimeLimit)
 			{
+				Time = TimeLimit;
 				OnExpire();
 				Deactivate();
-				MissionState = WorldMissionState.Failed;
+				State = WorldMissionState.Failed;
+
+				Main.NewText($"[{DisplayName}]任务已过期", 250, 150, 150);
+
 				return;
 			}
 		}
@@ -57,8 +72,10 @@ public abstract partial class MissionBase_New : IMissionBehavior
 		{
 			CurrentObjective.Update();
 
+			// Switch to next objective == net needed
+			// This operation should be stopped on local client in multiplayer here.
 			if (!CurrentObjective.Completed
-			&& CurrentObjective.CheckCompletion())
+				&& CurrentObjective.CheckCompletion())
 			{
 				CurrentObjective.Complete();
 				CurrentObjective.Deactivate();
@@ -66,34 +83,71 @@ public abstract partial class MissionBase_New : IMissionBehavior
 				CurrentObjective = CurrentObjective.Next;
 				CurrentObjective?.Activate(this);
 
-				Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+				Main.NewText($"[{DisplayName}]任务当前目标已完成", 250, 250, 150);
 			}
 		}
 		else
 		{
-			// Run mission completion
+			// Run mission completion == net needed
+			State = WorldMissionState.Completed;
 			OnComplete();
-			Deactivate(); // TODO: Sync to clients
+			Deactivate(); // Maybe not necessary, because the current objective is null.
+			Main.NewText($"[{DisplayName}]任务已完成", 150, 250, 150);
 		}
 	}
 
-	public void OnComplete()
+	/// <summary>
+	/// Requests the mission retry. Called by clicking the 'retry' button in the mission panel.
+	/// </summary>
+	public void Retry()
 	{
-		GiveRewards();
-		Main.NewText($"[{Name}]任务已完成", 150, 250, 150);
+		if (!Retriable || State != WorldMissionState.Failed)
+		{
+			return;
+		}
+
+		// Retry the mission == net needed
+		State = WorldMissionState.Active;
+		Time = 0;
+		ResetProgress();
+		Activate();
+
+		Main.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
 	}
 
-	public virtual void OnExpire()
+	/// <summary>
+	/// Requests the mission reward. Called by clicking the 'reward' button in the mission panel.
+	/// </summary>
+	public void GiveRewards()
 	{
+		if (RewardClaimed || State != WorldMissionState.Completed)
+		{
+			return;
+		}
+
+		RewardClaimed = true; // Sync this state to all sides == net needed
+
+		// TODO: Sync items to all sides.
+		var rewardPlayer = Main.LocalPlayer;
+		foreach (var item in RewardItems)
+		{
+			rewardPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
+		}
 	}
 
+	/// <summary>
+	/// Resets the mission to its initial state, clearing progress, time, and objectives.
+	/// <br/> This is called when loading a world.
+	/// <para/> Override <see cref="OnReset"/> to add custom reset behavior.
+	/// </summary>
 	public void Reset()
 	{
-		// TODO: reset all states, including progress, time, objectives, etc.
-		MissionState = WorldMissionState.Active;
+		State = WorldMissionState.Locked;
 		Time = 0;
 		RewardClaimed = false;
+		RewardClaimedPlayers = [];
 		ResetProgress();
+		OnReset();
 	}
 
 	public void ResetProgress()
@@ -104,18 +158,19 @@ public abstract partial class MissionBase_New : IMissionBehavior
 		}
 	}
 
-	public void GiveRewards()
+	public virtual void OnUnlock()
 	{
-		RewardClaimed = true;
+	}
 
-		if (!Main.dedServ)
-		{
-			// TODO: Sync items to all sides.
-			var rewardPlayer = Main.LocalPlayer;
-			foreach (var item in RewardItems)
-			{
-				rewardPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
-			}
-		}
+	public virtual void OnComplete()
+	{
+	}
+
+	public virtual void OnExpire()
+	{
+	}
+
+	public virtual void OnReset()
+	{
 	}
 }

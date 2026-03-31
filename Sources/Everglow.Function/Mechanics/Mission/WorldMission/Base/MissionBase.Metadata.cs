@@ -4,7 +4,7 @@ public abstract partial class MissionBase_New : IMissionMetadata
 {
 	public abstract string Name { get; }
 
-	public virtual string DisplayName { get; }
+	public virtual string DisplayName => Name;
 
 	public string Description { get; }
 
