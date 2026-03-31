@@ -12,13 +12,13 @@ public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 	public void ReceiveDelta(BinaryReader br)
 	{
 		var value = br.ReadInt32();
-		Console.WriteLine(value);
+		//Console.WriteLine(value);
 	}
 
 	public void ReceiveMain(BinaryReader br)
 	{
 		var value = br.ReadInt32();
-		Console.WriteLine(value);
+		//Console.WriteLine(value);
 	}
 
 	public void SendDelta(BinaryWriter bw)

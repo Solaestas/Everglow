@@ -33,6 +33,9 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			return;
 		}
 
+		var unlockText = $"[{DisplayName}]任务已解锁";
+		var unlockTextColor = new Color(150, 150, 250);
+
 		if (NetUtils.IsSingle)
 		{
 			State = WorldMissionState.Active;
@@ -40,14 +43,15 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			Activate();
 			OnUnlock();
 
-			Main.NewText($"[{DisplayName}]任务已解锁", 150, 150, 250);
+			Main.NewText(unlockText, unlockTextColor);
 		}
 		else if (NetUtils.IsServer)
 		{
 			State = WorldMissionState.Active;
 			Activate();
 			OnUnlock();
-			ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText($"[{DisplayName}]任务已解锁", Terraria.Localization.NetworkText.Mode.Literal), new Color(150, 150, 250));
+			ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(unlockText, Terraria.Localization.NetworkText.Mode.Literal), unlockTextColor);
+			Console.WriteLine(unlockText);
 			// TODO: Sync unlock state to all clients
 		}
 	}
@@ -79,19 +83,23 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 					return;
 				}
 
+				var failText = $"[{DisplayName}]任务已失败";
+				var failTextColor = new Color(250, 150, 150);
+
 				if (NetUtils.IsSingle)
 				{
 					State = WorldMissionState.Failed;
 					OnExpire();
 					Deactivate();
-					Main.NewText($"[{DisplayName}]任务已失败", 250, 150, 150);
+					Main.NewText(failText, failTextColor);
 				}
 				else if (NetUtils.IsServer)
 				{
 					State = WorldMissionState.Failed;
 					OnExpire();
 					Deactivate();
-					ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText($"[{DisplayName}]任务已失败", Terraria.Localization.NetworkText.Mode.Literal), new Color(250, 150, 150));
+					ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(failText, Terraria.Localization.NetworkText.Mode.Literal), failTextColor);
+					Console.WriteLine(failText);
 					// TODO: Sync failure state to all clients
 				}
 
@@ -117,6 +125,9 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				return;
 			}
 
+			var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
+			var objectiveCompleteTextColor = new Color(250, 250, 150);
+
 			if (NetUtils.IsSingle)
 			{
 				CurrentObjective.Complete();
@@ -125,7 +136,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				CurrentObjective = CurrentObjective.Next;
 				CurrentObjective?.Activate(this);
 
-				Main.NewText($"[{DisplayName}]任务当前目标已完成", 250, 250, 150);
+				Main.NewText(objectiveCompleteText, objectiveCompleteTextColor);
 			}
 			else if (NetUtils.IsServer)
 			{
@@ -133,7 +144,8 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				CurrentObjective.Deactivate();
 				CurrentObjective = CurrentObjective.Next;
 				CurrentObjective?.Activate(this);
-				ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText($"[{DisplayName}]任务当前目标已完成", Terraria.Localization.NetworkText.Mode.Literal), new Color(250, 250, 150));
+				ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
+				Console.WriteLine(objectiveCompleteText);
 				// TODO: Sync objective completion to all clients
 			}
 		}
@@ -168,6 +180,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			OnComplete();
 			Deactivate(); // Maybe not necessary, because the current objective is null.
 			ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(completeText, Terraria.Localization.NetworkText.Mode.Literal), completeTextColor);
+			Console.WriteLine(completeText);
 			// TODO: Sync completion to all clients
 		}
 	}
@@ -185,9 +198,9 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		if (NetUtils.IsServer)
 		{
 			Console.WriteLine("Waiting for retry packet.");
+			return;
 		}
-
-		if (NetUtils.IsSingle)
+		else if (NetUtils.IsSingle)
 		{
 			State = WorldMissionState.Active;
 			Time = 0;

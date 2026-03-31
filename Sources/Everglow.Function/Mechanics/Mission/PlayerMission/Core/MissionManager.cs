@@ -57,6 +57,7 @@ public static class MissionManager
 		{
 			_missionPools = null;
 			_nPCKillCounter = null;
+			Main.OnTickForInternalCodeOnly -= Update;
 			MissionGlobalNPC.OnKillNPCEvent -= MissionGlobalNPC_SpecialOnKill_CountKill;
 		}
 	}

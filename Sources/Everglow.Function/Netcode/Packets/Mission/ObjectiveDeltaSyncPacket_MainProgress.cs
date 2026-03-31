@@ -3,7 +3,7 @@ using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 using Everglow.Commons.Netcode.Abstracts;
 
-namespace Everglow.Commons.Netcode.Packets;
+namespace Everglow.Commons.Netcode.Packets.Mission;
 
 public class ObjectiveDeltaSyncPacket_MainProgress : IPacket
 {

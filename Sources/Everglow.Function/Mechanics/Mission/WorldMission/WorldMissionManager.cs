@@ -114,14 +114,6 @@ public class WorldMissionManager
 				m.OnMPSync();
 			}
 		}
-
-#if DEBUG
-		// Auto retry
-		foreach (var m in _missions.Where(m => m.State == WorldMissionState.Failed))
-		{
-			m.Retry();
-		}
-#endif
 	}
 
 	public WorldMissionBase GetMission(int whoAmI) =>

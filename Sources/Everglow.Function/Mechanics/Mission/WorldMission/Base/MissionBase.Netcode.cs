@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
-using Everglow.Commons.Netcode.Packets;
+using Everglow.Commons.Netcode.Packets.Mission;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
@@ -38,5 +38,30 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 				ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_SubProgress(WhoAmI, deltaSync));
 			}
 		}
+	}
+
+	public void SyncUnlock()
+	{
+	}
+
+	public void SyncCompletion()
+	{
+	}
+
+	public void SyncFailure()
+	{
+	}
+
+	public void SyncRetry()
+	{
+
+	}
+
+	public void SyncRewardClaim()
+	{
+	}
+
+	public void SyncObjectiveCompletion()
+	{
 	}
 }
