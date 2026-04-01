@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
-public class Winch : WinchTile<YggdrasilElevator>
+public class YggdrasilTownElevator_Winch : WinchTile<YggdrasilElevator>
 {
 	public override bool CanKillTile(int i, int j, ref bool blockDamaged)
 	{
@@ -29,7 +29,7 @@ public class Winch : WinchTile<YggdrasilElevator>
 			zero = Vector2.Zero;
 		}
 
-		Texture2D t = ModAsset.Tiles_LiftWinch.Value;
+		Texture2D t = ModAsset.YggdrasilTownElevator_Winch.Value;
 		Color c0 = Lighting.GetColor(i, j);
 
 		Rectangle frame = new Rectangle(0, 0, 38, 18);

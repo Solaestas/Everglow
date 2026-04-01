@@ -1,19 +1,21 @@
+using Everglow.Yggdrasil.Common.Elevator.Tiles;
+
 namespace Everglow.Yggdrasil.Common.Elevator.Items;
 
-public class LiftLamp : ModItem
+public class YggdrasilTownElevator_Winch_Item : ModItem
 {
     public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetDefaults()
     {
-        Item.width = 20;
-        Item.height = 36;
-        Item.createTile = ModContent.TileType<Tiles.LiftLamp>();
+        Item.width = 38;
+        Item.height = 16;
+        Item.createTile = ModContent.TileType<YggdrasilTownElevator_Winch>();
         Item.useStyle = ItemUseStyleID.Swing;
         Item.useAnimation = 15;
         Item.useTime = 15;
         Item.consumable = true;
-        Item.maxStack = 999;
+        Item.maxStack = Item.CommonMaxStack;
         Item.value = 1000;
     }
 }

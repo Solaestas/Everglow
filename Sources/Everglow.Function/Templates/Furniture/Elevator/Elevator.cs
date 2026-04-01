@@ -1,8 +1,8 @@
-using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
+using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
@@ -76,7 +76,7 @@ public abstract class Elevator : BoxEntity
 
 	public override void AI()
 	{
-		MaxSpeed = 50f;
+		MaxSpeed = 5f;
 		if (TileUtils.SafeGetTile(WinchCoord).TileType != WinchTileType)
 		{
 			Kill();
@@ -110,7 +110,7 @@ public abstract class Elevator : BoxEntity
 			var distToTargetY = (NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top)) * CurrentMoveDirection;
 			if (distToTargetY <= Math.Max(CurrentSpeed, 1))
 			{
-				if(CurrentSpeed <= 1)
+				if (CurrentSpeed <= 1)
 				{
 					StopElevator(300);
 					AccelerateDirection = 0;
@@ -140,7 +140,7 @@ public abstract class Elevator : BoxEntity
 			else
 			{
 				// Max Speed Uniform Motion
-				if(AccelerateDirection == 1)
+				if (AccelerateDirection == 1)
 				{
 					if (distToTargetY <= requiredDecelerateDistance)
 					{
@@ -148,12 +148,12 @@ public abstract class Elevator : BoxEntity
 						AccelerateDirection = -1;
 					}
 				}
-				if(CurrentSpeed <= 0.05f)
+				if (CurrentSpeed <= 0.05f)
 				{
 					AccelerateDirection = 0;
 					CurrentSpeed = 0;
 				}
-				if(CurrentSpeed >= MaxSpeed)
+				if (CurrentSpeed >= MaxSpeed)
 				{
 					CurrentSpeed = MaxSpeed;
 				}
@@ -302,8 +302,23 @@ public abstract class Elevator : BoxEntity
 			Tile leftTile = Framing.GetTileSafely(leftX, y);
 			Tile rightTile = Framing.GetTileSafely(rightX, y);
 
-			bool isFloor = (leftTile.HasTile && leftTile.IsType<FloorIndicatorTile>()) ||
-						   (rightTile.HasTile && rightTile.IsType<FloorIndicatorTile>());
+			bool isFloor = false;
+			if (leftTile.HasTile && TileLoader.GetTile(leftTile.TileType) is IFloorIndicatorTile)
+			{
+				Tile nextLeftTile = TileUtils.SafeGetTile(leftX, y + 1);
+				if (nextLeftTile.TileType != leftTile.TileType || (nextLeftTile.TileFrameY <= leftTile.TileFrameY && nextLeftTile.TileType == leftTile.TileType))
+				{
+					isFloor = true;
+				}
+			}
+			if (rightTile.HasTile && TileLoader.GetTile(rightTile.TileType) is IFloorIndicatorTile)
+			{
+				Tile nextRightTile = TileUtils.SafeGetTile(rightX, y + 1);
+				if (nextRightTile.TileType != rightTile.TileType || (nextRightTile.TileFrameY <= rightTile.TileFrameY && nextRightTile.TileType == rightTile.TileType))
+				{
+					isFloor = true;
+				}
+			}
 
 			if (isFloor)
 			{
