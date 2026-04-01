@@ -1,21 +1,20 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 using Everglow.Commons.Netcode.Abstracts;
 
-namespace Everglow.Commons.Netcode.Packets.Mission;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 
-public class ObjectiveDeltaSyncPacket_MainProgress : IPacket
+public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 {
 	private int _missionWhoAmI;
 
 	private IDeltaSyncObjective syncObjective;
 
-	public ObjectiveDeltaSyncPacket_MainProgress()
+	public ObjectiveDeltaSyncPacket_SubProgress()
 	{
 	}
 
-	public ObjectiveDeltaSyncPacket_MainProgress(int missionWhoAmI, IDeltaSyncObjective objective)
+	public ObjectiveDeltaSyncPacket_SubProgress(int missionWhoAmI, IDeltaSyncObjective objective)
 	{
 		_missionWhoAmI = missionWhoAmI;
 		syncObjective = objective;
@@ -29,7 +28,8 @@ public class ObjectiveDeltaSyncPacket_MainProgress : IPacket
 		var objective = mission.Objectives[objectiveId];
 		if (objective is IDeltaSyncObjective deltaSyncObjective)
 		{
-			deltaSyncObjective.ReceiveMain(reader);
+			deltaSyncObjective.ReceiveDelta(reader);
+			ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_MainProgress(missionId, deltaSyncObjective), -1, -1);
 		}
 		else
 		{
@@ -39,16 +39,18 @@ public class ObjectiveDeltaSyncPacket_MainProgress : IPacket
 
 	public void Send(BinaryWriter writer)
 	{
-		writer.Write(_missionWhoAmI);
-		writer.Write((syncObjective as WorldObjectiveBase).ObjectiveID);
-		syncObjective.SendMain(writer);
+		writer.Write(_missionWhoAmI); // Mission id
+		writer.Write((syncObjective as WorldObjectiveBase).ObjectiveID); // Objective id
+		syncObjective.SendDelta(writer);
 	}
 
-	[HandlePacket(typeof(ObjectiveDeltaSyncPacket_MainProgress))]
+	[HandlePacket(typeof(ObjectiveDeltaSyncPacket_SubProgress))]
 	public class MissionDeltaSyncPacketHandler : IPacketHandler
 	{
 		public void Handle(IPacket packet, int whoAmI)
 		{
+			// All logic already executed in Receive()
+			// Keep empty to satisfy the interface
 		}
 	}
 }

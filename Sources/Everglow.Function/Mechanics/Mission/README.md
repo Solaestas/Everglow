@@ -109,3 +109,20 @@ The world-side mission system aims to deliver a structured static experience thr
 由`Main.OnTickForInternalCodeOnly`触发，每帧调用可增量同步的任务目标的对应方法，通过`PacketResolver`发送特定的数据包到服务器来发送数据。
 
 仅发送有变化的目标数据，同时使用计时器来限制发送频率。
+
+### 任务提示
+
+#### 状态切换广播
+
+1. 正常更新: 需要
+2. 加载世界(Load/SaveData): 不需要
+3. 加载世界(NetSend/Receive): 不需要
+4. 强制同步(NetSend/Receive): 需要 (可以更换文本)
+
+备注:
+1. 书写在State属性的get中，会失去灵活性
+2. 在多人游戏下，客户端调用`NetSend/Receive`加载世界时, `Main.NewText`会无效，因此默认情况下不需要广播。如果需要广播，可以在`ModPlayer.OnEnterWorld`中广播
+
+### 任务UI
+
+监听任务系统更新，刷新UI

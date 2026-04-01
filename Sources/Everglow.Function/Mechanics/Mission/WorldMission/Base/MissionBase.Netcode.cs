@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
-using Everglow.Commons.Netcode.Packets.Mission;
+using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
@@ -38,6 +38,37 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		}
 
 		ApplySnapshot(State, oldState);
+
+		if (oldState != State)
+		{
+			if (State == WorldMissionState.Active)
+			{
+				if(oldState == WorldMissionState.Locked)
+				{
+					var unlockText = $"[{DisplayName}]任务已解锁";
+					var unlockTextColor = new Color(150, 150, 250);
+					Main.NewText(unlockText, unlockTextColor);
+				}
+				else
+				{
+					var unlockText = $"[{DisplayName}]任务已恢复";
+					var unlockTextColor = new Color(150, 150, 250);
+					Main.NewText(unlockText, unlockTextColor);
+				}
+			}
+			else if (State == WorldMissionState.Completed)
+			{
+				var completeText = $"[{DisplayName}]任务已完成";
+				var completeTextColor = new Color(150, 250, 150);
+				Main.NewText(completeText, completeTextColor);
+			}
+			else if (State == WorldMissionState.Failed)
+			{
+				var failText = $"[{DisplayName}]任务已失败";
+				var failTextColor = new Color(250, 150, 150);
+				Main.NewText(failText, failTextColor);
+			}
+		}
 	}
 
 	public void OnMPSync()

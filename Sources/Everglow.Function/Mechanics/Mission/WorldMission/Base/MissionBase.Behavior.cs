@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
@@ -38,8 +39,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			if (NetUtils.IsServer)
 			{
 				Console.WriteLine(unlockText);
-				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(unlockText, Terraria.Localization.NetworkText.Mode.Literal), unlockTextColor);
-				// TODO: Sync unlock state to all clients
+				ModIns.PacketResolver.Send(new MissionSyncPacket(this));
 			}
 		}
 	}
@@ -129,7 +129,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				{
 					Console.WriteLine(failText);
 					// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(failText, Terraria.Localization.NetworkText.Mode.Literal), failTextColor);
-					// TODO: Sync failure state to all clients
+					ModIns.PacketResolver.Send(new MissionSyncPacket(this));
 				}
 			}
 
@@ -165,7 +165,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			{
 				Console.WriteLine(completeText);
 				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(completeText, Terraria.Localization.NetworkText.Mode.Literal), completeTextColor);
-				// TODO: Sync completion to all clients
+				ModIns.PacketResolver.Send(new MissionSyncPacket(this));
 			}
 		}
 	}
@@ -196,7 +196,10 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			{
 				Console.WriteLine(objectiveCompleteText);
 				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
-				// TODO: Sync objective completion to all clients
+				if (CurrentObjective.Next != null) // Skip the last objective sync because a packet for completion will be sent.
+				{
+					ModIns.PacketResolver.Send(new MissionSyncPacket(this));
+				}
 			}
 		}
 	}

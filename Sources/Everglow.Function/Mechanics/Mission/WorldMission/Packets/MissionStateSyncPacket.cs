@@ -1,6 +1,6 @@
 using Everglow.Commons.Netcode.Abstracts;
 
-namespace Everglow.Commons.Netcode.Packets.Mission;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 
 /// <summary>
 /// Used to sync 3 types of state change for a mission from server to clients:

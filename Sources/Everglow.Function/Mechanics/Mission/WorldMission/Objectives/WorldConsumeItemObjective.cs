@@ -48,9 +48,9 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 		WorldMissionGlobalItem.OnItemConsumed -= WorldMissionGlobalItem_OnItemConsumed;
 	}
 
-	private void WorldMissionGlobalItem_OnItemConsumed(int type)
+	private void WorldMissionGlobalItem_OnItemConsumed(Item item, Player player)
 	{
-		if (ItemType == type)
+		if (ItemType == item.type)
 		{
 			if (NetUtils.IsSingle)
 			{
