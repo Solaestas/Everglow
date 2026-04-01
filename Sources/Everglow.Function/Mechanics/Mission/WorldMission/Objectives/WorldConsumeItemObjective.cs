@@ -50,7 +50,6 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	private void WorldMissionGlobalItem_OnItemConsumed(int type)
 	{
-		Console.WriteLine($"Consumed Item type: {type}");
 		if (ItemType == type)
 		{
 			if (NetUtils.IsSingle)
@@ -66,7 +65,6 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 			if (NetUtils.IsClient)
 			{
-				Console.WriteLine("Consumed once");
 				_localConsumedCount++;
 			}
 		}

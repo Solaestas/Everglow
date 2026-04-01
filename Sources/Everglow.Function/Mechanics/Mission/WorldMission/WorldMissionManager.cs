@@ -10,8 +10,10 @@ public class WorldMissionManager
 	// Add a config option for update interval if necessary.
 #if DEBUG
 	public const int UpdateInterval = 1;
+	public const int NetUpdateInterval = 1;
 #else
 	public const int UpdateInterval = 30;
+	public const int NetUpdateInterval = 60;
 #endif
 
 	public static WorldMissionManager Instance => ModContent.GetInstance<WorldMissionSystem>().Manager;
@@ -95,29 +97,31 @@ public class WorldMissionManager
 			return;
 		}
 
-		if (UpdateTimer % UpdateInterval != 0)
+		if (UpdateTimer % UpdateInterval == 0)
 		{
-			return;
-		}
-
-		// Check locked
-		foreach (var m in _missions.Where(m => m.State == WorldMissionState.Locked))
-		{
-			if (m.CanUnlock())
+			// Check locked
+			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Locked))
 			{
-				// Unlock mission
-				// 1. activate (set first + attach hooks)
-				// 2. set state to active
-				m.Unlock();
+				if (m.CanUnlock())
+				{
+					// Unlock mission
+					// 1. activate (set first + attach hooks)
+					// 2. set state to active
+					m.Unlock();
+				}
+			}
+
+			// Check active
+			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
+			{
+				m.Update();
 			}
 		}
 
-		// Check active
-		foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
+		if (UpdateTimer % NetUpdateInterval == 0
+			&& NetUtils.IsClient)
 		{
-			m.Update();
-
-			if (NetUtils.IsClient)
+			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
 				m.OnMPSync();
 			}
