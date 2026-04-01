@@ -1,5 +1,4 @@
 using Everglow.Commons.Utilities;
-using Terraria.Chat;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
@@ -13,8 +12,11 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public virtual float Progress => 1;
 
-	public WorldMissionObjectiveContainer Objectives { get; } = new();
+	public WorldObjectiveContainer Objectives { get; } = new();
 
+	/// <summary>
+	/// Set by the mission on activation. It is possibly null.
+	/// </summary>
 	public WorldObjectiveBase CurrentObjective { get; protected set; }
 
 	public int Time { get; protected set; }
@@ -27,33 +29,33 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public void Unlock()
 	{
-		if (NetUtils.IsClient)
+		if (UnlockCore())
 		{
-			Console.WriteLine("Waiting for unlock packet.");
-			return;
-		}
-
-		var unlockText = $"[{DisplayName}]任务已解锁";
-		var unlockTextColor = new Color(150, 150, 250);
-
-		if (NetUtils.IsSingle)
-		{
-			State = WorldMissionState.Active;
-
-			Activate();
-			OnUnlock();
-
+			var unlockText = $"[{DisplayName}]任务已解锁";
+			var unlockTextColor = new Color(150, 150, 250);
 			Main.NewText(unlockText, unlockTextColor);
+
+			if (NetUtils.IsServer)
+			{
+				Console.WriteLine(unlockText);
+				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(unlockText, Terraria.Localization.NetworkText.Mode.Literal), unlockTextColor);
+				// TODO: Sync unlock state to all clients
+			}
 		}
-		else if (NetUtils.IsServer)
+	}
+
+	private bool UnlockCore()
+	{
+		if (State != WorldMissionState.Locked)
 		{
-			State = WorldMissionState.Active;
-			Activate();
-			OnUnlock();
-			ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(unlockText, Terraria.Localization.NetworkText.Mode.Literal), unlockTextColor);
-			Console.WriteLine(unlockText);
-			// TODO: Sync unlock state to all clients
+			return false;
 		}
+
+		State = WorldMissionState.Active;
+		Activate();
+		OnUnlock();
+
+		return true;
 	}
 
 	public void Activate()
@@ -68,121 +70,150 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		CurrentObjective?.Deactivate();
 	}
 
+	public void ForceAdvanceObjective()
+	{
+		CurrentObjective.Deactivate(); // Make sure there's no registered hooks or other side effects from the current objective.
+		CurrentObjective = CurrentObjective.Next;
+		CurrentObjective.Activate(this);
+	}
+
 	public void Update()
 	{
-		if (TimeLimit > 0)
+		if (!UpdateTime())
 		{
-			Time += WorldMissionManager.UpdateInterval;
-			if (Time >= TimeLimit)
-			{
-				Time = TimeLimit;
-
-				if (NetUtils.IsClient)
-				{
-					Console.WriteLine("Waiting for fail packet.");
-					return;
-				}
-
-				var failText = $"[{DisplayName}]任务已失败";
-				var failTextColor = new Color(250, 150, 150);
-
-				if (NetUtils.IsSingle)
-				{
-					State = WorldMissionState.Failed;
-					OnExpire();
-					Deactivate();
-					Main.NewText(failText, failTextColor);
-				}
-				else if (NetUtils.IsServer)
-				{
-					State = WorldMissionState.Failed;
-					OnExpire();
-					Deactivate();
-					ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(failText, Terraria.Localization.NetworkText.Mode.Literal), failTextColor);
-					Console.WriteLine(failText);
-					// TODO: Sync failure state to all clients
-				}
-
-				return;
-			}
+			return;
 		}
 
 		if (CurrentObjective is null)
 		{
-			Complete();
+			CompleteMission();
+			return;
+		}
+
+		// Pass the completed objective.
+		// This block often happens when the mission just got loaded, or synced from server.
+		if (CurrentObjective.Completed)
+		{
+			ForceAdvanceObjective();
 			return;
 		}
 
 		CurrentObjective.Update();
 
-		// Check objective completion
-		if (!CurrentObjective.Completed
-			&& CurrentObjective.CheckCompletion())
+		// Check objective completion.
+		if (CurrentObjective.CheckCompletion())
 		{
-			if (NetUtils.IsClient)
+			CompleteObjective();
+		}
+	}
+
+	public bool UpdateTime()
+	{
+		if (TimeLimit <= 0)
+		{
+			return true;
+		}
+
+		Time += WorldMissionManager.UpdateInterval;
+		if (Time >= TimeLimit)
+		{
+			Time = TimeLimit;
+
+			if (ExpireCore())
 			{
-				Console.WriteLine("Waiting for objective complete packet.");
-				return;
+				var failText = $"[{DisplayName}]任务已失败";
+				var failTextColor = new Color(250, 150, 150);
+				Main.NewText(failText, failTextColor);
+
+				if (NetUtils.IsServer)
+				{
+					Console.WriteLine(failText);
+					// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(failText, Terraria.Localization.NetworkText.Mode.Literal), failTextColor);
+					// TODO: Sync failure state to all clients
+				}
 			}
 
+			return false;
+		}
+
+		return true;
+	}
+
+	private bool ExpireCore()
+	{
+		if (State != WorldMissionState.Active)
+		{
+			return false;
+		}
+
+		State = WorldMissionState.Failed;
+		OnExpire();
+		Deactivate();
+
+		return true;
+	}
+
+	public void CompleteMission()
+	{
+		if (CompleteMissionCore())
+		{
+			var completeText = $"[{DisplayName}]任务已完成";
+			var completeTextColor = new Color(150, 250, 150);
+			Main.NewText(completeText, completeTextColor);
+
+			if (NetUtils.IsServer)
+			{
+				Console.WriteLine(completeText);
+				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(completeText, Terraria.Localization.NetworkText.Mode.Literal), completeTextColor);
+				// TODO: Sync completion to all clients
+			}
+		}
+	}
+
+	private bool CompleteMissionCore()
+	{
+		if (State != WorldMissionState.Active)
+		{
+			return false;
+		}
+
+		State = WorldMissionState.Completed;
+		OnComplete();
+		Deactivate(); // Maybe not necessary, because the current objective is null here.
+
+		return true;
+	}
+
+	public void CompleteObjective()
+	{
+		if (CompleteObjectiveCore())
+		{
 			var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
 			var objectiveCompleteTextColor = new Color(250, 250, 150);
+			Main.NewText(objectiveCompleteText, objectiveCompleteTextColor);
 
-			if (NetUtils.IsSingle)
+			if (NetUtils.IsServer)
 			{
-				CurrentObjective.Complete();
-				CurrentObjective.Deactivate();
-
-				CurrentObjective = CurrentObjective.Next;
-				CurrentObjective?.Activate(this);
-
-				Main.NewText(objectiveCompleteText, objectiveCompleteTextColor);
-			}
-			else if (NetUtils.IsServer)
-			{
-				CurrentObjective.Complete();
-				CurrentObjective.Deactivate();
-				CurrentObjective = CurrentObjective.Next;
-				CurrentObjective?.Activate(this);
-				ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
 				Console.WriteLine(objectiveCompleteText);
+				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
 				// TODO: Sync objective completion to all clients
 			}
 		}
 	}
 
-	public void Complete()
+	private bool CompleteObjectiveCore()
 	{
-		if (State != WorldMissionState.Active)
+		if (State != WorldMissionState.Active || CurrentObjective is null)
 		{
-			return;
+			return false;
 		}
 
-		if (NetUtils.IsClient)
-		{
-			Console.WriteLine("Waiting for complete packet.");
-			return;
-		}
+		CurrentObjective.Complete();
+		CurrentObjective.Deactivate();
+		CurrentObjective = CurrentObjective.Next;
+		CurrentObjective?.Activate(this);
 
-		var completeText = $"[{DisplayName}]任务已完成";
-		var completeTextColor = new Color(150, 250, 150);
-
-		if (NetUtils.IsSingle)
-		{
-			State = WorldMissionState.Completed;
-			OnComplete();
-			Deactivate(); // Maybe not necessary, because the current objective is null here.
-			Main.NewText(completeText, completeTextColor);
-		}
-		else if (NetUtils.IsServer)
-		{
-			State = WorldMissionState.Completed;
-			OnComplete();
-			Deactivate(); // Maybe not necessary, because the current objective is null.
-			ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(completeText, Terraria.Localization.NetworkText.Mode.Literal), completeTextColor);
-			Console.WriteLine(completeText);
-			// TODO: Sync completion to all clients
-		}
+		return true;
 	}
 
 	/// <summary>
@@ -190,22 +221,18 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 	/// </summary>
 	public void Retry()
 	{
-		if (!Retriable || State != WorldMissionState.Failed)
-		{
-			return;
-		}
-
 		if (NetUtils.IsServer)
 		{
 			Console.WriteLine("Waiting for retry packet.");
 			return;
 		}
-		else if (NetUtils.IsSingle)
+
+		if (NetUtils.IsSingle)
 		{
-			State = WorldMissionState.Active;
-			Time = 0;
-			ResetProgress();
-			Activate();
+			if (!RetryCore())
+			{
+				return;
+			}
 
 			Main.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
 		}
@@ -213,6 +240,21 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		{
 			// TODO: Send retry request packet to server
 		}
+	}
+
+	public bool RetryCore()
+	{
+		if (!Retriable || State != WorldMissionState.Failed)
+		{
+			return false;
+		}
+
+		State = WorldMissionState.Active;
+		Time = 0;
+		ResetProgress();
+		Activate();
+
+		return true;
 	}
 
 	/// <summary>
@@ -227,25 +269,36 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 		if (NetUtils.IsSingle)
 		{
-			RewardClaimed = true;
-
-			var rewardPlayer = Main.LocalPlayer;
-			foreach (var item in RewardItems)
+			if (GiveRewardsCore(Main.LocalPlayer.name))
 			{
-				rewardPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
+				foreach (var item in RewardItems)
+				{
+					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
+				}
 			}
 		}
 		else if (NetUtils.IsClient)
 		{
 			// TODO: Send reward claim request packet to server
 		}
-		else if (NetUtils.IsServer)
+	}
+
+	private bool GiveRewardsCore(string player)
+	{
+		if (State != WorldMissionState.Completed)
+		{
+			return false;
+		}
+
+		if (!RewardClaimed)
 		{
 			RewardClaimed = true;
-			// TODO: Generate reward items and send them to the player who claimed the reward.
-			// And record player name in RewardClaimedPlayers to prevent multiple claims from the same player.
-			// TODO: Add extra hooks for world state changes and other types of rewards.
 		}
+
+		// TODO: We haven't decided how to handle rewards for multiplayers yet.
+		RewardClaimedPlayers.Add(player);
+
+		return true;
 	}
 
 	/// <summary>
@@ -265,9 +318,58 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public void ResetProgress()
 	{
+		CurrentObjective = Objectives.First;
 		foreach (var objective in Objectives.AllObjectives)
 		{
 			objective.ResetProgress();
+		}
+	}
+
+	/// <summary>
+	/// Use this method to adapt to a fully new snapshot.
+	/// <br/> This is called when loading a world, or syncing from server.
+	/// </summary>
+	/// <param name="newState"></param>
+	/// <param name="oldState"></param>
+	private void ApplySnapshot(WorldMissionState newState, WorldMissionState oldState)
+	{
+		if (CurrentObjective == Objectives.FirstIncomplete)
+		{
+			if (oldState == newState)
+			{
+				return;
+			}
+
+			if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
+				&& newState is WorldMissionState.Active)
+			{
+				CurrentObjective.Activate(this);
+			}
+			else if (oldState is WorldMissionState.Active
+				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)
+			{
+				CurrentObjective.Deactivate();
+			}
+		}
+		else
+		{
+			var oldObjective = CurrentObjective;
+			CurrentObjective = Objectives.FirstIncomplete;
+			if (oldState == WorldMissionState.Active && newState == WorldMissionState.Active)
+			{
+				oldObjective?.Deactivate();
+				CurrentObjective?.Activate(this);
+			}
+			else if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
+				&& newState is WorldMissionState.Active)
+			{
+				CurrentObjective.Activate(this);
+			}
+			else if (oldState is WorldMissionState.Active
+				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)
+			{
+				oldObjective.Deactivate();
+			}
 		}
 	}
 

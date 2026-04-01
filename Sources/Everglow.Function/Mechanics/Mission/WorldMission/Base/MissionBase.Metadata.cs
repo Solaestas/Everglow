@@ -2,7 +2,7 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 public abstract partial class WorldMissionBase : IMissionMetadata
 {
-	public abstract string Name { get; }
+	public virtual string Name => GetType().Name;
 
 	public virtual string DisplayName => Name;
 
@@ -20,10 +20,7 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public virtual bool Visible => true;
 
-	public virtual bool CanUnlock()
-	{
-		return true;
-	}
+	public virtual bool CanUnlock() => true;
 
 	public virtual void Initialize()
 	{

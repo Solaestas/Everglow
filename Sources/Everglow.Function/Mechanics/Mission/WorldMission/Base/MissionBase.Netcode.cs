@@ -15,11 +15,16 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			writer.Write(player);
 		}
+		foreach (var objective in Objectives.AllObjectives)
+		{
+			objective.NetSend(writer);
+		}
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
 	{
-		State = (WorldMissionState)reader.ReadInt32(); // TODO: What to do if the state is different?
+		var oldState = State;
+		State = (WorldMissionState)reader.ReadInt32();
 		Time = reader.ReadInt32();
 		RewardClaimed = reader.ReadBoolean();
 		int rewardPlayerCount = reader.ReadInt32();
@@ -27,41 +32,33 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			RewardClaimedPlayers.Add(reader.ReadString());
 		}
+		foreach (var objective in Objectives.AllObjectives)
+		{
+			objective.NetReceive(reader);
+		}
+
+		ApplySnapshot(State, oldState);
 	}
 
 	public void OnMPSync()
 	{
-		for (var task = Objectives.First; task != null; task = task.Next)
+		if (CurrentObjective is not null
+			and IDeltaSyncObjective deltaSync)
 		{
-			if (task is IDeltaSyncObjective deltaSync)
+			if (deltaSync.NeedDeltaSync)
 			{
 				ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_SubProgress(WhoAmI, deltaSync));
 			}
 		}
 	}
 
-	public void SyncUnlock()
-	{
-	}
-
-	public void SyncCompletion()
-	{
-	}
-
-	public void SyncFailure()
-	{
-	}
-
 	public void SyncRetry()
 	{
-
-	}
-
-	public void SyncRewardClaim()
-	{
+		RetryCore();
 	}
 
 	public void SyncObjectiveCompletion()
 	{
+		CompleteObjectiveCore();
 	}
 }

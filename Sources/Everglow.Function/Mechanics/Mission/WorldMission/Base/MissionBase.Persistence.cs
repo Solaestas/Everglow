@@ -12,6 +12,7 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 
 	public void LoadData(TagCompound tag)
 	{
+		WorldMissionState oldState = State;
 		if (tag.TryGet<int>(StateKey, out var ms))
 		{
 			State = (WorldMissionState)ms;
@@ -31,6 +32,8 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 		{
 			RewardClaimedPlayers = rp.ToHashSet();
 		}
+
+		ApplySnapshot(State, oldState);
 
 		LoadObjectives(tag, Objectives.AllObjectives);
 	}

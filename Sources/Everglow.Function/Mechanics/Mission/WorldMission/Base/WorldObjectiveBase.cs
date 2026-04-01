@@ -27,7 +27,7 @@ public abstract class WorldObjectiveBase
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="WorldMissionObjectiveContainer.Add(WorldObjectiveBase)"/>.
+	/// Invoked by <see cref="WorldObjectiveContainer.Add(WorldObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()
@@ -65,6 +65,7 @@ public abstract class WorldObjectiveBase
 
 	public virtual void ResetProgress()
 	{
+		RewardClaimed = false;
 		Completed = false;
 	}
 
@@ -80,6 +81,11 @@ public abstract class WorldObjectiveBase
 
 	public virtual void LoadData(TagCompound tag)
 	{
+		if (tag.TryGet<bool>(nameof(Completed), out var completed))
+		{
+			Completed = completed;
+		}
+
 		if (tag.TryGet<bool>(nameof(RewardClaimed), out var hasGiven))
 		{
 			RewardClaimed = hasGiven;
@@ -88,6 +94,19 @@ public abstract class WorldObjectiveBase
 
 	public virtual void SaveData(TagCompound tag)
 	{
+		tag.Add(nameof(Completed), Completed);
 		tag.Add(nameof(RewardClaimed), RewardClaimed);
+	}
+
+	public virtual void NetSend(BinaryWriter writer)
+	{
+		writer.Write(Completed);
+		writer.Write(RewardClaimed);
+	}
+
+	public virtual void NetReceive(BinaryReader reader)
+	{
+		Completed = reader.ReadBoolean();
+		RewardClaimed = reader.ReadBoolean();
 	}
 }

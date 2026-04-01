@@ -8,7 +8,7 @@ public interface IMissionBehavior
 
 	public float Progress { get; }
 
-	public WorldMissionObjectiveContainer Objectives { get; }
+	public WorldObjectiveContainer Objectives { get; }
 
 	public WorldObjectiveBase CurrentObjective { get; }
 
@@ -25,7 +25,9 @@ public interface IMissionBehavior
 
 	public void Unlock();
 
-	public void Complete();
+	public void CompleteMission();
+
+	public void CompleteObjective();
 
 	public void Update();
 
@@ -33,19 +35,11 @@ public interface IMissionBehavior
 
 	public void GiveRewards();
 
-	public void Activate();
+	// public void Activate();
 
-	public void Deactivate();
+	// public void Deactivate();
 
 	public void Reset();
 
 	public void ResetProgress();
-
-	public void OnUnlock();
-
-	public void OnComplete();
-
-	public void OnExpire();
-
-	public void OnReset();
 }

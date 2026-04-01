@@ -3,17 +3,17 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class ParallelObjective_New : WorldObjectiveBase
+public class WorldParallelObjective : WorldObjectiveBase
 {
 	private IEnumerable<WorldObjectiveBase> _objectives;
 
 	public IEnumerable<WorldObjectiveBase> Objectives => _objectives;
 
-	public ParallelObjective_New()
+	public WorldParallelObjective()
 	{
 	}
 
-	public ParallelObjective_New(params WorldObjectiveBase[] objectives)
+	public WorldParallelObjective(params WorldObjectiveBase[] objectives)
 	{
 		_objectives = objectives;
 	}
@@ -30,7 +30,7 @@ public class ParallelObjective_New : WorldObjectiveBase
 
 	public override void Update()
 	{
-		if (_objectives.Any(o => o is ParallelObjective_New or BranchingObjective_New))
+		if (_objectives.Any(o => o is WorldParallelObjective or WorldBranchingObjective))
 		{
 			throw new InvalidDataException("Parallel objective or branching objective should not nest in itself or other.");
 		}

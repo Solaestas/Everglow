@@ -4,8 +4,6 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
 public class TestGeneralLifeCycle : WorldMissionBase
 {
-	public override string Name => nameof(TestGeneralLifeCycle);
-
 	public override void Initialize()
 	{
 		Objectives.Add(new TestGeneralMissionLifeCycleObjective());

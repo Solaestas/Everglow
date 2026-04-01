@@ -20,6 +20,8 @@ public class WorldMissionManager
 
 	private List<WorldMissionBase> _missions = [];
 
+	public IReadOnlyList<WorldMissionBase> Missions => _missions;
+
 	private int UpdateTimer => (int)_gameState.TimeForVisualEffects;
 
 	public WorldMissionManager()
@@ -50,11 +52,13 @@ public class WorldMissionManager
 		{
 			foreach (var mT in modTypes.Where(t => t.IsSubclassOf(typeof(WorldMissionBase)) && !t.IsAbstract))
 			{
-				var mission = Activator.CreateInstance(mT);
-				_missions.Add(mission as WorldMissionBase);
+				var mission = Activator.CreateInstance(mT) as WorldMissionBase;
+				mission.WhoAmI = _missions.Count;
+				_missions.Add(mission);
 			}
 		}
 		Main.OnTickForInternalCodeOnly += Update;
+		Ins.HookManager.AddHook(Enums.CodeLayer.PostSaveAndQuit, Clear);
 	}
 
 	public void Unload()
@@ -75,7 +79,11 @@ public class WorldMissionManager
 
 	public void Clear()
 	{
-		_missions.ForEach(m => m.Reset());
+		_missions.ForEach(m =>
+		{
+			m.Deactivate();
+			m.Reset();
+		});
 	}
 
 	public void Update()
@@ -136,48 +144,6 @@ public class WorldMissionManager
 			throw new InvalidOperationException($"Mission with name {mission.Name} already exists.");
 		}
 		_missions.Add(mission);
-	}
-
-	/// <summary>
-	/// Use this method to activate a mission by its WhoAmI,
-	/// which is useful when receiving a request from server to activate a mission.
-	/// </summary>
-	/// <param name="whoAmI"></param>
-	/// <returns></returns>
-	public bool ActivateMission(int whoAmI)
-	{
-		if (whoAmI < 0 || whoAmI >= _missions.Count)
-		{
-			Ins.Logger.Warn($"Attempted to activate mission with invalid WhoAmI: {whoAmI}");
-			return false;
-		}
-
-		var mission = _missions[whoAmI];
-		ActivateMission(mission);
-
-		return true;
-	}
-
-	public bool ActivateMission(WorldMissionBase mission)
-	{
-		if (mission.State == WorldMissionState.Active)
-		{
-			Ins.Logger.Warn($"Attempted to activate mission {mission.Name} which is already active.");
-			return false;
-		}
-
-		// This method is called in two cases:
-		// 1. Receving a request to 'unlock' a mission from server.
-		// 2. Receving a request to 'retry' a mission from server.
-		// If the call aiming to 'retry', we also need to reset the mission progress.
-		// Later, we may want to separate the 'unlock' and 'retry' logic into two methods if they have significant differences.
-
-		// 1. Activate (Set first objective + attach hooks)
-		// 2. Set state to active
-		// 3. (Optional) reset progress if it's a retry request
-		throw new NotImplementedException();
-
-		return true;
 	}
 
 	public void GiveRewards(WorldMissionBase mission)

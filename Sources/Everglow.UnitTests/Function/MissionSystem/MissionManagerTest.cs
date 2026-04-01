@@ -19,7 +19,6 @@ public class MissionManagerTest
 
 	private class TestMission1 : WorldMissionBase
 	{
-		public override string Name => nameof(TestMission1);
 	}
 
 	[TestMethod]
@@ -37,8 +36,6 @@ public class MissionManagerTest
 		{
 			State = WorldMissionState.Active;
 		}
-
-		public override string Name => nameof(TestMission2);
 
 		public override int TimeLimit => 20;
 	}

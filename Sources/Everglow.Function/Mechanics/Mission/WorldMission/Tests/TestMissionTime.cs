@@ -4,8 +4,6 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
 public class TestMissionTime : WorldMissionBase
 {
-	public override string Name => nameof(TestMissionTime);
-
 	public override int TimeLimit => 600;
 
 	public override void Initialize()

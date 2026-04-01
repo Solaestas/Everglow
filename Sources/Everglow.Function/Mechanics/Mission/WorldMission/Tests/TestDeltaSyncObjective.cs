@@ -5,6 +5,8 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Tests;
 
 public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 {
+	public bool NeedDeltaSync => true;
+
 	public override bool CheckCompletion() => false;
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
@@ -34,8 +36,6 @@ public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 public class TestDeltaSyncMission : WorldMissionBase
 {
-	public override string Name => nameof(TestDeltaSyncMission);
-
 	public override void Initialize()
 	{
 		Objectives.Add(new TestDeltaSyncObjective());
