@@ -2,7 +2,6 @@ using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
@@ -60,6 +59,11 @@ public abstract class Elevator : BoxEntity
 	public int AccelerateDirection = 0;
 
 	/// <summary>
+	/// Time that the elevator will stop when it reaches a stop point. Default to 300 (5 seconds).
+	/// </summary>
+	public int StopTimeMax = 300;
+
+	/// <summary>
 	/// Timer for a stop elevator.
 	/// </summary>
 	public int StopTimer { get; protected set; } = 0;
@@ -76,7 +80,6 @@ public abstract class Elevator : BoxEntity
 
 	public override void AI()
 	{
-		MaxSpeed = 5f;
 		if (TileUtils.SafeGetTile(WinchCoord).TileType != WinchTileType)
 		{
 			Kill();
@@ -110,14 +113,14 @@ public abstract class Elevator : BoxEntity
 			var distToTargetY = (NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top)) * CurrentMoveDirection;
 			if (distToTargetY <= Math.Max(CurrentSpeed, 1))
 			{
-				if (CurrentSpeed <= 1)
+				if (CurrentSpeed <= 0.05f)
 				{
-					StopElevator(300);
+					StopElevator(StopTimeMax);
 					AccelerateDirection = 0;
 				}
 				else
 				{
-					CurrentSpeed = distToTargetY * 0.99f;
+					CurrentSpeed = distToTargetY;
 					Velocity = new Vector2(0, CurrentSpeed * CurrentMoveDirection);
 				}
 				return;
@@ -192,7 +195,7 @@ public abstract class Elevator : BoxEntity
 			if (TileUtils.AreaHasTile(nextPosTileCoord.X, nextPosTileCoord.Y, size.X, size.Y,
 					tile => Main.tileSolid[tile.type] || Main.tileSolidTop[tile.type]))
 			{
-				StopElevator(120);
+				StopElevator(StopTimeMax);
 			}
 		}
 		else
@@ -207,6 +210,15 @@ public abstract class Elevator : BoxEntity
 		CurrentSpeed = 0;
 		Velocity = Vector2.Zero;
 		MoveState = State.Stop;
+
+		// Debug Code
+		// float fixed_NextStopTileY = NextStopTileY;
+		// if (CurrentMoveDirection == 1)
+		// {
+		// fixed_NextStopTileY -= 1;
+		// }
+		// float delatY = fixed_NextStopTileY * 16 - Position.Y;
+		// Main.NewText(MathF.Abs(delatY));
 	}
 
 	private int GetNextTileOnPathY(int dir)
@@ -302,31 +314,30 @@ public abstract class Elevator : BoxEntity
 			Tile leftTile = Framing.GetTileSafely(leftX, y);
 			Tile rightTile = Framing.GetTileSafely(rightX, y);
 
-			bool isFloor = false;
-			if (leftTile.HasTile && TileLoader.GetTile(leftTile.TileType) is IFloorIndicatorTile)
-			{
-				Tile nextLeftTile = TileUtils.SafeGetTile(leftX, y + 1);
-				if (nextLeftTile.TileType != leftTile.TileType || (nextLeftTile.TileFrameY <= leftTile.TileFrameY && nextLeftTile.TileType == leftTile.TileType))
-				{
-					isFloor = true;
-				}
-			}
-			if (rightTile.HasTile && TileLoader.GetTile(rightTile.TileType) is IFloorIndicatorTile)
-			{
-				Tile nextRightTile = TileUtils.SafeGetTile(rightX, y + 1);
-				if (nextRightTile.TileType != rightTile.TileType || (nextRightTile.TileFrameY <= rightTile.TileFrameY && nextRightTile.TileType == rightTile.TileType))
-				{
-					isFloor = true;
-				}
-			}
+			bool isFloor = IsTileFloor(leftTile) || IsTileFloor(rightTile);
 
 			if (isFloor)
 			{
-				return y + (dir == 1 ? Size.Y.ToTileCoordinate() : 0);
+				int destinationY = y + 1 + (dir == 1 ? Size.Y.ToTileCoordinate() : 0);
+				if (destinationY != startTileY)
+				{
+					return destinationY;
+				}
 			}
 		}
-
 		return startTileY + scanRange * dir;
+	}
+
+	public bool IsTileFloor(Tile tile)
+	{
+		if (tile.HasTile && TileLoader.GetTile(tile.TileType) is FloorIndicatorTile fIT)
+		{
+			if (tile.TileFrameY == fIT.IdenticalFrameY)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/// <summary>
@@ -375,14 +386,23 @@ public abstract class Elevator : BoxEntity
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		var bars = new List<Vertex2D>();
-		for (int f = 0; f < 1000; f++)
+		for (int f = 0; f < 10000; f++)
 		{
 			var jointPos = new Vector2(0, -ElevatorCableJointOffset - f * 12);
-			Vector2 drawPos = Box.Center - Main.screenPosition;
-			Color drawcRope = Lighting.GetColor((int)(Position.X / 16f) + 2, (int)((Position.Y - f * 12) / 16f) - 7);
-
-			bars.Add(drawPos + jointPos + new Vector2(-4, 0), drawcRope, new Vector3(0, f, 0));
-			bars.Add(drawPos + jointPos + new Vector2(4, 0), drawcRope, new Vector3(1, f, 0));
+			Vector2 elevaorPos = Box.Center;
+			Vector2 drawPos = elevaorPos + jointPos;
+			if (drawPos.Y < Main.screenPosition.Y - 256)
+			{
+				break;
+			}
+			if (drawPos.Y > Main.screenPosition.Y + Main.screenHeight + 256)
+			{
+				continue;
+			}
+			Color drawRopeColor = Lighting.GetColor(drawPos.ToTileCoordinates());
+			drawPos -= Main.screenPosition;
+			bars.Add(drawPos + new Vector2(-4, 0), drawRopeColor, new Vector3(0, f, 0));
+			bars.Add(drawPos + new Vector2(4, 0), drawRopeColor, new Vector3(1, f, 0));
 			if ((jointPos + Box.Center).Y < WinchCoord.Y * 16 + 8)
 			{
 				break;
