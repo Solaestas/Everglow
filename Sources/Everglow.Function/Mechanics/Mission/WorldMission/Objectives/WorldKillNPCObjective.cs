@@ -22,6 +22,8 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 
 	public int KilledCount { get; private set; }
 
+	public override float Progress => Math.Clamp(KilledCount / (float)NPCCount, 0, 1);
+
 	public override bool CheckCompletion() => KilledCount >= NPCCount;
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();

@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
@@ -19,6 +18,7 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			objective.NetSend(writer);
 		}
+		Console.WriteLine("Full sync msg sent!");
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
@@ -43,7 +43,7 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			if (State == WorldMissionState.Active)
 			{
-				if(oldState == WorldMissionState.Locked)
+				if (oldState == WorldMissionState.Locked)
 				{
 					var unlockText = $"[{DisplayName}]任务已解锁";
 					var unlockTextColor = new Color(150, 150, 250);

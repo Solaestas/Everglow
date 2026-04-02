@@ -196,7 +196,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			{
 				Console.WriteLine(objectiveCompleteText);
 				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
-				if (CurrentObjective.Next != null) // Skip the last objective sync because a packet for completion will be sent.
+				if (CurrentObjective != null) // Skip the last objective sync because a packet for completion will be sent.
 				{
 					ModIns.PacketResolver.Send(new MissionSyncPacket(this));
 				}
@@ -346,18 +346,20 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
 				&& newState is WorldMissionState.Active)
 			{
-				CurrentObjective.Activate(this);
+				CurrentObjective?.Activate(this);
 			}
 			else if (oldState is WorldMissionState.Active
 				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)
 			{
-				CurrentObjective.Deactivate();
+				CurrentObjective?.Deactivate();
 			}
 		}
 		else
 		{
 			var oldObjective = CurrentObjective;
 			CurrentObjective = Objectives.FirstIncomplete;
+			Main.NewText($"目标已同步为: {CurrentObjective?.ObjectiveID ?? -1}", 150, 250, 150);
+			Main.NewText($"目标进度已同步为: {CurrentObjective?.Progress ?? -1}", 150, 250, 150);
 			if (oldState == WorldMissionState.Active && newState == WorldMissionState.Active)
 			{
 				oldObjective?.Deactivate();
@@ -366,7 +368,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			else if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
 				&& newState is WorldMissionState.Active)
 			{
-				CurrentObjective.Activate(this);
+				CurrentObjective?.Activate(this);
 			}
 			else if (oldState is WorldMissionState.Active
 				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)

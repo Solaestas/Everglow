@@ -27,6 +27,8 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public bool NeedDeltaSync => _localConsumedCount > 0;
 
+	public override float Progress => Math.Clamp(ConsumedCount / (float)ItemCount, 0, 1);
+
 	public override bool CheckCompletion() => ConsumedCount >= ItemCount;
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();

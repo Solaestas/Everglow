@@ -63,4 +63,12 @@ public class WorldMissionSystem : ModSystem
 	{
 		// Clean up mission manager data here.
 	}
+
+	public override void PostUpdateEverything()
+	{
+		foreach (var player in Main.ActivePlayers)
+		{
+		
+		}
+	}
 }

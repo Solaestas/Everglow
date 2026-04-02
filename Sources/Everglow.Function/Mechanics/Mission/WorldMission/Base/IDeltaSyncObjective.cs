@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 public interface IDeltaSyncObjective
 {

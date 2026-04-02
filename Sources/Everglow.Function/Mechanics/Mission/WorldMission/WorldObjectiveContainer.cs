@@ -51,6 +51,7 @@ public class WorldObjectiveContainer
 	/// </summary>
 	/// <param name="tasks">The array of objectives will be in the parallel objective</param>
 	/// <returns></returns>
+	[Obsolete("Conflict with net sync", true)]
 	public WorldObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
 	{
 		return Add(new WorldParallelObjective(objectives));
@@ -61,6 +62,7 @@ public class WorldObjectiveContainer
 	/// </summary>
 	/// <param name="branches"></param>
 	/// <returns></returns>
+	[Obsolete("Conflict with net sync", true)]
 	public WorldObjectiveContainer AddBranches(params WorldObjectiveContainer[] branches)
 	{
 		// foreach (var builder in branches)

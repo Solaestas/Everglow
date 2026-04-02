@@ -3,7 +3,8 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class WorldParallelObjective : WorldObjectiveBase
+[Obsolete("Conflict with net sync", true)]
+public class WorldParallelObjective : WorldObjectiveBase, IDeltaSyncObjective
 {
 	private IEnumerable<WorldObjectiveBase> _objectives;
 
@@ -19,6 +20,8 @@ public class WorldParallelObjective : WorldObjectiveBase
 	}
 
 	public override float Progress => _objectives.Average(o => o.Progress);
+
+	public bool NeedDeltaSync => _objectives.Any(o => o is IDeltaSyncObjective delta && delta.NeedDeltaSync);
 
 	public override void OnInitialize()
 	{
@@ -102,5 +105,49 @@ public class WorldParallelObjective : WorldObjectiveBase
 	{
 		base.SaveData(tag);
 		WorldMissionBase.SaveObjectives(tag, Objectives);
+	}
+
+	public void SendDelta(BinaryWriter bw)
+	{
+		foreach (var obj in Objectives)
+		{
+			if (obj is IDeltaSyncObjective delta)
+			{
+				delta.SendDelta(bw);
+			}
+		}
+	}
+
+	public void ReceiveDelta(BinaryReader br)
+	{
+		foreach (var obj in Objectives)
+		{
+			if (obj is IDeltaSyncObjective delta)
+			{
+				delta.ReceiveDelta(br);
+			}
+		}
+	}
+
+	public void SendMain(BinaryWriter bw)
+	{
+		foreach (var obj in Objectives)
+		{
+			if (obj is IDeltaSyncObjective delta)
+			{
+				delta.SendMain(bw);
+			}
+		}
+	}
+
+	public void ReceiveMain(BinaryReader br)
+	{
+		foreach (var obj in Objectives)
+		{
+			if (obj is IDeltaSyncObjective delta)
+			{
+				delta.ReceiveMain(br);
+			}
+		}
 	}
 }

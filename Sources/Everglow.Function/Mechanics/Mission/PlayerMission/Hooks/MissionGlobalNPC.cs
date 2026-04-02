@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.PlayerMission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerMission.Enums;
 using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerMission.Hooks;
 
@@ -9,46 +8,9 @@ public class MissionGlobalNPC : GlobalNPC
 {
 	public static event Action<NPC> OnKillNPCEvent;
 
-	/// <summary>
-	/// On kill hook for multiplayer missions
-	/// </summary>
-	public static event Action<NPC> GlobalOnKillNPCEvent;
-
 	public static void TriggerOnKillNPCEvent(NPC npc)
 	{
 		OnKillNPCEvent.Invoke(npc);
-	}
-
-	public override void OnKill(NPC npc)
-	{
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			SingleOnKill(npc);
-		}
-		else if (Main.netMode == NetmodeID.Server)
-		{
-			ServerOnKill(npc);
-		}
-	}
-
-	public override bool SpecialOnKill(NPC npc)
-	{
-		if (npc.lastInteraction == Main.myPlayer && !NetUtils.IsServer)
-		{
-			//OnKillNPCEvent?.Invoke(npc);
-		}
-
-		return base.SpecialOnKill(npc);
-	}
-
-	public void SingleOnKill(NPC npc)
-	{
-		GlobalOnKillNPCEvent?.Invoke(npc);
-	}
-
-	public void ServerOnKill(NPC npc)
-	{
-		GlobalOnKillNPCEvent?.Invoke(npc);
 	}
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

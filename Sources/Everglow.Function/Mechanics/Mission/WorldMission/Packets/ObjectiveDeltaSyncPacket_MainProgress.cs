@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
-using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 using Everglow.Commons.Netcode.Abstracts;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
