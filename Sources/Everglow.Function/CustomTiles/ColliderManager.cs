@@ -248,13 +248,14 @@ public class ColliderManager : ILoadable
 			{
 				if (Intersect(entityBoxNext) && !Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && customTile.Box.Bottom - entityBoxNext.Top > ascendValue)
 				{
+					customTileTop = customTile.Box.Bottom;
 					ascendValue = customTile.Box.Bottom - entityBoxNext.Top;
 				}
 			}
-			if (ascendValue > 0)
+			if (customTileTop != 0)
 			{
-				position.Y += ascendValue;
-				gfxOffY -= ascendValue;
+				gfxOffY += position.Y - customTileTop;
+				position.Y = customTileTop + 2;
 			}
 		}
 		if (Math.Abs(position.Y - oldPosY) > 9)

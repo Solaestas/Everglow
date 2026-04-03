@@ -2,10 +2,13 @@ using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
+using Everglow.Commons.VFX;
+using ReLogic.Content;
+using Terraria.Audio;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
-public abstract class Elevator : BoxEntity
+public abstract class CustomElevator : BoxEntity
 {
 	public enum State
 	{
@@ -63,18 +66,149 @@ public abstract class Elevator : BoxEntity
 	/// </summary>
 	public int StopTimeMax = 300;
 
+	public override Color MapColor => new Color(122, 91, 79);
+
+	public Texture2D AuxiliaryStructureTexture;
+
+	public Texture2D AuxiliaryStructureTextureHighlight;
+
+	public Texture2D AuxiliaryStructure_Glow;
+
+	public Texture2D AuxiliaryStructure_Bloom;
+
+	public Texture2D AuxiliaryStructure_TopRopes;
+
+	/// <summary>
+	/// If <see cref="LightSourceOn"/> is true, a Lighting.AddLight will called in <see cref="DrawAuxiliaryStructure"/> to emit light. This is used for elevator with lamps. The position of the light source is relative to the center of the elevator, and can be set by this variable. Default to (0, -60).
+	/// </summary>
+	public Vector2 LightSourceRelativePos = Vector2.zeroVector;
+
+	/// <summary>
+	/// If mouse world inside the box defined by <see cref="HighlightBoxRelativeTopLeft"/> and <see cref="HighlightBoxRelativeBottomRight"/> relative to the center of the elevator, the <see cref="AuxiliaryStructureTextureHighlight"/> will be drawn.
+	/// </summary>
+	public Vector2 HighlightBoxRelativeTopLeft;
+
+	/// <summary>
+	/// If mouse world inside the box defined by <see cref="HighlightBoxRelativeTopLeft"/> and <see cref="HighlightBoxRelativeBottomRight"/> relative to the center of the elevator, the <see cref="AuxiliaryStructureTextureHighlight"/> will be drawn.
+	/// </summary>
+	public Vector2 HighlightBoxRelativeBottomRight;
+
+	public Vector3 LightSourceColor;
+
+	/// <summary>
+	/// Relative to Box.Center.
+	/// </summary>
+	public Vector2 AuxiliaryPos;
+
+	/// <summary>
+	/// Relative to Box.Center.
+	/// </summary>
+	public Vector2 TopRopePos;
+
+	/// <summary>
+	/// In most cases, there is a light source in an elevator.
+	/// </summary>
+	public bool LightSourceOn = true;
+
+	/// <summary>
+	/// If mouse hover the elevator, it will be highlighted. This is used to indicate that the elevator can be interacted with(RightClick).
+	/// </summary>
+	public bool Highlighted = false;
+
+	public ElevatorHelper LocalElevatorHelper;
+
 	/// <summary>
 	/// Timer for a stop elevator.
 	/// </summary>
 	public int StopTimer { get; protected set; } = 0;
 
-	public abstract string ElevatorTexture { get; }
+	public Texture2D ElevatorTexture { get; set; }
 
-	public abstract string ElevatorCableTexture { get; }
+	public Texture2D ElevatorCableTexture { get; set; }
 
-	public virtual int ElevatorCableJointOffset => 0;
+	public virtual int ElevatorCableJointOffset => 125;
 
-	public override Color MapColor => new Color(122, 91, 79);
+	public override void SetDefaults()
+	{
+		Size = new Vector2(96, 16);
+		HighlightBoxRelativeTopLeft = new Vector2(-56, -94);
+		HighlightBoxRelativeBottomRight = new Vector2(56, 8);
+		AuxiliaryPos = new Vector2(0, -46);
+		TopRopePos = new Vector2(0, -110);
+		LightSourceColor = new Vector3(1f, 0.8f, 0f);
+		LightSourceOn = true;
+		LocalElevatorHelper = null;
+		ElevatorTexture = ModAsset.DefaultElevator.Value;
+		ElevatorCableTexture = ModAsset.DefaultElevator_Cable.Value;
+		AuxiliaryStructureTexture = ModAsset.DefaultElevator_AuxiliaryStructure.Value;
+		AuxiliaryStructureTextureHighlight = ModAsset.DefaultElevator_AuxiliaryStructure_Highlight.Value;
+		AuxiliaryStructure_Bloom = ModAsset.DefaultElevator_AuxiliaryStructure_Bloom.Value;
+		AuxiliaryStructure_Glow = ModAsset.DefaultElevator_AuxiliaryStructure_Glow.Value;
+		AuxiliaryStructure_TopRopes = ModAsset.DefaultElevator_TopRopes.Value;
+		TryInitializeTexture();
+	}
+
+	public void TryInitializeTexture()
+	{
+		List<string> suffix = new List<string>()
+		{
+			string.Empty,
+			"_Cable",
+			"_AuxiliaryStructure",
+			"_AuxiliaryStructure_Highlight",
+			"_AuxiliaryStructure_Bloom",
+			"_AuxiliaryStructure_Glow",
+			"_TopRopes",
+		};
+		for (int i = 0; i < 7; i++)
+		{
+			string checkName = GetType().FullName;
+			checkName = checkName.Replace('.', '/');
+			checkName += suffix[i];
+			string checkNameWithExtension = checkName + ".png";
+			if (ModContent.FileExists(checkNameWithExtension))
+			{
+				switch (i)
+				{
+					case 0:
+						{
+							ElevatorTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 1:
+						{
+							ElevatorCableTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 2:
+						{
+							AuxiliaryStructureTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 3:
+						{
+							AuxiliaryStructureTextureHighlight = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 4:
+						{
+							AuxiliaryStructure_Bloom = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 5:
+						{
+							AuxiliaryStructure_Glow = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+					case 6:
+						{
+							AuxiliaryStructure_TopRopes = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
+						}
+						break;
+				}
+			}
+		}
+	}
 
 	#region Behavior
 
@@ -85,7 +219,36 @@ public abstract class Elevator : BoxEntity
 			Kill();
 			return;
 		}
-
+		Highlighted = ShouldHighlight();
+		if (Highlighted)
+		{
+			if (Main.mouseRight && Main.mouseRightRelease)
+			{
+				SoundEngine.PlaySound(SoundID.Unlock, Main.MouseWorld);
+				if (LocalElevatorHelper is null || !LocalElevatorHelper.Active)
+				{
+					LocalElevatorHelper = new ElevatorHelper();
+					LocalElevatorHelper.AnimationTimer = 0;
+					LocalElevatorHelper.ParentElevator = this;
+					LocalElevatorHelper.Owner = Main.LocalPlayer;
+					LocalElevatorHelper.RelativePos = new Vector2(60, -80);
+					LocalElevatorHelper.Visible = true;
+					LocalElevatorHelper.Active = true;
+					Ins.VFXManager.Add(LocalElevatorHelper);
+				}
+				else
+				{
+					LocalElevatorHelper.Closing = !LocalElevatorHelper.Closing;
+				}
+			}
+		}
+		if(!CanClick())
+		{
+			if(LocalElevatorHelper is not null)
+			{
+				LocalElevatorHelper.Closing = true;
+			}
+		}
 		if (MoveState == State.Stop)
 		{
 			if (StopTimer > 0)
@@ -225,8 +388,6 @@ public abstract class Elevator : BoxEntity
 	{
 		int startTileX = Position.X.ToTileCoordinate();
 		int startTileY = dir == 1 ? Box.Bottom.ToTileCoordinate() : Box.Top.ToTileCoordinate();
-		var a = Box.Bottom.ToTileCoordinate();
-		var b = Box.Top.ToTileCoordinate();
 		int scanRange = 10000;
 		if (LengthRestrict is not float.PositiveInfinity && LengthRestrict > 0)
 		{
@@ -368,13 +529,51 @@ public abstract class Elevator : BoxEntity
 
 			if (PreDrawElevator(lightColor))
 			{
-				Main.spriteBatch.Draw(ModContent.Request<Texture2D>(ElevatorTexture).Value, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), lightColor);
+				Main.spriteBatch.Draw(ElevatorTexture, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), lightColor);
+				DrawAuxiliaryStructure(lightColor);
 				PostDrawElevator(lightColor);
 			}
 		}
 	}
 
 	public virtual bool PreDrawElevator(Color lightColor) => true;
+
+	public virtual void DrawAuxiliaryStructure(Color lightColor)
+	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Vector2 drawPos = AuxiliaryPos + Box.Center - Main.screenPosition;
+		Rectangle auxiliaryFrame = new Rectangle(0, 0, AuxiliaryStructureTexture.Width / 2, AuxiliaryStructureTexture.Height);
+		if (LightSourceOn)
+		{
+			auxiliaryFrame.X += AuxiliaryStructureTexture.Width / 2;
+			Lighting.AddLight(Box.Center + LightSourceRelativePos, LightSourceColor);
+		}
+		if (AuxiliaryStructure_TopRopes is not null)
+		{
+			Main.spriteBatch.Draw(AuxiliaryStructure_TopRopes, Box.Center - Main.screenPosition + TopRopePos, null, lightColor, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
+		}
+		Main.spriteBatch.Draw(AuxiliaryStructureTexture, drawPos, auxiliaryFrame, lightColor, 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		if (LightSourceOn)
+		{
+			Texture2D glow = AuxiliaryStructure_Glow;
+			Texture2D bloom = AuxiliaryStructure_Bloom;
+			if (glow is not null)
+			{
+				Main.spriteBatch.Draw(glow, drawPos, null, new Color(1f, 1f, 1f, 0), 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			}
+			if (bloom is not null)
+			{
+				Main.spriteBatch.Draw(bloom, drawPos, null, new Color(1f, 1f, 1f, 0) * 0.7f, 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			}
+		}
+		if (Highlighted)
+		{
+			if (Main.SmartCursorIsUsed)
+			{
+				Main.spriteBatch.Draw(AuxiliaryStructureTextureHighlight, drawPos, null, Color.White, 0, AuxiliaryStructureTextureHighlight.Size() * 0.5f, 1, SpriteEffects.None, 0);
+			}
+		}
+	}
 
 	public virtual void PostDrawElevator(Color lightColor)
 	{
@@ -410,7 +609,7 @@ public abstract class Elevator : BoxEntity
 		}
 		if (bars.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ElevatorCableTexture).Value;
+			Main.graphics.GraphicsDevice.Textures[0] = ElevatorCableTexture;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		Main.spriteBatch.End();
@@ -418,6 +617,32 @@ public abstract class Elevator : BoxEntity
 	}
 
 	public virtual bool PreDrawElevatorCable(Color lightColor) => true;
+
+	public virtual bool ShouldHighlight()
+	{
+		Vector2 amended_mouseWorld = Main.MouseWorld;
+		if (!CanClick())
+		{
+			return false;
+		}
+		float boxMinX = Box.Center.X + HighlightBoxRelativeTopLeft.X;
+		float boxMaxX = Box.Center.X + HighlightBoxRelativeBottomRight.X;
+		float boxMinY = Box.Center.Y + HighlightBoxRelativeTopLeft.Y;
+		float boxMaxY = Box.Center.Y + HighlightBoxRelativeBottomRight.Y;
+		if (amended_mouseWorld.X >= boxMinX && amended_mouseWorld.X <= boxMaxX)
+		{
+			if (amended_mouseWorld.Y >= boxMinY && amended_mouseWorld.Y <= boxMaxY)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public virtual bool CanClick()
+	{
+		return (Main.LocalPlayer.MountedCenter - (Box.Center + AuxiliaryPos)).Length() <= 200;
+	}
 
 	public virtual void PostDrawElevatorCable(Color lightColor)
 	{

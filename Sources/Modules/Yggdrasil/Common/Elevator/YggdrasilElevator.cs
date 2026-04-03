@@ -1,70 +1,22 @@
-using Terraria.Audio;
+using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
-public class YggdrasilElevator : Commons.Templates.Furniture.Elevator.Elevator
+public class YggdrasilElevator : CustomElevator
 {
-	public bool LampOn = false;
-
 	public override Color MapColor => new Color(122, 91, 79);
-
-	public override string ElevatorCableTexture => ModAsset.Rope_Mod;
-
-	public override string ElevatorTexture => ModAsset.YggdrasilElevator_Mod;
-
-	public override int ElevatorCableJointOffset => 125;
 
 	public override void SetDefaults()
 	{
-		Size = new Vector2(96, 16);
+		base.SetDefaults();
+		LightSourceRelativePos = new Vector2(10, -57);
 	}
 
-	public override bool PreDrawElevator(Color lightColor)
+	public override int ElevatorCableJointOffset => 125;
+
+	public override void DrawAuxiliaryStructure(Color lightColor)
 	{
-		if (LampOn)
-		{
-			Lighting.AddLight((int)(Position.X / 16f) + 1, (int)(Position.Y / 16f) - 3, 1f, 0.8f, 0f);
-		}
-		Texture2D frame = LampOn
-			? ModAsset.SkyTreeLiftShellLightOn.Value
-			: ModAsset.SkyTreeLiftShellLightOff.Value;
-		Main.spriteBatch.Draw(frame, Box.Center - Main.screenPosition + new Vector2(0, -46), null, lightColor, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-		if (LampOn)
-		{
-			var glow = ModAsset.SkyTreeLiftShellLight_Glow.Value;
-			var bloom = ModAsset.SkyTreeLiftShellLight_Bloom.Value;
-			Main.spriteBatch.Draw(glow, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0), 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			Main.spriteBatch.Draw(bloom, Box.Center - Main.screenPosition + new Vector2(0, -46), null, new Color(1f, 1f, 1f, 0) * 0.7f, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-		}
-
-		var lampGlowColor = new Color(255, 255, 255, 0);
-
-		// var lampGlowTexture = ;
-		// Main.spriteBatch.Draw(lampGlowTexture, Box.Center - Main.screenPosition + new Vector2(0, -46), null, lampGlowColor, 0, frame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-		Texture2D liftRopeTop = ModAsset.SkyTreeLiftRope.Value;
-		Main.spriteBatch.Draw(liftRopeTop, Box.Center - Main.screenPosition + new Vector2(0, -110), null, lightColor, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
-
-		Vector2 ButtomPosition = new Vector2(-11, -33) + Box.Center;
-		if ((Main.MouseWorld - ButtomPosition).Length() < 20)
-		{
-			if (Main.SmartCursorIsUsed)
-			{
-				Texture2D LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtom.Value;
-				if (LampOn)
-				{
-					LiftButtomHighLight = ModAsset.SkyTreeLiftShellMiddleButtom.Value;
-				}
-
-				Main.spriteBatch.Draw(LiftButtomHighLight, Box.Center - Main.screenPosition + new Vector2(0, -46), null, Color.White, 0, LiftButtomHighLight.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			}
-			if (Main.mouseRight && Main.mouseRightRelease)
-			{
-				SoundEngine.PlaySound(SoundID.Unlock, ButtomPosition);
-				LampOn = !LampOn;
-			}
-		}
-
-		return true;
+		base.DrawAuxiliaryStructure(lightColor);
 	}
 
 	public override bool PreDrawElevatorCable(Color lightColor)

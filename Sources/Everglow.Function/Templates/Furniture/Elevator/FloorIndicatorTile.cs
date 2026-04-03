@@ -7,6 +7,18 @@ namespace Everglow.Commons.Templates.Furniture.Elevator;
 
 public abstract class FloorIndicatorTile : ModTile
 {
+	/// <summary>
+	/// Only at this frameY will the tile check for nearby elevators and change its state.
+	/// </summary>
+	public int IdenticalFrameY = 36;
+
+	/// <summary>
+	/// For the offset from normal texture to glow texture.
+	/// </summary>
+	public int DefaultDoubleCoordinateWidth = 64;
+
+	public Vector3 LightColor = new Vector3(0.8f, 0.8f, 0.8f);
+
 	public override void PostSetDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -22,7 +34,7 @@ public abstract class FloorIndicatorTile : ModTile
 			18,
 		};
 		TileObjectData.newTile.CoordinateWidth = 32;
-
+		DefaultDoubleCoordinateWidth = 64;
 		TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
 		TileObjectData.newTile.StyleWrapLimit = 2;
 		TileObjectData.newTile.StyleMultiplier = 2;
@@ -32,19 +44,20 @@ public abstract class FloorIndicatorTile : ModTile
 		TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
 		TileObjectData.addAlternate(1);
 		TileObjectData.addTile(Type);
+		AddMapEntry(new Color(191, 142, 111));
 		SetCustomDefaults();
 	}
 
 	public virtual void SetCustomDefaults()
 	{
-		DustType = DustID.Iron;
-		AddMapEntry(new Color(191, 142, 111));
+		
 	}
 
-	/// <summary>
-	/// Only at this frameY will the tile check for nearby elevators and change its state.
-	/// </summary>
-	public int IdenticalFrameY = 36;
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
+		num = 0;
+		base.NumDust(i, j, fail, ref num);
+	}
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
@@ -56,7 +69,7 @@ public abstract class FloorIndicatorTile : ModTile
 		var tile = Main.tile[i, j];
 		if (tile.TileFrameY is >= 54 and <= 72)
 		{
-			Lighting.AddLight(new Vector2(i * 16, j * 16), new Vector3(0.8f, 0.8f, 0.8f));
+			Lighting.AddLight(new Vector2(i * 16, j * 16), LightColor);
 		}
 	}
 
@@ -121,7 +134,7 @@ public abstract class FloorIndicatorTile : ModTile
 	{
 		var tile = Main.tile[i, j];
 		int maxFrameY = GetMultiTileHeight(i, j) * 18;
-		foreach (var entity in ColliderManager.Instance.OfType<Elevator>())
+		foreach (var entity in ColliderManager.Instance.OfType<CustomElevator>())
 		{
 			Vector2 center = entity.Box.Center;
 			if (Math.Abs(center.Y - j * 16f - 8) < 64f && tile.TileFrameY % maxFrameY == IdenticalFrameY && Math.Abs(center.X - i * 16f - 8) < entity.Size.X / 2f + 18f)
@@ -130,5 +143,18 @@ public abstract class FloorIndicatorTile : ModTile
 			}
 		}
 		return false;
+	}
+
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		Texture2D glow = ModContent.Request<Texture2D>(Texture).Value;
+		var zero = new Vector2(Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.Zero;
+		}
+		var tile = Main.tile[i, j];
+		var frame = new Rectangle(tile.TileFrameX + DefaultDoubleCoordinateWidth, tile.TileFrameY, 32, 16);
+		spriteBatch.Draw(glow, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-8, 0), frame, new Color(1f, 1f, 1f, 0), 0, Vector2.zeroVector, 1f, SpriteEffects.None, 0);
 	}
 }
