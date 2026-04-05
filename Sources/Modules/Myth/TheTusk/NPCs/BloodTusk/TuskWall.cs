@@ -15,7 +15,7 @@ public class TuskWall : BoxEntity
 
 	public override void SetDefaults()
 	{
-		Size = new Vector2(194, 0);
+		Size = new Vector2(194, 16);
 		Timer = 3;
 	}
 
@@ -37,7 +37,7 @@ public class TuskWall : BoxEntity
 			}
 			BottomY += 15;
 		}
-		Size = new(Size.X, Math.Clamp(Timer * 3, 1, 840));
+		Size = new(Size.X, Math.Clamp(Timer * 3, 16, 840));
 		Position = new(Position.X, BottomY - Size.Y);
 		if (Tusk != null && Tusk.active)
 		{
