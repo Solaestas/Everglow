@@ -1,4 +1,5 @@
 using Everglow.Commons.CustomTiles.Core;
+using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.CustomTiles.Abstracts;
@@ -22,14 +23,45 @@ public interface IEntityCollider<TEntity> : IBox
 
 	public void Prepare()
 	{
-		// Still some issues:
-		// When CustomTile embedding with tile, and entity clips inside it by accident, entity will chop into CustomTile.
-		bool entityCollideTile = Collision.SolidCollision(Entity.position, Entity.width, Entity.height);
-		ColliderManager.EnableHook = true;
-		bool entityCollideTile_Next = Collision.SolidCollision(Entity.position + Entity.velocity + new Vector2(0, -0.4f + OffsetY - 1f), Entity.width, Entity.height);
-		ColliderManager.EnableHook = false;
+		// if(Entity is Player)
+		// {
+		// if (Ground is not null)
+		// {
+		// Main.NewText(Ground.ToString() + ": " + Ground.Position.Y);
+		// }
+		// else
+		// {
+		// Main.NewText("null");
+		// }
+		// }
 		if (Ground != null && OffsetY != 0)
 		{
+			bool entityCollideTile = Collision.SolidCollision(Entity.position + new Vector2(0, OffsetY - 0.4f), Entity.width, Entity.height);
+			Vector2 nextEntityPos = Entity.position + Entity.velocity + new Vector2(0, OffsetY - 0.4f);
+			ColliderManager.EnableHook = true;
+			bool entityCollideTile_Next = Collision.SolidCollision(nextEntityPos, Entity.width, Entity.height);
+			ColliderManager.EnableHook = false;
+			if (entityCollideTile_Next)
+			{
+				int collideCount = 0;
+				bool collideGround = false;
+				AABB entityBox = new AABB(nextEntityPos, Entity.Size);
+				foreach (var customTile in ColliderManager.Instance.OfType<BoxEntity>())
+				{
+					if (customTile.Intersect(entityBox))
+					{
+						collideCount++;
+						if (customTile == Ground)
+						{
+							collideGround = true;
+						}
+					}
+				}
+				if (collideCount == 1 && collideGround)
+				{
+					entityCollideTile_Next = false;
+				}
+			}
 			if (!entityCollideTile && !entityCollideTile_Next)
 			{
 				// This code is for preventing player from sticking to the ground. Only when player stand on customtile and not on solid tile or try to step up to a solid tile, the player will get unstuck. This code will not cause player to get unstuck when player is standing on solid tile, which is for preventing player from getting unstuck when standing on solid tile and trying to step up to customtile.

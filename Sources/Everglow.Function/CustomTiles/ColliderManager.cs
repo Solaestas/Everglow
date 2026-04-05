@@ -29,6 +29,7 @@ public class ColliderManager : ILoadable
 		On_Collision.SolidCollision_Vector2_int_int_bool += Collision_SolidCollision_Vector2_int_int_bool;
 		On_Collision.IsWorldPointSolid += On_Collision_IsWorldPointSolid;
 		On_Collision.StepUp += Collision_StepUp;
+		On_Collision.StepDown += Collision_StepDown;
 
 		Ins.HookManager.AddHook(CodeLayer.PostUpdateEverything, Update);
 		Ins.HookManager.AddHook(CodeLayer.PostDrawTiles, Draw);
@@ -206,6 +207,20 @@ public class ColliderManager : ILoadable
 	// TODO: StepHook, when player try to move on the CustomTile, it should be stepped to the top.
 	private void Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir = 1, bool holdsMatching = false, int specialChecksMode = 0)
 	{
+		//if (!Enable || !EnableHook)
+		//{
+		//	if (gravDir == 1 && gfxOffY != 0)
+		//	{
+		//		foreach (var customTile in rigidbodies.OfType<BoxEntity>())
+		//		{
+		//			if(Math.Abs(customTile.Box.Top - (position.Y - gfxOffY + height)) <= 1)
+		//			{
+		//				gfxOffY = 0;
+		//				break;
+		//			}
+		//		}
+		//	}
+		//}
 		orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
 		if (!Enable || !EnableHook)
 		{
@@ -222,8 +237,16 @@ public class ColliderManager : ILoadable
 			return;
 		}
 		float maxAscend = 20;
-		AABB entityBoxNow = new AABB(position, new Vector2(width, height));
-		AABB entityBoxNext = new AABB(position + velocity, new Vector2(width, height));
+		AABB entityBoxNow = new AABB(position + new Vector2(0, 0), new Vector2(width, height));
+
+		// var playerVFX = new PlayerCollisionIndicator();
+		// playerVFX.Visible = true;
+		// playerVFX.Active = true;
+		// playerVFX.MaxTime = 1;
+		// playerVFX.Pos = position + new Vector2(0, gfxOffY - 0.4f);
+		// playerVFX.HitBox = new Rectangle((int)entityBoxNow.Left, (int)entityBoxNow.Top, width, height);
+		// Ins.VFXManager.Add(playerVFX);
+		AABB entityBoxNext = new AABB(position + velocity + new Vector2(0, gfxOffY - 0.4f), new Vector2(width, height));
 		float customTileTop = 0;
 		if (gravDir == 1)
 		{
@@ -232,7 +255,7 @@ public class ColliderManager : ILoadable
 				if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow) && customTile.Box.Top > entityBoxNext.Bottom - maxAscend && entityBoxNext.Bottom - customTile.Box.Top > ascendValue)
 				{
 					customTileTop = customTile.Box.Top;
-					ascendValue = customTile.Box.Top - entityBoxNext.Bottom;
+					ascendValue = entityBoxNext.Bottom - customTile.Box.Top;
 				}
 			}
 			if (customTileTop != 0)
@@ -246,10 +269,10 @@ public class ColliderManager : ILoadable
 			// up-side-down
 			foreach (var customTile in rigidbodies.OfType<BoxEntity>())
 			{
-				if (Intersect(entityBoxNext) && !Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && customTile.Box.Bottom - entityBoxNext.Top > ascendValue)
+				if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow) && customTile.Box.Bottom < entityBoxNext.Top + maxAscend && entityBoxNext.Top - customTile.Box.Bottom > ascendValue)
 				{
 					customTileTop = customTile.Box.Bottom;
-					ascendValue = customTile.Box.Bottom - entityBoxNext.Top;
+					ascendValue = entityBoxNext.Top - customTile.Box.Bottom;
 				}
 			}
 			if (customTileTop != 0)
@@ -265,6 +288,33 @@ public class ColliderManager : ILoadable
 		else
 		{
 			stepSpeed = 1;
+		}
+	}
+
+	private void Collision_StepDown(On_Collision.orig_StepDown orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir, bool waterWalk)
+	{
+		orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, waterWalk);
+		if (!Enable || !EnableHook)
+		{
+			CustomTileStepDown(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, waterWalk);
+		}
+	}
+
+	public void CustomTileStepDown(ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir, bool waterWalk)
+	{
+		if (gfxOffY < 0)
+		{
+			AABB entityBoxNow = new AABB(position + new Vector2(0, gfxOffY - 0.4f), new Vector2(width, height));
+			AABB entityBoxNext = new AABB(position + velocity + new Vector2(0, gfxOffY - 0.4f), new Vector2(width, height));
+			foreach (var customTile in rigidbodies.OfType<BoxEntity>())
+			{
+				if (customTile.Intersect(entityBoxNext) && !customTile.Intersect(entityBoxNow))
+				{
+					position.Y = customTile.Box.Top - height;
+					gfxOffY = 0;
+					stepSpeed = 0;
+				}
+			}
 		}
 	}
 	#endregion

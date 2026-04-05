@@ -1,8 +1,8 @@
+using Everglow.Commons.CustomTiles;
 using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using Everglow.Commons.VFX;
 using ReLogic.Content;
 using Terraria.Audio;
 
@@ -72,12 +72,6 @@ public abstract class CustomElevator : BoxEntity
 
 	public Texture2D AuxiliaryStructureTextureHighlight;
 
-	public Texture2D AuxiliaryStructure_Glow;
-
-	public Texture2D AuxiliaryStructure_Bloom;
-
-	public Texture2D AuxiliaryStructure_TopRopes;
-
 	/// <summary>
 	/// If <see cref="LightSourceOn"/> is true, a Lighting.AddLight will called in <see cref="DrawAuxiliaryStructure"/> to emit light. This is used for elevator with lamps. The position of the light source is relative to the center of the elevator, and can be set by this variable. Default to (0, -60).
 	/// </summary>
@@ -94,11 +88,6 @@ public abstract class CustomElevator : BoxEntity
 	public Vector2 HighlightBoxRelativeBottomRight;
 
 	public Vector3 LightSourceColor;
-
-	/// <summary>
-	/// Relative to Box.Center.
-	/// </summary>
-	public Vector2 AuxiliaryPos;
 
 	/// <summary>
 	/// Relative to Box.Center.
@@ -133,7 +122,6 @@ public abstract class CustomElevator : BoxEntity
 		Size = new Vector2(96, 16);
 		HighlightBoxRelativeTopLeft = new Vector2(-56, -94);
 		HighlightBoxRelativeBottomRight = new Vector2(56, 8);
-		AuxiliaryPos = new Vector2(0, -46);
 		TopRopePos = new Vector2(0, -110);
 		LightSourceColor = new Vector3(1f, 0.8f, 0f);
 		LightSourceOn = true;
@@ -142,9 +130,6 @@ public abstract class CustomElevator : BoxEntity
 		ElevatorCableTexture = ModAsset.DefaultElevator_Cable.Value;
 		AuxiliaryStructureTexture = ModAsset.DefaultElevator_AuxiliaryStructure.Value;
 		AuxiliaryStructureTextureHighlight = ModAsset.DefaultElevator_AuxiliaryStructure_Highlight.Value;
-		AuxiliaryStructure_Bloom = ModAsset.DefaultElevator_AuxiliaryStructure_Bloom.Value;
-		AuxiliaryStructure_Glow = ModAsset.DefaultElevator_AuxiliaryStructure_Glow.Value;
-		AuxiliaryStructure_TopRopes = ModAsset.DefaultElevator_TopRopes.Value;
 		TryInitializeTexture();
 	}
 
@@ -156,11 +141,8 @@ public abstract class CustomElevator : BoxEntity
 			"_Cable",
 			"_AuxiliaryStructure",
 			"_AuxiliaryStructure_Highlight",
-			"_AuxiliaryStructure_Bloom",
-			"_AuxiliaryStructure_Glow",
-			"_TopRopes",
 		};
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			string checkName = GetType().FullName;
 			checkName = checkName.Replace('.', '/');
@@ -188,21 +170,6 @@ public abstract class CustomElevator : BoxEntity
 					case 3:
 						{
 							AuxiliaryStructureTextureHighlight = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 4:
-						{
-							AuxiliaryStructure_Bloom = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 5:
-						{
-							AuxiliaryStructure_Glow = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 6:
-						{
-							AuxiliaryStructure_TopRopes = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
 						}
 						break;
 				}
@@ -242,9 +209,9 @@ public abstract class CustomElevator : BoxEntity
 				}
 			}
 		}
-		if(!CanClick())
+		if (!CanClick())
 		{
-			if(LocalElevatorHelper is not null)
+			if (LocalElevatorHelper is not null)
 			{
 				LocalElevatorHelper.Closing = true;
 			}
@@ -276,7 +243,7 @@ public abstract class CustomElevator : BoxEntity
 			var distToTargetY = (NextStopTileY * 16 - (CurrentMoveDirection == 1 ? Box.Bottom : Box.Top)) * CurrentMoveDirection;
 			if (distToTargetY <= Math.Max(CurrentSpeed, 1))
 			{
-				if (CurrentSpeed <= 0.05f)
+				if (CurrentSpeed <= CollisionUtils.Epsilon)
 				{
 					StopElevator(StopTimeMax);
 					AccelerateDirection = 0;
@@ -540,38 +507,39 @@ public abstract class CustomElevator : BoxEntity
 
 	public virtual void DrawAuxiliaryStructure(Color lightColor)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		Vector2 drawPos = AuxiliaryPos + Box.Center - Main.screenPosition;
-		Rectangle auxiliaryFrame = new Rectangle(0, 0, AuxiliaryStructureTexture.Width / 2, AuxiliaryStructureTexture.Height);
+		Vector2 drawPos = new Vector2(Box.Center.X, Box.Top) - Main.screenPosition;
+		int unitFrameWidth = AuxiliaryStructureTexture.Width / 2;
+		int unitFrameHeight = AuxiliaryStructureTexture.Height / 3;
+		Rectangle auxiliaryFrame = new Rectangle(0, 0, unitFrameWidth, unitFrameHeight);
 		if (LightSourceOn)
 		{
 			auxiliaryFrame.X += AuxiliaryStructureTexture.Width / 2;
-			Lighting.AddLight(Box.Center + LightSourceRelativePos, LightSourceColor);
 		}
-		if (AuxiliaryStructure_TopRopes is not null)
-		{
-			Main.spriteBatch.Draw(AuxiliaryStructure_TopRopes, Box.Center - Main.screenPosition + TopRopePos, null, lightColor, 0, new Vector2(48, 15), 1, SpriteEffects.None, 0);
-		}
-		Main.spriteBatch.Draw(AuxiliaryStructureTexture, drawPos, auxiliaryFrame, lightColor, 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
+		AddLight();
+		Vector2 auxiliaryOffset = new Vector2(auxiliaryFrame.Width * 0.5f, auxiliaryFrame.Height - 16);
+		Main.spriteBatch.Draw(AuxiliaryStructureTexture, drawPos, auxiliaryFrame, lightColor, 0, auxiliaryOffset, 1, SpriteEffects.None, 0);
 		if (LightSourceOn)
 		{
-			Texture2D glow = AuxiliaryStructure_Glow;
-			Texture2D bloom = AuxiliaryStructure_Bloom;
-			if (glow is not null)
-			{
-				Main.spriteBatch.Draw(glow, drawPos, null, new Color(1f, 1f, 1f, 0), 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			}
-			if (bloom is not null)
-			{
-				Main.spriteBatch.Draw(bloom, drawPos, null, new Color(1f, 1f, 1f, 0) * 0.7f, 0, auxiliaryFrame.Size() * 0.5f, 1, SpriteEffects.None, 0);
-			}
+			Rectangle auxiliaryFrame_glow = new Rectangle(auxiliaryFrame.X, unitFrameHeight, unitFrameWidth, unitFrameHeight);
+			Rectangle auxiliaryFrame_bloom = new Rectangle(auxiliaryFrame.X, unitFrameHeight * 2, unitFrameWidth, unitFrameHeight);
+			Main.spriteBatch.Draw(AuxiliaryStructureTexture, drawPos, auxiliaryFrame_glow, new Color(1f, 1f, 1f, 0), 0, auxiliaryOffset, 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(AuxiliaryStructureTexture, drawPos, auxiliaryFrame_bloom, new Color(1f, 1f, 1f, 0) * 0.7f, 0, auxiliaryOffset, 1, SpriteEffects.None, 0);
 		}
 		if (Highlighted)
 		{
 			if (Main.SmartCursorIsUsed)
 			{
-				Main.spriteBatch.Draw(AuxiliaryStructureTextureHighlight, drawPos, null, Color.White, 0, AuxiliaryStructureTextureHighlight.Size() * 0.5f, 1, SpriteEffects.None, 0);
+				Vector2 highlight_Offset = new Vector2(AuxiliaryStructureTextureHighlight.Width * 0.5f, AuxiliaryStructureTextureHighlight.Height - 16);
+				Main.spriteBatch.Draw(AuxiliaryStructureTextureHighlight, drawPos, null, Color.White, 0, highlight_Offset, 1, SpriteEffects.None, 0);
 			}
+		}
+	}
+
+	public virtual void AddLight()
+	{
+		if (LightSourceOn)
+		{
+			Lighting.AddLight(Box.Center + LightSourceRelativePos, LightSourceColor);
 		}
 	}
 
@@ -641,7 +609,7 @@ public abstract class CustomElevator : BoxEntity
 
 	public virtual bool CanClick()
 	{
-		return (Main.LocalPlayer.MountedCenter - (Box.Center + AuxiliaryPos)).Length() <= 200;
+		return (Main.LocalPlayer.MountedCenter - (Box.Center + new Vector2(0, -50))).Length() <= 200;
 	}
 
 	public virtual void PostDrawElevatorCable(Color lightColor)

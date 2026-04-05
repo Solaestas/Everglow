@@ -11,8 +11,6 @@ public abstract class WinchTile<TElevator> : ModTile
 {
 	public Texture2D PreviewTexture;
 
-	public override string Texture => ModAsset.DefaultWinchTIle_Mod;
-
 	public override void SetStaticDefaults()
 	{
 		Main.tileFrameImportant[Type] = true;
@@ -81,7 +79,7 @@ public abstract class WinchTile<TElevator> : ModTile
 	{
 		if (PreviewTexture == null)
 		{
-			PreviewTexture = ModAsset.DefaultElevator_Preview.Value;
+			PreviewTexture = ModAsset.DefaultElevator_Winch_Preview.Value;
 			string checkName = GetType().FullName;
 			checkName = checkName.Replace('.', '/');
 			checkName += "_Preview";
