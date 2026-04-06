@@ -50,7 +50,6 @@ public abstract class FloorIndicatorTile : ModTile
 
 	public virtual void SetCustomDefaults()
 	{
-		
 	}
 
 	public override void NumDust(int i, int j, bool fail, ref int num)
