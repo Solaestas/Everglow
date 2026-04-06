@@ -202,6 +202,13 @@ public abstract class CustomElevator : BoxEntity
 					LocalElevatorHelper.Visible = true;
 					LocalElevatorHelper.Active = true;
 					Ins.VFXManager.Add(LocalElevatorHelper);
+					foreach (var customTile in ColliderManager.Instance.OfType<CustomElevator>())
+					{
+						if (customTile.LocalElevatorHelper is not null && customTile.LocalElevatorHelper.Active && customTile.LocalElevatorHelper.Owner == Main.LocalPlayer && !customTile.LocalElevatorHelper.Closing && customTile.LocalElevatorHelper != LocalElevatorHelper)
+						{
+							customTile.LocalElevatorHelper.Closing = true;
+						}
+					}
 				}
 				else
 				{
