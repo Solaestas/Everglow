@@ -4,4 +4,9 @@ namespace Everglow.CagedDomain.Tiles.Elevators;
 
 public class EbonwoodElevator : CustomElevator
 {
+	public override void SetDefaults()
+	{
+		base.SetDefaults();
+		LightSourceColor = new Vector3(0.7f, 0.6f, 1f);
+	}
 }

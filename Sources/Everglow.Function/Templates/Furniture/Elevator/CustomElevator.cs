@@ -493,6 +493,14 @@ public abstract class CustomElevator : BoxEntity
 	{
 		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
+			//SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			//bool changeState = false;
+			//if(sBS.SamplerState != SamplerState.PointClamp)
+			//{
+			//	Main.spriteBatch.End();
+			//	Main.spriteBatch.Begin(sBS.SortMode, sBS.BlendState, SamplerState.PointClamp, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, sBS.TransformMatrix);
+			//	changeState = true;
+			//}
 			Color lightColor = Lighting.GetColor(Box.Center.ToTileCoordinates());
 
 			if (PreDrawElevatorCable(lightColor))
@@ -503,10 +511,15 @@ public abstract class CustomElevator : BoxEntity
 
 			if (PreDrawElevator(lightColor))
 			{
-				Main.spriteBatch.Draw(ElevatorTexture, Position - Main.screenPosition, new Rectangle(0, 0, (int)Size.X, (int)Size.Y), lightColor);
+				Main.spriteBatch.Draw(ElevatorTexture, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, null, lightColor, 0, new Vector2(ElevatorTexture.Width / 2f, ElevatorTexture.Height), 1, SpriteEffects.None, 0);
 				DrawAuxiliaryStructure(lightColor);
 				PostDrawElevator(lightColor);
 			}
+			//if (changeState)
+			//{
+			//	Main.spriteBatch.End();
+			//	Main.spriteBatch.Begin(sBS);
+			//}
 		}
 	}
 
