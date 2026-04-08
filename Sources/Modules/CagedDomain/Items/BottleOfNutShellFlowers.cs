@@ -5,7 +5,7 @@ public class BottleOfNutShellFlowers : ModItem
     public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
     public override void SetDefaults()
-    {
+    {	
         Item.width = 22;
         Item.height = 34;
         Item.maxStack = 999;

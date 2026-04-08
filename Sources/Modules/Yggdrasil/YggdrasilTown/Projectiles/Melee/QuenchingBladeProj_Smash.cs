@@ -1,7 +1,5 @@
-using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs.TownNPCAttack;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
