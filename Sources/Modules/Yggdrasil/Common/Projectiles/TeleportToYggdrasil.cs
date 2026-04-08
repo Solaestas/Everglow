@@ -43,7 +43,10 @@ public class TeleportToYggdrasil : ModProjectile, IWarpProjectile
 		Main.ColorOfSurfaceBackgroundsModified *= 0.5f;
 		Main.ColorOfTheSkies = Color.Red;
 		Lighting.GlobalBrightness *= 0.5f;
-		Main.ApplyColorOfTheSkiesToTiles();
+		if (!NetUtils.IsServer)
+		{
+			Main.ApplyColorOfTheSkiesToTiles();
+		}
 		TeleportYggdrasilLightSystem.EffectProjWhoAmI = Projectile.whoAmI;
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1.6f, 1f) * Timer * 0.05f);
 
