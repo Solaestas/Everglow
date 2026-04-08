@@ -126,53 +126,31 @@ public abstract class CustomElevator : BoxEntity
 		LightSourceColor = new Vector3(1f, 0.8f, 0f);
 		LightSourceOn = true;
 		LocalElevatorHelper = null;
-		ElevatorTexture = ModAsset.DefaultElevator.Value;
-		ElevatorCableTexture = ModAsset.DefaultElevator_Cable.Value;
-		AuxiliaryStructureTexture = ModAsset.DefaultElevator_AuxiliaryStructure.Value;
-		AuxiliaryStructureTextureHighlight = ModAsset.DefaultElevator_AuxiliaryStructure_Highlight.Value;
-		TryInitializeTexture();
+		SetTextures();
 	}
 
-	public void TryInitializeTexture()
+	public void SetTextures()
 	{
-		List<string> suffix = new List<string>()
+		var mappings = new List<(string Suffix, Action<Texture2D> SetTexture, Texture2D DefaultTexture)>()
 		{
-			string.Empty,
-			"_Cable",
-			"_AuxiliaryStructure",
-			"_AuxiliaryStructure_Highlight",
+			(string.Empty, t => ElevatorTexture = t, ModAsset.DefaultElevator.Value),
+			("_Cable", t => ElevatorCableTexture = t, ModAsset.DefaultElevator_Cable.Value),
+			("_AuxiliaryStructure", t => AuxiliaryStructureTexture = t, ModAsset.DefaultElevator_AuxiliaryStructure.Value),
+			("_AuxiliaryStructure_Highlight", t => AuxiliaryStructureTextureHighlight = t, ModAsset.DefaultElevator_AuxiliaryStructure_Highlight.Value),
 		};
-		for (int i = 0; i < 4; i++)
+
+		string basePath = GetType().FullName.Replace('.', '/');
+		foreach (var (suffix, setTexture, defaultTexture) in mappings)
 		{
-			string checkName = GetType().FullName;
-			checkName = checkName.Replace('.', '/');
-			checkName += suffix[i];
-			string checkNameWithExtension = checkName + ".png";
-			if (ModContent.FileExists(checkNameWithExtension))
+			var texName = basePath + suffix;
+			var path = texName + ".png";
+			if (ModContent.FileExists(path))
 			{
-				switch (i)
-				{
-					case 0:
-						{
-							ElevatorTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 1:
-						{
-							ElevatorCableTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 2:
-						{
-							AuxiliaryStructureTexture = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-					case 3:
-						{
-							AuxiliaryStructureTextureHighlight = ModContent.Request<Texture2D>(checkName, AssetRequestMode.ImmediateLoad).Value;
-						}
-						break;
-				}
+				setTexture(ModContent.Request<Texture2D>(texName, AssetRequestMode.ImmediateLoad).Value);
+			}
+			else
+			{
+				setTexture(defaultTexture);
 			}
 		}
 	}
