@@ -1,4 +1,4 @@
-using Everglow.Commons.CustomTiles.Tiles;
+using Everglow.Commons.CustomTiles.Core;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.Utilities;
@@ -6,7 +6,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.TileHelper;
 
-public class NormalCableCar : DBlock
+public class NormalCableCar : BoxEntity
 {
 	public int RopeDuration;
 	public Point AnchorCableTile;
@@ -14,6 +14,12 @@ public class NormalCableCar : DBlock
 	public int Direction = 1;
 	public bool Initialized = false;
 	public List<int> InsidePlayers = new List<int>();
+
+	public override void SetDefaults()
+	{
+		Size = new Vector2(80, 80);
+		Direction = -1;
+	}
 
 	public override void AI()
 	{
@@ -30,8 +36,8 @@ public class NormalCableCar : DBlock
 			// find the closest rope joint unit.
 			for (int i = 0; i < Cable.Masses.Length; i++)
 			{
-				float thisLength = (Cable.Masses[i].Position - position).Length();
-				if ((Cable.Masses[i].Position - position).Length() < minLength)
+				float thisLength = (Cable.Masses[i].Position - Position).Length();
+				if ((Cable.Masses[i].Position - Position).Length() < minLength)
 				{
 					minLength = thisLength;
 					minIndex = i;
@@ -43,15 +49,15 @@ public class NormalCableCar : DBlock
 			// If depart from the cable over 3 unit, force postion to the cable.
 			Vector2 deltaPos = targetMassPos - closestPos;
 			Vector2 normalizedDelta = Utils.SafeNormalize(deltaPos, new Vector2(0, -1));
-			Vector2 toClosestPos = position - closestPos;
+			Vector2 toClosestPos = Position - closestPos;
 			float projectionLength = toClosestPos.Length() * Vector2.Dot(toClosestPos, deltaPos) / (toClosestPos.Length() * deltaPos.Length());
 			Vector2 projection = closestPos + projectionLength * normalizedDelta;
-			float toVelocityLineLength = (projection - position).Length();
+			float toVelocityLineLength = (projection - Position).Length();
 			if (toVelocityLineLength > 1)
 			{
-				position = projection;
+				Position = projection;
 			}
-			velocity = Utils.SafeNormalize(targetMassPos + velocity - closestPos, Vector2.zeroVector) * 3f;
+			Velocity = Utils.SafeNormalize(targetMassPos + Velocity - closestPos, Vector2.zeroVector) * 3f;
 			if (Direction == 1 && RopeDuration >= Cable.Masses.Length)
 			{
 				ChangeCableCarJoint();
@@ -64,18 +70,18 @@ public class NormalCableCar : DBlock
 		}
 		else
 		{
-			Active = false;
+			Kill();
 			return;
 		}
 		CheckMouseClick();
-		foreach(Player player in Main.player)
+		foreach (Player player in Main.player)
 		{
 			if (InsidePlayers.Contains(player.whoAmI))
 			{
-				player.Center = position + size * 0.5f + new Vector2(0, 60);
+				player.Center = Position + Size * 0.5f + new Vector2(0, 60);
 			}
 		}
-		Lighting.AddLight(position + size * 0.5f, new Vector3(1f, 0.9f, 0.6f));
+		Lighting.AddLight(Position + Size * 0.5f, new Vector3(1f, 0.9f, 0.6f));
 		base.AI();
 	}
 
@@ -83,11 +89,11 @@ public class NormalCableCar : DBlock
 	{
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
-			if (Main.MouseWorld.X > position.X && Main.MouseWorld.X < position.X + size.X)
+			if (Main.MouseWorld.X > Position.X && Main.MouseWorld.X < Position.X + Size.X)
 			{
-				if (Main.MouseWorld.Y > position.Y && Main.MouseWorld.Y < position.Y + size.Y)
+				if (Main.MouseWorld.Y > Position.Y && Main.MouseWorld.Y < Position.Y + Size.Y)
 				{
-					if(!InsidePlayers.Contains(Main.myPlayer))
+					if (!InsidePlayers.Contains(Main.myPlayer))
 					{
 						InsidePlayers.Add(Main.myPlayer);
 						CombatText.NewText(new Rectangle((int)Main.MouseWorld.X, (int)Main.MouseWorld.Y, 0, 0), Color.White, "Now you sit in the cable car.");
@@ -104,7 +110,7 @@ public class NormalCableCar : DBlock
 
 	public void ChangeCableCarJoint()
 	{
-		Point pointPos = position.ToTileCoordinates();
+		Point pointPos = Position.ToTileCoordinates();
 		pointPos.X = Math.Clamp(pointPos.X, 20, Main.maxTilesX - 20);
 		pointPos.Y = Math.Clamp(pointPos.Y, 20, Main.maxTilesY - 20);
 
@@ -157,7 +163,7 @@ public class NormalCableCar : DBlock
 					}
 					else
 					{
-						velocity *= 0;
+						Velocity *= 0;
 						Cable = null;
 						return;
 					}
@@ -167,7 +173,7 @@ public class NormalCableCar : DBlock
 		}
 		else
 		{
-			velocity *= 0;
+			Velocity *= 0;
 		}
 	}
 
@@ -184,7 +190,7 @@ public class NormalCableCar : DBlock
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes[0].Apply();
 		Texture2D cableCar = ModAsset.NormalCableCar.Value;
-		Vector2 drawPos = position + new Vector2(size.X * 0.5f, 8);
+		Vector2 drawPos = Position + new Vector2(Size.X * 0.5f, 8);
 
 		var bars = new List<Vertex2D>();
 		AddVertex(bars, drawPos + new Vector2(-2, -8), new Vector3(0.5f, 0.05f, 0));

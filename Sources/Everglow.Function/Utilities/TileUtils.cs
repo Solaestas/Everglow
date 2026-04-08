@@ -6,6 +6,17 @@ namespace Everglow.Commons.Utilities;
 
 public partial class TileUtils
 {
+	public static bool IsType<T>(this Tile tile)
+		where T : ModTile
+	{
+		var modTile = TileLoader.GetTile(tile.type);
+		return modTile is not null && modTile is T;
+	}
+
+	public static int ToTileCoordinate(this float value) => (int)value >> 4;
+
+	public static int ToTileCoordinate(this double value) => (int)value >> 4;
+
 	public static Tile SafeGetTile(int i, int j) =>
 		Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
 
@@ -79,5 +90,22 @@ public partial class TileUtils
 	{
 		Random random = new Random(seed);
 		return random.Next(0, max);
+	}
+
+	public static bool AreaHasTile(int x, int y, int width, int height, Func<Tile, bool> prediction = null)
+	{
+		for (int i = x; i < x + width; i++)
+		{
+			for (int j = y; j < y + height; j++)
+			{
+				var tile = SafeGetTile(i, j);
+				if (tile.HasTile && (prediction is null || prediction(tile)))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
