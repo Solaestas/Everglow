@@ -2,6 +2,6 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class CrystalElevator : CustomElevator
+public class CrystalElevator : ElevatorBase
 {
 }

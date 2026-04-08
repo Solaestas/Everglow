@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls.Elevator;
 
-public class GiantPineTreeElevator : CustomElevator
+public class GiantPineTreeElevator : ElevatorBase
 {
 	public override Color MapColor => new Color(122, 91, 79);
 

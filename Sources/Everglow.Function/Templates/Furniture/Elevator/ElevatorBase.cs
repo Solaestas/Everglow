@@ -8,7 +8,7 @@ using Terraria.Audio;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
-public abstract class CustomElevator : BoxEntity
+public abstract class ElevatorBase : BoxEntity
 {
 	public enum State
 	{
@@ -17,12 +17,12 @@ public abstract class CustomElevator : BoxEntity
 	}
 
 	/// <summary>
-	/// Winch tile type. Set by <see cref="WinchTile{TElevator}"/> automatically.
+	/// Winch tile type. Set by <see cref="WinchTileBase{TElevator}"/> automatically.
 	/// </summary>
 	public int WinchTileType;
 
 	/// <summary>
-	/// Coordinate of winch tile in <see cref="Main.tile"/>. Set by <see cref="WinchTile{TElevator}"/> automatically.
+	/// Coordinate of winch tile in <see cref="Main.tile"/>. Set by <see cref="WinchTileBase{TElevator}"/> automatically.
 	/// </summary>
 	public Point WinchCoord;
 
@@ -172,15 +172,17 @@ public abstract class CustomElevator : BoxEntity
 				SoundEngine.PlaySound(SoundID.Unlock, Main.MouseWorld);
 				if (LocalElevatorHelper is null || !LocalElevatorHelper.Active)
 				{
-					LocalElevatorHelper = new ElevatorHelper();
-					LocalElevatorHelper.AnimationTimer = 0;
-					LocalElevatorHelper.ParentElevator = this;
-					LocalElevatorHelper.Owner = Main.LocalPlayer;
-					LocalElevatorHelper.RelativePos = new Vector2(60, -80);
-					LocalElevatorHelper.Visible = true;
-					LocalElevatorHelper.Active = true;
+					LocalElevatorHelper = new ElevatorHelper
+					{
+						AnimationTimer = 0,
+						ParentElevator = this,
+						Owner = Main.LocalPlayer,
+						RelativePos = new Vector2(60, -80),
+						Visible = true,
+						Active = true,
+					};
 					Ins.VFXManager.Add(LocalElevatorHelper);
-					foreach (var customTile in ColliderManager.Instance.OfType<CustomElevator>())
+					foreach (var customTile in ColliderManager.Instance.OfType<ElevatorBase>())
 					{
 						if (customTile.LocalElevatorHelper is not null && customTile.LocalElevatorHelper.Active && customTile.LocalElevatorHelper.Owner == Main.LocalPlayer && !customTile.LocalElevatorHelper.Closing && customTile.LocalElevatorHelper != LocalElevatorHelper)
 						{
@@ -443,7 +445,7 @@ public abstract class CustomElevator : BoxEntity
 
 	public bool IsTileFloor(Tile tile)
 	{
-		if (tile.HasTile && TileLoader.GetTile(tile.TileType) is FloorIndicatorTile fIT)
+		if (tile.HasTile && TileLoader.GetTile(tile.TileType) is FloorIndicatorTileBase fIT)
 		{
 			if (tile.TileFrameY == fIT.IdenticalFrameY)
 			{
@@ -471,14 +473,14 @@ public abstract class CustomElevator : BoxEntity
 	{
 		if (Position.X / 16f < Main.maxTilesX - 28 && Position.Y / 16f < Main.maxTilesY - 28 && Position.X / 16f > 28 && Position.Y / 16f > 28)
 		{
-			//SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-			//bool changeState = false;
-			//if(sBS.SamplerState != SamplerState.PointClamp)
-			//{
-			//	Main.spriteBatch.End();
-			//	Main.spriteBatch.Begin(sBS.SortMode, sBS.BlendState, SamplerState.PointClamp, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, sBS.TransformMatrix);
-			//	changeState = true;
-			//}
+			// SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+			// bool changeState = false;
+			// if(sBS.SamplerState != SamplerState.PointClamp)
+			// {
+			// 	 Main.spriteBatch.End();
+			// 	 Main.spriteBatch.Begin(sBS.SortMode, sBS.BlendState, SamplerState.PointClamp, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, sBS.TransformMatrix);
+			// 	 changeState = true;
+			// }
 			Color lightColor = Lighting.GetColor(Box.Center.ToTileCoordinates());
 
 			if (PreDrawElevatorCable(lightColor))
@@ -493,11 +495,12 @@ public abstract class CustomElevator : BoxEntity
 				DrawAuxiliaryStructure(lightColor);
 				PostDrawElevator(lightColor);
 			}
-			//if (changeState)
-			//{
-			//	Main.spriteBatch.End();
-			//	Main.spriteBatch.Begin(sBS);
-			//}
+
+			// if (changeState)
+			// {
+			// 	 Main.spriteBatch.End();
+			// 	 Main.spriteBatch.Begin(sBS);
+			// }
 		}
 	}
 

@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Example.Tiles;
 
-public class ExampleElevator_Indicator_Lamp : FloorIndicatorTile
+public class ExampleElevator_Indicator_Lamp : FloorIndicatorTileBase
 {
 	public override void SetCustomDefaults() => base.SetCustomDefaults();
 

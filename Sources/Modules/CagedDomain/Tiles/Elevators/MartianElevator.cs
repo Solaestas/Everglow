@@ -2,6 +2,6 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class MartianElevator : CustomElevator
+public class MartianElevator : ElevatorBase
 {
 }

@@ -4,9 +4,9 @@ using Everglow.Example.Elevator;
 
 namespace Everglow.Example.Tiles;
 
-public class ExampleElevator_Winch : WinchTile<ExampleElevator>
+public class ExampleElevator_Winch : WinchTileBase<ExampleElevator>
 {
-	public override void EmitAuxiliaryStructure(CustomElevator parentElevator)
+	public override void EmitAuxiliaryStructure(ElevatorBase parentElevator)
 	{
 		var auxStructure = ColliderManager.Instance.Add<ExampleElevator_AuxiliaryStructure_Top>(parentElevator.Position);
 		auxStructure.ParentElavator = parentElevator;

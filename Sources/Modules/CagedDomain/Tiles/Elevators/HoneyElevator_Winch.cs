@@ -3,11 +3,11 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class HoneyElevator_Winch : WinchTile<HoneyElevator>
+public class HoneyElevator_Winch : WinchTileBase<HoneyElevator>
 {
 	public override string Texture => Commons.ModAsset.DefaultWinchTile_Mod;
 
-	public override void EmitAuxiliaryStructure(CustomElevator parentElevator)
+	public override void EmitAuxiliaryStructure(ElevatorBase parentElevator)
 	{
 		var auxStructure = ColliderManager.Instance.Add<CommonElevator_AuxiliaryStructure_Top>(parentElevator.Position);
 		auxStructure.ParentElavator = parentElevator;

@@ -2,6 +2,6 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class VortexElevator : CustomElevator
+public class VortexElevator : ElevatorBase
 {
 }

@@ -6,7 +6,7 @@ public abstract class Elevator_AuxiliaryStructure : BoxEntity
 {
 	public override Color MapColor => new Color(122, 91, 79);
 
-	public CustomElevator ParentElavator;
+	public ElevatorBase ParentElavator;
 
 	public Vector2 RelativePosition;
 

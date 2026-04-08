@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
-public class YggdrasilTownElevator_Indicator_Lamp : FloorIndicatorTile
+public class YggdrasilTownElevator_Indicator_Lamp : FloorIndicatorTileBase
 {
 	public override void SetCustomDefaults()
 	{

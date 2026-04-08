@@ -3,9 +3,9 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Yggdrasil.Common.Elevator.Tiles;
 
-public class YggdrasilTownElevator_Winch : WinchTile<YggdrasilElevator>
+public class YggdrasilTownElevator_Winch : WinchTileBase<YggdrasilElevator>
 {
-	public override void EmitAuxiliaryStructure(CustomElevator parentElevator)
+	public override void EmitAuxiliaryStructure(ElevatorBase parentElevator)
 	{
 		var auxStructure = ColliderManager.Instance.Add<YggdrasilElevator_AuxiliaryStructure_Top>(parentElevator.Position);
 		auxStructure.ParentElavator = parentElevator;

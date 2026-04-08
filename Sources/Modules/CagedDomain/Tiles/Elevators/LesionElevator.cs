@@ -2,6 +2,6 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class LesionElevator : CustomElevator
+public class LesionElevator : ElevatorBase
 {
 }

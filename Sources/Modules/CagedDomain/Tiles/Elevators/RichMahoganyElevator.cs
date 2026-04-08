@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class RichMahoganyElevator : CustomElevator
+public class RichMahoganyElevator : ElevatorBase
 {
 	public override void SetDefaults()
 	{

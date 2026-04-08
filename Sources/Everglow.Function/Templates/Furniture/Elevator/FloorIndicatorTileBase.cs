@@ -5,7 +5,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
-public abstract class FloorIndicatorTile : ModTile
+public abstract class FloorIndicatorTileBase : ModTile
 {
 	/// <summary>
 	/// Only at this frameY will the tile check for nearby elevators and change its state.
@@ -133,7 +133,7 @@ public abstract class FloorIndicatorTile : ModTile
 	{
 		var tile = Main.tile[i, j];
 		int maxFrameY = GetMultiTileHeight(i, j) * 18;
-		foreach (var entity in ColliderManager.Instance.OfType<CustomElevator>())
+		foreach (var entity in ColliderManager.Instance.OfType<ElevatorBase>())
 		{
 			Vector2 center = entity.Box.Center;
 			if (Math.Abs(center.Y - j * 16f - 8) < 64f && tile.TileFrameY % maxFrameY == IdenticalFrameY && Math.Abs(center.X - i * 16f - 8) < entity.Size.X / 2f + 18f)

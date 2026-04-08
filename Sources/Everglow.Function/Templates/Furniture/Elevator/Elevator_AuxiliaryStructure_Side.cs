@@ -10,7 +10,7 @@ public abstract class Elevator_AuxiliaryStructure_Side : Elevator_AuxiliaryStruc
 	public override void AI()
 	{
 		base.AI();
-		if (ParentElavator.MoveState == CustomElevator.State.Stop)
+		if (ParentElavator.MoveState == ElevatorBase.State.Stop)
 		{
 			Size = new Vector2(16, 16);
 			RelativePosition.Y = -84;

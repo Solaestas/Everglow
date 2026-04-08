@@ -2,6 +2,6 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class SpiderElevator_Indicator_Lamp : FloorIndicatorTile
+public class SpiderElevator_Indicator_Lamp : FloorIndicatorTileBase
 {
 }

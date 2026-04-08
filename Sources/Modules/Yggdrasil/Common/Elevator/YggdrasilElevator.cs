@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Yggdrasil.Common.Elevator;
 
-public class YggdrasilElevator : CustomElevator
+public class YggdrasilElevator : ElevatorBase
 {
 	public override Color MapColor => new Color(122, 91, 79);
 

@@ -11,7 +11,7 @@ public class ElevatorHelper : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
-	public CustomElevator ParentElevator;
+	public ElevatorBase ParentElevator;
 
 	public Vector2 RelativePos;
 

@@ -3,9 +3,9 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.Minortopography.GiantPinetree.TilesAndWalls.Elevator;
 
-public class GiantPineTreeElevator_Winch : WinchTile<GiantPineTreeElevator>
+public class GiantPineTreeElevator_Winch : WinchTileBase<GiantPineTreeElevator>
 {
-	public override void EmitAuxiliaryStructure(CustomElevator parentElevator)
+	public override void EmitAuxiliaryStructure(ElevatorBase parentElevator)
 	{
 		var auxStructure = ColliderManager.Instance.Add<GiantPineTreeElevator_AuxiliaryStructure_Top>(parentElevator.Position);
 		auxStructure.ParentElavator = parentElevator;

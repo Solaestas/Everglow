@@ -2,7 +2,7 @@ using Everglow.Commons.Templates.Furniture.Elevator;
 
 namespace Everglow.CagedDomain.Tiles.Elevators;
 
-public class EbonwoodElevator : CustomElevator
+public class EbonwoodElevator : ElevatorBase
 {
 	public override void SetDefaults()
 	{

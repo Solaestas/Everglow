@@ -6,8 +6,8 @@ using Terraria.ObjectData;
 
 namespace Everglow.Commons.Templates.Furniture.Elevator;
 
-public abstract class WinchTile<TElevator> : ModTile
-	where TElevator : CustomElevator, new()
+public abstract class WinchTileBase<TElevator> : ModTile
+	where TElevator : ElevatorBase, new()
 {
 	public Texture2D PreviewTexture;
 
@@ -54,7 +54,7 @@ public abstract class WinchTile<TElevator> : ModTile
 		EmitAuxiliaryStructure(newElevator);
 	}
 
-	public virtual void EmitAuxiliaryStructure(CustomElevator parentElevator)
+	public virtual void EmitAuxiliaryStructure(ElevatorBase parentElevator)
 	{
 	}
 
