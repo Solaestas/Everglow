@@ -33,9 +33,9 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 			RewardClaimedPlayers = rp.ToHashSet();
 		}
 
-		ApplySnapshot(State, oldState);
-
 		LoadObjectives(tag, Objectives.AllObjectives);
+
+		ApplySnapshot(State, oldState);
 	}
 
 	public static void LoadObjectives(TagCompound tag, IEnumerable<WorldObjectiveBase> objectives)

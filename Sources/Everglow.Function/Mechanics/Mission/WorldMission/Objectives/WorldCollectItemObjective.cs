@@ -35,7 +35,7 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 				break;
 			}
 
-			total += player.CountItem(remainRequired);
+			total += player.CountItem(ItemType, remainRequired);
 		}
 
 		total = Math.Clamp(total, 0, ItemCount);
