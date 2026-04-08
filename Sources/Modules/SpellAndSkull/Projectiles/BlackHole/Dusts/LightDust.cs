@@ -4,13 +4,13 @@ using Everglow.Commons.VFX.Visuals;
 
 namespace Everglow.SpellAndSkull.Projectiles.BlackHole.Dusts;
 
-
 [Pipeline(typeof(WCSPipeline))]
 internal class LightDust : Particle
 {
 	public int time;
 	public int time_max;
 	public Color drawColor;
+
 	public override void AI()
 	{
 		time++;
@@ -20,12 +20,15 @@ internal class LightDust : Particle
 			scale *= 0.9f;
 		}
 		if (time > time_max)
+		{
 			Kill();
+		}
 		else
 		{
 			velocity = velocity.RotatedBy(0.05f);
 		}
 	}
+
 	public override void Draw()
 	{
 		Texture2D tex = ModAsset.Ball.Value;
