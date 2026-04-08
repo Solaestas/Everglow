@@ -1,16 +1,16 @@
-任务系统分为世界侧与玩家侧2个部分，世界侧提供完整的多人游戏同步（跟随世界存档），玩家提供可重复的个人体验（跟随玩家存档）。当前仅世界侧。
+任务系统分为世界侧与玩家侧2个部分, 世界侧提供完整的多人游戏同步(跟随世界存档), 玩家提供可重复的个人体验(跟随玩家存档). 当前仅世界侧.
 
-The world-side mission system aims to deliver a structured static experience through several key features.
+世界任务系统旨在通过以下几项核心功能提供结构化的静态体验.
 
-(Types) All world-side missions fall into 3 categories: Main Story, Side Story, and Legendary. Main story missions are the core of the game, designed to guide players through the main storyline. Side story missions are optional, offering additional content and rewards. Legendary missions are a special subset of side story missions. They feature unique content and exclusive rewards, setting them apart from regular side story missions.
+(Types) 所有世界任务分为 3 类：主线剧情、支线剧情和传说任务. 主线任务是游戏的核心, 旨在引导玩家完成主线故事. 支线任务是可选的, 提供额外的内容和奖励. 传说任务是支线任务的一个特殊子集, 以独特的内容和专属奖励为特色, 使其有别于普通的支线任务.
 
-(Features-Main) Missions are locked before players reach certain milestones, though the unlocking requirements is visible. Some missions only become visible after specific conditions are met. Some of the missions are time-limited. Once the time limit expires, the mission becomes unavailable until a player chooses to restart it.
+(Features-Main) 在玩家达到特定的里程碑之前, 任务是锁定的, 但解锁条件是可见的. 某些任务只有在满足特定条件后才会显示. 部分任务具有时间限制, 一旦时限到期, 任务将变得不可用, 直到玩家选择重新开始.
 
-(UI) Mission UI consists of two parts: mission list and mission detail. In the mission list, all missions are displayed, and each mission is represented by a card. The card shows the mission name, type, state, and the time left (if applicable). Players can click on a card to view the mission detail, which includes the full description, objectives, rewards, and other information. If a mission is invisible, the card is grayed out and only shows "???" as the name, and the detail page remains empty. The UI appearance is selectable, with the marble plate technical style as the default and new themes becoming available over game progress.
+(UI) 任务界面由两部分组成：任务列表和任务详情. 在任务列表中显示所有任务, 每个任务由一张卡片代表. 卡片显示任务名称、类型、状态和剩余时间(如果适用). 玩家可以点击卡片查看任务详情, 其中包括完整的描述、目标、奖励和其他信息. 如果任务是不可见的, 卡片会变灰并仅显示“???”作为名称, 且详情页面保持空白. 界面外观是可选的, 默认风格为大理石板技术风, 随着游戏进程的推进, 将解锁新的主题.
 
-(Features-Sub) Each mission is a combination of several parts, including mission name, type, state, description, objectives, rewards, and other information. The mission state can be one of the following: locked, available, completed, or failed. Objectives are the tasks that players must complete to finish the mission. The rewards are granted upon mission completion, and they include items, world state changes, or other benefits.
+(Features-Sub) 每个任务都是由多个部分组成的组合, 包括任务名称、类型、状态、描述、目标、奖励和其他信息. 任务状态可以是以下之一：已锁定、可接取、已完成或已失败. 目标是玩家为了完成任务必须完成的任务. 奖励在任务完成时发放, 包括物品、世界状态变更或其他收益.
 
-(Features-Objectives) Objectives can be of various types, including but not limited to: kill NPCs, collect items, consume items, reach certain locations, move for a certain distance, talk to an NPC, give items to an NPC, and complete an invasion. Two special structures are also available: parallel and branching objectives. An objective can also give players rewards that are required to complete subsequent objective(s), but these rewards might be removed after the objective is completed.
+(Features-Objectives) 目标可以有多种类型, 包括但不限于：击杀 NPC、收集物品、消耗物品、到达特定地点、移动一定距离、与 NPC 对话、将物品交给 NPC 以及完成入侵. 系统还提供两种特殊结构：并行目标和分支目标. 一个目标也可以给予玩家完成后续目标所需的奖励, 但这些奖励可能会在目标完成后被移除.
 
 ## 世界侧任务系统
 
@@ -23,92 +23,84 @@ The world-side mission system aims to deliver a structured static experience thr
 
 ### 任务机制
 
-- 锁定与可见性: 任务在达到特定条件处于锁定状态，详情内容不可见。大部分任务解锁条件可见；隐藏任务解锁条件不可见，仅显示"???"作为任务名
-- 限时任务: 部分任务有时间限制，可无条件重试
+- 锁定与可见性: 任务在达到特定条件处于锁定状态, 详情内容不可见. 大部分任务解锁条件可见；隐藏任务解锁条件不可见, 仅显示"???"作为任务名
+- 限时任务: 部分任务有时间限制, 可无条件重试
 
 ### 任务类型
 
-总共包含3个类型，仅用作分类显示，不影响游玩体验:
+总共包含3个类型, 仅用作分类显示, 不影响游玩体验:
 
-- 主线任务: 游戏核心，引导玩家推进主线剧情
-- 支线任务: 可选内容，提供额外的剧情内容和奖励
-- 传说任务: 内容更为丰富的支线任务，独特内容和高级奖励
+- 主线任务: 游戏核心, 引导玩家推进主线剧情
+- 支线任务: 可选内容, 提供额外的剧情内容和奖励
+- 传说任务: 内容更为丰富的支线任务, 独特内容和高级奖励
 
 ### 任务状态 & 生命周期
 
-##### 锁定
+#### 锁定
 
-大部分任务在初始状态下处于锁定状态，需要达成特定条件后才能解锁
+大部分任务在初始状态下处于锁定状态, 需要达成特定条件后才能解锁
 解锁后不会再次锁定
 
-##### 进行中
+#### 进行中
 
-任务解锁后自动接取，进入此状态
+任务解锁后自动接取, 进入此状态
 
-##### 已完成
+#### 已完成
 
 任务完成后进入此状态
 
-##### 失败
+#### 失败
 
-标记任务因为某种原因失败，可无条件重试返回进行中状态
+标记任务因为某种原因失败, 可无条件重试返回进行中状态
 可能的原因有：任务计时结束、目标计时结束、任务限制等
 
 ### 任务目标
 
-##### 目标类型
+#### 目标类型
 
-- 击杀NPC:击败一定数量的指定NPC，多人游戏下计算所有玩家的击杀（未实现在特定条件下击杀，因BOSS可能需要全伤害计算）
-- 收集物品: 在背包中拥有一定数量的指定物品，多人游戏下计算所有玩家的仓库
-- 消耗物品: 消耗一定数量的指定物品，多人游戏下由全体玩家贡献进度，需C/S交互
+- 击杀NPC:击败一定数量的指定NPC, 多人游戏下计算所有玩家的击杀(未实现在特定条件下击杀, 因BOSS可能需要全伤害计算)
+- 收集物品: 在背包中拥有一定数量的指定物品, 多人游戏下计算所有玩家的仓库
+- 消耗物品: 消耗一定数量的指定物品, 多人游戏下由全体玩家贡献进度. 由客户端收集上传
 - 到达地点: 检测位置、环境、地层
 - 行走距离: 可附带条件
 - 对话NPC: 检测玩家对话NPC
-- 提交物品: 同上，对话后自动提交，需C/S交互
-- 完成事件: 略。等待事件系统实现同步后启用
+- 提交物品: 同上, 对话后自动提交. 由客户端收集上传
+- 完成事件: 略. 等待事件系统实现同步后启用
 
-##### 特殊结构
+#### 特殊结构
 
 - 分支目标: 完成其中一项后自动进入该分支
 - 并行目标: 完成任意/全部后可到达后继目标
 
 注：特殊结构之间不可互相包含
 
-##### 目标限时
+#### 目标限时
 
-同任务限时，可单独重试该目标
+同任务限时, 可单独重试该目标
 
-##### 目标内奖励
+#### 目标内奖励
 
-完成某些目标可能获得奖励，作为后续目标的前置条件。这些奖励可能在完成目标后被移除，类似天国魔力
+完成某些目标可能获得奖励, 作为后续目标的前置条件. 这些奖励可能在完成目标后被移除, 类似天国魔力
 
 ### 任务奖励
 
-完成任务后向全体玩家发放，包含物品、世界状态变化等
+完成任务后向全体玩家发放, 包含物品、世界状态变化等
 
 ### 网络同步
 
-世界侧任务系统采用服务器权威模型，大部分逻辑均在服务器完成，部分操作由客户端采集信息并上报，在服务器端验证后生效。同步方式分为三类：全量同步、增量同步、数据上传。
+世界侧任务系统采用服务器权威模型, 核心逻辑均在主世界服务器完成, 部分信息由子世界服务器/客户端采集并上传, 在服务器端验证后生效. 由于子世界玩家的客户端无法直接连接至主世界服务器，因此需要通过子世界服务器转发.
 
-#### 全量同步
+#### 3种同步方式
 
-包含所有任务的状态与进度。
+1. **全任务同步**: 含所有任务的信息. 基于`ModSystem.NetSend()`和`ModSystem.NetReceive`实现. 与terraria本体相同, 在特定时间点全量同步世界的信息.
+2. **单任务同步**: 含单个任务的信息. 一般由**数据上传**/状态改变触发, 对所有客户端进行一次单任务同步.
+3. **数据上传**: 含单个玩家的任务进度贡献量, 比如行走的距离, 消耗的物品等. 由`Main.OnTickForInternalCodeOnly`触发, 每帧调用任务目标的`OnMPSync`方法, 通过`PacketResolver`发送特定的数据包到服务器来发送数据, 同时使用计时器来限制发送频率.
 
-基于`ModSystem.NetSend()`和`ModSystem.NetReceive`实现。与terraria本体相同，在特定时间点全量同步世界的信息。
+#### 3类发送主体
 
-#### 增量同步
-
-仅包含单个任务/目标的状态与进度。
-
-一般由**数据上传**触发，在数据上传后对所有客户端进行一次增量同步。
-
-#### 数据上传
-
-单个玩家的任务进度贡献量，比如行走的距离，消耗的物品等。
-
-由`Main.OnTickForInternalCodeOnly`触发，每帧调用可增量同步的任务目标的对应方法，通过`PacketResolver`发送特定的数据包到服务器来发送数据。
-
-仅发送有变化的目标数据，同时使用计时器来限制发送频率。
+1. 主世界服务器(广播至所有客户端和所有子世界及其客户端): 主世界触发世界同步时(全任务同步)、任务生命周期改变(单任务同步)、差量数据上传后(单任务同步)
+2. 子世界服务器(直接发送至主世界): 上传子世界本地收集的玩家进度(客户端收集内容除外)
+3. 客户端(由子世界服务器转发至主世界): 上传客户端本地收集的玩家进度、请求重试失败任务、请求发放奖励
 
 ### 任务提示
 
@@ -120,9 +112,10 @@ The world-side mission system aims to deliver a structured static experience thr
 4. 强制同步(NetSend/Receive): 需要 (可以更换文本)
 
 备注:
-1. 书写在State属性的get中，会失去灵活性
-2. 在多人游戏下，客户端调用`NetSend/Receive`加载世界时, `Main.NewText`会无效，因此默认情况下不需要广播。如果需要广播，可以在`ModPlayer.OnEnterWorld`中广播
+
+1. 书写在State属性的get中, 会失去灵活性
+2. 在多人游戏下, 客户端调用`NetSend/Receive`加载世界时, `Main.NewText`会无效, 因此默认情况下不需要广播. 如果需要广播, 可以在`ModPlayer.OnEnterWorld`中广播
 
 ### 任务UI
 
-监听任务系统更新，刷新UI
+监听任务系统更新, 刷新UI
