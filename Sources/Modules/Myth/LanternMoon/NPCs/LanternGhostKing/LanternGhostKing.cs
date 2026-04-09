@@ -1396,6 +1396,15 @@ public class LanternGhostKing : LanternMoonNPC
 			{
 				Phase = 2;
 				Timer = 0;
+				var crackVFX = new LanternCrackingRay()
+				{
+					Active = true,
+					Visible = true,
+					Timer = 0,
+					MaxTime = 90,
+					OwnerLanternKing = NPC,
+				};
+				Ins.VFXManager.Add(crackVFX);
 			}
 		}
 	}
@@ -1571,6 +1580,32 @@ public class LanternGhostKing : LanternMoonNPC
 		{
 			var bloom = ModAsset.LanternGhostKing_BodyBloom.Value;
 			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0.2f, 0) * GoldenShieldBreakBloomValueFunction(), 0, bloom.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
+		}
+		if(GoldenShieldBreakEffectTimer is >= 40 and < 50)
+		{
+			if(GoldenShieldBreakEffectTimer % 10 > 4)
+			{
+				var crack = ModAsset.LanternGhostKing_Body_CrackVFXEffect.Value;
+				spriteBatch.Draw(crack, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 0.6f, 0.5f), 0, crack.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
+			}
+			else
+			{
+				var crack = ModAsset.LanternGhostKing_Body_CrackVFXEffect.Value;
+				spriteBatch.Draw(crack, NPC.Center - Main.screenPosition, null, new Color(0f, 0f, 0f, 1f), 0, crack.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
+			}
+		}
+		if (GoldenShieldBreakEffectTimer is >= 30 and < 40)
+		{
+			if (GoldenShieldBreakEffectTimer % 6 > 2)
+			{
+				var crack = ModAsset.LanternGhostKing_Body_CrackVFXEffect.Value;
+				spriteBatch.Draw(crack, NPC.Center - Main.screenPosition, null, new Color(0f, 0f, 0f, 1f), 0, crack.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
+			}
+			else
+			{
+				var crack = ModAsset.LanternGhostKing_Body_CrackVFXEffect.Value;
+				spriteBatch.Draw(crack, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), 0, crack.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
+			}
 		}
 	}
 

@@ -41,6 +41,11 @@ public class BloodLamp : ModItem
 		// }
 	}
 
+	public override bool CanUseItem(Player player)
+	{
+		return !Main.pumpkinMoon && !Main.snowMoon && !Main.dayTime;
+	}
+
 	public override bool? UseItem(Player player)
 	{
 		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
