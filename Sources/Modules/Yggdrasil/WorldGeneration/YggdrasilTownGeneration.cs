@@ -1854,7 +1854,7 @@ public class YggdrasilTownGeneration
 		}
 
 		// 电梯间
-		QuickBuild(buildX, buildY, ModAsset.LiftRoomOfChallengerHall40x22_Path);
+		// QuickBuild(buildX, buildY, ModAsset.LiftRoomOfChallengerHall40x22_Path);
 		int step2X = buildX + 40;
 		int step2Y = buildY + 3;
 		PlaceRectangleAreaOfBlock(step2X, step2Y, step2X + 480, step2Y + 9, ModContent.TileType<StoneScaleWood>());
