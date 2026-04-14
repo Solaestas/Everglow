@@ -21,7 +21,7 @@ public class GildingRevolver : ModItem
 		Item.useAnimation = 5;
 		Item.useTime = 5;
 		Item.knockBack = 1.5f;
-		Item.damage = 55;
+		Item.damage = 48;
 		Item.rare = ItemRarityID.Lime;
 		Item.DamageType = DamageClass.Ranged;
 		Item.noMelee = true;
@@ -30,6 +30,7 @@ public class GildingRevolver : ModItem
 		Item.shootSpeed = 27;
 		Item.shoot = ProjectileID.Bullet;
 		Item.value = 15000;
+		Item.crit = 14;
 	}
 
 	public override void HoldItem(Player player)

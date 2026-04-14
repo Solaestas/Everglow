@@ -27,7 +27,7 @@ public class KeroseneLanternFlameThrower : ModItem
 		Item.useAnimation = 5;
 		Item.useTime = 5;
 		Item.knockBack = 1.5f;
-		Item.damage = 55;
+		Item.damage = 70;
 		Item.rare = ItemRarityID.Lime;
 		Item.DamageType = DamageClass.Ranged;
 		Item.noMelee = true;

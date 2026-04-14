@@ -12,8 +12,8 @@ public class MillionLightStaff_Proj : TrailingProjectile
 	public override void SetCustomDefaults()
 	{
 		Projectile.aiStyle = -1;
-		Projectile.width = 16;
-		Projectile.height = 16;
+		Projectile.width = 64;
+		Projectile.height = 64;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = false;
 		Projectile.penetrate = -1;
