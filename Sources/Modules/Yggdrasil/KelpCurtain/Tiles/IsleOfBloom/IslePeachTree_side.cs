@@ -1,5 +1,6 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
@@ -48,6 +49,22 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
 		num = fail ? 1 : 3;
+	}
+
+	public override void RandomUpdate(int i, int j)
+	{
+		var petal = new PeachBlossom
+		{
+			Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+			Active = true,
+			Visible = true,
+			Position = new Vector2(i, j).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi),
+			MaxTime = 3600,
+			Scale = Main.rand.NextFloat(0.5f, 0.7f),
+			Frame = Main.rand.Next(10),
+			ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+		};
+		Ins.VFXManager.Add(petal);
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)

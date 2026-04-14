@@ -1,5 +1,6 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Steamworks;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
@@ -37,6 +38,22 @@ public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
+	}
+
+	public override void RandomUpdate(int i, int j)
+	{
+		var petal = new PeachBlossom
+		{
+			Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+			Active = true,
+			Visible = true,
+			Position = new Vector2(i, j).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 60 + new Vector2(0, -60),
+			MaxTime = 3600,
+			Scale = Main.rand.NextFloat(0.5f, 0.7f),
+			Frame = Main.rand.Next(10),
+			ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+		};
+		Ins.VFXManager.Add(petal);
 	}
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)

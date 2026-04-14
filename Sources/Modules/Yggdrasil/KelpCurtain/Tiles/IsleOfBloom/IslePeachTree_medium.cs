@@ -1,5 +1,6 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
@@ -74,7 +75,7 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		{
 			int length = 0;
 			int maxLengthHere = MaxLength - TileUtils.GetFixedRandomNumber(tile) % 3;
-			while (TileUtils.SafeGetTile(i, j + length).TileType == tile.TileType)
+			while (TileUtils.SafeGetTile(i, j + length).TileType == Type)
 			{
 				length++;
 				if (length >= maxLengthHere + 1)
@@ -88,32 +89,28 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 				tile2.HasTile = true;
 			}
 		}
-		bool canGenerateDust = true;
-		for (int y = 0; y < 10; y++)
+
+		int topY = j;
+		for(int y = 0;y < 12;y++)
 		{
-			if (TileUtils.SafeGetTile(i, j + y).type != Type)
+			if(TileUtils.SafeGetTile(i, j - y).TileType != Type)
 			{
-				canGenerateDust = false;
+				topY = j - y + 1;
 				break;
 			}
 		}
-		if (canGenerateDust)
+		var petal = new PeachBlossom
 		{
-			// var leaf = new PeachTreeLeaf
-			// {
-			// Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
-			// Active = true,
-			// Visible = true,
-			// Position = new Vector2(i, j).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi),
-			// MaxTime = 3600,
-			// Scale = Main.rand.NextFloat(0.5f, 0.7f),
-			// Frame = Main.rand.Next(8),
-			// FlipAngle = Main.rand.NextFloat(MathHelper.TwoPi),
-			// FlipSpeed = Main.rand.NextFloat(-0.4f, 0.4f),
-			// ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
-			// };
-			// Ins.VFXManager.Add(leaf);
-		}
+			Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+			Active = true,
+			Visible = true,
+			Position = new Vector2(i, topY).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 120 + new Vector2(0, -60),
+			MaxTime = 3600,
+			Scale = Main.rand.NextFloat(0.5f, 0.7f),
+			Frame = Main.rand.Next(10),
+			ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+		};
+		Ins.VFXManager.Add(petal);
 	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
