@@ -58,6 +58,6 @@ public class PeachBlossom : Visual
 	public override void Draw()
 	{
 		Rectangle frame = new Rectangle(0, Frame * 12, 24, 12);
-		Ins.Batch.Draw(ModAsset.BambooLeaf.Value, Position, frame, Lighting.GetColor(Position.ToTileCoordinates()) * Fade, Rotation, frame.Size() * 0.5f, Scale, SpriteEffects.None);
+		Ins.Batch.Draw(ModAsset.PeachBlossom.Value, Position, frame, Lighting.GetColor(Position.ToTileCoordinates()) * Fade, Rotation, frame.Size() * 0.5f, Scale, SpriteEffects.None);
 	}
 }
