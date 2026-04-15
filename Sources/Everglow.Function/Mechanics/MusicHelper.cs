@@ -388,6 +388,22 @@ public abstract class MusicHelper : ModSystem
 		}
 	}
 
+	public void FadeAllTheCurrentMusic(int fadeOutTime)
+	{
+		for (int i = 0; i < CustomMusicCues.Count; i++)
+		{
+			var inst = CustomMusicCues[i];
+			var track = inst.Track;
+			if (track != null)
+			{
+				inst.Fade = true;
+				inst.FadeValue = -1f / fadeOutTime;
+				inst.Track = track;
+				CustomMusicCues[i] = inst;
+			}
+		}
+	}
+
 	public void FadeMusic(SoundTrackInfo inst, int fadeOutTime)
 	{
 		int index = -1;

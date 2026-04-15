@@ -138,18 +138,21 @@ public class BloodLanternGhost_PowerBall_Explosion : ModProjectile
 
 	public void Wave(Vector2 pos)
 	{
-		var wave = new WarpLanternWave
+		if (Ins.VisualQuality.High)
 		{
-			Position = pos,
-			Speed = 12f * Projectile.ai[0],
-			Range = 0,
-			Timer = 0,
-			MaxTime = 30,
-			SpeedDecay = 0.9f,
-			Active = true,
-			Visible = true,
-		};
-		Ins.VFXManager.Add(wave);
+			var wave = new WarpLanternWave
+			{
+				Position = pos,
+				Speed = 12f * Projectile.ai[0],
+				Range = 0,
+				Timer = 0,
+				MaxTime = 30,
+				SpeedDecay = 0.9f,
+				Active = true,
+				Visible = true,
+			};
+			Ins.VFXManager.Add(wave);
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)

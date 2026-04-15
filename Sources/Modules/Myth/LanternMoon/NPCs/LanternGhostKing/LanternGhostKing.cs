@@ -74,6 +74,12 @@ public class LanternGhostKing : LanternMoonNPC
 
 	public override void OnSpawn(IEntitySource source)
 	{
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		if (musicSystem is not null)
+		{
+			musicSystem.Wave15StartTimer = 0;
+			LanternMoon.StartWave15Music();
+		}
 		Timer = 0;
 		Phase = 1;
 		RingFade = 240;
@@ -684,29 +690,25 @@ public class LanternGhostKing : LanternMoonNPC
 		{
 			maxCount = 45;
 		}
-		if (NPC.CountNPCS(ModContent.NPCType<EvilLantern>()) < maxCount)
+		if (Timer <= maxCount * 4)
 		{
-			if (Timer < 258)
+			NPC.HitSound = SoundID.NPCHit4;
+			if (Timer % 20 == 0)
 			{
-				NPC.defense = 1000;
-				NPC.HitSound = SoundID.NPCHit4;
-				if (Timer % 20 == 0)
+				for (int k = 0; k < 5; k++)
 				{
-					for (int k = 0; k < 5; k++)
-					{
-						NPC npc = NPC.NewNPCDirect(null, NPC.Center + new Vector2(0, 100), ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
-						npc.velocity = new Vector2(0, 16).RotatedBy(k / 5f * MathHelper.TwoPi + Main.time);
-					}
+					NPC npc = NPC.NewNPCDirect(null, NPC.Center + new Vector2(0, 100), ModContent.NPCType<EvilLantern>(), 0, 0, 0, 0, 0, 255);
+					npc.velocity = new Vector2(0, 16).RotatedBy(k / 5f * MathHelper.TwoPi + Main.time);
 				}
-				ShaderType = "GoldenSheild";
-				if (GoldenShieldLerp < 0.6f)
-				{
-					GoldenShieldLerp += 0.012f;
-				}
-				if (EffectValueZ < 1.2f)
-				{
-					EffectValueZ = 1.2f;
-				}
+			}
+			ShaderType = "GoldenSheild";
+			if (GoldenShieldLerp < 0.6f)
+			{
+				GoldenShieldLerp += 0.012f;
+			}
+			if (EffectValueZ < 1.2f)
+			{
+				EffectValueZ = 1.2f;
 			}
 		}
 
@@ -1396,6 +1398,7 @@ public class LanternGhostKing : LanternMoonNPC
 			{
 				Phase = 2;
 				Timer = 0;
+				NPC.defense = 1000;
 				var crackVFX = new LanternCrackingRay()
 				{
 					Active = true,
@@ -1411,10 +1414,6 @@ public class LanternGhostKing : LanternMoonNPC
 
 	public override void OnKill()
 	{
-		LanternMoon.Boss15Ended = true;
-		LanternMoon.NewWave();
-		LanternMoon.AccumulatedScore = LanternMoon.ScoreRequireOfWave.Take(15).Sum();
-
 		for (int g = 0; g < 24; g++)
 		{
 			Vector2 vel = new Vector2(MathF.Sqrt(Main.rand.NextFloat()) * 36f, 0).RotatedByRandom(MathHelper.TwoPi);
@@ -1457,8 +1456,18 @@ public class LanternGhostKing : LanternMoonNPC
 				sound = new SoundStyle(ModAsset.LanternYoyo_Explode0_Mod);
 				break;
 		}
-
 		SoundEngine.PlaySound(sound, NPC.Center);
+		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
+		if (musicSystem is not null)
+		{
+			musicSystem.FadeAllTheCurrentMusic(120);
+		}
+		if (LanternMoon.ScoreRequireOfWave is not null && LanternMoon.ScoreRequireOfWave.Length > 15)
+		{
+			LanternMoon.Boss15Ended = true;
+			LanternMoon.NewWave();
+			LanternMoon.AccumulatedScore = LanternMoon.ScoreRequireOfWave.Take(15).Sum();
+		}
 		base.OnKill();
 	}
 

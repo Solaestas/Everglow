@@ -24,11 +24,6 @@ public abstract class DissolveGore : VisualGore
 	/// </summary>
 	public bool HasBone = false;
 
-	public override void OnSpawn()
-	{
-		base.OnSpawn();
-	}
-
 	public override void Draw()
 	{
 		if (NoDissolvePartTexture == null)

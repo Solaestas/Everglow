@@ -180,10 +180,7 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 	{
 		LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
 		musicSystem.Wave15StartTimer = 0;
-		for (int i = 0; i < musicSystem.CustomMusicCues.Count; i++)
-		{
-			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
-		}
+		musicSystem.FadeAllTheCurrentMusic(120);
 	}
 
 	public void EndMusic()
@@ -304,12 +301,6 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 			int y0 = (int)(Main.screenPosition.Y + Main.screenHeight * 0.5f);
 
 			Wave15Boss = NPC.NewNPCDirect(NPC.GetSource_NaturalSpawn(), Main.rand.NextBool(2) ? x0 : x1, y0, ModContent.NPCType<LanternGhostKing>());
-			LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
-			if (musicSystem is not null)
-			{
-				musicSystem.Wave15StartTimer = 0;
-				StartWave15Music();
-			}
 		}
 		else
 		{
