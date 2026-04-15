@@ -3,6 +3,7 @@ using Everglow.Commons.MEAC.VFX;
 using Everglow.Myth.LanternMoon.VFX;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.CameraModifiers;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
@@ -55,6 +56,24 @@ public class LanternSword_Proj : MeleeProj_3D
 					{
 						slashVel = new Vector2(-12f, 0);
 					}
+					Owner.immune = true;
+					Owner.immuneTime = 30;
+					var lanternPlayer = Owner.GetModPlayer<LanternSword_player>();
+					if(lanternPlayer is not null)
+					{
+						lanternPlayer.Active = true;
+						lanternPlayer.OldPos = Main.screenPosition;
+						lanternPlayer.LerpValue = 1f;
+					}
+					var trail = new LanternSwordTeleportEffect
+					{
+						Active = true,
+						Visible = true,
+						MaxTime = 30,
+						Position_End = des,
+						Position_Start = Owner.MountedCenter,
+					};
+					Ins.VFXManager.Add(trail);
 					Owner.Center = des;
 					SoundEngine.PlaySound(new SoundStyle(ModAsset.LanternSwordTeleportation_Mod), Owner.Center);
 					for (int i = 0; i < 24; i++)

@@ -27,7 +27,7 @@ public class LanternSword_Slash : ModProjectile
 
 	public override void SetDefaults()
 	{
-		Projectile.timeLeft = 120;
+		Projectile.timeLeft = 30;
 		Projectile.width = 10;
 		Projectile.height = 10;
 		Projectile.friendly = true;
@@ -142,6 +142,7 @@ public class LanternSword_Slash : ModProjectile
 			if (slash.Active)
 			{
 				Texture2D star = Commons.ModAsset.StarSlash.Value;
+				Texture2D star_dark = Commons.ModAsset.StarSlash_black.Value;
 				var drawPos = slash.Position - Main.screenPosition;
 				float timeLeft = (slash.MaxTime - slash.Timer) / (float)slash.MaxTime;
 				float sizeMul = 2f;
@@ -151,6 +152,7 @@ public class LanternSword_Slash : ModProjectile
 					drawColor = new Color(1f, 0, 0, 0);
 					sizeMul = 1f;
 				}
+				Main.EntitySpriteDraw(star_dark, drawPos, null, new Color(1f, 1f, 1f, 1f), slash.Rotation + MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(timeLeft, slash.Length) * sizeMul, SpriteEffects.None, 0);
 				Main.EntitySpriteDraw(star, drawPos, null, drawColor, slash.Rotation + MathHelper.PiOver2, star.Size() * 0.5f, new Vector2(timeLeft, slash.Length) * sizeMul, SpriteEffects.None, 0);
 			}
 		}
