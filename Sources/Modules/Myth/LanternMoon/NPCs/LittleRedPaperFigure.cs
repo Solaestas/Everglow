@@ -103,6 +103,7 @@ public class LittleRedPaperFigure : LanternMoonNPC
 			NPC.aiStyle = -1;
 			NPC.noTileCollide = true;
 			NPC.velocity.Y += 0.1f;
+			return;
 		}
 
 		NPC.TargetClosest();
