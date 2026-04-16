@@ -27,15 +27,10 @@ public class WarpPipeline : Pipeline
 	private void AllocateRenderTarget(Vector2 size)
 	{
 		var gd = Main.instance.GraphicsDevice;
+		size = gd.Viewport.Bounds.Size();
 		warpScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
 		warpScreenSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-private void AllocateRenderTarget(Vector2 size)
-{
-var gd = Main.instance.GraphicsDevice;
-size = gd.Viewport.Bounds.Size();
-warpScreen = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-warpScreenSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.PresentationParameters.BackBufferFormat, DepthFormat.None);
-}
+	}
 
 	public override void BeginRender()
 	{
@@ -65,7 +60,7 @@ warpScreenSwap = new RenderTarget2D(gd, (int)size.X, (int)size.Y, false, gd.Pres
 
 	public override void Render(IEnumerable<IVisual> visuals)
 	{
-		if(!Ins.VisualQuality.High)
+		if (!Ins.VisualQuality.High)
 		{
 			return;
 		}
