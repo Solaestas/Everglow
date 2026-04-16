@@ -111,6 +111,7 @@ public class LanternGhostKing : LanternMoonNPC
 				l0.OwnerNPC = NPC;
 			}
 		}
+		LanternMoon.Boss15Started = false;
 	}
 
 	public void UpdateDrawParameter()
@@ -1462,7 +1463,7 @@ public class LanternGhostKing : LanternMoonNPC
 		{
 			musicSystem.FadeAllTheCurrentMusic(120);
 		}
-		if (LanternMoon.ScoreRequireOfWave is not null && LanternMoon.ScoreRequireOfWave.Length > 15)
+		if (LanternMoon.ScoreRequireOfWave is not null && LanternMoon.ScoreRequireOfWave.Length > 15 && LanternMoon.Active)
 		{
 			LanternMoon.Boss15Ended = true;
 			LanternMoon.NewWave();

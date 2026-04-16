@@ -43,7 +43,8 @@ public class BloodLamp : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		return !Main.pumpkinMoon && !Main.snowMoon && !Main.dayTime;
+		LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
+		return !Main.pumpkinMoon && !Main.snowMoon && !Main.dayTime && !LanternMoon.Active;
 	}
 
 	public override bool? UseItem(Player player)

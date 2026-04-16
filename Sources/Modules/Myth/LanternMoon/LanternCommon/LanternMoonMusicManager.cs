@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics;
+using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
 
 namespace Everglow.Myth.LanternMoon.LanternCommon;
 
@@ -31,6 +32,18 @@ public class LanternMoonMusicManager : MusicHelper
 		if(Wave15StartTimer < 360000)
 		{
 			Wave15StartTimer++;
+		}
+		if(CustomMusicCues.Count > 0)
+		{
+			LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
+			if (NPC.CountNPCS(ModContent.NPCType<LanternGhostKing>()) < 1)
+			{
+				FadeMusic(ModAsset.LanternMoonMusic_15_Accompaniment_Loop_Mod, 120);
+				FadeMusic(ModAsset.LanternMoonMusic_15_Melody_Loop_Mod, 120);
+				FadeMusic(ModAsset.LanternMoonMusic_15_Percussion_Loop_Mod, 120);
+				FadeMusic(ModAsset.LanternMoonMusic_15_Melody_Head_Mod, 120);
+				FadeMusic(ModAsset.LanternMoonMusic_Pre15_15_Transition_Mod, 120);
+			}
 		}
 		base.PostUpdateEverything();
 	}
