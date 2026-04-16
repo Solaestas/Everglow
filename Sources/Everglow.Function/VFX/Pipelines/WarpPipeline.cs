@@ -59,6 +59,10 @@ public class WarpPipeline : Pipeline
 
 	public override void Render(IEnumerable<IVisual> visuals)
 	{
+		if(!Ins.VisualQuality.High)
+		{
+			return;
+		}
 		BeginRender();
 		foreach (var visual in visuals)
 		{
