@@ -33,6 +33,12 @@ public class KillLanternMoonMobs : ModProjectile, IWarpProjectile
 		EliminateProj();
 		Timer++;
 		Range = MathF.Pow(Timer / 90f, 8) * 3600f;
+		if (Timer > 60 && Timer < 80)
+		{
+			LanternGhostKingSkyEffect skyEffect = ModContent.GetInstance<LanternGhostKingSkyEffect>();
+			skyEffect.Active = true;
+			skyEffect.SkyPower = (Timer - 60) / 20f;
+		}
 		base.AI();
 	}
 
