@@ -1,6 +1,5 @@
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
-using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
@@ -42,8 +41,83 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 				Direction = -1,
 			};
 			Ins.VFXManager.Add(vfx);
+			var foreground = new WaterDeliveryHole_foreground
+			{
+				Active = true,
+				Visible = true,
+				Position = new Vector2(i, j).ToWorldCoordinates(8, 20),
+				OriginTilePos = new Point(i, j),
+				OriginTileType = Type,
+				Direction = -1,
+			};
+			Ins.VFXManager.Add(foreground);
 		}
 	}
 
-	public override void PostDraw(int i, int j, SpriteBatch spriteBatch) => base.PostDraw(i, j, spriteBatch);
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		if (Main.drawToScreen)
+		{
+			zero = Vector2.Zero;
+		}
+		Tile tile = Main.tile[i, j];
+		Texture2D tex = ModAsset.WaterDeliveryHole.Value;
+		Vector2 pos = new Vector2(i * 16, j * 16) - Main.screenPosition + zero;
+		spriteBatch.Draw(tex, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY + 36, 16, 16), new Color(0f, 0f, 0.7f, 0));
+	}
+
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		if (Main.dedServ)
+		{
+			base.NearbyEffects(i, j, closer);
+			return;
+		}
+		Player player = Main.LocalPlayer;
+		WaterDeliveryHole_TeleportPlayer modPlayer = player.GetModPlayer<WaterDeliveryHole_TeleportPlayer>();
+		if (!modPlayer.Active)
+		{
+			if (closer && player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)))
+			{
+				Tile tile = Main.tile[i, j];
+				float closestDistance = 1000;
+				Vector2 destination = Vector2.Zero;
+				Vector2 currentPos = new Vector2(i * 16 + 8 - tile.TileFrameX / 18 * 16 + 40, j * 16 + 8 - tile.TileFrameY / 18 * 16 + 18);
+				for (int x = -40; x <= 40; x++)
+				{
+					for (int y = -40; y <= 40; y++)
+					{
+						var checkTile = TileUtils.SafeGetTile(i + x, j + y);
+						if (checkTile != null && checkTile.HasTile && checkTile.TileType == Type)
+						{
+							Vector2 dest = new Vector2((i + x) * 16 + 8 - checkTile.TileFrameX / 18 * 16 + 40, (j + y) * 16 + 8 - checkTile.TileFrameY / 18 * 16 + 18);
+							float distance = Vector2.Distance(player.Center, dest);
+							if(distance < closestDistance && (dest - currentPos).Length() > 32)
+							{
+								closestDistance = distance;
+								destination = dest;
+								player.velocity.Y += -5;
+							}
+						}
+					}
+				}
+				if(destination != Vector2.zeroVector)
+				{
+					Teleport(player, destination);
+				}
+			}
+		}
+		base.NearbyEffects(i, j, closer);
+	}
+
+	public void Teleport(Player player, Vector2 destination)
+	{
+		WaterDeliveryHole_TeleportPlayer modPlayer = player.GetModPlayer<WaterDeliveryHole_TeleportPlayer>();
+		modPlayer.Active = true;
+		modPlayer.Timer = modPlayer.MaxTeleportTime;
+		modPlayer.OldPos = Main.screenPosition;
+
+		player.Center = destination;
+	}
 }

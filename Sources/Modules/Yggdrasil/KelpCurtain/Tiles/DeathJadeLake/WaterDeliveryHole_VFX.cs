@@ -1,11 +1,11 @@
 using Everglow.Commons.VFX.Scene;
 
-namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
 public class WaterDeliveryHole_VFX : TileVFX
 {
-	public override CodeLayer DrawLayer => CodeLayer.PostDrawBG;
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 
 	public override void Update()
 	{
@@ -15,21 +15,21 @@ public class WaterDeliveryHole_VFX : TileVFX
 	public override void Draw()
 	{
 		float timeValue = (float)(Main.time * 0.01f);
-		List<Vertex2D> bars_side_left = new List<Vertex2D>();
-		List<Vertex2D> bars_side_right = new List<Vertex2D>();
-		List<Vertex2D> bars_side_left_dark = new List<Vertex2D>();
-		List<Vertex2D> bars_side_right_dark = new List<Vertex2D>();
-		for (int k = 0; k < 30; k++)
+		var bars_side_left = new List<Vertex2D>();
+		var bars_side_right = new List<Vertex2D>();
+		var bars_side_left_dark = new List<Vertex2D>();
+		var bars_side_right_dark = new List<Vertex2D>();
+		for (int k = -4; k < 30; k++)
 		{
-			Vector2 pos = new Vector2(0, k * Direction * 3);
+			var pos = new Vector2(0, k * Direction * 3);
 			float value = k / 30f;
 			float fade = 1f;
 			if (k > 20)
 			{
 				fade *= (30 - k) / 10f;
 			}
-			Color drawColor = Color.Lerp(new Color(0.7f, 1f, 1f, 0f), new Color(0f, 0.2f, 0.6f, 0f), value) * fade;
-			Color drawColor_dark = new Color(0, 0, 0, fade * 0.6f);
+			Color drawColor = Color.Lerp(new Color(0.4f, 0.7f, 1f, 0f), new Color(0f, 0.2f, 1f, 0f), value) * fade;
+			var drawColor_dark = new Color(0, 0, 0, fade * 0.6f);
 			float coordX = MathF.Pow(value, 2);
 
 			bars_side_left.Add(Position + pos + new Vector2(-20 - k, 0), drawColor * 0f, new Vector3(coordX + timeValue, 0, 0));
