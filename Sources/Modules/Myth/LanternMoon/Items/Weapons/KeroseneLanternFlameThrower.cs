@@ -76,10 +76,12 @@ public class KeroseneLanternFlameThrower : ModItem
 	{
 		if (Visual is null || !Visual.Active)
 		{
+			AmmoAmount -= 1;
 			return false;
 		}
 		if (player.ownedProjectileCounts[Item.shoot] <= 0)
 		{
+			AmmoAmount -= 1;
 			return false;
 		}
 		if (AmmoAmount > PowerRate * 5)
