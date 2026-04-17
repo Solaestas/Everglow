@@ -38,13 +38,45 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		if (!modPlayer.Active)
 		{
 			Tile tile = TileUtils.SafeGetTile(i, j);
-			if (player.Hitbox.Intersects(new Rectangle(i * 16, j * 16, 16, 16)) && (tile.TileFrameX == 18 || tile.TileFrameX == 36) && tile.TileFrameY is >= 18 and < 72)
+			bool horizontal = tile.TileType == ModContent.TileType<WaterDeliveryHole>();
+			bool vertical = tile.TileType == ModContent.TileType<WaterDeliveryHole_V>();
+			bool towardsTop = tile.TileFrameY == 18 && tile.TileFrameX < 90;
+			bool towardsDown = tile.TileFrameY == 0 && tile.TileFrameX >= 90;
+			bool canTeleport_H = (towardsTop || towardsDown) && (tile.TileFrameX % 90) is >= 18 and < 72 && horizontal;
+			bool towardsLeft = tile.TileFrameX == 18;
+			bool towardsRight = tile.TileFrameX == 36;
+			bool canTeleport_V = (towardsLeft || towardsRight) && tile.TileFrameY is >= 18 and < 72 && vertical;
+			float currentRot = 0;
+			if (horizontal)
+			{
+				if (towardsTop)
+				{
+					currentRot = -MathHelper.PiOver2;
+				}
+				if (towardsDown)
+				{
+					currentRot = MathHelper.PiOver2;
+				}
+			}
+			if(vertical)
+			{
+				if(towardsLeft)
+				{
+					currentRot = -MathHelper.Pi;
+				}
+			}
+			Vector2 moveDirection = new Vector2(1, 0).RotatedBy(currentRot);
+			Rectangle hitBox_vel = player.Hitbox;
+			hitBox_vel.X += (int)player.velocity.X;
+			hitBox_vel.Y += (int)player.velocity.Y;
+			Rectangle hitBox = player.Hitbox;
+			Rectangle tileBox = new Rectangle(i * 16, j * 16, 16, 16);
+			if ((hitBox.Intersects(tileBox) || hitBox_vel.Intersects(tileBox)) && (canTeleport_H || canTeleport_V))
 			{
 				Tile currentCenterTile = GetCenterTile(tile);
-				float closestDistance = 1000;
+				float closestDistance = 640;
 				Vector2 destination = Vector2.Zero;
 				Vector2 currentPos = new Vector2(currentCenterTile.X(), currentCenterTile.Y()) * 16 + new Vector2(8);
-				Main.NewText(currentPos, Color.Yellow);
 				float destRotation = 0;
 				for (int x = -40; x <= 40; x += 2)
 				{
@@ -56,29 +88,39 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 							var checkCenterTile = GetCenterTile(checkTile);
 							if (checkCenterTile != null && checkCenterTile.HasTile)
 							{
+								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
+								{
+									destRotation = -MathHelper.Pi;
+									if (checkCenterTile.TileFrameX == 36)
+									{
+										destRotation = 0;
+									}
+								}
+								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole>())
+								{
+									destRotation = -MathHelper.PiOver2;
+									if (checkCenterTile.TileFrameX == 36)
+									{
+										destRotation = MathHelper.PiOver2;
+									}
+								}
+								float cosTheta = Vector2.Dot(moveDirection, new Vector2(1, 0).RotatedBy(destRotation));
 								Vector2 dest = new Vector2(checkCenterTile.X(), checkCenterTile.Y()) * 16 + new Vector2(8);
 								float distance = Vector2.Distance(currentPos, dest);
+								if (cosTheta > 0.707f)
+								{
+									distance *= 4;
+									distance += 400;
+								}
+								else if (cosTheta > -0.707f)
+								{
+									distance *= 2;
+									distance += 400;
+								}
 								if (distance < closestDistance && distance > 32)
 								{
 									closestDistance = distance;
 									destination = dest;
-									if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
-									{
-										destRotation = -MathHelper.Pi;
-										if (checkCenterTile.TileFrameX == 36)
-										{
-											destRotation = 0;
-										}
-									}
-
-									if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole>())
-									{
-										destRotation = -MathHelper.PiOver2;
-										if (checkCenterTile.TileFrameX == 36)
-										{
-											destRotation = MathHelper.PiOver2;
-										}
-									}
 								}
 							}
 						}
@@ -87,7 +129,6 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 				if (destination != Vector2.zeroVector)
 				{
 					Teleport(player, destination, destRotation);
-					Main.NewText(destination);
 				}
 			}
 		}
@@ -134,7 +175,13 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		modPlayer.Timer = modPlayer.MaxTeleportTime;
 		modPlayer.OldPos = Main.screenPosition;
 
+		Vector2 desVel = new Vector2(4, 0).RotatedBy(-rotation);
 		player.Center = destination;
-		player.velocity += new Vector2(4, 0).RotatedBy(rotation);
+		if (desVel.Y <= -2.82f)
+		{
+			player.Center += new Vector2(player.height / 2, 0).RotatedBy(-rotation);
+		}
+
+		// player.velocity += new Vector2(-4, 0).RotatedBy(rotation);
 	}
 }
