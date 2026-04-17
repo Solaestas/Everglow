@@ -1,4 +1,3 @@
-using System.IO;
 using Everglow.Commons.DeveloperContent.VFXs;
 using Microsoft.Xna.Framework.Audio;
 
@@ -192,7 +191,6 @@ public abstract class MusicHelper : ModSystem
 			{
 				continue;
 			}
-			//Main.NewText(inst.Index,new Color(1f, 0.7f, 0));
 			inst.Index = index;
 			index++;
 			var track = inst.Track;
@@ -214,7 +212,7 @@ public abstract class MusicHelper : ModSystem
 					inst.Active = false;
 				}
 			}
-			track.Volume = inst.CueVolume * 0.25f;
+			track.Volume = inst.CueVolume * Main.musicVolume;
 			while (track.PendingBufferCount < 2)
 			{
 				Array.Clear(wavBuffer, 0, wavBuffer.Length);  // Keep this
@@ -258,7 +256,7 @@ public abstract class MusicHelper : ModSystem
 							bands[k] = bands[k] / 100f;
 						}
 						inst.FFTBands = bands;
-						if(inst.VFX is not null)
+						if (inst.VFX is not null)
 						{
 							inst.VFX.Visible = true;
 						}
@@ -272,7 +270,7 @@ public abstract class MusicHelper : ModSystem
 					}
 				}
 			}
-			if(inst.VFX is not null)
+			if (inst.VFX is not null)
 			{
 				inst.VFX.MusicCue = inst;
 			}

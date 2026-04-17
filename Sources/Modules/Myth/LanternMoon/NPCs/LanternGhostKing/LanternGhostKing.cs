@@ -2,6 +2,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Myth.LanternMoon.Gores;
 using Everglow.Myth.LanternMoon.Items;
+using Everglow.Myth.LanternMoon.Items.Weapons;
 using Everglow.Myth.LanternMoon.LanternCommon;
 using Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 using Everglow.Myth.LanternMoon.VFX;

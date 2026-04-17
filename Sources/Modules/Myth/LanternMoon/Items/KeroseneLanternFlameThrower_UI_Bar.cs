@@ -1,3 +1,5 @@
+using Everglow.Myth.LanternMoon.Items.Weapons;
+
 namespace Everglow.Myth.LanternMoon.Items;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]

@@ -1,7 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Commons.Templates.Weapons;
-using Everglow.Myth.LanternMoon.Items;
+using Everglow.Myth.LanternMoon.Items.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
 

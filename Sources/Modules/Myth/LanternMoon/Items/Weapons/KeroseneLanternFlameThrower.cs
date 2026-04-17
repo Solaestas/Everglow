@@ -1,9 +1,7 @@
-using Everglow.Commons.DeveloperContent.VFXs;
-using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.Items.Weapons;
 
 /// <summary>
 /// Mark target with a lantern label.
@@ -60,9 +58,9 @@ public class KeroseneLanternFlameThrower : ModItem
 		}
 		if (player.ownedProjectileCounts[type] <= 0 && !Visual.HoverButtom)
 		{
-			Projectile proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+			var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
 			proj.rotation = velocity.ToRotationSafe() + MathHelper.PiOver4;
-			if(Visual is not null)
+			if (Visual is not null)
 			{
 				PowerRate = Visual.ButtomValue;
 			}

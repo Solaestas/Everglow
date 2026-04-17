@@ -61,9 +61,5 @@ public class LanternMoonMusicManager : MusicHelper
 				PlayMusic(ModAsset.LanternMoonMusic_Pre15_Percussion_Loop_Mod, true);
 			}
 		}
-		else
-		{
-
-		}
 	}
 }

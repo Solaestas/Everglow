@@ -1,5 +1,5 @@
 using Everglow.Commons.Templates.Weapons;
-using Everglow.Myth.LanternMoon.Items;
+using Everglow.Myth.LanternMoon.Items.Weapons;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -157,12 +157,12 @@ public class GildingRevolver_Proj : HandholdProjectile
 		GildingRevolver gildingRevolver = item.ModItem as GildingRevolver;
 		if (gildingRevolver is not null && gildingRevolver.ShootType >= 0)
 		{
-			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed;
+			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * player.HeldItem.shootSpeed;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, gildingRevolver.ShootType, item.damage, item.knockBack, Projectile.owner);
 			UsedBulletsCount++;
 			if (NormalBulletsCount == 6 || NormalBulletsCount == 3)
 			{
-				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.12f) * player.HeldItem.shootSpeed / 4f;
+				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * player.HeldItem.shootSpeed / 4f;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternFlameBullet>(), item.damage, item.knockBack, Projectile.owner);
 			}
 		}

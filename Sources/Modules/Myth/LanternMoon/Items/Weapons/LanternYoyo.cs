@@ -1,7 +1,7 @@
 using Everglow.Commons.Templates.Weapons.Yoyos;
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.Items.Weapons;
 
 /// <summary>
 /// Mark target with a lantern label.

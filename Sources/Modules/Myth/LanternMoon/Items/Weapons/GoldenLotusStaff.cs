@@ -2,7 +2,7 @@ using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.Items.Weapons;
 
 /// <summary>
 /// Mark target with a lantern label.

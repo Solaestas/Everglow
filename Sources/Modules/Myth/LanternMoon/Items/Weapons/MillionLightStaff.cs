@@ -1,7 +1,7 @@
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.Items.Weapons;
 
 /// <summary>
 /// Mark target with a lantern label.
@@ -40,7 +40,7 @@ public class MillionLightStaff : ModItem
 			Vector2 vel = Main.MouseWorld - pos;
 			vel = vel.NormalizeSafe() * Main.rand.NextFloat(22f, 30f);
 			vel = vel.RotatedByRandom(0.14f);
-			Projectile p0 = Projectile.NewProjectileDirect(source, pos, vel, type, damage, knockback, player.whoAmI);
+			var p0 = Projectile.NewProjectileDirect(source, pos, vel, type, damage, knockback, player.whoAmI);
 		}
 		return false;
 	}

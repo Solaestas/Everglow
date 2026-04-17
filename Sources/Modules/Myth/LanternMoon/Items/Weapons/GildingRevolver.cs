@@ -1,7 +1,7 @@
 using Everglow.Myth.LanternMoon.Projectiles.Weapons;
 using Terraria.DataStructures;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.Items.Weapons;
 
 /// <summary>
 /// Mark target with a lantern label.
@@ -21,7 +21,7 @@ public class GildingRevolver : ModItem
 		Item.useAnimation = 5;
 		Item.useTime = 5;
 		Item.knockBack = 1.5f;
-		Item.damage = 48;
+		Item.damage = 99;
 		Item.rare = ItemRarityID.Lime;
 		Item.DamageType = DamageClass.Ranged;
 		Item.noMelee = true;
@@ -54,13 +54,13 @@ public class GildingRevolver : ModItem
 
 	public override bool CanConsumeAmmo(Item ammo, Player player)
 	{
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj is not null && proj.active)
+			if (proj is not null && proj.active)
 			{
-				if(proj.type == ModContent.ProjectileType<GildingRevolver_Proj>() && proj.owner == player.whoAmI)
+				if (proj.type == ModContent.ProjectileType<GildingRevolver_Proj>() && proj.owner == player.whoAmI)
 				{
-					GildingRevolver_Proj gProj = proj.ModProjectile as GildingRevolver_Proj;
+					var gProj = proj.ModProjectile as GildingRevolver_Proj;
 					if (gProj.UsedBulletsCount > 0)
 					{
 						gProj.UsedBulletsCount--;

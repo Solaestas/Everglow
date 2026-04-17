@@ -1,4 +1,4 @@
-using Everglow.Myth.LanternMoon.Items;
+using Everglow.Myth.LanternMoon.Items.Weapons;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 

@@ -1,3 +1,4 @@
+using Everglow.Myth.LanternMoon.Items.Weapons;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 
