@@ -1,7 +1,5 @@
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
-using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
-using Everglow.Yggdrasil.WorldGeneration;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -84,14 +82,14 @@ public class UnderwaterLightningMechanism : ModTile
 			mechanismEntity.SetState(MechanismState.Resting);
 			mechanismEntity.CurrentFrame = 0;
 		}
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
 			{
 				UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
 				if (uLLML is not null)
 				{
-					if(uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
+					if (uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
 					{
 						return;
 					}
@@ -150,6 +148,7 @@ public class UnderwaterLightningMechanism : ModTile
 		};
 		Queue<Point> queueChecked = new Queue<Point>();
 		Tile tile = Main.tile[i, j];
+
 		// 将起始点加入队列
 		queueChecked.Enqueue(new Point(i, j));
 		List<Point> visited = new List<Point>();
@@ -224,7 +223,7 @@ public class UnderwaterLightningMechanism : ModTile
 		Tile tile = Main.tile[i, j];
 		Point16 entityPoint = new Point16(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY / 18);
 		Tile entityTile = Main.tile[entityPoint];
-		if(entityTile.TileFrameX == 72)
+		if (entityTile.TileFrameX == 72)
 		{
 			entityPoint += new Point16(0, 4);
 		}

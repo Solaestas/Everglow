@@ -7,6 +7,8 @@ public class WaterDeliveryHole_VFX : TileVFX
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawTiles;
 
+	public float Rotation;
+
 	public override void Update()
 	{
 		base.Update();
@@ -19,9 +21,9 @@ public class WaterDeliveryHole_VFX : TileVFX
 		var bars_side_right = new List<Vertex2D>();
 		var bars_side_left_dark = new List<Vertex2D>();
 		var bars_side_right_dark = new List<Vertex2D>();
-		for (int k = -4; k < 30; k++)
+		for (int k = -2; k < 30; k++)
 		{
-			var pos = new Vector2(0, k * Direction * 3);
+			var pos = new Vector2(k * 3, 0).RotatedBy(Rotation);
 			float value = k / 30f;
 			float fade = 1f;
 			if (k > 20)
@@ -32,16 +34,16 @@ public class WaterDeliveryHole_VFX : TileVFX
 			var drawColor_dark = new Color(0, 0, 0, fade * 0.6f);
 			float coordX = MathF.Pow(value, 2);
 
-			bars_side_left.Add(Position + pos + new Vector2(-20 - k, 0), drawColor * 0f, new Vector3(coordX + timeValue, 0, 0));
+			bars_side_left.Add(Position + pos + new Vector2(0, -20 - k).RotatedBy(Rotation), drawColor * 0f, new Vector3(coordX + timeValue, 0, 0));
 			bars_side_left.Add(Position + pos + new Vector2(0, 0), drawColor, new Vector3(coordX + timeValue, 0.5f, 0));
 
-			bars_side_right.Add(Position + pos + new Vector2(20 + k, 0), drawColor * 0f, new Vector3(coordX + timeValue, 1, 0));
+			bars_side_right.Add(Position + pos + new Vector2(0, 20 + k).RotatedBy(Rotation), drawColor * 0f, new Vector3(coordX + timeValue, 1, 0));
 			bars_side_right.Add(Position + pos + new Vector2(0, 0), drawColor, new Vector3(coordX + timeValue, 0.5f, 0));
 
-			bars_side_left_dark.Add(Position + pos + new Vector2(-20 - k, 0), drawColor_dark * 0f, new Vector3(coordX + timeValue, 0, 0));
+			bars_side_left_dark.Add(Position + pos + new Vector2(0, -20 - k).RotatedBy(Rotation), drawColor_dark * 0f, new Vector3(coordX + timeValue, 0, 0));
 			bars_side_left_dark.Add(Position + pos + new Vector2(0, 0), drawColor_dark, new Vector3(coordX + timeValue, 0.5f, 0));
 
-			bars_side_right_dark.Add(Position + pos + new Vector2(20 + k, 0), drawColor_dark * 0, new Vector3(coordX + timeValue, 1, 0));
+			bars_side_right_dark.Add(Position + pos + new Vector2(0, 20 + k).RotatedBy(Rotation), drawColor_dark * 0, new Vector3(coordX + timeValue, 1, 0));
 			bars_side_right_dark.Add(Position + pos + new Vector2(0, 0), drawColor_dark, new Vector3(coordX + timeValue, 0.5f, 0));
 		}
 
