@@ -58,9 +58,9 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 					currentRot = MathHelper.PiOver2;
 				}
 			}
-			if(vertical)
+			if (vertical)
 			{
-				if(towardsLeft)
+				if (towardsLeft)
 				{
 					currentRot = -MathHelper.Pi;
 				}
@@ -86,41 +86,47 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 						if (checkTile.TileType == ModContent.TileType<WaterDeliveryHole_V>() || checkTile.TileType == ModContent.TileType<WaterDeliveryHole>())
 						{
 							var checkCenterTile = GetCenterTile(checkTile);
-							if (checkCenterTile != null && checkCenterTile.HasTile)
+							if (checkCenterTile != null && checkCenterTile.HasTile && checkCenterTile != currentCenterTile)
 							{
+								float checkRotation = 0;
 								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
 								{
-									destRotation = -MathHelper.Pi;
+									checkRotation = -MathHelper.Pi;
 									if (checkCenterTile.TileFrameX == 36)
 									{
-										destRotation = 0;
+										checkRotation = 0;
 									}
 								}
 								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole>())
 								{
-									destRotation = -MathHelper.PiOver2;
+									checkRotation = MathHelper.PiOver2;
 									if (checkCenterTile.TileFrameX == 36)
 									{
-										destRotation = MathHelper.PiOver2;
+										checkRotation = -MathHelper.PiOver2;
 									}
 								}
-								float cosTheta = Vector2.Dot(moveDirection, new Vector2(1, 0).RotatedBy(destRotation));
+								float dirDelta = (moveDirection - new Vector2(1, 0).RotatedBy(checkRotation)).Length() + 0.1f;
 								Vector2 dest = new Vector2(checkCenterTile.X(), checkCenterTile.Y()) * 16 + new Vector2(8);
-								float distance = Vector2.Distance(currentPos, dest);
-								if (cosTheta > 0.707f)
+								float distance = Vector2.Distance(currentPos, dest) / dirDelta;
+								if(dirDelta < 1.9f)
 								{
-									distance *= 4;
-									distance += 400;
+									distance *= 1.5f;
 								}
-								else if (cosTheta > -0.707f)
-								{
-									distance *= 2;
-									distance += 400;
-								}
-								if (distance < closestDistance && distance > 32)
+								// if (cosTheta > 0.707f)
+								// {
+								// distance *= 4;
+								// distance += 400;
+								// }
+								// else if (cosTheta > -0.707f)
+								// {
+								// distance *= 2;
+								// distance += 400;
+								// }
+								if (distance < closestDistance)
 								{
 									closestDistance = distance;
 									destination = dest;
+									destRotation = checkRotation;
 								}
 							}
 						}
