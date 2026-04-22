@@ -31,7 +31,7 @@ public class KeroseneLanternFlameThrower : ModItem
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
 		Item.shootSpeed = 1f;
-		Item.shoot = ModContent.ProjectileType<KeroseneLanternFlameThrower_Hold>();
+		Item.shoot = ProjectileID.Flames;
 		Item.value = 15000;
 		Item.useAmmo = AmmoID.Gel;
 	}
@@ -56,9 +56,10 @@ public class KeroseneLanternFlameThrower : ModItem
 		{
 			return false;
 		}
-		if (player.ownedProjectileCounts[type] <= 0 && !Visual.HoverButtom)
+		int holdingType = ModContent.ProjectileType<KeroseneLanternFlameThrower_Hold>();
+		if (player.ownedProjectileCounts[holdingType] <= 0 && !Visual.HoverButtom)
 		{
-			var proj = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+			var proj = Projectile.NewProjectileDirect(source, position, velocity, holdingType, damage, knockback, player.whoAmI);
 			proj.rotation = velocity.ToRotationSafe() + MathHelper.PiOver4;
 			if (Visual is not null)
 			{
@@ -79,7 +80,7 @@ public class KeroseneLanternFlameThrower : ModItem
 			AmmoAmount -= 1;
 			return false;
 		}
-		if (player.ownedProjectileCounts[Item.shoot] <= 0)
+		if (player.ownedProjectileCounts[ModContent.ProjectileType<KeroseneLanternFlameThrower_Hold>()] <= 0)
 		{
 			AmmoAmount -= 1;
 			return false;
