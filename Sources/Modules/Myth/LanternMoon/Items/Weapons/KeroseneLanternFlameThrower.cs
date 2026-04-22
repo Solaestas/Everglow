@@ -30,6 +30,7 @@ public class KeroseneLanternFlameThrower : ModItem
 		Item.DamageType = DamageClass.Ranged;
 		Item.noMelee = true;
 		Item.noUseGraphic = true;
+		Item.autoReuse = true;
 		Item.shootSpeed = 1f;
 		Item.shoot = ProjectileID.Flames;
 		Item.value = 15000;
@@ -77,12 +78,10 @@ public class KeroseneLanternFlameThrower : ModItem
 	{
 		if (Visual is null || !Visual.Active)
 		{
-			AmmoAmount -= 1;
 			return false;
 		}
 		if (player.ownedProjectileCounts[ModContent.ProjectileType<KeroseneLanternFlameThrower_Hold>()] <= 0)
 		{
-			AmmoAmount -= 1;
 			return false;
 		}
 		if (AmmoAmount > PowerRate * 5)
