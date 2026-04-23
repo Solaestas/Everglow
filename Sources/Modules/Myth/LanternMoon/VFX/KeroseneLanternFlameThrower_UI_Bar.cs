@@ -1,6 +1,6 @@
 using Everglow.Myth.LanternMoon.Items.Weapons;
 
-namespace Everglow.Myth.LanternMoon.Items;
+namespace Everglow.Myth.LanternMoon.VFX;
 
 [Pipeline(typeof(WCSPipeline_PointWrap))]
 public class KeroseneLanternFlameThrower_UI_Bar : Visual
@@ -9,10 +9,10 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 
 	public Player Owner = null;
 	public Item TargetItem = null;
-	public bool HoldingButtom = false;
+	public bool HoldingButton = false;
 	public bool HoverButtom = false;
 	public float Fade = 0;
-	public float ButtomValue = 0f;
+	public float ButtonValue = 0f;
 	public float AmmoValue = 1f;
 
 	public override void Update()
@@ -26,7 +26,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 		// Ensure player holding specfic item
 		if (Owner.HeldItem.type != ModContent.ItemType<KeroseneLanternFlameThrower>()
 			|| Owner.HeldItem.ModItem is not KeroseneLanternFlameThrower kero
-			|| kero.Visual != this)
+			|| kero.UIBar != this)
 		{
 			Fade -= 0.1f;
 			if (Fade <= 0)
@@ -40,7 +40,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 			KeroseneLanternFlameThrower kThrower = Owner.HeldItem.ModItem as KeroseneLanternFlameThrower;
 			if (kThrower is not null)
 			{
-				ButtomValue = kThrower.PowerRate;
+				ButtonValue = kThrower.PowerRate;
 				AmmoValue = kThrower.AmmoAmount;
 				HoverButtom = false;
 				Vector2 buttomWorldPos = Owner.MountedCenter + new Vector2(0, -40 * Owner.gravDir) + new Vector2(78 * ButtomValue - 39, 3);
@@ -50,19 +50,19 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 					{
 						if(Main.mouseLeft && Main.mouseLeftRelease)
 						{
-							HoldingButtom = true;
+							HoldingButton = true;
 						}
 						HoverButtom = true;
 					}
 				}
-				if (HoldingButtom)
+				if (HoldingButton)
 				{
 					HoverButtom = true;
 					kThrower.PowerRate = Math.Clamp((Main.MouseWorld.X - Owner.MountedCenter.X + 39) / 78f, 0, 1f);
-					ButtomValue = kThrower.PowerRate;
+					ButtonValue = kThrower.PowerRate;
 					if(!Main.mouseLeft)
 					{
-						HoldingButtom = false;
+						HoldingButton = false;
 					}
 				}
 			}
@@ -91,7 +91,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 		Rectangle ui_framework = new Rectangle(0, 0, 114, 26);
 		Rectangle powerBar = new Rectangle(18, 28, 78, 32);
 		Rectangle powerBar_realtime = powerBar;
-		powerBar_realtime.Width = (int)(ButtomValue * 78);
+		powerBar_realtime.Width = (int)(ButtonValue * 78);
 
 		Rectangle ammoBar = new Rectangle(18, 62, 78, 2);
 		Rectangle ammoBar_realtime = ammoBar;
