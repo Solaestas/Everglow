@@ -49,7 +49,7 @@ public class GildingRevolver_Hold : HandholdProjectile
 		{
 			if (NormalBulletTimer < 120)
 			{
-				NormalBulletTimer += 1 * (5f / Main.LocalPlayer.itemTimeMax);
+				NormalBulletTimer += 6 * (5f / Main.LocalPlayer.itemTimeMax);
 			}
 
 			if (NormalBulletTimer > 120)
