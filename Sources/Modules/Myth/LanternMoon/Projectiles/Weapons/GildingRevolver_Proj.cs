@@ -203,6 +203,11 @@ public class GildingRevolver_Proj : HandholdProjectile
 	public override void DrawBaseTexture(Color lightColor)
 	{
 		Player player = Main.player[Projectile.owner];
+		SpriteEffects sprite = SpriteEffects.None;
+		if(player.gravDir == -1)
+		{
+			sprite = SpriteEffects.FlipVertically;
+		}
 		if (!Projectile.hide)
 		{
 			var texMain = ModAsset.GildingRevolver_Proj.Value;
@@ -218,7 +223,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 
 		var textureUI = ModAsset.GildingRevolver_Proj_Bullets.Value;
 		Rectangle darkFrame = new Rectangle(0, 0, 92, 30);
-		Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(0, -50), darkFrame, Color.White, 0, darkFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(0, -50 * player.gravDir), darkFrame, Color.White, 0, darkFrame.Size() * 0.5f, 1f, sprite, 0);
 		if (!MouseInLanternZone)
 		{
 			for (int k = 0; k < 6; k++)
@@ -236,7 +241,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 				{
 					normalFrame = new Rectangle(40, 32, 10, 26);
 				}
-				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50 * player.gravDir), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, sprite, 0);
 			}
 		}
 		else
@@ -244,7 +249,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 			for (int k = 0; k < 6; k++)
 			{
 				Rectangle normalFrame = new Rectangle(68, 32, 10, 26);
-				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+				Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(k * 12 - 41, -50 * player.gravDir), normalFrame, Color.White, 0, normalFrame.Size() * 0.5f, 1f, sprite, 0);
 			}
 		}
 		if (LanternBulletTimer > 2)
@@ -254,14 +259,14 @@ public class GildingRevolver_Proj : HandholdProjectile
 			{
 				lanternbulletFrame = new Rectangle(24, 30, 14, 30);
 			}
-			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, -49), lanternbulletFrame, Color.White, 0, lanternbulletFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, -49 * player.gravDir), lanternbulletFrame, Color.White, 0, lanternbulletFrame.Size() * 0.5f, 1f, sprite, 0);
 		}
 		else if (LanternBulletCooling > 0)
 		{
 			Rectangle lanternbulletFrameCooling = new Rectangle(52, 30, 14, 30);
 			int duration = (int)(30f * LanternBulletCooling / LanternBulletCoolingMax);
 			Rectangle lanternbulletFrameCooling_Draw = new Rectangle(52, 60 - duration, 14, duration);
-			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, -50 + 30 - duration), lanternbulletFrameCooling_Draw, Color.White * 0.5f, 0, lanternbulletFrameCooling.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, (-50 + 30 - duration) * player.gravDir                 ), lanternbulletFrameCooling_Draw, Color.White * 0.5f, 0, lanternbulletFrameCooling.Size() * 0.5f, 1f, sprite, 0);
 		}
 	}
 }
