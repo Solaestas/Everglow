@@ -18,7 +18,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		public bool Active;
 	}
 
-	public List<SubProj> ShootProjPos = new List<SubProj>();
+	public List<SubProj> ShootProjPos = [];
 
 	public override void SetDef()
 	{
@@ -104,12 +104,8 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 			Projectile.Center = ArmRootPos + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * DepartLength;
 			Projectile.timeLeft = player.itemTimeMax;
 			float shootSpeed = GetShootSpeed();
-			if (Math.Abs(addRot) > 0.02f)
-			{
-				Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * shootSpeed;
-				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60 + DrawOffset, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-			}
-			else if (Timer % 2 == 1)
+			if (Math.Abs(addRot) > 0.02f
+				|| Timer % 2 == 1)
 			{
 				Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * shootSpeed;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * 60 + DrawOffset, vel, ModContent.ProjectileType<KeroseneLanternFlameThrower_Shoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
@@ -126,13 +122,11 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 	public float GetShootSpeed()
 	{
 		Player player = Main.player[Projectile.owner];
-		if (player.HeldItem is not null && player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>())
+		if (player.HeldItem is not null
+			&& player.HeldItem.type == ModContent.ItemType<KeroseneLanternFlameThrower>()
+			&& player.HeldItem.ModItem is KeroseneLanternFlameThrower kLFT)
 		{
-			KeroseneLanternFlameThrower kLFT = player.HeldItem.ModItem as KeroseneLanternFlameThrower;
-			if (kLFT is not null)
-			{
-				return (kLFT.PowerRate + 0.2f) * 36f * player.HeldItem.shootSpeed;
-			}
+			return (kLFT.PowerRate + 0.2f) * 36f * player.HeldItem.shootSpeed;
 		}
 		return 12f;
 	}
@@ -254,12 +248,12 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 			}
 			Color drawColor = GetTrailColor(i, style);
 			drawPos += offset;
-			bars0.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * trailWidth, drawColor, ModifywarpTexCoordinate(factor, timeValue, 0, width));
-			bars0.Add(drawPos, drawColor, ModifywarpTexCoordinate(factor, timeValue, 1, width));
-			bars1.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * trailWidth, drawColor, ModifywarpTexCoordinate(factor, timeValue, 2, width));
-			bars1.Add(drawPos, drawColor, ModifywarpTexCoordinate(factor, timeValue, 3, width));
-			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * trailWidth, drawColor, ModifywarpTexCoordinate(factor, timeValue, 4, width));
-			bars2.Add(drawPos, drawColor, ModifywarpTexCoordinate(factor, timeValue, 5, width));
+			bars0.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * trailWidth, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 0, width));
+			bars0.Add(drawPos, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 1, width));
+			bars1.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 1f / 3f) * trailWidth, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 2, width));
+			bars1.Add(drawPos, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 3, width));
+			bars2.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 0f / 3f) * trailWidth, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 4, width));
+			bars2.Add(drawPos, drawColor, ModifyWarpTexCoordinate(factor, timeValue, 5, width));
 		}
 	}
 
@@ -299,7 +293,7 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 		return drawColor;
 	}
 
-	public Vector3 ModifywarpTexCoordinate(float factor, float timeValue, float phase, float widthValue)
+	public Vector3 ModifyWarpTexCoordinate(float factor, float timeValue, float phase, float widthValue)
 	{
 		float x = factor + timeValue;
 		float y = 1;

@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.Weapons;
 
-public class GildingRevolver_Proj : HandholdProjectile
+public class GildingRevolver_Hold : HandholdProjectile
 {
 	public int Timer = 0;
 
@@ -49,7 +49,12 @@ public class GildingRevolver_Proj : HandholdProjectile
 		{
 			if (NormalBulletTimer < 120)
 			{
-				NormalBulletTimer += 6 * (5f / Main.LocalPlayer.itemTimeMax);
+				NormalBulletTimer += 1 * (5f / Main.LocalPlayer.itemTimeMax);
+			}
+
+			if (NormalBulletTimer > 120)
+			{
+				NormalBulletTimer = 120;
 			}
 		}
 		else
@@ -99,6 +104,8 @@ public class GildingRevolver_Proj : HandholdProjectile
 		{
 			dir = -1;
 		}
+
+		ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 		Vector2 mouseToPlayer = Main.MouseWorld - ArmRootPos;
 		mouseToPlayer = Vector2.Normalize(mouseToPlayer);
 		Projectile.rotation = mouseToPlayer.ToRotation() + MathHelper.PiOver4;
@@ -112,26 +119,28 @@ public class GildingRevolver_Proj : HandholdProjectile
 				Projectile.timeLeft = 2;
 			}
 		}
+
 		if (player.controlUseItem && player.altFunctionUse == 0)
 		{
+			player.direction = dir;
 			Projectile.hide = false;
-			ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
 			if (MouseInLanternZone && player.itemTime == player.itemTimeMax)
 			{
 				ShootPhantom();
 			}
-			else if (player.itemTime == player.itemTimeMax && (NormalBulletTimer >= 120/*None bullet*/ || (ReloadCooling > 0 && NormalBulletTimer >= 6)/*Have bullet*/))
+			else if (player.itemTime == player.itemTimeMax
+				&& NormalBulletTimer >= 20/* At least one bullet */)
 			{
 				Shoot();
 				NormalBulletTimer -= 20;
-				ReloadCooling = 10;
+				ReloadCooling = 25;
 			}
 		}
 		else if (player.controlUseItem && player.altFunctionUse == 2)
 		{
+			player.direction = dir;
 			Projectile.hide = false;
-			ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
 			if (player.itemTime == player.itemTimeMax && LanternBulletCount >= 1)
 			{
@@ -143,26 +152,23 @@ public class GildingRevolver_Proj : HandholdProjectile
 		{
 			Projectile.hide = true;
 		}
-		player.direction = dir;
 	}
 
 	private void Shoot()
 	{
 		Player player = Main.player[Projectile.owner];
-		Item item = player.HeldItem;
-		if (item is null)
+		var item = player.HeldItem;
+		if (item is not null
+			&& item.type == ModContent.ItemType<GildingRevolver>()
+			&& item.ModItem is GildingRevolver gildingRevolver
+			&& gildingRevolver.ShootType >= 0)
 		{
-			return;
-		}
-		GildingRevolver gildingRevolver = item.ModItem as GildingRevolver;
-		if (gildingRevolver is not null && gildingRevolver.ShootType >= 0)
-		{
-			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * player.HeldItem.shootSpeed;
+			Vector2 vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * item.shootSpeed;
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, gildingRevolver.ShootType, item.damage, item.knockBack, Projectile.owner);
 			UsedBulletsCount++;
 			if (NormalBulletsCount == 6 || NormalBulletsCount == 3)
 			{
-				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * player.HeldItem.shootSpeed / 4f;
+				vel = (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2().RotatedByRandom(0.02f) * item.shootSpeed / 4f;
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternFlameBullet>(), item.damage, item.knockBack, Projectile.owner);
 			}
 		}
@@ -177,7 +183,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 		{
 			return;
 		}
-		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe().RotatedByRandom(0.03f) * player.HeldItem.shootSpeed * 1.5f;
+		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe().RotatedByRandom(0.03f) * item.shootSpeed * 1.5f;
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternPhantomBullet>(), (int)(item.damage * 0.7f), item.knockBack, Projectile.owner);
 	}
 
@@ -189,7 +195,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 		{
 			return;
 		}
-		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe() * player.HeldItem.shootSpeed * 1.5f;
+		Vector2 vel = (Main.MouseWorld - Projectile.Center).NormalizeSafe() * item.shootSpeed * 1.5f;
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + vel.NormalizeSafe() * -2 + DrawOffset, vel, ModContent.ProjectileType<LanternZoneBullet>(), item.damage, item.knockBack, Projectile.owner);
 		UsedBulletsCount++;
 	}
@@ -205,7 +211,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 		Player player = Main.player[Projectile.owner];
 		if (!Projectile.hide)
 		{
-			var texMain = ModAsset.GildingRevolver_Proj.Value;
+			var texMain = ModAsset.GildingRevolver_Hold.Value;
 			SpriteEffects se = SpriteEffects.None;
 			if (player.direction == -1)
 			{
@@ -216,7 +222,7 @@ public class GildingRevolver_Proj : HandholdProjectile
 			Main.spriteBatch.Draw(texMain, drawCenter, null, lightColor, rot, texMain.Size() * 0.5f, 1f, se, 0);
 		}
 
-		var textureUI = ModAsset.GildingRevolver_Proj_Bullets.Value;
+		var textureUI = ModAsset.GildingRevolver_Hold_Bullets.Value;
 		Rectangle darkFrame = new Rectangle(0, 0, 92, 30);
 		Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(0, -50), darkFrame, Color.White, 0, darkFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		if (!MouseInLanternZone)
