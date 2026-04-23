@@ -43,7 +43,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 				ButtonValue = kThrower.PowerRate;
 				AmmoValue = kThrower.AmmoAmount;
 				HoverButtom = false;
-				Vector2 buttomWorldPos = Owner.MountedCenter + new Vector2(0, -40 * Owner.gravDir) + new Vector2(78 * ButtomValue - 39, 3);
+				Vector2 buttomWorldPos = Owner.MountedCenter + new Vector2(0, -40 * Owner.gravDir) + new Vector2(78 * ButtonValue - 39, 3);
 				if(Main.MouseWorld.X > buttomWorldPos.X - 5 && Main.MouseWorld.X < buttomWorldPos.X + 5)
 				{
 					if (Main.MouseWorld.Y > buttomWorldPos.Y - 8 && Main.MouseWorld.Y < buttomWorldPos.Y + 8)
@@ -107,7 +107,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 		}
 
 		Color envColor = Lighting.GetColor(drawPos.ToTileCoordinates());
-		Color flameColor = Color.Lerp(new Color(0.6f, 0f, 0f, 0), new Color(1f, 1f, 1f, 0), ButtomValue);
+		Color flameColor = Color.Lerp(new Color(0.6f, 0f, 0f, 0), new Color(1f, 1f, 1f, 0), ButtonValue);
 		Ins.Batch.Draw(tex, drawPos, ui_framework, envColor, 0, ui_framework.Size() * 0.5f, Fade, sprite);
 		Ins.Batch.Draw(tex, drawPos + new Vector2(0, 3 * Owner.gravDir), powerBar_realtime, flameColor, 0, powerBar.Size() * 0.5f, Fade, sprite);
 		Ins.Batch.Draw(tex, drawPos + new Vector2(0, 10 * Owner.gravDir), ammoBar_realtime, envColor, 0, ammoBar.Size() * 0.5f, Fade, sprite);
@@ -116,7 +116,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 			Rectangle ammoBar_end = new Rectangle(98, 62, 2, 2);
 			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * AmmoValue / 100f - 39, 10 * Owner.gravDir), ammoBar_end, envColor, 0, ammoBar_end.Size() * 0.5f, Fade, sprite);
 		}
-		Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtomValue - 39, 3 * Owner.gravDir), buttom, envColor, 0, buttom.Size() * 0.5f, Fade, sprite);
+		Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtonValue - 39, 3 * Owner.gravDir), buttom, envColor, 0, buttom.Size() * 0.5f, Fade, sprite);
 		if(HoverButtom)
 		{
 			Color hoverColor = new Color(0.6f, 0.2f, 0f, 0);
@@ -124,7 +124,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 			{
 				hoverColor = new Color(1f, 1f, 1f, 0);
 			}
-			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtomValue - 39, 3 * Owner.gravDir), buttom_highlight,hoverColor, 0, buttom_highlight.Size() * 0.5f, Fade, sprite);
+			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtonValue - 39, 3 * Owner.gravDir), buttom_highlight,hoverColor, 0, buttom_highlight.Size() * 0.5f, Fade, sprite);
 		}
 	}
 }
