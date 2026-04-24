@@ -1,5 +1,13 @@
-﻿sampler uImage0 : register(s0);
-sampler uImage1 : register(s1);
+sampler uImage0 : register(s0);
+texture2D uDissolveNoise;
+sampler2D uDissolveNoiseTex = sampler_state
+{
+	Texture = <uDissolveNoise>;
+	MinFilter = Linear;
+	MagFilter = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
 
 float4x4 uTransform;
 
@@ -32,7 +40,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
     if (!any(c))
         return float4(0, 0, 0, 0);
     c *= input.Color;
-    float4 c1 = tex2D(uImage1, input.Texcoord.xy);
+	float4 c1 = tex2D(uDissolveNoiseTex, input.Texcoord.xy);
     float light = max(max(c1.r, c1.g), c1.b);
     float value = (light - input.Texcoord.z) * 2.5;
     if (light < input.Texcoord.z)

@@ -15,26 +15,31 @@ public abstract class VisualGore : Visual
 	public float alpha = 1;
 	public bool tileCollide = true;
 	public bool noGravity = false;
-	public Texture2D texture;
-	public int width;
-	public int height;
+	public Texture2D Texture;
+	public int width = -1;
+	public int height = -1;
 	public int timer = 0;
 	public int maxTime = 600;
 	public float weight = 1000f;
+
 	/// <summary>
 	/// base.OnSpawn();之前必须填入Texture2D
 	/// </summary>
 	public override void OnSpawn()
 	{
 		timer = 0;
-		width = texture.Width; 
-		height = texture.Height;
-		weight = width * height * Main.rand.NextFloat(0.85f, 1.15f);
 	}
+
 	public override void Update()
 	{
 		timer++;
-		if(tileCollide)
+		if((width <= 0 || height <= 0) && Texture is not null)
+		{
+			width = Texture.Width;
+			height = Texture.Height;
+			weight = width * height * Main.rand.NextFloat(0.85f, 1.15f);
+		}
+		if (tileCollide)
 		{
 			float velocityValue = velocity.Length() / 25f;
 			velocityValue = Math.Clamp(velocityValue, 0.0f, 1.0f);
@@ -65,7 +70,7 @@ public abstract class VisualGore : Visual
 		}
 
 		rotation += velocity.X / 40f;
-		velocity *= MathF.Pow(0.999f,velocity.Length() / weight * 2500);
+		velocity *= MathF.Pow(0.999f, velocity.Length() / weight * 2500);
 
 		position += velocity;
 
@@ -74,6 +79,7 @@ public abstract class VisualGore : Visual
 			Active = false;
 		}
 	}
+
 	public override void Draw()
 	{
 		Vector2 v0 = position + new Vector2(-width, -height).RotatedBy(rotation) * 0.5f * scale;
@@ -95,9 +101,8 @@ public abstract class VisualGore : Visual
 			new Vertex2D(v1, c1, new Vector3(1, 0, 0)),
 
 			new Vertex2D(v2, c2, new Vector3(0, 1, 0)),
-			new Vertex2D(v3, c3, new Vector3(1, 1, 0))
+			new Vertex2D(v3, c3, new Vector3(1, 1, 0)),
 		};
-		Main.graphics.GraphicsDevice.Textures[0] = texture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

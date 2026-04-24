@@ -1,59 +1,65 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Templates.Weapons;
-using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Myth.LanternMoon.NPCs.LanternGhostKing;
+using Everglow.Myth.LanternMoon.VFX;
+using Terraria.Audio;
 
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
 
-public class GoldLanternLine : TrailingProjectile
+public class GoldLanternLine : ModProjectile
 {
 	public override string Texture => ModAsset.GoldLaser_Mod;
 
-	public override void SetCustomDefaults()
+	public float LaserDirection = 0;
+
+	public Vector2 EndPos = Vector2.zeroVector;
+
+	public int Timer;
+
+	public override void SetDefaults()
 	{
-		TrailLength = 40;
-		TrailColor = new Color(1, 0.35f, 0, 0f);
-		TrailWidth = 4f;
-		TrailBackgroundDarkness = 0.1f;
-		SelfLuminous = true;
-		TrailTexture = Commons.ModAsset.Trail.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
-		TrailShader = Commons.ModAsset.Trailing.Value;
+		Projectile.aiStyle = -1;
+		Projectile.ignoreWater = true;
+		Projectile.tileCollide = true;
+		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10240;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Projectile.type] = true;
 		Projectile.timeLeft = 300;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
+		Projectile.scale = 1;
 	}
 
-	public override void Behaviors()
+	public override void AI()
 	{
+		Timer++;
 		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
 		if (Projectile.timeLeft > 200)
 		{
 			Projectile.velocity *= 0.97f;
 		}
-		if (Timer == 100)
+		if(Timer == 80)
 		{
-			TrailWidth = 10f;
-			Projectile.velocity = Vector2.Normalize(player.Center - Projectile.Center) * 15;
-			for (int x = 0; x < 15; x++)
-			{
-				var spark = new RayDustDust
-				{
-					velocity = new Vector2(0, Main.rand.NextFloat(2, 3f)).RotateRandom(MathHelper.TwoPi),
-					Active = true,
-					Visible = true,
-					position = Projectile.Center,
-					maxTime = Main.rand.Next(67, 75),
-					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(9f, 12.0f)),
-					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { 0 },
-				};
-				Ins.VFXManager.Add(spark);
-			}
+			LaserDirection = (player.Center - Projectile.Center).ToRotation();
 		}
-		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * TrailWidth / 7f);
+		if(Timer == 100)
+		{
+			SoundEngine.PlaySound(SoundID.Item75, Projectile.Center);
+		}
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 1f, 0) * Projectile.scale);
 	}
 
-	public override void DrawSelf()
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
+		if (Timer >= 100)
+		{
+			return CollisionUtils.Intersect(targetHitbox.Left(), targetHitbox.Right(), targetHitbox.Height, Projectile.Center, EndPos, 30);
+		}
+		return base.Colliding(projHitbox, targetHitbox);
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
 		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		float width = 0.5f;
 		if (Projectile.timeLeft < 200)
@@ -73,35 +79,129 @@ public class GoldLanternLine : TrailingProjectile
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, MathHelper.PiOver2 + (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c0, (float)Main.timeForVisualEffects * 0.04f, star.Size() / 2f, width / 10f, SpriteEffects.None, 0);
 
-		if(Timer > 50 && Timer < 100)
+		float laserTime = 20;
+		if (Timer >= 100)
 		{
-			Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
+			width *= (100 + laserTime - Timer) / laserTime;
+			if (width <= 0)
+			{
+				width = 0;
+			}
+		}
+
+		Texture2D spot = Commons.ModAsset.LightPoint2.Value;
+		Main.spriteBatch.Draw(spot, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 0.7f, 0), (float)Main.timeForVisualEffects * 0.04f, spot.Size() / 2f, width, SpriteEffects.None, 0);
+
+		if (Timer > 50 && Timer < 100)
+		{
 			float rot = Vector2.Normalize(player.Center - Projectile.Center).ToRotationSafe() + MathHelper.PiOver2;
+			if (Timer >= 80)
+			{
+				rot = LaserDirection + MathHelper.PiOver2;
+			}
 			Color c1 = Color.Lerp(new Color(0.3f, 0.05f, 0f, 0f), new Color(1f, 1f, 0.5f, 0f), (Timer - 50) / 50f);
 			Main.spriteBatch.Draw(star, Projectile.Center - Main.screenPosition, null, c1, rot, star.Size() / 2f, new Vector2(width / 1.5f + 0.5f, 1f), SpriteEffects.None, 0);
 		}
+		if (Timer >= 100 && Timer <= 100 + laserTime)
+		{
+			var posCheck = Projectile.Center;
+			var dir = new Vector2(1, 0).RotatedBy(LaserDirection) * 16;
+			var value = (Timer - 100) / laserTime;
+			var drawC = Color.Lerp(new Color(1f, 1f, 0.8f, 0f), new Color(0.4f, 0f, 0f, 0f), MathF.Pow(value, 0.5f));
+			if (value > 0.3 && value < 0.7)
+			{
+				drawC = Color.Lerp(drawC, new Color(1f, 0.8f, 0.2f, 0f), value);
+			}
+			var widthRay = MathF.Sin(MathF.Pow(value, 0.5f) * MathF.PI);
+			var ringCenter = Projectile.Center;
+			var ringRadius = 20000f;
+			foreach (var npc in Main.npc)
+			{
+				if (npc != null && npc.active && npc.type == ModContent.NPCType<LanternGhostKing>())
+				{
+					LanternGhostKing lKing = npc.ModNPC as LanternGhostKing;
+					ringCenter = lKing.RingCenter;
+					ringRadius = lKing.RingRadius;
+				}
+			}
+			float lightValue = 0.5f / 255f;
+			List<Vertex2D> bars = new List<Vertex2D>();
+			for (int i = 0; i < 600; i++)
+			{
+				var drawPos = posCheck - Main.screenPosition;
+				bars.Add(drawPos + dir.RotatedBy(MathHelper.PiOver2) * widthRay, drawC, new Vector3(i / 4f + value, 0, 0));
+				bars.Add(drawPos - dir.RotatedBy(MathHelper.PiOver2) * widthRay, drawC, new Vector3(i / 4f + value, 1, 0));
+				if (!Collision.SolidCollision(posCheck - new Vector2(4), 8, 8) && (posCheck - ringCenter).Length() < ringRadius)
+				{
+					posCheck += dir;
+					Lighting.AddLight(posCheck, drawC.R * lightValue, drawC.G * lightValue, drawC.B * lightValue);
+				}
+				else
+				{
+					break;
+				}
+			}
+			EndPos = posCheck;
+			if (bars.Count > 2)
+			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
+				Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(sBS);
+			}
+		}
+		if (Timer == 100 && !Main.gamePaused)
+		{
+			for (int x = 0; x < 12; x++)
+			{
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(4f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new GoldenLineStar()
+				{
+					Velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					Position = EndPos,
+					RotateSpeed = 0,
+					Rotation = 0,
+					MaxTime = Main.rand.Next(20, 40),
+					Scale = Main.rand.NextFloat(0.5f, 1f),
+				};
+				Ins.VFXManager.Add(spark);
+			}
+		}
+		if (Timer == 100 + laserTime)
+		{
+			Projectile.Center = EndPos;
+			Projectile.velocity = new Vector2(16, 0).RotatedBy(LaserDirection);
+			Projectile.Kill();
+		}
+		return false;
 	}
 
-	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
-
-	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
-
-	public override void DestroyEntityEffect()
+	public override void OnKill(int timeLeft)
 	{
-		for (int x = 0; x < 25; x++)
+		if (Timer < 100)
 		{
-			var spark = new RayDustDust
+			for (int x = 0; x < 12; x++)
 			{
-				velocity = new Vector2(0, Main.rand.NextFloat(2, 6f)).RotateRandom(MathHelper.TwoPi),
-				Active = true,
-				Visible = true,
-				position = Projectile.Center,
-				maxTime = Main.rand.Next(57, 255),
-				scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(8f, 17.0f)),
-				rotation = Main.rand.NextFloat(6.283f),
-				ai = new float[] { 0 },
-			};
-			Ins.VFXManager.Add(spark);
+				Vector2 newVelocity = new Vector2(0, Main.rand.NextFloat(4f, 8f)).RotatedByRandom(MathHelper.TwoPi);
+				var spark = new GoldenLineStar()
+				{
+					Velocity = newVelocity,
+					Active = true,
+					Visible = true,
+					Position = Projectile.Center,
+					RotateSpeed = 0,
+					Rotation = 0,
+					MaxTime = Main.rand.Next(20, 40),
+					Scale = Main.rand.NextFloat(0.5f, 1f),
+				};
+				Ins.VFXManager.Add(spark);
+			}
 		}
 	}
 }
