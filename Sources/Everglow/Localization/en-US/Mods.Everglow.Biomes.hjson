@@ -1,54 +1,54 @@
 YggdrasilTownBiome: {
 	DisplayName: Yggdrasil Town
-	TownNPCDialogueName: The Yggdrasil Town
+	TownNPCDialogueName: Yggdrasil Town
 }
 
 TuskBiome: {
-	DisplayName: Tusk Biome
-	TownNPCDialogueName: ""
+	DisplayName: Tusk Tuya
+	TownNPCDialogueName: the Tusk Tuya biome
 }
 
 TuskSurfaceBiome: {
-	DisplayName: Tusk Surface Biome
-	TownNPCDialogueName: ""
+	DisplayName: Surface Tusk Tuya
+	TownNPCDialogueName: the Surface Tusk Tuya biome
 }
 
 FireflyBiome: {
-	DisplayName: Firefly Biome
-	TownNPCDialogueName: ""
+	DisplayName: Everglow Cocoon
+	TownNPCDialogueName: the Everglow Cocoon
 }
 
 FurnaceAreaBiome: {
-	DisplayName: Furnace Area Biome
-	TownNPCDialogueName: ""
+	DisplayName: Yggdrasil Forge
+	TownNPCDialogueName: the Yggdrasil Forge
 }
 
 JellyBallHotbedBiome: {
-	DisplayName: Jelly Ball Hotbed Biome
-	TownNPCDialogueName: ""
+	DisplayName: Jellyball Coldbed //temp
+	TownNPCDialogueName: the Jellyball Coldbed biome
 }
 
 LampWoodForest: {
-	DisplayName: Lamp Wood Forest
-	TownNPCDialogueName: ""
+	DisplayName: Lampwood Forest
+	TownNPCDialogueName: the Lampwood Forest biome
 }
 
 MidnightBayouBiome: {
-	DisplayName: Midnight Bayou Biome
-	TownNPCDialogueName: ""
+	DisplayName: Midnight Marsh
+	TownNPCDialogueName: the Midnight Marsh biome
 }
 
-TwilightForsetAndRelic: {
-	DisplayName: Twilight Forset And Relic
-	TownNPCDialogueName: ""
+TwilightForsetAndRelic: { //not sure what "AndRelic" means
+	DisplayName: Twilight Forest
+	TownNPCDialogueName: the Twilight Forest biome
 }
 
 KelpCurtainBiome: {
-	DisplayName: Kelp Curtain Biome
-	TownNPCDialogueName: ""
+	DisplayName: Moss Mantle //subject to change
+	TownNPCDialogueName: the Moss Mantle biome
 }
 
 HurricaneMazeBiome: {
-	DisplayName: Hurricane Maze Biome
-	TownNPCDialogueName: ""
+	DisplayName: Tempest Labyrinth
+	TownNPCDialogueName: the Tempest Labyrinth biome
 }
