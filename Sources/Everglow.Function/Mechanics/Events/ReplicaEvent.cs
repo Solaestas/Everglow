@@ -1,4 +1,5 @@
-using ReLogic.Content;
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
@@ -14,14 +15,14 @@ public abstract class ReplicaEvent : ModEvent
 	/// <summary>
 	/// 进度点数
 	/// </summary>
-	public int Progress;
+	public float Progress;
 
 	/// <summary>
 	/// 最大进度点数
 	/// </summary>
-	public int ProgressMax;
+	public float ProgressMax;
 	public float ProgressAlpha;
-	public int Timer;
+	public int UIBarFadeTimer;
 
 	/// <summary>
 	/// 事件波数
@@ -31,10 +32,9 @@ public abstract class ReplicaEvent : ModEvent
 	protected bool innerActive;
 
 	/// <summary>
-	/// 事件图标,一般为32*32大小
+	/// Event Icon, usually 32*32 size
 	/// </summary>
-	protected string eventIcon;
-	private Texture2D icon;
+	public Texture2D Icon;
 
 	/// <summary>
 	/// 修改显示
@@ -57,15 +57,19 @@ public abstract class ReplicaEvent : ModEvent
 
 	public override void Draw(SpriteBatch sprite)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(sprite).Value;
+		sprite.End();
+		sprite.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.EffectMatrix);
 		if (innerActive)
 		{
-			Timer = 160;
+			UIBarFadeTimer = 160;
 		}
-		if (!Main.gamePaused && Timer > 0)
+		if (!Main.gamePaused && UIBarFadeTimer > 0)
 		{
-			Timer--;
+			UIBarFadeTimer--;
 		}
-		ProgressAlpha = Math.Clamp(ProgressAlpha + Timer > 0 ? 0.05f : -0.05f, 0, 1);
+		ProgressAlpha += ProgressAlpha + UIBarFadeTimer > 0 ? 0.05f : -0.05f;
+		ProgressAlpha = Math.Clamp(ProgressAlpha, 0, 1);
 		if (ProgressAlpha <= 0f)
 		{
 			EventSystem.Deactivate(this);
@@ -74,9 +78,8 @@ public abstract class ReplicaEvent : ModEvent
 		float num = 0.5f + ProgressAlpha * 0.5f;
 		string text = string.Empty;
 		Color c = Color.White;
-		Texture2D value = icon ??= ModContent.Request<Texture2D>(eventIcon, AssetRequestMode.ImmediateLoad).Value;
 		ModifyInvasionProgress(ref text, ref c);
-		Vector2 texturescale = new(25.6f / value.Width, 25.6f / value.Height);
+		Vector2 texturescale = new(25.6f / Icon.Width, 25.6f / Icon.Height);
 		texturescale *= num;
 		if (Wave > 0)
 		{
@@ -86,10 +89,10 @@ public abstract class ReplicaEvent : ModEvent
 			Rectangle r4 = new((int)vector.X - num2 / 2, (int)vector.Y - num3 / 2, num2, num3);
 			Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
 			string key = "Game.WaveMessage";
-			object arg = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Language.GetTextValue("Game.InvasionPoints", Progress);
+			object arg = ProgressMax != 0 ? (Progress / ProgressMax).ToString("##.##%") : Language.GetTextValue("Game.InvasionPoints", Progress);
 			string text2 = Language.GetTextValue(key, Wave, arg);
 			Texture2D value2 = TextureAssets.ColorBar.Value;
-			float num4 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+			float num4 = MathHelper.Clamp(Progress / ProgressMax, 0f, 1f);
 			if (ProgressMax == 0)
 			{
 				num4 = 1f;
@@ -111,13 +114,13 @@ public abstract class ReplicaEvent : ModEvent
 			Vector2 vector3 = new(Main.screenWidth - 120, Main.screenHeight - 40);
 			Rectangle r4 = new((int)vector3.X - num7 / 2, (int)vector3.Y - num8 / 2, num7, num8);
 			Utils.DrawInvBG(Main.spriteBatch, r4, new Color(63, 65, 151, 255) * 0.785f);
-			string text3 = ProgressMax != 0 ? ((float)Progress / ProgressMax).ToString("##.##%") : Progress.ToString();
+			string text3 = ProgressMax != 0 ? (Progress / ProgressMax).ToString("##.##%") : Progress.ToString();
 			text3 = Language.GetTextValue("Game.WaveCleared", text3);
 			Texture2D value3 = TextureAssets.ColorBar.Value;
 			if (ProgressMax != 0)
 			{
 				Main.spriteBatch.Draw(value3, vector3, null, Color.White * ProgressAlpha, 0f, new Vector2(value3.Width / 2, 0f), num, SpriteEffects.None, 0f);
-				float num9 = MathHelper.Clamp(Progress / (float)ProgressMax, 0f, 1f);
+				float num9 = MathHelper.Clamp(Progress / ProgressMax, 0f, 1f);
 				Vector2 vector4 = FontAssets.MouseText.Value.MeasureString(text3);
 				float num10 = num;
 				if (vector4.Y > 22f)
@@ -140,10 +143,12 @@ public abstract class ReplicaEvent : ModEvent
 		{
 			num13 += value4.X - 200f;
 		}
-		Rectangle r3 = Utils.CenteredRectangle(new Vector2(Main.screenWidth - num13, Main.screenHeight - 80), (value4 + new Vector2(value.Width + 12, 6f)) * num);
+		Rectangle r3 = Utils.CenteredRectangle(new Vector2(Main.screenWidth - num13, Main.screenHeight - 80), (value4 + new Vector2(Icon.Width + 12, 6f)) * num);
 		Utils.DrawInvBG(Main.spriteBatch, r3, c);
-		Main.spriteBatch.Draw(value, r3.Left() + Vector2.UnitX * num * 8f, null, Color.White * ProgressAlpha, 0f, new Vector2(0f, value.Height / 2), texturescale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(Icon, r3.Left() + Vector2.UnitX * num * 8f, null, Color.White * ProgressAlpha, 0f, new Vector2(0f, Icon.Height / 2), texturescale, SpriteEffects.None, 0f);
 		Utils.DrawBorderString(Main.spriteBatch, text, r3.Right() + Vector2.UnitX * num * -22f, Color.White * ProgressAlpha, num * 0.9f, 1f, 0.4f, -1);
+		sprite.End();
+		sprite.Begin(sBS);
 	}
 
 	public override void SaveData(TagCompound tag)
