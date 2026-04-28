@@ -1,11 +1,10 @@
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
-using ModLiquidLib.Utils;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
 public class WaterDeliveryHole_V : ModTile, ISceneTile
 {
@@ -18,7 +17,7 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 5;
 		TileObjectData.newTile.Width = 2;
-		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile, 5, 0);
+		var SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile, 5, 0);
 		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
@@ -91,7 +90,7 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;

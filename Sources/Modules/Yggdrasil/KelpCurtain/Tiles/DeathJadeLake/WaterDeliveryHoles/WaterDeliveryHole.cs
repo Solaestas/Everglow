@@ -4,7 +4,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
 public class WaterDeliveryHole : ModTile, ISceneTile
 {
@@ -17,7 +17,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 2;
 		TileObjectData.newTile.Width = 5;
-		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 5, 0);
+		var SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 5, 0);
 		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
@@ -42,10 +42,10 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if ((tile.TileFrameX == 36 && tile.TileFrameY == 18) || (tile.TileFrameX == 126 && tile.TileFrameY == 0))
+		if (tile.TileFrameX == 36 && tile.TileFrameY == 18 || tile.TileFrameX == 126 && tile.TileFrameY == 0)
 		{
 			int dir = -1;
-			if(tile.TileFrameX == 126)
+			if (tile.TileFrameX == 126)
 			{
 				dir = 1;
 			}
@@ -87,7 +87,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;

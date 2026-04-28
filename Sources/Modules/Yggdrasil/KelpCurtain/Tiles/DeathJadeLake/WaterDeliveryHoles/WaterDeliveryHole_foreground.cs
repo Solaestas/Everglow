@@ -1,6 +1,6 @@
 using Everglow.Commons.VFX.Scene;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
 [Pipeline(typeof(WCSPipeline))]
 public class WaterDeliveryHole_foreground : TileVFX

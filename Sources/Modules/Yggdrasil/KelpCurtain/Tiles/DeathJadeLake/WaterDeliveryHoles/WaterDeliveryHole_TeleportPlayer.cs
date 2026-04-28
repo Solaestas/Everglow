@@ -1,6 +1,6 @@
 using ModLiquidLib.Utils;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
 public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 {
@@ -42,7 +42,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 			bool vertical = tile.TileType == ModContent.TileType<WaterDeliveryHole_V>();
 			bool towardsTop = tile.TileFrameY == 18 && tile.TileFrameX < 90;
 			bool towardsDown = tile.TileFrameY == 0 && tile.TileFrameX >= 90;
-			bool canTeleport_H = (towardsTop || towardsDown) && (tile.TileFrameX % 90) is >= 18 and < 72 && horizontal;
+			bool canTeleport_H = (towardsTop || towardsDown) && tile.TileFrameX % 90 is >= 18 and < 72 && horizontal;
 			bool towardsLeft = tile.TileFrameX == 18;
 			bool towardsRight = tile.TileFrameX == 36;
 			bool canTeleport_V = (towardsLeft || towardsRight) && tile.TileFrameY is >= 18 and < 72 && vertical;
@@ -70,7 +70,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 			hitBox_vel.X += (int)player.velocity.X;
 			hitBox_vel.Y += (int)player.velocity.Y;
 			Rectangle hitBox = player.Hitbox;
-			Rectangle tileBox = new Rectangle(i * 16, j * 16, 16, 16);
+			var tileBox = new Rectangle(i * 16, j * 16, 16, 16);
 			if ((hitBox.Intersects(tileBox) || hitBox_vel.Intersects(tileBox)) && (canTeleport_H || canTeleport_V))
 			{
 				Tile currentCenterTile = GetCenterTile(tile);
@@ -108,10 +108,11 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 								float dirDelta = (moveDirection - new Vector2(1, 0).RotatedBy(checkRotation)).Length() + 0.1f;
 								Vector2 dest = new Vector2(checkCenterTile.X(), checkCenterTile.Y()) * 16 + new Vector2(8);
 								float distance = Vector2.Distance(currentPos, dest) / dirDelta;
-								if(dirDelta < 1.9f)
+								if (dirDelta < 1.9f)
 								{
 									distance *= 1.5f;
 								}
+
 								// if (cosTheta > 0.707f)
 								// {
 								// distance *= 4;
