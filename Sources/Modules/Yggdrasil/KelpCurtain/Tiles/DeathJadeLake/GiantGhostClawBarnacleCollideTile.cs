@@ -28,7 +28,7 @@ public class GiantGhostClawBarnacleCollideTile : ShapeDataTile, ISceneTile
 				for (int x = 0; x < pixelRow.Length; x++)
 				{
 					ref var pixel = ref pixelRow[x];
-					PixelHideForeground[x, y] = pixel.G;
+					PixelHideForeground[x, y] = pixel.B;
 				}
 			}
 		});

@@ -21,7 +21,7 @@ public class WaterDeliveryHole_Item : ModItem
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			State++;
-			if (State >= 3)
+			if (State >= 6)
 			{
 				State = 0;
 			}
@@ -34,6 +34,21 @@ public class WaterDeliveryHole_Item : ModItem
 				Item.DefaultToPlaceableTile(ModContent.TileType<WaterDeliveryHole_V>());
 			}
 			else if (State == 2)
+			{
+				Item.DefaultToPlaceableTile(ModContent.TileType<WaterDeliveryHole_TopRight>());
+				Item.placeStyle = 0;
+			}
+			else if (State == 3)
+			{
+				Item.DefaultToPlaceableTile(ModContent.TileType<WaterDeliveryHole_BottomRight>());
+				Item.placeStyle = 0;
+			}
+			else if (State == 4)
+			{
+				Item.DefaultToPlaceableTile(ModContent.TileType<WaterDeliveryHole_BottomLeft>());
+				Item.placeStyle = 0;
+			}
+			else if (State == 5)
 			{
 				Item.DefaultToPlaceableTile(ModContent.TileType<WaterDeliveryHole_TopLeft>());
 				Item.placeStyle = 0;
@@ -50,20 +65,64 @@ public class WaterDeliveryHole_Item : ModItem
 	{
 		if (State == 2)
 		{
-			var waterHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_TopLeft>()) as WaterDeliveryHole_TopLeft;
+			var waterHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_TopRight>()) as WaterDeliveryHole_TopRight;
 			if (waterHole_TopLeft != null)
 			{
 				int x = (int)(Main.MouseWorld.X / 16);
-				int y = (int)(Main.MouseWorld.Y / 16 + 3);
-				Main.NewText((x, y));
-				if (waterHole_TopLeft.CanPlaceAtBottomLeft(x, y))
+				int y = (int)(Main.MouseWorld.Y / 16);
+				if (waterHole_TopLeft.NoCollideInSolidGrid(x, y))
 				{
-					waterHole_TopLeft.PlaceOriginAtBottomLeft(x, y);
+					waterHole_TopLeft.PlaceAtTileObjectDataOrigin(x, y);
 					Item.stack--;
 					return false;
 				}
 			}
 		}
-		return false;
+		if (State == 3)
+		{
+			var waterHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_BottomRight>()) as WaterDeliveryHole_BottomRight;
+			if (waterHole_TopLeft != null)
+			{
+				int x = (int)(Main.MouseWorld.X / 16);
+				int y = (int)(Main.MouseWorld.Y / 16);
+				if (waterHole_TopLeft.NoCollideInSolidGrid(x, y))
+				{
+					waterHole_TopLeft.PlaceAtTileObjectDataOrigin(x, y);
+					Item.stack--;
+					return false;
+				}
+			}
+		}
+		if (State == 4)
+		{
+			var waterHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_BottomLeft>()) as WaterDeliveryHole_BottomLeft;
+			if (waterHole_TopLeft != null)
+			{
+				int x = (int)(Main.MouseWorld.X / 16);
+				int y = (int)(Main.MouseWorld.Y / 16);
+				if (waterHole_TopLeft.NoCollideInSolidGrid(x, y))
+				{
+					waterHole_TopLeft.PlaceAtTileObjectDataOrigin(x, y);
+					Item.stack--;
+					return false;
+				}
+			}
+		}
+		if (State == 5)
+		{
+			var waterHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_TopLeft>()) as WaterDeliveryHole_TopLeft;
+			if (waterHole_TopLeft != null)
+			{
+				int x = (int)(Main.MouseWorld.X / 16);
+				int y = (int)(Main.MouseWorld.Y / 16);
+				if (waterHole_TopLeft.NoCollideInSolidGrid(x, y))
+				{
+					waterHole_TopLeft.PlaceAtTileObjectDataOrigin(x, y);
+					Item.stack--;
+					return false;
+				}
+			}
+		}
+		return base.CanUseItem(player);
 	}
 }

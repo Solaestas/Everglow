@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
-public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
+public class WaterDeliveryHole_BottomLeft : ShapeDataTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -24,7 +24,7 @@ public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 		Main.tileCut[Type] = false;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Origin = new Point16(1, 1);
+		TileObjectData.newTile.Origin = new Point16(1, 2);
 		TileObjectData.newTile.Height = TotalHeight;
 		TileObjectData.newTile.Width = TotalWidth;
 		TileObjectData.newTile.CoordinateHeights = new int[TotalHeight];
@@ -43,7 +43,7 @@ public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX == 18 && tile.TileFrameY == 18)
+		if (tile.TileFrameX == 18 && tile.TileFrameY == 36)
 		{
 			var vfx = new WaterDeliveryHole_VFX
 			{
@@ -53,7 +53,7 @@ public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = -MathHelper.PiOver4 * 3,
+				Rotation = -MathHelper.PiOver4 * 5,
 			};
 			Ins.VFXManager.Add(vfx);
 			var warp = new WaterDeliveryHole_VFX_warp
@@ -64,7 +64,7 @@ public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = -MathHelper.PiOver4 * 3,
+				Rotation = -MathHelper.PiOver4 * 5,
 			};
 			Ins.VFXManager.Add(warp);
 			var foreground = new WaterDeliveryHole_Slope_foreground
@@ -75,7 +75,7 @@ public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = -MathHelper.PiOver4 * 3,
+				Rotation = -MathHelper.PiOver4 * 5,
 			};
 			Ins.VFXManager.Add(foreground);
 		}

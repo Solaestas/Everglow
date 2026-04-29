@@ -1,4 +1,5 @@
 using ModLiquidLib.Utils;
+using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
@@ -37,108 +38,132 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		WaterDeliveryHole_TeleportPlayer modPlayer = player.GetModPlayer<WaterDeliveryHole_TeleportPlayer>();
 		if (!modPlayer.Active)
 		{
-			Tile tile = TileUtils.SafeGetTile(i, j);
-			bool horizontal = tile.TileType == ModContent.TileType<WaterDeliveryHole>();
-			bool vertical = tile.TileType == ModContent.TileType<WaterDeliveryHole_V>();
-			bool towardsTop = tile.TileFrameY == 18 && tile.TileFrameX < 90;
-			bool towardsDown = tile.TileFrameY == 0 && tile.TileFrameX >= 90;
-			bool canTeleport_H = (towardsTop || towardsDown) && tile.TileFrameX % 90 is >= 18 and < 72 && horizontal;
-			bool towardsLeft = tile.TileFrameX == 18;
-			bool towardsRight = tile.TileFrameX == 36;
-			bool canTeleport_V = (towardsLeft || towardsRight) && tile.TileFrameY is >= 18 and < 72 && vertical;
-			float currentRot = 0;
-			if (horizontal)
+			Vector2 currentPos = new Vector2(i, j);
+			int currentDir = -1;
+			var currentTile = TileUtils.SafeGetTile(i, j);
+			int currentStyle = TileObjectData.GetTileStyle(currentTile);
+			TileObjectData currentObjectData = TileObjectData.GetTileData(currentTile.TileType, currentStyle);
+			if(!TileAtOriginPos(currentTile, currentStyle, currentObjectData))
 			{
-				if (towardsTop)
-				{
-					currentRot = -MathHelper.PiOver2;
-				}
-				if (towardsDown)
-				{
-					currentRot = MathHelper.PiOver2;
-				}
+				return;
 			}
-			if (vertical)
+			Vector2 currentWorldPos = currentPos * 16 + new Vector2(8);
+			if ((player.Center - currentWorldPos).Length() >= 32 || (player.Center - currentWorldPos).Length() < (player.Center + player.velocity - currentWorldPos).Length())
 			{
-				if (towardsLeft)
-				{
-					currentRot = -MathHelper.Pi;
-				}
+				return;
 			}
-			Vector2 moveDirection = new Vector2(1, 0).RotatedBy(currentRot);
-			Rectangle hitBox_vel = player.Hitbox;
-			hitBox_vel.X += (int)player.velocity.X;
-			hitBox_vel.Y += (int)player.velocity.Y;
-			Rectangle hitBox = player.Hitbox;
-			var tileBox = new Rectangle(i * 16, j * 16, 16, 16);
-			if ((hitBox.Intersects(tileBox) || hitBox_vel.Intersects(tileBox)) && (canTeleport_H || canTeleport_V))
-			{
-				Tile currentCenterTile = GetCenterTile(tile);
-				float closestDistance = 640;
-				Vector2 destination = Vector2.Zero;
-				Vector2 currentPos = new Vector2(currentCenterTile.X(), currentCenterTile.Y()) * 16 + new Vector2(8);
-				float destRotation = 0;
-				for (int x = -40; x <= 40; x += 2)
-				{
-					for (int y = -40; y <= 40; y += 2)
-					{
-						var checkTile = TileUtils.SafeGetTile(i + x, j + y);
-						if (checkTile.TileType == ModContent.TileType<WaterDeliveryHole_V>() || checkTile.TileType == ModContent.TileType<WaterDeliveryHole>())
-						{
-							var checkCenterTile = GetCenterTile(checkTile);
-							if (checkCenterTile != null && checkCenterTile.HasTile && checkCenterTile != currentCenterTile)
-							{
-								float checkRotation = 0;
-								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
-								{
-									checkRotation = -MathHelper.Pi;
-									if (checkCenterTile.TileFrameX == 36)
-									{
-										checkRotation = 0;
-									}
-								}
-								if (checkCenterTile.TileType == ModContent.TileType<WaterDeliveryHole>())
-								{
-									checkRotation = MathHelper.PiOver2;
-									if (checkCenterTile.TileFrameX == 36)
-									{
-										checkRotation = -MathHelper.PiOver2;
-									}
-								}
-								float dirDelta = (moveDirection - new Vector2(1, 0).RotatedBy(checkRotation)).Length() + 0.1f;
-								Vector2 dest = new Vector2(checkCenterTile.X(), checkCenterTile.Y()) * 16 + new Vector2(8);
-								float distance = Vector2.Distance(currentPos, dest) / dirDelta;
-								if (dirDelta < 1.9f)
-								{
-									distance *= 1.5f;
-								}
 
-								// if (cosTheta > 0.707f)
-								// {
-								// distance *= 4;
-								// distance += 400;
-								// }
-								// else if (cosTheta > -0.707f)
-								// {
-								// distance *= 2;
-								// distance += 400;
-								// }
-								if (distance < closestDistance)
-								{
-									closestDistance = distance;
-									destination = dest;
-									destRotation = checkRotation;
-								}
+			// x, y, direction
+			List<(int, int, int)> destinations = new List<(int, int, int)>();
+			for (int x = -40; x <= 40; x += 1)
+			{
+				for (int y = -40; y <= 40; y += 1)
+				{
+					var tile = TileUtils.SafeGetTile(i + x, j + y);
+					int style = TileObjectData.GetTileStyle(tile);
+					if (style >= 0)
+					{
+						int targetType = tile.TileType;
+						TileObjectData tileObjectData = TileObjectData.GetTileData(targetType, style);
+						int dir = GetDirection(tile, style);
+						if (x == 0 && y == 0)
+						{
+							currentDir = dir;
+							continue;
+						}
+						if (TileAtOriginPos(tile, style, tileObjectData) && dir >= 0)
+						{
+							if (!destinations.Contains((tile.X(), tile.Y(), dir)))
+							{
+								destinations.Add((tile.X(), tile.Y(), dir));
 							}
 						}
 					}
 				}
-				if (destination != Vector2.zeroVector)
+			}
+			if (destinations.Count > 0)
+			{
+				Vector2 closestDest = new Vector2(i + 100, j + 100);
+				int bestDir = -1;
+				float maxDirDis = 0;
+				foreach (var dest in destinations)
 				{
-					Teleport(player, destination, destRotation);
+					Vector2 directionDis = new Vector2(1, 0).RotatedBy(dest.Item3 * MathHelper.PiOver4) - new Vector2(1, 0).RotatedBy(currentDir * MathHelper.PiOver4);
+					if (directionDis.Length() > maxDirDis - 0.1f)
+					{
+						maxDirDis = directionDis.Length();
+						bestDir = dest.Item3;
+					}
+				}
+				foreach (var dest in destinations)
+				{
+					if(dest.Item3 != bestDir)
+					{
+						continue;
+					}
+					Vector2 destination = new Vector2(dest.Item1, dest.Item2);
+					float dis = (currentPos - destination).Length();
+					if (dis < (closestDest - currentPos).Length())
+					{
+						closestDest = destination;
+					}
+				}
+				if ((currentPos - closestDest).Length() < 40)
+				{
+					Teleport(player, closestDest * 16 + new Vector2(8), bestDir * MathHelper.PiOver4);
 				}
 			}
 		}
+	}
+
+	public int GetDirection(Tile tile, int style)
+	{
+		int targetType = tile.TileType;
+		int dir = -1;
+		if (targetType == ModContent.TileType<WaterDeliveryHole>())
+		{
+			if (style == 0)
+			{
+				dir = 6;
+			}
+			else
+			{
+				dir = 2;
+			}
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_V>())
+		{
+			if (style == 0)
+			{
+				dir = 4;
+			}
+			else
+			{
+				dir = 0;
+			}
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_BottomRight>())
+		{
+			dir = 1;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_BottomLeft>())
+		{
+			dir = 3;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_TopLeft>())
+		{
+			dir = 5;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_TopRight>())
+		{
+			dir = 7;
+		}
+		return dir;
+	}
+
+	public bool TileAtOriginPos(Tile tile, int style, TileObjectData tileObjectData)
+	{
+		return tile.TileFrameX - style * tileObjectData.Width * 18 == tileObjectData.Origin.X * 18 && tile.TileFrameY == tileObjectData.Origin.Y * 18;
 	}
 
 	public Tile GetCenterTile(Tile checkTile)
@@ -186,7 +211,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		player.Center = destination;
 		if (desVel.Y <= -2.82f)
 		{
-			player.Center += new Vector2(player.height / 2, 0).RotatedBy(-rotation);
+			player.Center += new Vector2(player.height / 2, 0).RotatedBy(-rotation) + player.velocity;
 		}
 
 		// player.velocity += new Vector2(-4, 0).RotatedBy(rotation);

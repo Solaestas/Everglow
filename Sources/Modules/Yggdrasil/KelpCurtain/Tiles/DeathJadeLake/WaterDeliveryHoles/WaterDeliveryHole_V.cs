@@ -31,6 +31,7 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 		TileObjectData.newTile.LavaDeath = true;
 
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+		TileObjectData.newTile.Origin = new Point16(0, 2);
 		TileObjectData.newAlternate.AnchorLeft = SolidOrSolidSideAnchor1TilesLong;
 		TileObjectData.newAlternate.Style = 1;
 		TileObjectData.addAlternate(1);

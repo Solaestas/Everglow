@@ -28,6 +28,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 		TileObjectData.newTile.LavaDeath = true;
 
 		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+		TileObjectData.newAlternate.Origin = new Point16(2, 1);
 		TileObjectData.newAlternate.AnchorTop = SolidOrSolidSideAnchor1TilesLong;
 		TileObjectData.newAlternate.Style = 1;
 		TileObjectData.addAlternate(1);
@@ -42,7 +43,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameX == 36 && tile.TileFrameY == 18 || tile.TileFrameX == 126 && tile.TileFrameY == 0)
+		if ((tile.TileFrameX == 36 && tile.TileFrameY == 18) || (tile.TileFrameX == 126 && tile.TileFrameY == 0))
 		{
 			int dir = -1;
 			if (tile.TileFrameX == 126)
