@@ -1,3 +1,4 @@
+using Everglow.Yggdrasil.Common;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Buffs;
@@ -18,12 +19,7 @@ public class Charred : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		npc.defense = (int)((1 - DefenseReduction) * npc.defense);
-		if (npc.defense < 0)
-		{
-			npc.defense = 0;
-		}
-
+		npc.GetGlobalNPC<YggdrasilGlobalNPC>().CharredActive = true;
 		npc.lifeRegen -= LifeRegenReductionFromDot;
 		npc.SetLifeRegenExpectedLossPerSecond(LifeRegenReductionFromDot);
 
