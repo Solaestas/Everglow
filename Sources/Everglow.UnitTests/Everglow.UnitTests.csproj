@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -16,6 +16,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+	<Target Name="CopyTModLoaderFiles" AfterTargets="Build">
+		<ItemGroup>
+			<TModLoaderDlls Include="$(tMLSteamPath)\**\tModLoader.dll" />
+			<TModLoaderDlls Include="$(tMLSteamPath)\**\FNA.dll" />
+			<TModLoaderDlls Include="$(tMLSteamPath)\**\ReLogic.dll" />
+			<EverglowDlls Include="..\..\Libraries\SubworldLibrary.dll" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(TModLoaderDlls)"
+			  DestinationFolder="$(OutputPath)"
+			  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(EverglowDlls)"
+			  DestinationFolder="$(OutputPath)"
+			  SkipUnchangedFiles="true" />
+	</Target>
 
   <ItemGroup>
     <ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
