@@ -14,7 +14,7 @@ TuskSurfaceBiome: {
 }
 
 FireflyBiome: {
-	DisplayName: Everglow Cocoon
+	DisplayName: Everglowing Cocoon
 	TownNPCDialogueName: the Everglow Cocoon
 }
 
