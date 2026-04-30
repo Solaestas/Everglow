@@ -281,14 +281,6 @@ public class ColliderManager : ILoadable
 				position.Y = customTileTop + 2;
 			}
 		}
-		if (Math.Abs(position.Y - oldPosY) > 9)
-		{
-			stepSpeed = 2;
-		}
-		else
-		{
-			stepSpeed = 1;
-		}
 	}
 
 	private void Collision_StepDown(On_Collision.orig_StepDown orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir, bool waterWalk)
