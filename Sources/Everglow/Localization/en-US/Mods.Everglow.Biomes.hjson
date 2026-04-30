@@ -4,7 +4,7 @@ YggdrasilTownBiome: {
 }
 
 TuskBiome: {
-	DisplayName: Tusk Tuya
+	DisplayName: Tusk Tableland
 	TownNPCDialogueName: the Tusk Tuya biome
 }
 
