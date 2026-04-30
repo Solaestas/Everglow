@@ -1,3 +1,6 @@
+using Everglow.Commons.TileHelper;
+using Everglow.Yggdrasil.WorldGeneration;
+
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
 
 public class GenerateMazeRoom : ModItem
@@ -26,5 +29,6 @@ public class GenerateMazeRoom : ModItem
 	public void BuildMazeRoom(Vector2 worldPos)
 	{
 		Point tilePos = worldPos.ToTileCoordinates();
+		List<Tile> tiles = YggdrasilWorldGeneration.BFSContinueTile(tilePos);
 	}
 }
