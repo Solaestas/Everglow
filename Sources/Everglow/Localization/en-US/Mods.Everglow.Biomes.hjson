@@ -24,8 +24,8 @@ FurnaceAreaBiome: {
 }
 
 JellyBallHotbedBiome: {
-	DisplayName: Jellyball Coldbed //temp
-	TownNPCDialogueName: the Jellyball Coldbed biome
+	DisplayName: Jellyball Hotbed
+	TownNPCDialogueName: the Jellyball Hotbed
 }
 
 LampWoodForest: {
@@ -38,13 +38,13 @@ MidnightBayouBiome: {
 	TownNPCDialogueName: the Midnight Marsh biome
 }
 
-TwilightForsetAndRelic: { //not sure what "AndRelic" means
+TwilightForsetAndRelic: {
 	DisplayName: Twilight Forest
 	TownNPCDialogueName: the Twilight Forest biome
 }
 
 KelpCurtainBiome: {
-	DisplayName: Moss Mantle //subject to change
+	DisplayName: Moss Mantle 
 	TownNPCDialogueName: the Moss Mantle biome
 }
 
