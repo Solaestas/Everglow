@@ -5,17 +5,17 @@ YggdrasilTownBiome: {
 
 TuskBiome: {
 	DisplayName: Tusk Tableland
-	TownNPCDialogueName: the Tusk Tuya biome
+	TownNPCDialogueName: the Tusk Tableland biome
 }
 
 TuskSurfaceBiome: {
 	DisplayName: Surface Tusk Tuya
-	TownNPCDialogueName: the Surface Tusk Tuya biome
+	TownNPCDialogueName: the Surface Tusk Tableland biome
 }
 
 FireflyBiome: {
 	DisplayName: Everglowing Cocoon
-	TownNPCDialogueName: the Everglow Cocoon
+	TownNPCDialogueName: the Everglowing Cocoon
 }
 
 FurnaceAreaBiome: {
