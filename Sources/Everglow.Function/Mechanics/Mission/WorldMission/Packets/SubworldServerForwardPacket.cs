@@ -40,7 +40,7 @@ public class SubworldServerForwardPacket_ToMain : IPacket
 			else
 			{
 				// Forward to main server
-				ModIns.PacketResolver.RouteToMainServer(packet);
+				//ModIns.PacketResolver.RouteToMainServer(packet);
 				Console.WriteLine(value: $"Sub server has received {(packet as SubworldServerForwardPacket_ToMain)._value}");
 				Console.WriteLine(value: $"Forward to main server {(packet as SubworldServerForwardPacket_ToMain)._value}");
 			}

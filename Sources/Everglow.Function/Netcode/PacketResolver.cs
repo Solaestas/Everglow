@@ -267,6 +267,7 @@ public class PacketResolver
 			writer.Write(packetID);
 			writer.Write(remainingData);
 
+			writer.Flush();
 			var forwardPacket = stream.ToArray();
 
 			// Forward packets here.
