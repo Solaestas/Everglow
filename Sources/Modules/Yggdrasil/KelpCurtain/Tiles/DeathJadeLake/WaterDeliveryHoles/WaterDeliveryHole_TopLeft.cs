@@ -1,44 +1,41 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
-using ModLiquidLib.Utils;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
-public class WaterDeliveryHole_V : ModTile, ISceneTile
+public class WaterDeliveryHole_TopLeft : ShapeDataTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
-		Main.tileFrameImportant[Type] = true;
-		Main.tileLavaDeath[Type] = true;
-		Main.tileWaterDeath[Type] = false;
+		TotalHeight = 4;
+		TotalWidth = 4;
+		CustomItemType = ModContent.ItemType<WaterDeliveryHole_Item>();
+
+		Main.tileSolid[Type] = false;
 		Main.tileBlendAll[Type] = true;
+		Main.tileFrameImportant[Type] = true;
+		Main.tileLavaDeath[Type] = false;
+		Main.tileWaterDeath[Type] = false;
+		Main.tileCut[Type] = false;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Height = 5;
-		TileObjectData.newTile.Width = 2;
-		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile, 5, 0);
-		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
-		TileObjectData.newTile.CoordinateHeights = new int[]
+		TileObjectData.newTile.Origin = new Point16(1, 1);
+		TileObjectData.newTile.Height = TotalHeight;
+		TileObjectData.newTile.Width = TotalWidth;
+		TileObjectData.newTile.CoordinateHeights = new int[TotalHeight];
+		for (int i = 0; i < TotalHeight; i++)
 		{
-			16,
-			16,
-			16,
-			16,
-			16,
-		};
+			TileObjectData.newTile.CoordinateHeights[i] = 16;
+		}
 		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.LavaDeath = true;
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-		TileObjectData.newAlternate.AnchorLeft = SolidOrSolidSideAnchor1TilesLong;
-		TileObjectData.newAlternate.Style = 1;
-		TileObjectData.addAlternate(1);
-
-		TileObjectData.newTile.Origin = new Point16(1, 2);
-		TileObjectData.newTile.AnchorRight = SolidOrSolidSideAnchor1TilesLong;
+		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
+
 		DustType = ModContent.DustType<WaterDeliveryHoleDust>();
 		AddMapEntry(new Color(78, 162, 255));
 	}
@@ -46,44 +43,39 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if (tile.TileFrameY == 36 && (tile.TileFrameX == 18 || tile.TileFrameX == 36))
+		if (tile.TileFrameX == 18 && tile.TileFrameY == 18)
 		{
-			int dir = -1;
-			if (tile.TileFrameX == 36)
-			{
-				dir = 1;
-			}
 			var vfx = new WaterDeliveryHole_VFX
 			{
 				Active = true,
 				Visible = true,
-				Position = new Vector2(i, j).ToWorldCoordinates(8, 8),
+				Position = new Point(i, j).ToWorldCoordinates(),
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = (dir - 1) * MathHelper.PiOver2,
+				Rotation = -MathHelper.PiOver4 * 3,
 			};
 			Ins.VFXManager.Add(vfx);
 			var warp = new WaterDeliveryHole_VFX_warp
 			{
 				Active = true,
 				Visible = true,
-				Position = new Vector2(i, j).ToWorldCoordinates(8, 8),
+				Position = new Point(i, j).ToWorldCoordinates(),
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = (dir - 1) * MathHelper.PiOver2,
+				Rotation = -MathHelper.PiOver4 * 3,
 			};
 			Ins.VFXManager.Add(warp);
-			var foreground = new WaterDeliveryHole_foreground
+			var foreground = new WaterDeliveryHole_Slope_foreground
 			{
 				Active = true,
 				Visible = true,
-				Position = new Vector2(i, j).ToWorldCoordinates(8, 8),
+				Position = new Point(i, j).ToWorldCoordinates(),
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = (dir - 1) * MathHelper.PiOver2,
+				Rotation = -MathHelper.PiOver4 * 3,
 			};
 			Ins.VFXManager.Add(foreground);
 		}
@@ -91,7 +83,7 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;
@@ -99,7 +91,7 @@ public class WaterDeliveryHole_V : ModTile, ISceneTile
 		Tile tile = Main.tile[i, j];
 		Texture2D tex = ModAsset.WaterDeliveryHole.Value;
 		Vector2 pos = new Vector2(i * 16, j * 16) - Main.screenPosition + zero;
-		spriteBatch.Draw(tex, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY + 90, 16, 16), new Color(0f, 0f, 0.7f, 0));
+		spriteBatch.Draw(tex, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY + 36, 16, 16), new Color(0f, 0f, 0.7f, 0));
 	}
 
 	public override void NearbyEffects(int i, int j, bool closer)

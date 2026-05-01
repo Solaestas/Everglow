@@ -554,7 +554,7 @@ public class KelpCurtainGeneration
 				{
 					if (!tile.HasTile)
 					{
-						tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+						tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
 						tile.HasTile = true;
 					}
 				}

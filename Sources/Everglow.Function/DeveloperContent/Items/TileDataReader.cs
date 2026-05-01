@@ -3,6 +3,7 @@ using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
+using Terraria.ObjectData;
 
 namespace Everglow.Commons.DeveloperContent.Items;
 
@@ -153,6 +154,11 @@ public class TileDataReaderSystem : Visual
 			if (ContinueTiles.Count < MaxContinueCount)
 			{
 				datas += "\nContinue Tiles : " + ContinueTiles.Count;
+			}
+			int multiStyle = TileObjectData.GetTileStyle(tile);
+			if(multiStyle >= 0)
+			{
+				datas += "\nMultiTile Style: " + multiStyle;
 			}
 		}
 		if (!tile.HasTile)

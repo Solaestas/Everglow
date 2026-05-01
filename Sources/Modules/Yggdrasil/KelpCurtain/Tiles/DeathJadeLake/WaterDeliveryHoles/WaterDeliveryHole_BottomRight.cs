@@ -1,40 +1,41 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 
-public class WaterDeliveryHole : ModTile, ISceneTile
+public class WaterDeliveryHole_BottomRight : ShapeDataTile, ISceneTile
 {
 	public override void SetStaticDefaults()
 	{
-		Main.tileFrameImportant[Type] = true;
-		Main.tileLavaDeath[Type] = true;
-		Main.tileWaterDeath[Type] = false;
+		TotalHeight = 4;
+		TotalWidth = 4;
+		CustomItemType = ModContent.ItemType<WaterDeliveryHole_Item>();
+
+		Main.tileSolid[Type] = false;
 		Main.tileBlendAll[Type] = true;
+		Main.tileFrameImportant[Type] = true;
+		Main.tileLavaDeath[Type] = false;
+		Main.tileWaterDeath[Type] = false;
+		Main.tileCut[Type] = false;
+
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 5;
-		AnchorData SolidOrSolidSideAnchor1TilesLong = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 5, 0);
-		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
-		TileObjectData.newTile.CoordinateHeights = new int[]
+		TileObjectData.newTile.Origin = new Point16(2, 2);
+		TileObjectData.newTile.Height = TotalHeight;
+		TileObjectData.newTile.Width = TotalWidth;
+		TileObjectData.newTile.CoordinateHeights = new int[TotalHeight];
+		for (int i = 0; i < TotalHeight; i++)
 		{
-			16,
-			16,
-		};
+			TileObjectData.newTile.CoordinateHeights[i] = 16;
+		}
 		TileObjectData.newTile.StyleHorizontal = true;
-		TileObjectData.newTile.LavaDeath = true;
-
-		TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-		TileObjectData.newAlternate.AnchorTop = SolidOrSolidSideAnchor1TilesLong;
-		TileObjectData.newAlternate.Style = 1;
-		TileObjectData.addAlternate(1);
-
-		TileObjectData.newTile.Origin = new Point16(2, 0);
-		TileObjectData.newTile.AnchorBottom = SolidOrSolidSideAnchor1TilesLong;
+		TileObjectData.newTile.LavaDeath = false;
 		TileObjectData.addTile(Type);
+
 		DustType = ModContent.DustType<WaterDeliveryHoleDust>();
 		AddMapEntry(new Color(78, 162, 255));
 	}
@@ -42,13 +43,8 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 	public void AddScene(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if ((tile.TileFrameX == 36 && tile.TileFrameY == 18) || (tile.TileFrameX == 126 && tile.TileFrameY == 0))
+		if (tile.TileFrameX == 36 && tile.TileFrameY == 36)
 		{
-			int dir = -1;
-			if(tile.TileFrameX == 126)
-			{
-				dir = 1;
-			}
 			var vfx = new WaterDeliveryHole_VFX
 			{
 				Active = true,
@@ -57,7 +53,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = dir * MathHelper.PiOver2,
+				Rotation = MathHelper.PiOver4,
 			};
 			Ins.VFXManager.Add(vfx);
 			var warp = new WaterDeliveryHole_VFX_warp
@@ -68,10 +64,10 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = dir * MathHelper.PiOver2,
+				Rotation = MathHelper.PiOver4,
 			};
 			Ins.VFXManager.Add(warp);
-			var foreground = new WaterDeliveryHole_foreground
+			var foreground = new WaterDeliveryHole_Slope_foreground
 			{
 				Active = true,
 				Visible = true,
@@ -79,7 +75,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 				OriginTilePos = new Point(i, j),
 				OriginTileType = Type,
 				Direction = 1,
-				Rotation = dir * MathHelper.PiOver2,
+				Rotation = MathHelper.PiOver4,
 			};
 			Ins.VFXManager.Add(foreground);
 		}
@@ -87,7 +83,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+		var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
 		if (Main.drawToScreen)
 		{
 			zero = Vector2.Zero;

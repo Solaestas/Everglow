@@ -1,5 +1,4 @@
 using Everglow.Commons.VFX.Scene;
-using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
@@ -7,6 +6,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 public class GiantGhostClawBarnacle_VFX : TileVFX
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawPlayers;
+
 	/// <summary>
 	/// Became 0.05f when local player inside the barnacle.
 	/// </summary>
@@ -14,10 +14,6 @@ public class GiantGhostClawBarnacle_VFX : TileVFX
 
 	public override void Update()
 	{
-		if (!SubworldSystem.IsActive<YggdrasilWorld>())
-		{
-			Active = false;
-		}
 		bool inside = false;
 		var collideMap = GiantGhostClawBarnacleCollideTile.PixelHideForeground;
 		for (int i = 0; i < collideMap.GetLength(0); i++)
@@ -27,7 +23,7 @@ public class GiantGhostClawBarnacle_VFX : TileVFX
 				if (collideMap[i, j] >= 200)
 				{
 					Point topLeft = OriginTilePos + new Point(i, j);
-					Rectangle collisionFrame = new Rectangle(topLeft.X * 16, topLeft.Y * 16, 16,16);
+					Rectangle collisionFrame = new Rectangle(topLeft.X * 16, topLeft.Y * 16, 16, 16);
 					if (Rectangle.Intersect(collisionFrame, Main.LocalPlayer.Hitbox) != Rectangle.emptyRectangle)
 					{
 						inside = true;
@@ -35,12 +31,12 @@ public class GiantGhostClawBarnacle_VFX : TileVFX
 					}
 				}
 			}
-			if(inside)
+			if (inside)
 			{
 				break;
 			}
 		}
-		if(inside)
+		if (inside)
 		{
 			Transparency = Transparency * 0.9f + 0.05f * 0.1f;
 		}

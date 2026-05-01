@@ -23,12 +23,13 @@ public class WaterDeliveryHole_VFX_warp : TileVFX
 		{
 			var pos = new Vector2(k * 3, 0).RotatedBy(Rotation);
 			float value = k / 300f;
-			float fade = 0.5f;
+			float fade = 0.15f;
 			if (k > 20)
 			{
 				fade *= (30 - k) / 10f;
 			}
-			Vector2 dir = new Vector2(1, 0).RotatedBy(Rotation + MathHelper.PiOver2);
+			Vector2 dir = new Vector2(1, 0).RotatedBy(Rotation + MathHelper.PiOver2) + Vector2.One;
+			dir *= 0.5f;
 			Color drawColor = new Color(dir.X, dir.Y, fade, 1f);
 			Color drawColor_side = new Color(dir.X, dir.Y, 0, 1f);
 			float coordX = MathF.Pow(value, 2);
