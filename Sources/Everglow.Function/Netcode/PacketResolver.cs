@@ -2,11 +2,66 @@ using Everglow.Commons.FeatureFlags;
 using Everglow.Commons.Netcode.Abstracts;
 using Everglow.Commons.Utilities;
 using SubworldLibrary;
+using Player_ID = System.Int32;
 using Packet_ID = System.Int32;
 
 #pragma warning disable SA1121 // Use built-in type alias
 
 namespace Everglow.Commons.Netcode;
+
+/// <summary>
+/// Specifies the network destination for a packet, relative to the caller's role.
+/// <para/> Determined by <see cref="NetUtils"/> based on <see cref="Main.netMode"/> and <see cref="SubworldSystem.Current"/>.
+/// </summary>
+public enum RouteDestination
+{
+	/// <summary>
+	/// Packet is handled only within the current world.
+	/// Useful for vanilla netcode.
+	/// </summary>
+	WorldOnly,
+
+	/// <summary>
+	/// Packet travels upward to the main world server.
+	/// <list type="bullet">
+	/// <item>
+	///     <term>Subworld server</term>
+	///     <description>Sends directly to main world.</description>
+	/// </item>
+	/// <item>
+	///     <term>Subworld client</term>
+	///     <description>Forwards through its subworld server (server relays transparently, no parsing).</description>
+	/// </item>
+	/// <item>
+	///     <term>Main world client</term>
+	///     <description>Sends directly to main world server.</description>
+	/// </item>
+	/// </list>
+	/// Typical use: mission progress reporting, validation requests, data aggregation.
+	/// </summary>
+	MainServer,
+
+	/// <summary>
+	/// Packet is broadcast downstream from the main world server to all endpoints.
+	/// Only the main world server is allowed to send this.
+	/// <list type="number">
+	/// <item>
+	///     <term>Main world clients</term>
+	///     <description>Direct delivery.</description>
+	/// </item>
+	/// <item>
+	///     <term>All subworld servers</term>
+	///     <description>Each subworld server will first execute the packet logic locally, then forward it to its own subworld clients.</description>
+	/// </item>
+	/// <item>
+	///     <term>Subworld clients</term>
+	///     <description>Indirectly, via subworld server forwarding.</description>
+	/// </item>
+	/// </list>
+	/// Typical use: global state synchronization, world events, system announcements.
+	/// </summary>
+	AllDownstream,
+}
 
 /// <summary>
 /// 用于管理封包发送、接收的类
@@ -49,6 +104,40 @@ public class PacketResolver
 		throw new ArgumentException($"Packet type {type.Name} does not exist.");
 	}
 
+	private byte[] SerializePacket(IPacket packet, RouteDestination destination, Player_ID sourcePlayer)
+	{
+		using MemoryStream ms = new();
+		using BinaryWriter bw = new(ms);
+
+		// 1. 写入 route 目标
+		bw.Write((byte)destination);
+
+		// 2. 写入来源玩家ID
+		bw.Write(sourcePlayer);
+
+		// 3. 写入封包ID
+		int id = packetIDMapping[packet.GetType()];
+		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
+		{
+			bw.Write(id);
+		}
+		else
+		{
+			bw.Write((byte)id);
+		}
+
+		// 4. 写入封包数据
+		packet.Send(bw);
+		bw.Flush();
+
+		return ms.ToArray();
+	}
+
+	private RouteDestination DeserializeRouteDestination(BinaryReader reader)
+	{
+		return (RouteDestination)reader.ReadByte();
+	}
+
 	/// <summary>
 	/// 向指定对象发送一个封包数据的实例
 	/// <br/>除特殊情况外，请尽可能使用封装版本<see cref="Send(IPacket, bool, Player)"/>
@@ -57,57 +146,30 @@ public class PacketResolver
 	/// <param name="packet"></param>
 	/// <param name="toClient"></param>
 	/// <param name="ignoreClient"></param>
-	public void Send(IPacket packet, int toClient = -1, int ignoreClient = -1)
+	private void Send(IPacket packet, RouteDestination destination, Player_ID toClient = -1, Player_ID ignoreClient = -1)
 	{
 		// 单人模式不要有任何动作
-		if (Main.netMode == NetmodeID.SinglePlayer)
+		if (NetUtils.IsSingle)
 		{
 			return;
 		}
+
+		var sourcePlayer = NetUtils.IsServer ? ignoreClient : Main.myPlayer;
+		var data = SerializePacket(packet, destination, sourcePlayer);
 
 		var modPacket = GetPacket();
-		using (MemoryStream ms = new())
-		{
-			// 写入来源玩家ID
-			if (NetUtils.IsServer)
-			{
-				modPacket.Write(ignoreClient);
-			}
-			else
-			{
-				modPacket.Write(Main.myPlayer);
-			}
-
-			// 写入封包ID
-			int id = packetIDMapping[packet.GetType()];
-			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
-			{
-				modPacket.Write(id);
-			}
-			else
-			{
-				modPacket.Write((byte)id);
-			}
-
-			// 写入封包数据
-			BinaryWriter bw = new(ms);
-			packet.Send(bw);
-			modPacket.Write(ms.GetBuffer(), 0, (int)ms.Position);
-			modPacket.Flush();
-		}
-
-		// 二次检测，如果是单人模式则不发送
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			return;
-		}
-
+		modPacket.Write(data);
 		modPacket.Send(toClient, ignoreClient);
+	}
+
+	public void Send(IPacket packet, Player_ID toClient = -1, Player_ID ignoreClient = -1)
+	{
+		Send(packet, RouteDestination.WorldOnly, toClient, ignoreClient);
 	}
 
 	/// <summary>
 	/// 向指定对象发送一个封包数据的实例
-	/// <br/> <see cref="Send(IPacket, Packet_ID, Packet_ID)"/>的封装版本，自动填充发送对象
+	/// <br/> <see cref="Send(IPacket, Player_ID, Player_ID)"/>的封装版本，自动填充发送对象
 	/// </summary>
 	/// <param name="packet"></param>
 	/// <param name="fromServer"></param>
@@ -124,87 +186,47 @@ public class PacketResolver
 		}
 	}
 
-	private byte[] SubworldPacketData(IPacket packet)
+	public void Route(IPacket packet, RouteDestination destination)
 	{
-		using MemoryStream ms = new();
-		using (BinaryWriter bw = new(ms))
-		{
-			// 写入来源玩家ID
-			var sourceEnd = NetUtils.IsServer ? -1 : Main.myPlayer;
-			bw.Write(sourceEnd);
-
-			// 写入封包ID
-			int id = packetIDMapping[packet.GetType()];
-			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
-			{
-				bw.Write(id);
-			}
-			else
-			{
-				bw.Write((byte)id);
-			}
-
-			// 写入封包数据
-			packet.Send(bw);
-			bw.Flush();
-		}
-
-		return ms.ToArray();
-	}
-
-	/// <summary>
-	/// Send packet to main server via <see cref="SubworldLibrary"/>.
-	/// <br/>This method should only be called on server.
-	/// <br/>Use <see cref="SubworldSystem.Current"/> to check the subworld type.
-	/// </summary>
-	/// <param name="packet"></param>
-	public void SendToMainServer(IPacket packet)
-	{
-		// 单人模式不要有任何动作
-		if (Main.netMode == NetmodeID.SinglePlayer)
+		if (NetUtils.IsSingle)
 		{
 			return;
 		}
 
-		var data = SubworldPacketData(packet);
-		SubworldSystem.SendToMainServer(_mod, data);
-	}
+		Debug.Assert(destination is not RouteDestination.WorldOnly, "Use Send() to send world only packets.");
 
-	/// <summary>
-	/// Send packet to specific sub server via <see cref="SubworldLibrary"/>.
-	/// <br/>This method should only be called on server.
-	/// <br/>Use <see cref="SubworldSystem.Current"/> with <c>SubworldSystem.Current == null</c> to ensure main server.
-	/// </summary>
-	/// <param name="packet"></param>
-	/// <param name="subserver"></param>
-	public void SendToSubServer(IPacket packet, int subserver)
-	{
-		// 单人模式不要有任何动作
-		if (Main.netMode == NetmodeID.SinglePlayer)
+		switch (destination)
 		{
-			return;
+			case RouteDestination.MainServer:
+				{
+					if (NetUtils.IsMainClient)
+					{
+						Send(packet, false, Main.LocalPlayer);
+					}
+					else if (NetUtils.IsSubServer)
+					{
+						var data = SerializePacket(packet, RouteDestination.MainServer, -1);
+						SubworldSystem.SendToMainServer(_mod, data);
+					}
+					else if (NetUtils.IsSubClient)
+					{
+						Send(packet, RouteDestination.MainServer);
+					}
+				}
+				break;
+			case RouteDestination.AllDownstream:
+				{
+					Debug.Assert(NetUtils.IsMainServer, "All downstream can only be sent from main world server!");
+
+					// Send to main clients
+					Send(packet);
+
+					// Send to all sub servers
+					var data = SerializePacket(packet, RouteDestination.AllDownstream, -1);
+					SubworldSystem.SendToAllSubservers(_mod, data);
+				}
+				break;
 		}
-
-		var data = SubworldPacketData(packet);
-		SubworldSystem.SendToSubserver(subserver, _mod, data);
-	}
-
-	/// <summary>
-	/// Send packet to all sub server via <see cref="SubworldLibrary"/>.
-	/// <br/>This method should only be called on server.
-	/// <br/>Use <see cref="SubworldSystem.Current"/> with <c>SubworldSystem.Current == null</c> to ensure main server.
-	/// </summary>
-	/// <param name="packet"></param>
-	public void SendToAllSubservers(IPacket packet)
-	{
-		// 单人模式不要有任何动作
-		if (Main.netMode == NetmodeID.SinglePlayer)
-		{
-			return;
-		}
-
-		var data = SubworldPacketData(packet);
-		SubworldSystem.SendToAllSubservers(_mod, data);
 	}
 
 	/// <summary>
@@ -214,6 +236,8 @@ public class PacketResolver
 	/// <param name="whoAmI"></param>
 	public void Resolve(BinaryReader reader, int _)
 	{
+		var destination = DeserializeRouteDestination(reader);
+
 		// 读取来源玩家ID
 		var sourcePlayer = reader.ReadInt32();
 
@@ -226,6 +250,41 @@ public class PacketResolver
 		else
 		{
 			packetID = reader.ReadByte();
+		}
+
+		// Forward packets
+		bool shouldForward = NetUtils.IsSubServer && destination != RouteDestination.WorldOnly;
+		if (shouldForward)
+		{
+			var headPosition = reader.BaseStream.Position;
+			byte[] remainingData = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+
+			using var stream = new MemoryStream();
+			using var writer = new BinaryWriter(stream);
+
+			writer.Write((byte)destination);
+			writer.Write(sourcePlayer);
+			writer.Write(packetID);
+			writer.Write(remainingData);
+
+			writer.Flush();
+			var forwardPacket = stream.ToArray();
+
+			// Forward packets here.
+			if (destination == RouteDestination.AllDownstream)
+			{
+				var modPacket = GetPacket();
+				modPacket.Write(forwardPacket);
+				modPacket.Send();
+
+				reader.BaseStream.Position = headPosition;
+			}
+			else if (destination == RouteDestination.MainServer)
+			{
+				// Forward only, no excuting packet logic.
+				SubworldSystem.SendToMainServer(_mod, forwardPacket);
+				return;
+			}
 		}
 
 		if (!packetHandlerRegistry.TryGetValue(packetID, out List<IPacketHandler> registeredHandlers))
@@ -253,9 +312,8 @@ public class PacketResolver
 		var modTypes = Ins.ModuleManager.Types.Where(type => !type.IsAbstract);
 		foreach (var type in modTypes.Where(type => type.IsAssignableTo(typeof(IPacket))))
 		{
-			if (!packetIDMapping.ContainsKey(type))
+			if (packetIDMapping.TryAdd(type, packetIDCounter))
 			{
-				packetIDMapping.Add(type, packetIDCounter);
 				packetIDToTypeMapping.Add(packetIDCounter, type);
 				packetIDCounter++;
 			}
