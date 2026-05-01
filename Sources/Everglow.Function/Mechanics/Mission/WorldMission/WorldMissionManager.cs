@@ -16,6 +16,8 @@ public class WorldMissionManager
 	public const int NetUpdateInterval = 60;
 #endif
 
+	public static bool SendText { get; private set; } = true;
+
 	public static WorldMissionManager Instance => ModContent.GetInstance<WorldMissionSystem>().Manager;
 
 	private IGameStateProvider _gameState;
@@ -39,6 +41,7 @@ public class WorldMissionManager
 	public WorldMissionManager(IGameStateProvider gameStateProvider)
 	{
 		_gameState = gameStateProvider;
+		SendText = false;
 	}
 
 	public void Load()
@@ -119,7 +122,7 @@ public class WorldMissionManager
 		}
 
 		if (UpdateTimer % NetUpdateInterval == 0
-			&& NetUtils.IsClient)
+			&& (NetUtils.IsClient || NetUtils.IsSubServer))
 		{
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
@@ -160,6 +163,19 @@ public class WorldMissionManager
 	public bool ResetMission(WorldMissionBase mission)
 	{
 		throw new NotImplementedException();
+	}
+
+	public static void NewText(string text, byte R, byte G, byte B)
+	{
+		NewText(text, new Color(R, G, B));
+	}
+
+	public static void NewText(string text, Color color)
+	{
+		if (SendText)
+		{
+			Main.NewText(text, color);
+		}
 	}
 
 	#region Persistence & Netcode

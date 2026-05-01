@@ -1,12 +1,13 @@
+using SubworldLibrary;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission;
 
-public class WorldMissionSystem : ModSystem
+public class WorldMissionSystem : ModSystem, ICopyWorldData
 {
 	private const string MissionManagerKey = "MissionManagerData";
 
-	public WorldMissionManager Manager;
+	public WorldMissionManager Manager { get; private set; }
 
 	public override void Load()
 	{
@@ -68,7 +69,20 @@ public class WorldMissionSystem : ModSystem
 	{
 		foreach (var player in Main.ActivePlayers)
 		{
-		
+
 		}
+	}
+
+	void ICopyWorldData.CopyMainWorldData()
+	{
+		var tag = new TagCompound();
+		SaveWorldData(tag);
+		SubworldSystem.CopyWorldData("EverglowMissionManager", tag);
+	}
+
+	void ICopyWorldData.ReadCopiedMainWorldData()
+	{
+		var tag = SubworldSystem.ReadCopiedWorldData<TagCompound>("EverglowMissionManager");
+		LoadWorldData(tag);
 	}
 }

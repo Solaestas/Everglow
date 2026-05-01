@@ -47,26 +47,26 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 				{
 					var unlockText = $"[{DisplayName}]任务已解锁";
 					var unlockTextColor = new Color(150, 150, 250);
-					Main.NewText(unlockText, unlockTextColor);
+					WorldMissionManager.NewText(unlockText, unlockTextColor);
 				}
 				else
 				{
 					var unlockText = $"[{DisplayName}]任务已恢复";
 					var unlockTextColor = new Color(150, 150, 250);
-					Main.NewText(unlockText, unlockTextColor);
+					WorldMissionManager.NewText(unlockText, unlockTextColor);
 				}
 			}
 			else if (State == WorldMissionState.Completed)
 			{
 				var completeText = $"[{DisplayName}]任务已完成";
 				var completeTextColor = new Color(150, 250, 150);
-				Main.NewText(completeText, completeTextColor);
+				WorldMissionManager.NewText(completeText, completeTextColor);
 			}
 			else if (State == WorldMissionState.Failed)
 			{
 				var failText = $"[{DisplayName}]任务已失败";
 				var failTextColor = new Color(250, 150, 150);
-				Main.NewText(failText, failTextColor);
+				WorldMissionManager.NewText(failText, failTextColor);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			if (deltaSync.NeedDeltaSync)
 			{
-				ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_SubProgress(WhoAmI, deltaSync));
+				ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync));
 			}
 		}
 	}

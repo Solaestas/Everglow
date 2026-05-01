@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
@@ -13,6 +14,8 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 		ItemType = itemType;
 		ItemCount = itemCount;
 	}
+
+	private int localProgress;
 
 	private float progress;
 
@@ -43,4 +46,12 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 	}
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+
+	public override void SendDelta(BinaryWriter bw)
+	{
+		if (NetUtils.IsSubServer)
+		{
+
+		}
+	}
 }

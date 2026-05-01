@@ -5,7 +5,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
+public class WorldConsumeItemObjective : WorldObjectiveBase
 {
 	public WorldConsumeItemObjective()
 	{
@@ -25,7 +25,7 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public int ConsumedCount { get; private set; }
 
-	public bool NeedDeltaSync => _localConsumedCount > 0;
+	public override bool NeedDeltaSync => _localConsumedCount > 0;
 
 	public override float Progress => Math.Clamp(ConsumedCount / (float)ItemCount, 0, 1);
 
@@ -99,7 +99,7 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 		}
 	}
 
-	public void SendDelta(BinaryWriter bw)
+	public override void SendDelta(BinaryWriter bw)
 	{
 		bw.Write(_localConsumedCount);
 
@@ -107,7 +107,7 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 		_localConsumedCount = 0;
 	}
 
-	public void ReceiveDelta(BinaryReader br)
+	public override void ReceiveDelta(BinaryReader br)
 	{
 		var count = br.ReadInt32();
 		ConsumedCount += count;
@@ -118,13 +118,13 @@ public class WorldConsumeItemObjective : WorldObjectiveBase, IDeltaSyncObjective
 		Console.WriteLine($"Received {count} times consuming to {ConsumedCount}.");
 	}
 
-	public void SendMain(BinaryWriter bw)
+	public override void SendMain(BinaryWriter bw)
 	{
 		bw.Write(ConsumedCount);
 		Console.WriteLine($"Sync {ConsumedCount} as total.");
 	}
 
-	public void ReceiveMain(BinaryReader br)
+	public override void ReceiveMain(BinaryReader br)
 	{
 		ConsumedCount = br.ReadInt32();
 		Console.WriteLine($"Received {ConsumedCount} as total.");

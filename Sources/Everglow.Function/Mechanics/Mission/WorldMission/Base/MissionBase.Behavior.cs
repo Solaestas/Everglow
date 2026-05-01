@@ -28,13 +28,33 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public HashSet<string> RewardClaimedPlayers { get; protected set; } = [];
 
+	public void Activate()
+	{
+		CurrentObjective = Objectives.First;
+
+		CurrentObjective?.Activate(this);
+	}
+
+	public void Deactivate()
+	{
+		CurrentObjective?.Deactivate();
+	}
+
+	public void ForceAdvanceObjective()
+	{
+		CurrentObjective.Deactivate(); // Make sure there's no registered hooks or other side effects from the current objective.
+		CurrentObjective = CurrentObjective.Next;
+		CurrentObjective.Activate(this);
+	}
+
 	public void Unlock()
 	{
 		if (UnlockCore())
 		{
 			var unlockText = $"[{DisplayName}]任务已解锁";
 			var unlockTextColor = new Color(150, 150, 250);
-			Main.NewText(unlockText, unlockTextColor);
+			WorldMissionManager.NewText(unlockText, unlockTextColor);
+
 
 			if (NetUtils.IsServer)
 			{
@@ -56,25 +76,6 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		OnUnlock();
 
 		return true;
-	}
-
-	public void Activate()
-	{
-		CurrentObjective = Objectives.First;
-
-		CurrentObjective?.Activate(this);
-	}
-
-	public void Deactivate()
-	{
-		CurrentObjective?.Deactivate();
-	}
-
-	public void ForceAdvanceObjective()
-	{
-		CurrentObjective.Deactivate(); // Make sure there's no registered hooks or other side effects from the current objective.
-		CurrentObjective = CurrentObjective.Next;
-		CurrentObjective.Activate(this);
 	}
 
 	public void Update()
@@ -123,7 +124,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			{
 				var failText = $"[{DisplayName}]任务已失败";
 				var failTextColor = new Color(250, 150, 150);
-				Main.NewText(failText, failTextColor);
+				WorldMissionManager.NewText(failText, failTextColor);
 
 				if (NetUtils.IsServer)
 				{
@@ -159,7 +160,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		{
 			var completeText = $"[{DisplayName}]任务已完成";
 			var completeTextColor = new Color(150, 250, 150);
-			Main.NewText(completeText, completeTextColor);
+			WorldMissionManager.NewText(completeText, completeTextColor);
 
 			if (NetUtils.IsServer)
 			{
@@ -190,7 +191,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		{
 			var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
 			var objectiveCompleteTextColor = new Color(250, 250, 150);
-			Main.NewText(objectiveCompleteText, objectiveCompleteTextColor);
+			WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
 
 			if (NetUtils.IsServer)
 			{
@@ -237,7 +238,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				return;
 			}
 
-			Main.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
+			WorldMissionManager.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
 		}
 		else if (NetUtils.IsClient)
 		{
@@ -358,8 +359,8 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		{
 			var oldObjective = CurrentObjective;
 			CurrentObjective = Objectives.FirstIncomplete;
-			Main.NewText($"目标已同步为: {CurrentObjective?.ObjectiveID ?? -1}", 150, 250, 150);
-			Main.NewText($"目标进度已同步为: {CurrentObjective?.Progress ?? -1}", 150, 250, 150);
+			WorldMissionManager.NewText($"目标已同步为: {CurrentObjective?.ObjectiveID ?? -1}", 150, 250, 150);
+			WorldMissionManager.NewText($"目标进度已同步为: {CurrentObjective?.Progress ?? -1}", 150, 250, 150);
 			if (oldState == WorldMissionState.Active && newState == WorldMissionState.Active)
 			{
 				oldObjective?.Deactivate();

@@ -3,7 +3,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
-public abstract class WorldObjectiveBase
+public abstract class WorldObjectiveBase : IDeltaSyncObjective
 {
 	public WorldObjectiveBase()
 	{
@@ -23,6 +23,8 @@ public abstract class WorldObjectiveBase
 	public List<Item> RewardItems { get; } = [];
 
 	public bool RewardClaimed { get; private set; } = false;
+
+	public virtual bool NeedDeltaSync => false;
 
 	public abstract bool CheckCompletion();
 
@@ -108,5 +110,21 @@ public abstract class WorldObjectiveBase
 	{
 		Completed = reader.ReadBoolean();
 		RewardClaimed = reader.ReadBoolean();
+	}
+
+	public virtual void SendDelta(BinaryWriter bw)
+	{
+	}
+
+	public virtual void ReceiveDelta(BinaryReader br)
+	{
+	}
+
+	public virtual void SendMain(BinaryWriter bw)
+	{
+	}
+
+	public virtual void ReceiveMain(BinaryReader br)
+	{
 	}
 }
