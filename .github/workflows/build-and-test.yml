@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: windows-latest
 
@@ -99,8 +99,8 @@ jobs:
       run: |
         Start-Process msiexec.exe -ArgumentList "/i xnafx40_redist.msi /quiet /norestart" -Wait
 
-    - name: Build with MSBuild
-      run: msbuild Everglow.sln /p:Configuration=Release /p:WarningLevel=0
+    - name: Build
+      run: dotnet build /p:Configuration=Release /p:WarningLevel=0
       
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: dotnet test --verbosity normal /p:WarningLevel=0
