@@ -197,7 +197,14 @@ public class PacketResolver
 
 		writer.Write((int)destination);
 		writer.Write(sourcePlayer);
-		writer.Write(packetID);
+		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
+		{
+			writer.Write(packetID);
+		}
+		else
+		{
+			writer.Write((byte)packetID);
+		}
 		writer.Write(data.Length);
 		writer.Write(data);
 
