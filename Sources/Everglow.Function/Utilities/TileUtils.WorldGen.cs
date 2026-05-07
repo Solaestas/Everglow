@@ -1,4 +1,4 @@
-using ModLiquidLib.Utils;
+using Terraria.ObjectData;
 using Terraria.Utilities;
 
 namespace Everglow.Commons.Utilities;
@@ -309,7 +309,7 @@ public partial class TileUtils
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlaceCircleAreaOfBlock(Point center, float radius, int type, int force = 0)
 	{
-		PlaceCircleAreaOfBlockWithRandomNoise(center.ToVector2(), radius, type, force);
+		PlaceCircleAreaOfBlock(center.ToVector2(), radius, type, force);
 	}
 
 	/// <summary>
@@ -352,11 +352,55 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tile within the polygon to the type. The polygon is a list of tile coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// Kill the tile within the circle(center, radius), but with a random noise affect on the bound.
 	/// </summary>
-	/// <param name="polygon">All the Vector2 is in Tile coord.</param>
-	/// <param name="type"></param>
+	/// <param name="center">Tile coord</param>
+	/// <param name="radius"></param>
+	/// <param name="type_be_killed"></param>
+	/// <param name="killStyle">-1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="noiseSize"></param>
 	/// <param name="force"></param>
+	public static void KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(Vector2 center, float radius, List<int> type_be_killed, int killStyle = -1, float noiseSize = 10f, int force = 0)
+	{
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin) / 255f;
+				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize && type_be_killed.Contains(tile.TileType))
+				{
+					ChangeTile(tile, killStyle, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Kill the tile within the circle(center, radius), but with a random noise affect on the bound.
+	/// </summary>
+	/// <param name="center">Tile coord</param>
+	/// <param name="radius"></param>
+	/// <param name="type_be_killed"></param>
+	/// <param name="killStyle">-1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="noiseSize"></param>
+	/// <param name="force"></param>
+	public static void KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(Point center, float radius, List<int> type_be_killed, int killStyle = -1, float noiseSize = 10f, int force = 0)
+	{
+		KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(center.ToVector2(), radius, type_be_killed, killStyle, noiseSize, force);
+	}
+
+	/// <summary>
+	/// Transform the tile within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlacePolygonAreaOfBlock(List<Vector2> polygon, int type, int force = 0)
 	{
 		if (polygon.Count < 3)
@@ -370,7 +414,7 @@ public partial class TileUtils
 			{
 				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
 				{
-					Tile tile = SafeGetTile(x, y);
+					Tile tile = SafeGetTile(new Vector2(x, y).ToTileCoordinates());
 					ChangeTile(tile, type, force);
 				}
 			}
@@ -378,12 +422,28 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Automatically offset the polygon by the anchorPos, then transform the tile within the polygon to the type. The polygon is a list of tile coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// Transform the tile within the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
 	/// </summary>
-	/// <param name="polygon"></param>
+	/// <param name="polygon">TILE coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonAreaOfBlock(List<Point> polygon, int type, int force = 0)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		PlacePolygonAreaOfBlock(polygon_Vector2, type, force);
+	}
+
+	/// <summary>
+	/// Automatically offset the polygon by the anchorPos, then transform the tile within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
 	/// <param name="anchorPos"></param>
 	/// <param name="type"></param>
-	/// <param name="force"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlacePolygonAreaOfBlockWithOffset(List<Vector2> polygon, Vector2 anchorPos, int type, int force = 0)
 	{
 		if (polygon.Count < 3)
@@ -407,6 +467,99 @@ public partial class TileUtils
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Automatically offset the polygon by the anchorPos, then transform the tile within the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">TILE coord</param>
+	/// <param name="anchorPos"></param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonAreaOfBlockWithOffset(List<Point> polygon, Vector2 anchorPos, int type, int force = 0)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		PlacePolygonAreaOfBlockWithOffset(polygon_Vector2, anchorPos, type, force);
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonBoundOfBlock(List<Vector2> polygon, int type, float thick, int force = 0)
+	{
+		if (polygon.Count < 3)
+		{
+			return;
+		}
+		for (int k = 0; k < polygon.Count; k++)
+		{
+			int nextIndex = k + 1;
+			if (nextIndex == polygon.Count)
+			{
+				nextIndex = 0;
+			}
+			PlaceLineBlock(polygon[k], polygon[nextIndex], thick, type, force);
+		}
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">TILE coord</param>
+	/// <param name="type"></param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonBoundOfBlock(List<Point> polygon, int type, float thick, int force = 0)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		PlacePolygonBoundOfBlock(polygon_Vector2, type, thick, force);
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// </summary>
+	/// <param name="pos0">WORLD coord</param>
+	/// <param name="pos1">WORLD coord</param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineBlock(Vector2 pos0, Vector2 pos1, float thick, int type, int force = 0)
+	{
+		Vector2 dir = pos0 - pos1;
+		if (dir == Vector2.zeroVector)
+		{
+			return;
+		}
+		Vector2 normalizedDir = dir.NormalizeSafe().RotatedBy(MathHelper.PiOver2);
+		List<Vector2> tiltRect = new List<Vector2>();
+		tiltRect.Add(pos0 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 - normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos0 - normalizedDir * thick * 0.5f);
+		PlacePolygonAreaOfBlock(tiltRect, type, force);
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// </summary>
+	/// <param name="pos0">TILE coord</param>
+	/// <param name="pos1">TILE coord</param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineBlock(Point pos0, Point pos1, float thick, int type, int force = 0)
+	{
+		PlaceLineBlock(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
 	}
 
 	public static void ChangeTile(Tile tile, int type, int force)
@@ -455,5 +608,445 @@ public partial class TileUtils
 				WorldGen.SquareWallFrame(x, y, true);
 			}
 		}
+	}
+
+	/// <summary>
+	/// Use BFS algorithm get the continue tiles from the check point.
+	/// </summary>
+	/// <param name="checkPoint"></param>
+	/// <param name="includeWall">If true, tile with no block but only wall will also be included.</param>
+	/// <param name="maxCount"></param>
+	/// <returns></returns>
+	public static List<Point> BFSContinueTile(Point checkPoint, bool includeWall = false, int maxCount = 512, List<int> theseTypeOnly = default)
+	{
+		int maxContinueCount = maxCount;
+		(int, int)[] directions =
+		{
+			(0, 1),
+			(1, 0),
+			(0, -1),
+			(-1, 0),
+		};
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// Add first point to the queue.
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// Check bound and obstruction.
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					(tile.HasTile || (includeWall && tile.WallType > WallID.None)) && !visited.Contains(point))
+				{
+					if (theseTypeOnly == default)
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+					else if (theseTypeOnly.Contains(tile.type))
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+				}
+			}
+			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			{
+				break;
+			}
+		}
+		return visited;
+	}
+
+	/// <summary>
+	/// Use BFS algorithm get the continue tiles from the check point.
+	/// </summary>
+	/// <param name="checkPoint"></param>
+	/// <param name="includeWall">If true, tile with wall will NOT be included.</param>
+	/// <param name="maxCount"></param>
+	/// <returns></returns>
+	public static List<Point> BFSContinueEmpty(Point checkPoint, bool includeWall = false, int maxCount = 512, List<int> ignoreTheseType = default)
+	{
+		int maxContinueCount = maxCount;
+		(int, int)[] directions =
+		{
+			(0, 1),
+			(1, 0),
+			(0, -1),
+			(-1, 0),
+		};
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// Add first point to the queue.
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// Check bound and obstruction.
+				bool flag0 = !tile.HasTile && (!includeWall || tile.WallType <= WallID.None);
+				bool flag1 = tile.HasTile && ignoreTheseType != default && ignoreTheseType.Contains(tile.TileType);
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					(flag0 || flag1) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			{
+				break;
+			}
+		}
+		return visited;
+	}
+
+	public static List<Point> BFSSurface(Point checkPoint, int maxCount = 512, bool ignoreFrameImportant = true, List<int> theseTypeOnly = default)
+	{
+		int maxContinueCount = maxCount;
+		(int, int)[] directions =
+		{
+			(0, 1),
+			(1, 0),
+			(0, -1),
+			(-1, 0),
+			(1, 1),
+			(1, -1),
+			(-1, -1),
+			(-1, 1),
+		};
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// Add first point to the queue.
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+				Tile tile_up = SafeGetTile(checkX, checkY - 1);
+				Tile tile_bottom = SafeGetTile(checkX, checkY + 1);
+				Tile tile_left = SafeGetTile(checkX - 1, checkY);
+				Tile tile_right = SafeGetTile(checkX + 1, checkY);
+				//Tile tile_upleft = SafeGetTile(checkX - 1, checkY - 1);
+				//Tile tile_bottomleft = SafeGetTile(checkX - 1, checkY + 1);
+				//Tile tile_upright = SafeGetTile(checkX + 1, checkY - 1);
+				//Tile tile_bottomright = SafeGetTile(checkX + 1, checkY - 1);
+
+				//bool flag0 = !tile_upleft.HasTile || !tile_upright.HasTile || !tile_bottomleft.HasTile || !tile_bottomright.HasTile;
+				// Check bound and obstruction.
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					tile.HasTile && (!tile_up.HasTile || !tile_bottom.HasTile || !tile_left.HasTile || !tile_right.HasTile) && (!ignoreFrameImportant || !Main.tileFrameImportant[tile.TileType]) && !visited.Contains(point))
+				{
+					if (theseTypeOnly == default)
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+					else if (theseTypeOnly.Contains(tile.type))
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+				}
+			}
+			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			{
+				break;
+			}
+		}
+		return visited;
+	}
+
+	public static List<Point> GenerateRandomSeeds(int xBoundLeft, int xBoundRight, int yBoundTop, int yBoundBottom, int expect_Count, float minDistance = 20)
+	{
+		List<Point> result = new List<Point>();
+		HashSet<Point> used = new HashSet<Point>();
+
+		int width = xBoundRight - xBoundLeft;
+		int height = yBoundBottom - yBoundTop;
+		float cellSize = minDistance / (float)Math.Sqrt(2);
+		int gridW = (int)Math.Ceiling(width / cellSize) + 2;
+		int gridH = (int)Math.Ceiling(height / cellSize) + 2;
+
+		Point?[,] grid = new Point?[gridW, gridH];
+		List<Point> active = new List<Point>();
+
+		int startX = (xBoundLeft + xBoundRight) / 2;
+		int startY = (yBoundTop + yBoundBottom) / 2;
+		result.Add(new Point(startX, startY));
+		used.Add(new Point(startX, startY));
+		active.Add(new Point(startX, startY));
+		SetGrid(grid, cellSize, xBoundLeft, yBoundTop, startX, startY);
+
+		while (active.Count > 0 && result.Count < expect_Count)
+		{
+			int idx = Main.rand.Next(active.Count);
+			var current = active[idx];
+			bool found = false;
+
+			for (int i = 0; i < 8; i++)
+			{
+				float angle = Main.rand.NextFloat(0f, MathHelper.TwoPi);
+				float dist = Main.rand.NextFloat(minDistance, minDistance * 2f);
+
+				int newX = current.X + (int)Math.Round(Math.Cos(angle) * dist);
+				int newY = current.Y + (int)Math.Round(Math.Sin(angle) * dist);
+
+				if (newX < xBoundLeft || newX > xBoundRight ||
+					newY < yBoundTop || newY > yBoundBottom)
+				{
+					continue;
+				}
+
+				int gx = (int)((newX - xBoundLeft) / cellSize);
+				int gy = (int)((newY - yBoundTop) / cellSize);
+
+				bool tooClose = false;
+
+				for (int cx = Math.Max(0, gx - 1); cx <= Math.Min(gridW - 1, gx + 1); cx++)
+				{
+					for (int cy = Math.Max(0, gy - 1); cy <= Math.Min(gridH - 1, gy + 1); cy++)
+					{
+						var pt = grid[cx, cy];
+						if (pt.HasValue)
+						{
+							float d = Vector2.Distance(
+								new Vector2(newX, newY),
+								new Vector2(pt.Value.X, pt.Value.Y));
+							if (d < minDistance)
+							{
+								tooClose = true;
+								break;
+							}
+						}
+					}
+					if (tooClose)
+					{
+						break;
+					}
+				}
+
+				if (!tooClose && !used.Contains(new Point(newX, newY)))
+				{
+					result.Add(new Point(newX, newY));
+					used.Add(new Point(newX, newY));
+					active.Add(new Point(newX, newY));
+					SetGrid(grid, cellSize, xBoundLeft, yBoundTop, newX, newY);
+					found = true;
+					break;
+				}
+			}
+
+			if (!found)
+			{
+				active.RemoveAt(idx);
+			}
+		}
+
+		return result;
+	}
+
+	private static void SetGrid(Point?[,] grid, float cellSize, int ox, int oy, int x, int y)
+	{
+		int gx = (int)((x - ox) / cellSize);
+		int gy = (int)((y - oy) / cellSize);
+		grid[gx, gy] = new Point(x, y);
+	}
+
+	public static bool TileAtOriginPos(Tile tile)
+	{
+		int style = TileObjectData.GetTileStyle(tile);
+		TileObjectData tileObjectData = TileObjectData.GetTileData(tile.TileType, style);
+		return tile.TileFrameX - style * tileObjectData.Width * 18 == tileObjectData.Origin.X * 18 && tile.TileFrameY == tileObjectData.Origin.Y * 18;
+	}
+
+	public static void PlaceWallAround(Tile tile, int wallType, bool middle = true, bool top = true, bool bottom = true, bool left = true, bool right = true)
+	{
+		PlaceWallAround(tile.X(), tile.Y(), wallType, middle, top, bottom, left, right);
+	}
+
+	public static void PlaceWallAround(int x, int y, int wallType, bool middle = true, bool top = true, bool bottom = true, bool left = true, bool right = true)
+	{
+		Tile tile = SafeGetTile(x, y);
+		if (middle)
+		{
+			tile.wall = (ushort)wallType;
+		}
+		Tile tile_top = SafeGetTile(x, y - 1);
+		if (top)
+		{
+			tile_top.wall = (ushort)wallType;
+		}
+		Tile tile_bottom = SafeGetTile(x, y + 1);
+		if (bottom)
+		{
+			tile_bottom.wall = (ushort)wallType;
+		}
+		Tile tile_left = SafeGetTile(x - 1, y);
+		if (left)
+		{
+			tile_left.wall = (ushort)wallType;
+		}
+		Tile tile_right = SafeGetTile(x + 1, y);
+		if (right)
+		{
+			tile_right.wall = (ushort)wallType;
+		}
+	}
+
+	private static readonly (int, int)[] directionsLiquid =
+	{
+		(1, 0),
+		(0, 1),
+		(-1, 0),
+	};
+
+	/// <summary>
+	/// Fill water or other liquid below pos. pos : in World coord.
+	/// </summary>
+	/// <param name="pos"></param>
+	/// <param name="type"></param>
+	/// <param name="maxCount"></param>
+	public static void FillLiquid(Point pos, int type = 0, int maxCount = 900)
+	{
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(pos);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directionsLiquid)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					!Collision.IsWorldPointSolid(point.ToWorldCoordinates()) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(point);
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > maxCount || visited.Count > maxCount)
+			{
+				break;
+			}
+		}
+		if (visited.Count < maxCount)
+		{
+			foreach (var checked_pos in visited)
+			{
+				Tile tile = SafeGetTile(checked_pos);
+				tile.LiquidType = (byte)type;
+				tile.LiquidAmount = 255;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Fill water or other liquid below center.center : in World coord.
+	/// </summary>
+	/// <param name="center">World coord</param>
+	/// <param name="type"></param>
+	public static void FillLiquid(Vector2 center, int type = 0, int maxCount = 900)
+	{
+		FillLiquid(center.ToTileCoordinates(), type, maxCount);
+	}
+
+	/// <summary>
+	/// Fill water or other liquid below pos.
+	/// </summary>
+	/// <param name="i"></param>
+	/// <param name="j"></param>
+	/// <param name="type"></param>
+	/// <param name="maxCount"></param>
+	public static void FillLiquid(int i, int j, int type = 0, int maxCount = 900)
+	{
+		FillLiquid(new Point(i, j), type, maxCount);
+	}
+
+	/// <summary>
+	/// Fill water or other liquid below center.center : in tile coord.
+	/// </summary>
+	/// <param name="center">Tile coord</param>
+	public static List<Point> BFSGetCanFillLiquidTiles(Vector2 center, int maxCount = 900)
+	{
+		return BFSGetCanFillLiquidTiles(center.ToTileCoordinates(), maxCount);
+	}
+
+	/// <summary>
+	/// Fill water or other liquid below pos. pos : in tile coord.
+	/// </summary>
+	/// <param name="pos">Tile coord</param>
+	public static List<Point> BFSGetCanFillLiquidTiles(Point pos, int maxCount = 900)
+	{
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// 将起始点加入队列
+		queueChecked.Enqueue(pos);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directionsLiquid)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Tile Tile = SafeGetTile(checkX, checkY);
+				Point point = new Point(checkX, checkY);
+				// 检查边界和障碍物
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					!Collision.IsWorldPointSolid(new Point(checkX, checkY).ToWorldCoordinates()) && !visited.Contains(point))
+				{
+					queueChecked.Enqueue(new Point(checkX, checkY));
+					visited.Add(point);
+				}
+			}
+			if (queueChecked.Count > maxCount || visited.Count > maxCount)
+			{
+				break;
+			}
+		}
+		return visited;
+	}
+
+	public static List<Point> BFSGetCanFillLiquidTiles(int i, int j, int maxCount = 900)
+	{
+		return BFSGetCanFillLiquidTiles(new Point(i, j), maxCount);
 	}
 }

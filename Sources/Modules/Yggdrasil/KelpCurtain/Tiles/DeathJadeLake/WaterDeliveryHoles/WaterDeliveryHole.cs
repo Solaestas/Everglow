@@ -107,8 +107,7 @@ public class WaterDeliveryHole : ModTile, ISceneTile
 			return;
 		}
 		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.1f, 0.2f, 0.5f));
-		var teleportSystem = ModContent.GetInstance<WaterDeliveryHole_TeleportPlayer>();
-		teleportSystem.GetDestinationAndTeleport(i, j);
+		WaterDeliveryHole_TeleportPlayer.GetDestinationAndTeleport(i, j);
 		base.NearbyEffects(i, j, closer);
 	}
 }

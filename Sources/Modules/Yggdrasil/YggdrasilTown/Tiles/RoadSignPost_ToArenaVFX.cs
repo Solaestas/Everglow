@@ -1,9 +1,9 @@
 using Everglow.Commons.VFX.Scene;
 using Everglow.SubSpace;
 using Everglow.SubSpace.Tiles;
-using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
+using static Everglow.Commons.Utilities.TileUtils;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
@@ -126,7 +126,7 @@ public class RoadSignPost_ToArenaVFX : TileVFX
 		{
 			NPC.NewNPCDirect(WorldGen.GetNPCSource_TileBreak(180, 190), new Point(180, 190).ToWorldCoordinates(), msg.Y);
 		}
-		YggdrasilWorldGeneration.SmoothTile(20, 20, Main.maxTilesX - 20, Main.maxTilesY - 20);
+		SmoothTile(20, 20, Main.maxTilesX - 20, Main.maxTilesY - 20);
 		TileUtils.PlaceFrameImportantTiles(70, 198, 2, 2, ModContent.TileType<ArenaChallengeSettingTile>());
 		WorldGen.PlaceChest(72, 199, 21, false, 33);
 	}

@@ -1,4 +1,3 @@
-using ModLiquidLib.Utils;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
@@ -32,7 +31,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		base.ModifyScreenPosition();
 	}
 
-	public void GetDestinationAndTeleport(int i, int j)
+	public static void GetDestinationAndTeleport(int i, int j)
 	{
 		Player player = Main.LocalPlayer;
 		WaterDeliveryHole_TeleportPlayer modPlayer = player.GetModPlayer<WaterDeliveryHole_TeleportPlayer>();
@@ -65,7 +64,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 					{
 						int targetType = tile.TileType;
 						TileObjectData tileObjectData = TileObjectData.GetTileData(targetType, style);
-						int dir = GetDirection(tile, style);
+						int dir = GetDirection(tile);
 						if (x == 0 && y == 0)
 						{
 							currentDir = dir;
@@ -84,6 +83,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 			if (destinations.Count > 0)
 			{
 				Vector2 closestDest = new Vector2(i + 100, j + 100);
+				float minDis = closestDest.Length() * 2;
 				int bestDir = -1;
 				float maxDirDis = 0;
 				foreach (var dest in destinations)
@@ -102,9 +102,16 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 						continue;
 					}
 					Vector2 destination = new Vector2(dest.Item1, dest.Item2);
-					float dis = (currentPos - destination).Length();
-					if (dis < (closestDest - currentPos).Length())
+					Vector2 toDes = destination - currentPos;
+					float dis = toDes.Length();
+					float cosValue = Vector2.Dot(toDes.SafeNormalize(Vector2.Zero), new Vector2(1, 0).RotatedBy(bestDir * MathHelper.PiOver4));
+					if (cosValue < 0.8)
 					{
+						dis += 50;
+					}
+					if (dis < minDis)
+					{
+						minDis = dis;
 						closestDest = destination;
 					}
 				}
@@ -116,10 +123,11 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		}
 	}
 
-	public int GetDirection(Tile tile, int style)
+	public static int GetDirection(Tile tile)
 	{
 		int targetType = tile.TileType;
 		int dir = -1;
+		int style = TileObjectData.GetTileStyle(tile);
 		if (targetType == ModContent.TileType<WaterDeliveryHole>())
 		{
 			if (style == 0)
@@ -161,46 +169,12 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		return dir;
 	}
 
-	public bool TileAtOriginPos(Tile tile, int style, TileObjectData tileObjectData)
+	public static bool TileAtOriginPos(Tile tile, int style, TileObjectData tileObjectData)
 	{
 		return tile.TileFrameX - style * tileObjectData.Width * 18 == tileObjectData.Origin.X * 18 && tile.TileFrameY == tileObjectData.Origin.Y * 18;
 	}
 
-	public Tile GetCenterTile(Tile checkTile)
-	{
-		return GetCenterTile(checkTile.X(), checkTile.Y());
-	}
-
-	public Tile GetCenterTile(int i, int j)
-	{
-		Tile tile = TileUtils.SafeGetTile(i, j);
-		int currentOffsetX = 0;
-		int currentOffsetY = 0;
-		bool fail = true;
-		if (tile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
-		{
-			currentOffsetX = -tile.TileFrameX / 18 + 1;
-			if (tile.TileFrameX >= 36)
-			{
-				currentOffsetX = -(tile.TileFrameX % 36) / 18;
-			}
-			currentOffsetY = -tile.TileFrameY / 18 + 2;
-			fail = false;
-		}
-		else if (tile.TileType == ModContent.TileType<WaterDeliveryHole>())
-		{
-			currentOffsetX = -(tile.TileFrameX % 90) / 18 + 2;
-			currentOffsetY = -tile.TileFrameY / 18 + 1;
-			fail = false;
-		}
-		if (fail)
-		{
-			Main.NewText("Fail to access target", Color.Red);
-		}
-		return TileUtils.SafeGetTile(i + currentOffsetX, j + currentOffsetY);
-	}
-
-	public void Teleport(Player player, Vector2 destination, float rotation)
+	public static void Teleport(Player player, Vector2 destination, float rotation)
 	{
 		WaterDeliveryHole_TeleportPlayer modPlayer = player.GetModPlayer<WaterDeliveryHole_TeleportPlayer>();
 		modPlayer.Active = true;
@@ -208,10 +182,10 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		modPlayer.OldPos = Main.screenPosition;
 
 		Vector2 desVel = new Vector2(4, 0).RotatedBy(-rotation);
-		player.Center = destination;
+		player.MountedCenter = destination;
 		if (desVel.Y <= -2.82f)
 		{
-			player.Center += new Vector2(player.height / 2, 0).RotatedBy(-rotation) + player.velocity;
+			player.MountedCenter += new Vector2(player.height / 2, 0).RotatedBy(-rotation) + player.velocity;
 		}
 
 		// player.velocity += new Vector2(-4, 0).RotatedBy(rotation);

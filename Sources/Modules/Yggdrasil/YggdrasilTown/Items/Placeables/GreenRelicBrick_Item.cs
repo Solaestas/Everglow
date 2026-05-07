@@ -22,26 +22,15 @@ public class GreenRelicBrick_Item : ModItem
 		Item.DefaultToPlaceableTile(ModContent.TileType<Bakery_Scene>());
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
-			Point point = Main.MouseWorld.ToTileCoordinates();
-			var checkTiles = YggdrasilWorldGeneration.BFSContinueTile(point, true, 1024);
-			foreach (var tile in checkTiles)
-			{
-				if (tile.TileType == TileID.GreenDungeonBrick)
-				{
-					tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
-				}
-
-				//if (tile.WallType == WallID.GreenDungeonSlab)
-				//{
-				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall>();
-				//}
-				//if (tile.WallType == WallID.GreenDungeon)
-				//{
-				//	tile.WallType = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
-				//}
-				tile.wall = 0;
-				//tile.wall = (ushort)ModContent.WallType<GreenRelicWall_Style2>();
-			}
+			//Point point = Main.MouseWorld.ToTileCoordinates();
+			//var checkTiles = TileUtils.BFSContinueTile(point, true, 1024);
+			//foreach (var tile in checkTiles)
+			//{
+			//	if (tile.TileType == TileID.GreenDungeonBrick)
+			//	{
+			//		tile.TileType = (ushort)ModContent.TileType<GreenRelicBrick>();
+			//	}
+			//}
 		}
 	}
 }

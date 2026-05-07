@@ -3,6 +3,7 @@ using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
+using Terraria;
 using Terraria.ObjectData;
 
 namespace Everglow.Commons.DeveloperContent.Items;
@@ -55,6 +56,7 @@ public class TileDataReaderSystem : Visual
 	public Point FixPoint;
 	public static List<int> OwnerPlayerWhoAmI = new List<int>();
 	public List<Point> ContinueTiles = new List<Point>();
+	public List<Point> SurfaceTiles = new List<Point>();
 	public List<Point> CheckLiquidTiles = new List<Point>();
 	public Point OldTilePos = new Point(0, 0);
 	public bool EverLasting = false;
@@ -111,7 +113,7 @@ public class TileDataReaderSystem : Visual
 			OwnerPlayerWhoAmI.Remove(player.whoAmI);
 			return;
 		}
-		Tile tile = Main.tile[i, j];
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		int colorType = ItemRarityID.White;
 		Color drawColor = Color.White;
 		if (!tile.HasTile)
@@ -120,20 +122,31 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		if (ContinueTiles.Count < MaxContinueCount)
+		if(tile.HasTile)
 		{
-			var drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
-			foreach (Point point in ContinueTiles)
+			if (ContinueTiles.Count < MaxContinueCount)
 			{
-				DrawBlockBound(point.X, point.Y, drawContinueColor);
+				var drawContinueColor = new Color(0.12f, 0.24f, 0.4f, 0);
+				foreach (var check_tile in ContinueTiles)
+				{
+					DrawBlockBound(check_tile.X, check_tile.Y, drawContinueColor);
+				}
+			}
+			if (SurfaceTiles.Count < MaxContinueCount)
+			{
+				var drawSurfaceTilesColor = new Color(0.8f, 0.03f, 0.06f, 0);
+				foreach (var check_tile in SurfaceTiles)
+				{
+					DrawBlockBound(check_tile.X, check_tile.Y, drawSurfaceTilesColor);
+				}
 			}
 		}
 		if (CheckLiquidTiles.Count < MaxContinueCount)
 		{
 			var drawContinueColor = new Color(0.0f, 0.0f, 0.6f, 0);
-			foreach (Point point in CheckLiquidTiles)
+			foreach (var check_tile in CheckLiquidTiles)
 			{
-				DrawBlockBound(point.X, point.Y, drawContinueColor);
+				DrawBlockBound(check_tile.X, check_tile.Y, drawContinueColor);
 			}
 		}
 		string datas = GetDatas(i, j);
@@ -155,18 +168,25 @@ public class TileDataReaderSystem : Visual
 			{
 				datas += "\nContinue Tiles : " + ContinueTiles.Count;
 			}
+			if (SurfaceTiles.Count < MaxContinueCount)
+			{
+				datas += "\nSurface Tiles : " + SurfaceTiles.Count;
+			}
 			int multiStyle = TileObjectData.GetTileStyle(tile);
-			if(multiStyle >= 0)
+			if (multiStyle >= 0)
 			{
 				datas += "\nMultiTile Style: " + multiStyle;
 			}
 		}
 		if (!tile.HasTile)
 		{
-			datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
+			if (CheckLiquidTiles.Count <= 900)
+			{
+				datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
+			}
 		}
 
-		if(tile.WallType > 0)
+		if (tile.WallType > WallID.None)
 		{
 			datas += "\nWallType :" + tile.WallType;
 			datas += " " + WallID.Search.GetName(tile.WallType);
@@ -183,105 +203,16 @@ public class TileDataReaderSystem : Visual
 	/// <returns></returns>
 	public void UpdateContinueTiles(int i, int j)
 	{
-		ContinueTiles = new List<Point>();
-		CheckLiquidTiles = new List<Point>();
-		BFSContinueTile(i, j);
-		BFSFillLiquid(i, j);
-	}
-
-	private static readonly (int, int)[] directions =
-	{
-		(0, 1),
-		(1, 0),
-		(0, -1),
-		(-1, 0),
-	};
-
-	private static readonly (int, int)[] directionsLiquid =
-	{
-		(1, 0),
-		(0, 1),
-		(-1, 0),
-	};
-
-	public void BFSContinueTile(int i, int j)
-	{
-		BFSContinueTile(new Point(i, j));
-	}
-
-	public void BFSContinueTile(Point checkPoint)
-	{
-		var queueChecked = new Queue<Point>();
-
-		// 将起始点加入队列
-		queueChecked.Enqueue(checkPoint);
-		var visited = new List<Point>();
-
-		while (queueChecked.Count > 0)
+		Tile tile = TileUtils.SafeGetTile(i, j);
+		if(tile.HasTile)
 		{
-			var tilePos = queueChecked.Dequeue();
-
-			foreach (var (dx, dy) in directions)
-			{
-				int checkX = tilePos.X + dx;
-				int checkY = tilePos.Y + dy;
-				var point = new Point(checkX, checkY);
-				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
-
-				// 检查边界和障碍物
-				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
-					tile.HasTile && !visited.Contains(point))
-				{
-					queueChecked.Enqueue(point);
-					visited.Add(point);
-				}
-			}
-			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
-			{
-				break;
-			}
+			SurfaceTiles = TileUtils.BFSSurface(new Point(i, j), 625);
+			ContinueTiles = TileUtils.BFSContinueTile(new Point(i, j), false, 625);
 		}
-		ContinueTiles = visited;
-	}
-
-	public void BFSFillLiquid(int i, int j)
-	{
-		BFSFillLiquid(new Point(i, j));
-	}
-
-	public void BFSFillLiquid(Point checkPoint)
-	{
-		var queueChecked = new Queue<Point>();
-
-		// 将起始点加入队列
-		queueChecked.Enqueue(checkPoint);
-		var visited = new List<Point>();
-
-		while (queueChecked.Count > 0)
+		else
 		{
-			var tilePos = queueChecked.Dequeue();
-
-			foreach (var (dx, dy) in directionsLiquid)
-			{
-				int checkX = tilePos.X + dx;
-				int checkY = tilePos.Y + dy;
-				var point = new Point(checkX, checkY);
-				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
-
-				// 检查边界和障碍物
-				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
-					!Collision.IsWorldPointSolid(point.ToWorldCoordinates()) && !visited.Contains(point))
-				{
-					queueChecked.Enqueue(point);
-					visited.Add(point);
-				}
-			}
-			if (queueChecked.Count > MaxContinueCount || visited.Count > MaxContinueCount)
-			{
-				break;
-			}
+			CheckLiquidTiles = TileUtils.BFSGetCanFillLiquidTiles(i, j);
 		}
-		CheckLiquidTiles = visited;
 	}
 
 	public void DrawBlockBound(int i, int j, Color color)

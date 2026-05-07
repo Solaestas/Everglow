@@ -108,4 +108,19 @@ public partial class TileUtils
 
 		return false;
 	}
+
+	public static int X(this Tile tile)
+	{
+		return (tile.GetHashCode() - tile.Y()) / Main.tile.Height;
+	}
+
+	public static int Y(this Tile tile)
+	{
+		return tile.GetHashCode() % Main.tile.Height;
+	}
+
+	public static Vector2 Center(this Tile tile)
+	{
+		return new Point(tile.X(), tile.Y()).ToWorldCoordinates();
+	}
 }

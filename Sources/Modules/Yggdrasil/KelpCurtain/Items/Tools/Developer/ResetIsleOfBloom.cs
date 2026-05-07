@@ -1,5 +1,6 @@
 using Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
 using Everglow.Yggdrasil.WorldGeneration;
+using static Everglow.Commons.Utilities.TileUtils;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
 
@@ -37,7 +38,7 @@ public class ResetIsleOfBloom : ModItem
 			{
 				var checkPoint = tilePos + new Point(x, y);
 				var tile = TileUtils.SafeGetTile(checkPoint);
-				float value0 = YggdrasilWorldGeneration.GetPerlinPixelG(x, y) * 12;
+				float value0 = GetPerlinPixelG(x, y) * 12;
 				if (y < 4 + value0)
 				{
 					tile.TileType = (ushort)ModContent.TileType<Tiles.OldMoss>();
@@ -46,7 +47,7 @@ public class ResetIsleOfBloom : ModItem
 				{
 					tile.TileType = (ushort)ModContent.TileType<Tiles.MossProneSandSoil>();
 				}
-				float value1 = YggdrasilWorldGeneration.GetPerlinPixelR(x, y);
+				float value1 = GetPerlinPixelR(x, y);
 				if (y > value1 * 3 + value0)
 				{
 					tile.HasTile = true;
@@ -120,7 +121,7 @@ public class ResetIsleOfBloom : ModItem
 							break;
 						}
 					}
-					float value2 = YggdrasilWorldGeneration.GetPerlinPixelG(x * 24, surfaceY) * 40;
+					float value2 = GetPerlinPixelG(x * 24, surfaceY) * 40;
 					for (int j = 0; j <= 27 + value2; j++)
 					{
 						var checkPoint = tilePos + new Point(x, surfaceY - j);
@@ -193,7 +194,7 @@ public class ResetIsleOfBloom : ModItem
 					}
 					if (surfaceY < 30)
 					{
-						float value2 = YggdrasilWorldGeneration.GetPerlinPixelG(x * 12, surfaceY) * 4;
+						float value2 = GetPerlinPixelG(x * 12, surfaceY) * 4;
 						for (int j = 0; j <= 1 + value2; j++)
 						{
 							var checkPoint = tilePos + new Point(x, surfaceY - j);

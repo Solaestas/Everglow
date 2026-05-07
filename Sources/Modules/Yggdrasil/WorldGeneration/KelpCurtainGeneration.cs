@@ -1,16 +1,27 @@
 using Everglow.Yggdrasil.Common.Tiles;
+using Everglow.Yggdrasil.Common.Walls;
 using Everglow.Yggdrasil.KelpCurtain;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Terraria.ObjectData;
+using static Everglow.Commons.Utilities.TileUtils;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.WorldGeneration;
 
 public class KelpCurtainGeneration
 {
+	/// <summary>
+	/// Tile coord.
+	/// </summary>
+	public static int UnderWaterMazeTopY = -1;
+
+	public static List<int> WaterDeliveryHoleTiles = new List<int>();
+
 	public static void BuildKelpCurtain()
 	{
 		Initialize();
@@ -40,6 +51,13 @@ public class KelpCurtainGeneration
 	/// </summary>
 	public static void Initialize()
 	{
+		WaterDeliveryHoleTiles = new List<int>();
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole>());
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole_V>());
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole_BottomLeft>());
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole_BottomRight>());
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole_TopLeft>());
+		WaterDeliveryHoleTiles.Add(ModContent.TileType<WaterDeliveryHole_TopRight>());
 	}
 
 	/// <summary>
@@ -522,58 +540,751 @@ public class KelpCurtainGeneration
 		lakeCenterX = (int)(Main.maxTilesX * 0.5);
 		int lakeBottomYHalfX = (int)(Main.maxTilesY * 0.88);
 		lakeBottomYHalfX += CheckSpaceDown(lakeCenterX, lakeBottomYHalfX);
-		float halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
+		int yBoundTop = lakeSurfaceY + 45;
+		UnderWaterMazeTopY = yBoundTop;
+		int yBoundBottom = lakeBottomYHalfX + 15;
+
+		// We need a bound of Yggdrasil Black Rock.
+		List<Vector2> MazeBoundPolygon = new List<Vector2>();
+		int distance_Center_Left = CheckSpaceLeft(lakeCenterX, yBoundTop);
+		int distance_Center_Right = CheckSpaceRight(lakeCenterX, yBoundTop);
+		MazeBoundPolygon.Add(new Vector2(lakeCenterX - distance_Center_Left, yBoundTop) * 16);
+		for (int dx = lakeCenterX - distance_Center_Left + 5; dx < lakeCenterX + distance_Center_Right; dx += 10)
+		{
+			int depthOfLake = CheckSpaceDown(dx, yBoundTop);
+			MazeBoundPolygon.Add(new Vector2(dx, yBoundTop + depthOfLake) * 16);
+		}
+		MazeBoundPolygon.Add(new Vector2(lakeCenterX + distance_Center_Right, yBoundTop) * 16);
+		PlacePolygonBoundOfBlock(MazeBoundPolygon, ModContent.TileType<YggdrasilBlackRock>(), 40, (int)TileChangeState.Forceful);
 
 		// Random seed Points
-		int seedCount = 120;
-		Point size = new Point((int)(Main.maxTilesX * 0.3f), (int)(halfHeight / 0.6f));
-		List<(int X, int Y)> seeds = MazeUnderLake_GenerateRandomSeeds(size, seedCount);
-
+		List<Point> seeds = GenerateRandomSeeds(xBoundLeft - 30, xBoundRight + 30, yBoundTop - 30, yBoundBottom + 30, 180, 25);
 		for (int x = xBoundLeft; x < xBoundRight; x++)
 		{
-			halfHeight = (lakeBottomYHalfX - lakeSurfaceY) * 0.6f;
-			halfHeight += GetPerlinPixelG(x, 60) * 16f;
-			float thick = 10 + GetPerlinPixelB(x + 32, 140) * 8f;
-			if (x >= xBoundRight - 30)
+			for (int y = yBoundTop; y < yBoundBottom; y++)
 			{
-				float valueH = MathF.Pow((30 + x - xBoundRight) / 6f, 2);
-				halfHeight += valueH;
-				thick += valueH;
-			}
-			for (int y = 0; y < halfHeight; y++)
-			{
-				float value = 0;
-				if (y >= halfHeight - thick)
-				{
-					value += (thick - (halfHeight - y)) / (float)thick;
-				}
-
 				// Exist a projection. SeedMap is not TileMap.
-				var tile = TileUtils.SafeGetTile(x, lakeBottomYHalfX - y);
-				if (MazeUnderLake_IsEdgePoint(x - xBoundLeft + 15, y + 30, seeds) || value >= 0.2f)
+				var tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
 				{
-					if (!tile.HasTile)
+					if (MazeUnderLake_IsEdgePoint(x, y, seeds))
 					{
 						tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
 						tile.HasTile = true;
 					}
+					if (MazeUnderLake_IsEdgePoint(x, y, seeds, 1.8f))
+					{
+						tile.wall = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
+					}
 				}
 			}
 		}
-		float middleSeedPosX = (xBoundRight - xBoundLeft) / 2f;
-		float minDis = 200;
-		Vector2 centerSeed = Vector2.zeroVector;
-		foreach (var seed in seeds)
+
+		for (int x = xBoundLeft; x < xBoundRight; x++)
 		{
-			Vector2 check = new Vector2(seed.X, seed.Y);
-			Vector2 toCenter = check - new Vector2(middleSeedPosX, 60);
-			if (toCenter.Length() < minDis)
+			for (int y = yBoundTop - 10; y <= yBoundTop + 10; y++)
 			{
-				minDis = toCenter.Length();
-				centerSeed = check;
+				// Exist a projection. SeedMap is not TileMap.
+				int value = y - yBoundTop;
+				var tile = SafeGetTile(x, y);
+				if (!tile.HasTile)
+				{
+					if (value > -GetPerlinPixelG(x, y) * 4f - 4f && value < GetPerlinPixelR(x, y) * 4f + 4f)
+					{
+						tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
+						tile.HasTile = true;
+						if (value > -GetPerlinPixelG(x, y) * 4f - 3f && value < GetPerlinPixelR(x, y) * 4f + 3f)
+						{
+							tile.wall = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
+						}
+					}
+				}
 			}
 		}
-		CircleTile(new Vector2(xBoundLeft + centerSeed.X, lakeBottomYHalfX - centerSeed.Y), 10, ModContent.TileType<OldMoss>());
+		Dictionary<Point, List<Point>> holes = new Dictionary<Point, List<Point>>();
+		Point mediumSeedPos = default;
+		float minDisToCenter = new Vector2(xBoundRight - xBoundLeft, yBoundBottom - yBoundTop).Length();
+		foreach (var pos in seeds)
+		{
+			float boundRange = 8;
+			Vector2 center = new Vector2(xBoundLeft + xBoundRight, yBoundTop + yBoundBottom) * 0.5f;
+			float toCenterDis = new Vector2(pos.X - center.X, pos.Y - center.Y).Length();
+			if (toCenterDis < minDisToCenter)
+			{
+				minDisToCenter = toCenterDis;
+				mediumSeedPos = pos;
+			}
+			if (pos.X >= xBoundLeft + boundRange && pos.X <= xBoundRight - boundRange && pos.Y <= yBoundBottom - boundRange && pos.Y >= yBoundTop + boundRange && !SafeGetTile(pos).HasTile)
+			{
+				MazeUnderLake_AddNewConnection(pos, holes, seeds);
+			}
+		}
+		if (mediumSeedPos != default)
+		{
+			int maxStep = 10;
+			for (int t = 0; t < maxStep; t++)
+			{
+				List<Point> connectedWithMediumSeeds = MazeUnderLake_GetAllConnectedPoints(holes, seeds, new List<Point>(), mediumSeedPos, 0);
+				foreach (var pos in connectedWithMediumSeeds)
+				{
+					bool noTileWithin5x5 = true;
+					for (int dx = -2; dx <= 2; dx++)
+					{
+						for (int dy = -2; dy <= 2; dy++)
+						{
+							Tile surroundTile = SafeGetTile(pos.X + dx, pos.Y + dy);
+							if (surroundTile.HasTile)
+							{
+								noTileWithin5x5 = false;
+								break;
+							}
+						}
+						if (!noTileWithin5x5)
+						{
+							break;
+						}
+					}
+					if (noTileWithin5x5)
+					{
+						MazeUnderLake_AddNewConnectionWithMediumNet(pos, holes, seeds, connectedWithMediumSeeds);
+					}
+				}
+			}
+		}
+		foreach (var pos in seeds)
+		{
+			bool inTheArea = MathUtils.IsPointInPolygon(MazeBoundPolygon, pos.ToWorldCoordinates());
+			if (!inTheArea)
+			{
+				continue;
+			}
+			bool flag0 = holes.ContainsKey(pos);
+			if (flag0)
+			{
+				continue;
+			}
+			bool canFill = true;
+			foreach (var des in seeds)
+			{
+				bool flag2 = holes.ContainsKey(des) && holes[des].Contains(pos);
+				if (flag2)
+				{
+					canFill = false;
+					break;
+				}
+			}
+			if (canFill)
+			{
+				List<Point> cellArea = BFSContinueEmpty(pos, false, 1024);
+				foreach (var cell_pos in cellArea)
+				{
+					MazeUnderLake_FillYggdrasilBlackRock(cell_pos.X, cell_pos.Y);
+				}
+			}
+		}
+		for (int x = xBoundLeft; x < xBoundRight; x += 5)
+		{
+			for (int y = yBoundTop; y <= yBoundBottom; y += 5)
+			{
+				List<Point> cellArea = BFSContinueEmpty(new Point(x, y), false, 25);
+				if (cellArea.Count < 25 && cellArea.Count > 0)
+				{
+					foreach (var pos in cellArea)
+					{
+						MazeUnderLake_FillYggdrasilBlackRock(pos.X, pos.Y);
+					}
+				}
+			}
+		}
+		foreach (var pos in seeds)
+		{
+			bool inTheArea = MathUtils.IsPointInPolygon(MazeBoundPolygon, pos.ToWorldCoordinates());
+			if (!inTheArea)
+			{
+				continue;
+			}
+
+			List<Point> tiles = BFSContinueEmpty(pos, false, 1536, WaterDeliveryHoleTiles);
+			MazeUnderLake_BuildDesolateRoom(tiles);
+		}
+	}
+
+	public static void MazeUnderLake_BuildDesolateRoom(List<Point> tiles)
+	{
+		int maxY = 0;
+		foreach (var pos in tiles)
+		{
+			maxY = Math.Max(maxY, pos.Y);
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
+			if (pos.Y > maxY - 7 + GetPerlinPixelB(pos.X, pos.Y) && !tile.HasTile)
+			{
+				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+				tile.HasTile = true;
+				PlaceWallAround(tile, (ushort)ModContent.WallType<DarkLakeBottomMudWall>(), true, false);
+			}
+			if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+			{
+				if (tile == MazeUnderLake_WaterDeliveryHole_GetCenterTile(pos.X, pos.Y))
+				{
+					int dir = MazeUnderLake_WaterDeliveryHole_GetDirection(tile);
+					Vector2 checkTilePos = tile.Center();
+					Vector2 normal = new Vector2(8, 0).RotatedBy(MathHelper.PiOver4 * dir);
+					checkTilePos += normal * 4;
+					List<Vector2> shouldClearTilePos = new List<Vector2>();
+					for (int k = 0; k < 32; k++)
+					{
+						checkTilePos += normal;
+						shouldClearTilePos.Add(checkTilePos);
+						if (SafeGetTile(checkTilePos.ToTileCoordinates()).TileType != ModContent.TileType<DarkLakeBottomMud>())
+						{
+							shouldClearTilePos.Add(checkTilePos + normal);
+							shouldClearTilePos.Add(checkTilePos + normal * 2);
+							shouldClearTilePos.Add(checkTilePos + normal * 3);
+							Main.NewText(SafeGetTile(checkTilePos.ToTileCoordinates()).TileType);
+							break;
+						}
+					}
+					foreach (var corePos in shouldClearTilePos)
+					{
+						KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(corePos.ToTileCoordinates(), 3, new List<int> { ModContent.TileType<DarkLakeBottomMud>(), ModContent.TileType<YggdrasilBlackRock>() });
+					}
+				}
+			}
+		}
+
+		// foreach (var pos in tiles)
+		// {
+		// if (tile.Y() == maxY - 5)
+		// {
+		// if (GenRand.NextBool(18))
+		// {
+		// int height = GenRand.Next(1, 7);
+		// for (int j = 0; j < height; j++)
+		// {
+		// var algeeTile = SafeGetTile(tile.X(), tile.Y() - j);
+		// algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
+		// algeeTile.HasTile = true;
+		// }
+		// }
+		// }
+		// }
+	}
+
+	public static int MazeUnderLake_WaterDeliveryHole_GetDirection(Tile tile)
+	{
+		int targetType = tile.TileType;
+		int dir = -1;
+		int style = TileObjectData.GetTileStyle(tile);
+		if (targetType == ModContent.TileType<WaterDeliveryHole>())
+		{
+			if (style == 0)
+			{
+				dir = 6;
+			}
+			else
+			{
+				dir = 2;
+			}
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_V>())
+		{
+			if (style == 0)
+			{
+				dir = 4;
+			}
+			else
+			{
+				dir = 0;
+			}
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_BottomRight>())
+		{
+			dir = 1;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_BottomLeft>())
+		{
+			dir = 3;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_TopLeft>())
+		{
+			dir = 5;
+		}
+		if (targetType == ModContent.TileType<WaterDeliveryHole_TopRight>())
+		{
+			dir = 7;
+		}
+		return dir;
+	}
+
+	public static Tile MazeUnderLake_WaterDeliveryHole_GetCenterTile(int i, int j)
+	{
+		Tile tile = TileUtils.SafeGetTile(i, j);
+		int currentOffsetX = 0;
+		int currentOffsetY = 0;
+		bool fail = true;
+		if (tile.TileType == ModContent.TileType<WaterDeliveryHole_V>())
+		{
+			currentOffsetX = -tile.TileFrameX / 18 + 1;
+			if (tile.TileFrameX >= 36)
+			{
+				currentOffsetX = -(tile.TileFrameX % 36) / 18;
+			}
+			currentOffsetY = -tile.TileFrameY / 18 + 2;
+			fail = false;
+		}
+		else if (tile.TileType == ModContent.TileType<WaterDeliveryHole>())
+		{
+			currentOffsetX = -(tile.TileFrameX % 90) / 18 + 2;
+			currentOffsetY = -tile.TileFrameY / 18 + 1;
+			fail = false;
+		}
+		else if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+		{
+			int currentStyle = TileObjectData.GetTileStyle(tile);
+			TileObjectData currentObjectData = TileObjectData.GetTileData(tile.TileType, currentStyle);
+			currentOffsetX = -(tile.TileFrameX / 18 - currentStyle * currentObjectData.Width) + currentObjectData.Origin.X;
+			currentOffsetY = -tile.TileFrameY / 18 + currentObjectData.Origin.Y;
+			fail = false;
+		}
+		if (fail)
+		{
+			Main.NewText("Fail to access target", Color.Red);
+		}
+		return TileUtils.SafeGetTile(i + currentOffsetX, j + currentOffsetY);
+	}
+
+	public static void MazeUnderLake_AddNewConnectionWithMediumNet(Point pos, Dictionary<Point, List<Point>> holes, List<Point> seeds, List<Point> mediumNet, int count = 1)
+	{
+		int connectedCount = 0;
+		if (holes.ContainsKey(pos))
+		{
+			connectedCount += holes[pos].Count;
+		}
+		List<Point> closeSeeds = new List<Point>();
+		foreach (var otherPos in seeds)
+		{
+			if (otherPos != pos)
+			{
+				float dis = Vector2.Distance(new Vector2(pos.X, pos.Y), new Vector2(otherPos.X, otherPos.Y));
+				Point des = otherPos;
+				bool flag1 = holes.ContainsKey(pos) && holes[pos].Contains(des);
+				bool flag2 = holes.ContainsKey(des) && holes[des].Contains(pos);
+				bool flag3 = mediumNet.Contains(des);
+				bool flag4 = des.Y < UnderWaterMazeTopY + 5;
+				bool flag5 = BFSContinueEmpty(des, false, 10).Count < 10;
+				bool flag6 = BFSContinueEmpty(pos, false, 10).Count < 10;
+				if (dis < 50 && !flag1 && !flag2 && !flag3 && !flag4 && !flag5 && !flag6)
+				{
+					closeSeeds.Add(des);
+				}
+				if (flag2)
+				{
+					connectedCount++;
+				}
+			}
+		}
+		if (connectedCount >= 3)
+		{
+			return;
+		}
+		List<Point> connectedSeeds = new List<Point>();
+		if (holes.ContainsKey(pos))
+		{
+			connectedSeeds = holes[pos];
+		}
+		for (int k = 0; k < count; k++)
+		{
+			if (closeSeeds.Count <= 0)
+			{
+				break;
+			}
+			int index = GenRand.Next(closeSeeds.Count);
+			MazeUnderLake_ConnectDeliveryHole(pos.ToWorldCoordinates(), closeSeeds[index].ToWorldCoordinates());
+			connectedSeeds.Add(closeSeeds[index]);
+			closeSeeds.RemoveAt(index);
+		}
+		if (holes.ContainsKey(pos))
+		{
+			holes[pos] = connectedSeeds;
+		}
+		else
+		{
+			holes.Add(pos, connectedSeeds);
+		}
+	}
+
+	public static void MazeUnderLake_AddNewConnection(Point pos, Dictionary<Point, List<Point>> holes, List<Point> seeds, int count = 1)
+	{
+		List<Point> closeSeeds = new List<Point>();
+		foreach (var otherPos in seeds)
+		{
+			if (otherPos != pos)
+			{
+				float dis = Vector2.Distance(new Vector2(pos.X, pos.Y), new Vector2(otherPos.X, otherPos.Y));
+				Point des = otherPos;
+				bool flag1 = holes.ContainsKey(pos) && holes[pos].Contains(des);
+				bool flag2 = holes.ContainsKey(des) && holes[des].Contains(pos);
+				bool flag4 = des.Y < UnderWaterMazeTopY + 5;
+				bool flag5 = BFSContinueEmpty(des, false, 10).Count < 10;
+				bool flag6 = BFSContinueEmpty(pos, false, 10).Count < 10;
+				if (dis < 33 && !flag1 && !flag2 && !flag4 && !flag5 && !flag6)
+				{
+					closeSeeds.Add(des);
+				}
+			}
+		}
+		List<Point> connectedSeeds = new List<Point>();
+		if (holes.ContainsKey(pos))
+		{
+			connectedSeeds = holes[pos];
+		}
+		for (int k = 0; k < count; k++)
+		{
+			if (closeSeeds.Count <= 0)
+			{
+				break;
+			}
+			int index = GenRand.Next(closeSeeds.Count);
+			MazeUnderLake_ConnectDeliveryHole(pos.ToWorldCoordinates(), closeSeeds[index].ToWorldCoordinates());
+			connectedSeeds.Add(closeSeeds[index]);
+			closeSeeds.RemoveAt(index);
+		}
+		if (holes.ContainsKey(pos))
+		{
+			holes[pos] = connectedSeeds;
+		}
+		else
+		{
+			holes.Add(pos, connectedSeeds);
+		}
+	}
+
+	public static List<Point> MazeUnderLake_GetAllConnectedPoints(Dictionary<Point, List<Point>> connectMap, List<Point> seedMap, List<Point> checkedList, Point checkPos, int step)
+	{
+		List<Point> result = checkedList;
+		if (step > 8)
+		{
+			return result;
+		}
+		List<Point> newPoint = new List<Point>();
+		if (connectMap.ContainsKey(checkPos))
+		{
+			List<Point> subSeed = connectMap[checkPos];
+			foreach (var sub in subSeed)
+			{
+				if (!result.Contains(sub) && !newPoint.Contains(sub))
+				{
+					newPoint.Add(sub);
+				}
+			}
+		}
+		foreach (var parentPos in connectMap.Keys)
+		{
+			if (connectMap[parentPos].Contains(checkPos))
+			{
+				if (!result.Contains(parentPos) && !newPoint.Contains(parentPos))
+				{
+					newPoint.Add(parentPos);
+				}
+			}
+		}
+		result.AddRange(newPoint);
+		foreach (var point in newPoint)
+		{
+			List<Point> subNewPoint = MazeUnderLake_GetAllConnectedPoints(connectMap, seedMap, result, point, step + 1);
+			foreach (var pos in subNewPoint)
+			{
+				if (!result.Contains(pos))
+				{
+					result.Add(pos);
+				}
+			}
+		}
+		return result;
+	}
+
+	public static void MazeUnderLake_ConnectDeliveryHole(Vector2 pos0, Vector2 pos1)
+	{
+		if (pos0 == pos1)
+		{
+			return;
+		}
+		Vector2 dir = (pos1 - pos0).SafeNormalize(Vector2.Zero);
+		float rot = dir.ToRotation();
+
+		int style = -1;
+		if (MathF.Abs(rot) <= MathHelper.Pi * 1f / 8f)
+		{
+			style = 0;
+		}
+		else if (rot <= MathHelper.Pi * 3f / 8f && rot > MathHelper.Pi * 1f / 8f)
+		{
+			style = 1;
+		}
+		else if (rot <= MathHelper.Pi * 5f / 8f && rot > MathHelper.Pi * 3f / 8f)
+		{
+			style = 2;
+		}
+		else if (rot <= MathHelper.Pi * 7f / 8f && rot > MathHelper.Pi * 5f / 8f)
+		{
+			style = 3;
+		}
+		else if (MathF.Abs(rot) >= MathHelper.Pi * 7f / 8f)
+		{
+			style = 4;
+		}
+		else if (rot >= -MathHelper.Pi * 7f / 8f && rot < -MathHelper.Pi * 5f / 8f)
+		{
+			style = 5;
+		}
+		else if (rot >= -MathHelper.Pi * 5f / 8f && rot < -MathHelper.Pi * 3f / 8f)
+		{
+			style = 6;
+		}
+		else if (rot >= -MathHelper.Pi * 3f / 8f && rot < -MathHelper.Pi * 1f / 8f)
+		{
+			style = 7;
+		}
+		Vector2 checkPos = pos0;
+		int penetrateState = 0;
+
+		Point origin0 = default;
+		Point origin1 = default;
+		int penetrate1Count = 0;
+		for (int t = 0; t < 400; t++)
+		{
+			if (t % 2 == 0)
+			{
+				checkPos.X += dir.X * 4f;
+			}
+			else
+			{
+				checkPos.Y += dir.Y * 4f;
+			}
+			Point tilePos = checkPos.ToTileCoordinates();
+			if (penetrateState == 0)
+			{
+				if (MazeUnderLake_SpecialCollisionWithDeliveryHoleStyle(checkPos, style))
+				{
+					penetrateState = 1;
+					origin0 = tilePos;
+				}
+			}
+
+			if (penetrateState == 1)
+			{ // Second delivery hole.
+				penetrate1Count++;
+				if (!MazeUnderLake_SpecialCollisionWithDeliveryHoleStyle(checkPos, style) && penetrate1Count >= 16)
+				{
+					origin1 = tilePos;
+					break;
+				}
+			}
+		}
+		if (origin0 != default && origin1 != default)
+		{
+			WaterDeliveryHole_TopLeft waterDeliveryHole_TopLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_TopLeft>()) as WaterDeliveryHole_TopLeft;
+			WaterDeliveryHole_BottomRight waterDeliveryHole_BottomRight = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_BottomRight>()) as WaterDeliveryHole_BottomRight;
+			WaterDeliveryHole_TopRight waterDeliveryHole_TopRight = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_TopRight>()) as WaterDeliveryHole_TopRight;
+			WaterDeliveryHole_BottomLeft waterDeliveryHole_BottomLeft = TileLoader.GetTile(ModContent.TileType<WaterDeliveryHole_BottomLeft>()) as WaterDeliveryHole_BottomLeft;
+			switch (style)
+			{
+				case 0:
+					PlaceFrameImportantTiles(origin0.X - 1, origin0.Y - 2, 2, 5, (ushort)ModContent.TileType<WaterDeliveryHole_V>(), 0, 0);
+					PlaceFrameImportantTiles(origin1.X, origin1.Y - 2, 2, 5, (ushort)ModContent.TileType<WaterDeliveryHole_V>(), 36, 0);
+					break;
+				case 1:
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin0, 3);
+					waterDeliveryHole_TopLeft.PlaceAtTileObjectDataOrigin(origin0.X, origin0.Y);
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin1, 1);
+					waterDeliveryHole_BottomRight.PlaceAtTileObjectDataOrigin(origin1.X, origin1.Y);
+					break;
+				case 2:
+					PlaceFrameImportantTiles(origin0.X - 2, origin0.Y - 1, 5, 2, (ushort)ModContent.TileType<WaterDeliveryHole>(), 0, 0);
+					PlaceFrameImportantTiles(origin1.X - 2, origin1.Y, 5, 2, (ushort)ModContent.TileType<WaterDeliveryHole>(), 90, 0);
+					break;
+				case 3:
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin0, 0);
+					waterDeliveryHole_TopRight.PlaceAtTileObjectDataOrigin(origin0.X, origin0.Y);
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin1, 2);
+					waterDeliveryHole_BottomLeft.PlaceAtTileObjectDataOrigin(origin1.X, origin1.Y);
+					break;
+				case 4:
+					PlaceFrameImportantTiles(origin0.X, origin0.Y - 2, 2, 5, (ushort)ModContent.TileType<WaterDeliveryHole_V>(), 36, 0);
+					PlaceFrameImportantTiles(origin1.X - 1, origin1.Y - 2, 2, 5, (ushort)ModContent.TileType<WaterDeliveryHole_V>(), 0, 0);
+					break;
+				case 5:
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin0, 1);
+					waterDeliveryHole_BottomRight.PlaceAtTileObjectDataOrigin(origin0.X, origin0.Y);
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin1, 3);
+					waterDeliveryHole_TopLeft.PlaceAtTileObjectDataOrigin(origin1.X, origin1.Y);
+					break;
+				case 6:
+					PlaceFrameImportantTiles(origin0.X - 2, origin0.Y, 5, 2, (ushort)ModContent.TileType<WaterDeliveryHole>(), 90, 0);
+					PlaceFrameImportantTiles(origin1.X - 2, origin1.Y - 1, 5, 2, (ushort)ModContent.TileType<WaterDeliveryHole>(), 0, 0);
+					break;
+				case 7:
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin0, 2);
+					waterDeliveryHole_BottomLeft.PlaceAtTileObjectDataOrigin(origin0.X, origin0.Y);
+					MazeUnderLake_CheckSuitableForSlopeHole(ref origin1, 0);
+					waterDeliveryHole_TopRight.PlaceAtTileObjectDataOrigin(origin1.X, origin1.Y);
+					break;
+			}
+			List<Vector2> polygon =
+			[
+				origin0.ToWorldCoordinates() + new Vector2(4, -32).RotatedBy(MathHelper.PiOver4 * style),
+				origin1.ToWorldCoordinates() + new Vector2(0, -32).RotatedBy(MathHelper.PiOver4 * style),
+				origin1.ToWorldCoordinates() + new Vector2(0, 32).RotatedBy(MathHelper.PiOver4 * style),
+				origin0.ToWorldCoordinates() + new Vector2(4, 32).RotatedBy(MathHelper.PiOver4 * style),
+			];
+			PlacePolygonAreaOfBlock(polygon, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.NoTileOnly);
+		}
+	}
+
+	/// <summary>
+	/// Check whether the position is suitable for placing a slope hole.
+	/// </summary>
+	/// <param name="oldPoint"></param>
+	/// <param name="slopeType">0: TopRight 1: BottomRight 2: BottomLeft 3: TopLeft</param>
+	/// <returns>A suitable point for placement.</returns>
+	public static void MazeUnderLake_CheckSuitableForSlopeHole(ref Point oldPoint, int slopeType)
+	{
+		switch (slopeType)
+		{
+			case 0:
+				for (int c = 0; c < 2; c++)
+				{
+					if (SafeGetTile(oldPoint.X - 1, oldPoint.Y).HasTile || SafeGetTile(oldPoint.X, oldPoint.Y + 1).HasTile)
+					{
+						if (c % 2 == 0)
+						{
+							oldPoint.X += 1;
+						}
+						else
+						{
+							oldPoint.Y -= 1;
+						}
+					}
+				}
+				break;
+			case 1:
+				for (int c = 0; c < 2; c++)
+				{
+					if (SafeGetTile(oldPoint.X - 1, oldPoint.Y).HasTile || SafeGetTile(oldPoint.X, oldPoint.Y - 1).HasTile)
+					{
+						if (c % 2 == 0)
+						{
+							oldPoint.X += 1;
+						}
+						else
+						{
+							oldPoint.Y += 1;
+						}
+					}
+				}
+				break;
+			case 2:
+				for (int c = 0; c < 2; c++)
+				{
+					if (SafeGetTile(oldPoint.X + 1, oldPoint.Y).HasTile || SafeGetTile(oldPoint.X, oldPoint.Y - 1).HasTile)
+					{
+						if (c % 2 == 0)
+						{
+							oldPoint.X -= 1;
+						}
+						else
+						{
+							oldPoint.Y += 1;
+						}
+					}
+				}
+				break;
+			case 3:
+				for (int c = 0; c < 2; c++)
+				{
+					if (SafeGetTile(oldPoint.X + 1, oldPoint.Y).HasTile || SafeGetTile(oldPoint.X, oldPoint.Y + 1).HasTile)
+					{
+						if (c % 2 == 0)
+						{
+							oldPoint.X -= 1;
+						}
+						else
+						{
+							oldPoint.Y -= 1;
+						}
+					}
+				}
+				break;
+		}
+	}
+
+	public static bool MazeUnderLake_SpecialCollisionWithDeliveryHoleStyle(Vector2 checkPos, int style)
+	{
+		switch (style)
+		{
+			case 0:
+				if (Collision.SolidCollision(checkPos - new Vector2(8, 40), 16, 80))
+				{
+					return true;
+				}
+				break;
+			case 1:
+				if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(32, -32), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(-32, 32), 16, 16))
+				{
+					return true;
+				}
+				break;
+			case 2:
+				if (Collision.SolidCollision(checkPos - new Vector2(40, 8), 80, 16))
+				{
+					return true;
+				}
+				break;
+			case 3:
+				if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(-32, -32), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(32, 32), 16, 16))
+				{
+					return true;
+				}
+				break;
+			case 4:
+				if (Collision.SolidCollision(checkPos - new Vector2(8, 40), 16, 80))
+				{
+					return true;
+				}
+				break;
+			case 5:
+				if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(32, -32), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(-32, 32), 16, 16))
+				{
+					return true;
+				}
+				break;
+			case 6:
+				if (Collision.SolidCollision(checkPos - new Vector2(40, 8), 80, 16))
+				{
+					return true;
+				}
+				break;
+			case 7:
+				if (Collision.SolidCollision(checkPos - new Vector2(8), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(-32, -32), 16, 16) || Collision.SolidCollision(checkPos - new Vector2(8) + new Vector2(32, 32), 16, 16))
+				{
+					return true;
+				}
+				break;
+		}
+		return false;
+	}
+
+	public static void MazeUnderLake_FillYggdrasilBlackRock(int i, int j)
+	{
+		Tile tile = SafeGetTile(i, j);
+		if (!tile.HasTile)
+		{
+			tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
+			tile.HasTile = true;
+		}
 	}
 
 	/// <summary>
@@ -822,31 +1533,14 @@ public class KelpCurtainGeneration
 	}
 
 	/// <summary>
-	/// 生成随机种子点（确保在点阵范围内）
+	/// True if the point is close to multiple seeds, which means it's likely to be at the edge of the Voronoi cell and suitable for placing delivery holes.
 	/// </summary>
-	public static List<(int X, int Y)> MazeUnderLake_GenerateRandomSeeds(Point size, int count)
-	{
-		List<(int X, int Y)> seeds = new List<(int X, int Y)>();
-		for (int j = 0; j < size.Y / 20f; j++)
-		{
-			for (int i = 0; i < size.X / 20f; i++)
-			{
-				int x = i * 30 + GenRand.Next(-10, 10) + 10;
-				if (j % 2 == 0)
-				{
-					x += 15;
-				}
-				int y = (int)(j * 15 * MathF.Sqrt(3)) + GenRand.Next(-10, 10) + 10;
-				seeds.Add((x, y));
-			}
-		}
-		return seeds;
-	}
-
-	/// <summary>
-	/// 判断点是否为多边形边缘（与两个种子点距离相近）
-	/// </summary>
-	public static bool MazeUnderLake_IsEdgePoint(int x, int y, List<(int X, int Y)> seeds)
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="seeds"></param>
+	/// <param name="edgeThreshold"></param>
+	/// <returns></returns>
+	public static bool MazeUnderLake_IsEdgePoint(int x, int y, List<Point> seeds, float edgeThreshold = 2.5f)
 	{
 		// 计算到所有种子点的距离平方（避免开方运算，提高效率）
 		List<(int SeedIndex, long DistanceSquared)> distances = new List<(int, long)>();
@@ -866,7 +1560,6 @@ public class KelpCurtainGeneration
 		// 阈值可调整：值越小边缘越细，值越大边缘越粗
 		double minDist = Math.Sqrt(distances[0].DistanceSquared);
 		double secondMinDist = Math.Sqrt(distances[1].DistanceSquared);
-		double edgeThreshold = 2.5; // 边缘检测阈值
 
 		return (secondMinDist - minDist) < edgeThreshold;
 	}
