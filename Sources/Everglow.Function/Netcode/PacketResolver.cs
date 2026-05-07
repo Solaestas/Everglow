@@ -60,7 +60,7 @@ public enum RouteDestination
 }
 
 /// <summary>
-/// 用于管理封包发送、接收的类
+/// Manages packet sending, receiving, and routing.
 /// </summary>
 public class PacketResolver
 {
@@ -71,7 +71,7 @@ public class PacketResolver
 	private int packetIDCounter;
 
 	/// <summary>
-	/// 用于初始化所有需要监听的 Packet 类型和监听器
+	/// Initializes the PacketResolver and registers all packet types and handlers.
 	/// </summary>
 	public PacketResolver(Mod mod)
 	{
@@ -85,10 +85,10 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 查询某个封包类型对应的封包ID，如果不存在则返回-1
+	/// Queries the packet ID for a given packet type. Returns -1 if not found.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <returns></returns>
+	/// <typeparam name="T">The packet type.</typeparam>
+	/// <returns>The packet ID, or -1 if not found.</returns>
 	public int QueryPacketID<T>()
 		where T : IPacket
 	{
@@ -96,7 +96,7 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 注册所有<see cref="IPacket"/>和<see cref="IPacketHandler"/>的实现类型.
+	/// Registers all <see cref="IPacket"/> and <see cref="IPacketHandler"/> implementation types.
 	/// </summary>
 	private void RegisterPackets()
 	{
@@ -112,7 +112,7 @@ public class PacketResolver
 
 		foreach (var type in modTypes.Where(type => type.IsAssignableTo(typeof(IPacketHandler))))
 		{
-			// 将 packet 和 PacketHandler 绑定
+			// Bind packet to its handler
 			if (Attribute.GetCustomAttribute(type, typeof(HandlePacketAttribute)) is HandlePacketAttribute handlePacket)
 			{
 				if (!packetIDMapping.TryGetValue(handlePacket.PacketType, out int packetID))
@@ -136,7 +136,7 @@ public class PacketResolver
 			}
 		}
 
-		// 如果有封包没有绑定任何handler就发出警告
+		// Warn if any packet has no handlers bound
 		foreach (var packetID in packetIDToTypeMapping)
 		{
 			if (!packetHandlerRegistry.TryGetValue(packetID.Key, out var registeredHandlers) || registeredHandlers.Count == 0)
@@ -156,13 +156,13 @@ public class PacketResolver
 		using MemoryStream ms = new();
 		using BinaryWriter bw = new(ms);
 
-		// 1. 写入 route 目标
+		// 1. Write route destination
 		bw.Write((int)destination);
 
-		// 2. 写入来源玩家ID
+		// 2. Write source player ID
 		bw.Write(sourcePlayer);
 
-		// 3. 写入封包ID
+		// 3. Write packet ID
 		int id = packetIDMapping[packet.GetType()];
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
 		{
@@ -173,7 +173,7 @@ public class PacketResolver
 			bw.Write((byte)id);
 		}
 
-		// 4. 写入封包数据 (长度 + 数据)
+		// 4. Write packet data (length + data)
 		var lengthPos = ms.Position;
 		bw.Write(0);
 
@@ -219,7 +219,6 @@ public class PacketResolver
 
 	private void Send(IPacket packet, RouteDestination destination, int toClient = -1, int ignoreClient = -1)
 	{
-		// 单人模式不要有任何动作
 		if (NetUtils.IsSingle)
 		{
 			return;
@@ -234,24 +233,23 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 向指定对象发送一个封包数据的实例
+	/// Sends a packet instance to the specified targets.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <param name="packet"></param>
-	/// <param name="toClient"></param>
-	/// <param name="ignoreClient"></param>
+	/// <param name="packet">The packet to send.</param>
+	/// <param name="toClient">Target client ID, or -1 for all clients.</param>
+	/// <param name="ignoreClient">Client ID to ignore, or -1 to ignore none.</param>
 	public void Send(IPacket packet, int toClient = -1, int ignoreClient = -1)
 	{
 		Send(packet, RouteDestination.WorldOnly, toClient, ignoreClient);
 	}
 
 	/// <summary>
-	/// 向指定对象发送一个封包数据的实例
-	/// <br/> <see cref="Send(IPacket, int, int)"/>的封装版本，自动填充发送对象
+	/// Sends a packet with automatic target determination based on the fromServer flag.
+	/// <br/> Wrapper around <see cref="Send(IPacket, int, int)"/>.
 	/// </summary>
-	/// <param name="packet"></param>
-	/// <param name="fromServer"></param>
-	/// <param name="player"></param>
+	/// <param name="packet">The packet to send.</param>
+	/// <param name="fromServer">If true, sends to all clients except the specified player. If false, sends to all clients.</param>
+	/// <param name="player">The player to potentially ignore when fromServer is true.</param>
 	public void Send(IPacket packet, bool fromServer, Player player)
 	{
 		if (fromServer)
@@ -264,6 +262,9 @@ public class PacketResolver
 		}
 	}
 
+	/// <summary>
+	/// Routes a packet according to the specified destination.
+	/// </summary>
 	public void Route(IPacket packet, RouteDestination destination)
 	{
 		if (NetUtils.IsSingle)
@@ -279,15 +280,18 @@ public class PacketResolver
 				{
 					if (NetUtils.IsMainClient)
 					{
-						Send(packet, false, Main.LocalPlayer);
+						// Main client -> Main world
+						Send(packet);
 					}
 					else if (NetUtils.IsSubServer)
 					{
+						// Sub world -> Main world
 						var data = SerializePacket(packet, RouteDestination.MainServer, -1);
 						SubworldSystem.SendToMainServer(_mod, data);
 					}
 					else if (NetUtils.IsSubClient)
 					{
+						// Sub client -> Sub world -> Main world
 						Send(packet, RouteDestination.MainServer);
 					}
 				}
@@ -308,19 +312,19 @@ public class PacketResolver
 	}
 
 	/// <summary>
-	/// 处理封包
+	/// Handles and resolves incoming packets.
 	/// </summary>
-	/// <param name="reader"></param>
-	/// <param name="whoAmI"></param>
+	/// <param name="reader">The binary reader containing the packet data.</param>
+	/// <param name="_">Passed by <see cref="Mod.HandlePacket"/>. Unused but required for compatibility.</param>
 	public void Resolve(BinaryReader reader, int _)
 	{
-		// 读取路由目标
+		// Read route destination
 		var destination = DeserializeRouteDestination(reader);
 
-		// 读取来源玩家ID
+		// Read source player ID
 		var sourcePlayer = reader.ReadInt32();
 
-		// 读取封包ID
+		// Read packet ID
 		int packetID;
 		if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
 		{
@@ -331,10 +335,10 @@ public class PacketResolver
 			packetID = reader.ReadByte();
 		}
 
-		// 读取数据长度
+		// Read data length
 		var length = reader.ReadInt32();
 
-		// Forward packets
+		// Forward packets if needed
 		bool shouldForward = NetUtils.IsSubServer && destination != RouteDestination.WorldOnly;
 		if (shouldForward)
 		{
@@ -353,7 +357,7 @@ public class PacketResolver
 			}
 			else if (destination == RouteDestination.MainServer)
 			{
-				// Forward only, no excuting packet logic.
+				// Forward only, no executing packet logic
 				Ins.Logger.Debug("Forward packet is sent...");
 				SubworldSystem.SendToMainServer(_mod, forwardPacket);
 				return;
@@ -366,11 +370,11 @@ public class PacketResolver
 			return;
 		}
 
-		// 读取封包数据
+		// Read the packet data
 		var packet = Activator.CreateInstance(packetIDToTypeMapping[packetID]) as IPacket;
 		packet.Receive(reader, sourcePlayer);
 
-		// 调用Handlers处理封包数据
+		// Invoke handlers to process the packet
 		foreach (var handler in registeredHandlers)
 		{
 			handler.Handle(packet, sourcePlayer);
