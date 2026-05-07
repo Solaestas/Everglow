@@ -34,7 +34,6 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		}
 
 		// 2. Intersect Detection
-		// 2. Intersect Detection
 		const float SmallScale = 7;
 		AABB smallBox = selfBox;
 
@@ -44,10 +43,10 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		float midX = (selfBox.TopLeft.X + selfBox.BottomRight.X) * 0.5f;
 		float midY = (selfBox.TopLeft.Y + selfBox.BottomRight.Y) * 0.5f;
 
-		float newLeft = (2 * SmallScale >= width) ? midX : selfBox.TopLeft.X + SmallScale;
-		float newTop = (2 * SmallScale >= height) ? midY : selfBox.TopLeft.Y + SmallScale;
-		float newRight = (2 * SmallScale >= width) ? midX : selfBox.BottomRight.X - SmallScale;
-		float newBottom = (2 * SmallScale >= height) ? midY : selfBox.BottomRight.Y - SmallScale;
+		float newLeft = (width <= 2 * SmallScale) ? midX : selfBox.TopLeft.X + SmallScale;
+		float newTop = (height <= 2 * SmallScale) ? midY : selfBox.TopLeft.Y + SmallScale;
+		float newRight = (width <= 2 * SmallScale) ? midX : selfBox.BottomRight.X - SmallScale;
+		float newBottom = (height <= 2 * SmallScale) ? midY : selfBox.BottomRight.Y - SmallScale;
 
 		smallBox.TopLeft = new Vector2(newLeft, newTop);
 		smallBox.BottomRight = new Vector2(newRight, newBottom);
