@@ -63,33 +63,6 @@ jobs:
                 </Project>' > .\Sources\Directory.Build.props
           dotnet restore
 
-    - name: Override Everglow.csproj
-      run: |
-          touch .\Sources\Everglow\Everglow.csproj
-          echo '<Project Sdk="Microsoft.NET.Sdk">
-                  <PropertyGroup>
-                		<EnableModBuilder>true</EnableModBuilder>
-                		<EnablePathGenerator>false</EnablePathGenerator>
-                		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
-                	</PropertyGroup>
-                	<ItemGroup>
-                		<ProjectReference Include="..\Everglow.Core\Everglow.Core.csproj" />
-                		<ProjectReference Include="..\Everglow.Function\Everglow.Function.csproj" />
-                		<ModuleReference Include="$(Modules.Split(';'))" />
-                		<ProjectReference Include="@(ModuleReference->'..\Modules\%(Filename)\Everglow.%(Filename).csproj')" />
-                	</ItemGroup>
-                	<Target Name="ReadResource" BeforeTargets="Build">
-                		<ItemGroup>
-                			<Lists Include="@(ModuleReference->'$(EverglowIntermediateOutput)%(Filename).resource')"/>
-                			<Lists Include="$(EverglowIntermediateOutput)Commons.resource" />
-                 		</ItemGroup>
-                   		<ReadResource Lists="@(Lists)">
-                			<Output TaskParameter="Resources"
-                					ItemName="AdditionalFiles" />
-                		</ReadResource>
-                	</Target>
-                </Project>' > .\Sources\Everglow\Everglow.csproj
-
     - name: Pull TML
       run: |
           cd ..
