@@ -7,6 +7,7 @@ using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Terraria;
 using Terraria.ObjectData;
 using static Everglow.Commons.Utilities.TileUtils;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
@@ -725,6 +726,10 @@ public class KelpCurtainGeneration
 				tile.HasTile = true;
 				PlaceWallAround(tile, (ushort)ModContent.WallType<DarkLakeBottomMudWall>(), true, false);
 			}
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
 			if (WaterDeliveryHoleTiles.Contains(tile.TileType))
 			{
 				if (tile == MazeUnderLake_WaterDeliveryHole_GetCenterTile(pos.X, pos.Y))
@@ -743,7 +748,6 @@ public class KelpCurtainGeneration
 							shouldClearTilePos.Add(checkTilePos + normal);
 							shouldClearTilePos.Add(checkTilePos + normal * 2);
 							shouldClearTilePos.Add(checkTilePos + normal * 3);
-							Main.NewText(SafeGetTile(checkTilePos.ToTileCoordinates()).TileType);
 							break;
 						}
 					}
@@ -755,22 +759,30 @@ public class KelpCurtainGeneration
 			}
 		}
 
-		// foreach (var pos in tiles)
-		// {
-		// if (tile.Y() == maxY - 5)
-		// {
-		// if (GenRand.NextBool(18))
-		// {
-		// int height = GenRand.Next(1, 7);
-		// for (int j = 0; j < height; j++)
-		// {
-		// var algeeTile = SafeGetTile(tile.X(), tile.Y() - j);
-		// algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
-		// algeeTile.HasTile = true;
-		// }
-		// }
-		// }
-		// }
+		List<Point> towardUp_Mud = new List<Point>();
+		foreach (var pos in tiles)
+		{
+			var tile = SafeGetTile(pos);
+			var tile_up = SafeGetTile(pos.X, pos.Y - 1);
+			if (tile.HasTile && tile.TileType == ModContent.TileType<DarkLakeBottomMud>() && !tile_up.HasTile && !towardUp_Mud.Contains(pos))
+			{
+				towardUp_Mud.Add(pos);
+			}
+		}
+		foreach (var pos in towardUp_Mud)
+		{
+			int distanceToTop = CheckSpaceUp(pos.X, pos.Y - 1);
+			if (GenRand.NextBool(4))
+			{
+				int height = GenRand.Next(1, distanceToTop);
+				for (int j = 1; j <= height; j++)
+				{
+					var algeeTile = SafeGetTile(pos.X, pos.Y - j);
+					algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
+					algeeTile.HasTile = true;
+				}
+			}
+		}
 	}
 
 	public static int MazeUnderLake_WaterDeliveryHole_GetDirection(Tile tile)

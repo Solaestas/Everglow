@@ -1,3 +1,4 @@
+using System.Linq;
 using Terraria.ObjectData;
 using Terraria.Utilities;
 
@@ -729,17 +730,17 @@ public partial class TileUtils
 			(1, 0),
 			(0, -1),
 			(-1, 0),
-			(1, 1),
-			(1, -1),
-			(-1, -1),
-			(-1, 1),
+			//(1, 1),
+			//(1, -1),
+			//(-1, -1),
+			//(-1, 1),
 		};
 		Queue<Point> queueChecked = new Queue<Point>();
 
 		// Add first point to the queue.
 		queueChecked.Enqueue(checkPoint);
-		List<Point> visited = new List<Point>();
-
+		List<Point> visited_air = new List<Point>();
+		List<Point> visited_tile = new List<Point>();
 		while (queueChecked.Count > 0)
 		{
 			var tilePos = queueChecked.Dequeue();
@@ -761,27 +762,44 @@ public partial class TileUtils
 
 				//bool flag0 = !tile_upleft.HasTile || !tile_upright.HasTile || !tile_bottomleft.HasTile || !tile_bottomright.HasTile;
 				// Check bound and obstruction.
-				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
-					tile.HasTile && (!tile_up.HasTile || !tile_bottom.HasTile || !tile_left.HasTile || !tile_right.HasTile) && (!ignoreFrameImportant || !Main.tileFrameImportant[tile.TileType]) && !visited.Contains(point))
+				bool flag0 = checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20;
+				bool flag1 = tile.HasTile && (visited_air.Contains(new Point(checkX, checkY - 1)) || visited_air.Contains(new Point(checkX, checkY + 1)) || visited_air.Contains(new Point(checkX - 1, checkY)) || visited_air.Contains(new Point(checkX + 1, checkY)));
+				bool flag2 = !tile.HasTile && (tile_up.HasTile || tile_bottom.HasTile || tile_left.HasTile || tile_right.HasTile);
+				bool flag3 = !ignoreFrameImportant || !Main.tileFrameImportant[tile.TileType];
+				if (flag0 && (flag1 || flag2) && flag3 && !visited_air.Contains(point) && !visited_tile.Contains(point))
 				{
 					if (theseTypeOnly == default)
 					{
 						queueChecked.Enqueue(point);
-						visited.Add(point);
+						if(flag1)
+						{
+							visited_tile.Add(point);
+						}
+						if(flag2)
+						{
+							visited_air.Add(point);
+						}
 					}
 					else if (theseTypeOnly.Contains(tile.type))
 					{
 						queueChecked.Enqueue(point);
-						visited.Add(point);
+						if (flag1)
+						{
+							visited_tile.Add(point);
+						}
+						if (flag2)
+						{
+							visited_air.Add(point);
+						}
 					}
 				}
 			}
-			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			if (queueChecked.Count > maxContinueCount || visited_tile.Count + visited_air.Count > maxContinueCount)
 			{
 				break;
 			}
 		}
-		return visited;
+		return visited_tile;
 	}
 
 	public static List<Point> GenerateRandomSeeds(int xBoundLeft, int xBoundRight, int yBoundTop, int yBoundBottom, int expect_Count, float minDistance = 20)
