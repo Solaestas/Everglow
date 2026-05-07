@@ -10,13 +10,20 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Fetch all branches
+      run: git fetch --all
+
+    - name: Compare with master
+      run: git rev-list --count HEAD..origin/master
+  
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -92,8 +99,8 @@ jobs:
       run: |
         Start-Process msiexec.exe -ArgumentList "/i xnafx40_redist.msi /quiet /norestart" -Wait
 
-    - name: Build with MSBuild
-      run: msbuild Everglow.sln /p:Configuration=Release /p:WarningLevel=0
+    - name: Build
+      run: dotnet build /p:Configuration=Release /p:WarningLevel=0
       
-    # - name: Test
-    #   run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: dotnet test --verbosity normal /p:WarningLevel=0

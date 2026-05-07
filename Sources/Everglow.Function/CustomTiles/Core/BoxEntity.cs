@@ -36,8 +36,20 @@ public class BoxEntity : RigidEntity, IBox, IHookable
 		// 2. Intersect Detection
 		const float SmallScale = 7;
 		AABB smallBox = selfBox;
-		smallBox.TopLeft += new Vector2(SmallScale, SmallScale);
-		smallBox.BottomRight -= new Vector2(SmallScale, SmallScale);
+
+		float width = selfBox.BottomRight.X - selfBox.TopLeft.X;
+		float height = selfBox.BottomRight.Y - selfBox.TopLeft.Y;
+
+		float midX = (selfBox.TopLeft.X + selfBox.BottomRight.X) * 0.5f;
+		float midY = (selfBox.TopLeft.Y + selfBox.BottomRight.Y) * 0.5f;
+
+		float newLeft = (width <= 2 * SmallScale) ? midX : selfBox.TopLeft.X + SmallScale;
+		float newTop = (height <= 2 * SmallScale) ? midY : selfBox.TopLeft.Y + SmallScale;
+		float newRight = (width <= 2 * SmallScale) ? midX : selfBox.BottomRight.X - SmallScale;
+		float newBottom = (height <= 2 * SmallScale) ? midY : selfBox.BottomRight.Y - SmallScale;
+
+		smallBox.TopLeft = new Vector2(newLeft, newTop);
+		smallBox.BottomRight = new Vector2(newRight, newBottom);
 		if (smallBox.Intersect(otherBox))
 		{
 			result.Stride = stride;
