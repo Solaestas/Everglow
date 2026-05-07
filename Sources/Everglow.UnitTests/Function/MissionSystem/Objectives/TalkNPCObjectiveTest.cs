@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.MissionSystem.Objectives;
+using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
 
 namespace Everglow.UnitTests.Function.MissionSystem.ObjectiveTests;
 
@@ -10,14 +10,14 @@ public class TalkNPCObjectiveTest
 	{
 		for (int i = 0; i > -100; i--)
 		{
-			Assert.ThrowsException<InvalidDataException>(() => new TalkNPCObjective(i, "111"));
+			Assert.ThrowsExactly<InvalidDataException>(() => new TalkNPCObjective(i, "111"));
 		}
 	}
 
 	[TestMethod]
 	public void Constructor_Should_ThrowException_When_NPCTextIsNullOrEmpty()
 	{
-		Assert.ThrowsException<ArgumentNullException>(() => new TalkNPCObjective(1, string.Empty));
-		Assert.ThrowsException<ArgumentNullException>(() => new TalkNPCObjective(1, null));
+		Assert.ThrowsExactly<ArgumentNullException>(() => new TalkNPCObjective(1, string.Empty));
+		Assert.ThrowsExactly<ArgumentNullException>(() => new TalkNPCObjective(1, null));
 	}
 }

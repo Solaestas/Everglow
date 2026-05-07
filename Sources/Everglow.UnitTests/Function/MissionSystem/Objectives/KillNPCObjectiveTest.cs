@@ -1,5 +1,5 @@
+using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
 using Everglow.Commons.Mechanics.Mission.PlayerMission.Primitives;
-using Everglow.Commons.Mechanics.MissionSystem.Objectives;
 using Terraria;
 using Terraria.ID;
 
@@ -104,12 +104,12 @@ public class KillNPCObjectiveTest
 	[TestMethod]
 	public void CreateRequirement_Should_ThrowInvalidDataException_When_ParamIsLessThanZero()
 	{
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
 			KillNPCRequirement.Create([], 1);
 		});
 
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
 			KillNPCRequirement.Create([NPCID.Worm], 0);
 		});

@@ -1,5 +1,5 @@
-using Everglow.Commons.Mechanics.MissionSystem.Objectives;
-using Everglow.Commons.Mechanics.MissionSystem.Primitives;
+using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
+using Everglow.Commons.Mechanics.Mission.PlayerMission.Primitives;
 using Terraria;
 using Terraria.ID;
 
@@ -129,12 +129,12 @@ public class CollectItemObjectiveTest
 	[TestMethod]
 	public void CreateRequirement_Should_ThrowInvalidDataException_When_ParamIsEmpty()
 	{
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
 			new ItemRequirement([], 1);
 		});
 
-		Assert.ThrowsException<InvalidDataException>(() =>
+		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
 			new ItemRequirement([ItemID.DirtBlock], 0);
 		});

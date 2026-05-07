@@ -21,11 +21,11 @@ public class TestPacket : IPacket
 		var data = reader.ReadInt32();
 		if (SubworldSystem.Current is null)
 		{
-			Console.WriteLine($"Test received from main: {data}");
+			Console.WriteLine($"Test received on main: {data}");
 		}
 		else
 		{
-			Console.WriteLine($"Test received from sub: {data}");
+			Console.WriteLine($"Test received on sub: {data}");
 		}
 	}
 

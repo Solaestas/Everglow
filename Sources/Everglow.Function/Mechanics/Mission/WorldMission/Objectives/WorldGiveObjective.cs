@@ -25,7 +25,7 @@ public class WorldGiveObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override float Progress => progress ? 1f : 0f;
 
-	public bool NeedDeltaSync => progress;
+	public override bool NeedDeltaSync => progress;
 
 	public override bool CheckCompletion() => progress;
 
@@ -33,7 +33,7 @@ public class WorldGiveObjective : WorldObjectiveBase, IDeltaSyncObjective
 	{
 		foreach (var player in Main.ActivePlayers)
 		{
-			if (player.TalkNPC?.type == NpcType)
+			if (player.talkNPC == NpcType)
 			{
 				if (player.CountItem(ItemType, ItemCount) >= ItemCount)
 				{
@@ -51,22 +51,22 @@ public class WorldGiveObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
 
-	public void SendDelta(BinaryWriter bw)
+	public override void SendDelta(BinaryWriter bw)
 	{
 		bw.Write(progress);
 	}
 
-	public void ReceiveDelta(BinaryReader br)
+	public override	void ReceiveDelta(BinaryReader br)
 	{
 		progress = br.ReadBoolean();
 	}
 
-	public void SendMain(BinaryWriter bw)
+	public override void SendMain(BinaryWriter bw)
 	{
 		bw.Write(progress);
 	}
 
-	public void ReceiveMain(BinaryReader br)
+	public override void ReceiveMain(BinaryReader br)
 	{
 		progress = br.ReadBoolean();
 	}

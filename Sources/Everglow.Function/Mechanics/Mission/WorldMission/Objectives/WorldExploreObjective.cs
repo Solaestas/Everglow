@@ -3,7 +3,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
-public class WorldExploreObjective : WorldObjectiveBase, IDeltaSyncObjective
+public class WorldExploreObjective : WorldObjectiveBase
 {
 	public WorldExploreObjective()
 	{
@@ -25,7 +25,7 @@ public class WorldExploreObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override float Progress => Math.Clamp(CurrentDistance / Distance, 0, 1);
 
-	public bool NeedDeltaSync => _localDistance > 0;
+	public override bool NeedDeltaSync => _localDistance > 0;
 
 	public override bool CheckCompletion() => CurrentDistance >= Distance;
 
@@ -47,24 +47,24 @@ public class WorldExploreObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
 
-	public void SendDelta(BinaryWriter bw)
+	public override void SendDelta(BinaryWriter bw)
 	{
 		bw.Write(_localDistance);
 		_localDistance = 0;
 	}
 
-	public void ReceiveDelta(BinaryReader br)
+	public override void ReceiveDelta(BinaryReader br)
 	{
 		var distance = br.ReadSingle();
 		CurrentDistance += distance;
 	}
 
-	public void SendMain(BinaryWriter bw)
+	public override void SendMain(BinaryWriter bw)
 	{
 		bw.Write(CurrentDistance);
 	}
 
-	public void ReceiveMain(BinaryReader br)
+	public override void ReceiveMain(BinaryReader br)
 	{
 		CurrentDistance = br.ReadSingle();
 	}

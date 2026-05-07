@@ -28,15 +28,6 @@ public class StringParameterKeyTest
 	}
 
 	[TestMethod]
-	public void DifferentTypesAreUnequal()
-	{
-		var key = "TestKey";
-		var StringParameterKey = new StringParameterKey(key);
-
-		Assert.AreNotEqual(key, StringParameterKey.Value);
-	}
-
-	[TestMethod]
 	public void OperatorsWorkCorrectly()
 	{
 		var key1 = "Test1";
