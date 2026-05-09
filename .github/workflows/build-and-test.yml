@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       
     - name: Fetch all branches
       run: git fetch --all
@@ -24,12 +24,11 @@ jobs:
     - name: Compare with master
       run: git rev-list --count HEAD..origin/master
   
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+        cache: true
 
     - name: Restore dependencies
       run: |
