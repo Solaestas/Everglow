@@ -25,10 +25,11 @@ jobs:
       run: git rev-list --count HEAD..origin/master
   
     - name: Setup .NET 8.0
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         cache: true
+        cache-dependency-path: '**/*.csproj'
 
     - name: Restore dependencies
       run: |
