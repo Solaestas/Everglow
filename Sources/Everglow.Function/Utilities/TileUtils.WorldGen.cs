@@ -439,6 +439,48 @@ public partial class TileUtils
 	}
 
 	/// <summary>
+	/// Transform the tile within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonAreaOfWall(List<Vector2> polygon, int type, int force = 0)
+	{
+		if (polygon.Count < 3)
+		{
+			return;
+		}
+		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
+		for (int x = (int)bounds.X; x <= bounds.Z; x++)
+		{
+			for (int y = (int)bounds.Y; y <= bounds.W; y++)
+			{
+				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
+				{
+					Tile tile = SafeGetTile(new Vector2(x, y).ToTileCoordinates());
+					ChangeWall(tile, type, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Transform the tile within the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">TILE coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonAreaOfWall(List<Point> polygon, int type, int force = 0)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		PlacePolygonAreaOfWall(polygon_Vector2, type, force);
+	}
+
+	/// <summary>
 	/// Automatically offset the polygon by the anchorPos, then transform the tile within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
 	/// </summary>
 	/// <param name="polygon">WORLD coord</param>
@@ -529,6 +571,47 @@ public partial class TileUtils
 	}
 
 	/// <summary>
+	/// Transform the tiles at the edge of the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonBoundOfWall(List<Vector2> polygon, int type, float thick, int force = 0)
+	{
+		if (polygon.Count < 3)
+		{
+			return;
+		}
+		for (int k = 0; k < polygon.Count; k++)
+		{
+			int nextIndex = k + 1;
+			if (nextIndex == polygon.Count)
+			{
+				nextIndex = 0;
+			}
+			PlaceLineWall(polygon[k], polygon[nextIndex], thick, type, force);
+		}
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">TILE coord</param>
+	/// <param name="type"></param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonBoundOfWall(List<Point> polygon, int type, float thick, int force = 0)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		PlacePolygonBoundOfWall(polygon_Vector2, type, thick, force);
+	}
+
+	/// <summary>
 	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
 	/// </summary>
 	/// <param name="pos0">WORLD coord</param>
@@ -563,6 +646,41 @@ public partial class TileUtils
 		PlaceLineBlock(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
 	}
 
+	/// <summary>
+	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// </summary>
+	/// <param name="pos0">WORLD coord</param>
+	/// <param name="pos1">WORLD coord</param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineWall(Vector2 pos0, Vector2 pos1, float thick, int type, int force = 0)
+	{
+		Vector2 dir = pos0 - pos1;
+		if (dir == Vector2.zeroVector)
+		{
+			return;
+		}
+		Vector2 normalizedDir = dir.NormalizeSafe().RotatedBy(MathHelper.PiOver2);
+		List<Vector2> tiltRect = new List<Vector2>();
+		tiltRect.Add(pos0 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 - normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos0 - normalizedDir * thick * 0.5f);
+		PlacePolygonAreaOfWall(tiltRect, type, force);
+	}
+
+	/// <summary>
+	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// </summary>
+	/// <param name="pos0">TILE coord</param>
+	/// <param name="pos1">TILE coord</param>
+	/// <param name="thick"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineWall(Point pos0, Point pos1, float thick, int type, int force = 0)
+	{
+		PlaceLineBlock(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
+	}
+
 	public static void ChangeTile(Tile tile, int type, int force)
 	{
 		if (ChestSafe(tile) && CanChangeTile(tile, force))
@@ -571,6 +689,25 @@ public partial class TileUtils
 			{
 				tile.TileType = (ushort)type;
 				tile.HasTile = true;
+			}
+			else if (type == -1)
+			{
+				tile.HasTile = false;
+			}
+			else if (type == -2)
+			{
+				tile.ClearEverything();
+			}
+		}
+	}
+
+	public static void ChangeWall(Tile tile, int type, int force)
+	{
+		if (ChestSafe(tile) && CanChangeTile(tile, force))
+		{
+			if (type >= 0)
+			{
+				tile.wall = (ushort)type;
 			}
 			else if (type == -1)
 			{

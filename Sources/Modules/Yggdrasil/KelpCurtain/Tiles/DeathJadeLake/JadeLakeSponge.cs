@@ -4,7 +4,7 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
-public class AgedOxygenTank : ModTile
+public class JadeLakeSponge : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -12,18 +12,19 @@ public class AgedOxygenTank : ModTile
 		Main.tileLavaDeath[Type] = true;
 		Main.tileWaterDeath[Type] = false;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 2;
+		TileObjectData.newTile.Height = 1;
+		TileObjectData.newTile.Width = 1;
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
-			16,
-			18,
+			30,
 		};
+		TileObjectData.newTile.CoordinateWidth = 30;
+		TileObjectData.newTile.DrawYOffset = --15;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
-		DustType = ModContent.DustType<AbandonedLakeWreckDust>();
-		AddMapEntry(new Color(57, 83, 107));
+		DustType = ModContent.DustType<JadeLakeSpongeDust>();
+		AddMapEntry(new Color(129, 120, 97));
 	}
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)

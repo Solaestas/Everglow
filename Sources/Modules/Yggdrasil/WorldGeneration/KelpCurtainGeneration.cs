@@ -7,7 +7,6 @@ using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
-using Terraria;
 using Terraria.ObjectData;
 using static Everglow.Commons.Utilities.TileUtils;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
@@ -557,7 +556,7 @@ public class KelpCurtainGeneration
 		}
 		MazeBoundPolygon.Add(new Vector2(lakeCenterX + distance_Center_Right, yBoundTop) * 16);
 		PlacePolygonBoundOfBlock(MazeBoundPolygon, ModContent.TileType<YggdrasilBlackRock>(), 40, (int)TileChangeState.Forceful);
-
+		PlacePolygonBoundOfWall(MazeBoundPolygon, ModContent.WallType<YggdrasilBlackRockWall>(), 40, (int)TileChangeState.Forceful);
 		// Random seed Points
 		List<Point> seeds = GenerateRandomSeeds(xBoundLeft - 30, xBoundRight + 30, yBoundTop - 30, yBoundBottom + 30, 180, 25);
 		for (int x = xBoundLeft; x < xBoundRight; x++)
@@ -706,11 +705,260 @@ public class KelpCurtainGeneration
 			}
 
 			List<Point> tiles = BFSContinueEmpty(pos, false, 1536, WaterDeliveryHoleTiles);
-			MazeUnderLake_BuildDesolateRoom(tiles);
+			if (GenRand.NextBool(7))
+			{
+				MazeUnderLake_RedAlgaeRoom(tiles);
+			}
+			else
+			{
+				MazeUnderLake_BuildDesolateRoom(tiles);
+			}
+		}
+		float xMiddle = xBoundLeft + xBoundRight;
+		xMiddle /= 2;
+		int successCount = 0;
+		for(int k = 0;k < 999;k++)
+		{
+			bool success = false;
+			float randomX = GenRand.NextFloat(-70, 70);
+			float checkX = xMiddle + randomX;
+			float avg_x = -1;
+			Point checkPos = new Vector2(checkX, yBoundTop + 11).ToPoint();
+			List<Point> checkRoom = BFSContinueEmpty(checkPos, false, 1536, WaterDeliveryHoleTiles);
+			if(checkRoom.Count > 300)
+			{
+				foreach (var pos in checkRoom)
+				{
+					var tile = SafeGetTile(pos);
+					if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+					{
+						success = true;
+					}
+					avg_x += pos.X;
+				}
+			}
+			if(success)
+			{
+				avg_x /= checkRoom.Count;
+				int surfaceY = yBoundBottom - 20;
+				surfaceY += CheckSpaceDown((int)avg_x,surfaceY);
+				Vector2 entranceCenter = new Vector2(avg_x, surfaceY + 2) * 16;
+				float tilt = GenRand.NextFloat(-0.8f, 0.8f);
+				Vector2 top_Vertex = new Vector2(0, -320).RotatedBy(tilt) + entranceCenter;
+				Vector2 left_Vertex = new Vector2(-720, 0) + entranceCenter;
+				Vector2 right_Vertex = new Vector2(720, 0) + entranceCenter;
+				List<Vector2> curve_polygon = new List<Vector2>();
+				curve_polygon.Add(left_Vertex);
+				for(int m = 0;m < 20;m++)
+				{
+					float value = m / 20f;
+					Vector2 lerpPos = Vector2.Lerp(left_Vertex, top_Vertex, value);
+					lerpPos = Vector2.Lerp(lerpPos, entranceCenter, MathF.Sin(value * MathHelper.Pi) * 0.5f);
+					curve_polygon.Add(lerpPos);
+				}
+				curve_polygon.Add(top_Vertex);
+				for(int m = 0;m < 20;m++)
+				{
+					float value = m / 20f;
+					Vector2 lerpPos = Vector2.Lerp(top_Vertex, right_Vertex, value);
+					lerpPos = Vector2.Lerp(lerpPos, entranceCenter, MathF.Sin(value * MathHelper.Pi) * 0.5f);
+					curve_polygon.Add(lerpPos);
+				}
+				curve_polygon.Add(right_Vertex);
+				PlacePolygonAreaOfBlock(curve_polygon, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.Forceful);
+				for (int m = 0; m < curve_polygon.Count;m++)
+				{
+					var pos = curve_polygon[m];
+					pos.Y = pos.Y * 0.9f + entranceCenter.Y * 0.1f;
+					curve_polygon[m] = pos;
+				}
+				PlacePolygonAreaOfWall(curve_polygon, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.Forceful);
+				Vector2 des = Vector2.Lerp(top_Vertex, entranceCenter, 1.3f);
+				PlaceLineBlock(des, entranceCenter, -1, (int)TileChangeState.Forceful);
+				successCount++;
+			}
+			if(successCount > 3)
+			{
+				break;
+			}
+		}
+	}
+
+	public static void MazeUnderLake_BuildSpongeRoom(List<Point> tiles)
+	{
+		int maxY = 0;
+		foreach (var pos in tiles)
+		{
+			maxY = Math.Max(maxY, pos.Y);
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
+			if (pos.Y > maxY - 7 + GetPerlinPixelB(pos.X, pos.Y) && !tile.HasTile)
+			{
+				tile.TileType = (ushort)ModContent.TileType<HumicMud>();
+				tile.HasTile = true;
+				PlaceWallAround(tile, (ushort)ModContent.WallType<DarkLakeBottomMudWall>(), true, false);
+			}
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
+			if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+			{
+				if (tile == MazeUnderLake_WaterDeliveryHole_GetCenterTile(pos.X, pos.Y))
+				{
+					int dir = MazeUnderLake_WaterDeliveryHole_GetDirection(tile);
+					Vector2 checkTilePos = tile.Center();
+					Vector2 normal = new Vector2(8, 0).RotatedBy(MathHelper.PiOver4 * dir);
+					checkTilePos += normal * 4;
+					List<Vector2> shouldClearTilePos = new List<Vector2>();
+					for (int k = 0; k < 32; k++)
+					{
+						checkTilePos += normal;
+						shouldClearTilePos.Add(checkTilePos);
+						if (SafeGetTile(checkTilePos.ToTileCoordinates()).TileType != ModContent.TileType<HumicMud>())
+						{
+							shouldClearTilePos.Add(checkTilePos + normal);
+							shouldClearTilePos.Add(checkTilePos + normal * 2);
+							shouldClearTilePos.Add(checkTilePos + normal * 3);
+							break;
+						}
+					}
+					foreach (var corePos in shouldClearTilePos)
+					{
+						KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(corePos.ToTileCoordinates(), 3, new List<int> { ModContent.TileType<HumicMud>(), ModContent.TileType<DarkLakeBottomMud>(), ModContent.TileType<YggdrasilBlackRock>() });
+					}
+				}
+			}
 		}
 	}
 
 	public static void MazeUnderLake_BuildDesolateRoom(List<Point> tiles)
+	{
+		int maxY = 0;
+		foreach (var pos in tiles)
+		{
+			maxY = Math.Max(maxY, pos.Y);
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
+			if (pos.Y > maxY - 7 + GetPerlinPixelB(pos.X, pos.Y) && !tile.HasTile)
+			{
+				tile.TileType = (ushort)ModContent.TileType<HumicMud>();
+				tile.HasTile = true;
+				PlaceWallAround(tile, (ushort)ModContent.WallType<DarkLakeBottomMudWall>(), true, false);
+			}
+		}
+		foreach (var pos in tiles)
+		{
+			Tile tile = SafeGetTile(pos);
+			if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+			{
+				if (tile == MazeUnderLake_WaterDeliveryHole_GetCenterTile(pos.X, pos.Y))
+				{
+					int dir = MazeUnderLake_WaterDeliveryHole_GetDirection(tile);
+					Vector2 checkTilePos = tile.Center();
+					Vector2 normal = new Vector2(8, 0).RotatedBy(MathHelper.PiOver4 * dir);
+					checkTilePos += normal * 4;
+					List<Vector2> shouldClearTilePos = new List<Vector2>();
+					for (int k = 0; k < 32; k++)
+					{
+						checkTilePos += normal;
+						shouldClearTilePos.Add(checkTilePos);
+						if (SafeGetTile(checkTilePos.ToTileCoordinates()).TileType != ModContent.TileType<HumicMud>())
+						{
+							shouldClearTilePos.Add(checkTilePos + normal);
+							shouldClearTilePos.Add(checkTilePos + normal * 2);
+							shouldClearTilePos.Add(checkTilePos + normal * 3);
+							break;
+						}
+					}
+					foreach (var corePos in shouldClearTilePos)
+					{
+						KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(corePos.ToTileCoordinates(), 3, new List<int> { ModContent.TileType<HumicMud>(), ModContent.TileType<DarkLakeBottomMud>(), ModContent.TileType<YggdrasilBlackRock>() });
+					}
+				}
+			}
+		}
+
+		List<Point> towardUp_Mud = new List<Point>();
+		foreach (var pos in tiles)
+		{
+			var tile = SafeGetTile(pos);
+			var tile_up = SafeGetTile(pos.X, pos.Y - 1);
+			if (tile.HasTile && tile.TileType == ModContent.TileType<HumicMud>() && !tile_up.HasTile && !towardUp_Mud.Contains(pos))
+			{
+				towardUp_Mud.Add(pos);
+			}
+		}
+		foreach (var pos in towardUp_Mud)
+		{
+			int distanceToTop = CheckSpaceUp(pos.X, pos.Y - 1);
+			if (GenRand.NextBool(4) && distanceToTop > 1)
+			{
+				int height = GenRand.Next(1, distanceToTop);
+				for (int j = 1; j <= height; j++)
+				{
+					var algeeTile = SafeGetTile(pos.X, pos.Y - j);
+					algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
+					algeeTile.HasTile = true;
+				}
+			}
+		}
+		foreach (var pos in towardUp_Mud)
+		{
+			if (GenRand.NextBool(8))
+			{
+				if (CanPlaceMultiAtTopTowardsUpRight(pos.X, pos.Y, 3, 2))
+				{
+					switch (GenRand.Next(2))
+					{
+						case 0:
+							PlaceFrameImportantTilesAbove(pos.X, pos.Y, 3, 2, ModContent.TileType<UnderwaterTentDebris>(), 54 * GenRand.Next(4));
+							break;
+						case 1:
+							PlaceFrameImportantTilesAbove(pos.X, pos.Y, 3, 2, ModContent.TileType<FishSkeleton>(), 54 * GenRand.Next(6));
+							break;
+					}
+				}
+			}
+		}
+		foreach (var pos in towardUp_Mud)
+		{
+			if (GenRand.NextBool(3))
+			{
+				if (CanPlaceMultiAtTopTowardsUpRight(pos.X, pos.Y, 2, 2))
+				{
+					switch (GenRand.Next(3))
+					{
+						case 0:
+							PlaceFrameImportantTilesAbove(pos.X, pos.Y, 2, 2, ModContent.TileType<BrokenOxygenTank>(), 36 * GenRand.Next(4));
+							break;
+						case 1:
+							PlaceFrameImportantTilesAbove(pos.X, pos.Y, 2, 2, ModContent.TileType<AgedOxygenTank>(), 36 * GenRand.Next(4));
+							break;
+						case 2:
+							PlaceFrameImportantTilesAbove(pos.X, pos.Y, 2, 2, ModContent.TileType<AbandonedShrimpCage>(), 36 * GenRand.Next(6));
+							break;
+					}
+				}
+			}
+		}
+		foreach (var pos in towardUp_Mud)
+		{
+			if (GenRand.NextBool(8))
+			{
+				if (CanPlaceMultiAtTopTowardsUpRight(pos.X, pos.Y, 1, 2))
+				{
+					PlaceFrameImportantTilesAbove(pos.X, pos.Y, 1, 2, ModContent.TileType<AbandonedFishingNet>(), 18 * GenRand.Next(3));
+				}
+			}
+		}
+	}
+
+	public static void MazeUnderLake_RedAlgaeRoom(List<Point> tiles)
 	{
 		int maxY = 0;
 		foreach (var pos in tiles)
@@ -759,6 +1007,8 @@ public class KelpCurtainGeneration
 			}
 		}
 
+		
+
 		List<Point> towardUp_Mud = new List<Point>();
 		foreach (var pos in tiles)
 		{
@@ -769,17 +1019,129 @@ public class KelpCurtainGeneration
 				towardUp_Mud.Add(pos);
 			}
 		}
+		float avg_mud_x = -1;
+		foreach (var pos in towardUp_Mud)
+		{
+			avg_mud_x += pos.X;
+		}
+		avg_mud_x /= towardUp_Mud.Count;
+		float closestToAvg = towardUp_Mud.Count;
+		Point targetForCenterPlant = default;
+		if (avg_mud_x != -1)
+		{
+			foreach (var pos in towardUp_Mud)
+			{
+				float disToAvg = Math.Abs(pos.X - avg_mud_x);
+				if (disToAvg < closestToAvg)
+				{
+					closestToAvg = disToAvg;
+					targetForCenterPlant = pos;
+				}
+			}
+		}
+		if (targetForCenterPlant != default)
+		{
+			int distanceToTop = CheckSpaceUp(targetForCenterPlant.X, targetForCenterPlant.Y - 1);
+			int height = distanceToTop / 2;
+			for (int j = 1; j <= height; j++)
+			{
+				var algeeTile = SafeGetTile(targetForCenterPlant.X, targetForCenterPlant.Y - j);
+				algeeTile.TileType = (ushort)ModContent.TileType<CrimsonMoonAlgea>();
+				if(j == height)
+				{
+					algeeTile.TileType = (ushort)ModContent.TileType<CrimsonMoonAlgea_fruit>();
+				}
+				algeeTile.HasTile = true;
+			}
+		}
 		foreach (var pos in towardUp_Mud)
 		{
 			int distanceToTop = CheckSpaceUp(pos.X, pos.Y - 1);
-			if (GenRand.NextBool(4))
+			if (GenRand.NextBool(4) && distanceToTop > 1)
 			{
 				int height = GenRand.Next(1, distanceToTop);
 				for (int j = 1; j <= height; j++)
 				{
 					var algeeTile = SafeGetTile(pos.X, pos.Y - j);
-					algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
+					algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeBloodVineAlgea>();
 					algeeTile.HasTile = true;
+				}
+			}
+		}
+
+		List<Point> side_tiles = new List<Point>();
+		foreach (var pos in tiles)
+		{
+			var tile = SafeGetTile(pos);
+			var pos_up = new Point(pos.X, pos.Y - 1);
+			var pos_down = new Point(pos.X, pos.Y + 1);
+			var pos_left = new Point(pos.X - 1, pos.Y);
+			var pos_right = new Point(pos.X + 1, pos.Y);
+			bool flag = !tiles.Contains(pos_up) || !tiles.Contains(pos_down) || !tiles.Contains(pos_left) || !tiles.Contains(pos_right);
+			if (tile.HasTile && flag)
+			{
+				bool flag1 = !side_tiles.Contains(pos_up) || !side_tiles.Contains(pos_down) || !side_tiles.Contains(pos_left) || !side_tiles.Contains(pos_right);
+				if (flag1)
+				{
+					side_tiles.AddRange(BFSSurface(pos));
+				}
+			}
+		}
+		side_tiles = side_tiles.Distinct().ToList();
+		foreach (var pos in side_tiles)
+		{
+			var tile = SafeGetTile(pos);
+			if(tile.TileType != ModContent.TileType<DarkLakeBottomMud>() && tile.TileType != ModContent.TileType<YggdrasilBlackRock>())
+			{
+				continue;
+			}
+			var tile_up = SafeGetTile(pos.X, pos.Y - 1);
+			var tile_down = SafeGetTile(pos.X, pos.Y + 1);
+			var tile_left = SafeGetTile(pos.X - 1, pos.Y);
+			var tile_right = SafeGetTile(pos.X + 1, pos.Y);
+			if (!GenRand.NextBool(3))
+			{
+				if (!tile_up.HasTile)
+				{
+					tile_up.TileType = (ushort)ModContent.TileType<JadeLakeRedAlgae>();
+					tile_up.HasTile = true;
+				}
+			}
+			if (!GenRand.NextBool(3))
+			{
+				if (!tile_down.HasTile)
+				{
+					tile_down.TileType = (ushort)ModContent.TileType<JadeLakeRedAlgae>();
+					tile_down.HasTile = true;
+				}
+			}
+			if (!GenRand.NextBool(3))
+			{
+				if (!tile_left.HasTile)
+				{
+					tile_left.TileType = (ushort)ModContent.TileType<JadeLakeRedAlgae>();
+					tile_left.HasTile = true;
+				}
+			}
+			if (!GenRand.NextBool(8))
+			{
+				if (!tile_right.HasTile)
+				{
+					tile_right.TileType = (ushort)ModContent.TileType<JadeLakeRedAlgae>();
+					tile_right.HasTile = true;
+				}
+			}
+		}
+		foreach (var pos in tiles)
+		{
+			if (GetPerlinPixelR(pos.X * 3, pos.Y * 3) > 0.3f)
+			{
+				var tile = SafeGetTile(pos);
+				tile.wall = (ushort)ModContent.WallType<DarkLakeBottomMudWall>();
+				if (GenRand.NextBool(5) && !tile.HasTile)
+				{
+					tile.TileType = (ushort)ModContent.TileType<JadeLakeRedAlgae>();
+					tile.HasTile = true;
 				}
 			}
 		}

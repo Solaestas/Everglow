@@ -12,7 +12,7 @@ public class BrokenOxygenTank : ModTile
 		Main.tileWaterDeath[Type] = false;
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 1;
+		TileObjectData.newTile.Width = 2;
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
 			16,

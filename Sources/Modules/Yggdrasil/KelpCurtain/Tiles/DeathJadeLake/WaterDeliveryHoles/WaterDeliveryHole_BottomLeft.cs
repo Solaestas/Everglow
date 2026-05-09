@@ -101,7 +101,7 @@ public class WaterDeliveryHole_BottomLeft : ShapeDataTile, ISceneTile
 			base.NearbyEffects(i, j, closer);
 			return;
 		}
-		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.1f, 0.2f, 0.5f));
+		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.4f, 0.8f, 2f));
 		WaterDeliveryHole_TeleportPlayer.GetDestinationAndTeleport(i, j);
 		base.NearbyEffects(i, j, closer);
 	}

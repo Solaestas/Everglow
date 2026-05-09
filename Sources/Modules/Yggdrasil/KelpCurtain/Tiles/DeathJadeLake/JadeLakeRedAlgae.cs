@@ -15,7 +15,6 @@ public class JadeLakeRedAlgae : ModTile, ITileFluentlyDrawn
 	{
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
-		Main.tileCut[Type] = true;
 		Main.tileLavaDeath[Type] = true;
 		// TileObjectData assignment
 		// The TileID.Signs TileObjectData doesn't set StyleMultiplier to 5, so we will not be copying from it in this case
@@ -245,9 +244,8 @@ public class JadeLakeRedAlgae : ModTile, ITileFluentlyDrawn
 				windCycle += highestWindGridPushComplexRight;
 				Vector2 movementRight = new Vector2(windCycle * 7.2f * hardness, 0);
 				float midRot = (movementLeft.X + movementRight.X) * 0.015f + totalRot;
-
-				algaes.Add(drawPos - deltaX.RotatedBy(midRot) + algeaPos + movementLeft, tileLight, new Vector3(frame.X / (float)tex.Width, (frame.Y + frame.Height - frame.Height / 16f * j) / tex.Height, 0));
 				algaes.Add(drawPos + deltaX.RotatedBy(midRot) + algeaPos + movementRight, tileLight, new Vector3((frame.X + frame.Width) / (float)tex.Width, (frame.Y + frame.Height - frame.Height / 16f * j) / tex.Height, 0));
+				algaes.Add(drawPos - deltaX.RotatedBy(midRot) + algeaPos + movementLeft, tileLight, new Vector3(frame.X / (float)tex.Width, (frame.Y + frame.Height - frame.Height / 16f * j) / tex.Height, 0));
 				algeaPos += deltaY.RotatedBy(midRot);
 			}
 		}

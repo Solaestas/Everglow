@@ -11,6 +11,8 @@ public class HumicMud : ModTile, ISceneTile
 		Main.tileSolid[Type] = true;
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = true;
+		Main.tileMerge[Type][ModContent.TileType<DarkLakeBottomMud>()] = true;
+		Main.tileMerge[ModContent.TileType<DarkLakeBottomMud>()][Type] = true;
 		DustType = ModContent.DustType<HumicMud_Dust>();
 		AddMapEntry(new Color(34, 43, 39));
 	}

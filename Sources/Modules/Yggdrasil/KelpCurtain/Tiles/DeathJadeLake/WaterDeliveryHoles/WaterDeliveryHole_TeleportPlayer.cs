@@ -180,13 +180,8 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 		modPlayer.Active = true;
 		modPlayer.Timer = modPlayer.MaxTeleportTime;
 		modPlayer.OldPos = Main.screenPosition;
-
-		Vector2 desVel = new Vector2(4, 0).RotatedBy(-rotation);
 		player.MountedCenter = destination;
-		if (desVel.Y <= -2.82f)
-		{
-			player.MountedCenter += new Vector2(player.height / 2, 0).RotatedBy(-rotation) + player.velocity;
-		}
+		player.MountedCenter += new Vector2(20, 0).RotatedBy(rotation) + player.velocity;
 
 		// player.velocity += new Vector2(-4, 0).RotatedBy(rotation);
 	}

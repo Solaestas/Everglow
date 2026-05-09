@@ -61,6 +61,7 @@ public class DeathJadeLakeBackground : ModSystem
 		DrawBGLiquid(tex5, 0.4f);
 		DrawBGLiquid(tex4, 0.5f);
 		DrawBGLiquid(tex3, 0.6f);
+		DrawLiquidTyndallLight(Commons.ModAsset.Noise_perlin.Value, 4f);
 		DrawBGLiquid(tex2, 0.8f);
 	}
 
@@ -124,6 +125,86 @@ public class DeathJadeLakeBackground : ModSystem
 			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
 		}
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
+	}
+
+	public static void DrawLiquidTyndallLight(Texture2D tex, float moveScale)
+	{
+		DeathJadeLakeBackground deathJadeLakeBackground = ModContent.GetInstance<DeathJadeLakeBackground>();
+		if (deathJadeLakeBackground is null)
+		{
+			return;
+		}
+		Color baseColor = new Color(0.1f, 0.3f, 0.2f, 0f) * deathJadeLakeBackground.alpha;
+		DeathJadeLakeBiome dJLB = ModContent.GetInstance<DeathJadeLakeBiome>();
+		if (dJLB == null)
+		{
+			return;
+		}
+		float drawTop = dJLB.LiquidSurfaceY;
+		if (drawTop - Main.screenPosition.Y < -Main.offScreenRange)
+		{
+			drawTop = -Main.offScreenRange + Main.screenPosition.Y;
+		}
+		float drawBottom = Main.screenPosition.Y + Main.screenHeight + Main.offScreenRange;
+		if (drawTop > drawBottom)
+		{
+			return;
+		}
+		Vector2 totalOffset = (Main.screenPosition - BiomeCenter) * moveScale / 3000f;
+		float timeValue = (float)(Main.time * 0.0005);
+
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+		var bars = new List<Vertex2D>();
+		int yLayers = (int)((drawBottom - drawTop) / 16f);
+
+		for (int offsetY = 0; offsetY < yLayers; offsetY++)
+		{
+			float rightClamp = Main.screenWidth + Main.offScreenRange;
+			float rightBound = Main.maxTilesX * 16;
+			int tileY = (int)(drawTop / 16) + offsetY;
+			if (dJLB.RightBoundOfACertainY.ContainsKey(tileY))
+			{
+				int rightX;
+				dJLB.RightBoundOfACertainY.TryGetValue(tileY, out rightX);
+				rightBound = rightX * 16;
+			}
+			rightBound -= Main.screenPosition.X;
+			if (rightClamp > rightBound)
+			{
+				rightClamp = rightBound;
+			}
+			float tilt = -0.01f;
+			float tiltX0 = offsetY * tilt;
+			float tileX1 = (offsetY + 1) * tilt;
+
+			float fade = 1 - offsetY * 0.02f;
+			if(fade <= 0)
+			{
+				break;
+			}
+			Color drawColor = baseColor * fade;
+			float leftXcoord = totalOffset.X;
+			float rightXcoord = totalOffset.X + (rightClamp + Main.offScreenRange) / tex.Width;
+			bars.Add(new Vector2(-Main.offScreenRange, drawTop + offsetY * 16 - Main.screenPosition.Y), drawColor, new Vector3(leftXcoord + tiltX0, timeValue, 0));
+			bars.Add(new Vector2(rightClamp, drawTop + offsetY * 16 - Main.screenPosition.Y), drawColor, new Vector3(rightXcoord + tiltX0, timeValue, 0));
+			bars.Add(new Vector2(-Main.offScreenRange, drawTop + (offsetY + 1) * 16 - Main.screenPosition.Y), drawColor, new Vector3(leftXcoord + tileX1, timeValue, 0));
+
+			bars.Add(new Vector2(-Main.offScreenRange, drawTop + (offsetY + 1) * 16 - Main.screenPosition.Y), drawColor, new Vector3(leftXcoord + tileX1, timeValue, 0));
+			bars.Add(new Vector2(rightClamp, drawTop + offsetY * 16 - Main.screenPosition.Y), drawColor, new Vector3(rightXcoord + tiltX0, timeValue, 0));
+			bars.Add(new Vector2(rightClamp, drawTop + (offsetY + 1) * 16 - Main.screenPosition.Y), drawColor, new Vector3(rightXcoord + tileX1, timeValue, 0));
+		}
+		if (bars.Count > 2)
+		{
+			Main.graphics.GraphicsDevice.Textures[0] = tex;
+			Main.graphics.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+		}
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
