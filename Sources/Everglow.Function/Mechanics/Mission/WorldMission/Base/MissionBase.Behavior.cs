@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
+using Everglow.Commons.Netcode;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
@@ -55,11 +56,10 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			var unlockTextColor = new Color(150, 150, 250);
 			WorldMissionManager.NewText(unlockText, unlockTextColor);
 
-
-			if (NetUtils.IsServer)
+			if (NetUtils.IsMainServer)
 			{
-				Console.WriteLine(unlockText);
-				ModIns.PacketResolver.Send(new MissionSyncPacket(this));
+				Ins.Logger.Info(unlockText);
+				ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
 			}
 		}
 	}
@@ -126,11 +126,10 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 				var failTextColor = new Color(250, 150, 150);
 				WorldMissionManager.NewText(failText, failTextColor);
 
-				if (NetUtils.IsServer)
+				if (NetUtils.IsMainServer)
 				{
-					Console.WriteLine(failText);
-					// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(failText, Terraria.Localization.NetworkText.Mode.Literal), failTextColor);
-					ModIns.PacketResolver.Send(new MissionSyncPacket(this));
+					Ins.Logger.Info(failText);
+					ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
 				}
 			}
 
@@ -162,11 +161,10 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			var completeTextColor = new Color(150, 250, 150);
 			WorldMissionManager.NewText(completeText, completeTextColor);
 
-			if (NetUtils.IsServer)
+			if (NetUtils.IsMainServer)
 			{
-				Console.WriteLine(completeText);
-				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(completeText, Terraria.Localization.NetworkText.Mode.Literal), completeTextColor);
-				ModIns.PacketResolver.Send(new MissionSyncPacket(this));
+				Ins.Logger.Info(completeText);
+				ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
 			}
 		}
 	}
@@ -193,13 +191,12 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			var objectiveCompleteTextColor = new Color(250, 250, 150);
 			WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
 
-			if (NetUtils.IsServer)
+			if (NetUtils.IsMainServer)
 			{
-				Console.WriteLine(objectiveCompleteText);
-				// ChatHelper.BroadcastChatMessage(new Terraria.Localization.NetworkText(objectiveCompleteText, Terraria.Localization.NetworkText.Mode.Literal), objectiveCompleteTextColor);
+				Ins.Logger.Info(objectiveCompleteText);
 				if (CurrentObjective != null) // Skip the last objective sync because a packet for completion will be sent.
 				{
-					ModIns.PacketResolver.Send(new MissionSyncPacket(this));
+					ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
 				}
 			}
 		}
@@ -225,12 +222,6 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 	/// </summary>
 	public void Retry()
 	{
-		if (NetUtils.IsServer)
-		{
-			Console.WriteLine("Waiting for retry packet.");
-			return;
-		}
-
 		if (NetUtils.IsSingle)
 		{
 			if (!RetryCore())
@@ -239,6 +230,11 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			}
 
 			WorldMissionManager.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
+		}
+		else if (NetUtils.IsMainServer)
+		{
+			// TODO: Waiting for retry packet
+			return;
 		}
 		else if (NetUtils.IsClient)
 		{

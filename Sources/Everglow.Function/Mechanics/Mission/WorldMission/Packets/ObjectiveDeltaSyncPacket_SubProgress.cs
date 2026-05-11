@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Netcode;
 using Everglow.Commons.Netcode.Abstracts;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
@@ -28,7 +29,7 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 		if (objective is IDeltaSyncObjective deltaSyncObjective)
 		{
 			deltaSyncObjective.ReceiveDelta(reader);
-			ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_MainProgress(missionName, deltaSyncObjective), -1, -1);
+			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(missionName, deltaSyncObjective), RouteDestination.AllDownstream);
 		}
 		else
 		{
@@ -48,8 +49,6 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 	{
 		public void Handle(IPacket packet, int whoAmI)
 		{
-			// All logic already executed in Receive()
-			// Keep empty to satisfy the interface
 		}
 	}
 }

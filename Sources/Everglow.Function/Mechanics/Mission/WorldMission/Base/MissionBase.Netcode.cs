@@ -1,4 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
+using Everglow.Commons.Netcode;
+using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
@@ -18,7 +20,6 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			objective.NetSend(writer);
 		}
-		Console.WriteLine("Full sync msg sent!");
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
@@ -78,7 +79,14 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			if (deltaSync.NeedDeltaSync)
 			{
-				ModIns.PacketResolver.Send(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync));
+				if (NetUtils.IsClient || NetUtils.IsSubServer)
+				{
+					ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync), RouteDestination.MainServer);
+				}
+				else
+				{
+					ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(Name, deltaSync), RouteDestination.AllDownstream);
+				}
 			}
 		}
 	}

@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
@@ -49,9 +48,20 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 
 	public override void SendDelta(BinaryWriter bw)
 	{
-		if (NetUtils.IsSubServer)
-		{
+	}
 
-		}
+	public override void ReceiveDelta(BinaryReader br)
+	{
+
+	}
+
+	public override void SendMain(BinaryWriter bw)
+	{
+
+	}
+
+	public override void ReceiveMain(BinaryReader br)
+	{
+
 	}
 }

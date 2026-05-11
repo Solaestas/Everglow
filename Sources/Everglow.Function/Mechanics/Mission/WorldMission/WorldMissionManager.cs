@@ -107,9 +107,6 @@ public class WorldMissionManager
 			{
 				if (m.CanUnlock())
 				{
-					// Unlock mission
-					// 1. activate (set first + attach hooks)
-					// 2. set state to active
 					m.Unlock();
 				}
 			}
@@ -121,8 +118,7 @@ public class WorldMissionManager
 			}
 		}
 
-		if (UpdateTimer % NetUpdateInterval == 0
-			&& (NetUtils.IsClient || NetUtils.IsSubServer))
+		if (UpdateTimer % NetUpdateInterval == 0)
 		{
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
@@ -175,6 +171,7 @@ public class WorldMissionManager
 		if (SendText)
 		{
 			Main.NewText(text, color);
+			Console.WriteLine(text);
 		}
 	}
 
@@ -186,6 +183,7 @@ public class WorldMissionManager
 		{
 			m.NetSend(writer);
 		}
+		Console.WriteLine("Full sync msg sent!");
 	}
 
 	public void NetReceive(BinaryReader reader)
@@ -194,6 +192,7 @@ public class WorldMissionManager
 		{
 			m.NetReceive(reader);
 		}
+		Console.WriteLine("Full sync msg received!");
 	}
 
 	public void SaveData(TagCompound tag)

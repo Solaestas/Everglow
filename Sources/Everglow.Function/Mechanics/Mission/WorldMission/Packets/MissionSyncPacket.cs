@@ -1,6 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Everglow.Commons.Netcode.Abstracts;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
 
@@ -35,11 +34,6 @@ public class MissionSyncPacket : IPacket
 	{
 		public void Handle(IPacket packet, int whoAmI)
 		{
-			// Forward sync packet to all subworld client.
-			if (NetUtils.IsSubServer)
-			{
-				ModIns.PacketResolver.Send(packet);
-			}
 		}
 	}
 }

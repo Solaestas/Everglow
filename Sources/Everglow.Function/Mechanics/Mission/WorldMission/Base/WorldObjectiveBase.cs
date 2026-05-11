@@ -24,7 +24,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	public bool RewardClaimed { get; private set; } = false;
 
-	public virtual bool NeedDeltaSync => false;
+	public virtual bool NeedDeltaSync { get; protected set; } = false;
 
 	public abstract bool CheckCompletion();
 

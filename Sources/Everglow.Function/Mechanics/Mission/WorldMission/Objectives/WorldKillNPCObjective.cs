@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
@@ -15,6 +16,10 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 		NPCType = type;
 		NPCCount = count;
 	}
+
+	private int _localKillCount = 0;
+
+	public override bool NeedDeltaSync { get; protected set; } = false;
 
 	public int NPCType { get; private set; }
 
@@ -38,16 +43,33 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 		WorldMissionGlobalNPC.OnNPCKilled -= WorldMissionGlobalNPC_OnNPCKilled;
 	}
 
+	private void CountKill(int count = 1)
+	{
+		KilledCount += count;
+		if (KilledCount > NPCCount)
+		{
+			KilledCount = NPCCount;
+		}
+	}
+
 	private void WorldMissionGlobalNPC_OnNPCKilled(NPC npc)
 	{
 		if (npc.netID == NPCType)
 		{
-			KilledCount++;
-			if (KilledCount > NPCCount)
+			if (NetUtils.IsSingle)
 			{
-				KilledCount = NPCCount;
+				CountKill();
 			}
-			Console.WriteLine($"{KilledCount}/{NPCCount}");
+			else if (NetUtils.IsMainServer)
+			{
+				CountKill();
+				NeedDeltaSync = true;
+			}
+			else if (NetUtils.IsSubServer)
+			{
+				_localKillCount++;
+				NeedDeltaSync = true;
+			}
 		}
 	}
 
@@ -55,6 +77,7 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 	{
 		base.ResetProgress();
 		KilledCount = 0;
+		_localKillCount = 0;
 	}
 
 	public override void NetSend(BinaryWriter writer)
@@ -67,6 +90,30 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 	{
 		base.NetReceive(reader);
 		KilledCount = reader.ReadInt32();
+	}
+
+	public override void SendDelta(BinaryWriter bw)
+	{
+		bw.Write(_localKillCount);
+		_localKillCount = 0;
+		NeedDeltaSync = false;
+	}
+
+	public override void ReceiveDelta(BinaryReader br)
+	{
+		var count = br.ReadInt32();
+		CountKill(count);
+	}
+
+	public override void SendMain(BinaryWriter bw)
+	{
+		bw.Write(KilledCount);
+		NeedDeltaSync = false;
+	}
+
+	public override void ReceiveMain(BinaryReader br)
+	{
+		KilledCount = br.ReadInt32();
 	}
 
 	public override void LoadData(TagCompound tag)
