@@ -19,8 +19,6 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 
 	private int _localKillCount = 0;
 
-	public override bool NeedDeltaSync { get; protected set; } = false;
-
 	public int NPCType { get; private set; }
 
 	public int NPCCount { get; private set; }
@@ -28,6 +26,8 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 	public int KilledCount { get; private set; }
 
 	public override float Progress => Math.Clamp(KilledCount / (float)NPCCount, 0, 1);
+
+	public override bool NeedDeltaSync { get; protected set; } = false;
 
 	public override bool CheckCompletion() => KilledCount >= NPCCount;
 
@@ -80,6 +80,21 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 		_localKillCount = 0;
 	}
 
+	public override void SaveData(TagCompound tag)
+	{
+		base.SaveData(tag);
+		tag.Add(nameof(KilledCount), KilledCount);
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+		if (tag.TryGet<int>(nameof(KilledCount), out var cc))
+		{
+			KilledCount = cc;
+		}
+	}
+
 	public override void NetSend(BinaryWriter writer)
 	{
 		base.NetSend(writer);
@@ -114,20 +129,5 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 	public override void ReceiveMain(BinaryReader br)
 	{
 		KilledCount = br.ReadInt32();
-	}
-
-	public override void LoadData(TagCompound tag)
-	{
-		base.LoadData(tag);
-		if (tag.TryGet<int>(nameof(KilledCount), out var cc))
-		{
-			KilledCount = cc;
-		}
-	}
-
-	public override void SaveData(TagCompound tag)
-	{
-		base.SaveData(tag);
-		tag.Add(nameof(KilledCount), KilledCount);
 	}
 }

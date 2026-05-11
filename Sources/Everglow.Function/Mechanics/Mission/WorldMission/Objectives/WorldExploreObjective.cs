@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Everglow.Commons.Utilities;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
@@ -45,7 +46,41 @@ public class WorldExploreObjective : WorldObjectiveBase
 		}
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		CurrentDistance = 0;
+		_localDistance = 0;
+	}
+
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+
+	public override void SaveData(TagCompound tag)
+	{
+		base.SaveData(tag);
+		tag.Add(nameof(CurrentDistance), CurrentDistance);
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+		if (tag.TryGet(nameof(CurrentDistance), out float distance))
+		{
+			CurrentDistance = distance;
+		}
+	}
+
+	public override void NetSend(BinaryWriter writer)
+	{
+		base.NetSend(writer);
+		writer.Write(CurrentDistance);
+	}
+
+	public override void NetReceive(BinaryReader reader)
+	{
+		base.NetReceive(reader);
+		CurrentDistance = reader.ReadSingle();
+	}
 
 	public override void SendDelta(BinaryWriter bw)
 	{

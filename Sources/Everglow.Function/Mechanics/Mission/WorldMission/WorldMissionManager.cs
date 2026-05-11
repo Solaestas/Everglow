@@ -20,6 +20,10 @@ public class WorldMissionManager
 
 	public static WorldMissionManager Instance => ModContent.GetInstance<WorldMissionSystem>().Manager;
 
+	public static bool NetUpdate => Instance.UpdateTimer % NetUpdateInterval == 0;
+
+	public static bool NormalUpdate => Instance.UpdateTimer % UpdateInterval == 0;
+
 	private IGameStateProvider _gameState;
 
 	private List<WorldMissionBase> _missions = [];
@@ -100,7 +104,7 @@ public class WorldMissionManager
 			return;
 		}
 
-		if (UpdateTimer % UpdateInterval == 0)
+		if (NormalUpdate)
 		{
 			// Check locked
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Locked))
@@ -118,7 +122,7 @@ public class WorldMissionManager
 			}
 		}
 
-		if (UpdateTimer % NetUpdateInterval == 0 && !NetUtils.IsSingle)
+		if (NetUpdate && !NetUtils.IsSingle)
 		{
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{

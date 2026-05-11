@@ -1,4 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Utilities;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
 
@@ -13,25 +15,114 @@ public class WorldReachObjective : WorldObjectiveBase
 		Condition = condition;
 	}
 
-	private bool progress;
+	private bool reaching;
+
+	private bool oldReaching;
+
+	public bool Reached { get; private set; }
 
 	public Func<Player, bool> Condition { get; private set; }
 
-	public override float Progress => progress ? 1f : 0f;
+	public override float Progress => Reached ? 1f : 0f;
 
-	public override bool CheckCompletion() => progress;
+	public override bool NeedDeltaSync { get; protected set; } = false;
+
+	public override bool CheckCompletion() => Reached;
 
 	public override void Update()
 	{
-		foreach (var player in Main.ActivePlayers)
+		if (NetUtils.IsSingle || NetUtils.IsMainServer)
 		{
-			if (Condition(player))
+			foreach (var player in Main.ActivePlayers)
 			{
-				progress = true;
-				return;
+				if (Condition(player))
+				{
+					Reached = true;
+				}
+			}
+		}
+		else if (NetUtils.IsSubServer)
+		{
+			oldReaching = reaching;
+			reaching = false;
+
+			foreach (var player in Main.ActivePlayers)
+			{
+				if (Condition(player))
+				{
+					reaching = true;
+
+					if (!oldReaching)
+					{
+						NeedDeltaSync = true;
+					}
+
+					if (WorldMissionManager.NetUpdate)
+					{
+						NeedDeltaSync = true;
+					}
+
+					return;
+				}
 			}
 		}
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		Reached = false;
+		reaching = false;
+		oldReaching = false;
+	}
+
 	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+
+	public override void SaveData(TagCompound tag)
+	{
+		base.SaveData(tag);
+		tag.Add(nameof(Reached), Reached);
+	}
+
+	public override void LoadData(TagCompound tag)
+	{
+		base.LoadData(tag);
+		if (tag.TryGet(nameof(Reached), out bool reached))
+		{
+			Reached = reached;
+		}
+	}
+
+	public override void NetSend(BinaryWriter writer)
+	{
+		base.NetSend(writer);
+		writer.Write(Reached);
+	}
+
+	public override void NetReceive(BinaryReader reader)
+	{
+		base.NetReceive(reader);
+		Reached = reader.ReadBoolean();
+	}
+
+	public override void SendDelta(BinaryWriter bw)
+	{
+		bw.Write(reaching);
+		NeedDeltaSync = false;
+	}
+
+	public override void ReceiveDelta(BinaryReader br)
+	{
+		Reached |= br.ReadBoolean();
+	}
+
+	public override void SendMain(BinaryWriter bw)
+	{
+		bw.Write(Reached);
+	}
+
+	public override void ReceiveMain(BinaryReader br)
+	{
+		Reached = br.ReadBoolean();
+	}
 }

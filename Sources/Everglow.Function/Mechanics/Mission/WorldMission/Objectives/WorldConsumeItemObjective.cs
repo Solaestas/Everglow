@@ -38,6 +38,7 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 		base.ResetProgress();
 
 		ConsumedCount = 0;
+		_localConsumedCount = 0;
 	}
 
 	public override void Activate(WorldMissionBase sourceMission)
@@ -72,18 +73,6 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 		}
 	}
 
-	override public void NetSend(BinaryWriter writer)
-	{
-		base.NetSend(writer);
-		writer.Write(ConsumedCount);
-	}
-
-	override public void NetReceive(BinaryReader reader)
-	{
-		base.NetReceive(reader);
-		ConsumedCount = reader.ReadInt32();
-	}
-
 	override public void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
@@ -97,6 +86,18 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 		{
 			ConsumedCount = cc;
 		}
+	}
+
+	override public void NetSend(BinaryWriter writer)
+	{
+		base.NetSend(writer);
+		writer.Write(ConsumedCount);
+	}
+
+	override public void NetReceive(BinaryReader reader)
+	{
+		base.NetReceive(reader);
+		ConsumedCount = reader.ReadInt32();
 	}
 
 	public override void SendDelta(BinaryWriter bw)
