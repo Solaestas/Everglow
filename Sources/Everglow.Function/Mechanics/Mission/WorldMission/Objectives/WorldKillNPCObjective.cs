@@ -40,7 +40,7 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 
 	private void WorldMissionGlobalNPC_OnNPCKilled(NPC npc)
 	{
-		if (npc.type == NPCType)
+		if (npc.netID == NPCType)
 		{
 			KilledCount++;
 			if (KilledCount > NPCCount)
