@@ -118,7 +118,7 @@ public class WorldMissionManager
 			}
 		}
 
-		if (UpdateTimer % NetUpdateInterval == 0)
+		if (UpdateTimer % NetUpdateInterval == 0 && !NetUtils.IsSingle)
 		{
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
