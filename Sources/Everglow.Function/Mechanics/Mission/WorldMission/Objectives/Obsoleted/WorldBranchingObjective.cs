@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Objectives.Obsoleted;
 
 [Obsolete("Conflict with net sync", true)]
 public class WorldBranchingObjective : WorldObjectiveBase, IDeltaSyncObjective

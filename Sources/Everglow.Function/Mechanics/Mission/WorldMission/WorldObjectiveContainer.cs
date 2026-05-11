@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
-using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
+using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives.Obsoleted;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldMission;
 
