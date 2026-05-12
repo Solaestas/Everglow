@@ -1,7 +1,11 @@
+using System;
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Commons.Netcode.Packets;
+using MathNet.Numerics;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using Spine;
+using Terraria.Audio;
 
 namespace Everglow.Commons.Utilities;
 
@@ -232,6 +236,14 @@ public static class NPCUtils
 	/// <param name="value"></param>
 	public static void SetLifeRegenExpectedLossPerSecond(this NPC npc, int value) =>
 		npc.lifeRegenExpectedLossPerSecond = Math.Max(npc.lifeRegenExpectedLossPerSecond, value);
+
+	public static void StrikeNPCWithCustomCombatText(this NPC npc, NPC.HitInfo hit, Color textColor, bool dot = false)
+	{
+		npc.HideStrikeDamage = true;
+		npc.StrikeNPC(hit);
+		npc.HideStrikeDamage = false;
+		CombatText.NewText(npc.Hitbox, textColor, hit.Damage, hit.Crit, dot);
+	}
 
 	#endregion
 

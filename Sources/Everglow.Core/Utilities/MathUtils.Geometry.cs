@@ -33,6 +33,25 @@ public static partial class MathUtils
 	}
 
 	/// <summary>
+	/// 判定2D 圆形与 AABB 是否相交（边界算相交）
+	/// </summary>
+	/// <param name="circleCenter"></param>
+	/// <param name="radius"></param>
+	/// <param name="aabbMin"></param>
+	/// <param name="aabbMax"></param>
+	/// <returns></returns>
+	public static bool IntersectsCircleAABB(Vector2 circleCenter, float radius, Vector2 aabbMin, Vector2 aabbMax)
+	{
+		float closestX = Math.Clamp(circleCenter.X, aabbMin.X, aabbMax.X);
+		float closestY = Math.Clamp(circleCenter.Y, aabbMin.Y, aabbMax.Y);
+
+		float dx = circleCenter.X - closestX;
+		float dy = circleCenter.Y - closestY;
+
+		return (dx * dx + dy * dy) <= (radius * radius);
+	}
+
+	/// <summary>
 	/// 2D 多边形与 AABB 是否相交
 	/// </summary>
 	public static bool IntersectsPolygonAABB(List<Vector2> polygonVertices, Vector2 aabbMin, Vector2 aabbMax)

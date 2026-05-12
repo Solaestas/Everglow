@@ -30,8 +30,8 @@ public class WaterDeliveryHole_VFX : TileVFX
 			{
 				fade *= (30 - k) / 10f;
 			}
-			Color drawColor = Color.Lerp(new Color(0.4f, 0.7f, 1f, 0f), new Color(0f, 0.2f, 1f, 0f), value) * fade;
-			var drawColor_dark = new Color(0, 0, 0, fade * 0.6f);
+			Color drawColor = Color.Lerp(new Color(0.4f, 0.7f, 1f, 0f), new Color(0f, 0.2f, 1f, 0f), value) * fade * 0.5f;
+			var drawColor_dark = new Color(0, 0, 0, fade * 0.6f) * 0.5f;
 			float coordX = MathF.Pow(value, 2);
 
 			bars_side_left.Add(Position + pos + new Vector2(0, -20 - k).RotatedBy(Rotation), drawColor * 0f, new Vector3(coordX + timeValue, 0, 0));

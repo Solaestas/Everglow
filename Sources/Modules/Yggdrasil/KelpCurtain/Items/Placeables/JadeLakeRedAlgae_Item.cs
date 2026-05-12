@@ -9,5 +9,6 @@ public class JadeLakeRedAlgae_Item : ModItem
 	public override void SetDefaults()
 	{
 		Item.DefaultToPlaceableTile(ModContent.TileType<JadeLakeRedAlgae>());
+		Item.value = 50;
 	}
 }

@@ -720,12 +720,12 @@ public class KelpCurtainGeneration
 		for(int k = 0;k < 999;k++)
 		{
 			bool success = false;
-			float randomX = GenRand.NextFloat(-70, 70);
+			float randomX = GenRand.NextFloat(-120, 120);
 			float checkX = xMiddle + randomX;
 			float avg_x = -1;
 			Point checkPos = new Vector2(checkX, yBoundTop + 11).ToPoint();
 			List<Point> checkRoom = BFSContinueEmpty(checkPos, false, 1536, WaterDeliveryHoleTiles);
-			if(checkRoom.Count > 300)
+			if(checkRoom.Count > 300 && checkRoom.Count < 1536)
 			{
 				foreach (var pos in checkRoom)
 				{
@@ -740,7 +740,7 @@ public class KelpCurtainGeneration
 			if(success)
 			{
 				avg_x /= checkRoom.Count;
-				int surfaceY = yBoundBottom - 20;
+				int surfaceY = yBoundTop - 20;
 				surfaceY += CheckSpaceDown((int)avg_x,surfaceY);
 				Vector2 entranceCenter = new Vector2(avg_x, surfaceY + 2) * 16;
 				float tilt = GenRand.NextFloat(-0.8f, 0.8f);
@@ -765,7 +765,7 @@ public class KelpCurtainGeneration
 					curve_polygon.Add(lerpPos);
 				}
 				curve_polygon.Add(right_Vertex);
-				PlacePolygonAreaOfBlock(curve_polygon, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.Forceful);
+				PlacePolygonAreaOfBlock(curve_polygon, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.NoWallOnly);
 				for (int m = 0; m < curve_polygon.Count;m++)
 				{
 					var pos = curve_polygon[m];
@@ -773,8 +773,8 @@ public class KelpCurtainGeneration
 					curve_polygon[m] = pos;
 				}
 				PlacePolygonAreaOfWall(curve_polygon, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.Forceful);
-				Vector2 des = Vector2.Lerp(top_Vertex, entranceCenter, 1.3f);
-				PlaceLineBlock(des, entranceCenter, -1, (int)TileChangeState.Forceful);
+				Vector2 des = Vector2.Lerp(top_Vertex, entranceCenter, 1.6f);
+				PlaceLineBlock(des, top_Vertex, 48, -1, (int)TileChangeState.Forceful);
 				successCount++;
 			}
 			if(successCount > 3)

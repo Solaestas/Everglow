@@ -80,6 +80,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 					}
 				}
 			}
+			var chosenDest = (-1, -1, -1);
 			if (destinations.Count > 0)
 			{
 				Vector2 closestDest = new Vector2(i + 100, j + 100);
@@ -113,10 +114,26 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 					{
 						minDis = dis;
 						closestDest = destination;
+						chosenDest = dest;
 					}
 				}
 				if ((currentPos - closestDest).Length() < 40)
 				{
+					int destX = chosenDest.Item1;
+					int destY = chosenDest.Item2;
+					var destTile = TileUtils.SafeGetTile(destX, destY);
+					var vfx = new WaterDeliveryHole_VFX_Release
+					{
+						Active = true,
+						Visible = true,
+						Position = new Point(destX, destY).ToWorldCoordinates(),
+						OriginTilePos = new Point(destX, destY),
+						OriginTileType = destTile.TileType,
+						Direction = 1,
+						Rotation = chosenDest.Item3 * MathHelper.PiOver4,
+						MaxTime = 60,
+					};
+					Ins.VFXManager.Add(vfx);
 					Teleport(player, closestDest * 16 + new Vector2(8), bestDir * MathHelper.PiOver4);
 				}
 			}

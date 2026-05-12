@@ -19,7 +19,7 @@ public class JadeLakeSponge : ModTile
 			30,
 		};
 		TileObjectData.newTile.CoordinateWidth = 30;
-		TileObjectData.newTile.DrawYOffset = --15;
+		TileObjectData.newTile.DrawYOffset = -15;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);

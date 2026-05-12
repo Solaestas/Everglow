@@ -9,6 +9,7 @@ public class CrimsonMoonSap : ModItem
 		Item.width = 20;
 		Item.height = 28;
 		Item.value = 5000;
+		Item.maxStack = Item.CommonMaxStack;
 		Item.rare = ItemRarityID.Orange;
 	}
 }
