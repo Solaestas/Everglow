@@ -38,7 +38,7 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 			Objectives.LoadData(o);
 		}
 
-		ApplySnapshot(oldState, State);
+		ApplyObjectiveSnapshot(oldState, State);
 	}
 
 	public void SaveData(TagCompound tag)

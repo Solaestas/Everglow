@@ -28,7 +28,7 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		}
 		Objectives.NetReceive(reader);
 
-		ApplySnapshot(oldState, State);
+		ApplyObjectiveSnapshot(oldState, State);
 
 		if (oldState != State)
 		{

@@ -10,8 +10,8 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 	{
 		Objectives.OnNodeCompleted += Objectives_OnNodeCompleted;
 		Objectives.OnObjectiveActivated += Objectives_OnObjectiveActivated;
-		Objectives.OnObjectiveDectivated += Objectives_OnObjectiveDectivated;
-		Objectives.OnMPSyncTriggerred += Objectives_OnMPSyncTriggerred;
+		Objectives.OnObjectiveDeactivated += Objectives_OnObjectiveDeactivated;
+		Objectives.OnMPSyncTriggered += Objectives_OnMPSyncTriggered;
 		Objectives.OnObjectiveSynced += Objectives_OnObjectiveSynced;
 	}
 
@@ -87,7 +87,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			return;
 		}
 
-		Objectives.UpdateCurrentNode();
+		Objectives.UpdateNode();
 	}
 
 	public bool UpdateTime()
@@ -275,11 +275,11 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 	/// </summary>
 	/// <param name="oldState"></param>
 	/// <param name="newState"></param>
-	private void ApplySnapshot(WorldMissionState oldState, WorldMissionState newState)
+	private void ApplyObjectiveSnapshot(WorldMissionState oldState, WorldMissionState newState)
 	{
 		var missionActiveBefore = oldState == WorldMissionState.Active;
 		var missionActiveAfter = newState == WorldMissionState.Active;
-		Objectives.HandleObjectiveLifecycle(missionActiveBefore, missionActiveAfter);
+		Objectives.ApplyObjectiveSnapshot(missionActiveBefore, missionActiveAfter);
 	}
 
 	public virtual void OnUnlock()
@@ -327,7 +327,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		}
 	}
 
-	private void Objectives_OnObjectiveDectivated(WorldObjectiveNodeBase node)
+	private void Objectives_OnObjectiveDeactivated(WorldObjectiveNodeBase node)
 	{
 		if (node == null)
 		{
@@ -340,7 +340,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		}
 	}
 
-	private void Objectives_OnMPSyncTriggerred(IDeltaSyncObjective deltaSync)
+	private void Objectives_OnMPSyncTriggered(IDeltaSyncObjective deltaSync)
 	{
 		if (NetUtils.IsClient || NetUtils.IsSubServer)
 		{
