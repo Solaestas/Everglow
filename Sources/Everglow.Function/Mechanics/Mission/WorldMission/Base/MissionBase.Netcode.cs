@@ -1,7 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission.Packets;
-using Everglow.Commons.Netcode;
-using Everglow.Commons.Utilities;
-
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 public abstract partial class WorldMissionBase : IMissionNetcode
@@ -16,10 +12,7 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			writer.Write(player);
 		}
-		foreach (var objective in Objectives.AllObjectives)
-		{
-			objective.NetSend(writer);
-		}
+		Objectives.NetSend(writer);
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
@@ -33,12 +26,9 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 		{
 			RewardClaimedPlayers.Add(reader.ReadString());
 		}
-		foreach (var objective in Objectives.AllObjectives)
-		{
-			objective.NetReceive(reader);
-		}
+		Objectives.NetReceive(reader);
 
-		ApplySnapshot(State, oldState);
+		ApplySnapshot(oldState, State);
 
 		if (oldState != State)
 		{
@@ -74,30 +64,6 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 
 	public void OnMPSync()
 	{
-		if (CurrentObjective is not null
-			and IDeltaSyncObjective deltaSync)
-		{
-			if (deltaSync.NeedDeltaSync)
-			{
-				if (NetUtils.IsClient || NetUtils.IsSubServer)
-				{
-					ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync), RouteDestination.MainServer);
-				}
-				else
-				{
-					ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(Name, deltaSync), RouteDestination.AllDownstream);
-				}
-			}
-		}
-	}
-
-	public void SyncRetry()
-	{
-		RetryCore();
-	}
-
-	public void SyncObjectiveCompletion()
-	{
-		CompleteObjectiveCore();
+		Objectives.OnMPSync();
 	}
 }

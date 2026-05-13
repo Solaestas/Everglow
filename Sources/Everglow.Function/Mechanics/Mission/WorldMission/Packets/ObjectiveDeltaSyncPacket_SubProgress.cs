@@ -25,7 +25,7 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 		var missionName = reader.ReadString();
 		var objectiveId = reader.ReadInt32();
 		var mission = WorldMissionManager.Instance.GetMission(missionName);
-		var objective = mission.Objectives[objectiveId];
+		var objective = mission.Objectives.AllObjectives[objectiveId];
 		if (objective is IDeltaSyncObjective deltaSyncObjective)
 		{
 			deltaSyncObjective.ReceiveDelta(reader);

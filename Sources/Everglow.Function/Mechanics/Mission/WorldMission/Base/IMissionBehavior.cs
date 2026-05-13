@@ -8,9 +8,7 @@ public interface IMissionBehavior
 
 	public float Progress { get; }
 
-	public WorldObjectiveContainer Objectives { get; }
-
-	public WorldObjectiveBase CurrentObjective { get; }
+	public StructuralObjectiveContainer Objectives { get; }
 
 	public int Time { get; }
 
@@ -26,8 +24,6 @@ public interface IMissionBehavior
 	public void Unlock();
 
 	public void CompleteMission();
-
-	public void CompleteObjective();
 
 	public void Update();
 

@@ -33,25 +33,12 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 			RewardClaimedPlayers = rp.ToHashSet();
 		}
 
-		LoadObjectives(tag, Objectives.AllObjectives);
-
-		ApplySnapshot(State, oldState);
-	}
-
-	public static void LoadObjectives(TagCompound tag, IEnumerable<WorldObjectiveBase> objectives)
-	{
-		if (tag.TryGet<IList<TagCompound>>(ObjectivesSaveKey, out var oTags))
+		if (tag.TryGet<TagCompound>(ObjectivesSaveKey, out var o))
 		{
-			foreach (var o in objectives)
-			{
-				if (oTags.Count <= o.ObjectiveID)
-				{
-					break;
-				}
-
-				o.LoadData(oTags[o.ObjectiveID]);
-			}
+			Objectives.LoadData(o);
 		}
+
+		ApplySnapshot(oldState, State);
 	}
 
 	public void SaveData(TagCompound tag)
@@ -61,18 +48,8 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 		tag.Add(RewardKey, RewardClaimed);
 		tag.Add(RewardPlayerKey, RewardClaimedPlayers.ToList());
 
-		SaveObjectives(tag, Objectives.AllObjectives);
-	}
-
-	public static void SaveObjectives(TagCompound tag, IEnumerable<WorldObjectiveBase> objectives)
-	{
-		var oTags = new List<TagCompound>();
-		foreach (var o in objectives)
-		{
-			var ot = new TagCompound();
-			o.SaveData(ot);
-			oTags.Add(ot);
-		}
-		tag.Add(ObjectivesSaveKey, oTags);
+		var o = new TagCompound();
+		Objectives.SaveData(o);
+		tag.Add(ObjectivesSaveKey, o);
 	}
 }

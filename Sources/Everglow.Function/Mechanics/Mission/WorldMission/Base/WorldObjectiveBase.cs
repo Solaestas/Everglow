@@ -29,7 +29,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="WorldObjectiveContainer.Add(WorldObjectiveBase)"/>.
+	/// Invoked by <see cref="StructuralObjectiveContainer.Add(WorldObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()

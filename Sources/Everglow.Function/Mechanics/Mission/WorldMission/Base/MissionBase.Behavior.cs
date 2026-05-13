@@ -6,20 +6,25 @@ namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 
 public abstract partial class WorldMissionBase : IMissionBehavior
 {
+	protected WorldMissionBase()
+	{
+		Objectives.OnNodeCompleted += Objectives_OnNodeCompleted;
+		Objectives.OnObjectiveActivated += Objectives_OnObjectiveActivated;
+		Objectives.OnObjectiveDectivated += Objectives_OnObjectiveDectivated;
+		Objectives.OnMPSyncTriggerred += Objectives_OnMPSyncTriggerred;
+		Objectives.OnObjectiveSynced += Objectives_OnObjectiveSynced;
+	}
+
 	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
 
 	public int WhoAmI { get; internal set; }
 
 	public WorldMissionState State { get; protected set; } = WorldMissionState.Locked;
 
+	[Obsolete("Not implemented", true)]
 	public virtual float Progress => 1;
 
-	public WorldObjectiveContainer Objectives { get; } = new();
-
-	/// <summary>
-	/// Set by the mission on activation. It is possibly null.
-	/// </summary>
-	public WorldObjectiveBase CurrentObjective { get; protected set; }
+	public StructuralObjectiveContainer Objectives { get; } = new();
 
 	public int Time { get; protected set; }
 
@@ -31,21 +36,12 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public void Activate()
 	{
-		CurrentObjective = Objectives.First;
-
-		CurrentObjective?.Activate(this);
+		Objectives.Activate();
 	}
 
 	public void Deactivate()
 	{
-		CurrentObjective?.Deactivate();
-	}
-
-	public void ForceAdvanceObjective()
-	{
-		CurrentObjective.Deactivate(); // Make sure there's no registered hooks or other side effects from the current objective.
-		CurrentObjective = CurrentObjective.Next;
-		CurrentObjective.Activate(this);
+		Objectives.Deactivate();
 	}
 
 	public void Unlock()
@@ -85,27 +81,13 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			return;
 		}
 
-		if (CurrentObjective is null)
+		if (Objectives.Completed)
 		{
 			CompleteMission();
 			return;
 		}
 
-		// Pass the completed objective.
-		// This block often happens when the mission just got loaded, or synced from server.
-		if (CurrentObjective.Completed)
-		{
-			ForceAdvanceObjective();
-			return;
-		}
-
-		CurrentObjective.Update();
-
-		// Check objective completion.
-		if (CurrentObjective.CheckCompletion())
-		{
-			CompleteObjective();
-		}
+		Objectives.UpdateCurrentNode();
 	}
 
 	public bool UpdateTime()
@@ -179,40 +161,6 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		State = WorldMissionState.Completed;
 		OnComplete();
 		Deactivate(); // Maybe not necessary, because the current objective is null here.
-
-		return true;
-	}
-
-	public void CompleteObjective()
-	{
-		if (CompleteObjectiveCore())
-		{
-			var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
-			var objectiveCompleteTextColor = new Color(250, 250, 150);
-			WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
-
-			if (NetUtils.IsMainServer)
-			{
-				Ins.Logger.Info(objectiveCompleteText);
-				if (CurrentObjective != null) // Skip the last objective sync because a packet for completion will be sent.
-				{
-					ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
-				}
-			}
-		}
-	}
-
-	private bool CompleteObjectiveCore()
-	{
-		if (State != WorldMissionState.Active || CurrentObjective is null)
-		{
-			return false;
-		}
-
-		CurrentObjective.Complete();
-		CurrentObjective.Deactivate();
-		CurrentObjective = CurrentObjective.Next;
-		CurrentObjective?.Activate(this);
 
 		return true;
 	}
@@ -318,61 +266,20 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public void ResetProgress()
 	{
-		CurrentObjective = Objectives.First;
-		foreach (var objective in Objectives.AllObjectives)
-		{
-			objective.ResetProgress();
-		}
+		Objectives.ResetProgress();
 	}
 
 	/// <summary>
 	/// Use this method to adapt to a fully new snapshot.
 	/// <br/> This is called when loading a world, or syncing from server.
 	/// </summary>
-	/// <param name="newState"></param>
 	/// <param name="oldState"></param>
-	private void ApplySnapshot(WorldMissionState newState, WorldMissionState oldState)
+	/// <param name="newState"></param>
+	private void ApplySnapshot(WorldMissionState oldState, WorldMissionState newState)
 	{
-		if (CurrentObjective == Objectives.FirstIncomplete)
-		{
-			if (oldState == newState)
-			{
-				return;
-			}
-
-			if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
-				&& newState is WorldMissionState.Active)
-			{
-				CurrentObjective?.Activate(this);
-			}
-			else if (oldState is WorldMissionState.Active
-				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)
-			{
-				CurrentObjective?.Deactivate();
-			}
-		}
-		else
-		{
-			var oldObjective = CurrentObjective;
-			CurrentObjective = Objectives.FirstIncomplete;
-			WorldMissionManager.NewText($"目标已同步为: {CurrentObjective?.ObjectiveID ?? -1}", 150, 250, 150);
-			WorldMissionManager.NewText($"目标进度已同步为: {CurrentObjective?.Progress ?? -1}", 150, 250, 150);
-			if (oldState == WorldMissionState.Active && newState == WorldMissionState.Active)
-			{
-				oldObjective?.Deactivate();
-				CurrentObjective?.Activate(this);
-			}
-			else if (oldState is WorldMissionState.Locked or WorldMissionState.Failed
-				&& newState is WorldMissionState.Active)
-			{
-				CurrentObjective?.Activate(this);
-			}
-			else if (oldState is WorldMissionState.Active
-				&& newState is WorldMissionState.Failed or WorldMissionState.Completed)
-			{
-				oldObjective.Deactivate();
-			}
-		}
+		var missionActiveBefore = oldState == WorldMissionState.Active;
+		var missionActiveAfter = newState == WorldMissionState.Active;
+		Objectives.HandleObjectiveLifecycle(missionActiveBefore, missionActiveAfter);
 	}
 
 	public virtual void OnUnlock()
@@ -389,5 +296,68 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public virtual void OnReset()
 	{
+	}
+
+	private void Objectives_OnNodeCompleted(WorldObjectiveNodeBase current)
+	{
+		var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
+		var objectiveCompleteTextColor = new Color(250, 250, 150);
+		WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
+
+		if (NetUtils.IsMainServer)
+		{
+			Ins.Logger.Info(objectiveCompleteText);
+			if (current != null) // Skip the last objective sync because a packet for completion will be sent.
+			{
+				ModIns.PacketResolver.Route(new MissionSyncPacket(this), RouteDestination.AllDownstream);
+			}
+		}
+	}
+
+	private void Objectives_OnObjectiveActivated(WorldObjectiveNodeBase node)
+	{
+		if (node == null)
+		{
+			return;
+		}
+
+		foreach (var objective in node.FindAllEntrances())
+		{
+			objective.Activate(this);
+		}
+	}
+
+	private void Objectives_OnObjectiveDectivated(WorldObjectiveNodeBase node)
+	{
+		if (node == null)
+		{
+			return;
+		}
+
+		foreach (var objective in node.FindAllEntrances())
+		{
+			objective.Deactivate();
+		}
+	}
+
+	private void Objectives_OnMPSyncTriggerred(IDeltaSyncObjective deltaSync)
+	{
+		if (NetUtils.IsClient || NetUtils.IsSubServer)
+		{
+			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync), RouteDestination.MainServer);
+		}
+		else
+		{
+			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(Name, deltaSync), RouteDestination.AllDownstream);
+		}
+	}
+
+	private void Objectives_OnObjectiveSynced(WorldObjectiveNodeBase node)
+	{
+		var newObjectives = node is not null
+			? string.Join(' ', node.FindAllEntrances().Select(x => x.ObjectiveID))
+			: "-1";
+		WorldMissionManager.NewText($"节点已同步为: {newObjectives}", 150, 250, 150);
+		WorldMissionManager.NewText($"目标进度已同步为: {node?.Progress ?? -1}", 150, 250, 150);
 	}
 }
