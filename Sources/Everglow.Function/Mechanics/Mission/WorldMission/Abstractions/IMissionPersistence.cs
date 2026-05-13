@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
 
 public interface IMissionPersistence
 {

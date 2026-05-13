@@ -1,7 +1,9 @@
+using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
 
 public abstract class WorldObjectiveBase : IDeltaSyncObjective
 {

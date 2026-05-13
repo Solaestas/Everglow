@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
 using Everglow.Commons.Netcode;
 using Everglow.Commons.Netcode.Abstracts;
 

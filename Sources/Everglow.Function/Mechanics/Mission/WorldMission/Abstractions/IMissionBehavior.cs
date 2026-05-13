@@ -1,4 +1,6 @@
-namespace Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure;
+
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
 
 public interface IMissionBehavior
 {

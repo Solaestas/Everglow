@@ -1,7 +1,8 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
+using Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
+using Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure.Nodes;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.WorldMission;
+namespace Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure;
 
 /// <summary>
 /// Minimal linear structural objective container.
@@ -317,104 +318,3 @@ public class StructuralObjectiveContainer
 
 	#endregion
 }
-
-#region Nodes
-
-/// <summary>
-/// Base class for structural objective nodes.
-/// </summary>
-public abstract class WorldObjectiveNodeBase
-{
-	/// <summary>
-	/// Whether this node has been structurally completed.
-	/// </summary>
-	public abstract bool Completed { get; }
-
-	/// <summary>
-	/// Progress value of this node (0–1).
-	/// </summary>
-	public abstract float Progress { get; }
-
-	/// <summary>
-	/// Returns all active objectives belonging to this node.
-	/// </summary>
-	public abstract List<WorldObjectiveBase> FindAllEntrances();
-
-	/// <summary>
-	/// Per-frame update logic.
-	/// </summary>
-	public abstract void Update();
-
-	/// <summary>
-	/// Checks whether this node's completion conditions are met.
-	/// </summary>
-	public abstract bool CheckCompletion();
-
-	/// <summary>
-	/// Marks this node as structurally completed.
-	/// </summary>
-	public abstract void Complete();
-
-	/// <summary>
-	/// Resets this node's progress and completion state.
-	/// </summary>
-	public abstract void ResetProgress();
-
-	/// <summary>
-	/// Saves node-specific data.
-	/// </summary>
-	public abstract void SaveData(TagCompound tag);
-
-	/// <summary>
-	/// Loads node-specific data.
-	/// </summary>
-	public abstract void LoadData(TagCompound tag);
-
-	/// <summary>
-	/// Sends node-specific netcode data.
-	/// </summary>
-	public abstract void NetSend(BinaryWriter bw);
-
-	/// <summary>
-	/// Receives node-specific netcode data.
-	/// </summary>
-	public abstract void NetReceive(BinaryReader br);
-}
-
-/// <summary>
-/// Leaf node wrapping a single objective.
-/// </summary>
-public class LeafNode : WorldObjectiveNodeBase
-{
-	public WorldObjectiveBase Objective;
-
-	public LeafNode(WorldObjectiveBase obj)
-	{
-		Objective = obj;
-	}
-
-	public override bool Completed => Objective.Completed;
-
-	public override float Progress => Objective.Progress;
-
-	public override List<WorldObjectiveBase> FindAllEntrances() =>
-		Objective.Completed ? [] : [Objective];
-
-	public override void Update() => Objective.Update();
-
-	public override bool CheckCompletion() => Objective.CheckCompletion();
-
-	public override void Complete() => Objective.Complete();
-
-	public override void ResetProgress() => Objective.ResetProgress();
-
-	public override void SaveData(TagCompound tag) => Objective.SaveData(tag);
-
-	public override void LoadData(TagCompound tag) => Objective.LoadData(tag);
-
-	public override void NetSend(BinaryWriter bw) => Objective.NetSend(bw);
-
-	public override void NetReceive(BinaryReader br) => Objective.NetReceive(br);
-}
-
-#endregion
