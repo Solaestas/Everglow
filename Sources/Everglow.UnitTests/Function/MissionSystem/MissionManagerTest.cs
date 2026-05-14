@@ -1,6 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.WorldMission;
-using Everglow.Commons.Mechanics.Mission.WorldMission.Base;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Objectives;
+using Everglow.Commons.Mechanics.Mission.WorldSide;
+using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 
