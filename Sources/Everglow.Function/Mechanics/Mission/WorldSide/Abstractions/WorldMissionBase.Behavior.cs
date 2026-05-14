@@ -271,6 +271,12 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public void ResetProgress()
 	{
+		foreach (var objective in _activatedObjectives)
+		{
+			objective.Deactivate();
+		}
+
+		_activatedObjectives.Clear();
 		Objectives.ResetProgress();
 	}
 

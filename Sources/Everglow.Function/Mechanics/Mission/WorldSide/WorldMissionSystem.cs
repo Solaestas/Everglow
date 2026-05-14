@@ -51,18 +51,9 @@ public class WorldMissionSystem : ModSystem, ICopyWorldData
 		tag.Add(MissionManagerKey, data);
 	}
 
-	public override void OnWorldLoad()
-	{
-		// Load world data to mission manager here.
-		// All necessary world data have been synced at this point.
-
-		// TODO: In single player, ModSystem.LoadWorldData() is called after this hook.
-		// Maybe we can skip loading data, and just sync it in Netcode?
-	}
-
 	public override void OnWorldUnload()
 	{
-		// Clean up mission manager data here.
+		Manager.Reset();
 	}
 
 	void ICopyWorldData.CopyMainWorldData()

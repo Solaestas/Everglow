@@ -67,14 +67,13 @@ public class WorldMissionManager
 			}
 		}
 		Main.OnTickForInternalCodeOnly += Update;
-		Ins.HookManager.AddHook(Enums.CodeLayer.PostSaveAndQuit, Clear);
 	}
 
 	public void Unload()
 	{
 		// Clean up mission manager: clear mission data, remove hooks, etc.
 		Main.OnTickForInternalCodeOnly -= Update;
-		Clear();
+		Reset();
 		_missions = null;
 	}
 
@@ -86,7 +85,7 @@ public class WorldMissionManager
 		}
 	}
 
-	public void Clear()
+	public void Reset()
 	{
 		_missions.ForEach(m =>
 		{
@@ -211,7 +210,7 @@ public class WorldMissionManager
 
 	public void LoadData(TagCompound tag)
 	{
-		Clear();
+		Reset();
 
 		foreach (var m in _missions)
 		{
