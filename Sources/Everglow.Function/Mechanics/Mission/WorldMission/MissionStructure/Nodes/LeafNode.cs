@@ -12,6 +12,11 @@ public class LeafNode : WorldObjectiveNodeBase
 
 	public LeafNode(WorldObjectiveBase obj)
 	{
+		if (obj is null)
+		{
+			throw new InvalidDataException("Objective must be not null.");
+		}
+
 		Objective = obj;
 	}
 

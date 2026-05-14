@@ -20,6 +20,8 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
 
+	private readonly List<WorldObjectiveBase> _activatedObjectives = [];
+
 	public int WhoAmI { get; internal set; }
 
 	public WorldMissionState State { get; protected set; } = WorldMissionState.Locked;
@@ -303,7 +305,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	private void Objectives_OnNodeCompleted(WorldObjectiveNodeBase current)
 	{
-		var objectiveCompleteText = $"[{DisplayName}]任务当前目标已完成";
+		var objectiveCompleteText = $"[{DisplayName}]任务当前节点[{current?.GetType().Name}]中目标已完成";
 		var objectiveCompleteTextColor = new Color(250, 250, 150);
 		WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
 
@@ -324,23 +326,26 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			return;
 		}
 
+		if (_activatedObjectives.Count != 0)
+		{
+			throw new InvalidOperationException("Objectives must be deactivated before activation.");
+		}
+
 		foreach (var objective in node.FindAllEntrances())
 		{
 			objective.Activate(this);
+			_activatedObjectives.Add(objective);
 		}
 	}
 
-	private void Objectives_OnObjectiveDeactivated(WorldObjectiveNodeBase node)
+	private void Objectives_OnObjectiveDeactivated()
 	{
-		if (node == null)
-		{
-			return;
-		}
-
-		foreach (var objective in node.FindAllEntrances())
+		foreach (var objective in _activatedObjectives)
 		{
 			objective.Deactivate();
 		}
+
+		_activatedObjectives.Clear();
 	}
 
 	private void Objectives_OnMPSyncTriggered(IDeltaSyncObjective deltaSync)

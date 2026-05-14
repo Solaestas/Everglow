@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Everglow.Commons.Mechanics.Mission.WorldMission.Abstractions;
 using Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure.Nodes;
 using Terraria.ModLoader.IO;
@@ -5,13 +6,13 @@ using Terraria.ModLoader.IO;
 namespace Everglow.Commons.Mechanics.Mission.WorldMission.MissionStructure;
 
 /// <summary>
-/// Minimal linear structural objective container.
-/// Manages objective nodes, lifecycle transitions, persistence, and netcode.
+/// Represents a linear structural objective container.
+/// Manages structural nodes, objective lifecycle transitions, persistence, and netcode.
 /// </summary>
 public class StructuralObjectiveContainer
 {
 	/// <summary>
-	/// Fired when the current node has been structurally completed.
+	/// Fired when the current structural node requires completion.
 	/// </summary>
 	public event Action<WorldObjectiveNodeBase> OnNodeCompleted;
 
@@ -21,9 +22,9 @@ public class StructuralObjectiveContainer
 	public event Action<WorldObjectiveNodeBase> OnObjectiveActivated;
 
 	/// <summary>
-	/// Fired when a node is no longer the active node.
+	/// Fired when the previous activated node is no longer active.
 	/// </summary>
-	public event Action<WorldObjectiveNodeBase> OnObjectiveDeactivated;
+	public event Action OnObjectiveDeactivated;
 
 	/// <summary>
 	/// Fired when an objective requires delta-sync transmission.
@@ -31,7 +32,7 @@ public class StructuralObjectiveContainer
 	public event Action<IDeltaSyncObjective> OnMPSyncTriggered;
 
 	/// <summary>
-	/// Fired when the active node is changed due to snapshot synchronization.
+	/// Fired when the active node changes due to snapshot synchronization.
 	/// </summary>
 	public event Action<WorldObjectiveNodeBase> OnObjectiveSynced;
 
@@ -39,37 +40,120 @@ public class StructuralObjectiveContainer
 	private readonly List<WorldObjectiveBase> _objectives = [];
 
 	/// <summary>
-	/// All structural nodes in linear order.
+	/// Gets all structural nodes in linear order.
 	/// </summary>
 	public IReadOnlyList<WorldObjectiveNodeBase> AllNodes => _nodes;
 
 	/// <summary>
-	/// All objectives in the order they were added.
+	/// Gets all objectives in the order they were added.
 	/// </summary>
 	public IReadOnlyList<WorldObjectiveBase> AllObjectives => _objectives;
 
 	/// <summary>
-	/// The currently active structural node.
+	/// Gets the currently active structural node.
 	/// </summary>
 	public WorldObjectiveNodeBase Current { get; private set; }
 
 	/// <summary>
-	/// Whether all nodes have been structurally completed.
+	/// Gets whether all structural nodes have been completed.
 	/// </summary>
 	public bool Completed => FindCurrentNode() == null;
 
 	#region DSL
 
 	/// <summary>
-	/// Adds a linear objective and creates a corresponding leaf node.
+	/// Adds a single objective and wraps it in a leaf node.
 	/// </summary>
+	/// <param name="objective">The objective to add.</param>
+	/// <returns>The current container instance.</returns>
 	public StructuralObjectiveContainer Add(WorldObjectiveBase objective)
 	{
+		if (objective is null)
+		{
+			throw new InvalidDataException("Input must not be null.");
+		}
+
 		objective.ObjectiveID = _objectives.Count;
 		_objectives.Add(objective);
 
-		var leaf = new LeafNode(objective);
-		_nodes.Add(leaf);
+		var node = new LeafNode(objective);
+		_nodes.Add(node);
+		return this;
+	}
+
+	/// <summary>
+	/// Adds a parallel structural node containing multiple objectives.
+	/// All objectives must be completed for the node to finish.
+	/// </summary>
+	/// <param name="objectives">The objectives to include in the parallel node.</param>
+	/// <returns>The current container instance.</returns>
+	public StructuralObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
+	{
+		if (objectives is null)
+		{
+			throw new InvalidDataException("Input must not be null.");
+		}
+
+		foreach (var o in objectives)
+		{
+			o.ObjectiveID = _objectives.Count;
+			_objectives.Add(o);
+		}
+
+		var node = new ParallelNode(objectives.ToList());
+		_nodes.Add(node);
+		return this;
+	}
+
+	/// <summary>
+	/// Adds an optional structural node containing multiple objectives.
+	/// Any single objective completing will complete the node.
+	/// </summary>
+	/// <param name="objectives">The objectives to include in the optional node.</param>
+	/// <returns>The current container instance.</returns>
+	public StructuralObjectiveContainer AddOptional(params WorldObjectiveBase[] objectives)
+	{
+		if (objectives is null)
+		{
+			throw new InvalidDataException("Input must not be null.");
+		}
+
+		foreach (var o in objectives)
+		{
+			o.ObjectiveID = _objectives.Count;
+			_objectives.Add(o);
+		}
+
+		var node = new OptionalNode(objectives.ToList());
+		_nodes.Add(node);
+		return this;
+	}
+
+	/// <summary>
+	/// Adds a branching structural node. Each list represents a branch.
+	/// The first objective of each branch is active simultaneously.
+	/// Completing any branch head locks the branch and continues along that branch.
+	/// </summary>
+	/// <param name="branches">The branches to add, each represented as a list of objectives.</param>
+	/// <returns>The current container instance.</returns>
+	public StructuralObjectiveContainer AddBranch(params List<WorldObjectiveBase>[] branches)
+	{
+		if (branches is null)
+		{
+			throw new InvalidDataException("Input must not be null.");
+		}
+
+		foreach (var branch in branches)
+		{
+			foreach (var o in branch)
+			{
+				o.ObjectiveID = _objectives.Count;
+				_objectives.Add(o);
+			}
+		}
+
+		var node = new BranchNode(branches.Select(b => b.ToList()).ToList());
+		_nodes.Add(node);
 		return this;
 	}
 
@@ -78,8 +162,9 @@ public class StructuralObjectiveContainer
 	#region Query
 
 	/// <summary>
-	/// Finds the first node that is not structurally completed.
+	/// Finds the first structural node that has not yet been completed.
 	/// </summary>
+	/// <returns>The current active node, or null if all nodes are completed.</returns>
 	public WorldObjectiveNodeBase FindCurrentNode()
 	{
 		foreach (var node in _nodes)
@@ -93,8 +178,9 @@ public class StructuralObjectiveContainer
 	}
 
 	/// <summary>
-	/// Returns all active objectives of the current node.
+	/// Returns all active objectives of the current node for this frame.
 	/// </summary>
+	/// <returns>A collection of active objectives.</returns>
 	public IEnumerable<WorldObjectiveBase> FindCurrentObjectives()
 	{
 		var cur = FindCurrentNode();
@@ -124,7 +210,7 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	public void Deactivate()
 	{
-		OnObjectiveDeactivated.Invoke(Current);
+		OnObjectiveDeactivated.Invoke();
 	}
 
 	/// <summary>
@@ -132,14 +218,17 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	private void CheckActiveNode()
 	{
-		OnObjectiveDeactivated.Invoke(Current);
+		OnObjectiveDeactivated.Invoke();
 		Current = FindCurrentNode();
 		OnObjectiveActivated.Invoke(Current);
 	}
 
 	/// <summary>
 	/// Applies a snapshot-based lifecycle correction without executing completion logic.
+	/// Used for multiplayer synchronization.
 	/// </summary>
+	/// <param name="activeBefore">Whether the node was active before the snapshot.</param>
+	/// <param name="activeAfter">Whether the node should be active after the snapshot.</param>
 	public void ApplyObjectiveSnapshot(bool activeBefore, bool activeAfter)
 	{
 		if (Current == FindCurrentNode())
@@ -155,7 +244,7 @@ public class StructuralObjectiveContainer
 			}
 			else if (activeBefore && !activeAfter)
 			{
-				OnObjectiveDeactivated.Invoke(Current);
+				OnObjectiveDeactivated.Invoke();
 			}
 		}
 		else
@@ -166,7 +255,7 @@ public class StructuralObjectiveContainer
 
 			if (activeBefore && activeAfter)
 			{
-				OnObjectiveDeactivated.Invoke(oldObjective);
+				OnObjectiveDeactivated.Invoke();
 				OnObjectiveActivated.Invoke(Current);
 			}
 			else if (!activeBefore && activeAfter)
@@ -175,7 +264,7 @@ public class StructuralObjectiveContainer
 			}
 			else if (activeBefore && !activeAfter)
 			{
-				OnObjectiveDeactivated.Invoke(oldObjective);
+				OnObjectiveDeactivated.Invoke();
 			}
 		}
 	}
@@ -213,6 +302,7 @@ public class StructuralObjectiveContainer
 	/// <summary>
 	/// Core structural completion logic.
 	/// </summary>
+	/// <returns>True if the node was completed; otherwise false.</returns>
 	private bool CompleteNodeCore()
 	{
 		if (Current is null)
@@ -221,7 +311,7 @@ public class StructuralObjectiveContainer
 		}
 
 		Current.Complete();
-		OnObjectiveDeactivated.Invoke(Current);
+		OnObjectiveDeactivated.Invoke();
 
 		Current = FindCurrentNode();
 		OnObjectiveActivated.Invoke(Current);
@@ -248,8 +338,9 @@ public class StructuralObjectiveContainer
 	private const string ObjectivesSaveKey = "Objectives";
 
 	/// <summary>
-	/// Loads objective data for each node.
+	/// Loads objective data for each structural node.
 	/// </summary>
+	/// <param name="tag">The tag compound containing saved data.</param>
 	public void LoadData(TagCompound tag)
 	{
 		if (tag.TryGet<IList<TagCompound>>(ObjectivesSaveKey, out var oTags))
@@ -262,8 +353,9 @@ public class StructuralObjectiveContainer
 	}
 
 	/// <summary>
-	/// Saves objective data for each node.
+	/// Saves objective data for each structural node.
 	/// </summary>
+	/// <param name="tag">The tag compound to write data into.</param>
 	public void SaveData(TagCompound tag)
 	{
 		var oTags = new List<TagCompound>();
@@ -281,8 +373,9 @@ public class StructuralObjectiveContainer
 	#region Netcode
 
 	/// <summary>
-	/// Sends netcode data for all nodes.
+	/// Sends netcode data for all structural nodes.
 	/// </summary>
+	/// <param name="bw">The binary writer used for sending data.</param>
 	public void NetSend(BinaryWriter bw)
 	{
 		foreach (var node in AllNodes)
@@ -292,8 +385,9 @@ public class StructuralObjectiveContainer
 	}
 
 	/// <summary>
-	/// Receives netcode data for all nodes.
+	/// Receives netcode data for all structural nodes.
 	/// </summary>
+	/// <param name="br">The binary reader used for receiving data.</param>
 	public void NetReceive(BinaryReader br)
 	{
 		foreach (var node in AllNodes)
@@ -303,7 +397,7 @@ public class StructuralObjectiveContainer
 	}
 
 	/// <summary>
-	/// Triggers delta-sync events for all active objectives.
+	/// Triggers delta-sync events for all active objectives that require synchronization.
 	/// </summary>
 	public void OnMPSync()
 	{
