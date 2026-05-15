@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
 namespace Everglow.UnitTests.Function.MissionSystem.ObjectiveTests;
 

@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerMission.Objectives;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria;
 using Terraria.ID;
