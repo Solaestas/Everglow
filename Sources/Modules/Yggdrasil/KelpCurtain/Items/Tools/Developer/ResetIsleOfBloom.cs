@@ -64,7 +64,7 @@ public class ResetIsleOfBloom : ModItem
 		{
 			float radius = (60 - y) / 3f;
 			radius = MathF.Max(radius, 10);
-			TileUtils.PlaceCircleAreaOfBlockWithRandomNoise(tilePos + new Point(0, y), radius, ModContent.TileType<Tiles.OldMoss>(), 10, (int)TileUtils.TileChangeState.TileOnly);
+			TileUtils.PlaceCircleAreaOfBlockWithRandomNoise(tilePos + new Point(0, y), radius, ModContent.TileType<Tiles.OldMoss>(), 10, (int)TileUtils.TileChangeState.HasTile);
 			TileUtils.PlaceCircleAreaOfBlockWithRandomNoise(tilePos + new Point(0, y), radius - 3, -2, 10, (int)TileUtils.TileChangeState.Forceful);
 		}
 
@@ -99,9 +99,9 @@ public class ResetIsleOfBloom : ModItem
 			height += value2;
 			Cave0.Add(new Vector2(x, cave0Y + height));
 		}
-		TileUtils.PlacePolygonAreaOfBlockWithOffset(Cave0_Bound, tilePos.ToVector2(), ModContent.TileType<Tiles.OldMoss>(), (int)TileUtils.TileChangeState.TileOnly);
+		TileUtils.PlacePolygonAreaOfBlockWithOffset(Cave0_Bound, tilePos.ToVector2(), ModContent.TileType<Tiles.OldMoss>(), (int)TileUtils.TileChangeState.HasTile);
 		TileUtils.PlacePolygonAreaOfBlockWithOffset(Cave0, tilePos.ToVector2(), -2, (int)TileUtils.TileChangeState.Forceful);
-		TileUtils.SmoothTile(tilePos.X - 150, tilePos.Y - 60, tilePos.X + 150, tilePos.Y + 150);
+		TileUtils.SmoothTile_XXYY(tilePos.X - 150, tilePos.Y - 60, tilePos.X + 150, tilePos.Y + 150);
 
 		// Bamboo
 		for (int x = -130; x <= 130; x++)
@@ -157,14 +157,14 @@ public class ResetIsleOfBloom : ModItem
 				{
 					if (direction == -1)
 					{
-						if (YggdrasilWorldGeneration.CheckSpaceRight(tilePos.X + checkX, tilePos.Y + y) > 11)
+						if (CheckSpaceRight(tilePos.X + checkX, tilePos.Y + y) > 11)
 						{
 							TileUtils.PlaceFrameImportantTiles(tilePos.X + checkX, tilePos.Y + y, 10, 1, ModContent.TileType<IslePeachTree_side>(), 180);
 						}
 					}
 					else
 					{
-						if (YggdrasilWorldGeneration.CheckSpaceLeft(tilePos.X + checkX, tilePos.Y + y) > 11)
+						if (CheckSpaceLeft(tilePos.X + checkX, tilePos.Y + y) > 11)
 						{
 							TileUtils.PlaceFrameImportantTiles(tilePos.X + checkX - 10, tilePos.Y + y, 10, 1, ModContent.TileType<IslePeachTree_side>(), 0);
 						}

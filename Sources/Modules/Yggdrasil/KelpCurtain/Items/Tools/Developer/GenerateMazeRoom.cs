@@ -47,62 +47,34 @@ public class GenerateMazeRoom : ModItem
 	public void BuildMazeRoom(Vector2 worldPos)
 	{
 		Point tilePos = worldPos.ToTileCoordinates();
-		List<Point> tiles = BFSContinueEmpty(tilePos, false, 1536);
-		BuildDesolateRoom(tiles);
-	}
-
-	public void ClearMazeRooms(Vector2 worldPos)
-	{
-		Point tilePos = worldPos.ToTileCoordinates();
-		int xBoundLeft = tilePos.X - 500;
-		int xBoundRight = tilePos.X + 500;
-		int yBoundTop = tilePos.Y - 500;
-		int yBoundBottom = tilePos.Y + 500;
-		for (int x = xBoundLeft; x < xBoundRight; x++)
+		Point buildPos = tilePos;
+		int dir = 1;
+		if(GenRand.NextBool())
 		{
-			for (int y = yBoundTop; y < yBoundBottom; y++)
+			dir = -1;
+		}
+		int space = CheckSpaceLeft(tilePos.X, tilePos.Y);
+		if(dir == -1)
+		{
+			space = CheckSpaceRight(tilePos.X, tilePos.Y);
+		}
+		buildPos.X -= space * dir;
+		int randomAddPosX = GenRand.Next(0, 4);
+		buildPos.X += randomAddPosX * dir;
+		if(dir == 1)
+		{
+			if (GetUniformTile(buildPos.X, buildPos.Y - 9, 10, 10) == -1)
 			{
-				// Exist a projection. SeedMap is not TileMap.
-				var tile = SafeGetTile(x, y);
-				if (tile.TileType == ModContent.TileType<YggdrasilBlackRock>() || tile.wall == ModContent.WallType<YggdrasilBlackRockWall>() || tile.TileType == ModContent.TileType<WaterDeliveryHole>() || tile.TileType == ModContent.TileType<WaterDeliveryHole_V>() || tile.TileType == ModContent.TileType<WaterDeliveryHole_TopLeft>() || tile.TileType == ModContent.TileType<WaterDeliveryHole_TopRight>() || tile.TileType == ModContent.TileType<WaterDeliveryHole_BottomLeft>() || tile.TileType == ModContent.TileType<WaterDeliveryHole_BottomRight>())
-				{
-					tile.ClearEverything();
-				}
+				YggdrasilWorldGeneration.QuickBuild(buildPos.X, buildPos.Y - 9, ModAsset.UnderwaterMaze_ChestRoom_withLamps10x10_Path, false);
+				PlaceLineBlock(buildPos, buildPos + new Point(-randomAddPosX, 0), 1, ModContent.TileType<YggdrasilBlackRock>());
 			}
 		}
-	}
-
-	public void BuildDesolateRoom(List<Point> tiles)
-	{
-		int maxY = 0;
-		foreach (var pos in tiles)
+		else
 		{
-			maxY = Math.Max(maxY, pos.Y);
-		}
-		foreach (var pos in tiles)
-		{
-			if (pos.Y > maxY - 5)
+			if (GetUniformTile(buildPos.X - 10, buildPos.Y - 9, 10, 10) == -1)
 			{
-				var tile = SafeGetTile(pos);
-				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
-				tile.HasTile = true;
-				PlaceWallAround(tile, (ushort)ModContent.WallType<DarkLakeBottomMudWall>(), true, false);
-			}
-		}
-		foreach (var pos in tiles)
-		{
-			if (pos.Y == maxY - 5)
-			{
-				if (GenRand.NextBool(18))
-				{
-					int height = GenRand.Next(1, 7);
-					for (int j = 0; j < height; j++)
-					{
-						var algeeTile = SafeGetTile(pos.X, pos.Y - j);
-						algeeTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
-						algeeTile.HasTile = true;
-					}
-				}
+				YggdrasilWorldGeneration.QuickBuild(buildPos.X - 10, buildPos.Y - 9, ModAsset.UnderwaterMaze_ChestRoom_withLamps10x10_Path, false);
+				PlaceLineBlock(buildPos, buildPos + new Point(randomAddPosX, 0), 1, ModContent.TileType<YggdrasilBlackRock>());
 			}
 		}
 	}

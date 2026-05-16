@@ -1,4 +1,6 @@
-using System.Linq;
+using Everglow.Commons.Physics.DataStructures;
+using Everglow.Commons.TileHelper;
+using Spine;
 using Terraria.ObjectData;
 using Terraria.Utilities;
 
@@ -14,26 +16,26 @@ public partial class TileUtils
 
 	/// <summary>
 	/// 0: Forceful<br/>
-	/// 1: NoTileOnly<br/>
-	/// 2: TileOnly<br/>
-	/// 3: WallOnly<br/>
-	/// 4: NoWallOnly<br/>
-	/// 5: LiquidOnly<br/>
-	/// 6: NoLiquidOnly<br/>
-	/// 7: TileAndWallOnly<br/>
+	/// 1: NoTile<br/>
+	/// 2: HasTile<br/>
+	/// 3: HasWall<br/>
+	/// 4: NoWall<br/>
+	/// 5: HasLiquid<br/>
+	/// 6: NoLiquid<br/>
+	/// 7: HasTileAndWall<br/>
 	/// 8: TileButNoWallOnly<br/>
 	/// 9: WallButNoTileOnly<br/>
 	/// </summary>
 	public enum TileChangeState
 	{
 		Forceful,
-		NoTileOnly,
-		TileOnly,
-		WallOnly,
-		NoWallOnly,
-		LiquidOnly,
-		NoLiquidOnly,
-		TileAndWallOnly,
+		NoTile,
+		HasTile,
+		HasWall,
+		NoWall,
+		HasLiquid,
+		NoLiquid,
+		HasTileAndWall,
 		TileButNoWallOnly,
 		WallButNoTileOnly,
 	}
@@ -44,43 +46,43 @@ public partial class TileUtils
 		{
 			case (int)TileChangeState.Forceful:
 				return true;
-			case (int)TileChangeState.NoTileOnly:
+			case (int)TileChangeState.NoTile:
 				if (!tile.HasTile)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.TileOnly:
+			case (int)TileChangeState.HasTile:
 				if (tile.HasTile)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.WallOnly:
+			case (int)TileChangeState.HasWall:
 				if (tile.wall > 0)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.NoWallOnly:
+			case (int)TileChangeState.NoWall:
 				if (tile.wall <= 0)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.LiquidOnly:
+			case (int)TileChangeState.HasLiquid:
 				if (tile.LiquidAmount > 0)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.NoLiquidOnly:
+			case (int)TileChangeState.NoLiquid:
 				if (tile.LiquidAmount <= 0)
 				{
 					return true;
 				}
 				break;
-			case (int)TileChangeState.TileAndWallOnly:
+			case (int)TileChangeState.HasTileAndWall:
 				if (tile.wall > 0 && tile.HasTile)
 				{
 					return true;
@@ -361,7 +363,7 @@ public partial class TileUtils
 	/// <param name="killStyle">-1: Kill tile.<br/>
 	/// -2: ClearEverything</param>
 	/// <param name="noiseSize"></param>
-	/// <param name="force"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(Vector2 center, float radius, List<int> type_be_killed, int killStyle = -1, float noiseSize = 10f, int force = 0)
 	{
 		int x0CoordPerlin = GenRand.Next(1024);
@@ -390,10 +392,38 @@ public partial class TileUtils
 	/// <param name="killStyle">-1: Kill tile.<br/>
 	/// -2: ClearEverything</param>
 	/// <param name="noiseSize"></param>
-	/// <param name="force"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(Point center, float radius, List<int> type_be_killed, int killStyle = -1, float noiseSize = 10f, int force = 0)
 	{
 		KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(center.ToVector2(), radius, type_be_killed, killStyle, noiseSize, force);
+	}
+
+	/// <summary>
+	/// Kill the wall within the circle(center, radius), but with a random noise affect on the bound.
+	/// </summary>
+	/// <param name="center"></param>
+	/// <param name="radius"></param>
+	/// <param name="type_be_killed"></param>
+	/// <param name="killStyle">Default to 0, only wall will be removed.</param>
+	/// <param name="noiseSize"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void KillCircleAreaOfWallWithRandomNoiseInCertainType(Point center, float radius, List<int> type_be_killed, int killStyle = 0, float noiseSize = 10f, int force = 0)
+	{
+		int x0CoordPerlin = GenRand.Next(1024);
+		int y0CoordPerlin = GenRand.Next(1024);
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin) / 255f;
+				Tile tile = SafeGetTile(center + new Point(x, y));
+				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize && type_be_killed.Contains(tile.wall))
+				{
+					ChangeWall(tile, killStyle, force);
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -409,9 +439,9 @@ public partial class TileUtils
 			return;
 		}
 		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
-		for (int x = (int)bounds.X; x <= bounds.Z; x++)
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
 		{
-			for (int y = (int)bounds.Y; y <= bounds.W; y++)
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
 			{
 				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
 				{
@@ -451,9 +481,9 @@ public partial class TileUtils
 			return;
 		}
 		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
-		for (int x = (int)bounds.X; x <= bounds.Z; x++)
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
 		{
-			for (int y = (int)bounds.Y; y <= bounds.W; y++)
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
 			{
 				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
 				{
@@ -499,9 +529,9 @@ public partial class TileUtils
 			newPolygon[i] += anchorPos;
 		}
 		var bounds = MathUtils.GetPolygonAABBBound_Vector4(newPolygon);
-		for (int x = (int)bounds.X; x <= bounds.Z; x++)
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
 		{
-			for (int y = (int)bounds.Y; y <= bounds.W; y++)
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
 			{
 				if (MathUtils.IsPointInPolygon(newPolygon, new Vector2(x, y)))
 				{
@@ -727,7 +757,7 @@ public partial class TileUtils
 	/// <param name="y0"></param>
 	/// <param name="x1"></param>
 	/// <param name="y1"></param>
-	public static void SmoothTile(int x0, int y0, int x1, int y1)
+	public static void SmoothTile_XXYY(int x0, int y0, int x1, int y1)
 	{
 		x0 = Math.Clamp(x0, 20, Main.maxTilesX - 20);
 		x1 = Math.Clamp(x1, 20, Main.maxTilesX - 20);
@@ -744,6 +774,68 @@ public partial class TileUtils
 				Tile.SmoothSlope(x, y, false, false);
 				WorldGen.TileFrame(x, y, true, false);
 				WorldGen.SquareWallFrame(x, y, true);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Smooth tiles by given area:(x, y, w, h)
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	public static void SmoothTile_XYWH(int x, int y, int w, int h)
+	{
+		SmoothTile_XXYY(x, y, x + w, y + h);
+	}
+
+	/// <summary>
+	/// Smooth tiles by given tile list. Note that the tile list should be in the same area, otherwise it may cause some unexpected result.
+	/// </summary>
+	/// <param name="tiles"></param>
+	public static void SmoothTile_List(List<Point> tiles)
+	{
+		foreach (var pos in tiles)
+		{
+			if (!ChestSafe(pos.X, pos.Y))
+			{
+				continue;
+			}
+			Tile.SmoothSlope(pos.X, pos.Y, false, false);
+			WorldGen.TileFrame(pos.X, pos.Y, true, true);
+			WorldGen.SquareWallFrame(pos.X, pos.Y, true);
+		}
+	}
+
+	public static void SmoothTile_PolygonArea(List<Point> polygon_TilePos)
+	{
+		List<Vector2> polygon_WorldPos = new List<Vector2>();
+		foreach (var point in polygon_TilePos)
+		{
+			polygon_WorldPos.Add(point.ToWorldCoordinates());
+		}
+		SmoothTile_PolygonArea(polygon_WorldPos);
+	}
+
+	public static void SmoothTile_PolygonArea(List<Vector2> polygon_WorldPos)
+	{
+		if (polygon_WorldPos.Count < 3)
+		{
+			return;
+		}
+		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon_WorldPos);
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
+		{
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
+			{
+				if (MathUtils.IsPointInPolygon(polygon_WorldPos, new Vector2(x, y)))
+				{
+					var point = new Vector2(x, y).ToTileCoordinates();
+					Tile.SmoothSlope(point.X, point.Y, false, false);
+					WorldGen.TileFrame(point.X, point.Y, true, true);
+					WorldGen.SquareWallFrame(point.X, point.Y, true);
+				}
 			}
 		}
 	}
@@ -867,10 +959,11 @@ public partial class TileUtils
 			(1, 0),
 			(0, -1),
 			(-1, 0),
-			//(1, 1),
-			//(1, -1),
-			//(-1, -1),
-			//(-1, 1),
+
+			// (1, 1),
+			// (1, -1),
+			// (-1, -1),
+			// (-1, 1),
 		};
 		Queue<Point> queueChecked = new Queue<Point>();
 
@@ -892,12 +985,13 @@ public partial class TileUtils
 				Tile tile_bottom = SafeGetTile(checkX, checkY + 1);
 				Tile tile_left = SafeGetTile(checkX - 1, checkY);
 				Tile tile_right = SafeGetTile(checkX + 1, checkY);
-				//Tile tile_upleft = SafeGetTile(checkX - 1, checkY - 1);
-				//Tile tile_bottomleft = SafeGetTile(checkX - 1, checkY + 1);
-				//Tile tile_upright = SafeGetTile(checkX + 1, checkY - 1);
-				//Tile tile_bottomright = SafeGetTile(checkX + 1, checkY - 1);
 
-				//bool flag0 = !tile_upleft.HasTile || !tile_upright.HasTile || !tile_bottomleft.HasTile || !tile_bottomright.HasTile;
+				// Tile tile_upleft = SafeGetTile(checkX - 1, checkY - 1);
+				// Tile tile_bottomleft = SafeGetTile(checkX - 1, checkY + 1);
+				// Tile tile_upright = SafeGetTile(checkX + 1, checkY - 1);
+				// Tile tile_bottomright = SafeGetTile(checkX + 1, checkY - 1);
+
+				// bool flag0 = !tile_upleft.HasTile || !tile_upright.HasTile || !tile_bottomleft.HasTile || !tile_bottomright.HasTile;
 				// Check bound and obstruction.
 				bool flag0 = checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20;
 				bool flag1 = tile.HasTile && (visited_air.Contains(new Point(checkX, checkY - 1)) || visited_air.Contains(new Point(checkX, checkY + 1)) || visited_air.Contains(new Point(checkX - 1, checkY)) || visited_air.Contains(new Point(checkX + 1, checkY)));
@@ -908,11 +1002,11 @@ public partial class TileUtils
 					if (theseTypeOnly == default)
 					{
 						queueChecked.Enqueue(point);
-						if(flag1)
+						if (flag1)
 						{
 							visited_tile.Add(point);
 						}
-						if(flag2)
+						if (flag2)
 						{
 							visited_air.Add(point);
 						}
@@ -1047,6 +1141,11 @@ public partial class TileUtils
 		PlaceWallAround(tile.X(), tile.Y(), wallType, middle, top, bottom, left, right);
 	}
 
+	public static void PlaceWallAround(Point pos, int wallType, bool middle = true, bool top = true, bool bottom = true, bool left = true, bool right = true)
+	{
+		PlaceWallAround(pos.X, pos.Y, wallType, middle, top, bottom, left, right);
+	}
+
 	public static void PlaceWallAround(int x, int y, int wallType, bool middle = true, bool top = true, bool bottom = true, bool left = true, bool right = true)
 	{
 		Tile tile = SafeGetTile(x, y);
@@ -1073,6 +1172,35 @@ public partial class TileUtils
 		if (right)
 		{
 			tile_right.wall = (ushort)wallType;
+		}
+	}
+
+	public static void PlaceTileAround(int x, int y, int tileType, bool middle = true, bool top = true, bool bottom = true, bool left = true, bool right = true, int force = 0)
+	{
+		Tile tile = SafeGetTile(x, y);
+		if (middle)
+		{
+			ChangeTile(tile, tileType, force);
+		}
+		Tile tile_top = SafeGetTile(x, y - 1);
+		if (top)
+		{
+			ChangeTile(tile_top, tileType, force);
+		}
+		Tile tile_bottom = SafeGetTile(x, y + 1);
+		if (bottom)
+		{
+			ChangeTile(tile_bottom, tileType, force);
+		}
+		Tile tile_left = SafeGetTile(x - 1, y);
+		if (left)
+		{
+			ChangeTile(tile_left, tileType, force);
+		}
+		Tile tile_right = SafeGetTile(x + 1, y);
+		if (right)
+		{
+			ChangeTile(tile_right, tileType, force);
 		}
 	}
 
@@ -1184,6 +1312,7 @@ public partial class TileUtils
 				int checkY = tilePos.Y + dy;
 				Tile Tile = SafeGetTile(checkX, checkY);
 				Point point = new Point(checkX, checkY);
+
 				// 检查边界和障碍物
 				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
 					!Collision.IsWorldPointSolid(new Point(checkX, checkY).ToWorldCoordinates()) && !visited.Contains(point))
@@ -1203,5 +1332,332 @@ public partial class TileUtils
 	public static List<Point> BFSGetCanFillLiquidTiles(int i, int j, int maxCount = 900)
 	{
 		return BFSGetCanFillLiquidTiles(new Point(i, j), maxCount);
+	}
+
+	/// <summary>
+	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return Vector2.zeroVector.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="type"></param>
+	/// <param name="maxDistance"></param>
+	/// <returns></returns>
+	public static Vector2 ToNearestTypeOfTIle(int x, int y, int type, float maxDistance = 100)
+	{
+		Vector2 direction = Vector2.zeroVector;
+		float minDis = maxDistance;
+		for (int i = -(int)maxDistance; i <= maxDistance; i++)
+		{
+			for (int j = -(int)maxDistance; j <= maxDistance; j++)
+			{
+				Tile tile = SafeGetTile(i + x, j + y);
+				bool flag0 = tile.HasTile && tile.TileType == type;
+				bool flag1 = type == -1 && !tile.HasTile;
+				bool flag2 = type == -2 && !tile.HasTile && tile.wall <= 0;
+				if (flag0 || flag1 || flag2)
+				{
+					Vector2 v1 = new Vector2(i, j);
+					if (v1.Length() < minDis)
+					{
+						minDis = v1.Length();
+						direction = v1;
+					}
+				}
+			}
+		}
+		return direction * 16;
+	}
+
+	/// <summary>
+	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return Vector2.zeroVector.
+	/// </summary>
+	/// <param name="worldPos"></param>
+	/// <param name="type"></param>
+	/// <param name="maxDistance"></param>
+	/// <returns></returns>
+	public static Vector2 ToNearestTypeOfTIle(Vector2 worldPos, int type, float maxDistance = 100)
+	{
+		int x = worldPos.ToTileCoordinates().X;
+		int y = worldPos.ToTileCoordinates().Y;
+		return ToNearestTypeOfTIle(x, y, type, maxDistance);
+	}
+
+	/// <summary>
+	/// Return the summary of air-to-tile distances of given point to top and to bottom.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceHeight(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (x0 > Main.maxTilesX || x0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 > Main.maxTilesY)
+			{
+				break;
+			}
+			y0++;
+			count++;
+		}
+		x0 = x;
+		y0 = y - 1;
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 < 0)
+			{
+				break;
+			}
+			y0--;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the summary of air-to-tile distances of given point to left and to right.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceWidth(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 > Main.maxTilesX)
+			{
+				break;
+			}
+			x0++;
+			count++;
+		}
+		x0 = x - 1;
+		y0 = y;
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 < 0)
+			{
+				break;
+			}
+			x0--;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the air-to-tile distance from given point to LEFT.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceLeft(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 < 0)
+			{
+				break;
+			}
+			x0--;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the air-to-tile distance from given point to RIGHT.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceRight(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (x0 > Main.maxTilesX)
+			{
+				break;
+			}
+			x0++;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the air-to-tile distance from given point to TOP.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceUp(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (x0 > Main.maxTilesX || x0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 < 0)
+			{
+				break;
+			}
+			y0--;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the air-to-tile distance from given point to BOTTOM.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	public static int CheckSpaceDown(int x, int y)
+	{
+		int count = 0;
+		int x0 = x;
+		int y0 = y;
+		if (y0 > Main.maxTilesY || y0 < 0)
+		{
+			return count;
+		}
+		while (!SafeGetTile(x0, y0).HasTile)
+		{
+			if (y0 > Main.maxTilesY)
+			{
+				break;
+			}
+			y0++;
+			count++;
+		}
+		return count;
+	}
+
+	/// <summary>
+	/// Return the tile type if all tiles in the given area are the same, otherwise return -3.No any tile, return -1. If the area is out of world, return -4.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	/// <returns></returns>
+	public static int GetUniformTile(int x, int y, int w, int h)
+	{
+		if (x < 0 || y < 0 || x + w > Main.maxTilesX || y + h > Main.maxTilesY)
+		{
+			return -4;
+		}
+
+		Tile tile = SafeGetTile(x, y);
+		int targetId = tile.type;
+		if (!tile.HasTile)
+		{
+			targetId = -1;
+		}
+		for (int px = x; px < x + w; px++)
+		{
+			for (int py = y; py < y + h; py++)
+			{
+				Tile checkTile = SafeGetTile(px, py);
+				int checkType = checkTile.type;
+				if (!checkTile.HasTile)
+				{
+					checkType = -1;
+				}
+				if (checkType != targetId)
+				{
+					return -3;
+				}
+			}
+		}
+
+		return targetId;
+	}
+
+	/// <summary>
+	/// Return the tile type if all tiles in the given area are the same, otherwise return -3.No any tile, return -1. If the area is out of world, return -4.
+	/// </summary>
+	/// <param name="point"></param>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	/// <returns></returns>
+	public static int GetUniformTile(Point point, int w, int h)
+	{
+		return GetUniformTile(point.X, point.Y, w, h);
+	}
+
+	/// <summary>
+	/// Fill liquid in the given area. Type: vanilla Liquid.ID.
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	/// <param name="type"></param>
+	public static void PlaceRectangleAreaOfLiquid_XYWH(int x, int y, int w, int h, int type)
+	{
+		for (int i = x; i <= x + w; i++)
+		{
+			for (int j = y; j <= y + h; j++)
+			{
+				Tile tile = SafeGetTile(i, j);
+				if (ChestSafe(x, y))
+				{
+					tile.liquid = (byte)type;
+					tile.LiquidAmount = 255;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	///  Fill all chest by given area if exist.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="width"></param>
+	/// <param name="height"></param>
+	/// <param name="contents"></param>
+	public static void FillChestXYWH(int x, int y, int width, int height, List<Item> contents)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				WorldGenMisc.TryFillChest(x + i, y + j, contents);
+			}
+		}
 	}
 }

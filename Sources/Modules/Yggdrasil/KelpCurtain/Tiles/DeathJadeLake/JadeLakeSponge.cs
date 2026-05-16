@@ -19,7 +19,7 @@ public class JadeLakeSponge : ModTile
 			30,
 		};
 		TileObjectData.newTile.CoordinateWidth = 30;
-		TileObjectData.newTile.DrawYOffset = -15;
+		TileObjectData.newTile.DrawYOffset = -12;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
@@ -29,7 +29,7 @@ public class JadeLakeSponge : ModTile
 
 	public override void KillMultiTile(int i, int j, int frameX, int frameY)
 	{
-		if (frameX % 36 == 0 && frameY == 0)
+		if (frameX % 30 == 0 && frameY == 0)
 		{
 			Vector2 pos = new Point(i, j).ToWorldCoordinates() + new Vector2(8, 16);
 			var p0 = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_TileBreak(i, j), pos, new Vector2(0, -5), ModContent.ProjectileType<SpongeOxygenBubble>(), 20, 0);

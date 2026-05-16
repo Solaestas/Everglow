@@ -16,6 +16,7 @@ public class JadeLakeRedAlgae : ModTile, ITileFluentlyDrawn
 		Main.tileFrameImportant[Type] = false;
 		Main.tileNoAttach[Type] = true;
 		Main.tileLavaDeath[Type] = true;
+
 		// TileObjectData assignment
 		// The TileID.Signs TileObjectData doesn't set StyleMultiplier to 5, so we will not be copying from it in this case
 		// Using Style1x1 as a base, we will create a TileObjectData with 5 alternate placements, each anchoring to a different anchor.

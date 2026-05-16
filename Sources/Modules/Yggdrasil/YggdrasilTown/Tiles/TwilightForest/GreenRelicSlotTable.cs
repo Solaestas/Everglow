@@ -53,7 +53,7 @@ public class GreenRelicSlotTable : ModTile
 				Tile tile = TileUtils.SafeGetTile(i, j);
 				Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
 				YggdrasilWorldGeneration.KillRectangleAreaOfTile(topLeftPoint.X - 1, topLeftPoint.Y, topLeftPoint.X + 3, topLeftPoint.Y + 42);
-				SmoothTile(topLeftPoint.X - 2, topLeftPoint.Y, topLeftPoint.X + 4, topLeftPoint.Y + 42);
+				SmoothTile_XXYY(topLeftPoint.X - 2, topLeftPoint.Y, topLeftPoint.X + 4, topLeftPoint.Y + 42);
 				for (int x = -2; x < 3; x++)
 				{
 					for (int y = 0; y < 40; y++)

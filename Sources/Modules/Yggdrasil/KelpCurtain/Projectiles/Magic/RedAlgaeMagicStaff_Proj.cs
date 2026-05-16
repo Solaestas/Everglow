@@ -17,6 +17,7 @@ public class RedAlgaeMagicStaff_Proj : ModProjectile
 		Projectile.friendly = true;
 		Projectile.hostile = false;
 		Projectile.penetrate = 1;
+		Projectile.DamageType = DamageClass.Magic;
 	}
 
 	public override void AI()

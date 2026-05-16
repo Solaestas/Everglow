@@ -126,7 +126,7 @@ public class RoadSignPost_ToArenaVFX : TileVFX
 		{
 			NPC.NewNPCDirect(WorldGen.GetNPCSource_TileBreak(180, 190), new Point(180, 190).ToWorldCoordinates(), msg.Y);
 		}
-		SmoothTile(20, 20, Main.maxTilesX - 20, Main.maxTilesY - 20);
+		SmoothTile_XXYY(20, 20, Main.maxTilesX - 20, Main.maxTilesY - 20);
 		TileUtils.PlaceFrameImportantTiles(70, 198, 2, 2, ModContent.TileType<ArenaChallengeSettingTile>());
 		WorldGen.PlaceChest(72, 199, 21, false, 33);
 	}

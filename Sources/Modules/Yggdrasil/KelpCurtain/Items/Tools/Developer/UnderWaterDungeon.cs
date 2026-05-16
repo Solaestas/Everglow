@@ -1,11 +1,9 @@
-using System;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.IRProbe;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.LightningMechanism;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.UnderwaterGuillotine;
 using Everglow.Yggdrasil.KelpCurtain.Walls;
-using Everglow.Yggdrasil.WorldGeneration;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Everglow.Commons.Utilities.TileUtils;
 using static Everglow.Yggdrasil.WorldGeneration.YggdrasilWorldGeneration;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Tools.Developer;
@@ -245,7 +243,7 @@ public class UnderWaterDungeon : ModItem
 			if (height > 0)
 			{
 				Tile algaBottom = TileUtils.SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick);
-				if(algaBottom.HasTile)
+				if (algaBottom.HasTile)
 				{
 					for (int algaY = 0; algaY < height; algaY++)
 					{

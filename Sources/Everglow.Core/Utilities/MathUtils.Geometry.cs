@@ -1,3 +1,5 @@
+using Terraria;
+
 namespace Everglow.Commons.Utilities;
 
 public static partial class MathUtils
@@ -49,6 +51,19 @@ public static partial class MathUtils
 		float dy = circleCenter.Y - closestY;
 
 		return (dx * dx + dy * dy) <= (radius * radius);
+	}
+
+	/// <summary>
+	/// 判定2D 圆形与 AABB 是否相交（边界算相交）
+	/// </summary>
+	/// <param name="circleCenter"></param>
+	/// <param name="radius"></param>
+	/// <param name="aabbMin"></param>
+	/// <param name="aabbMax"></param>
+	/// <returns></returns>
+	public static bool IntersectsCircleAABB(Vector2 circleCenter, float radius, Rectangle hitBox)
+	{
+		return IntersectsCircleAABB(circleCenter, radius, hitBox.TopLeft(), hitBox.BottomRight());
 	}
 
 	/// <summary>

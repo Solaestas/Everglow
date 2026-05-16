@@ -291,7 +291,7 @@ public class YggdrasilTownGeneration
 					int upY = (int)(oldPoints[a].Y - radious);
 					int downY = (int)(oldPoints[a].Y + radious);
 
-					// SmoothTile(leftX, upY, rightX, downY);
+					// SmoothTile_XXYY(leftX, upY, rightX, downY);
 				}
 				FillLiquid(oldPoints[a] * 16 + new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(16))).RotatedByRandom(MathHelper.TwoPi) * radious);
 			}
@@ -1236,7 +1236,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 
-		// SmoothTile(leftBound, upBound, rightBound, bottomBound);
+		// SmoothTile_XXYY(leftBound, upBound, rightBound, bottomBound);
 		string mapIOPath = ModAsset.HotbedObervatory_66x44_Path;
 		QuickBuild(rightBound - 100, (int)Center.Y, mapIOPath);
 
@@ -1417,8 +1417,8 @@ public class YggdrasilTownGeneration
 				}
 
 				// 平坦化
-				// SmoothTile(startX - 10, checkY - 30, endX + 10, checkY - 25);
-				// SmoothTile(startX - 10, checkY + 25, endX + 10, checkY + 30);
+				// SmoothTile_XXYY(startX - 10, checkY - 30, endX + 10, checkY - 25);
+				// SmoothTile_XXYY(startX - 10, checkY + 25, endX + 10, checkY + 30);
 
 				// 房子
 				int countCell = 0;
@@ -2419,7 +2419,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void SmoothYggdrasilTown()
 	{
-		SmoothTile(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
+		SmoothTile_XXYY(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
 	}
 
 	/// <summary>

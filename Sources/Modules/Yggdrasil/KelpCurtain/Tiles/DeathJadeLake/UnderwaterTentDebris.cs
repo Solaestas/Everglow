@@ -14,7 +14,7 @@ public class UnderwaterTentDebris : ModTile
 		TileObjectData.newTile.CoordinateHeights = new int[]
 		{
 			16,
-			18,
+			20,
 		};
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = true;

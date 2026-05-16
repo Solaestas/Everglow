@@ -265,25 +265,6 @@ public class YggdrasilWorldGeneration : ModSystem
 	}
 
 	/// <summary>
-	///  Fill all chest by given area if exist.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <param name="width"></param>
-	/// <param name="height"></param>
-	/// <param name="contents"></param>
-	public static void FillChestXYWH(int x, int y, int width, int height, List<Item> contents)
-	{
-		for (int i = 0; i < width; i++)
-		{
-			for (int j = 0; j < height; j++)
-			{
-				WorldGenMisc.TryFillChest(x + i, y + j, contents);
-			}
-		}
-	}
-
-	/// <summary>
 	/// Fill liquids by given area:(x0:left, y0:top, x1:right, y1:bottom)
 	/// </summary>
 	/// <param name="x0"></param>
@@ -409,7 +390,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				tile.wall = (ushort)type;
 			}
 		}
-		SmoothTile(x0, y0, x1, y1);
+		SmoothTile_XXYY(x0, y0, x1, y1);
 	}
 
 	/// <summary>
@@ -430,7 +411,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				tile.ClearEverything();
 			}
 		}
-		SmoothTile(x0, y0, x1, y1);
+		SmoothTile_XXYY(x0, y0, x1, y1);
 	}
 
 	/// <summary>
@@ -454,7 +435,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				}
 			}
 		}
-		SmoothTile(x0, y0, x1, y1);
+		SmoothTile_XXYY(x0, y0, x1, y1);
 	}
 
 	/// <summary>
@@ -516,7 +497,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				tile.wall = 0;
 			}
 		}
-		SmoothTile(x0, y0, x1, y1);
+		SmoothTile_XXYY(x0, y0, x1, y1);
 	}
 
 	/// <summary>
@@ -539,190 +520,6 @@ public class YggdrasilWorldGeneration : ModSystem
 			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
 		}
-	}
-
-	/// <summary>
-	/// Return the summary of air-to-tile distances of given point to top and to bottom.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceHeight(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (x0 > Main.maxTilesX || x0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (y0 > Main.maxTilesY)
-			{
-				break;
-			}
-			y0++;
-			count++;
-		}
-		x0 = x;
-		y0 = y - 1;
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (y0 < 0)
-			{
-				break;
-			}
-			y0--;
-			count++;
-		}
-		return count;
-	}
-
-	/// <summary>
-	/// Return the summary of air-to-tile distances of given point to left and to right.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceWidth(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (y0 > Main.maxTilesY || y0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (x0 > Main.maxTilesX)
-			{
-				break;
-			}
-			x0++;
-			count++;
-		}
-		x0 = x - 1;
-		y0 = y;
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (x0 < 0)
-			{
-				break;
-			}
-			x0--;
-			count++;
-		}
-		return count;
-	}
-
-	/// <summary>
-	/// Return the air-to-tile distance from given point to LEFT.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceLeft(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (y0 > Main.maxTilesY || y0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (x0 < 0)
-			{
-				break;
-			}
-			x0--;
-			count++;
-		}
-		return count;
-	}
-
-	/// <summary>
-	/// Return the air-to-tile distance from given point to RIGHT.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceRight(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (y0 > Main.maxTilesY || y0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (x0 > Main.maxTilesX)
-			{
-				break;
-			}
-			x0++;
-			count++;
-		}
-		return count;
-	}
-
-	/// <summary>
-	/// Return the air-to-tile distance from given point to TOP.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceUp(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (x0 > Main.maxTilesX || x0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (y0 < 0)
-			{
-				break;
-			}
-			y0--;
-			count++;
-		}
-		return count;
-	}
-
-	/// <summary>
-	/// Return the air-to-tile distance from given point to BOTTOM.
-	/// </summary>
-	/// <param name="x"></param>
-	/// <param name="y"></param>
-	/// <returns></returns>
-	public static int CheckSpaceDown(int x, int y)
-	{
-		int count = 0;
-		int x0 = x;
-		int y0 = y;
-		if (y0 > Main.maxTilesY || y0 < 0)
-		{
-			return count;
-		}
-		while (!SafeGetTile(x0, y0).HasTile)
-		{
-			if (y0 > Main.maxTilesY)
-			{
-				break;
-			}
-			y0++;
-			count++;
-		}
-		return count;
 	}
 
 	/// <summary>
