@@ -202,7 +202,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 				}
 			}
 			ushort type = tile.TileType;
-			int jointStyle = 4 - (j + TileUtils.GetFixedRandomNumber(tilePos.X)) % 5;
+			int jointStyle = 4 - (j + TileUtils.GetFixedRandomNumber_SingleSeed(tilePos.X)) % 5;
 			var frame = new Rectangle(3 + 12 * jointStyle, 116, 10, 18);
 			if (lastTileDis > 0)
 			{

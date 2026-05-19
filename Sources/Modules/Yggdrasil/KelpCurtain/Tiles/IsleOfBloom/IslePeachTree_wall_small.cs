@@ -1,12 +1,13 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
 
-public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
+public class IslePeachTree_wall_small : ModTile, ITileFluentlyDrawn
 {
 	public override void SetStaticDefaults()
 	{
@@ -16,13 +17,10 @@ public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
 		Main.tileAxe[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-		TileObjectData.newTile.Height = 2;
+		TileObjectData.newTile.Height = 1;
 		TileObjectData.newTile.Width = 1;
-		TileObjectData.newTile.CoordinateHeights = new int[]
-		{
-			16,
-			18,
-		};
+		TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
+		TileObjectData.newTile.AnchorWall = true;
 		TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.LavaDeath = true;
 		TileObjectData.addTile(Type);
@@ -33,11 +31,7 @@ public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		Tile tile = TileUtils.SafeGetTile(i, j);
-		if (tile.TileFrameY == 18)
-		{
-			TileFluentDrawManager.AddFluentPoint(this, i, j);
-		}
+		TileFluentDrawManager.AddFluentPoint(this, i, j);
 		return false;
 	}
 
@@ -77,8 +71,8 @@ public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
 		}
 
 		int paint = Main.tile[tilePos].TileColor;
-		tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.IslePeachTree_small_tree_Path, Type, 1, paint, tileDrawing);
-		tex ??= ModAsset.IslePeachTree_small_tree.Value;
+		tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.IslePeachTree_wall_small_Path, Type, 1, paint, tileDrawing);
+		tex ??= ModAsset.IslePeachTree_wall_small.Value;
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
@@ -127,21 +121,19 @@ public class IslePeachTree_small : ModTile, ITileFluentlyDrawn
 				}
 			}
 		}
-		switch (TileUtils.GetFixedRandomNumber(tilePos, 4))
+		switch (TileUtils.GetFixedRandomNumber(tilePos, 3))
 		{
 			case 0:
+				frame = new Rectangle(8, 12, 88, 36);
+				origin = new Vector2(53, 30);
 				break;
 			case 1:
-				frame = new Rectangle(182, 10, 156, 158);
-				origin = new Vector2(92, 156);
+				frame = new Rectangle(112, 4,98, 52);
+				origin = new Vector2(64, 42);
 				break;
 			case 2:
-				frame = new Rectangle(406, 56, 96, 122);
-				origin = new Vector2(45, 111);
-				break;
-			case 3:
-				frame = new Rectangle(576, 30, 122, 138);
-				origin = new Vector2(49, 138);
+				frame = new Rectangle(218, 14, 84, 38);
+				origin = new Vector2(61, 36);
 				break;
 		}
 

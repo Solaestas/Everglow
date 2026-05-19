@@ -1,6 +1,4 @@
-using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.TileHelper;
-using Spine;
 using Terraria.ObjectData;
 using Terraria.Utilities;
 
@@ -8,9 +6,13 @@ namespace Everglow.Commons.Utilities;
 
 public partial class TileUtils
 {
-	public static int[,] PerlinPixelR = new int[1024, 1024];
-	public static int[,] PerlinPixelG = new int[1024, 1024];
-	public static int[,] PerlinPixelB = new int[1024, 1024];
+	public static int[,] PerlinPixelR = new int[512, 512];
+	public static int[,] PerlinPixelG = new int[512, 512];
+	public static int[,] PerlinPixelB = new int[512, 512];
+
+	public static int[,] LargeSmokeTexturePixelR = new int[1024, 1024];
+	public static int[,] LargeSmokeTexturePixelG = new int[1024, 1024];
+	public static int[,] LargeSmokeTexturePixelB = new int[1024, 1024];
 
 	public static UnifiedRandom GenRand = new UnifiedRandom();
 
@@ -25,6 +27,8 @@ public partial class TileUtils
 	/// 7: HasTileAndWall<br/>
 	/// 8: TileButNoWallOnly<br/>
 	/// 9: WallButNoTileOnly<br/>
+	/// 10: SolidBlock<br/>
+	/// 11: NoneSolidTile<br/>
 	/// </summary>
 	public enum TileChangeState
 	{
@@ -38,6 +42,8 @@ public partial class TileUtils
 		HasTileAndWall,
 		TileButNoWallOnly,
 		WallButNoTileOnly,
+		SolidBlock,
+		NoneSolidTile,
 	}
 
 	public static bool CanChangeTile(Tile tile, int state)
@@ -100,6 +106,18 @@ public partial class TileUtils
 					return true;
 				}
 				break;
+			case (int)TileChangeState.SolidBlock:
+				if (tile.HasTile && IsTileSolid(tile))
+				{
+					return true;
+				}
+				break;
+			case (int)TileChangeState.NoneSolidTile:
+				if (tile.HasTile && !IsTileSolid(tile))
+				{
+					return true;
+				}
+				break;
 		}
 
 		return false;
@@ -131,33 +149,84 @@ public partial class TileUtils
 				}
 			}
 		});
+
+		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>(ModAsset.WorldGenLarge_rgb_Mod);
+		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		imageData.ProcessPixelRows(accessor =>
+		{
+			for (int y = 0; y < accessor.Height; y++)
+			{
+				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
+				var pixelRow = accessor.GetRowSpan(newY);
+				for (int x = 0; x < pixelRow.Length; x++)
+				{
+					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
+					ref var pixel = ref pixelRow[newX];
+					LargeSmokeTexturePixelR[x, y] = pixel.R;
+					LargeSmokeTexturePixelG[x, y] = pixel.G;
+					LargeSmokeTexturePixelB[x, y] = pixel.B;
+				}
+			}
+		});
 	}
 
 	/// <summary>
 	/// A float value based on the noise texture's red channel.
 	/// </summary>
 	/// <returns>0f~1f</returns>
-	public static float GetPerlinPixelR(float x, float y)
+	public static float GetPerlinPixelR(double x, double y)
 	{
-		return PerlinPixelR[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
+		return GetLerpTexturePixelValue(PerlinPixelR, x, y);
 	}
 
 	/// <summary>
 	/// A float value based on the noise texture's green channel.
 	/// </summary>
 	/// <returns>0f~1f</returns>
-	public static float GetPerlinPixelG(float x, float y)
+	public static float GetPerlinPixelG(double x, double y)
 	{
-		return PerlinPixelG[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
+		return GetLerpTexturePixelValue(PerlinPixelG, x, y);
 	}
 
 	/// <summary>
 	/// A float value based on the noise texture's blue channel.
 	/// </summary>
 	/// <returns>0f~1f</returns>
-	public static float GetPerlinPixelB(float x, float y)
+	public static float GetPerlinPixelB(double x, double y)
 	{
-		return PerlinPixelB[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
+		return GetLerpTexturePixelValue(PerlinPixelB,x ,y);
+	}
+
+	/// <summary>
+	/// A float value based on the noise texture's red channel.
+	/// </summary>
+	/// <returns>0f~1f</returns>
+	public static float GetLargeSmokeTexturePixelR(double x, double y)
+	{
+		return GetLerpTexturePixelValue(LargeSmokeTexturePixelR, x, y);
+	}
+
+	/// <summary>
+	/// A float value based on the noise texture's green channel.
+	/// </summary>
+	/// <returns>0f~1f</returns>
+	public static float GetLargeSmokeTexturePixelG(double x, double y)
+	{
+		return GetLerpTexturePixelValue(LargeSmokeTexturePixelG, x, y);
+	}
+
+	/// <summary>
+	/// A float value based on the noise texture's blue channel.
+	/// </summary>
+	/// <returns>0f~1f</returns>
+	public static float GetLargeSmokeTexturePixelB(double x, double y)
+	{
+		return GetLerpTexturePixelValue(LargeSmokeTexturePixelB, x, y);
+	}
+
+	public static float GetLerpTexturePixelValue(int[,] colorMap, double x, double y)
+	{
+		return colorMap[(int)(Math.Abs(x) % colorMap.GetLength(0)), (int)(Math.Abs(y) % colorMap.GetLength(1))] / 255f;
 	}
 
 	/// <summary>
@@ -266,6 +335,20 @@ public partial class TileUtils
 	}
 
 	/// <summary>
+	/// Fill tiles by given area:(x, y, w, h) where (x, y) is the top left corner.
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	public static void PlaceRectangleAreaOfBlock_XYWH(int x, int y, int w, int h, int type, int force = 0)
+	{
+		PlaceRectangleAreaOfBlock(x, y, x + w - 1, y + h - 1, type, force);
+	}
+
+	/// <summary>
 	/// Fill tiles by given area. The pos is the top left corner and size is the width and height. So the area is (pos.X, pos.Y) to (pos.X + size.X, pos.Y + size.Y).
 	/// </summary>
 	/// <param name="pos">Tile coord.</param>
@@ -323,16 +406,16 @@ public partial class TileUtils
 	/// -1: Kill tile.<br/>
 	/// -2: ClearEverything</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
-	public static void PlaceCircleAreaOfBlockWithRandomNoise(Vector2 center, float radius, int type, float noiseSize = 10f, int force = 0)
+	public static void PlaceCircleAreaOfBlockWithRandomNoise(Vector2 center, float radius, int type, float noiseSize = 3f, int force = 0)
 	{
-		int x0CoordPerlin = GenRand.Next(1024);
-		int y0CoordPerlin = GenRand.Next(1024);
+		int x0CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(512);
 		int radiusI = (int)radius;
 		for (int x = -radiusI; x <= radiusI; x++)
 		{
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
-				float aValue = PerlinPixelR[Math.Abs((x + x0CoordPerlin) % 1024), Math.Abs((y + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin);
 				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
 				{
 					Tile tile = SafeGetTile(center + new Vector2(x, y));
@@ -355,6 +438,46 @@ public partial class TileUtils
 	}
 
 	/// <summary>
+	/// Transform the wall within the circle(center, radius) to the type, but with a random noise affect on the bound.
+	/// </summary>
+	/// <param name="center">Tile coord</param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="noiseSize"></param>
+	/// <param name="force"></param>
+	public static void PlaceCircleAreaOfWallWithRandomNoise(Point center, float radius, int type, float noiseSize = 10f, int force = 0)
+	{
+		PlaceCircleAreaOfWallWithRandomNoise(center.ToVector2(), radius, type, noiseSize, force);
+	}
+
+	/// <summary>
+	/// Transform the wall within the circle(center, radius) to the type, but with a random noise affect on the bound.
+	/// </summary>
+	/// <param name="center">Tile coord</param>
+	/// <param name="radius"></param>
+	/// <param name="type"></param>
+	/// <param name="noiseSize"></param>
+	/// <param name="force"></param>
+	public static void PlaceCircleAreaOfWallWithRandomNoise(Vector2 center, float radius, int type, float noiseSize = 3f, int force = 0)
+	{
+		int x0CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(512);
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin);
+				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
+				{
+					Tile tile = SafeGetTile(center + new Vector2(x, y));
+					ChangeWall(tile, type, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// Kill the tile within the circle(center, radius), but with a random noise affect on the bound.
 	/// </summary>
 	/// <param name="center">Tile coord</param>
@@ -366,14 +489,14 @@ public partial class TileUtils
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(Vector2 center, float radius, List<int> type_be_killed, int killStyle = -1, float noiseSize = 10f, int force = 0)
 	{
-		int x0CoordPerlin = GenRand.Next(1024);
-		int y0CoordPerlin = GenRand.Next(1024);
+		int x0CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(512);
 		int radiusI = (int)radius;
 		for (int x = -radiusI; x <= radiusI; x++)
 		{
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
-				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin) / 255f;
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin);
 				Tile tile = SafeGetTile(center + new Vector2(x, y));
 				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize && type_be_killed.Contains(tile.TileType))
 				{
@@ -409,14 +532,14 @@ public partial class TileUtils
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void KillCircleAreaOfWallWithRandomNoiseInCertainType(Point center, float radius, List<int> type_be_killed, int killStyle = 0, float noiseSize = 10f, int force = 0)
 	{
-		int x0CoordPerlin = GenRand.Next(1024);
-		int y0CoordPerlin = GenRand.Next(1024);
+		int x0CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(512);
 		int radiusI = (int)radius;
 		for (int x = -radiusI; x <= radiusI; x++)
 		{
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
-				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin) / 255f;
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin);
 				Tile tile = SafeGetTile(center + new Point(x, y));
 				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize && type_be_killed.Contains(tile.wall))
 				{
@@ -439,9 +562,9 @@ public partial class TileUtils
 			return;
 		}
 		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
-		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
+		for (int x = (int)bounds.X - 8; x < bounds.Z; x += 16)
 		{
-			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
+			for (int y = (int)bounds.Y - 8; y < bounds.W; y += 16)
 			{
 				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
 				{
@@ -528,18 +651,7 @@ public partial class TileUtils
 		{
 			newPolygon[i] += anchorPos;
 		}
-		var bounds = MathUtils.GetPolygonAABBBound_Vector4(newPolygon);
-		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
-		{
-			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
-			{
-				if (MathUtils.IsPointInPolygon(newPolygon, new Vector2(x, y)))
-				{
-					Tile tile = SafeGetTile(x, y);
-					ChangeTile(tile, type, force);
-				}
-			}
-		}
+		PlacePolygonAreaOfBlock(newPolygon, type, force);
 	}
 
 	/// <summary>
@@ -883,7 +995,7 @@ public partial class TileUtils
 						queueChecked.Enqueue(point);
 						visited.Add(point);
 					}
-					else if (theseTypeOnly.Contains(tile.type))
+					else if (theseTypeOnly.Contains(tile.TileType))
 					{
 						queueChecked.Enqueue(point);
 						visited.Add(point);
@@ -1011,7 +1123,7 @@ public partial class TileUtils
 							visited_air.Add(point);
 						}
 					}
-					else if (theseTypeOnly.Contains(tile.type))
+					else if (theseTypeOnly.Contains(tile.TileType))
 					{
 						queueChecked.Enqueue(point);
 						if (flag1)
@@ -1335,16 +1447,16 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return Vector2.zeroVector.
+	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return new Vector2(float.NaN).
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <param name="type"></param>
 	/// <param name="maxDistance"></param>
 	/// <returns></returns>
-	public static Vector2 ToNearestTypeOfTIle(int x, int y, int type, float maxDistance = 100)
+	public static Vector2 ToNearestTypeOfTile(int x, int y, int type, float maxDistance = 100)
 	{
-		Vector2 direction = Vector2.zeroVector;
+		Vector2 direction = new Vector2(maxDistance + 1);
 		float minDis = maxDistance;
 		for (int i = -(int)maxDistance; i <= maxDistance; i++)
 		{
@@ -1375,11 +1487,11 @@ public partial class TileUtils
 	/// <param name="type"></param>
 	/// <param name="maxDistance"></param>
 	/// <returns></returns>
-	public static Vector2 ToNearestTypeOfTIle(Vector2 worldPos, int type, float maxDistance = 100)
+	public static Vector2 ToNearestTypeOfTile(Vector2 worldPos, int type, float maxDistance = 100)
 	{
 		int x = worldPos.ToTileCoordinates().X;
 		int y = worldPos.ToTileCoordinates().Y;
-		return ToNearestTypeOfTIle(x, y, type, maxDistance);
+		return ToNearestTypeOfTile(x, y, type, maxDistance);
 	}
 
 	/// <summary>
@@ -1582,7 +1694,7 @@ public partial class TileUtils
 		}
 
 		Tile tile = SafeGetTile(x, y);
-		int targetId = tile.type;
+		int targetId = tile.TileType;
 		if (!tile.HasTile)
 		{
 			targetId = -1;
@@ -1592,7 +1704,7 @@ public partial class TileUtils
 			for (int py = y; py < y + h; py++)
 			{
 				Tile checkTile = SafeGetTile(px, py);
-				int checkType = checkTile.type;
+				int checkType = checkTile.TileType;
 				if (!checkTile.HasTile)
 				{
 					checkType = -1;
@@ -1659,5 +1771,83 @@ public partial class TileUtils
 				WorldGenMisc.TryFillChest(x + i, y + j, contents);
 			}
 		}
+	}
+
+	/// <summary>
+	/// Tile coord. Ignore platforms.
+	/// </summary>
+	/// <param name="point"></param>
+	/// <returns></returns>
+	public static bool IsTileSolid(Point point)
+	{
+		if (!WorldGen.InWorld(point.X, point.Y, 1))
+		{
+			return false;
+		}
+		Tile tile = Main.tile[point.X, point.Y];
+		return IsTileSolid(tile);
+	}
+
+	public static bool IsTileSolid(int x, int y)
+	{
+		return IsTileSolid(new Point(x, y));
+	}
+
+	public static bool IsTileSolid(Tile tile)
+	{
+		if (tile == null || !tile.HasTile || tile.IsActuated || !Main.tileSolid[tile.TileType])
+		{
+			return false;
+		}
+		if (tile.TileType > TileID.Dirt && (TileID.Sets.Platforms[tile.TileType] || tile.TileType == TileID.PlanterBox))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	/// <summary>
+	/// Get the tile positions in the given polygon area. World coord.
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	/// <returns></returns>
+	public static List<Point> GetPolygonAreaOfTilePos(List<Vector2> polygon)
+	{
+		List<Point> polygon_Pos = new List<Point>();
+		if (polygon.Count < 3)
+		{
+			return polygon_Pos;
+		}
+		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
+		for (int x = (int)bounds.X - 8; x < bounds.Z; x += 16)
+		{
+			for (int y = (int)bounds.Y - 8; y < bounds.W; y += 16)
+			{
+				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
+				{
+					polygon_Pos.Add(new Vector2(x, y).ToTileCoordinates());
+				}
+			}
+		}
+		return polygon_Pos;
+	}
+
+	/// <summary>
+	/// Get the tile positions in the given polygon area. Tile coord.
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <param name="type"></param>
+	/// <param name="force"></param>
+	/// <returns></returns>
+	public static List<Point> GetPolygonAreaOfTilePos(List<Point> polygon)
+	{
+		List<Vector2> polygon_Vector2 = new List<Vector2>();
+		foreach (var point in polygon)
+		{
+			polygon_Vector2.Add(point.ToWorldCoordinates());
+		}
+		return GetPolygonAreaOfTilePos(polygon_Vector2);
 	}
 }

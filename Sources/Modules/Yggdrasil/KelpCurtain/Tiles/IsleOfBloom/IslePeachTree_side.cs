@@ -18,6 +18,8 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
+		Main.tileAxe[Type] = true;
+
 		DustType = ModContent.DustType<IslePeachTree_Sawdust>();
 
 		// Placement - Standard Chandelier Setup Below
@@ -42,7 +44,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 		TileObjectData.newTile.AnchorRight = SolidOrSolidSideAnchor1TilesLong;
 		TileObjectData.addTile(Type);
 		AnimationFrameHeight = 18;
-		AddMapEntry(new Color(137, 99, 99));
+		AddMapEntry(new Color(205, 101, 147));
 		HitSound = SoundID.Dig;
 	}
 
@@ -58,9 +60,9 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 			Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
 			Active = true,
 			Visible = true,
-			Position = new Vector2(i, j).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi),
+			Position = new Vector2(i, j).ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 120 + new Vector2(0, -60),
 			MaxTime = 3600,
-			Scale = Main.rand.NextFloat(0.5f, 0.7f),
+			Scale = Main.rand.NextFloat(1f, 1.5f),
 			Frame = Main.rand.Next(10),
 			ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
 		};
@@ -69,7 +71,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		if(!ITileOffsetOverScreenDrawn.SpecialTilePositon.Contains(new Point(i, j)))
+		if (!ITileOffsetOverScreenDrawn.SpecialTilePositon.Contains(new Point(i, j)))
 		{
 			ITileOffsetOverScreenDrawn.SpecialTilePositon.Add(new Point(i, j));
 		}
@@ -122,9 +124,38 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 
 		int totalPushTime = 140;
 		float pushForcePerFrame = 0.96f;
-		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X - 20, tilePos.Y - 10, 20, 10, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		if(tile.TileFrameX == 180)
+		{
+			highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y - 10, 20, 10, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		}
 		windCycle += highestWindGridPushComplex * 0.25f;
-		float rotation = windCycle * 0.01f;
+		float rotation = windCycle * 0.1f;
+		if (!Main.gamePaused)
+		{
+			if (windCycle > 0.1f)
+			{
+				if (Main.rand.NextBool(2))
+				{
+					var petal = new PeachBlossom
+					{
+						Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+						Active = true,
+						Visible = true,
+						Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.2f) * 200 + new Vector2(-200, -80),
+						MaxTime = 3600,
+						Scale = Main.rand.NextFloat(0.8f, 1.2f),
+						Frame = Main.rand.Next(10),
+						ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+					};
+					if (tile.TileFrameX == 180)
+					{
+						petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.2f) * 200 + new Vector2(200, -80);
+					}
+					Ins.VFXManager.Add(petal);
+				}
+			}
+		}
 
 		var tileLight = Lighting.GetColor(tilePos);
 
@@ -140,9 +171,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 			origin = new Vector2(21, 179);
 		}
 
-		var drawPos = drawCenterPos;
-		var tileSpriteEffect = SpriteEffects.None;
-		spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
+		TileUtils.VertexDraw_Grid(drawCenterPos, frame, origin, tex, spriteBatch, rotation);
 	}
 
 	int ITileOffsetOverScreenDrawn.TileOffsetScreenRange() => 480;

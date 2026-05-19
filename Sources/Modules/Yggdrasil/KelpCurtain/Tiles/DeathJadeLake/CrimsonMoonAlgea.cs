@@ -220,7 +220,7 @@ public class CrimsonMoonAlgea : ModTile, ITileFluentlyDrawn
 				spriteBatch.Draw(tex, drawPos, frame, new Color(0.1f, 0.1f, 0.1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 				if(lastTileHasFruit)
 				{
-					Lighting.AddLight(drawPos + new Vector2(0, -40).RotatedBy(rotation) + Main.screenPosition, new Vector3(1.5f, 1.3f, 1f) * (1.5f + MathF.Sin(Main.GlobalTimeWrappedHourly + TileUtils.GetFixedRandomNumber(tilePos.GetHashCode())) * 0.5f));
+					Lighting.AddLight(drawPos + new Vector2(0, -40).RotatedBy(rotation) + Main.screenPosition, new Vector3(1.5f, 1.3f, 1f) * (1.5f + MathF.Sin(Main.GlobalTimeWrappedHourly + TileUtils.GetFixedRandomNumber_SingleSeed(tilePos.GetHashCode())) * 0.5f));
 				}
 			}
 			if (j == 0)

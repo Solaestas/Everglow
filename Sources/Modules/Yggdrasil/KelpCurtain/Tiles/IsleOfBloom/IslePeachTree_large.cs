@@ -1,12 +1,13 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
+using Microsoft.Build.Tasks;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
 
-public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
+public class IslePeachTree_large : ModTile, ITileFluentlyDrawn
 {
 	public const int MaxLength = 6;
 
@@ -16,7 +17,6 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		Main.tileNoAttach[Type] = true;
 		Main.tileCut[Type] = false;
 		Main.tileLavaDeath[Type] = true;
-		Main.tileAxe[Type] = true;
 
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
 		TileObjectData.newTile.Height = 1;
@@ -25,7 +25,7 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		TileObjectData.addTile(Type);
 		DustType = ModContent.DustType<IslePeachTree_Sawdust>();
 
-		AddMapEntry(new Color(205, 101, 147));
+		AddMapEntry(new Color(137, 99, 99));
 		HitSound = SoundID.Dig;
 	}
 
@@ -92,9 +92,9 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		}
 
 		int topY = j;
-		for (int y = 0; y < 12; y++)
+		for(int y = 0;y < 12;y++)
 		{
-			if (TileUtils.SafeGetTile(i, j - y).TileType != Type)
+			if(TileUtils.SafeGetTile(i, j - y).TileType != Type)
 			{
 				topY = j - y + 1;
 				break;
@@ -151,7 +151,7 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 				break;
 			}
 		}
-		Texture2D tex = ModAsset.IslePeachTree_medium.Value;
+		Texture2D tex = ModAsset.IslePeachTree_large.Value;
 
 		// 回声涂料
 		if (!TileDrawing.IsVisible(tile))
@@ -160,8 +160,8 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		}
 
 		int paint = Main.tile[tilePos].TileColor;
-		tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.IslePeachTree_medium_Path, Type, 1, paint, tileDrawing);
-		tex ??= ModAsset.IslePeachTree_medium.Value;
+		tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.IslePeachTree_large_Path, Type, 1, paint, tileDrawing);
+		tex ??= ModAsset.IslePeachTree_large.Value;
 
 		float windCycle = 0;
 		if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
@@ -172,36 +172,33 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 		int totalPushTime = 140;
 		float pushForcePerFrame = 0.96f;
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
-		int styleTop = TileUtils.GetFixedRandomNumber_SingleSeed(tilePos.X, 2);
+		int styleTop = TileUtils.GetFixedRandomNumber(tilePos, 2);
 		if (toTop == 1)
 		{
 			highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X - 3, tilePos.Y - 7, 7, 7, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		}
 		windCycle += highestWindGridPushComplex * 0.25f;
 		float rotation = windCycle * 0.1f;
-		if (!Main.gamePaused)
+		if(windCycle > 0.17f && toTop == 1)
 		{
-			if (windCycle > 0.1f && toTop == 1)
+			if(!Main.gamePaused && Main.rand.NextBool(2))
 			{
-				if (Main.rand.NextBool(2))
+				var petal = new PeachBlossom
 				{
-					var petal = new PeachBlossom
-					{
-						Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
-						Active = true,
-						Visible = true,
-						Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.5f) * 150 + new Vector2(0, -80),
-						MaxTime = 3600,
-						Scale = Main.rand.NextFloat(0.8f, 1.2f),
-						Frame = Main.rand.Next(10),
-						ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
-					};
-					if (styleTop == 1)
-					{
-						petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 100 + new Vector2(0, -100);
-					}
-					Ins.VFXManager.Add(petal);
+					Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+					Active = true,
+					Visible = true,
+					Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 120 + new Vector2(0, -60),
+					MaxTime = 3600,
+					Scale = Main.rand.NextFloat(1f, 1.5f),
+					Frame = Main.rand.Next(10),
+					ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+				};
+				if(styleTop == 1)
+				{
+					petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.5f) * 240 + new Vector2(0, -80);
 				}
+				Ins.VFXManager.Add(petal);
 			}
 		}
 
@@ -213,33 +210,21 @@ public class IslePeachTree_medium : ModTile, ITileFluentlyDrawn
 
 		if (toTop == 1)
 		{
-			var frame = new Rectangle(14, 4, 340, 212);
-			var origin = new Vector2(170, 224);
-			switch (styleTop)
-			{
-				case 0:
-					frame = new Rectangle(14, 4, 340, 212);
-					origin = new Vector2(167, 212);
-					break;
-				case 1:
-					frame = new Rectangle(370, 38, 240, 220);
-					origin = new Vector2(114, 220);
-					break;
-			}
-			TileUtils.VertexDraw_Grid(drawCenterPos + new Vector2(0, 2), frame, origin, tex, spriteBatch, rotation);
+			var frame = new Rectangle(184, 6, 1022, 726);
+			var origin = new Vector2(505, 726);
+			var drawPos = drawCenterPos;
+			var tileSpriteEffect = SpriteEffects.None;
+			spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 		}
-		if (toTop > 1 && toBottom > 1)
+		if (toTop > 1)
 		{
-			int style = TileUtils.GetFixedRandomNumber(tile) % 8;
-			var frame = new Rectangle(0, 236 + 18 * style, 34, 16);
-			var origin = new Vector2(15, 16);
-			TileUtils.VertexDraw_4_Corner(drawCenterPos, frame, origin, tex, spriteBatch, rotation);
-		}
-		if (toBottom == 1)
-		{
-			var frame = new Rectangle(50, 340, 38, 40);
-			var origin = new Vector2(19, 32);
-			TileUtils.VertexDraw_Grid(drawCenterPos + new Vector2(0, 12), frame, origin, tex, spriteBatch, rotation);
+			int style = TileUtils.GetFixedRandomNumber(tile) % 1;
+			var frame = new Rectangle(2, 636 + 18 * style, 38, 16);
+			var origin = new Vector2(19, 16);
+
+			var drawPos = drawCenterPos;
+			var tileSpriteEffect = SpriteEffects.None;
+			spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 		}
 	}
 }

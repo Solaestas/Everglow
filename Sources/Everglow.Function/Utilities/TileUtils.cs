@@ -1,3 +1,4 @@
+using Everglow.Commons.Vertex;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
@@ -70,7 +71,7 @@ public partial class TileUtils
 
 	public static int GetFixedRandomNumber(int x, int y, int max = 1024)
 	{
-		Random random = new Random(SafeGetTile(x, y).GetHashCode());
+		Random random = new Random(SafeGetTile(Math.Abs(x), Math.Abs(y)).GetHashCode());
 		return random.Next(0, max);
 	}
 
@@ -86,7 +87,7 @@ public partial class TileUtils
 		return random.Next(0, max);
 	}
 
-	public static int GetFixedRandomNumber(int seed, int max = 1024)
+	public static int GetFixedRandomNumber_SingleSeed(int seed, int max = 1024)
 	{
 		Random random = new Random(seed);
 		return random.Next(0, max);
@@ -122,5 +123,64 @@ public partial class TileUtils
 	public static Vector2 Center(this Tile tile)
 	{
 		return new Point(tile.X(), tile.Y()).ToWorldCoordinates();
+	}
+
+	public static void VertexDraw_4_Corner(Vector2 drawCenterPos, Rectangle frame, Vector2 origin, Texture2D tex, SpriteBatch spriteBatch, float rotation = 0)
+	{
+		var drawPos = drawCenterPos;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		Vector2 pos = drawPos + Main.screenPosition;
+		Vector2 offset0 = (new Vector2(0, 0) - origin).RotatedBy(rotation);
+		Vector2 offset1 = (new Vector2(frame.Width, 0) - origin).RotatedBy(rotation);
+		Vector2 offset2 = (new Vector2(0, frame.Height) - origin).RotatedBy(rotation);
+		Vector2 offset3 = (new Vector2(frame.Width, frame.Height) - origin).RotatedBy(rotation);
+
+		AddLightColorVertex(bars, pos + offset0, new Vector3(new Vector2(frame.X, frame.Y) / tex.Size(), 0));
+		AddLightColorVertex(bars, pos + offset1, new Vector3(new Vector2(frame.X + frame.Width, frame.Y) / tex.Size(), 0));
+		AddLightColorVertex(bars, pos + offset2, new Vector3(new Vector2(frame.X, frame.Y + frame.Height) / tex.Size(), 0));
+		AddLightColorVertex(bars, pos + offset3, new Vector3(new Vector2(frame.X + frame.Width, frame.Y + frame.Height) / tex.Size(), 0));
+		if (bars.Count > 2)
+		{
+			spriteBatch.GraphicsDevice.Textures[0] = tex;
+			spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+	}
+
+	public static void VertexDraw_Grid(Vector2 drawCenterPos, Rectangle frame, Vector2 origin, Texture2D tex, SpriteBatch spriteBatch, float rotation = 0)
+	{
+		var drawPos = drawCenterPos;
+		List<Vertex2D> bars = new List<Vertex2D>();
+		Vector2 pos = drawPos + Main.screenPosition;
+		int xCount = frame.Width / 16;
+		int yCount = frame.Height / 16;
+		float unitX = frame.Width / (float)xCount;
+		float unitY = frame.Height / (float)yCount;
+		for (int x = 0; x < xCount; x++)
+		{
+			for (int y = 0; y < yCount; y++)
+			{
+				Vector2 offset0 = (new Vector2(x * unitX, y * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset1 = (new Vector2((x + 1) * unitX, y * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset2 = (new Vector2(x * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset3 = (new Vector2((x + 1) * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
+
+				AddLightColorVertex(bars, pos + offset0, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + y * unitY) / tex.Size(), 0));
+				AddLightColorVertex(bars, pos + offset1, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + y * unitY) / tex.Size(), 0));
+				AddLightColorVertex(bars, pos + offset2, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0));
+				AddLightColorVertex(bars, pos + offset3, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0));
+			}
+		}
+
+		if (bars.Count > 2)
+		{
+			spriteBatch.GraphicsDevice.Textures[0] = tex;
+			spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		}
+	}
+
+	public static void AddLightColorVertex(List<Vertex2D> bars, Vector2 worldPos, Vector3 coord)
+	{
+		Color drawC = Lighting.GetColor(worldPos.ToTileCoordinates());
+		bars.Add(worldPos - Main.screenPosition, drawC, coord);
 	}
 }

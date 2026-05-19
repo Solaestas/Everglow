@@ -175,7 +175,7 @@ public class CrimsonMoonAlgaeSummonStaff_minion : ModProjectile
 		else
 		{
 			BlockedTimer += 3;
-			Vector2 toAir = TileUtils.ToNearestTypeOfTIle(Projectile.Center, -1);
+			Vector2 toAir = TileUtils.ToNearestTypeOfTile(Projectile.Center, -1);
 			Projectile.velocity = Projectile.velocity * 0.95f + toAir.NormalizeSafe() * 16f * 0.05f;
 			if (BlockedTimer >= BlockedTimeMax)
 			{
@@ -202,7 +202,7 @@ public class CrimsonMoonAlgaeSummonStaff_minion : ModProjectile
 				Vector2 toAim = chaseAim - Projectile.Center;
 				if (Collision.IsWorldPointSolid(toAim))
 				{
-					toAim += TileUtils.ToNearestTypeOfTIle(toAim, -1);
+					toAim += TileUtils.ToNearestTypeOfTile(toAim, -1);
 				}
 				if (toAim.Length() > 120)
 				{
@@ -240,7 +240,7 @@ public class CrimsonMoonAlgaeSummonStaff_minion : ModProjectile
 			}
 			else
 			{
-				Vector2 toAir = TileUtils.ToNearestTypeOfTIle(Projectile.Center, -1);
+				Vector2 toAir = TileUtils.ToNearestTypeOfTile(Projectile.Center, -1);
 				Projectile.velocity = Projectile.velocity * 0.95f + toAir.NormalizeSafe() * 16f * 0.05f;
 			}
 		}

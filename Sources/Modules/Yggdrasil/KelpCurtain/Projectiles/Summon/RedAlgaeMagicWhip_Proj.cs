@@ -91,7 +91,7 @@ public class RedAlgaeMagicWhip_Proj : WhipProjectile
 		FillWhipControlPoints(list0, foreStep);
 		for (int i = 0; i < list0.Count - 1; i++)
 		{
-			int frame = TileUtils.GetFixedRandomNumber(i, 3) + 1;
+			int frame = TileUtils.GetFixedRandomNumber_SingleSeed(i, 3) + 1;
 			if (frame == 0 && i > 0)
 			{
 				frame = 1;

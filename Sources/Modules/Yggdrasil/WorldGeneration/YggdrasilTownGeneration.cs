@@ -267,7 +267,7 @@ public class YggdrasilTownGeneration
 						int x = (int)point.X + dx;
 						int y = (int)point.Y + dy;
 
-						float aValue = PerlinPixelB[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 8f;
+						float aValue = GetLargeSmokeTexturePixelB(x + x0CoordPerlin, y + y0CoordPerlin) * 32f;
 						if (v0.Length() < radious - aValue)
 						{
 							Tile tile = SafeGetTile(x, y);
@@ -936,7 +936,7 @@ public class YggdrasilTownGeneration
 			{
 				Point pos = new Point(i, j) + topLeft;
 				Tile tile = SafeGetTile(pos);
-				float noiseValueUp = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + y0CoordPerlin) % 1024] / 255f * 0.5f;
+				float noiseValueUp = GetLargeSmokeTexturePixelG(i + x0CoordPerlin, j + y0CoordPerlin) * 0.5f;
 
 				// float noiseValueDown = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
 				if (ChestSafe(pos.X, pos.Y))
@@ -968,7 +968,7 @@ public class YggdrasilTownGeneration
 			{
 				Point pos = new Point(i, j) + topLeft;
 				Tile tile = SafeGetTile(pos);
-				float noiseValue = PerlinPixelG[(i + x0CoordPerlin) % 1024, (j + 50 + y0CoordPerlin) % 1024] / 255f * 0.5f;
+				float noiseValue = GetLargeSmokeTexturePixelG(i + x0CoordPerlin, j + y0CoordPerlin) * 0.5f;
 				if (j >= height - value + noiseValue * 25)
 				{
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
@@ -1164,8 +1164,8 @@ public class YggdrasilTownGeneration
 				Vector2 toCenter = Center - new Vector2(x, y);
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
-				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
-				float valueNoiseSecretion = PerlinPixelB[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.6f) % 1024] / 255f;
+				float valueNoise = GetLargeSmokeTexturePixelG((int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400), (int)(toCenter.Length() * 0.7f));
+				float valueNoiseSecretion = GetLargeSmokeTexturePixelB((int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400), (int)(toCenter.Length() * 0.6f));
 				float clearRange = 90f;
 				float boundThick = 60f;
 				if (toCenter.Length() > r)
@@ -1197,7 +1197,7 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<JellyBallSecretion>();
 					tile.HasTile = true;
 				}
-				float valueNoise2 = PerlinPixelG[x % 1024, y % 1024] / 255f;
+				float valueNoise2 = GetLargeSmokeTexturePixelG(x, y);
 				if (y < upBound + 30)
 				{
 					valueNoise2 += (upBound + 30 - y) / 30f;
@@ -1248,9 +1248,9 @@ public class YggdrasilTownGeneration
 				Vector2 toCenter = Center - new Vector2(x, y);
 				float r = a - b * MathF.Sin(toCenter.ToRotation());
 				toCenter.Y /= 1.2f;
-				float valueNoise = PerlinPixelG[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoise = GetLargeSmokeTexturePixelG((int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400), (int)(toCenter.Length() * 0.7f));
 				float valueNoiseWall = CellPixel[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 512, (int)(toCenter.Length() * 0.7f) % 512] / 255f;
-				float valueNoiseWallWood = PerlinPixelR[(int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400) % 1024, (int)(toCenter.Length() * 0.7f) % 1024] / 255f;
+				float valueNoiseWallWood = GetLargeSmokeTexturePixelR((int)((toCenter.ToRotation() + MathHelper.TwoPi + 0.5f) * 400), (int)(toCenter.Length() * 0.7f));
 				float clearRange = 90f;
 				float boundThick = 60f;
 				if (toCenter.Length() > r)
@@ -1280,7 +1280,7 @@ public class YggdrasilTownGeneration
 				{
 					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 				}
-				float valueNoise2 = PerlinPixelG[x % 1024, y % 1024] / 255f;
+				float valueNoise2 = GetLargeSmokeTexturePixelG(x, y);
 				if (y < upBound + 30)
 				{
 					valueNoise2 += (upBound + 30 - y) / 30f;
@@ -1335,7 +1335,7 @@ public class YggdrasilTownGeneration
 					{
 						Tile tile = SafeGetTile(x, y);
 						float addXValue = 0;
-						float addYValue = PerlinPixelG[(x + x0CoordPerlin) % 1024, (y + y0CoordPerlin) % 1024] / 255f * 0.5f;
+						float addYValue = GetLargeSmokeTexturePixelG(x + x0CoordPerlin, y + y0CoordPerlin) * 0.5f;
 						if (tile.WallType == ModContent.WallType<StoneDragonScaleWoodWall>())
 						{
 							addXValue = EmbeddingDepthOfTileType(x, y, ModContent.TileType<StoneScaleWood>(), 10) / 20f;
@@ -1405,7 +1405,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = checkY - 40; y <= checkY + 40; y++)
 					{
-						float aValue = PerlinPixelR[(x + x0CoordPerlin + 10) % 1024, (y + y0CoordPerlin) % 1024] / 255f;
+						float aValue = GetLargeSmokeTexturePixelR(x + x0CoordPerlin, y + y0CoordPerlin) * 0.5f;
 						float bValue = Math.Abs(checkY - y) / 120f - 0.1f + Math.Max(0, Math.Abs(checkX - x) / 120f - 0.6f);
 						if (aValue + bValue < 0.2f)
 						{
@@ -1542,7 +1542,7 @@ public class YggdrasilTownGeneration
 				{
 					for (int y = checkY - 40; y <= checkY + 10; y++)
 					{
-						float valueG = PerlinPixelG[(int)(x * 2.24f) % 1024, (int)(y * 2.24) % 1024] / 255f;
+						float valueG = GetLargeSmokeTexturePixelG(x * 2.24f, y * 2.24f);
 						Tile tile0 = SafeGetTile(x, y);
 						Tile tile1 = SafeGetTile(x + 1, y);
 						Tile tile2 = SafeGetTile(x, y + 1);
@@ -1585,7 +1585,7 @@ public class YggdrasilTownGeneration
 						for (int y0 = -radiusI; y0 <= radiusI; y0++)
 						{
 							Tile tile = SafeGetTile(checkTrunk + mesaOffset + new Vector2(x0, y0));
-							float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
+							float aValue = GetLargeSmokeTexturePixelR(x0 + x0CoordPerlin, y0 + y0CoordPerlin);
 							if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 							{
 								if (y0 > radiusI * 0.4f + aValue * 5)
@@ -1779,7 +1779,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = Main.maxTilesY - 2400; y <= Main.maxTilesY - 1800; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				float bValue = MathF.Abs((y - Main.maxTilesY + 2100) / 100f);
 				float cValue = (x - Main.maxTilesX / 2f) / (Main.maxTilesX / 2f);
 				cValue *= cValue;
@@ -1816,7 +1816,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = Main.maxTilesY - 2100; y <= step2Y; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				float bValue = MathF.Abs((y - step2Y) / 100f);
 				float cValue = (x - step2X + 20) / 50f;
 				cValue *= cValue;
@@ -1835,7 +1835,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = Main.maxTilesY - 2200; y <= step2Y + 1; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				float bValue = MathF.Abs((y - step2Y) / 70f);
 				float cValue = (x - step2X - 240) / 200f;
 				cValue *= cValue;
@@ -1854,7 +1854,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = step2Y + 7; y <= step2Y + 500; y += 1)
 			{
-				float bValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)(y * 4.3f + y0CoordPerlin) % 1024] / 255f;
+				float bValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				int thick = y - step2Y - 7;
 				float value = (x - step2X) / 480f;
 				value *= value;
@@ -1977,7 +1977,7 @@ public class YggdrasilTownGeneration
 					{
 						Tile tile = SafeGetTile(basePos + new Vector2(x0, y0));
 						Tile tileUp = SafeGetTile(basePos + new Vector2(x0, y0 - 1));
-						float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
+						float aValue = GetLargeSmokeTexturePixelR(x0 + x0CoordPerlin, y0 + y0CoordPerlin);
 						if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 						{
 							if (!TileID.Sets.BasicChest[tile.TileType] && !TileID.Sets.BasicChest[tileUp.TileType])
@@ -2094,7 +2094,7 @@ public class YggdrasilTownGeneration
 			for (int y0 = -radiusI; y0 <= radiusI; y0++)
 			{
 				Tile tile = SafeGetTile(TwilightRelicCenter + new Vector2(x0, y0));
-				float aValue = PerlinPixelR[Math.Abs((x0 + x0CoordPerlin) % 1024), Math.Abs((y0 + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(x0 + x0CoordPerlin, y0 + y0CoordPerlin);
 				if (new Vector2(x0, y0).Length() <= radiusI - aValue * 10)
 				{
 					if (y0 > radiusI * 0.5f + aValue * 5)
@@ -2120,7 +2120,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = centerY - 103; y <= centerY + 200; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				if (aValue < 0.4f)
 				{
 					Tile tile = SafeGetTile(x, y);
@@ -2133,7 +2133,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = centerY + 160; y <= centerY + 260; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				if (aValue < 0.4f)
 				{
 					Tile tile = SafeGetTile(x, y);
@@ -2280,7 +2280,7 @@ public class YggdrasilTownGeneration
 		{
 			for (int y = subTowerCenterY - 63; y <= subTowerCenterY + 63; y += 1)
 			{
-				float aValue = PerlinPixelR[(int)Math.Abs((x * 4.3f + x0CoordPerlin) % 1024), (int)Math.Abs((y * 4.3f + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(Math.Abs(x * 4.3f + x0CoordPerlin), Math.Abs(y * 4.3f + y0CoordPerlin));
 				if (aValue < 0.4f)
 				{
 					Tile tile = SafeGetTile(x, y);
@@ -2419,7 +2419,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void SmoothYggdrasilTown()
 	{
-		SmoothTile_XXYY(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
+		//SmoothTile_XXYY(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
 	}
 
 	/// <summary>

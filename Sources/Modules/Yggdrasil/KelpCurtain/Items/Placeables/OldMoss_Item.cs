@@ -1,6 +1,6 @@
 namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
-public class OldMoss : ModItem
+public class OldMoss_Item : ModItem
 {
     public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 

@@ -65,7 +65,7 @@ public class GenerateMazeRoom : ModItem
 		{
 			if (GetUniformTile(buildPos.X, buildPos.Y - 9, 10, 10) == -1)
 			{
-				YggdrasilWorldGeneration.QuickBuild(buildPos.X, buildPos.Y - 9, ModAsset.UnderwaterMaze_ChestRoom_withLamps10x10_Path, false);
+				YggdrasilWorldGeneration.QuickBuild(buildPos.X, buildPos.Y - 9, ModAsset.MazeUnderLake_ChestRoom_withLamps10x10_Path, false);
 				PlaceLineBlock(buildPos, buildPos + new Point(-randomAddPosX, 0), 1, ModContent.TileType<YggdrasilBlackRock>());
 			}
 		}
@@ -73,7 +73,7 @@ public class GenerateMazeRoom : ModItem
 		{
 			if (GetUniformTile(buildPos.X - 10, buildPos.Y - 9, 10, 10) == -1)
 			{
-				YggdrasilWorldGeneration.QuickBuild(buildPos.X - 10, buildPos.Y - 9, ModAsset.UnderwaterMaze_ChestRoom_withLamps10x10_Path, false);
+				YggdrasilWorldGeneration.QuickBuild(buildPos.X - 10, buildPos.Y - 9, ModAsset.MazeUnderLake_ChestRoom_withLamps10x10_Path, false);
 				PlaceLineBlock(buildPos, buildPos + new Point(randomAddPosX, 0), 1, ModContent.TileType<YggdrasilBlackRock>());
 			}
 		}

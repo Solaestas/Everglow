@@ -66,7 +66,7 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static float GetPerlinPixel2(float x, float y)
+	public static float GetLargeSmokeTexturePixel2(float x, float y)
 	{
 		return PerlinPixel2[(int)Math.Abs(x) % 1024, (int)Math.Abs(y) % 1024] / 255f;
 	}
@@ -111,27 +111,8 @@ public class YggdrasilWorldGeneration : ModSystem
 	/// </summary>
 	public static void FillPerlinPixel()
 	{
-		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_II_rgb.bmp");
-		Vector2 perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
-		imageData.ProcessPixelRows(accessor =>
-		{
-			for (int y = 0; y < accessor.Height; y++)
-			{
-				int newY = (int)(accessor.Height * perlinCoordCenter.Y + y) % accessor.Height;
-				var pixelRow = accessor.GetRowSpan(newY);
-				for (int x = 0; x < pixelRow.Length; x++)
-				{
-					int newX = (int)(accessor.Width * perlinCoordCenter.X + x) % accessor.Width;
-					ref var pixel = ref pixelRow[newX];
-					PerlinPixelR[x, y] = pixel.R;
-					PerlinPixelG[x, y] = pixel.G;
-					PerlinPixelB[x, y] = pixel.B;
-				}
-			}
-		});
-
-		imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
-		perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
+		var imageData = ImageReader.Read<SixLabors.ImageSharp.PixelFormats.Rgb24>("Everglow/Yggdrasil/WorldGeneration/Noise_perlin.bmp");
+		var perlinCoordCenter = new Vector2(GenRand.NextFloat(0f, 1f), GenRand.NextFloat(0f, 1f));
 		imageData.ProcessPixelRows(accessor =>
 		{
 			for (int y = 0; y < accessor.Height; y++)
@@ -253,7 +234,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			{
 				int x = i + cX;
 				int y = cY - j;
-				float value = j / topThick + (PerlinPixelR[Math.Abs(x) % 1024, Math.Abs(y) % 1024] - 128) / 64f * smoothTopValue;
+				float value = j / topThick + (GetLargeSmokeTexturePixelR(x, y) * 256 - 128) / 64f * smoothTopValue;
 				if (value < 1)
 				{
 					Tile tile = SafeGetTile(x, y);
@@ -1127,7 +1108,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = -radiusI; y <= radiusI; y++)
 			{
 				Tile tile = SafeGetTile(center + new Vector2(x, y));
-				float aValue = PerlinPixelR[Math.Abs((x + x0CoordPerlin) % 1024), Math.Abs((y + y0CoordPerlin) % 1024)] / 255f;
+				float aValue = GetLargeSmokeTexturePixelR(x + x0CoordPerlin, y + y0CoordPerlin);
 				if (ChestSafe(center + new Vector2(x, y)))
 				{
 					if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)

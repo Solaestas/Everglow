@@ -3,7 +3,7 @@ using Everglow.Commons.VFX.Scene;
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
 [Pipeline(typeof(WCSPipeline))]
-public class HumicMud_Algae_fore : TileVFX
+public class HydraMudTentacles_fore : TileVFX
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawPlayers;
 
@@ -251,13 +251,13 @@ public class HumicMud_Algae_fore : TileVFX
 				}
 			}
 		}
-		Ins.Batch.Draw(ModAsset.HumicMud_Algae.Value, bars, PrimitiveType.TriangleList);
+		Ins.Batch.Draw(ModAsset.HydraMudTentacles.Value, bars, PrimitiveType.TriangleList);
 	}
 
 	public void AddDrawingFace(List<Vertex2D> bars, Vector2 Direction, Vector2 Position, float length = 1, Vector2 offset = default)
 	{
 		Tile tile = Main.tile[OriginTilePos];
-		if (tile.Slope == SlopeType.Solid && !tile.halfBrick())
+		if(tile.Slope == SlopeType.Solid && !tile.halfBrick())
 		{
 			Tile directionTile = Main.tile[OriginTilePos + Direction.ToPoint()];
 			if (TileUtils.IsTileSolid(directionTile))
@@ -289,17 +289,14 @@ public class HumicMud_Algae_fore : TileVFX
 		Vector2 point2 = drawCenter + new Vector2(-8 * length, 6).RotatedBy(rot) + Direction * 12;
 		Vector2 point3 = drawCenter + new Vector2(8 * length, 6).RotatedBy(rot) + Direction * 12;
 
-		Color color0 = Lighting.GetColor(point0.ToTileCoordinates());
-		Color color1 = Lighting.GetColor(point1.ToTileCoordinates());
-		Color color2 = Lighting.GetColor(point2.ToTileCoordinates());
-		Color color3 = Lighting.GetColor(point3.ToTileCoordinates());
+		Color color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 
-		bars.Add(point0, color0, new Vector3(frameWidth * style / texWidth, frameYModify, 0));
-		bars.Add(point1, color1, new Vector3(dLength + frameWidth * style / texWidth, frameYModify, 0));
-		bars.Add(point3, color3, new Vector3(dLength + frameWidth * style / texWidth, 0.5f + frameYModify, 0));
+		bars.Add(point0, color, new Vector3(frameWidth * style / texWidth, frameYModify, 0));
+		bars.Add(point1, color, new Vector3(dLength + frameWidth * style / texWidth, frameYModify, 0));
+		bars.Add(point3, color, new Vector3(dLength + frameWidth * style / texWidth, 0.5f + frameYModify, 0));
 
-		bars.Add(point2, color2, new Vector3(frameWidth * style / texWidth, 0.5f + frameYModify, 0));
-		bars.Add(point0, color0, new Vector3(frameWidth * style / texWidth, frameYModify, 0));
-		bars.Add(point3, color3, new Vector3(dLength + frameWidth * style / texWidth, 0.5f + frameYModify, 0));
+		bars.Add(point2, color, new Vector3(frameWidth * style / texWidth, 0.5f + frameYModify, 0));
+		bars.Add(point0, color, new Vector3(frameWidth * style / texWidth, frameYModify, 0));
+		bars.Add(point3, color, new Vector3(dLength + frameWidth * style / texWidth, 0.5f + frameYModify, 0));
 	}
 }

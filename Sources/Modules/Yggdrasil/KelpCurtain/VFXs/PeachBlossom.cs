@@ -52,12 +52,20 @@ public class PeachBlossom : Visual
 		{
 			Position += Velocity;
 		}
+		if(Timer % 5 == 0 && Velocity.Length() > 0.1f)
+		{
+			Frame++;
+			if(Frame >= 10)
+			{
+				Frame = 0;
+			}
+		}
 		Rotation = MathF.Sin(ai[0]) * 0.5f;
 	}
 
 	public override void Draw()
 	{
-		Rectangle frame = new Rectangle(0, Frame * 12, 24, 12);
+		Rectangle frame = new Rectangle(0, Frame * 12, 12, 12);
 		Ins.Batch.Draw(ModAsset.PeachBlossom.Value, Position, frame, Lighting.GetColor(Position.ToTileCoordinates()) * Fade, Rotation, frame.Size() * 0.5f, Scale, SpriteEffects.None);
 	}
 }
