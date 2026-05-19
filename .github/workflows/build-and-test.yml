@@ -20,8 +20,10 @@ jobs:
       
     - name: Fetch full git history
       run: |
-        git fetch --unshallow || true # Unshallow current branch to get full commit history
-        git fetch origin master # Fetch latest master for comparison
+        # Unshallow current branch to get full commit history
+        git fetch --unshallow || true
+        # Fetch latest master for comparison
+        git fetch origin master
 
     - name: Compare with master
       run: |
