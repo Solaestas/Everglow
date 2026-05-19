@@ -19,10 +19,21 @@ jobs:
       uses: actions/checkout@v6
       
     - name: Fetch all branches
-      run: git fetch --all
+      run: |
+        git fetch --unshallow || true
+        git fetch origin master
 
     - name: Compare with master
-      run: git rev-list --count HEAD..origin/master
+      run: |
+        $count = git rev-list --count HEAD..origin/master
+        Write-Host "Commits behind master: $count"
+
+        if ($count -ne 0) {
+          Write-Error "❌ This branch is behind origin/master"
+          exit 1
+        }
+
+        Write-Host "✅ Branch is up to date with origin/master"
   
     - name: Setup .NET 8.0
       uses: actions/setup-dotnet@v4
