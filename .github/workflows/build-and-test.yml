@@ -18,10 +18,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
       
-    - name: Fetch all branches
+    - name: Fetch full git history
       run: |
-        git fetch --unshallow || true
-        git fetch origin master
+        git fetch --unshallow || true # Unshallow current branch to get full commit history
+        git fetch origin master # Fetch latest master for comparison
 
     - name: Compare with master
       run: |
