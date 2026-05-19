@@ -535,6 +535,10 @@ public class KelpCurtainGeneration
 			{
 				continue;
 			}
+			if (pos.Y - tilePos.Y > 105 + GetLargeSmokeTexturePixelB(pos.X * 3, pos.Y * 3) * 15f)
+			{
+				continue;
+			}
 			tile.LiquidAmount = 0;
 			float value0 = GetPerlinPixelG(pos.X, pos.Y) * 12;
 			if (pos.Y - tilePos.Y < 20 + value0)
@@ -555,9 +559,9 @@ public class KelpCurtainGeneration
 			{
 				tile.HasTile = false;
 			}
-			if (pos.Y - tilePos.Y > value2 * 3 + value0 + 2)
+			if (pos.Y - tilePos.Y > value2 * 3 + value0 + 16)
 			{
-				if (pos.Y - tilePos.Y > value2 * 4 + value0 * 1.2f + 11)
+				if (pos.Y - tilePos.Y > value2 * 4 + value0 * 1.2f + 24)
 				{
 					tile.wall = (ushort)ModContent.WallType<MossProneSandSoilWall>();
 				}
@@ -586,30 +590,31 @@ public class KelpCurtainGeneration
 		for (int x = -130; x <= 130; x++)
 		{
 			float height = 130 - MathF.Abs(x);
-			height = Math.Clamp(height, 0, caveHeight + 64);
+			height = Math.Clamp(height, 0, caveHeight + 96);
 			float value2 = GetPerlinPixelR(x * 2, cave0Y) * 64;
 			height += value2;
 			Cave0_Bound.Add(new Vector2(x * 16, cave0Y * 16 - height));
 			height -= 64;
 			height = Math.Clamp(height, 0, caveHeight);
-			value2 = GetPerlinPixelB(x * 2, cave0Y + 40) * 64;
+			value2 = GetPerlinPixelB(x * 2 + 260, cave0Y + 40) * 64;
 			height += value2;
 			Cave0.Add(new Vector2(x * 16, cave0Y * 16 - height));
 		}
 		for (int x = 130; x >= -130; x--)
 		{
 			float height = 130 - MathF.Abs(x);
-			height = Math.Clamp(height, 0, caveHeight + 64);
+			height = Math.Clamp(height, 0, caveHeight + 96);
 			float value2 = GetPerlinPixelB(x * 2, cave0Y + 30) * 64;
 			height += value2;
 			Cave0_Bound.Add(new Vector2(x * 16, cave0Y * 16 + height));
 			height -= 64;
 			height = Math.Clamp(height, 0, caveHeight);
-			value2 = GetPerlinPixelB(x * 2, cave0Y + 70) * 64;
+			value2 = GetPerlinPixelB(x * 2 + 260, cave0Y + 70) * 64;
 			height += value2;
 			Cave0.Add(new Vector2(x * 16, cave0Y * 16 + height));
 		}
 		PlacePolygonAreaOfBlockWithOffset(Cave0_Bound, tilePos.ToWorldCoordinates(), ModContent.TileType<OldMoss>(), (int)TileChangeState.HasTile);
+		PlacePolygonBoundOfBlock(Cave0_Bound, ModContent.TileType<OldMoss>(), 64, (int)TileChangeState.Forceful);
 		PlacePolygonAreaOfBlockWithOffset(Cave0, tilePos.ToWorldCoordinates(), -1, (int)TileChangeState.Forceful);
 		SmoothTile_XXYY(tilePos.X - 150, tilePos.Y - 60, tilePos.X + 150, tilePos.Y + 150);
 
@@ -854,7 +859,7 @@ public class KelpCurtainGeneration
 						}
 					}
 					peachPosX.Add(x);
-					if (peachPosX.Count > 5)
+					if (peachPosX.Count > 2)
 					{
 						break;
 					}
@@ -878,6 +883,7 @@ public class KelpCurtainGeneration
 					break;
 				}
 			}
+
 			if (valid)
 			{
 				int surfaceY = 0;
@@ -887,7 +893,8 @@ public class KelpCurtainGeneration
 					var checkPoint = tilePos + new Point(x, y);
 					var tile = SafeGetTile(checkPoint);
 					surfaceY = y;
-					if (tile.HasTile && tile.TileType == ModContent.TileType<OldMoss>())
+					float toSidePeach = ToNearestTypeOfTile(tilePos.X + x, tilePos.Y + y, ModContent.TileType<IslePeachTree_medium>(), 3).Length();
+					if (tile.HasTile && tile.TileType == ModContent.TileType<OldMoss>() && toSidePeach > 48)
 					{
 						safe = true;
 						break;

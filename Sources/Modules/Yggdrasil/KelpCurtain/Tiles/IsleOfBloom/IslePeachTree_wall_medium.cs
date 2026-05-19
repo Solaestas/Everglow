@@ -82,7 +82,7 @@ public class IslePeachTree_wall_medium : ModTile, ITileFluentlyDrawn
 
 		int totalPushTime = 140;
 		float pushForcePerFrame = 0.96f;
-		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X - 3, tilePos.Y - 8, 7, 7, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X - 4, tilePos.Y - 1, 8, 3, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex * 0.25f;
 		float rotation = windCycle * 0.2f;
 
@@ -100,27 +100,6 @@ public class IslePeachTree_wall_medium : ModTile, ITileFluentlyDrawn
 		{
 			offset.Y += 8;
 		}
-		if (!Main.gamePaused)
-		{
-			if (windCycle > 0.1f)
-			{
-				if (Main.rand.NextBool(8))
-				{
-					var petal = new PeachBlossom
-					{
-						Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
-						Active = true,
-						Visible = true,
-						Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * 75 + new Vector2(0, -80),
-						MaxTime = 3600,
-						Scale = Main.rand.NextFloat(0.8f, 1.2f),
-						Frame = Main.rand.Next(10),
-						ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
-					};
-					Ins.VFXManager.Add(petal);
-				}
-			}
-		}
 		switch (TileUtils.GetFixedRandomNumber(tilePos, 2))
 		{
 			case 0:
@@ -132,7 +111,34 @@ public class IslePeachTree_wall_medium : ModTile, ITileFluentlyDrawn
 				origin = new Vector2(68, 34);
 				break;
 		}
-
+		if (rotation > 0.02f)
+		{
+			GenerateDust(tilePos.X, tilePos.Y, origin, frame);
+		}
 		TileUtils.VertexDraw_Grid(drawCenterPos + offset, frame, origin, tex, spriteBatch, rotation);
+	}
+	public void GenerateDust(int i, int j, Vector2 origin, Rectangle frame)
+	{
+		if (!Main.gamePaused)
+		{
+			if (Main.rand.NextBool(12))
+			{
+				Point tilePos = new Point(i, j);
+				int style = TileUtils.GetFixedRandomNumber(tilePos, 2);
+				var petal = new PeachBlossom
+				{
+					Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
+					Active = true,
+					Visible = true,
+					Position = tilePos.ToWorldCoordinates(),
+					MaxTime = 3600,
+					Scale = Main.rand.NextFloat(0.8f, 1.2f),
+					Frame = Main.rand.Next(10),
+					ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
+				};
+				petal.Position += new Vector2(Main.rand.NextFloat(frame.Width), Main.rand.NextFloat(frame.Height * 0.3f) + frame.Height * 0.3f) - origin;
+				Ins.VFXManager.Add(petal);
+			}
+		}
 	}
 }

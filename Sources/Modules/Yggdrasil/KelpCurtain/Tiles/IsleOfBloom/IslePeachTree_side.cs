@@ -142,7 +142,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 						Velocity = new Vector2(0, 0.5f).RotatedByRandom(Math.PI * 2),
 						Active = true,
 						Visible = true,
-						Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.2f) * 200 + new Vector2(-200, -80),
+						Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.1f) * 120 + new Vector2(-100, -80),
 						MaxTime = 3600,
 						Scale = Main.rand.NextFloat(0.8f, 1.2f),
 						Frame = Main.rand.Next(10),
@@ -150,7 +150,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 					};
 					if (tile.TileFrameX == 180)
 					{
-						petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.2f) * 200 + new Vector2(200, -80);
+						petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.1f) * 120 + new Vector2(100, -80);
 					}
 					Ins.VFXManager.Add(petal);
 				}

@@ -676,7 +676,7 @@ public partial class TileUtils
 	/// </summary>
 	/// <param name="polygon">WORLD coord</param>
 	/// <param name="type"></param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlacePolygonBoundOfBlock(List<Vector2> polygon, int type, float thick, int force = 0)
 	{
@@ -1447,7 +1447,7 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return new Vector2(float.NaN).
+	/// Get the nearest tile of the type. type : tile type, -1 : empty tile, -2 : empty tile without wall. maxDistance : the max distance to check. return : the offset to the nearest tile of the type. if no tile of the type is found within maxDistance, return new Vector2(maxDistance + 1).
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
