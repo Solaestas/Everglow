@@ -18,11 +18,29 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
       
-    - name: Fetch all branches
-      run: git fetch --all
-
+    - name: Fetch full git history
+      shell: bash
+      run: |
+        # Convert shallow clone to full history for accurate comparison
+        git fetch --prune --unshallow || true
+        # Fetch latest master to perform upstream divergence check
+        git fetch --prune origin master
     - name: Compare with master
-      run: git rev-list --count HEAD..origin/master
+      id: divergence
+      shell: pwsh
+      run: |
+        # Perform an upstream divergence check
+        $behind = git rev-list --count HEAD..origin/master
+        $ahead  = git rev-list --count origin/master..HEAD
+            Write-Host "Ahead commits: $ahead"
+            Write-Host "Behind commits: $behind"
+            echo "ahead=$ahead"   >> $env:GITHUB_OUTPUT
+            echo "behind=$behind" >> $env:GITHUB_OUTPUT
+            if ($behind -ne 0) {
+              Write-Error "❌ This branch is behind origin/master by $behind commits"
+              exit 1
+            }
+            Write-Host "✅ Branch is up to date with origin/master"
   
     - name: Setup .NET 8.0
       uses: actions/setup-dotnet@v4
