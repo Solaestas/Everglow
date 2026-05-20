@@ -72,6 +72,11 @@ public class KeroseneLanternFlameThrower_Hold : HandholdProjectile, IWarpProject
 	public override void HeldProjectileAI()
 	{
 		Player player = Main.player[Projectile.owner];
+		if (player.wet)
+		{
+			Projectile.Kill();
+		}
+
 		player.heldProj = Projectile.whoAmI;
 		ArmRootPos = player.MountedCenter + new Vector2(-4 * player.direction, -2);
 		player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, (Projectile.rotation - MathF.PI * 0.25f) * player.gravDir - MathF.PI * 0.5f);
