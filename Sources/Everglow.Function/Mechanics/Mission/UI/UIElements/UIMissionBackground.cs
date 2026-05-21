@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
@@ -18,9 +18,9 @@ public class UIMissionBackground : UIBlock
 
 	private float chainMovement = 0;
 
-	private Color PoolTypeColor => MissionColorDefinition.GetPoolTypeColor(poolType);
+	private Color PoolTypeColor => ColorDefinition.GetMissionStateColor(poolType);
 
-	private Color MissionTypeColor => MissionColorDefinition.GetMissionTypeColor(missionType);
+	private Color MissionTypeColor => ColorDefinition.GetMissionTypeColor(missionType);
 
 	public void SetSpectrumColor(PlayerMissionState? poolType, MissionType? missionType)
 	{

@@ -1,13 +1,13 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
+namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public static class MissionColorDefinition
+public static class ColorDefinition
 {
 	public static readonly Color InitialLightColor = new Color(1f, 1f, 1f, 0f) * 0.8f;
 
-	public static Color GetPoolTypeColor(PlayerMissionState? poolType) => poolType switch
+	public static Color GetMissionStateColor(PlayerMissionState? poolType) => poolType switch
 	{
 		PlayerMissionState.Accepted => new Color(0f, 1f, 0f, 0f),
 		PlayerMissionState.Available => new Color(0.9f, 0.88f, 0.06f, 0f),
@@ -34,5 +34,27 @@ public static class MissionColorDefinition
 		MissionType.Challenge => new Color(1f, 0f, 0f, 0.3f),
 		null => InitialLightColor,
 		_ => InitialLightColor,
+	};
+
+	public static Texture2D GetBackground(MissionType? missionType) => missionType switch
+	{
+		MissionType.None => ModAsset.MissionStackPanel_None.Value,
+		MissionType.MainStory => ModAsset.MissionStackPanel_MainStory.Value,
+		MissionType.SideStory => ModAsset.MissionStackPanel_SideStory.Value,
+		MissionType.Achievement => ModAsset.MissionStackPanel_Achievement.Value,
+		MissionType.Challenge => ModAsset.MissionStackPanel_Challenge.Value,
+		MissionType.Daily => ModAsset.MissionStackPanel_Daily.Value,
+		MissionType.Legendary => ModAsset.MissionStackPanel_Legendary.Value,
+		_ => ModAsset.MissionStackPanel_None.Value,
+	};
+
+	public static Texture2D GetMissionStatus(PlayerMissionState? poolType) => poolType switch
+	{
+		PlayerMissionState.Accepted => ModAsset.MissionState_Accepted.Value,
+		PlayerMissionState.Available => ModAsset.MissionState_Available.Value,
+		PlayerMissionState.Completed => ModAsset.MissionState_Completed.Value,
+		PlayerMissionState.Overdue => ModAsset.MissionState_Failed.Value,
+		PlayerMissionState.Failed => ModAsset.MissionState_Failed.Value,
+		_ => ModAsset.MissionState_Accepted.Value,
 	};
 }

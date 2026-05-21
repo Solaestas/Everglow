@@ -1,14 +1,13 @@
+using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Vertex;
 using Terraria.GameContent;
-using UIImage = Everglow.Commons.UI.UIElements.UIImage;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
-using Everglow.Commons.Mechanics.Mission.UI;
-using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using UIImage = Everglow.Commons.UI.UIElements.UIImage;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 
@@ -55,14 +54,14 @@ public class UIMissionItem : UIBlock
 		Register(block);
 
 		// 任务项背景
-		_background = new UIImage(GetBackground(Mission), Color.White);
+		_background = new UIImage(ColorDefinition.GetBackground(Mission.MissionType), Color.White);
 		_background.Info.Width.SetFull();
 		_background.Info.Height.SetFull();
 		_background.Style = UIImage.CalculationStyle.None;
 		block.Register(_background);
 
 		// 任务进度
-		statusBar = new UIImage(GetMissionStatus(Mission), Color.White);
+		statusBar = new UIImage(ColorDefinition.GetMissionStatus(Mission.PoolType), Color.White);
 		statusBar.Info.Top.SetValue(19f * Scale, 0);
 		statusBar.Info.Left.SetValue(291f * Scale, 0);
 		statusBar.Info.Width.SetValue(12 * Scale, 0);
@@ -109,7 +108,7 @@ public class UIMissionItem : UIBlock
 		nameContainer.Info.SetToCenter();
 		nameContainer.Info.Left.SetValue(0, 0.2f);
 
-		if(oldScale != Scale)
+		if (oldScale != Scale)
 		{
 			oldScale = Scale;
 
@@ -124,28 +123,6 @@ public class UIMissionItem : UIBlock
 			name.Calculation();
 		}
 	}
-
-	private static Texture2D GetBackground(MissionBase mission) => mission.MissionType switch
-	{
-		MissionType.None => ModAsset.MissionStackPanel_None.Value,
-		MissionType.MainStory => ModAsset.MissionStackPanel_MainStory.Value,
-		MissionType.SideStory => ModAsset.MissionStackPanel_SideStory.Value,
-		MissionType.Achievement => ModAsset.MissionStackPanel_Achievement.Value,
-		MissionType.Challenge => ModAsset.MissionStackPanel_Challenge.Value,
-		MissionType.Daily => ModAsset.MissionStackPanel_Daily.Value,
-		MissionType.Legendary => ModAsset.MissionStackPanel_Legendary.Value,
-		_ => ModAsset.MissionStackPanel_None.Value,
-	};
-
-	private static Texture2D GetMissionStatus(MissionBase mission) => mission.PoolType switch
-	{
-		PlayerMissionState.Accepted => ModAsset.MissionState_Accepted.Value,
-		PlayerMissionState.Available => ModAsset.MissionState_Available.Value,
-		PlayerMissionState.Completed => ModAsset.MissionState_Completed.Value,
-		PlayerMissionState.Overdue => ModAsset.MissionState_Failed.Value,
-		PlayerMissionState.Failed => ModAsset.MissionState_Failed.Value,
-		_ => ModAsset.MissionState_Accepted.Value,
-	};
 
 	/// <summary>
 	/// 鼠标悬停时
@@ -196,7 +173,7 @@ public class UIMissionItem : UIBlock
 		var width = 15 * MissionContainer.Scale;
 		var y1 = 12 * MissionContainer.Scale;
 		var y2 = 36 * MissionContainer.Scale;
-		var startColor = MissionColorDefinition.GetMissionTypeColor(Mission.MissionType) * 0.4f;
+		var startColor = ColorDefinition.GetMissionTypeColor(Mission.MissionType) * 0.4f;
 		var endColor = Color.Transparent;
 		var vertices = new List<Vertex2D>();
 		{

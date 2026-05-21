@@ -21,9 +21,7 @@ public interface IMissionMetadata
 	/// </summary>
 	public MissionType MissionType { get; }
 
-	public object MissionSource { get; }
-
-	public object MissionIcons { get; }
+	public MissionSource MissionSource { get; }
 
 	public List<Item> RewardItems { get; }
 

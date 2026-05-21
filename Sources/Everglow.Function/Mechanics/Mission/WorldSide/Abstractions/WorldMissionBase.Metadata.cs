@@ -12,14 +12,15 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public MissionType MissionType { get; }
 
-	public object MissionSource { get; }
-
-	public object MissionIcons { get; }
+	public MissionSource MissionSource { get; }
 
 	public List<Item> RewardItems { get; protected set; }
 
 	public virtual int TimeLimit => 0;
 
+	/// <summary>
+	/// Represents the mission unlock condition is visible before unlocked.
+	/// </summary>
 	public virtual bool Visible => true;
 
 	public virtual bool CanUnlock() => true;
