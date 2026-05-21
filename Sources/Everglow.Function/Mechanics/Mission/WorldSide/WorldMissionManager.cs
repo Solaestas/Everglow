@@ -30,6 +30,8 @@ public class WorldMissionManager
 
 	public IReadOnlyList<WorldMissionBase> Missions => _missions;
 
+	public IReadOnlyList<WorldMissionBase> ActiveMissions => _missions.Where(m => m.State == WorldMissionState.Active).ToList();
+
 	private int UpdateTimer => (int)_gameState.TimeForVisualEffects;
 
 	public WorldMissionManager()

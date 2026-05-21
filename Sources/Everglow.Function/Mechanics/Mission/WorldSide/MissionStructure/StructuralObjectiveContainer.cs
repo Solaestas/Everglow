@@ -54,6 +54,8 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	public WorldObjectiveNodeBase Current { get; private set; }
 
+	public float Progress => AllNodes.Average(n => n.Progress);
+
 	/// <summary>
 	/// Gets whether all structural nodes have been completed.
 	/// </summary>

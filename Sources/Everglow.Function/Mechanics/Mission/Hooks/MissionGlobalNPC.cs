@@ -1,6 +1,8 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
+using Everglow.Commons.Mechanics.Mission.WorldSide;
+using Everglow.Commons.Mechanics.Mission.WorldSide.Objectives;
 
 namespace Everglow.Commons.Mechanics.Mission.Hooks;
 
@@ -40,11 +42,35 @@ public class MissionGlobalNPC : GlobalNPC
 		var missions = MissionManager.GetMissionPool(PlayerMissionState.Accepted);
 
 		// Flatten all objectives recursively and filter for KillNPCObjective
-		return missions
+		var playerSideNPCs = missions
 			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
 			.OfType<KillNPCObjective>()
 			.Where(o => !o.Completed)
 			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
+
+		var worldSideNPCs = WorldMissionManager.Instance.ActiveMissions
+			.SelectMany(m => m.ActiveObjectives)
+			.Select(o =>
+			{
+				if (o is WorldKillNPCObjective killObjective)
+				{
+					return killObjective.NPCType;
+				}
+				else if (o is WorldTalkObjective talkObjective)
+				{
+					return talkObjective.NpcType;
+				}
+				else if (o is WorldGiveObjective giveObjective)
+				{
+					return giveObjective.NpcType;
+				}
+				else
+				{
+					return NPCID.None;
+				}
+			}).Distinct();
+
+		return playerSideNPCs.Concat(worldSideNPCs).Distinct();
 	}
 
 	/// <summary>

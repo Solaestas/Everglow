@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Packets;
@@ -26,10 +25,11 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public WorldMissionState State { get; protected set; } = WorldMissionState.Locked;
 
-	[Obsolete("Not implemented", true)]
-	public virtual float Progress => 1;
+	public virtual float Progress => Objectives.Progress;
 
 	public StructuralObjectiveContainer Objectives { get; } = new();
+
+	public IReadOnlyList<WorldObjectiveBase> ActiveObjectives => _activatedObjectives;
 
 	public int Time { get; protected set; }
 
