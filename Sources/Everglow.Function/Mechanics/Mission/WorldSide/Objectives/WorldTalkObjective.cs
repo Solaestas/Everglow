@@ -12,7 +12,7 @@ public class WorldTalkObjective : WorldObjectiveBase
 
 	public WorldTalkObjective(int npcType)
 	{
-		NpcType = npcType;
+		NPCType = npcType;
 	}
 
 	private bool talking;
@@ -21,7 +21,7 @@ public class WorldTalkObjective : WorldObjectiveBase
 
 	public bool Talked { get; private set; }
 
-	public int NpcType { get; private set; }
+	public int NPCType { get; private set; }
 
 	public override float Progress => Talked ? 1f : 0f;
 
@@ -35,7 +35,7 @@ public class WorldTalkObjective : WorldObjectiveBase
 		{
 			foreach (var player in Main.ActivePlayers)
 			{
-				if (player.TalkNPC?.netID == NpcType)
+				if (player.TalkNPC?.netID == NPCType)
 				{
 					Talked = true;
 				}
@@ -47,7 +47,7 @@ public class WorldTalkObjective : WorldObjectiveBase
 			talking = false;
 			foreach (var player in Main.ActivePlayers)
 			{
-				if (player.TalkNPC?.netID == NpcType)
+				if (player.TalkNPC?.netID == NPCType)
 				{
 					talking = true;
 

@@ -13,14 +13,14 @@ public class WorldGiveObjective : WorldObjectiveBase
 
 	public WorldGiveObjective(int npcType, int itemType, int itemCount)
 	{
-		NpcType = npcType;
+		NPCType = npcType;
 		ItemType = itemType;
 		ItemCount = itemCount;
 	}
 
 	private bool localSubmitted;
 
-	public int NpcType { get; private set; }
+	public int NPCType { get; private set; }
 
 	public int ItemType { get; private set; }
 
@@ -39,7 +39,7 @@ public class WorldGiveObjective : WorldObjectiveBase
 		if (NetUtils.IsSingle)
 		{
 			var player = Main.LocalPlayer;
-			if (player.TalkNPC?.netID == NpcType)
+			if (player.TalkNPC?.netID == NPCType)
 			{
 				if (player.CountItem(ItemType, ItemCount) >= ItemCount)
 				{
@@ -65,7 +65,7 @@ public class WorldGiveObjective : WorldObjectiveBase
 			}
 
 			var player = Main.LocalPlayer;
-			if (player.TalkNPC?.netID == NpcType)
+			if (player.TalkNPC?.netID == NPCType)
 			{
 				if (player.CountItem(ItemType, ItemCount) >= ItemCount)
 				{

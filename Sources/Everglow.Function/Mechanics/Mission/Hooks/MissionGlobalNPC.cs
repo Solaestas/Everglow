@@ -58,11 +58,11 @@ public class MissionGlobalNPC : GlobalNPC
 				}
 				else if (o is WorldTalkObjective talkObjective)
 				{
-					return talkObjective.NpcType;
+					return talkObjective.NPCType;
 				}
 				else if (o is WorldGiveObjective giveObjective)
 				{
-					return giveObjective.NpcType;
+					return giveObjective.NPCType;
 				}
 				else
 				{
