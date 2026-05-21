@@ -80,7 +80,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	{
 	}
 
-	public abstract void GetObjectivesText(List<string> lines);
+	public abstract void GetObjectivesText();
 
 	public virtual void LoadData(TagCompound tag)
 	{

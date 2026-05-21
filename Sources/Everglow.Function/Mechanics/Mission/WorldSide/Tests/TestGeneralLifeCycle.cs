@@ -13,6 +13,6 @@ public class TestGeneralLifeCycle : WorldMissionBase
 	{
 		public override bool CheckCompletion() => true;
 
-		public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+		public override void GetObjectivesText() => throw new NotImplementedException();
 	}
 }

@@ -31,7 +31,7 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 
 	public override bool CheckCompletion() => KilledCount >= NPCCount;
 
-	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+	public override void GetObjectivesText() => throw new NotImplementedException();
 
 	public override void Activate(WorldMissionBase sourceMission)
 	{

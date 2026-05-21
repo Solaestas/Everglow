@@ -31,7 +31,7 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 
 	public override bool CheckCompletion() => ConsumedCount >= ItemCount;
 
-	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+	public override void GetObjectivesText() => throw new NotImplementedException();
 
 	public override void ResetProgress()
 	{

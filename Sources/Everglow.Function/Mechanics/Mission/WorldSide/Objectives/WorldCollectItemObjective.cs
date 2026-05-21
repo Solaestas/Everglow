@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Utilities;
 using SubworldLibrary;
@@ -107,7 +106,7 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 		globalMax = 0;
 	}
 
-	public override void GetObjectivesText(List<string> lines) => throw new NotImplementedException();
+	public override void GetObjectivesText() => throw new NotImplementedException();
 
 	public override void SaveData(TagCompound tag)
 	{
