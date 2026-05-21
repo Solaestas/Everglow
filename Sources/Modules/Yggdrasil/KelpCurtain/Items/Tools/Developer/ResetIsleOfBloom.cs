@@ -66,11 +66,11 @@ public class ResetIsleOfBloom : ModItem
 			{
 				if (pos.Y - tilePos.Y > value2 * 4 + value0 * 1.2f + 3)
 				{
-					tile.wall = (ushort)ModContent.WallType<MossProneSandSoilWall>();
+					tile.WallType = (ushort)ModContent.WallType<MossProneSandSoilWall>();
 				}
 				else
 				{
-					tile.wall = (ushort)ModContent.WallType<OldMossWall>();
+					tile.WallType = (ushort)ModContent.WallType<OldMossWall>();
 				}
 			}
 		}

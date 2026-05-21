@@ -211,6 +211,23 @@ public static partial class MathUtils
 		return isInside;
 	}
 
+	// Distance from point pos to line defined by points a and b
+	public static float PointToLineDistance(Vector2 a, Vector2 b, Vector2 pos)
+	{
+		float dx = b.X - a.X;
+		float dy = b.Y - a.Y;
+
+		float numerator = MathF.Abs(dy * pos.X - dx * pos.Y + b.X * a.Y - b.Y * a.X);
+		float denominator = MathF.Sqrt(dx * dx + dy * dy);
+
+		if (denominator < float.Epsilon)
+		{
+			return (pos - a).Length(); // a and b are same point
+		}
+
+		return numerator / denominator;
+	}
+
 	/// <summary>
 	/// 判断点是否在线段上
 	/// </summary>

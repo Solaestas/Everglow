@@ -128,7 +128,7 @@ public class YggdrasilTownBackground : ModSystem
 		var texSky = ModAsset.YggdrasilTownBackgroundSky.Value;
 
 		// 旧背景
-		BackgroundManager.QuickDrawBG(texSky, float.PositiveInfinity, Stratum1Center, baseColor, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 16000));
+		BackgroundManager.DrawBG_RestrictY(texSky, float.PositiveInfinity, Stratum1Center, baseColor, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 16000));
 
 		DrawYggdrasilTown_Town(baseColor);
 		DrawMidnightBayou(baseColor);
@@ -172,21 +172,21 @@ public class YggdrasilTownBackground : ModSystem
 			Vector2 correction = OriginPylonCenter;
 			if (!YggdrasilTownCentralSystem.InCanteen_YggdrasilTown() && !YggdrasilTownCentralSystem.InUnion_YggdrasilTown() && !YggdrasilTownCentralSystem.InPlayerRoom_YggdrasilTown() && !YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 			{
-				BackgroundManager.QuickDrawBG(townSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townMiddle, 6f, correction + new Vector2(0, 200), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townClose, 3f, correction + new Vector2(0, 200), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townFar, 15f, correction, baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townMiddle, 6f, correction + new Vector2(0, 200), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townClose, 3f, correction + new Vector2(0, 200), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 			}
 			else
 			{
-				BackgroundManager.QuickDrawBG(townSky, float.PositiveInfinity, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townFar, 15f, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townMiddle, 6f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-				BackgroundManager.QuickDrawBG(townClose, 3f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townSky, float.PositiveInfinity, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townFar, 15f, correction + new Vector2(0, 2000), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townMiddle, 6f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+				BackgroundManager.DrawBG_RestrictY(townClose, 3f, correction + new Vector2(0, 3800), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				if (YggdrasilTownCentralSystem.InArena_YggdrasilTown())
 				{
 					var arenaClose = ModAsset.ArenaBackground.Value;
-					BackgroundManager.QuickDrawBG(arenaClose, 1.5f, correction + new Vector2(3150, 3754), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+					BackgroundManager.DrawBG_RestrictY(arenaClose, 1.5f, correction + new Vector2(3150, 3754), baseColor * BackgroundAlphaYggdrasilTown, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 				}
 			}
 		}
@@ -226,11 +226,11 @@ public class YggdrasilTownBackground : ModSystem
 			var bayouSky = ModAsset.MidnightBayou_Sky.Value;
 			Vector2 correction = OriginPylonCenter;
 
-			BackgroundManager.QuickDrawBG(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
-			BackgroundManager.QuickDrawBG(bayouClose, 6f, correction + new Vector2(0, 2950), baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(bayouSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(bayouMiddle2, 80f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(bayouMiddle1, 20f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(bayouMiddle0, 10f, correction, baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(bayouClose, 6f, correction + new Vector2(0, 2950), baseColor * BackgroundAlphaMidnightBayou, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 		}
 	}
 
@@ -271,8 +271,8 @@ public class YggdrasilTownBackground : ModSystem
 			Vector2 anchorPos = new Vector2((leftBound + rightBound) / 2f, (upBound + bottomBound) / 2f - 120f);
 			anchorPos *= 16f;
 
-			BackgroundManager.QuickDrawBG(jellyFar, 20f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), true, true);
-			BackgroundManager.QuickDrawBG(jellyClose, 6f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
+			BackgroundManager.DrawBG_RestrictY(jellyFar, 20f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), true, true);
+			BackgroundManager.DrawBG_RestrictY(jellyClose, 6f, anchorPos, baseColor * BackgroundAlphaJellyBallHotbed, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 18000), false, true);
 		}
 	}
 
@@ -357,11 +357,11 @@ public class YggdrasilTownBackground : ModSystem
 					var stoneFar = ModAsset.StoneCageOfChallengesFar.Value;
 					var stoneSky = ModAsset.StoneCageOfChallengesSky.Value;
 
-					BackgroundManager.QuickDrawBG(stoneSky, float.PositiveInfinity, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneFar, 30, backgroundCenter + new Vector2(0, -9000), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneMiddle, 20, backgroundCenter + new Vector2(0, -4800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneClose, 12, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
-					BackgroundManager.QuickDrawBG(stoneClose2, 3, backgroundCenter + new Vector2(0, 100), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
+					BackgroundManager.DrawBG_RestrictY(stoneSky, float.PositiveInfinity, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
+					BackgroundManager.DrawBG_RestrictY(stoneFar, 30, backgroundCenter + new Vector2(0, -9000), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
+					BackgroundManager.DrawBG_RestrictY(stoneMiddle, 20, backgroundCenter + new Vector2(0, -4800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
+					BackgroundManager.DrawBG_RestrictY(stoneClose, 12, backgroundCenter + new Vector2(0, -1800), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
+					BackgroundManager.DrawBG_RestrictY(stoneClose2, 3, backgroundCenter + new Vector2(0, 100), baseColor * BackgroundAlphaCage, (int)(Stratum1Center.Y - 25600), (int)(Stratum1Center.Y + 8000), true, true);
 				}
 			}
 		}
@@ -415,10 +415,10 @@ public class YggdrasilTownBackground : ModSystem
 			var lampSky = ModAsset.LampWoodSky.Value;
 			Vector2 correction = new Vector2(0, LampWoodCenterY - 4000);
 
-			BackgroundManager.QuickDrawBG(lampSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampFar, 20f, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampMiddle, 10f, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
-			BackgroundManager.QuickDrawBG(lampClose, 6f, correction + new Vector2(0, 6000), baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
+			BackgroundManager.DrawBG_RestrictY(lampSky, float.PositiveInfinity, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
+			BackgroundManager.DrawBG_RestrictY(lampFar, 20f, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
+			BackgroundManager.DrawBG_RestrictY(lampMiddle, 10f, correction, baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
+			BackgroundManager.DrawBG_RestrictY(lampClose, 6f, correction + new Vector2(0, 6000), baseColor * BackgroundAlphaLampWood, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), false, true);
 		}
 	}
 
@@ -455,12 +455,12 @@ public class YggdrasilTownBackground : ModSystem
 			var twilightMiddleFar = ModAsset.TwilightMiddleFar.Value;
 			var twilightFar = ModAsset.TwilightFar.Value;
 			var twilightSky = ModAsset.TwilightSky.Value;
-			BackgroundManager.QuickDrawBG(twilightSky, float.PositiveInfinity, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightFar, 40, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddleFar, 30, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddle, 16, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightMiddleClose, 10, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
-			BackgroundManager.QuickDrawBG(twilightClose, 5, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightSky, float.PositiveInfinity, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightFar, 40, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightMiddleFar, 30, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightMiddle, 16, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightMiddleClose, 10, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
+			BackgroundManager.DrawBG_RestrictY(twilightClose, 5, Stratum1Center, baseColor * BackgroundAlphaTwilight, (int)(Stratum1Center.Y - 20600), (int)(Stratum1Center.Y + 8000), true, true);
 		}
 	}
 

@@ -133,7 +133,7 @@ public class YggdrasilTownGeneration
 					tile.HasTile = true;
 					if (color + distance > 1.6f)
 					{
-						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+						tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 					}
 				}
 				else
@@ -274,7 +274,7 @@ public class YggdrasilTownGeneration
 							tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 							if (v0.Length() < radious - aValue - 2)
 							{
-								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+								tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
 							tile.HasTile = true;
 						}
@@ -319,7 +319,7 @@ public class YggdrasilTownGeneration
 					tile.HasTile = true;
 					if (color + distance > 1.6f)
 					{
-						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+						tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 					}
 				}
 				else if (color + distance < 1.5f)
@@ -389,11 +389,11 @@ public class YggdrasilTownGeneration
 		// tile.HasTile = true;
 		// if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
 		// {
-		// tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		// tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// if (y1 > 0)
 		// {
-		// tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		// tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// }
 		// else if (SafeGetTile(finalX, finalY + 5).HasTile)
@@ -420,11 +420,11 @@ public class YggdrasilTownGeneration
 		// tile.HasTile = true;
 		// if ((x <= -width + 12 && x >= -width + 3) || (x >= width - 12 && x <= width - 3))
 		// {
-		// tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		// tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// if (y1 > 0 && y1 < thickValue - 4)
 		// {
-		// tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+		// tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 		// }
 		// }
 		// }
@@ -749,7 +749,7 @@ public class YggdrasilTownGeneration
 									}
 									if (wallType != -1)
 									{
-										tile.wall = (ushort)wallType;
+										tile.WallType = (ushort)wallType;
 									}
 								}
 								else
@@ -948,7 +948,7 @@ public class YggdrasilTownGeneration
 					}
 					if (j > height - value + noiseValueUp * 15 + 3/* && j < height - value + thick + noiseValueDown * 25 - 3*/)
 					{
-						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+						tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 					}
 
 					// if (j >= height + thick - value + noiseValueDown * 25)
@@ -976,7 +976,7 @@ public class YggdrasilTownGeneration
 				}
 				if (j >= height - value + noiseValue * 25 + 3)
 				{
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+					tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 				}
 			}
 		}
@@ -991,9 +991,9 @@ public class YggdrasilTownGeneration
 		// int x = 430 + i;
 		// int y = Main.maxTilesY - 400 + 91 + j;
 		// Tile tile = SafeGetTile(x, y);
-		// if (!tile.HasTile && tile.wall <= 0)
+		// if (!tile.HasTile && tile.WallType <= 0)
 		// {
-		// tile.wall = WallID.Ebonwood;
+		// tile.WallType = WallID.Ebonwood;
 		// }
 		// }
 		// }
@@ -1267,18 +1267,18 @@ public class YggdrasilTownGeneration
 				}
 				if (valueNoiseWall < 0.5f)
 				{
-					if (valueNoise <= 1 && (tile.wall == (ushort)ModContent.WallType<StoneDragonScaleWoodWall>() || tile.wall == (ushort)ModContent.WallType<JellyBallSecretionWall>() || tile.wall == (ushort)ModContent.WallType<DarkForestSoilWall>()))
+					if (valueNoise <= 1 && (tile.WallType == (ushort)ModContent.WallType<StoneDragonScaleWoodWall>() || tile.WallType == (ushort)ModContent.WallType<JellyBallSecretionWall>() || tile.WallType == (ushort)ModContent.WallType<DarkForestSoilWall>()))
 					{
-						tile.wall = 0;
+						tile.WallType = 0;
 					}
 				}
 				else if (valueNoise <= 1)
 				{
-					tile.wall = (ushort)ModContent.WallType<JellyBallSecretionWall>();
+					tile.WallType = (ushort)ModContent.WallType<JellyBallSecretionWall>();
 				}
 				if (valueNoiseWallWood >= 0.5f && valueNoise <= 1)
 				{
-					tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+					tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 				}
 				float valueNoise2 = GetLargeSmokeTexturePixelG(x, y);
 				if (y < upBound + 30)
@@ -1291,9 +1291,9 @@ public class YggdrasilTownGeneration
 					{
 						if (valueNoise2 < 0.45f)
 						{
-							if (tile.wall == 0)
+							if (tile.WallType == 0)
 							{
-								tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+								tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
 						}
 					}
@@ -1354,7 +1354,7 @@ public class YggdrasilTownGeneration
 						tile.HasTile = true;
 						if (value < 0.94)
 						{
-							tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
+							tile.WallType = (ushort)ModContent.WallType<DarkForestSoilWall>();
 						}
 					}
 				}
@@ -1597,7 +1597,7 @@ public class YggdrasilTownGeneration
 								{
 									tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 									tile.HasTile = true;
-									tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
+									tile.WallType = (ushort)ModContent.WallType<DarkForestSoilWall>();
 								}
 							}
 						}
@@ -1629,7 +1629,7 @@ public class YggdrasilTownGeneration
 						if (distanceToLeaves > 7 && jointWidth > 2 && distanceToWood <= 2)
 						{
 							Tile tile = SafeGetTile(placePos);
-							if (tile.wall != ModContent.WallType<FemaleLampWoodWall>())
+							if (tile.WallType != ModContent.WallType<FemaleLampWoodWall>())
 							{
 								tile.TileType = (ushort)ModContent.TileType<FemaleLampLeaves>();
 								tile.HasTile = true;
@@ -1797,7 +1797,7 @@ public class YggdrasilTownGeneration
 					tile.TileType = (ushort)ModContent.TileType<StoneScaleWood>();
 					if (aValue + bValue < 0.75f)
 					{
-						tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+						tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 					}
 					tile.HasTile = true;
 				}
@@ -1872,7 +1872,7 @@ public class YggdrasilTownGeneration
 				{
 					bValue += 1f;
 				}
-				if (tile.wall > 0)
+				if (tile.WallType > 0)
 				{
 					bValue += 0.5f;
 					if (x > step2X + 400)
@@ -1991,7 +1991,7 @@ public class YggdrasilTownGeneration
 								{
 									tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 									tile.HasTile = true;
-									tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
+									tile.WallType = (ushort)ModContent.WallType<DarkForestSoilWall>();
 								}
 							}
 						}
@@ -2106,7 +2106,7 @@ public class YggdrasilTownGeneration
 					{
 						tile.TileType = (ushort)ModContent.TileType<DarkForestSoil>();
 						tile.HasTile = true;
-						tile.wall = (ushort)ModContent.WallType<DarkForestSoilWall>();
+						tile.WallType = (ushort)ModContent.WallType<DarkForestSoilWall>();
 					}
 				}
 			}
@@ -2505,9 +2505,9 @@ public class YggdrasilTownGeneration
 					for (int j = y - roomHeight; j <= y; j++)
 					{
 						var tile = SafeGetTile(i, j);
-						if (tile.wall <= 0)
+						if (tile.WallType <= 0)
 						{
-							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 						}
 					}
 				}
@@ -2519,9 +2519,9 @@ public class YggdrasilTownGeneration
 					for (int j = y - roomHeight; j <= y; j++)
 					{
 						var tile = SafeGetTile(i, j);
-						if (tile.wall <= 0)
+						if (tile.WallType <= 0)
 						{
-							tile.wall = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
+							tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 						}
 					}
 				}
@@ -2945,7 +2945,7 @@ public class YggdrasilTownGeneration
 			int y = endY + 1;
 			Tile tile = SafeGetTile(x, y);
 			Tile tileUp = SafeGetTile(x, y - 2);
-			if (tile.wall != 0 && !tile.HasTile && tileUp.wall != 0 && !tileUp.HasTile)
+			if (tile.WallType != 0 && !tile.HasTile && tileUp.wall != 0 && !tileUp.HasTile)
 			{
 				emptyBottomX.Add(x);
 			}
@@ -3004,7 +3004,7 @@ public class YggdrasilTownGeneration
 					tile.TileFrameX = 216;
 				}
 
-				tile.wall = SafeGetTile(x, y - 1).wall;
+				tile.WallType = SafeGetTile(x, y - 1).wall;
 			}
 		}
 
@@ -3049,9 +3049,9 @@ public class YggdrasilTownGeneration
 					}
 					else
 					{
-						if (tile.wall == 0)
+						if (tile.WallType == 0)
 						{
-							tile.wall = (ushort)contentWallType;
+							tile.WallType = (ushort)contentWallType;
 						}
 					}
 				}
@@ -3065,7 +3065,7 @@ public class YggdrasilTownGeneration
 					else
 					{
 						tile.HasTile = false;
-						tile.wall = (ushort)contentWallType;
+						tile.WallType = (ushort)contentWallType;
 					}
 				}
 			}

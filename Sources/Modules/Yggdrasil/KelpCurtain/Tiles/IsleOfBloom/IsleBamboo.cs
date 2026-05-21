@@ -1,5 +1,6 @@
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
+using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Terraria;
 using Terraria.GameContent.Drawing;
@@ -28,6 +29,11 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 
 		AddMapEntry(new Color(55, 91, 40));
 		HitSound = SoundID.Grass;
+	}
+
+	public override IEnumerable<Item> GetItemDrops(int i, int j)
+	{
+		yield return new Item(ModContent.ItemType<DryIsleBamboo_Item>());
 	}
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)

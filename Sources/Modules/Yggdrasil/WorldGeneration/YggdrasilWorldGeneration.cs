@@ -347,7 +347,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				Tile tile = SafeGetTile(check);
 				if (ChestSafe(check.X, check.Y))
 				{
-					tile.wall = (ushort)type;
+					tile.WallType = (ushort)type;
 				}
 			}
 		}
@@ -368,7 +368,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = y0; y <= y1; y += 1)
 			{
 				Tile tile = SafeGetTile(x, y);
-				tile.wall = (ushort)type;
+				tile.WallType = (ushort)type;
 			}
 		}
 		SmoothTile_XXYY(x0, y0, x1, y1);
@@ -475,7 +475,7 @@ public class YggdrasilWorldGeneration : ModSystem
 			for (int y = y0; y <= y1; y += 1)
 			{
 				Tile tile = SafeGetTile(x, y);
-				tile.wall = 0;
+				tile.WallType = 0;
 			}
 		}
 		SmoothTile_XXYY(x0, y0, x1, y1);
@@ -1061,13 +1061,13 @@ public class YggdrasilWorldGeneration : ModSystem
 					{
 						if (force)
 						{
-							tile.wall = (ushort)type;
+							tile.WallType = (ushort)type;
 						}
 						else
 						{
-							if (tile.wall <= 0)
+							if (tile.WallType <= 0)
 							{
-								tile.wall = (ushort)type;
+								tile.WallType = (ushort)type;
 							}
 						}
 					}
@@ -1432,7 +1432,7 @@ public class YggdrasilWorldGeneration : ModSystem
 								}
 								if (wallType != -1)
 								{
-									tile.wall = (ushort)wallType;
+									tile.WallType = (ushort)wallType;
 								}
 							}
 						}
@@ -1525,7 +1525,7 @@ public class YggdrasilWorldGeneration : ModSystem
 									}
 									if (wallType != -1)
 									{
-										tile.wall = (ushort)wallType;
+										tile.WallType = (ushort)wallType;
 									}
 								}
 								else

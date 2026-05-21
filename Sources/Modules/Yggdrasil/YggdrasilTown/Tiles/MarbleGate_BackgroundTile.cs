@@ -60,7 +60,7 @@ public class MarbleGate_BackgroundTile : TileVFX
 			for (int y = 20; y < 23; y++)
 			{
 				Tile tile = TileUtils.SafeGetTile(x, y);
-				tile.wall = 1;
+				tile.WallType = 1;
 				ushort typeChange = (ushort)ModContent.TileType<UnionCommandBlock>();
 				if (y == 22)
 				{

@@ -1,3 +1,4 @@
+using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.TileHelper;
 using Terraria.ObjectData;
 using Terraria.Utilities;
@@ -254,7 +255,7 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// place frame important tiles above the area with (x, y) as the BOTTOM left corner and given width and height, and set the frameX and frameY of each tile in this area according to their position in this area.
+	/// place frame important tiles above the area with (x, y - 1) as the BOTTOM left corner and given width and height (It means that Y = y in most case should be solid tile), and set the frameX and frameY of each tile in this area according to their position in this area.
 	/// </summary>
 	/// <param name="startX">TileFrameX at left side, +18 each tile towards right.</param>
 	/// <param name="startY">TileFrameX at top side, +18 each tile towards down.</param>
@@ -396,6 +397,33 @@ public partial class TileUtils
 	public static void PlaceCircleAreaOfBlock(Point center, float radius, int type, int force = 0)
 	{
 		PlaceCircleAreaOfBlock(center.ToVector2(), radius, type, force);
+	}
+
+	/// <summary>
+	/// Get a list of tile coordinates in a circle area with random noise.
+	/// </summary>
+	/// <param name="pos">the center of the circle</param>
+	/// <param name="radius">the radius of the circle</param>
+	/// <param name="noiseSize">the max random noise that can be added to the radius</param>
+	/// <returns></returns>
+	public static List<Point> GetCircleAreaOfTilePosWithRandomNoise(Point pos, float radius, float noiseSize = 3f)
+	{
+		List<Point> tiles = new List<Point>();
+		int x0CoordPerlin = GenRand.Next(512);
+		int y0CoordPerlin = GenRand.Next(512);
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				float aValue = GetPerlinPixelR(x + x0CoordPerlin, y + y0CoordPerlin);
+				if (new Vector2(x, y).Length() <= radius - aValue * noiseSize)
+				{
+					tiles.Add(new Point(x, y) + pos);
+				}
+			}
+		}
+		return tiles;
 	}
 
 	/// <summary>
@@ -1678,6 +1706,36 @@ public partial class TileUtils
 		return count;
 	}
 
+	public static int CheckSpaceHeight(Point pos)
+	{
+		return CheckSpaceHeight(pos.X, pos.Y);
+	}
+
+	public static int CheckSpaceWidth(Point pos)
+	{
+		return CheckSpaceWidth(pos.X, pos.Y);
+	}
+
+	public static int CheckSpaceLeft(Point pos)
+	{
+		return CheckSpaceLeft(pos.X, pos.Y);
+	}
+
+	public static int CheckSpaceRight(Point pos)
+	{
+		return CheckSpaceRight(pos.X, pos.Y);
+	}
+
+	public static int CheckSpaceUp(Point pos)
+	{
+		return CheckSpaceUp(pos.X, pos.Y);
+	}
+
+	public static int CheckSpaceDown(Point pos)
+	{
+		return CheckSpaceDown(pos.X, pos.Y);
+	}
+
 	/// <summary>
 	/// Return the tile type if all tiles in the given area are the same, otherwise return -3.No any tile, return -1. If the area is out of world, return -4.
 	/// </summary>
@@ -1849,5 +1907,149 @@ public partial class TileUtils
 			polygon_Vector2.Add(point.ToWorldCoordinates());
 		}
 		return GetPolygonAreaOfTilePos(polygon_Vector2);
+	}
+
+	/// <summary>
+	/// Get the tile positions in the given rectangle area. World coord.
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns></returns>
+	public static List<Point> GetAABBAreaOfTilePos(Vector2 worldPos, Vector2 size)
+	{
+		List<Point> tilePoses = new List<Point>();
+		for (int x = worldPos.ToTileCoordinates().X; x <= (worldPos + size).ToTileCoordinates().X; x++)
+		{
+			for (int y = worldPos.ToTileCoordinates().Y; y <= (worldPos + size).ToTileCoordinates().Y; y++)
+			{
+				tilePoses.Add(new Point(x, y));
+			}
+		}
+		return tilePoses;
+	}
+
+	public static void PlaceTileListTowardDownUntilCollide(Point pos, int type, int max = 1024)
+	{
+		for(int t = 0;t < max;t++)
+		{
+			var tile = SafeGetTile(pos + new Point(0, t));
+			if(!tile.HasTile || !Main.tileSolid[tile.TileType])
+			{
+				tile.TileType = (ushort)type;
+				tile.HasTile = true;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	public static void PlaceTileListTowardUpUntilCollide(Point pos, int type, int max = 1024)
+	{
+		for (int t = 0; t < max; t++)
+		{
+			var tile = SafeGetTile(pos + new Point(0, -t));
+			if (!tile.HasTile)
+			{
+				tile.TileType = (ushort)type;
+				tile.HasTile = true;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	public static void PlaceTileListTowardLeftUntilCollide(Point pos, int type, int max = 1024)
+	{
+		for (int t = 0; t < max; t++)
+		{
+			var tile = SafeGetTile(pos + new Point(-t, 0));
+			if (!tile.HasTile)
+			{
+				tile.TileType = (ushort)type;
+				tile.HasTile = true;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	public static void PlaceTileListTowardRightUntilCollide(Point pos, int type, int max = 1024)
+	{
+		for (int t = 0; t < max; t++)
+		{
+			var tile = SafeGetTile(pos + new Point(t, 0));
+			if (!tile.HasTile)
+			{
+				tile.TileType = (ushort)type;
+				tile.HasTile = true;
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	public static Point PointLerp(Point pos0, Point pos1, float value)
+	{
+		return new Point((int)(pos0.X + (pos1.X - pos0.X) * value), (int)(pos0.Y + (pos1.Y - pos0.Y) * value));
+	}
+
+	/// <summary>
+	/// Get the centroid of the given points.
+	/// </summary>
+	/// <param name="points"></param>
+	/// <returns></returns>
+	public static Point GetCentroid(List<Point> points)
+	{
+		if(points.Count <= 0)
+		{
+			return default;
+		}
+		Point point = new Point(0, 0);
+		foreach (var p in points)
+		{
+			point += p;
+		}
+		return new Point(point.X / points.Count, point.Y / points.Count);
+	}
+
+	/// <summary>
+	/// Find the nearest tile position with tile within 100 range. Return default if not found.
+	/// </summary>
+	/// <param name="pos"></param>
+	/// <param name="force"><see cref="TileChangeState"/>, Default to 10, SolidTile</param>
+	/// <returns></returns>
+	public static Point FindNearestTileWithin100Range(Point pos, int force = 10)
+	{
+		float minDis = 100;
+		Point point = default;
+		for (int i = -100; i <= 100; i++)
+		{
+			for (int j = -100; j <= 100; j++)
+			{
+				Tile tile = SafeGetTile(i + pos.X, j + pos.Y);
+				if (CanChangeTile(tile, force))
+				{
+					Vector2 v1 = new Vector2(i, j);
+					if (v1.Length() < minDis)
+					{
+						minDis = v1.Length();
+						point = new Point(i + pos.X, j + pos.Y);
+					}
+				}
+			}
+		}
+		return point;
+	}
+
+	public static float PointDistance(Point p0, Point p1)
+	{
+		return Vector2.Distance(p0.ToVector2(), p1.ToVector2());
 	}
 }
