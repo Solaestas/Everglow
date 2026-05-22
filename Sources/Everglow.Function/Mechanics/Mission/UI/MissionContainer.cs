@@ -7,7 +7,7 @@ using Everglow.Commons.Utilities;
 using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
 using Terraria.GameContent;
-using static Everglow.Commons.Mechanics.Mission.PlayerSide.Core.MissionManager;
+using static Everglow.Commons.Mechanics.Mission.PlayerSide.Core.PlayerMissionManager;
 
 namespace Everglow.Commons.Mechanics.Mission.UI;
 

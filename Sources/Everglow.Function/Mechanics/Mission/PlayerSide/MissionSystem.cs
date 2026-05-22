@@ -7,12 +7,12 @@ public class MissionSystem : ModSystem
 {
 	public override void Load()
 	{
-		MissionManager.Load();
+		PlayerMissionManager.Load();
 	}
 
 	public override void Unload()
 	{
-		MissionManager.UnLoad();
+		PlayerMissionManager.UnLoad();
 		MissionContainer.Instance?.Unload();
 	}
 }

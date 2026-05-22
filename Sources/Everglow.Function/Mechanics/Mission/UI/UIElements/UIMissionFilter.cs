@@ -207,7 +207,7 @@ public class UIMissionFilter : BaseElement
 		if (MissionTypeValue != missionType)
 		{
 			MissionTypeValue = missionType;
-			MissionManager.NeedRefresh = true;
+			PlayerMissionManager.NeedRefresh = true;
 		}
 
 		// Update pool type
@@ -215,7 +215,7 @@ public class UIMissionFilter : BaseElement
 		if (PoolTypeValue != poolType)
 		{
 			PoolTypeValue = poolType;
-			MissionManager.NeedRefresh = true;
+			PlayerMissionManager.NeedRefresh = true;
 		}
 
 		ManageAutoRotation();

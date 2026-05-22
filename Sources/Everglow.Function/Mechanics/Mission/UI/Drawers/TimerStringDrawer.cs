@@ -37,7 +37,7 @@ internal class TimerStringDrawer : TextDrawer
 		TimerStyle = stringParameters.GetInt("TimerStyle",
 			stringDrawer.DefaultParameters.GetInt("MSTTimerStyle", 0));
 
-		_mission = MissionManager.GetMission(MissionName);
+		_mission = PlayerMissionManager.GetMission(MissionName);
 	}
 
 	public override void Draw(SpriteBatch sb)

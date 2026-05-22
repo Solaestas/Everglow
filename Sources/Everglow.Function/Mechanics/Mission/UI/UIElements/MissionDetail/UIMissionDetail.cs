@@ -350,7 +350,7 @@ public class UIMissionDetail : UIBlock
 			{
 				// Commit the mission
 				SelectedItem.Mission.OnComplete();
-				MissionManager.NeedRefresh = true;
+				PlayerMissionManager.NeedRefresh = true;
 			}
 			else // Incompleted
 			{
@@ -361,8 +361,8 @@ public class UIMissionDetail : UIBlock
 		else if (SelectedItem.Mission.PoolType == PlayerMissionState.Available) // Available missions
 		{
 			// Accept the mission
-			MissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
-			MissionManager.NeedRefresh = true;
+			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+			PlayerMissionManager.NeedRefresh = true;
 		}
 	}
 
@@ -373,8 +373,8 @@ public class UIMissionDetail : UIBlock
 			&& SelectedItem.Mission.Cancellable
 			&& !SelectedItem.Mission.CheckComplete())
 		{
-			MissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			MissionManager.NeedRefresh = true;
+			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+			PlayerMissionManager.NeedRefresh = true;
 		}
 	}
 

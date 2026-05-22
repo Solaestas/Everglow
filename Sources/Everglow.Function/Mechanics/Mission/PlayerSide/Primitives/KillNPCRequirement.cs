@@ -44,7 +44,7 @@ public sealed class KillNPCRequirement
 	/// <para/>
 	/// - When <see cref="EnableIndividualCounter"/> is <c>true</c>, the progress is calculated based on the value of the <see cref="Counter"/> property.
 	/// <para/>
-	/// - When <see cref="EnableIndividualCounter"/> is <c>false</c>, the progress is calculated by summing the kill counts for the NPCs in the <see cref="NPCs"/> list from a global kill counter (<see cref="MissionManager.NPCKillCounter"/>).
+	/// - When <see cref="EnableIndividualCounter"/> is <c>false</c>, the progress is calculated by summing the kill counts for the NPCs in the <see cref="NPCs"/> list from a global kill counter (<see cref="PlayerMissionManager.NPCKillCounter"/>).
 	/// <para/>
 	/// The returned value is clamped to the range [0, 1], ensuring that the progress is always represented as a percentage (0% to 100%).
 	/// </remarks>

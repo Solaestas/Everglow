@@ -28,7 +28,7 @@ public class KillNPCObjective : MissionObjectiveBase
 
 	public override bool CheckCompletion() => Progress >= 1f;
 
-	public override float Progress => DemandNPC.Progress(MissionManager.NPCKillCounter);
+	public override float Progress => DemandNPC.Progress(PlayerMissionManager.NPCKillCounter);
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
@@ -44,7 +44,7 @@ public class KillNPCObjective : MissionObjectiveBase
 	{
 		string progress = DemandNPC.EnableIndividualCounter
 				? $"({DemandNPC.Counter}/{DemandNPC.Requirement})"
-				: $"({MissionManager.NPCKillCounter.Where((pair) => DemandNPC.NPCs.Contains(pair.Key)).Sum(pair => pair.Value)}/{DemandNPC.Requirement})";
+				: $"({PlayerMissionManager.NPCKillCounter.Where((pair) => DemandNPC.NPCs.Contains(pair.Key)).Sum(pair => pair.Value)}/{DemandNPC.Requirement})";
 
 		if (DemandNPC.NPCs.Count > 1)
 		{

@@ -135,10 +135,10 @@ public abstract class MissionBase : ITagCompoundEntity
 	private PlayerMissionState poolType;
 
 	/// <summary>
-	/// Mission status, managed by <see cref="MissionManager"/>.
+	/// Mission status, managed by <see cref="PlayerMissionManager"/>.
 	/// </summary>
 	/// <remarks>
-	/// Should only be changed in <see cref="MissionManager"/> to keep the mission syncing to its pool collection.
+	/// Should only be changed in <see cref="PlayerMissionManager"/> to keep the mission syncing to its pool collection.
 	/// </remarks>
 	public PlayerMissionState PoolType { get; set; }
 
@@ -190,7 +190,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnCheckCompleteChange()
 	{
-		MissionManager.NeedRefresh = true;
+		PlayerMissionManager.NeedRefresh = true;
 	}
 
 	/// <summary>
@@ -216,7 +216,7 @@ public abstract class MissionBase : ITagCompoundEntity
 				CurrentObjective?.Activate(this);
 
 				Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
-				MissionManager.NeedRefresh = true;
+				PlayerMissionManager.NeedRefresh = true;
 			}
 		}
 	}
@@ -229,7 +229,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	{
 		if (EnableTime)
 		{
-			Time += MissionManager.UpdateInterval;
+			Time += PlayerMissionManager.UpdateInterval;
 
 			if (Time > TimeMax)
 			{
@@ -249,10 +249,10 @@ public abstract class MissionBase : ITagCompoundEntity
 			return;
 		}
 
-		MissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
+		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
 
 		IsVisible = true;
-		MissionManager.NeedRefresh = true;
+		PlayerMissionManager.NeedRefresh = true;
 
 		Main.NewText($"[{Name}]任务已完成", 150, 250, 150);
 
@@ -281,7 +281,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		MissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
+		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
 	}
 
 	/// <summary>
@@ -289,7 +289,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnFail()
 	{
-		MissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 	}
 
 	/// <summary>

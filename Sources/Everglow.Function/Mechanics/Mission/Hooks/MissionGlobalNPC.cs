@@ -39,7 +39,7 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public static IEnumerable<int> GetMissionNPCTypes()
 	{
-		var missions = MissionManager.GetMissionPool(PlayerMissionState.Accepted);
+		var missions = PlayerMissionManager.GetMissionPool(PlayerMissionState.Accepted);
 
 		// Flatten all objectives recursively and filter for KillNPCObjective
 		var playerSideNPCs = missions

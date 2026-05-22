@@ -21,7 +21,7 @@ public class MissionPlayer : ModPlayer
 	private MissionManagerData missionManagerData;
 
 	/// <summary>
-	/// Indicate to apply player mission info into <see cref="MissionManager"/>. Defaults to <c>false</c>.
+	/// Indicate to apply player mission info into <see cref="PlayerMissionManager"/>. Defaults to <c>false</c>.
 	/// <br/>Set to <c>true</c> after data applying, to <c>false</c> after player loading.
 	/// </summary>
 	private bool missionManagerDataInitialized = false;
@@ -35,40 +35,40 @@ public class MissionPlayer : ModPlayer
 	{
 		if (!missionManagerDataInitialized) // Prevent load being called when OnEnterWorld is called by subworldlibrary
 		{
-			MissionManager.ApplyData(missionManagerData);
+			PlayerMissionManager.ApplyData(missionManagerData);
 			missionManagerDataInitialized = true;
 		}
 
 #if DEBUG
-		if (!MissionManager.HasMission<MissionBase>())
+		if (!PlayerMissionManager.HasMission<MissionBase>())
 		{
-			MissionManager.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new MissionObjectivesTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new OpenPanelMissionTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new BranchingMissionTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission1(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission2(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission3(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission4(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission5(), PlayerMissionState.Available);
-			MissionManager.AddMission(new NoneMission6(), PlayerMissionState.Available);
-			MissionManager.AddMission(new MissionTimerTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new MissionIconTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new GiveItemMissionTest(), PlayerMissionState.Available);
-			MissionManager.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new MissionObjectivesTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new OpenPanelMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new BranchingMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission1(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission2(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission3(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission4(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission5(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new NoneMission6(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new MissionTimerTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new MissionIconTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new GiveItemMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
 		}
 #endif
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		MissionManager.SaveData(tag);
+		PlayerMissionManager.SaveData(tag);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		missionManagerData = MissionManager.LoadData(tag);
+		missionManagerData = PlayerMissionManager.LoadData(tag);
 		missionManagerDataInitialized = false;
 	}
 

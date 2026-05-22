@@ -6,7 +6,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 
-public static class MissionManager
+public static class PlayerMissionManager
 {
 	public const int UpdateInterval = 20;
 
