@@ -10,5 +10,5 @@ public class OpenPanelMissionTest : PlayerMissionBase
 
 	public override MissionIconGroup Icon => null;
 
-	public override MissionType MissionType => MissionType.Challenge;
+	public override MissionType Type => MissionType.Challenge;
 }

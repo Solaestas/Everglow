@@ -38,5 +38,5 @@ public class BranchingMissionTest : PlayerMissionBase
 
 	public override string DisplayName => nameof(BranchingMissionTest);
 
-	public override MissionType MissionType => MissionType.Daily;
+	public override MissionType Type => MissionType.Daily;
 }

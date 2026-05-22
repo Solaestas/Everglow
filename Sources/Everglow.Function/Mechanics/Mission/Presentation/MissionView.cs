@@ -16,10 +16,10 @@ public class MissionView
 	{
 		DisplayName = mission.DisplayName;
 		State = MapState(mission.State);
-		Type = mission.MissionType;
+		Type = mission.Type;
 		TimeLimit = mission.TimeLimit;
 		TimeRemaining = mission.Time;
-		Source = mission.MissionSource;
+		Source = mission.Source;
 		Progress = mission.Progress;
 		Visible = mission.Visible;
 		Retriable = mission.Retriable;

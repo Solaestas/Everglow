@@ -24,5 +24,5 @@ public class KillNPCMissionTest : PlayerMissionBase
 
 	public override string DisplayName => nameof(KillNPCMissionTest);
 
-	public override MissionType MissionType => MissionType.MainStory;
+	public override MissionType Type => MissionType.MainStory;
 }

@@ -10,9 +10,9 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public string Description { get; }
 
-	public MissionType MissionType { get; }
+	public MissionType Type { get; }
 
-	public MissionSource MissionSource { get; }
+	public MissionSource Source { get; }
 
 	public List<Item> RewardItems { get; protected set; }
 

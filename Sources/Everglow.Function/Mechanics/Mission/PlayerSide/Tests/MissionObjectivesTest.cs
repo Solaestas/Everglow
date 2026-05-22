@@ -31,5 +31,5 @@ public class MissionObjectivesTest : PlayerMissionBase
 
 	public override string DisplayName => nameof(MissionObjectivesTest);
 
-	public override MissionType MissionType => MissionType.SideStory;
+	public override MissionType Type => MissionType.SideStory;
 }

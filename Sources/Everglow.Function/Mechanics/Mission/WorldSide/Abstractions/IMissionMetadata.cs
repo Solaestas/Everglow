@@ -19,9 +19,9 @@ public interface IMissionMetadata
 	/// <summary>
 	/// Gets the type of the mission associated with this instance.
 	/// </summary>
-	public MissionType MissionType { get; }
+	public MissionType Type { get; }
 
-	public MissionSource MissionSource { get; }
+	public MissionSource Source { get; }
 
 	public List<Item> RewardItems { get; }
 

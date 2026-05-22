@@ -127,25 +127,17 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	public virtual long Time { get; set; }
 
 	/// <summary>
-	/// Mission status.
-	/// </summary>
-	/// <remarks>
-	/// Use property <see cref="PoolType"/> rather than this field directly.
-	/// </remarks>
-	private PlayerMissionState poolType;
-
-	/// <summary>
-	/// Mission status, managed by <see cref="PlayerMissionManager"/>.
+	/// Mission state, managed by <see cref="PlayerMissionManager"/>.
 	/// </summary>
 	/// <remarks>
 	/// Should only be changed in <see cref="PlayerMissionManager"/> to keep the mission syncing to its pool collection.
 	/// </remarks>
-	public PlayerMissionState PoolType { get; set; }
+	public PlayerMissionState State { get; set; }
 
 	/// <summary>
 	/// 任务类型
 	/// </summary>
-	public virtual MissionType MissionType => MissionType.None;
+	public virtual MissionType Type => MissionType.None;
 
 	/// <summary>
 	/// 任务奖励物品

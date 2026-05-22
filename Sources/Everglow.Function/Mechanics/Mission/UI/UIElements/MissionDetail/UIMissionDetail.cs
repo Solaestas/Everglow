@@ -146,8 +146,8 @@ public class UIMissionDetail : UIBlock
 		_changeMission.Events.OnMouseHover += e =>
 		{
 			if (SelectedItem != null
-				&& SelectedItem.Mission.PoolType != PlayerMissionState.Overdue
-				&& SelectedItem.Mission.PoolType != PlayerMissionState.Failed)
+				&& SelectedItem.Mission.State != PlayerMissionState.Overdue
+				&& SelectedItem.Mission.State != PlayerMissionState.Failed)
 			{
 				_changeMission.PanelColor = ChangeButtonHoverColor;
 			}
@@ -344,7 +344,7 @@ public class UIMissionDetail : UIBlock
 			return;
 		}
 
-		if (SelectedItem.Mission.PoolType == PlayerMissionState.Accepted) // Accepted missions
+		if (SelectedItem.Mission.State == PlayerMissionState.Accepted) // Accepted missions
 		{
 			if (SelectedItem.Mission.CheckComplete()) // Completed
 			{
@@ -358,7 +358,7 @@ public class UIMissionDetail : UIBlock
 				DetailTip.Show(new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否"));
 			}
 		}
-		else if (SelectedItem.Mission.PoolType == PlayerMissionState.Available) // Available missions
+		else if (SelectedItem.Mission.State == PlayerMissionState.Available) // Available missions
 		{
 			// Accept the mission
 			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
@@ -369,7 +369,7 @@ public class UIMissionDetail : UIBlock
 	public static void DiscardMission(PlayerMissionBase m)
 	{
 		if (SelectedItem != null
-			&& SelectedItem.Mission.PoolType == PlayerMissionState.Accepted
+			&& SelectedItem.Mission.State == PlayerMissionState.Accepted
 			&& SelectedItem.Mission.Cancellable
 			&& !SelectedItem.Mission.CheckComplete())
 		{
@@ -385,11 +385,11 @@ public class UIMissionDetail : UIBlock
 	{
 		if (SelectedItem != null)
 		{
-			if (SelectedItem.Mission.PoolType == PlayerMissionState.Available)
+			if (SelectedItem.Mission.State == PlayerMissionState.Available)
 			{
 				_changeText.Text = ChangeButtonText.Accept;
 			}
-			else if (SelectedItem.Mission.PoolType == PlayerMissionState.Accepted)
+			else if (SelectedItem.Mission.State == PlayerMissionState.Accepted)
 			{
 				if (SelectedItem.Mission.CheckComplete())
 				{
@@ -400,15 +400,15 @@ public class UIMissionDetail : UIBlock
 					_changeText.Text = ChangeButtonText.Cancel;
 				}
 			}
-			else if (SelectedItem.Mission.PoolType == PlayerMissionState.Completed)
+			else if (SelectedItem.Mission.State == PlayerMissionState.Completed)
 			{
 				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='126,126,126']";
 			}
-			else if (SelectedItem.Mission.PoolType == PlayerMissionState.Overdue)
+			else if (SelectedItem.Mission.State == PlayerMissionState.Overdue)
 			{
 				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='126,126,126']";
 			}
-			else if (SelectedItem.Mission.PoolType == PlayerMissionState.Failed)
+			else if (SelectedItem.Mission.State == PlayerMissionState.Failed)
 			{
 				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='126,126,126']";
 			}

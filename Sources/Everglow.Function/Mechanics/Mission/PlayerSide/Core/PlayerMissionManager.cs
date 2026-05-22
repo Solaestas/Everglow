@@ -22,7 +22,7 @@ public static class PlayerMissionManager
 	/// <summary>
 	/// 已接受任务的任务池
 	/// </summary>
-	private static IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.PoolType == PlayerMissionState.Accepted);
+	private static IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.State == PlayerMissionState.Accepted);
 
 	/// <summary>
 	/// 历史杀怪计数
@@ -226,7 +226,7 @@ public static class PlayerMissionManager
 		if (!HasMission(mission.Name))
 		{
 			_missions.Add(mission);
-			mission.PoolType = type;
+			mission.State = type;
 
 			if (showText)
 			{
@@ -313,7 +313,7 @@ public static class PlayerMissionManager
 			return;
 		}
 
-		mission.PoolType = toType;
+		mission.State = toType;
 
 		if (toType == PlayerMissionState.Accepted)
 		{
@@ -331,7 +331,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.PoolType == type).ToList();
+	public static List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.State == type).ToList();
 
 	#endregion
 

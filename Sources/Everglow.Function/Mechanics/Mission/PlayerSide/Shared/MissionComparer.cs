@@ -9,23 +9,23 @@ public class MissionComparer : IComparer<PlayerMissionBase>
 
 	public int Compare(PlayerMissionBase x, PlayerMissionBase y)
 	{
-		if (x.PoolType != y.PoolType)
+		if (x.State != y.State)
 		{
-			return x.PoolType - y.PoolType;
+			return x.State - y.State;
 		}
-		else if (x.MissionType != y.MissionType)
+		else if (x.Type != y.Type)
 		{
-			if (x.MissionType is MissionType.None)
+			if (x.Type is MissionType.None)
 			{
 				return 1;
 			}
 
-			if (y.MissionType is MissionType.None)
+			if (y.Type is MissionType.None)
 			{
 				return -1;
 			}
 
-			return x.MissionType - y.MissionType;
+			return x.Type - y.Type;
 		}
 		else
 		{

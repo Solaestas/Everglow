@@ -54,14 +54,14 @@ public class UIMissionItem : UIBlock
 		Register(block);
 
 		// 任务项背景
-		_background = new UIImage(ColorDefinition.GetBackground(Mission.MissionType), Color.White);
+		_background = new UIImage(ColorDefinition.GetBackground(Mission.Type), Color.White);
 		_background.Info.Width.SetFull();
 		_background.Info.Height.SetFull();
 		_background.Style = UIImage.CalculationStyle.None;
 		block.Register(_background);
 
 		// 任务进度
-		statusBar = new UIImage(ColorDefinition.GetMissionStatus(Mission.PoolType), Color.White);
+		statusBar = new UIImage(ColorDefinition.GetMissionStatus(Mission.State), Color.White);
 		statusBar.Info.Top.SetValue(19f * Scale, 0);
 		statusBar.Info.Left.SetValue(291f * Scale, 0);
 		statusBar.Info.Width.SetValue(12 * Scale, 0);
@@ -173,7 +173,7 @@ public class UIMissionItem : UIBlock
 		var width = 15 * MissionContainer.Scale;
 		var y1 = 12 * MissionContainer.Scale;
 		var y2 = 36 * MissionContainer.Scale;
-		var startColor = ColorDefinition.GetMissionTypeColor(Mission.MissionType) * 0.4f;
+		var startColor = ColorDefinition.GetMissionTypeColor(Mission.Type) * 0.4f;
 		var endColor = Color.Transparent;
 		var vertices = new List<Vertex2D>();
 		{

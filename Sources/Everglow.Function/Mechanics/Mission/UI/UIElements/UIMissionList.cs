@@ -80,13 +80,13 @@ public class UIMissionList : UIBlock
 		}
 		else // 全局模式，去掉有来源NPC的未接取任务
 		{
-			missions = missions.Where(m => !(m.PoolType is PlayerMissionState.Available && m.Source is not null && m.Source != MissionSourceBase.Default));
+			missions = missions.Where(m => !(m.State is PlayerMissionState.Available && m.Source is not null && m.Source != MissionSourceBase.Default));
 		}
 
 		// 筛选任务类型
 		if (missionType.HasValue)
 		{
-			missions = missions.Where(m => m.MissionType == missionType);
+			missions = missions.Where(m => m.Type == missionType);
 		}
 
 		// 排序

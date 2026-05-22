@@ -14,5 +14,5 @@ public class MissionIconTest : PlayerMissionBase
 
 	public override string DisplayName => GetType().Name;
 
-	public override MissionType MissionType => MissionType.MainStory;
+	public override MissionType Type => MissionType.MainStory;
 }
