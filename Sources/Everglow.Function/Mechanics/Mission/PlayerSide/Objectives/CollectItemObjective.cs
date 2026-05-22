@@ -83,7 +83,7 @@ public class CollectItemObjective : MissionObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase sourceMission)
+	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionPlayer.OnPickupEvent += MissionPlayer_OnPickUp;
 	}

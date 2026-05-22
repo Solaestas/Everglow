@@ -56,7 +56,7 @@ public class UseItemObjective : MissionObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase sourceMission)
+	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalItem.PlayerSide_OnUseItemEvent += MissionGlobalItem_OnUseItem;
 	}

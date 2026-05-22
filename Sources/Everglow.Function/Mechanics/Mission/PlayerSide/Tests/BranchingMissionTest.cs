@@ -6,7 +6,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class BranchingMissionTest : MissionBase
+public class BranchingMissionTest : PlayerMissionBase
 {
 	public BranchingMissionTest()
 	{

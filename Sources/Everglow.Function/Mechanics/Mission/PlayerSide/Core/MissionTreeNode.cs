@@ -2,12 +2,12 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 
 public class MissionTreeNode
 {
-	public MissionTreeNode(MissionBase mission)
+	public MissionTreeNode(PlayerMissionBase mission)
 	{
 		Mission = mission;
 	}
 
-	public MissionBase Mission { get; init; }
+	public PlayerMissionBase Mission { get; init; }
 
 	public List<MissionTreeNode> Children { get; } = [];
 

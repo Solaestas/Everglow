@@ -16,7 +16,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	public virtual float Progress { get; } = 1f;
 
 	/// <summary>
-	/// Objective rewards, different from <see cref="MissionBase.RewardItems"/>
+	/// Objective rewards, different from <see cref="PlayerMissionBase.RewardItems"/>
 	/// </summary>
 	public List<Item> RewardItems { get; } = [];
 
@@ -51,7 +51,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 			{
 				foreach (var item in RewardItems)
 				{
-					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(MissionBase.RewardItemsSourceContext), item, item.stack);
+					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(PlayerMissionBase.RewardItemsSourceContext), item, item.stack);
 				}
 
 				HasGivenRewardItems = true;
@@ -63,7 +63,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 
 	public virtual void ResetProgress() => Completed = false;
 
-	public virtual void Activate(MissionBase sourceMission)
+	public virtual void Activate(PlayerMissionBase sourceMission)
 	{
 	}
 

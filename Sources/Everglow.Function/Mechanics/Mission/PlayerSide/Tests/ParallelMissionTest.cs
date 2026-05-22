@@ -6,7 +6,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class ParallelMissionTest : MissionBase
+public class ParallelMissionTest : PlayerMissionBase
 {
 	public ParallelMissionTest()
 	{

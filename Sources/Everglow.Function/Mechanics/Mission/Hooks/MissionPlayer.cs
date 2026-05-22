@@ -40,7 +40,7 @@ public class MissionPlayer : ModPlayer
 		}
 
 #if DEBUG
-		if (!PlayerMissionManager.HasMission<MissionBase>())
+		if (!PlayerMissionManager.HasMission<PlayerMissionBase>())
 		{
 			PlayerMissionManager.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);

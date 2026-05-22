@@ -55,7 +55,7 @@ public class ConsumeItemObjective : MissionObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase sourceMission)
+	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalItem.PlayerSide_OnConsumeItemEvent += MissionGlobalItem_OnConsumeItem;
 	}

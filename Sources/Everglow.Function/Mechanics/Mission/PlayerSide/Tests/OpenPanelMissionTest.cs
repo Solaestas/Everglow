@@ -4,7 +4,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class OpenPanelMissionTest : MissionBase
+public class OpenPanelMissionTest : PlayerMissionBase
 {
 	public override string DisplayName => nameof(OpenPanelMissionTest);
 

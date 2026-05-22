@@ -7,7 +7,7 @@ namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
 public class MissionView
 {
-	public MissionView(MissionBase mission)
+	public MissionView(PlayerMissionBase mission)
 	{
 
 	}

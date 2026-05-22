@@ -16,7 +16,7 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 /// <remarks>
 /// NOTE: 继承后必须保证存在一个无参构造函数
 /// </remarks>
-public abstract class MissionBase : ITagCompoundEntity
+public abstract class PlayerMissionBase : ITagCompoundEntity
 {
 	/// <summary>
 	/// 任务计时器存储键
@@ -28,7 +28,7 @@ public abstract class MissionBase : ITagCompoundEntity
 	/// </summary>
 	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
 
-	protected MissionBase()
+	protected PlayerMissionBase()
 	{
 		Objectives = new MissionObjectiveContainer();
 		RewardItems = [];

@@ -20,7 +20,7 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	private string _tipTextStr;
 	private string _yesTextStr;
 	private string _noTextStr;
-	private Action<MissionBase> _yesAction;
+	private Action<PlayerMissionBase> _yesAction;
 
 	private UIBlock _main;
 
@@ -37,7 +37,7 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	{
 	}
 
-	public UIMissionOperationTip(MissionBase? mission, TipType type, string tipText, Action<MissionBase> yes = null, string yesText = null, string noText = null)
+	public UIMissionOperationTip(PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
 	{
 		_mission = mission;
 		_mod = type;

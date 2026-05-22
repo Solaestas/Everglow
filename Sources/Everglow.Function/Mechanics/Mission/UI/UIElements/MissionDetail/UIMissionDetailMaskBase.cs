@@ -37,7 +37,7 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 		PanelColor = _content.BackgroundColor ?? DefaultColor;
 	}
 
-	public void Show<TContent>(MissionBase mission)
+	public void Show<TContent>(PlayerMissionBase mission)
 		where TContent : UIMissionDetailMaskContentBase<TMask>, new()
 	{
 		var content = new TContent();

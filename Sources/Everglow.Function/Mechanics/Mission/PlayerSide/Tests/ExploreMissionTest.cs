@@ -4,7 +4,7 @@ using Terraria.GameContent.Personalities;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class ExploreMissionTest : MissionBase
+public class ExploreMissionTest : PlayerMissionBase
 {
 	public override string DisplayName => nameof(ExploreMissionTest);
 

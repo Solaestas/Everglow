@@ -9,7 +9,7 @@ internal class TimerStringDrawer : TextDrawer
 {
 	public string MissionName;
 	public int TimerStyle = 0;
-	private MissionBase _mission;
+	private PlayerMissionBase _mission;
 
 	protected override Vector2 GetTextSize(string text)
 	{

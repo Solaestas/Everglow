@@ -4,7 +4,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class MissionIconTest : MissionBase
+public class MissionIconTest : PlayerMissionBase
 {
 	public MissionIconTest()
 	{

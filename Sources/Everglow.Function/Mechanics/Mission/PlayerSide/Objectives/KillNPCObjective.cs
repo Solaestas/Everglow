@@ -64,7 +64,7 @@ public class KillNPCObjective : MissionObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase sourceMission)
+	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalNPC.OnKillNPCEvent += MissionPlayer_OnKillNPC;
 	}

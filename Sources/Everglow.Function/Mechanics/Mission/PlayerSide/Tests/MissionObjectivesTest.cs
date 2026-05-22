@@ -6,7 +6,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class MissionObjectivesTest : MissionBase
+public class MissionObjectivesTest : PlayerMissionBase
 {
 	public MissionObjectivesTest()
 	{

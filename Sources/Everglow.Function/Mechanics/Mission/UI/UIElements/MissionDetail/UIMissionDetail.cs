@@ -263,7 +263,7 @@ public class UIMissionDetail : UIBlock
 		{
 			HideMissionSubContent();
 
-			MissionBase mission = missionItem.Mission;
+			PlayerMissionBase mission = missionItem.Mission;
 			_icon.SetIconGroup(mission.Icon);
 			_descriptionTextScrollbar.WheelValue = 0f;
 
@@ -271,7 +271,7 @@ public class UIMissionDetail : UIBlock
 		}
 	}
 
-	public void SetTexts(MissionBase mission)
+	public void SetTexts(PlayerMissionBase mission)
 	{
 		var desText = new StringBuilder();
 
@@ -366,7 +366,7 @@ public class UIMissionDetail : UIBlock
 		}
 	}
 
-	public static void DiscardMission(MissionBase m)
+	public static void DiscardMission(PlayerMissionBase m)
 	{
 		if (SelectedItem != null
 			&& SelectedItem.Mission.PoolType == PlayerMissionState.Accepted

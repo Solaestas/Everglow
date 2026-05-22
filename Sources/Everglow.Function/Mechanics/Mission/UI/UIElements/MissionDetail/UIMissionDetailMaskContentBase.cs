@@ -6,7 +6,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 	where TMask : UIMissionDetailMaskBase<TMask>, new()
 {
-	protected MissionBase _mission;
+	protected PlayerMissionBase _mission;
 
 	public event Action<BaseElement> HideMask;
 
@@ -26,7 +26,7 @@ public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 		HideMask?.Invoke(this);
 	}
 
-	public virtual void SetMission(MissionBase mission)
+	public virtual void SetMission(PlayerMissionBase mission)
 	{
 		_mission = mission;
 	}

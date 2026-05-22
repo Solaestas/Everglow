@@ -3,11 +3,11 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
 
-public class MissionComparer : IComparer<MissionBase>
+public class MissionComparer : IComparer<PlayerMissionBase>
 {
 	public static readonly MissionComparer Instance = new MissionComparer();
 
-	public int Compare(MissionBase x, MissionBase y)
+	public int Compare(PlayerMissionBase x, PlayerMissionBase y)
 	{
 		if (x.PoolType != y.PoolType)
 		{

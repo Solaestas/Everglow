@@ -57,7 +57,7 @@ public class BranchingObjective : MissionObjectiveBase
 
 	public override bool CheckCompletion() => Objectives.Any(x => x.CheckCompletion());
 
-	public override void Activate(MissionBase fromQuest)
+	public override void Activate(PlayerMissionBase fromQuest)
 	{
 		foreach (MissionObjectiveBase objective in Objectives)
 		{
@@ -137,13 +137,13 @@ public class BranchingObjective : MissionObjectiveBase
 	{
 		base.LoadData(tag);
 
-		MissionBase.LoadObjectives(tag, Objectives);
+		PlayerMissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
 
-		MissionBase.SaveObjectives(tag, Objectives);
+		PlayerMissionBase.SaveObjectives(tag, Objectives);
 	}
 }

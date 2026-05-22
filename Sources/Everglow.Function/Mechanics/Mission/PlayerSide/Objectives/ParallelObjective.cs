@@ -75,7 +75,7 @@ public class ParallelObjective : MissionObjectiveBase
 		}
 	}
 
-	public override void Activate(MissionBase mission)
+	public override void Activate(PlayerMissionBase mission)
 	{
 		foreach (var objective in _objectives)
 		{
@@ -96,12 +96,12 @@ public class ParallelObjective : MissionObjectiveBase
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		MissionBase.LoadObjectives(tag, Objectives);
+		PlayerMissionBase.LoadObjectives(tag, Objectives);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		MissionBase.SaveObjectives(tag, Objectives);
+		PlayerMissionBase.SaveObjectives(tag, Objectives);
 	}
 }

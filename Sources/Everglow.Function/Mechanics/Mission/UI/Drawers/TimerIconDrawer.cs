@@ -11,7 +11,7 @@ internal class TimerIconDrawer : DrawerItem
 	public int Size;
 	public Color Color;
 	public int Thickness;
-	private MissionBase _mission;
+	private PlayerMissionBase _mission;
 
 	public override string ToString()
 	{

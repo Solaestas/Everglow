@@ -24,9 +24,9 @@ public class UIMissionItem : UIBlock
 
 	private float oldScale;
 
-	public MissionBase Mission { get; private set; }
+	public PlayerMissionBase Mission { get; private set; }
 
-	public UIMissionItem(MissionBase missionBase)
+	public UIMissionItem(PlayerMissionBase missionBase)
 	{
 		Mission = missionBase;
 		PanelColor = Color.Transparent;

@@ -10,9 +10,9 @@ public static class PlayerMissionManager
 {
 	public const int UpdateInterval = 20;
 
-	private static List<MissionBase> _missions;
+	private static List<PlayerMissionBase> _missions;
 
-	public static IReadOnlyList<MissionBase> Missions => _missions;
+	public static IReadOnlyList<PlayerMissionBase> Missions => _missions;
 
 	/// <summary>
 	/// 历史杀怪计数
@@ -22,7 +22,7 @@ public static class PlayerMissionManager
 	/// <summary>
 	/// 已接受任务的任务池
 	/// </summary>
-	private static IEnumerable<MissionBase> AcceptedMissions => _missions.Where(m => m.PoolType == PlayerMissionState.Accepted);
+	private static IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.PoolType == PlayerMissionState.Accepted);
 
 	/// <summary>
 	/// 历史杀怪计数
@@ -184,7 +184,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <returns></returns>
-	public static MissionBase GetMission(string missionName) =>
+	public static PlayerMissionBase GetMission(string missionName) =>
 		_missions.FirstOrDefault(m => m.Name == missionName);
 
 	/// <summary>
@@ -194,14 +194,14 @@ public static class PlayerMissionManager
 	/// <param name="type">任务池类型</param>
 	/// <returns>任务池内所有该类型的任务</returns>
 	public static List<T> GetMissions<T>()
-		where T : MissionBase =>
+		where T : PlayerMissionBase =>
 		_missions.OfType<T>().ToList();
 
 	/// <summary>
 	/// Checks if a mission exists by type
 	/// </summary>
 	public static bool HasMission<T>()
-		where T : MissionBase =>
+		where T : PlayerMissionBase =>
 		HasMission(m => m is T);
 
 	/// <summary>
@@ -213,7 +213,7 @@ public static class PlayerMissionManager
 	/// <summary>
 	/// Internal implementation for mission checking
 	/// </summary>
-	private static bool HasMission(Func<MissionBase, bool> predicate) =>
+	private static bool HasMission(Func<PlayerMissionBase, bool> predicate) =>
 		_missions.Any(predicate);
 
 	/// <summary>
@@ -221,7 +221,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="mission">任务</param>
 	/// <param name="type">任务池类型</param>
-	public static void AddMission(MissionBase mission, PlayerMissionState type, bool showText = true)
+	public static void AddMission(PlayerMissionBase mission, PlayerMissionState type, bool showText = true)
 	{
 		if (!HasMission(mission.Name))
 		{
@@ -245,7 +245,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="predicate">删除范围</param>
 	/// <returns></returns>
-	private static bool RemoveMission(Func<MissionBase, bool> predicate)
+	private static bool RemoveMission(Func<PlayerMissionBase, bool> predicate)
 	{
 		foreach (var m in _missions.Where(predicate))
 		{
@@ -278,7 +278,7 @@ public static class PlayerMissionManager
 	/// <param name="type"></param>
 	/// <returns></returns>
 	public static bool RemoveMission<T>()
-		where T : MissionBase =>
+		where T : PlayerMissionBase =>
 		RemoveMission(m => m is T);
 
 	/// <summary>
@@ -306,7 +306,7 @@ public static class PlayerMissionManager
 	/// <param name="mission">任务实例</param>
 	/// <param name="fromType">任务目前所处任务池</param>
 	/// <param name="toType">目标任务池</param>
-	public static void MoveMission(MissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
+	public static void MoveMission(PlayerMissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
 	{
 		if (fromType == toType)
 		{
@@ -331,7 +331,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static List<MissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.PoolType == type).ToList();
+	public static List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.PoolType == type).ToList();
 
 	#endregion
 
@@ -372,7 +372,7 @@ public static class PlayerMissionManager
 		}
 
 		// Load missions.
-		var missions = new List<MissionBase>();
+		var missions = new List<PlayerMissionBase>();
 
 		if (tag.TryGet<IList<TagCompound>>(nameof(_missions), out var missionTags))
 		{
@@ -383,7 +383,7 @@ public static class PlayerMissionManager
 				{
 					var type = Ins.ModuleManager.Types.FirstOrDefault(t => t.FullName == typeName);
 					if (type != null
-						&& Activator.CreateInstance(type) is MissionBase m)
+						&& Activator.CreateInstance(type) is PlayerMissionBase m)
 					{
 						m.LoadData(data);
 						missions.Add(m);

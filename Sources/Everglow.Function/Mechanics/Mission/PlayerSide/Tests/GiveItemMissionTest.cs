@@ -5,7 +5,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Tests.ExampleNPC;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class GiveItemMissionTest : MissionBase
+public class GiveItemMissionTest : PlayerMissionBase
 {
 	public override string DisplayName => GetType().Name;
 

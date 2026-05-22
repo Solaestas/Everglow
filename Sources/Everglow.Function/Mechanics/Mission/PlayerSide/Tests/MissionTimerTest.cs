@@ -7,7 +7,7 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
-public class MissionTimerTest : MissionBase
+public class MissionTimerTest : PlayerMissionBase
 {
 	public override string DisplayName => GetType().Name;
 
