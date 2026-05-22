@@ -26,18 +26,69 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		var types = GetMissionNPCTypes();
-		bool valid = types.Contains(npc.type);
-		if (valid)
+		var killTypes = GetKillNPCTypes();
+		if (killTypes.Contains(npc.type))
 		{
 			Texture2D tex = ModAsset.MissionExclamationMark.Value;
-			float scale = (1f + (float)Math.Sin(Main.time * 0.24f) * 0.14f) * 0.16f;
+			float scale = (1f + (float)Math.Sin(Main.timeForVisualEffects * 0.24f) * 0.14f) * 0.16f;
 			Color color = new Color(1f, 0.7f, 0.5f, 1f);
+			spriteBatch.Draw(tex, new Vector2(npc.Center.X, npc.Center.Y - 36) - Main.screenPosition, null, color, 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
+		}
+
+		var talkTypes = GetTalkNPCTypes();
+		if (talkTypes.Contains(npc.type))
+		{
+			Texture2D tex = ModAsset.MissionExclamationMark.Value;
+			float scale = (1f + (float)Math.Sin(Main.timeForVisualEffects * 0.24f) * 0.14f) * 0.16f;
+			Color color = new Color(0.5f, 0.8f, 1f, 1f);
 			spriteBatch.Draw(tex, new Vector2(npc.Center.X, npc.Center.Y - 36) - Main.screenPosition, null, color, 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 		}
 	}
 
-	public static IEnumerable<int> GetMissionNPCTypes()
+	public static IEnumerable<int> GetTalkNPCTypes()
+	{
+		var missions = PlayerMissionManager.GetMissionPool(PlayerMissionState.Accepted);
+
+		// Flatten all objectives recursively and filter for TalkObjective
+		var playerSideNPCs = missions
+			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
+			.Select(o =>
+			{
+				if (o is TalkNPCObjective talkObjective)
+				{
+					return talkObjective.NPCType;
+				}
+				else if (o is GiveItemObjective giveObjective)
+				{
+					return giveObjective.NPCType;
+				}
+				else
+				{
+					return NPCID.None;
+				}
+			});
+
+		var worldSideNPCs = WorldMissionManager.Instance.ActiveMissions
+			.SelectMany(m => m.ActiveObjectives)
+			.Select(o =>
+			{
+				if (o is WorldTalkObjective talkObjective)
+				{
+					return talkObjective.NPCType;
+				}
+				else if (o is WorldGiveObjective giveObjective)
+				{
+					return giveObjective.NPCType;
+				}
+				else
+				{
+					return NPCID.None;
+				}
+			}).Distinct();
+		return playerSideNPCs.Concat(worldSideNPCs).Distinct();
+	}
+
+	public static IEnumerable<int> GetKillNPCTypes()
 	{
 		var missions = PlayerMissionManager.GetMissionPool(PlayerMissionState.Accepted);
 
@@ -45,7 +96,6 @@ public class MissionGlobalNPC : GlobalNPC
 		var playerSideNPCs = missions
 			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
 			.OfType<KillNPCObjective>()
-			.Where(o => !o.Completed)
 			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
 
 		var worldSideNPCs = WorldMissionManager.Instance.ActiveMissions
@@ -55,14 +105,6 @@ public class MissionGlobalNPC : GlobalNPC
 				if (o is WorldKillNPCObjective killObjective)
 				{
 					return killObjective.NPCType;
-				}
-				else if (o is WorldTalkObjective talkObjective)
-				{
-					return talkObjective.NPCType;
-				}
-				else if (o is WorldGiveObjective giveObjective)
-				{
-					return giveObjective.NPCType;
 				}
 				else
 				{
