@@ -10,10 +10,9 @@ public static class MissionManager
 {
 	public const int UpdateInterval = 20;
 
-	/// <summary>
-	/// 任务池
-	/// </summary>
-	private static Dictionary<PlayerMissionState, List<MissionBase>> _missionPools;
+	private static List<MissionBase> _missions;
+
+	public static IReadOnlyList<MissionBase> Missions => _missions;
 
 	/// <summary>
 	/// 历史杀怪计数
@@ -23,7 +22,7 @@ public static class MissionManager
 	/// <summary>
 	/// 已接受任务的任务池
 	/// </summary>
-	private static List<MissionBase> AcceptedMissionPool => _missionPools[PlayerMissionState.Accepted];
+	private static IEnumerable<MissionBase> AcceptedMissions => _missions.Where(m => m.PoolType == PlayerMissionState.Accepted);
 
 	/// <summary>
 	/// 历史杀怪计数
@@ -41,8 +40,7 @@ public static class MissionManager
 	{
 		if (!Main.dedServ)
 		{
-			_missionPools = Enum.GetValues<PlayerMissionState>()
-				.ToDictionary(t => t, _ => new List<MissionBase>());
+			_missions = [];
 			_nPCKillCounter = [];
 
 			Main.OnTickForInternalCodeOnly += Update;
@@ -55,7 +53,7 @@ public static class MissionManager
 	{
 		if (!Main.dedServ)
 		{
-			_missionPools = null;
+			_missions = null;
 			_nPCKillCounter = null;
 			Main.OnTickForInternalCodeOnly -= Update;
 			MissionGlobalNPC.OnKillNPCEvent -= MissionGlobalNPC_SpecialOnKill_CountKill;
@@ -74,9 +72,12 @@ public static class MissionManager
 		}
 
 		_nPCKillCounter = data.NPCKillCounter.ToDictionary();
-		_missionPools = data.MissionPools.ToDictionary();
+		_missions = data.MissionPools.ToList();
 
-		AcceptedMissionPool.ForEach(x => x.Activate());
+		foreach (var m in AcceptedMissions)
+		{
+			m.Activate();
+		}
 	}
 
 	/// <summary>
@@ -85,16 +86,13 @@ public static class MissionManager
 	public static void Clear()
 	{
 		// Clear all events.
-		foreach (var m in _missionPools.SelectMany(x => x.Value))
+		foreach (var m in _missions)
 		{
 			m.Deactivate();
 		}
 
 		_nPCKillCounter.Clear();
-		foreach (var (_, missionPool) in _missionPools)
-		{
-			missionPool.Clear();
-		}
+		_missions.Clear();
 	}
 
 	#endregion
@@ -118,10 +116,13 @@ public static class MissionManager
 		}
 
 		// 更新所有任务
-		AcceptedMissionPool.ForEach(m => m.Update());
+		foreach (var m in AcceptedMissions)
+		{
+			m.Update();
+		}
 
 		// 处理自动提交任务
-		var autoCommitMissions = AcceptedMissionPool.Where(m => m.CheckComplete() && m.AutoComplete).ToList();
+		var autoCommitMissions = AcceptedMissions.Where(m => m.CheckComplete() && m.AutoComplete).ToList();
 		if (autoCommitMissions.Count > 0)
 		{
 			autoCommitMissions.ForEach(m => m.OnComplete());
@@ -129,7 +130,7 @@ public static class MissionManager
 		}
 
 		// 处理过期任务
-		var expiredMissions = AcceptedMissionPool.Where(m => m.CheckExpire()).ToList();
+		var expiredMissions = AcceptedMissions.Where(m => m.CheckExpire()).ToList();
 		if (expiredMissions.Count > 0)
 		{
 			expiredMissions.ForEach(m => m.OnExpire());
@@ -137,7 +138,7 @@ public static class MissionManager
 		}
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
-		foreach (var m in AcceptedMissionPool.ToList())
+		foreach (var m in AcceptedMissions.ToList())
 		{
 			if (m.CheckComplete() != m.OldCheckComplete)
 			{
@@ -179,78 +180,41 @@ public static class MissionManager
 	#region Manager Logic
 
 	/// <summary>
+	/// 获取某个任务
+	/// </summary>
+	/// <param name="missionName">任务名字，或者说 ID</param>
+	/// <returns></returns>
+	public static MissionBase GetMission(string missionName) =>
+		_missions.FirstOrDefault(m => m.Name == missionName);
+
+	/// <summary>
 	/// 获取某个类型的所有任务
 	/// </summary>
 	/// <typeparam name="T">任务的类型</typeparam>
 	/// <param name="type">任务池类型</param>
 	/// <returns>任务池内所有该类型的任务</returns>
-	public static List<T> GetMissions<T>(PlayerMissionState type)
-		where T : MissionBase => _missionPools[type].FindAll(m => m is T).ConvertAll(m => (T)m);
-
-	/// <summary>
-	/// 获取某个任务
-	/// </summary>
-	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <param name="type">任务池类型</param>
-	/// <returns></returns>
-	public static MissionBase GetMission(string missionName, PlayerMissionState type) =>
-		_missionPools[type].Find(m => m.Name == missionName);
-
-	/// <summary>
-	/// 获取某个任务
-	/// </summary>
-	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <returns></returns>
-	public static MissionBase GetMission(string missionName)
-	{
-		foreach (var mp in _missionPools)
-		{
-			var m = mp.Value.Find(m => m.Name == missionName);
-			if (m != null)
-			{
-				return m;
-			}
-		}
-		return null;
-	}
+	public static List<T> GetMissions<T>()
+		where T : MissionBase =>
+		_missions.OfType<T>().ToList();
 
 	/// <summary>
 	/// Checks if a mission exists by type
 	/// </summary>
-	public static bool HasMission<T>(PlayerMissionState? type = null)
+	public static bool HasMission<T>()
 		where T : MissionBase =>
-		HasMission(m => m is T, type);
+		HasMission(m => m is T);
 
 	/// <summary>
 	/// Checks if a mission exists by name
 	/// </summary>
-	public static bool HasMission(string missionName, PlayerMissionState? type = null) =>
-		HasMission(m => m.Name == missionName, type);
+	public static bool HasMission(string missionName) =>
+		HasMission(m => m.Name == missionName);
 
 	/// <summary>
 	/// Internal implementation for mission checking
 	/// </summary>
-	private static bool HasMission(Func<MissionBase, bool> predicate, PlayerMissionState? type = null)
-	{
-		if (type.HasValue)
-		{
-			return _missionPools.TryGetValue(type.Value, out var missions)
-				? missions.Any(predicate)
-				: false;
-		}
-		else
-		{
-			foreach (var pool in _missionPools.Values)
-			{
-				if (pool.Any(predicate))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}
+	private static bool HasMission(Func<MissionBase, bool> predicate) =>
+		_missions.Any(predicate);
 
 	/// <summary>
 	/// 向任务池中添加任务
@@ -261,7 +225,7 @@ public static class MissionManager
 	{
 		if (!HasMission(mission.Name))
 		{
-			_missionPools[type].Add(mission);
+			_missions.Add(mission);
 			mission.PoolType = type;
 
 			if (showText)
@@ -279,48 +243,23 @@ public static class MissionManager
 	/// <summary>
 	/// 移除任务池内指定条件的所有任务
 	/// </summary>
-	/// <typeparam name="T">任务类型</typeparam>
-	/// <param name="type">任务池类型</param>
+	/// <param name="predicate">删除范围</param>
 	/// <returns></returns>
-	private static bool RemoveMission(Func<MissionBase, bool> predicate, PlayerMissionState? type = null)
+	private static bool RemoveMission(Func<MissionBase, bool> predicate)
 	{
-		if (type.HasValue)
+		foreach (var m in _missions.Where(predicate))
 		{
-			var missions = _missionPools[type.Value];
-			foreach (var m in missions.Where(predicate))
-			{
-				m.Deactivate();
-			}
-
-			var removed = missions.RemoveAll(m => predicate(m));
-
-			if (removed > 0)
-			{
-				NeedRefresh = true;
-			}
-
-			return removed > 0;
+			m.Deactivate();
 		}
-		else
+
+		var removed = _missions.RemoveAll(m => predicate(m));
+
+		if (removed > 0)
 		{
-			var removed = 0;
-			foreach (var pool in _missionPools.Values)
-			{
-				foreach (var m in pool.Where(predicate))
-				{
-					m.Deactivate();
-				}
-
-				removed += pool.RemoveAll(m => predicate(m));
-			}
-
-			if (removed > 0)
-			{
-				NeedRefresh = true;
-			}
-
-			return removed > 0;
+			NeedRefresh = true;
 		}
+
+		return removed > 0;
 	}
 
 	/// <summary>
@@ -329,18 +268,18 @@ public static class MissionManager
 	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static bool RemoveMission(string missionName, PlayerMissionState? type = null) =>
-		RemoveMission(m => m.Name == missionName, type);
+	public static bool RemoveMission(string missionName) =>
+		RemoveMission(m => m.Name == missionName);
 
 	/// <summary>
 	/// 移除任务池内某个任务
 	/// </summary>
-	/// <param name="mission"></param>
+	/// <typeparam name="T">任务类型</typeparam>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	public static bool RemoveMission<T>(PlayerMissionState? type = null)
+	public static bool RemoveMission<T>()
 		where T : MissionBase =>
-		RemoveMission(m => m is T, type);
+		RemoveMission(m => m is T);
 
 	/// <summary>
 	/// 将某个任务从目前任务池移到另一个
@@ -351,7 +290,7 @@ public static class MissionManager
 	/// <returns>是否成功</returns>
 	public static bool MoveMission(string missionName, PlayerMissionState fromType, PlayerMissionState toType)
 	{
-		var mission = _missionPools[fromType].Find(m => m.Name == missionName);
+		var mission = _missions.FirstOrDefault(m => m.Name == missionName);
 		if (mission == null)
 		{
 			return false;
@@ -369,8 +308,11 @@ public static class MissionManager
 	/// <param name="toType">目标任务池</param>
 	public static void MoveMission(MissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
 	{
-		_missionPools[fromType].Remove(mission);
-		_missionPools[toType].Add(mission);
+		if (fromType == toType)
+		{
+			return;
+		}
+
 		mission.PoolType = toType;
 
 		if (toType == PlayerMissionState.Accepted)
@@ -389,7 +331,7 @@ public static class MissionManager
 	/// </summary>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static List<MissionBase> GetMissionPool(PlayerMissionState type) => _missionPools[type][..];
+	public static List<MissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.PoolType == type).ToList();
 
 	#endregion
 
@@ -403,21 +345,15 @@ public static class MissionManager
 	public static void SaveData(TagCompound tag)
 	{
 		tag.Add(nameof(_nPCKillCounter), _nPCKillCounter.ToList());
-
-		foreach (var (poolType, missionPool) in _missionPools)
+		tag.Add(nameof(_missions), _missions.ConvertAll(m =>
 		{
-			tag.Add(
-				$"Everglow.MissionManage.{poolType}.Type",
-				missionPool.ConvertAll(m => m.GetType().FullName));
-			tag.Add(
-				$"Everglow.MissionManage.{poolType}.Missions",
-				missionPool.ConvertAll(m =>
-				{
-					TagCompound t = [];
-					m.SaveData(t);
-					return t;
-				}));
-		}
+			TagCompound mainT = [];
+			TagCompound t = [];
+			m.SaveData(t);
+			mainT.Add("Type", m.GetType().FullName);
+			mainT.Add("Data", t);
+			return mainT;
+		}));
 	}
 
 	/// <summary>
@@ -436,38 +372,35 @@ public static class MissionManager
 		}
 
 		// Load missions.
-		var missionPools = new Dictionary<PlayerMissionState, List<MissionBase>>();
-		foreach (var missionPoolType in Enum.GetValues<PlayerMissionState>())
-		{
-			missionPools.Add(missionPoolType, []);
-		}
+		var missions = new List<MissionBase>();
 
-		foreach (var (poolType, missionPool) in missionPools)
+		if (tag.TryGet<IList<TagCompound>>(nameof(_missions), out var missionTags))
 		{
-			string poolTypeKey = $"Everglow.MissionManage.{poolType}.Type";
-			string poolMissionKey = $"Everglow.MissionManage.{poolType}.Missions";
-			if (tag.TryGet<IList<string>>(poolTypeKey, out var missionTypes)
-				&& tag.TryGet<IList<TagCompound>>(poolMissionKey, out var missions))
+			foreach (var mTag in missionTags)
 			{
-				for (int i = 0; i < missionTypes.Count; i++)
+				if (mTag.TryGet<string>("Type", out var typeName)
+					&& mTag.TryGet<TagCompound>("Data", out var data))
 				{
-					var type = Ins.ModuleManager.Types.FirstOrDefault(t => t.FullName == missionTypes[i]);
+					var type = Ins.ModuleManager.Types.FirstOrDefault(t => t.FullName == typeName);
 					if (type != null
 						&& Activator.CreateInstance(type) is MissionBase m)
 					{
-						m.LoadData(missions[i]);
-						missionPool.Add(m);
-						m.PoolType = poolType;
+						m.LoadData(data);
+						missions.Add(m);
 					}
 					else
 					{
-						Ins.Logger.Warn($"Invalid type {missionTypes[i]} detected from player file.");
+						Ins.Logger.Warn($"Invalid type {typeName} detected from player file.");
 					}
+				}
+				else
+				{
+					Ins.Logger.Warn($"Invalid mission data detected from player file.");
 				}
 			}
 		}
 
-		return new MissionManagerData(nPCKillCounter, missionPools);
+		return new MissionManagerData(nPCKillCounter, missions);
 	}
 
 	#endregion
