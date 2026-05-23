@@ -179,10 +179,10 @@ public class DarkFlower_Proj : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, CustomBlendStates.Subtract, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
 
-		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Terraria/Images/Extra_189", AssetRequestMode.ImmediateLoad).Value;
-		Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 		if (bars.Count >= 3)
 		{
+			Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>("Terraria/Images/Extra_189", AssetRequestMode.ImmediateLoad).Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		Main.spriteBatch.End();
@@ -190,6 +190,8 @@ public class DarkFlower_Proj : ModProjectile
 
 		DrawOnCenter(tex, Projectile.Center - Main.screenPosition, new Color(0.5f, 1f, 0.8f) * alpha, Projectile.rotation, Projectile.scale);
 
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		EliminateLight.AddVirtualWall_Circle(Projectile.Center, (12 - Projectile.ai[1]) * 10f);
