@@ -1,8 +1,37 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.EliminateLight;
 
 public class EliminateLight
 {
 	public static List<Point> Point_BlockLightAsWall = new List<Point>();
+
+	/// <summary>
+	/// List x, y, r
+	/// </summary>
+	public static List<Vector3> Point_BlockLight_Circle = new List<Vector3>();
+
+	public static List<List<Vector2>> Point_BlockLight_Polygon = new List<List<Vector2>>();
+
+	public static void AddVirtualWall_Circle(Vector2 center, float r)
+	{
+		Vector3 circle = new Vector3(center, r);
+		if(!Point_BlockLight_Circle.Contains(circle))
+		{
+			Point_BlockLight_Circle.Add(circle);
+		}
+	}
+
+	public static void AddVirtualWall_Polygon(List<Vector2> polygon)
+	{
+		if(polygon.Count >= 3)
+		{
+			if(!Point_BlockLight_Polygon.Contains(polygon))
+			{
+				Point_BlockLight_Polygon.Add(polygon);
+			}
+		}
+	}
 
 	public static void AddVirtualWall_Rectangle_XXYY(int x0, int y0, int x1, int y1)
 	{
@@ -41,22 +70,30 @@ public class EliminateLight
 		}
 	}
 
-	private static readonly object _lockObj = new object();
-
 	public static void WallLightWithFakeBlock(int x, int y, ref Vector3 lightColor)
 	{
-		lock (_lockObj)
+		foreach(var circle in Point_BlockLight_Circle)
 		{
-			for (int t = Point_BlockLightAsWall.Count - 1; t >= 0; t--)
+			bool inCircle = Math.Pow(x - circle.X / 16, 2) + Math.Pow(y - circle.Y / 16, 2) <= Math.Pow(circle.Z / 16, 2);
+			if(inCircle)
 			{
-				Point pos = Point_BlockLightAsWall[t];
-				if (pos.X == x && pos.Y == y)
-				{
-					lightColor *= 0;
-					Point_BlockLightAsWall.RemoveAt(t);
-					break;
-				}
+				lightColor *= 0;
+				return;
 			}
+		}
+		foreach (var polygon in Point_BlockLight_Polygon)
+		{
+			bool inPolygon = MathUtils.IsPointInPolygon(polygon, new Point(x, y).ToWorldCoordinates());
+			if (inPolygon)
+			{
+				lightColor *= 0;
+				return;
+			}
+		}
+		if (Point_BlockLightAsWall.Contains(new Point(x, y)))
+		{
+			lightColor *= 0;
+			return;
 		}
 	}
 }
