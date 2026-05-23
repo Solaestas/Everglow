@@ -1,5 +1,5 @@
-using Everglow.Commons.EliminateLight;
 using Everglow.Commons.Enums;
+using Everglow.Commons.Mechanics.EliminateLight;
 
 namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
@@ -81,7 +81,7 @@ internal class LunarFlareArray : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		EliminateLight.AddVirtualWall_Circle(Projectile.Center, 400 * Projectile.scale);
+		EliminateLightManager.AddCircle(Projectile.Center, 400 * Projectile.scale);
 		return false;
 	}
 

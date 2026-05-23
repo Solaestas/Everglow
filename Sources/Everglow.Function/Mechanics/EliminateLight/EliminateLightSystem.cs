@@ -1,9 +1,9 @@
 using Terraria.Graphics.Light;
 using Terraria.Utilities;
 
-namespace Everglow.Commons.EliminateLight;
+namespace Everglow.Commons.Mechanics.EliminateLight;
 
-public class EliminateLight_Hooks : ModSystem
+public class EliminateLightSystem : ModSystem
 {
 	public override void Load()
 	{
@@ -16,13 +16,13 @@ public class EliminateLight_Hooks : ModSystem
 	private void On_TileLightScanner_ApplyWallLight(On_TileLightScanner.orig_ApplyWallLight orig, TileLightScanner self, Tile tile, int x, int y, ref FastRandom localRandom, ref Vector3 lightColor)
 	{
 		orig(self, tile, x, y, ref localRandom, ref lightColor);
-		EliminateLight.CheckEliminateLight(x, y, ref lightColor);
+		EliminateLightManager.ApplyEliminateLight(x, y, ref lightColor);
 	}
 
 	private void On_TileLightScanner_ExportTo(On_TileLightScanner.orig_ExportTo orig, TileLightScanner self, Rectangle area, LightMap outputMap, TileLightScannerOptions options)
 	{
 		orig(self, area, outputMap, options);
-		EliminateLight.Clear();
+		EliminateLightManager.Clear();
 	}
 
 	/// <summary>

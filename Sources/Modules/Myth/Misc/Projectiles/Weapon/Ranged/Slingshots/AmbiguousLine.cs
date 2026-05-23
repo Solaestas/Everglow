@@ -1,5 +1,5 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.EliminateLight;
+using Everglow.Commons.Mechanics.EliminateLight;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
@@ -44,7 +44,7 @@ public class AmbiguousLine : ModProjectile
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-		EliminateLight.AddVirtualWall_Circle(Projectile.Center, Projectile.timeLeft);
+		EliminateLightManager.AddCircle(Projectile.Center, Projectile.timeLeft);
 		return false;
 	}
 

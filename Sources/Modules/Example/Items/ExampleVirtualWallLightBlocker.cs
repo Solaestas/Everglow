@@ -1,4 +1,4 @@
-using Everglow.Commons.EliminateLight;
+using Everglow.Commons.Mechanics.EliminateLight;
 
 namespace Everglow.Example.Items;
 
@@ -19,7 +19,7 @@ public class ExampleVirtualWallLightBlocker : ModItem
 				}
 				polygon.Add(Main.MouseWorld + new Vector2(0, -range * 16 * mulRange).RotatedBy(i / 10f * MathHelper.TwoPi + Main.GlobalTimeWrappedHourly));
 			}
-			EliminateLight.AddVirtualWall_Polygon(polygon);
+			EliminateLightManager.AddPolygon(polygon);
 		}
 		base.HoldItem(player);
 	}

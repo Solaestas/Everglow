@@ -1,4 +1,4 @@
-using Everglow.Commons.EliminateLight;
+using Everglow.Commons.Mechanics.EliminateLight;
 using Everglow.Commons.Templates.Weapons.Slingshots;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
@@ -88,7 +88,7 @@ public class AmbiguousNightHit : ModProjectile
 			float lightValue = Projectile.timeLeft - 290;
 			Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), lightValue * lightValue / 100f, lightValue * lightValue / 100f, lightValue);
 		}
-		EliminateLight.AddVirtualWall_Circle(Projectile.Center, Projectile.timeLeft * Projectile.ai[0] * 8f);
+		EliminateLightManager.AddCircle(Projectile.Center, Projectile.timeLeft * Projectile.ai[0] * 8f);
 		return false;
 	}
 }

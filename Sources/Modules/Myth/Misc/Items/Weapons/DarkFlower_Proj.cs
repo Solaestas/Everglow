@@ -1,6 +1,6 @@
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.EliminateLight;
 using Everglow.Commons.Graphics;
+using Everglow.Commons.Mechanics.EliminateLight;
 using Everglow.Commons.VFX.CommonVFXDusts;
 using ReLogic.Content;
 
@@ -194,7 +194,7 @@ public class DarkFlower_Proj : ModProjectile
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-		EliminateLight.AddVirtualWall_Circle(Projectile.Center, (12 - Projectile.ai[1]) * 10f);
+		EliminateLightManager.AddCircle(Projectile.Center, (12 - Projectile.ai[1]) * 10f);
 		return false;
 	}
 
