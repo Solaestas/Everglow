@@ -19,8 +19,7 @@ public class ExampleVirtualWallLightBlocker : ModItem
 				}
 				polygon.Add(Main.MouseWorld + new Vector2(0, -range * 16 * mulRange).RotatedBy(i / 10f * MathHelper.TwoPi + Main.GlobalTimeWrappedHourly));
 			}
-		//	EliminateLight.AddVirtualWall_Polygon(polygon);
-			EliminateLight.AddVirtualWall_Rectangle_XYWH(Main.MouseWorld.ToTileCoordinates().X, Main.MouseWorld.ToTileCoordinates().Y, 100, 100);
+			EliminateLight.AddVirtualWall_Polygon(polygon);
 		}
 		base.HoldItem(player);
 	}
