@@ -1,3 +1,4 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Terraria.GameContent.Drawing;
@@ -70,7 +71,6 @@ public class KelpMoss : ModTile, ITileFluentlyDrawn
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		//Main.instance.TilesRenderer.CrawlToTopOfVineAndAddSpecialPoint(j, i);
 		if (Main.tile[i, j - 1].TileType != Type)
 		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
@@ -80,7 +80,7 @@ public class KelpMoss : ModTile, ITileFluentlyDrawn
 
 	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
-		DrawVineStrip(screenPosition, Vector2.zeroVector, pos.X, pos.Y, tileDrawing);
+		DrawAlgae(pos, pos.ToWorldCoordinates() - screenPosition, spriteBatch, tileDrawing);
 	}
 
 	/// <summary>
@@ -91,93 +91,103 @@ public class KelpMoss : ModTile, ITileFluentlyDrawn
 	/// <param name="offSet"></param>
 	/// <param name="x"></param>
 	/// <param name="startY"></param>
-	private void DrawVineStrip(Vector2 screenPosition, Vector2 offSet, int x, int startY, TileDrawing tileDrawing)
+	private void DrawAlgae(Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
-		int num = 0;
-		int num2 = 0;
-		Vector2 value = new Vector2(x * 16 + 8, startY * 16 - 2);
-		float amount = Math.Abs(Main.WindForVisuals) / 1.2f;
-		amount = MathHelper.Lerp(0.2f, 1f, amount);
-		float num3 = -0.08f * amount;
-		float windCycle = tileDrawing.GetWindCycle(x, startY, tileDrawing._vineWindCounter);
-		float num4 = 0f;
-		float num5 = 0f;
-		for (int i = startY; i < Main.maxTilesY - 10; i++)
+		int maxCount = 40;
+		Vector2 lastSegmentPos = drawCenterPos - new Vector2(0, 24);
+		float lastRot = 0;
+		int xStyle = TileUtils.GetFixedRandomNumber_SingleSeed(tilePos.X, 3);
+		Rectangle lastFrame = new Rectangle(xStyle * 34, 0, 32, 16);
+		bool tail = false;
+		Texture2D dropTex = ModAsset.KelpMoss.Value;
+		float displacement = 0;
+		for (int t = 0; t < maxCount; t++)
 		{
-			Tile tile = Main.tile[x, i];
-			bool flag = tile != null;
-			if (flag)
+			var tile = TileUtils.SafeGetTile(tilePos + new Point(0, t));
+			if (tile.TileType != Type)
 			{
-				ushort type = tile.type;
-				bool flag2 = !tile.active() || !TileID.Sets.VineThreads[type];
-				if (flag2)
+				break;
+			}
+			int paint = tile.TileColor;
+			Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.KelpMoss_Path, Type, 1, paint, tileDrawing);
+			tex ??= ModAsset.KelpMoss.Value;
+			float windCycle = 0;
+			if (tileDrawing.InAPlaceWithWind(tilePos.X, tilePos.Y, 1, 1))
+			{
+				windCycle = tileDrawing.GetWindCycle(tilePos.X, tilePos.Y + t, tileDrawing._sunflowerWindCounter);
+			}
+
+			int totalPushTime = 140;
+			float pushForcePerFrame = 0.96f;
+			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y + t, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
+			windCycle += highestWindGridPushComplex;
+			float rotation = -windCycle * 0.21f + displacement * 0.015f;
+			var tileLight = Lighting.GetColor(tilePos + new Point(0, t));
+			tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y - t, tile, Type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
+			tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.X, tilePos.Y - t, tile, Type, 0, 0, tileLight);
+			var origin = new Vector2(16, 0);
+			spriteBatch.Draw(tex, lastSegmentPos, lastFrame, tileLight, rotation, origin, 1f, SpriteEffects.None, 0);
+			lastRot = rotation;
+			Vector2 bone = new Vector2(0, 16).RotatedBy(lastRot);
+			lastSegmentPos += bone;
+			displacement += bone.X;
+			var tileBelow4 = TileUtils.SafeGetTile(tilePos + new Point(0, t + 4));
+			if ((!tileBelow4.HasTile || tileBelow4.TileType != Type) && !tail)
+			{
+				lastFrame.Y = 136;
+				for (int j = 1; j <= 3; j++)
 				{
-					break;
+					var tileBelow_j = TileUtils.SafeGetTile(tilePos + new Point(0, t + j));
+					if (!tileBelow_j.HasTile || tileBelow_j.TileType != Type)
+					{
+						lastFrame.Y += (4 - j) * 16;
+						break;
+					}
 				}
-				num++;
-				bool flag3 = num2 >= 5;
-				if (flag3)
+				tail = true;
+			}
+			if (tail)
+			{
+				lastFrame.Y += 16;
+			}
+			else
+			{
+				if (lastFrame.Y % 34 == 0)
 				{
-					num3 += 0.0075f * amount;
+					lastFrame.Y += 16;
 				}
-				bool flag4 = num2 >= 2;
-				if (flag4)
+				else
 				{
-					num3 += 0.0025f;
+					lastFrame.Y = TileUtils.GetFixedRandomNumber(t + tilePos.Y, tilePos.X, 3) * 34 + 34;
 				}
-				bool flag5 = WallID.Sets.AllowsWind[tile.wall] && i < Main.worldSurface;
-				if (flag5)
-				{
-					num2++;
-				}
-				float windGridPush = tileDrawing.GetWindGridPush(x, i, 20, 0.01f);
-				num4 = (windGridPush != 0f || num5 == 0f) ? (num4 - windGridPush) : (num4 * -0.78f);
-				num5 = windGridPush;
-				short tileFrameX = tile.frameX;
-				short tileFrameY = tile.frameY;
-				Color color = Lighting.GetColor(x, i);
-				//color *= 2.4f;
-				int tileWidth;
-				int tileHeight;
-				int tileTop;
-				int halfBrickHeight;
-				int addFrX;
-				int addFrY;
-				SpriteEffects tileSpriteEffect;
-				Texture2D texture2D;
-				Rectangle rectangle;
-				Color color2;
-				tileDrawing.GetTileDrawData(x, i, tile, type, ref tileFrameX, ref tileFrameY, out tileWidth, out tileHeight, out tileTop, out halfBrickHeight, out addFrX, out addFrY, out tileSpriteEffect, out texture2D, out rectangle, out color2);
-				Vector2 position = new Vector2((float)(-(float)((int)screenPosition.X)), (float)(-(float)((int)screenPosition.Y))) + offSet + value;
-				bool flag6 = tile.color() == 31;
-				if (flag6)
-				{
-					color = Color.White;
-				}
-				float num6 = num2 * num3 * windCycle + num4;
-				Texture2D tileDrawTexture = ModAsset.KelpMoss_II.Value;
-				bool flag7 = tileDrawTexture == null;
-				if (flag7)
-				{
-					break;
-				}
-				color.A = 0;
-				Main.spriteBatch.Draw(tileDrawTexture, position, new Rectangle?(new Rectangle(tileFrameX + addFrX, tileFrameY + addFrY, tileWidth, tileHeight - halfBrickHeight)), color, num6, new Vector2(tileWidth / 2, halfBrickHeight - tileTop), 1f, tileSpriteEffect, 0f);
-				value += (num6 + 1.5707964f).ToRotationVector2() * 16f;
 			}
 		}
-	}
-
-	public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
-	{
-		offsetY = -2;
-	}
-
-	public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects)
-	{
-		if (i % 2 == 0)
+		Vector2 dropOffset = new Vector2(0);
+		switch (xStyle)
 		{
-			spriteEffects = SpriteEffects.FlipHorizontally;
+			case 0:
+				dropOffset = new Vector2(3, 0);
+				break;
+			case 1:
+				dropOffset = new Vector2(1, 0);
+				break;
+			case 2:
+				dropOffset = new Vector2(-1, 0);
+				break;
 		}
+
+		Vector2 worldPos_drop = lastSegmentPos + Main.screenPosition + dropOffset.RotatedBy(lastRot);
+		float dropValue = (TileUtils.GetFixedRandomNumber(tilePos, 600) + (int)Main.time) % 600 - 300;
+		if(dropValue < 0)
+		{
+			dropValue = 0;
+		}
+		if(dropValue == 299 && !Main.gamePaused)
+		{
+			Dust.NewDustPerfect(worldPos_drop, ModContent.DustType<KelpWaterDrop>(), Vector2.zeroVector);
+		}
+		dropValue *= 2.5f / 600f;
+		var dropLight = Lighting.GetColor(worldPos_drop.ToTileCoordinates()) * dropValue;
+		spriteBatch.Draw(dropTex, lastSegmentPos + dropOffset.RotatedBy(lastRot), new Rectangle(0, 206, 2, 2), dropLight, 0, new Vector2(1), 1f, SpriteEffects.None, 0);
 	}
 }

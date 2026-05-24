@@ -532,6 +532,8 @@ public class KelpCurtainGeneration
 		}
 	}
 
+	#region IsleOfBloom
+
 	/// <summary>
 	/// 夭华洲
 	/// </summary>
@@ -602,6 +604,22 @@ public class KelpCurtainGeneration
 			PlaceCircleAreaOfBlockWithRandomNoise(tilePos + new Point(0, y), radius - 3, -1, 3, (int)TileChangeState.Forceful);
 			PlaceCircleAreaOfWallWithRandomNoise(tilePos + new Point(0, y), radius - 1, ModContent.WallType<OldMossWall>(), 3, (int)TileChangeState.HasWall);
 		}
+
+		// Cave Visual Effects
+		int wallStart = -51;
+		for (int y = -10; y < 200; y++)
+		{
+			var tile = SafeGetTile(tilePos + new Point(0, y));
+			if (tile.WallType > WallID.None && wallStart == -51)
+			{
+				wallStart = y;
+				break;
+			}
+		}
+		var rayTile = SafeGetTile(tilePos + new Point(0, wallStart + 5));
+		rayTile.WallType = (ushort)ModContent.WallType<OldMossWall>();
+		rayTile.TileType = (ushort)ModContent.TileType<IsleOfBloom_CaveRay>();
+		rayTile.HasTile = true;
 
 		// SubFloor Cave
 		List<Vector2> Cave0_Bound = new List<Vector2>();
@@ -1451,6 +1469,10 @@ public class KelpCurtainGeneration
 			}
 		}
 	}
+
+	#endregion
+
+	#region MazeUnderLake
 
 	/// <summary>
 	/// 水下迷宫
@@ -3061,6 +3083,8 @@ public class KelpCurtainGeneration
 
 		return (secondMinDist - minDist) < edgeThreshold;
 	}
+
+	#endregion
 
 	/// <summary>
 	/// 龙潭
