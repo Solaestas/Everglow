@@ -21,6 +21,5 @@ public class ExampleVirtualWallLightBlocker : ModItem
 			}
 			EliminateLightManager.AddPolygon(polygon);
 		}
-		base.HoldItem(player);
 	}
 }
