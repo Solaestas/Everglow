@@ -1,5 +1,6 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 
@@ -10,6 +11,7 @@ public abstract class SlingshotAmmo : ModProjectile
 	public override void SetStaticDefaults()
 	{
 	}
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;
@@ -26,34 +28,47 @@ public abstract class SlingshotAmmo : ModProjectile
 		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 30;
 		SetDef();
 	}
+
 	public virtual void SetDef()
 	{
-
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 	}
+
 	/// <summary>
 	/// 内部变量,别动
 	/// </summary>
 	protected int TimeTokill = -1;
+
 	/// <summary>
 	/// 碰撞长宽,默认10
 	/// </summary>
 	protected int HitBoxSize = 10;
+
 	/// <summary>
 	/// 撞激弹幕
 	/// </summary>
 	protected int HitProjType = ModContent.ProjectileType<NormalHit>();
+
 	public override void AI()
 	{
 		if (TimeTokill >= 0 && TimeTokill <= 2)
+		{
 			Projectile.Kill();
+		}
+
 		if (TimeTokill <= 15 && TimeTokill > 0)
+		{
 			Projectile.velocity = Projectile.oldVelocity;
+		}
+
 		TimeTokill--;
 		if (TimeTokill < 0)
+		{
 			Projectile.velocity.Y += 0.17f;
+		}
 		else
 		{
 			if (TimeTokill < 10)
@@ -63,7 +78,6 @@ public abstract class SlingshotAmmo : ModProjectile
 			}
 			Projectile.velocity *= 0f;
 		}
-
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)
@@ -74,6 +88,7 @@ public abstract class SlingshotAmmo : ModProjectile
 		AmmoHit();
 		return false;
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.ai[0] *= 0.4f;
@@ -81,6 +96,7 @@ public abstract class SlingshotAmmo : ModProjectile
 		Projectile.velocity *= 0.7f;
 		AmmoHit();
 	}
+
 	public virtual void AmmoHit()
 	{
 		Projectile.velocity = Projectile.oldVelocity;
@@ -91,10 +107,13 @@ public abstract class SlingshotAmmo : ModProjectile
 		}
 		SoundEngine.PlaySound(SoundID.NPCHit1.WithPitchOffset(1f), Projectile.Center);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		if (TimeTokill > 0)
+		{
 			return false;
+		}
 		else
 		{
 			var TexMain = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -107,10 +126,19 @@ public abstract class SlingshotAmmo : ModProjectile
 			return false;
 		}
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		DrawTrail();
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 	}
+
 	public virtual void DrawTrail()
 	{
 		float DrawC = Projectile.ai[0] * Projectile.ai[0];
@@ -122,7 +150,10 @@ public abstract class SlingshotAmmo : ModProjectile
 			if (Projectile.oldPos[i] == Vector2.Zero)
 			{
 				if (i == 1)
+				{
 					return;
+				}
+
 				break;
 			}
 
@@ -131,11 +162,16 @@ public abstract class SlingshotAmmo : ModProjectile
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
+			{
 				break;
+			}
 
 			float width = 6;
 			if (Projectile.timeLeft <= 30)
+			{
 				width *= Projectile.timeLeft / 30f;
+			}
+
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = new Vector2(-normalDir.Y, normalDir.X).SafeNormalize(Vector2.Zero);
 
@@ -144,7 +180,6 @@ public abstract class SlingshotAmmo : ModProjectile
 
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 0, 0)));
 			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width + new Vector2(10, 10) - Main.screenPosition, color, new Vector3(1, 1, 0)));
-
 		}
 
 		if (bars.Count > 2)
