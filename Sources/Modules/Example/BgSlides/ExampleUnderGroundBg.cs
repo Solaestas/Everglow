@@ -12,7 +12,7 @@ public class ExampleUnderGroundBg : BackgroundSlideBase
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
-		Texture = Terraria.GameContent.TextureAssets.Background[114].Value;
+		Texture = Commons.ModAsset.NoiseWave.Value;
 		Distance = 5f;
 		UseColorStyle = 1;
 		Shader = Effects.XWrap_YWrap_Shader;

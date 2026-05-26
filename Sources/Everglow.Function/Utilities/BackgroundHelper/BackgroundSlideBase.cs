@@ -38,7 +38,7 @@ public abstract class BackgroundSlideBase
 	public virtual void SetDefaults()
 	{
 		Distance = float.PositiveInfinity;
-		Shader = BackgroundSlideBase.Effects.XWrap_YClamp_Shader;
+		Shader = Effects.XWrap_YClamp_Shader;
 	}
 
 	public virtual void Update()
