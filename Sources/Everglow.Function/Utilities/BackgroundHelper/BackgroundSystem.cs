@@ -5,15 +5,51 @@ namespace Everglow.Commons.Utilities.BackgroundHelper;
 
 public class BackgroundSystem : ModSystem
 {
+	private static readonly Comparer<BackgroundSlideBase> BackgroundSlideComparer =
+		Comparer<BackgroundSlideBase>.Create((x, y) =>
+		{
+			int cmp = y.Distance.CompareTo(x.Distance);
+			if (cmp == 0)
+			{
+				cmp = x.UniqueName.CompareTo(y.UniqueName);
+			}
+			return cmp;
+		});
+
+	private List<BackgroundSlideBase> backgroundSlides;
+
+	public override void Load()
+	{
+		backgroundSlides = [];
+	}
+
+	public override void Unload()
+	{
+		backgroundSlides.Clear();
+		backgroundSlides = null;
+	}
+
 	public override void OnModLoad()
 	{
-		if (Main.netMode != NetmodeID.Server)
+		if (NetUtils.IsServer)
 		{
 			Ins.HookManager.AddHook(CodeLayer.PostDrawBG, DrawBackground);
 		}
 	}
 
-	private List<BgSlide> backgroundSlides = new List<BgSlide>();
+	public override void OnWorldUnload()
+	{
+		backgroundSlides.Clear();
+	}
+
+	public override void PostUpdateEverything()
+	{
+		backgroundSlides.RemoveAll(x => x.Active == false);
+		foreach (var slide in backgroundSlides)
+		{
+			slide.Update();
+		}
+	}
 
 	private void DrawBackground()
 	{
@@ -21,44 +57,40 @@ public class BackgroundSystem : ModSystem
 		{
 			return;
 		}
+
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
 		Effect lastEffect = null;
-		foreach (var bg in backgroundSlides.OrderByDescending(x => x.Distance))
+		foreach (var bg in backgroundSlides)
 		{
-			bg.Update();
 			bool shouldChangeSpriteBatch = bg.Shader != lastEffect;
 			if (shouldChangeSpriteBatch)
 			{
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
-				if (bg.Shader is not null)
-				{
-					bg.Shader.CurrentTechnique.Passes[0].Apply();
-				}
+				bg.Shader?.CurrentTechnique.Passes[0].Apply();
 			}
 			bg.Draw();
 			lastEffect = bg.Shader;
 		}
-		backgroundSlides.RemoveAll(x => x.Active == false);
+
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 	}
 
-	public void AddBgSlide(BgSlide bg)
+	public bool AddBackgroundSlide(BackgroundSlideBase bg)
 	{
-		if (backgroundSlides.FindAll(x => x.UniqueName == bg.UniqueName).Count <= 0)
+		int index = backgroundSlides.BinarySearch(bg, BackgroundSlideComparer);
+		if (!bg.AllowMultiple
+			&& index >= 0)
 		{
-			backgroundSlides.Add(bg);
+			return false;
 		}
-		else
-		{
-			bg.Active = false;
-		}
-	}
 
-	public static void DrawBackgroundAnchorWithWorldPos(BgSlide bg)
-	{
+		index = ~index;
+		backgroundSlides.Insert(index, bg);
+
+		return true;
 	}
 }

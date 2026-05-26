@@ -2,14 +2,15 @@ using Everglow.Commons.Utilities.BackgroundHelper;
 
 namespace Everglow.Example.BgSlides;
 
-public class ExampleBgSlideCloud : BgSlide
+public class ExampleBgSlideCloud : BackgroundSlideBase
 {
 	public int TimeLeft = 600;
+
+	public override bool AllowMultiple => true;
 
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
-		UniqueName = "ExampleBgSlideCloud" + GetHashCode();
 		Texture = Terraria.GameContent.TextureAssets.Cloud[Main.rand.Next(Terraria.GameContent.TextureAssets.Cloud.Length)].Value;
 		Distance = Main.rand.NextFloat(10f, 120f);
 		Scale = 40f;

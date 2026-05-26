@@ -1,10 +1,9 @@
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using rail;
 
 namespace Everglow.Commons.Utilities.BackgroundHelper;
 
-public abstract class BgSlide
+public abstract class BackgroundSlideBase
 {
 	public float Distance;
 
@@ -29,18 +28,18 @@ public abstract class BgSlide
 	/// </summary>
 	public int UseColorStyle = 0;
 
-	public BgSlide()
+	public virtual bool AllowMultiple => false;
+
+	public BackgroundSlideBase()
 	{
 		SetDefaults();
 	}
 
 	public virtual void SetDefaults()
 	{
+		UniqueName = GetType().FullName;
 		Distance = float.PositiveInfinity;
-		UniqueName = string.Empty;
-
-		// Most common cases.
-		Shader = BgSlide.XWrap_YClamp_Shader;
+		Shader = BackgroundSlideBase.Effects.XWrap_YClamp_Shader;
 	}
 
 	public virtual void Update()
@@ -80,6 +79,11 @@ public abstract class BgSlide
 		}
 	}
 
+	/// <summary>
+	/// Active state condition.
+	/// The system updates <see cref="Active"/> according to this.
+	/// </summary>
+	/// <returns></returns>
 	public virtual bool CanActive()
 	{
 		return false;
@@ -90,7 +94,7 @@ public abstract class BgSlide
 		DrawPreset_Normal(this);
 	}
 
-	private static Color GetColor(BgSlide bg, Vector2 worldPos)
+	private static Color GetColor(BackgroundSlideBase bg, Vector2 worldPos)
 	{
 		Color c = Color.White;
 		switch (bg.UseColorStyle)
@@ -105,14 +109,14 @@ public abstract class BgSlide
 		return c * bg.Alpha;
 	}
 
-	public static void DrawPreset_Piece(BgSlide bg)
+	public static void DrawPreset_Piece(BackgroundSlideBase bg)
 	{
 		Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
 		Vector2 move = (screenCenter - bg.WorldAnchor) / bg.Distance;
 		Main.spriteBatch.Draw(bg.Texture, bg.WorldAnchor - move - Main.screenPosition, null, GetColor(bg, bg.WorldAnchor), 0, bg.Texture.Size() * 0.5f, bg.Scale / bg.Distance, SpriteEffects.None, 0);
 	}
 
-	public static void DrawPreset_Normal(BgSlide bg)
+	public static void DrawPreset_Normal(BackgroundSlideBase bg)
 	{
 		Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
 		Vector2 move = (screenCenter - bg.WorldAnchor) / bg.Distance;
@@ -131,7 +135,7 @@ public abstract class BgSlide
 		DrawVertexBackground(bg, PrimitiveType.TriangleStrip, bars);
 	}
 
-	public static void Add_WorldPosVertex(BgSlide bg, Vector2 position, List<Vertex2D> bars)
+	public static void Add_WorldPosVertex(BackgroundSlideBase bg, Vector2 position, List<Vertex2D> bars)
 	{
 		Vector2 screenCenter = Main.screenPosition + new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
 		Vector2 move = (screenCenter - bg.WorldAnchor) / bg.Distance;
@@ -143,14 +147,14 @@ public abstract class BgSlide
 		bars.Add(position - Main.screenPosition, drawColor, new Vector3(screen_move + new Vector2(0.5f), 0));
 	}
 
-	public static void Add_WorldTriangle(BgSlide bg, Vector2 v0, Vector2 v1, Vector2 v2, List<Vertex2D> bars)
+	public static void Add_WorldTriangle(BackgroundSlideBase bg, Vector2 v0, Vector2 v1, Vector2 v2, List<Vertex2D> bars)
 	{
 		Add_WorldPosVertex(bg, v0, bars);
 		Add_WorldPosVertex(bg, v1, bars);
 		Add_WorldPosVertex(bg, v2, bars);
 	}
 
-	public static void Add_TileBgVertice(BgSlide bg, List<Point> tiles, List<Vertex2D> bars)
+	public static void Add_TileBgVertice(BackgroundSlideBase bg, List<Point> tiles, List<Vertex2D> bars)
 	{
 		foreach (var pos in tiles)
 		{
@@ -166,7 +170,7 @@ public abstract class BgSlide
 		}
 	}
 
-	public static void DrawVertexBackground(BgSlide bg, PrimitiveType primitiveType, List<Vertex2D> bars)
+	public static void DrawVertexBackground(BackgroundSlideBase bg, PrimitiveType primitiveType, List<Vertex2D> bars)
 	{
 		if (bars.Count > 2)
 		{
@@ -182,11 +186,14 @@ public abstract class BgSlide
 		}
 	}
 
-	public static Effect XClamp_YClamp_Shader = ModAsset.BgShader_X_Clamp_Y_Clamp.Value;
+	public class Effects
+	{
+		public static readonly Effect XClamp_YClamp_Shader = ModAsset.BgShader_X_Clamp_Y_Clamp.Value;
 
-	public static Effect XWrap_YClamp_Shader = ModAsset.BgShader_X_Wrap_Y_Clamp.Value;
+		public static readonly Effect XWrap_YClamp_Shader = ModAsset.BgShader_X_Wrap_Y_Clamp.Value;
 
-	public static Effect XClamp_YWrap_Shader = ModAsset.BgShader_X_Clamp_Y_Wrap.Value;
+		public static readonly Effect XClamp_YWrap_Shader = ModAsset.BgShader_X_Clamp_Y_Wrap.Value;
 
-	public static Effect XWrap_YWrap_Shader = ModAsset.BgShader_X_Wrap_Y_Wrap.Value;
+		public static readonly Effect XWrap_YWrap_Shader = ModAsset.BgShader_X_Wrap_Y_Wrap.Value;
+	}
 }

@@ -3,7 +3,7 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Example.BgSlides;
 
-public class ExampleUnderGroundBg : BgSlide
+public class ExampleUnderGroundBg : BackgroundSlideBase
 {
 	public int TimeLeft = 600;
 
@@ -12,11 +12,10 @@ public class ExampleUnderGroundBg : BgSlide
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
-		UniqueName = "ExampleUnderGroundBg" + GetHashCode();
 		Texture = Terraria.GameContent.TextureAssets.Background[114].Value;
 		Distance = 5f;
 		UseColorStyle = 1;
-		Shader = XWrap_YWrap_Shader;
+		Shader = Effects.XWrap_YWrap_Shader;
 	}
 
 	public override void Update()

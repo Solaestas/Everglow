@@ -38,7 +38,7 @@ public class ExampleUndergroundBackgroundTool : ModItem
 					}
 				}
 			}
-			bgSystem.AddBgSlide(exSlide);
+			bgSystem.AddBackgroundSlide(exSlide);
 		}
 	}
 }

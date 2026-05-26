@@ -3,12 +3,11 @@ using Everglow.Example.Items;
 
 namespace Everglow.Example.BgSlides;
 
-public class ExampleBgSlide3 : BgSlide
+public class ExampleBgSlide3 : BackgroundSlideBase
 {
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
-		UniqueName = "ExampleBgSlide3";
 		Texture = ModAsset.ExampleBgSlide3.Value;
 		Distance = 5f;
 	}
