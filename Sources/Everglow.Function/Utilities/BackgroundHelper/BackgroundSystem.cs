@@ -31,7 +31,7 @@ public class BackgroundSystem : ModSystem
 
 	public override void OnModLoad()
 	{
-		if (NetUtils.IsServer)
+		if (!NetUtils.IsServer)
 		{
 			Ins.HookManager.AddHook(CodeLayer.PostDrawBG, DrawBackground);
 		}
