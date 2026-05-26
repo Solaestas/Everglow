@@ -11,7 +11,7 @@ public abstract class BackgroundSlideBase
 
 	public Texture2D Texture;
 
-	public string UniqueName;
+	public string UniqueName => GetType().FullName;
 
 	public Effect Shader;
 
@@ -30,14 +30,13 @@ public abstract class BackgroundSlideBase
 
 	public virtual bool AllowMultiple => false;
 
-	public BackgroundSlideBase()
-	{
-		SetDefaults();
-	}
+	/// <summary>
+	/// Only available when <see cref="AllowMultiple"/> is true. Defaults to 30. -1 means no max value.
+	/// </summary>
+	public virtual int MaxInstanceNumber => BackgroundSystem.MaxMultipleInstanceNumber;
 
 	public virtual void SetDefaults()
 	{
-		UniqueName = GetType().FullName;
 		Distance = float.PositiveInfinity;
 		Shader = BackgroundSlideBase.Effects.XWrap_YClamp_Shader;
 	}

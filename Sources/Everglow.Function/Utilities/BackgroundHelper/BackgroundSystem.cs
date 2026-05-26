@@ -5,16 +5,8 @@ namespace Everglow.Commons.Utilities.BackgroundHelper;
 
 public class BackgroundSystem : ModSystem
 {
-	private static readonly Comparer<BackgroundSlideBase> BackgroundSlideComparer =
-		Comparer<BackgroundSlideBase>.Create((x, y) =>
-		{
-			int cmp = y.Distance.CompareTo(x.Distance);
-			if (cmp == 0)
-			{
-				cmp = x.UniqueName.CompareTo(y.UniqueName);
-			}
-			return cmp;
-		});
+	private const int MaxSingleInstanceNumber = 20;
+	public const int MaxMultipleInstanceNumber = 50;
 
 	private List<BackgroundSlideBase> backgroundSlides;
 
@@ -62,7 +54,7 @@ public class BackgroundSystem : ModSystem
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.Transform);
 		Effect lastEffect = null;
-		foreach (var bg in backgroundSlides)
+		foreach (var bg in backgroundSlides.OrderByDescending(b => b.Distance)) // Adapt to dynamic distance.
 		{
 			bool shouldChangeSpriteBatch = bg.Shader != lastEffect;
 			if (shouldChangeSpriteBatch)
@@ -81,15 +73,34 @@ public class BackgroundSystem : ModSystem
 
 	public bool AddBackgroundSlide(BackgroundSlideBase bg)
 	{
-		int index = backgroundSlides.BinarySearch(bg, BackgroundSlideComparer);
-		if (!bg.AllowMultiple
-			&& index >= 0)
+		if (!bg.AllowMultiple)
 		{
-			return false;
+			if (backgroundSlides.Any(x => x.UniqueName == bg.UniqueName))
+			{
+				return false;
+			}
+
+			if (MaxSingleInstanceNumber > 0)
+			{
+				if (backgroundSlides.Count(x => !x.AllowMultiple) > MaxSingleInstanceNumber)
+				{
+					return false;
+				}
+			}
+		}
+		else
+		{
+			if (bg.MaxInstanceNumber > 0)
+			{
+				if (backgroundSlides.Count(x => x.GetType() == bg.GetType()) > bg.MaxInstanceNumber)
+				{
+					return false;
+				}
+			}
 		}
 
-		index = ~index;
-		backgroundSlides.Insert(index, bg);
+		backgroundSlides.Add(bg);
+		bg.SetDefaults();
 
 		return true;
 	}
