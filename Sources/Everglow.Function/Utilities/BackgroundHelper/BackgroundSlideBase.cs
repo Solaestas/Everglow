@@ -169,6 +169,55 @@ public abstract class BackgroundSlideBase
 		}
 	}
 
+	private static readonly Vector2[] _rotOffsets = new[]
+	{
+		new Vector2(0, -24),
+		new Vector2(0, 24),
+	};
+
+	/// <summary>
+	/// Compare with <see cref="Add_TileBgVertice">, this method reduce the vertex number by about half, but it can not work with tiles separated in x.
+	/// </summary>
+	/// <param name="bg"></param>
+	/// <param name="tiles"></param>
+	/// <param name="bars"></param>
+	public static void Add_TileBgVertice_Strip(BackgroundSlideBase bg, List<Point> tiles, List<Vertex2D> bars)
+	{
+		var visibleTiles = tiles
+			.Select(p => new { Pos = p, World = p.ToWorldCoordinates() })
+			.Where(t => VFXManager.InScreen(t.World, 64))
+			.OrderBy(t => t.Pos.Y)
+			.ThenBy(t => t.Pos.X)
+			.ToList();
+
+		if (visibleTiles.Count == 0)
+		{
+			return;
+		}
+
+		int lastY = visibleTiles[0].Pos.Y;
+
+		foreach (var tile in visibleTiles)
+		{
+			Vector2 basePos = tile.World;
+			if (tile.Pos.Y != lastY)
+			{
+				Vector2 lastPos = bars[^1].position;
+				bars.Add(lastPos + new Vector2(0, -48), Color.Transparent, new Vector3(0));
+				bars.Add(lastPos + new Vector2(0, 0), Color.Transparent, new Vector3(0));
+				Vector2 finalPos = basePos + new Vector2(24, 24) - Main.screenPosition;
+				bars.Add(finalPos + new Vector2(0, -24), Color.Transparent, new Vector3(0));
+				bars.Add(finalPos + new Vector2(0, 24), Color.Transparent, new Vector3(0));
+				lastY = tile.Pos.Y;
+			}
+			foreach (var offset in _rotOffsets)
+			{
+				Vector2 finalPos = basePos + offset + new Vector2(24, 24);
+				Add_WorldPosVertex(bg, finalPos, bars);
+			}
+		}
+	}
+
 	public static void DrawVertexBackground(BackgroundSlideBase bg, PrimitiveType primitiveType, List<Vertex2D> bars)
 	{
 		if (bars.Count > 2)
