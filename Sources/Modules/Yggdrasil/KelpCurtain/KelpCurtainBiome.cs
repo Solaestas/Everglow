@@ -1,4 +1,7 @@
+using Everglow.Commons.Utilities.BackgroundHelper;
 using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.KelpCurtain.Background;
+using MonoMod.Core.Platforms;
 using SubworldLibrary;
 
 namespace Everglow.Yggdrasil.KelpCurtain;
@@ -93,6 +96,29 @@ public class KelpCurtainBiome : ModBiome
 	public override void OnInBiome(Player player)
 	{
 		YggdrasilEnvironmentLightManager.LightingScene = YggdrasilScene.KelpCurtain;
+		Vector2 biomeCenter = new Vector2(9000, 157000);
+		BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+
+		KelpCurtainSky kelpCurtainSky = new KelpCurtainSky();
+		kelpCurtainSky.WorldAnchor = biomeCenter;
+		bgSystem.AddBackgroundSlide(kelpCurtainSky);
+
+		KelpCurtainFar kelpCurtainFar = new KelpCurtainFar();
+		kelpCurtainFar.WorldAnchor = biomeCenter;
+		bgSystem.AddBackgroundSlide(kelpCurtainFar);
+
+		KelpCurtainMiddle kelpCurtainMiddle = new KelpCurtainMiddle();
+		kelpCurtainMiddle.WorldAnchor = biomeCenter;
+		bgSystem.AddBackgroundSlide(kelpCurtainMiddle);
+
+		KelpCurtainMiddleClose kelpCurtainMiddleClose = new KelpCurtainMiddleClose();
+		kelpCurtainMiddleClose.WorldAnchor = biomeCenter;
+		bgSystem.AddBackgroundSlide(kelpCurtainMiddleClose);
+
+		KelpCurtainClose kelpCurtainClose = new KelpCurtainClose();
+		kelpCurtainClose.WorldAnchor = biomeCenter;
+		bgSystem.AddBackgroundSlide(kelpCurtainClose);
+
 		base.OnInBiome(player);
 	}
 }
