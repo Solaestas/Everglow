@@ -3,18 +3,16 @@ using Everglow.Commons.Vertex;
 
 namespace Everglow.Example.BgSlides;
 
-public class ExampleUnderGroundBg : BackgroundSlideBase
+public class ExampleUnderGroundBg : UnderBackgroundBackgroundSlideBase
 {
 	public int TimeLeft = 600;
-
-	public List<Point> BgTiles = new List<Point>();
 
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
 		Texture = Commons.ModAsset.NoiseWave.Value;
 		Distance = 5f;
-		UseColorStyle = 1;
+		UseColorStyle = 0;
 		Shader = Effects.XWrap_YWrap_Shader;
 	}
 
@@ -26,13 +24,6 @@ public class ExampleUnderGroundBg : BackgroundSlideBase
 	{
 		base.Update();
 		TimeLeft--;
-	}
-
-	public override void Draw()
-	{
-		List<Vertex2D> bars = new List<Vertex2D>();
-		BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, BgTiles, bars);
-		DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
 	}
 
 	public override bool CanActive()
