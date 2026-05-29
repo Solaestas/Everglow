@@ -5,11 +5,11 @@ using Everglow.Commons.VFX;
 namespace Everglow.Commons.Utilities.BackgroundHelper;
 
 /// <summary>
-/// unsafe+闭包Lambda 高性能顶点生成（性能敏感专用）
+/// Use unsafe + Lambda closure for extremely high performance rendering.
 /// </summary>
-public static class TileVertexRenderer
+public static class BackgroundHigherPerformanceHelper
 {
-	// 预计算旋转偏移（全局静态，仅初始化一次）
+	// Precompute rotation offset (global static, initialized only once)
 	private static readonly Vector2[] _rotOffsets =
 	[
 		new Vector2(0, -24),
@@ -17,27 +17,26 @@ public static class TileVertexRenderer
 	];
 
 	/// <summary>
-	/// 行优先TriangleStrip渲染，闭包捕获不变量，unsafe指针写入顶点
+	/// Row-major TriangleStrip rendering, closure capture invariants, unsafe pointer vertex writes
 	/// </summary>
 	public static void Add_TileBgVertice_UnsafeLambda(
 		BackgroundSlideBase bg,
 		List<Point> tiles,
 		List<Vertex2D> bars)
 	{
-		// ========== 逐帧仅计算一次【不变量】，全部捕获进Lambda闭包 ==========
+		// Compute the invariant only once per frame and capture it all into the Lambda closure
 		Vector2 screenHalf = new Vector2(Main.screenWidth, Main.screenHeight) * 0.5f;
 		Vector2 screenCenter = Main.screenPosition + screenHalf;
 		Vector2 texSize = bg.Texture.Size();
 		Vector2 texMoveBase = (screenCenter - bg.WorldAnchor) / bg.Distance / texSize;
 		Vector2 screenPos = Main.screenPosition;
 
-		// 提前扩容List，避免unsafe写入时数组越界（预估顶点数，可按需放大）
+		// Expand the List in advance to avoid array overflow during unsafe writing (estimate the number of vertices, can be enlarged as needed)
 		bars.Capacity = Math.Max(bars.Capacity, tiles.Count * 6 + 256);
 
-		// ========== Lambda闭包：捕获所有不变量，消除传参开销 ==========
+		// Lambda closure: Capture all invariants and eliminate parameter passing overhead
 		void AddVertex(Vector2 pos)
 		{
-			// 闭包自动访问外层预计算变量，无参数传递
 			Vector2 screenOffset = pos - screenCenter;
 			Vector2 uv = screenOffset / texSize + texMoveBase;
 			uv.X += 0.5f;
@@ -49,11 +48,8 @@ public static class TileVertexRenderer
 
 			unsafe
 			{
-				// ========== unsafe 直接操作List底层数组，零开销写入 ==========
 				ref Vertex2D[] itemArray = ref ListAccessor.GetItems(bars);
 				ref int size = ref ListAccessor.GetSize(bars);
-
-				// 直接写入，跳过List.Add安全检查
 				itemArray[size] = vtx;
 				size++;
 			}
@@ -86,7 +82,6 @@ public static class TileVertexRenderer
 			}
 		}
 
-		// ========== 视口过滤+行排序（和之前逻辑一致） ==========
 		var visibleTiles = tiles
 			.Select(p => new { Pos = p, World = p.ToWorldCoordinates() })
 			.Where(t => VFXManager.InScreen(t.World, 64))
@@ -106,12 +101,11 @@ public static class TileVertexRenderer
 			Vector2 basePos = tile.World;
 			if (tile.Pos.Y != lastY)
 			{
-				// 退化顶点：复用最后一个顶点，透明衔接上下行
+				// Degenerated vertex: Reuse the last vertex and transparently connect the up and down directions
 				NextRow(basePos);
 				lastY = tile.Pos.Y;
 			}
 
-			// 调用闭包写入顶点，无参数传递开销
 			foreach (var offset in _rotOffsets)
 			{
 				AddVertex(basePos + offset + new Vector2(24, 24));
@@ -133,13 +127,4 @@ public static class TileVertexRenderer
 		}
 		return c * bg.Alpha;
 	}
-}
-
-public static class ListAccessor
-{
-	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_items")]
-	public static extern ref Vertex2D[] GetItems(List<Vertex2D> list);
-
-	[UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_size")]
-	public static extern ref int GetSize(List<Vertex2D> list);
 }
