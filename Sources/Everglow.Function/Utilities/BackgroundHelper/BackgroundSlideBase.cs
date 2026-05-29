@@ -153,6 +153,13 @@ public abstract class BackgroundSlideBase
 		Add_WorldPosVertex(bg, v2, bars);
 	}
 
+	/// <summary>
+	/// Legacy code, use <see cref="BackgroundHigherPerformanceHelper.Add_TileBgVertice"> Instead.
+	/// </summary>
+	/// <param name="bg"></param>
+	/// <param name="tiles"></param>
+	/// <param name="bars"></param>
+	[Obsolete]
 	public static void Add_TileBgVertice(BackgroundSlideBase bg, List<Point> tiles, List<Vertex2D> bars)
 	{
 		foreach (var pos in tiles)
@@ -169,6 +176,7 @@ public abstract class BackgroundSlideBase
 		}
 	}
 
+	[Obsolete]
 	private static readonly Vector2[] _rotOffsets = new[]
 	{
 		new Vector2(0, -24),
@@ -176,11 +184,12 @@ public abstract class BackgroundSlideBase
 	};
 
 	/// <summary>
-	/// Compare with <see cref="Add_TileBgVertice">, this method reduce the vertex number by about half, but it can not work with tiles separated in x.
+	/// Legacy code, use <see cref="BackgroundHigherPerformanceHelper.Add_TileBgVertice"> Instead.
 	/// </summary>
 	/// <param name="bg"></param>
 	/// <param name="tiles"></param>
 	/// <param name="bars"></param>
+	[Obsolete]
 	public static void Add_TileBgVertice_Strip(BackgroundSlideBase bg, List<Point> tiles, List<Vertex2D> bars)
 	{
 		var visibleTiles = tiles

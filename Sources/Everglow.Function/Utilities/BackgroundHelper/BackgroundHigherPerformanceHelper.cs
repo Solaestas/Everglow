@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 
@@ -19,7 +19,7 @@ public static class BackgroundHigherPerformanceHelper
 	/// <summary>
 	/// Row-major TriangleStrip rendering, closure capture invariants, unsafe pointer vertex writes
 	/// </summary>
-	public static void Add_TileBgVertice_UnsafeLambda(
+	public static void Add_TileBgVertice(
 		BackgroundSlideBase bg,
 		List<Point> tiles,
 		List<Vertex2D> bars)
@@ -32,85 +32,85 @@ public static class BackgroundHigherPerformanceHelper
 		Vector2 screenPos = Main.screenPosition;
 
 		// Expand the List in advance to avoid array overflow during unsafe writing (estimate the number of vertices, can be enlarged as needed)
-		bars.Capacity = Math.Max(bars.Capacity, tiles.Count * 6 + 256);
-
-		// Lambda closure: Capture all invariants and eliminate parameter passing overhead
-		void AddVertex(Vector2 pos)
+		int currentSize = bars.Count;
+		int estimatedCapacity = bars.Count + tiles.Count * 6 + 256;
+		if (bars.Capacity < estimatedCapacity)
 		{
-			Vector2 screenOffset = pos - screenCenter;
-			Vector2 uv = screenOffset / texSize + texMoveBase;
-			uv.X += 0.5f;
-			uv.Y += 0.5f;
-
-			Color drawColor = GetColor(bg, pos);
-			Vector3 uv3 = new Vector3(uv.X, uv.Y, 0f);
-			Vertex2D vtx = new Vertex2D(pos - screenPos, drawColor, uv3);
-
-			unsafe
-			{
-				ref Vertex2D[] itemArray = ref ListAccessor.GetItems(bars);
-				ref int size = ref ListAccessor.GetSize(bars);
-				itemArray[size] = vtx;
-				size++;
-			}
+			bars.Capacity = estimatedCapacity;
 		}
-
-		void NextRow(Vector2 pos)
-		{
-			unsafe
-			{
-				ref Vertex2D[] itemArray = ref ListAccessor.GetItems(bars);
-				ref int size = ref ListAccessor.GetSize(bars);
-				ref Vertex2D lastRef = ref itemArray[size - 1];
-				Vertex2D degenerate = lastRef;
-				degenerate.color = Color.Transparent;
-				ref Vertex2D degRef0 = ref itemArray[size];
-				degRef0 = degenerate;
-				degRef0.position += new Vector2(0, -48);
-				size++;
-				ref Vertex2D degRef1 = ref itemArray[size];
-				degRef1 = degenerate;
-				size++;
-				Vector2 finalPos = pos + new Vector2(24, 24) - Main.screenPosition;
-				ref Vertex2D degRef2 = ref itemArray[size];
-				degRef2 = degenerate;
-				degRef2.position = finalPos + new Vector2(0, -24);
-				size++;
-				ref Vertex2D degRef3 = ref itemArray[size];
-				degRef3.position = finalPos + new Vector2(0, 24);
-				size++;
-			}
-		}
+		CollectionsMarshal.SetCount(bars, estimatedCapacity);
+		Span<Vertex2D> span = CollectionsMarshal.AsSpan(bars);
 
 		var visibleTiles = tiles
-			.Select(p => new { Pos = p, World = p.ToWorldCoordinates() })
-			.Where(t => VFXManager.InScreen(t.World, 64))
-			.OrderBy(t => t.Pos.Y)
-			.ThenBy(t => t.Pos.X)
-			.ToList();
+		   .Select(p => new { Pos = p, World = p.ToWorldCoordinates() })
+		   .Where(t => VFXManager.InScreen(t.World, 64))
+		   .OrderBy(t => t.Pos.Y)
+		   .ThenBy(t => t.Pos.X)
+		   .ToList();
 
 		if (visibleTiles.Count == 0)
 		{
+			CollectionsMarshal.SetCount(bars, currentSize);
 			return;
 		}
 
 		int lastY = visibleTiles[0].Pos.Y;
-
+		int lastX = visibleTiles[0].Pos.X;
 		foreach (var tile in visibleTiles)
 		{
 			Vector2 basePos = tile.World;
-			if (tile.Pos.Y != lastY)
+			if (tile.Pos.Y != lastY || tile.Pos.X - lastX > 3)
 			{
 				// Degenerated vertex: Reuse the last vertex and transparently connect the up and down directions
-				NextRow(basePos);
+				// Triangle strip, just like:
+				// ↓↗↓↗↓↗↓↗↓↗↓↑↓
+				// ↑↓↗↓↗↓↗↓↗↓↗↓↗↓
+				// or
+				// ↓↗↓↗↓↗↓↗↓↗↓↑↓     ↑↓↗↓↗↓↗↓↗↓↗↓↗↓
+				Vertex2D degenerate = span[currentSize - 1];
+				degenerate.color = Color.Transparent;
+
+				span[currentSize] = degenerate;
+				span[currentSize].position += new Vector2(0, -48);
+				currentSize++;
+
+				span[currentSize] = degenerate;
+				currentSize++;
+
+				Vector2 finalPos = basePos + new Vector2(24, 24) - Main.screenPosition;
+				span[currentSize] = degenerate;
+				span[currentSize].position = finalPos + new Vector2(0, -24);
+				currentSize++;
+
+				span[currentSize] = degenerate;
+				span[currentSize].position = finalPos + new Vector2(0, 24);
+				currentSize++;
+
 				lastY = tile.Pos.Y;
 			}
+			lastX = tile.Pos.X;
 
+			// Add vertex.
 			foreach (var offset in _rotOffsets)
 			{
-				AddVertex(basePos + offset + new Vector2(24, 24));
+				Vector2 pos = basePos + offset + new Vector2(24, 24);
+
+				Vector2 screenOffset = pos - screenCenter;
+				Vector2 uv = screenOffset / texSize + texMoveBase;
+				uv.X += 0.5f;
+				uv.Y += 0.5f;
+
+				Color drawColor = GetColor(bg, pos);
+				Vector3 uv3 = new Vector3(uv.X, uv.Y, 0f);
+				Vertex2D vtx = new Vertex2D(pos - screenPos, drawColor, uv3);
+
+				span[currentSize] = vtx;
+				currentSize++;
 			}
 		}
+
+		// Update size.
+		CollectionsMarshal.SetCount(bars, currentSize);
 	}
 
 	private static Color GetColor(BackgroundSlideBase bg, Vector2 worldPos)

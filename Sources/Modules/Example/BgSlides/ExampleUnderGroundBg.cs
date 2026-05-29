@@ -31,7 +31,7 @@ public class ExampleUnderGroundBg : BackgroundSlideBase
 	public override void Draw()
 	{
 		List<Vertex2D> bars = new List<Vertex2D>();
-		BackgroundHigherPerformanceHelper.Add_TileBgVertice_UnsafeLambda(this, BgTiles, bars);
+		BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, BgTiles, bars);
 		DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
 	}
 
