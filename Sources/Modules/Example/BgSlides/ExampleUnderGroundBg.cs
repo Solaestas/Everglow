@@ -18,6 +18,10 @@ public class ExampleUnderGroundBg : BackgroundSlideBase
 		Shader = Effects.XWrap_YWrap_Shader;
 	}
 
+	public override bool AllowMultiple => true;
+
+	public override int MaxInstanceNumber => 10000;
+
 	public override void Update()
 	{
 		base.Update();
