@@ -22,7 +22,7 @@ public class UnitTest
 	[TestMethod]
 	public void RopeTest()
 	{
-		var rope = Rope.Create_Fixed_Head_and_Tail(
+		var rope = Rope.Create_Fixed_Start_and_End_WithKnot(
 			new Vector2(0, 0),
 			new Vector2(10, 0),
 			11,

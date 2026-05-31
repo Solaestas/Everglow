@@ -8,7 +8,6 @@ public class ExampleRopeItem : ModItem
 {
 	public Rope ItemRope;
 
-
 	public override void HoldItem(Player player)
 	{
 		if (ItemRope is null)

@@ -23,17 +23,19 @@ public class Rope : IMassSpringMesh
 	public Mass[] Masses => _masses;
 
 	/// <summary>
-	/// Two points are given to connect the rope and both ends are fixed.
+	/// Two points are given to connect the rope and both ends are fixed.<br/>
+	/// Knot is a special mass point with different mass value. Just like lightbulbs in a rope, normal masses simulate the rope and knot masses simulate the lightbulbs. <br/>
+	/// Spring length is decided by the count, start and end. <br/>
 	/// </summary>
-	/// <param name="start"> </param>
-	/// <param name="end"> </param>
-	/// <param name="count"> </param>
-	/// <param name="elasticity"> </param>
-	/// <param name="mass"> </param>
-	/// <param name="knotDistance"> </param>
+	/// <param name="start">Position of the first mass.</param>
+	/// <param name="end">Position of the last mass.</param>
+	/// <param name="count">The number of masses.</param>
+	/// <param name="elasticity"></param>
+	/// <param name="mass">The weight of normal mass.</param>
+	/// <param name="knotDistance">How many normal masses between 2 knots</param>
 	/// <param name="knotMass"> </param>
 	/// <returns> </returns>
-	public static Rope Create_Fixed_Head_and_Tail(Vector2 start, Vector2 end, int count, float elasticity, float mass, int knotDistance = 0, float knotMass = 1)
+	public static Rope Create_Fixed_StartAndEnd_WithKnots(Vector2 start, Vector2 end, int count, float elasticity, float mass, int knotDistance = 0, float knotMass = 1)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
@@ -62,13 +64,13 @@ public class Rope : IMassSpringMesh
 	}
 
 	/// <summary>
-	/// Create a rope at <paramref name="start" /> extending to the positive y-axis.
-	/// <br /><paramref name="start" /> is fixed.
+	/// Create a rope at start and extending towards down.<br />
+	/// Mass at <paramref name="start" /> is fixed.
 	/// </summary>
-	/// <param name="start"> </param>
-	/// <param name="count"> </param>
-	/// <param name="elasticity"> </param>
-	/// <param name="mass"> </param>
+	/// <param name="start">Position of the first mass.</param>
+	/// <param name="count">The number of masses.</param>
+	/// <param name="elasticity"></param>
+	/// <param name="mass">The weight of normal mass.</param>
 	/// <returns> </returns>
 	public static Rope Create_Fixed_StartPos(Vector2 start, int count, float elasticity, float mass)
 	{
@@ -88,20 +90,23 @@ public class Rope : IMassSpringMesh
 	}
 
 	/// <summary>
-	/// Create a rope at <paramref name="start" /> extending to the positive y-axis.
-	/// <br /><paramref name="start" /> is fixed.
+	/// Create a rope at start and extending towards down.<br />
+	/// Last mass usually should be very heavy to simulate pendant lamp.
 	/// </summary>
-	/// <param name="start"> </param>
-	/// <param name="count"> </param>
-	/// <param name="elasticity"> </param>
-	/// <param name="mass"> </param>
-	/// <returns> </returns>
-	public static Rope CreateWithHangHead(Vector2 start, int count, float elasticity, float mass, float headMass, int restCount = 0)
+	/// <param name="start">Position of the first mass.</param>
+	/// <param name="count">The number of masses.</param>
+	/// <param name="elasticity"></param>
+	/// <param name="mass"></param>
+	/// <param name="endMass"></param>
+	/// <param name="offsetY"></param>
+	/// <param name="springLength"></param>
+	/// <returns></returns>
+	public static Rope Create_Fixed_Start_Heavy_End(Vector2 start, int count, float elasticity, float mass, float endMass, int offsetY = 0, float springLength = 6)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
 		{
-			int posY = i - restCount;
+			int posY = i - offsetY;
 			if (posY < 0)
 			{
 				posY = 0;
@@ -110,13 +115,13 @@ public class Rope : IMassSpringMesh
 			var m = rope._masses[i] = new Mass(mass, position, i == 0);
 			if (i == count - 1)
 			{
-				m.Value = headMass;
+				m.Value = endMass;
 			}
 			if (i != 0)
 			{
 				var prev = rope._masses[i - 1];
 				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
-					6, elasticity);
+					springLength, elasticity);
 			}
 		}
 		return rope;

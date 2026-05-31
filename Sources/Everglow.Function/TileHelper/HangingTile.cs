@@ -162,7 +162,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		Tile tile = Main.tile[i, j];
 		int counts = MaxCableLength;
 		int restCount = tile.TileFrameY;
-		Rope rope = Rope.CreateWithHangHead(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
+		Rope rope = Rope.Create_Fixed_Start_Heavy_End(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
 		return rope;
 	}
 
