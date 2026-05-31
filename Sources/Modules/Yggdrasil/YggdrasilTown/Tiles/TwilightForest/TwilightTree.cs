@@ -81,7 +81,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 				{
 					Vector2 offset = GetStyleOffset(k);
 
-					var rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(10, 20), 10f, 2f);
+					var rope = Rope.Create_Fixed_StartPos(offset + new Vector2(i, j) * 16, Main.rand.Next(10, 20), 10f, 2f);
 					style.Add(new Point(i, j), rope);
 				}
 			}

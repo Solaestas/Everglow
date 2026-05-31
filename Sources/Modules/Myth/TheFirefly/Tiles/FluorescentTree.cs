@@ -112,7 +112,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 									break;
 							}
 						}
-						Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(2, 9), 10f, 2f);
+						Rope rope = Rope.Create_Fixed_StartPos(offset + new Vector2(i, j) * 16, Main.rand.Next(2, 9), 10f, 2f);
 						style.Add(new Point(i, j), rope);
 					}
 				}
@@ -124,7 +124,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 					if (!style.ContainsKey(new Point(i, j)))
 					{
 						Vector2 offset = new Vector2(-12, 11);
-						Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
+						Rope rope = Rope.Create_Fixed_StartPos(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
 						style.Add(new Point(i, j), rope);
 					}
 				}
@@ -134,7 +134,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 					if (!style.ContainsKey(new Point(i, j)))
 					{
 						Vector2 offset = new Vector2(-15, 18);
-						Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
+						Rope rope = Rope.Create_Fixed_StartPos(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
 						style.Add(new Point(i, j), rope);
 					}
 				}
@@ -146,7 +146,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 					if (!style.ContainsKey(new Point(i, j)))
 					{
 						Vector2 offset = new Vector2(9, 12);
-						Rope rope = Rope.Create(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
+						Rope rope = Rope.Create_Fixed_StartPos(offset + new Vector2(i, j) * 16, Main.rand.Next(1, 4), 10f, 2f);
 						style.Add(new Point(i, j), rope);
 					}
 				}

@@ -1624,7 +1624,7 @@ public class LanternGhostKing : LanternMoonNPC
 	{
 		if (LanternTail == null)
 		{
-			LanternTail = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternTail = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f);
 			LanternGhostKingMassSpringSystem.AddMassSpringMesh(LanternTail);
 		}
 		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50).RotatedBy(NPC.rotation);

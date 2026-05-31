@@ -33,7 +33,7 @@ public class Rope : IMassSpringMesh
 	/// <param name="knotDistance"> </param>
 	/// <param name="knotMass"> </param>
 	/// <returns> </returns>
-	public static Rope Create(Vector2 start, Vector2 end, int count, float elasticity, float mass, int knotDistance = 0, float knotMass = 1)
+	public static Rope Create_Fixed_Head_and_Tail(Vector2 start, Vector2 end, int count, float elasticity, float mass, int knotDistance = 0, float knotMass = 1)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
@@ -70,7 +70,7 @@ public class Rope : IMassSpringMesh
 	/// <param name="elasticity"> </param>
 	/// <param name="mass"> </param>
 	/// <returns> </returns>
-	public static Rope Create(Vector2 start, int count, float elasticity, float mass)
+	public static Rope Create_Fixed_StartPos(Vector2 start, int count, float elasticity, float mass)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
@@ -122,7 +122,7 @@ public class Rope : IMassSpringMesh
 		return rope;
 	}
 
-	public void ApplyForce()
+	public void ApplyForce_Gravity_Wind()
 	{
 		for (int i = 0; i < _masses.Length; i++)
 		{
@@ -130,6 +130,34 @@ public class Rope : IMassSpringMesh
 			m.Force += new Vector2(2 * (MathF.Sin((float)Main.timeForVisualEffects / 72f + m.Position.X / 13f + m.Position.Y / 4f) + 0.9f), 0)
 				* Main.windSpeedCurrent
 				+ new Vector2(0, Gravity * m.Value);
+		}
+	}
+
+	public void ApplyForce_Gravity()
+	{
+		for (int i = 0; i < _masses.Length; i++)
+		{
+			Mass m = _masses[i];
+			m.Force += new Vector2(0, Gravity * m.Value);
+		}
+	}
+
+	public void ApplyForce_Wind()
+	{
+		for (int i = 0; i < _masses.Length; i++)
+		{
+			Mass m = _masses[i];
+			m.Force += new Vector2(2 * (MathF.Sin((float)Main.timeForVisualEffects / 72f + m.Position.X / 13f + m.Position.Y / 4f) + 0.9f), 0)
+				* Main.windSpeedCurrent;
+		}
+	}
+
+	public void ApplyForce_VelocityDecay(float decayValue = 0.05f)
+	{
+		for (int i = 0; i < _masses.Length; i++)
+		{
+			Mass m = _masses[i];
+			m.Force -= m.Velocity * decayValue;
 		}
 	}
 
