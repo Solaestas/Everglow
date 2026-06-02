@@ -6,9 +6,9 @@ public class GlobalRopeManager : ModSystem
 
 	public static PBDSolver PBDSolver = new PBDSolver(8);
 
-	public static MassSpringSystem EularRopeSystem = new MassSpringSystem();
+	public static List<MassSpringSystem> EularRopeSystems = [];
 
-	public static MassSpringSystem PBDRopeSystem = new MassSpringSystem();
+	public static List<MassSpringSystem> PBDRopeSystems = [];
 
 	public override void Load()
 	{
@@ -17,8 +17,14 @@ public class GlobalRopeManager : ModSystem
 
 	public override void PostUpdateEverything()
 	{
-		EulerSolver.Step(EularRopeSystem, 1);
-		PBDSolver.Step(PBDRopeSystem, 1);
+		foreach(var eularSys in EularRopeSystems)
+		{
+			EulerSolver.Step(eularSys, 1);
+		}
+		foreach (var pbdSys in PBDRopeSystems)
+		{
+			PBDSolver.Step(pbdSys, 1);
+		}
 		base.PostUpdateEverything();
 	}
 }

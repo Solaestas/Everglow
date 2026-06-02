@@ -23,6 +23,131 @@ public class Rope : IMassSpringMesh
 	public Mass[] Masses => _masses;
 
 	/// <summary>
+	/// Create a vine-like rope, in equilibrium, each mass is equally spaced from its neighbors, and the first mass is static.<br/>
+	/// F = kx, k = 1, F = mg = 9, x = 16.
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="count"></param>
+	/// <param name="mass"></param>
+	/// <param name="last_elasticity">To ensure each mass is equally spaced from its neighbors at equilibrium, the elasticity should be calculated from a basic value.</param>
+	/// <param name="springLength"></param>
+	/// <returns></returns>
+	public static Rope Create_Vine(Vector2 position, int count, float mass = 1, float last_elasticity = 1, float springLength = 7)
+	{
+		Rope rope = new Rope(count);
+		for (int i = 0; i < count; i++)
+		{
+			var m = rope._masses[i] = new Mass(mass, position + new Vector2(0, 16 * i), i == 0);
+
+			// give a tiny force to break the initial balance.
+			m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
+			if (i != 0)
+			{
+				var prev = rope._masses[i - 1];
+				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
+					springLength, last_elasticity * (count - i));
+			}
+		}
+		return rope;
+	}
+
+	/// <summary>
+	/// Experimental codes.
+	/// </summary>
+	/// <param name="vine"></param>
+	/// <param name="amount"></param>
+	/// <returns></returns>
+	public static Rope Grow_Vine(Rope vine, int amount)
+	{
+		if (amount <= 0)
+		{
+			return vine;
+		}
+		int count = vine.Masses.Length + amount;
+		float mass = vine.Masses[0].Value;
+		float elasticity = vine.ElasticConstrains[^1].Stiffness;
+		float springLength = vine.ElasticConstrains[^1].RestLength;
+		Rope rope = new Rope(count);
+		for (int i = 0; i < count; i++)
+		{
+			if(i - amount >= 0)
+			{
+				var m = rope._masses[i] = new Mass(mass, vine._masses[i - amount].Position + new Vector2(0, amount * springLength), false);
+				m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
+			}
+			else
+			{
+				var m = rope._masses[i] = new Mass(mass, vine._masses[0].Position + new Vector2(0, (i - amount) * springLength), i == 0);
+				m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
+			}
+			if (i != 0)
+			{
+				var prev = rope._masses[i - 1];
+				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
+					springLength, elasticity * (count - i));
+			}
+		}
+		return rope;
+	}
+
+	public static Rope Cut_Vine(Rope vine, int amount)
+	{
+		if (amount <= 0)
+		{
+			return vine;
+		}
+		int count = vine.Masses.Length - amount;
+		if (count <= 1)
+		{
+			return vine;
+		}
+		float mass = vine.Masses[0].Value;
+		float elasticity = vine.ElasticConstrains[^1].Stiffness;
+		float springLength = vine.ElasticConstrains[^1].RestLength;
+		Rope rope = new Rope(count);
+		for (int i = 0; i < count; i++)
+		{
+			var m = rope._masses[i] = new Mass(mass, vine._masses[i + amount].Position, i == 0);
+
+			// give a tiny force to break the initial balance.
+			m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
+			if (i != 0)
+			{
+				var prev = rope._masses[i - 1];
+				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
+					springLength, elasticity * (count - i));
+			}
+		}
+		return rope;
+	}
+
+	/// <summary>
+	/// Create a new rope.
+	/// </summary>
+	/// <param name="masses"></param>
+	/// <param name="springLength_elasticity">X for spring length, Y for elasticity.</param>
+	/// <returns></returns>
+	public static Rope Create(List<Mass> masses, List<Vector2> springLength_elasticity)
+	{
+		int count = Math.Min(masses.Count, springLength_elasticity.Count);
+		Rope rope = new Rope(count);
+		for (int i = 0; i < count; i++)
+		{
+			var m = rope._masses[i] = masses[i];
+
+			// give a tiny force to break the initial balance.
+			m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);
+			if (i != 0)
+			{
+				var prev = rope._masses[i - 1];
+				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
+					springLength_elasticity[i - 1].X, springLength_elasticity[i - 1].Y);
+			}
+		}
+		return rope;
+	}
+
+	/// <summary>
 	/// Two points are given to connect the rope and both ends are fixed.<br/>
 	/// Knot is a special mass point with different mass value. Just like lightbulbs in a rope, normal masses simulate the rope and knot masses simulate the lightbulbs. <br/>
 	/// Spring length is decided by the count, start and end. <br/>
@@ -72,7 +197,7 @@ public class Rope : IMassSpringMesh
 	/// <param name="elasticity"></param>
 	/// <param name="mass">The weight of normal mass.</param>
 	/// <returns> </returns>
-	public static Rope Create_Fixed_StartPos(Vector2 start, int count, float elasticity, float mass)
+	public static Rope Create_Fixed_StartPos(Vector2 start, int count, float elasticity, float mass, float springLength)
 	{
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
@@ -83,7 +208,7 @@ public class Rope : IMassSpringMesh
 			{
 				var prev = rope._masses[i - 1];
 				rope._springs[i - 1] = new ElasticConstrain(prev, rope._masses[i],
-					(prev.Position - m.Position).Length(), elasticity);
+					springLength, elasticity);
 			}
 		}
 		return rope;

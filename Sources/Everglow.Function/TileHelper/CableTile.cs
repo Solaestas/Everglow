@@ -336,7 +336,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (tile.TileType == Type)
 		{
 			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2 + 2;
-			Rope rope = Rope.Create_Fixed_Start_and_End_WithKnot(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
+			Rope rope = Rope.Create_Fixed_StartAndEnd_WithKnots(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;

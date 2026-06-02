@@ -265,7 +265,7 @@ public class WizardLantern : LanternMoonNPC
 	{
 		if (LanternCloak == null)
 		{
-			LanternCloak = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternCloak = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f, 4f);
 			WizardLanternMassSpringSystem.AddMassSpringMesh(LanternCloak);
 		}
 		LanternCloak.Masses[0].Position = NPC.Center + new Vector2(0, 4).RotatedBy(NPC.rotation);
