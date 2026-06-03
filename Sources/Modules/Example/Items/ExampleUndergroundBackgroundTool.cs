@@ -26,10 +26,11 @@ public class ExampleUndergroundBackgroundTool : ModItem
 			}
 
 			ExampleUnderGroundBg exSlide = new ExampleUnderGroundBg();
+			exSlide.SamplingUnit = 1;
 			Point tilePos = Main.MouseWorld.ToTileCoordinates();
-			for (int x = -100; x <= 100; x += 3)
+			for (int x = -100; x <= 100; x += exSlide.SamplingUnit)
 			{
-				for (int y = -100; y <= 100; y += 3)
+				for (int y = -100; y <= 100; y += exSlide.SamplingUnit)
 				{
 					Vector2 pos = (tilePos + new Point(x, y)).ToWorldCoordinates();
 					if (MathUtils.IsPointInPolygon(star_5, pos))
