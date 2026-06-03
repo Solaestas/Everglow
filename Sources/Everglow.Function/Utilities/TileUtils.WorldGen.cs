@@ -1,4 +1,3 @@
-using Everglow.Commons.Physics.DataStructures;
 using Everglow.Commons.TileHelper;
 using Terraria.ObjectData;
 using Terraria.Utilities;
@@ -195,7 +194,7 @@ public partial class TileUtils
 	/// <returns>0f~1f</returns>
 	public static float GetPerlinPixelB(double x, double y)
 	{
-		return GetLerpTexturePixelValue(PerlinPixelB,x ,y);
+		return GetLerpTexturePixelValue(PerlinPixelB, x, y);
 	}
 
 	/// <summary>
@@ -390,6 +389,54 @@ public partial class TileUtils
 	/// <summary>
 	/// Set a center and radius of a circle in tile coordinate.
 	/// </summary>
+	/// <param name="center">Tile coord center in Vector2.</param>
+	/// <param name="type">TileID: place the tile.<br/>
+	/// -1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCircleAreaOfWall(Vector2 center, float radius, int type, int force = 0)
+	{
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				if (new Vector2(x, y).Length() <= radius)
+				{
+					ChangeWall(tile, type, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Set a center and radius of a circle in tile coordinate.
+	/// </summary>
+	/// <param name="center">Tile coord center in Vector2.</param>
+	/// <param name="type">TileID: place the tile.<br/>
+	/// -1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCircleAreaOfLiquid(Vector2 center, float radius, int type, int force = 0)
+	{
+		int radiusI = (int)radius;
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				Tile tile = SafeGetTile(center + new Vector2(x, y));
+				if (new Vector2(x, y).Length() <= radius)
+				{
+					ChangeLiquid(tile, type, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Set a center and radius of a circle in tile coordinate.
+	/// </summary>
 	/// <param name="type">TileID: place the tile.<br/>
 	/// -1: Kill tile.<br/>
 	/// -2: ClearEverything</param>
@@ -397,6 +444,30 @@ public partial class TileUtils
 	public static void PlaceCircleAreaOfBlock(Point center, float radius, int type, int force = 0)
 	{
 		PlaceCircleAreaOfBlock(center.ToVector2(), radius, type, force);
+	}
+
+	/// <summary>
+	/// Set a center and radius of a circle in tile coordinate.
+	/// </summary>
+	/// <param name="type">TileID: place the tile.<br/>
+	/// -1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCircleAreaOfWall(Point center, float radius, int type, int force = 0)
+	{
+		PlaceCircleAreaOfWall(center.ToVector2(), radius, type, force);
+	}
+
+	/// <summary>
+	/// Set a center and radius of a circle in tile coordinate.
+	/// </summary>
+	/// <param name="type">TileID: place the tile.<br/>
+	/// -1: Kill tile.<br/>
+	/// -2: ClearEverything</param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCircleAreaOfLiquid(Point center, float radius, int type, int force = 0)
+	{
+		PlaceCircleAreaOfLiquid(center.ToVector2(), radius, type, force);
 	}
 
 	/// <summary>
@@ -604,7 +675,7 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tile within the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
+	/// Transform the tiles within the polygon to the type. The polygon is a list of TILE coordinates in Point, and the area is determined by the point-in-polygon test.
 	/// </summary>
 	/// <param name="polygon">TILE coord</param>
 	/// <param name="type"></param>
@@ -620,7 +691,7 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tile within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// Transform the walls within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
 	/// </summary>
 	/// <param name="polygon">WORLD coord</param>
 	/// <param name="type"></param>
@@ -640,6 +711,32 @@ public partial class TileUtils
 				{
 					Tile tile = SafeGetTile(new Vector2(x, y).ToTileCoordinates());
 					ChangeWall(tile, type, force);
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Transform the liquid within the polygon to the type. The polygon is a list of WORLD coordinates in Vector2, and the area is determined by the point-in-polygon test.
+	/// </summary>
+	/// <param name="polygon">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlacePolygonAreaOfLiquid(List<Vector2> polygon, int type, int force = 0)
+	{
+		if (polygon.Count < 3)
+		{
+			return;
+		}
+		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
+		{
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
+			{
+				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
+				{
+					Tile tile = SafeGetTile(new Vector2(x, y).ToTileCoordinates());
+					ChangeLiquid(tile, type, force);
 				}
 			}
 		}
@@ -745,7 +842,7 @@ public partial class TileUtils
 	/// </summary>
 	/// <param name="polygon">WORLD coord</param>
 	/// <param name="type"></param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlacePolygonBoundOfWall(List<Vector2> polygon, int type, float thick, int force = 0)
 	{
@@ -769,7 +866,7 @@ public partial class TileUtils
 	/// </summary>
 	/// <param name="polygon">TILE coord</param>
 	/// <param name="type"></param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlacePolygonBoundOfWall(List<Point> polygon, int type, float thick, int force = 0)
 	{
@@ -782,11 +879,11 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// Transform the tiles beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
 	/// </summary>
 	/// <param name="pos0">WORLD coord</param>
 	/// <param name="pos1">WORLD coord</param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlaceLineBlock(Vector2 pos0, Vector2 pos1, float thick, int type, int force = 0)
 	{
@@ -805,11 +902,12 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// Transform the tiles beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
 	/// </summary>
 	/// <param name="pos0">TILE coord</param>
 	/// <param name="pos1">TILE coord</param>
 	/// <param name="thick"></param>
+	/// <param name="type"></param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlaceLineBlock(Point pos0, Point pos1, float thick, int type, int force = 0)
 	{
@@ -817,11 +915,12 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// Transform the walls beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
 	/// </summary>
 	/// <param name="pos0">WORLD coord</param>
 	/// <param name="pos1">WORLD coord</param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
+	/// <param name="type"></param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlaceLineWall(Vector2 pos0, Vector2 pos1, float thick, int type, int force = 0)
 	{
@@ -840,15 +939,51 @@ public partial class TileUtils
 	}
 
 	/// <summary>
-	/// Transform the tiles at the edge of the line(pos0, pos1) to the type. The area is determined by the distance from the tile to the line. If the distance is smaller than thick, then this tile will be transformed.
+	/// Transform the liquid beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="pos0">WORLD coord</param>
+	/// <param name="pos1">WORLD coord</param>
+	/// <param name="thick">WORLD coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineLiquid(Vector2 pos0, Vector2 pos1, float thick, int type, int force = 0)
+	{
+		Vector2 dir = pos0 - pos1;
+		if (dir == Vector2.zeroVector)
+		{
+			return;
+		}
+		Vector2 normalizedDir = dir.NormalizeSafe().RotatedBy(MathHelper.PiOver2);
+		List<Vector2> tiltRect = new List<Vector2>();
+		tiltRect.Add(pos0 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 + normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos1 - normalizedDir * thick * 0.5f);
+		tiltRect.Add(pos0 - normalizedDir * thick * 0.5f);
+		PlacePolygonAreaOfLiquid(tiltRect, type, force);
+	}
+
+	/// <summary>
+	/// Transform the walls beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
 	/// </summary>
 	/// <param name="pos0">TILE coord</param>
 	/// <param name="pos1">TILE coord</param>
-	/// <param name="thick"></param>
+	/// <param name="thick">WORLD coord</param>
 	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void PlaceLineWall(Point pos0, Point pos1, float thick, int type, int force = 0)
 	{
-		PlaceLineBlock(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
+		PlaceLineWall(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
+	}
+
+	/// <summary>
+	/// Transform the liquid beside the line(pos0, pos1) to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="pos0">TILE coord</param>
+	/// <param name="pos1">TILE coord</param>
+	/// <param name="thick">WORLD coord</param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceLineLiquid(Point pos0, Point pos1, float thick, int type, int force = 0)
+	{
+		PlaceLineLiquid(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
 	}
 
 	public static void ChangeTile(Tile tile, int type, int force)
@@ -877,7 +1012,26 @@ public partial class TileUtils
 		{
 			if (type >= 0)
 			{
-				tile.wall = (ushort)type;
+				tile.WallType = (ushort)type;
+			}
+			else if (type == -1)
+			{
+				tile.HasTile = false;
+			}
+			else if (type == -2)
+			{
+				tile.ClearEverything();
+			}
+		}
+	}
+
+	public static void ChangeLiquid(Tile tile, int type, int force)
+	{
+		if (ChestSafe(tile) && CanChangeTile(tile, force))
+		{
+			if (type >= 0)
+			{
+				tile.LiquidType = (ushort)type;
 			}
 			else if (type == -1)
 			{
@@ -1042,7 +1196,7 @@ public partial class TileUtils
 	/// Use BFS algorithm get the continue tiles from the check point.
 	/// </summary>
 	/// <param name="checkPoint"></param>
-	/// <param name="includeWall">If true, tile with wall will NOT be included.</param>
+	/// <param name="includeWall">If true, tile is empty but has wall will NOT count as empty.</param>
 	/// <param name="maxCount"></param>
 	/// <returns></returns>
 	public static List<Point> BFSContinueEmpty(Point checkPoint, bool includeWall = false, int maxCount = 512, List<int> ignoreTheseType = default)
@@ -1929,10 +2083,10 @@ public partial class TileUtils
 
 	public static void PlaceTileListTowardDownUntilCollide(Point pos, int type, int max = 1024)
 	{
-		for(int t = 0;t < max;t++)
+		for (int t = 0; t < max; t++)
 		{
 			var tile = SafeGetTile(pos + new Point(0, t));
-			if(!tile.HasTile || !Main.tileSolid[tile.TileType])
+			if (!tile.HasTile || !Main.tileSolid[tile.TileType])
 			{
 				tile.TileType = (ushort)type;
 				tile.HasTile = true;
@@ -2007,7 +2161,7 @@ public partial class TileUtils
 	/// <returns></returns>
 	public static Point GetCentroid(List<Point> points)
 	{
-		if(points.Count <= 0)
+		if (points.Count <= 0)
 		{
 			return default;
 		}
@@ -2051,5 +2205,148 @@ public partial class TileUtils
 	public static float PointDistance(Point p0, Point p1)
 	{
 		return Vector2.Distance(p0.ToVector2(), p1.ToVector2());
+	}
+
+	public static void ConnectWire(Point point0, Point point1, bool red = true, bool green = false, bool blue = false, bool yellow = false)
+	{
+		int distanceX = Math.Abs((point1 - point0).X);
+		int distanceY = Math.Abs((point1 - point0).Y);
+		Point check = point0;
+		int dirX = 1;
+		int dirY = 1;
+		if (point1.X < point0.X)
+		{
+			dirX = -1;
+		}
+		if (point1.Y < point0.Y)
+		{
+			dirY = -1;
+		}
+		for (int y = 0; y < distanceY; y++)
+		{
+			Tile tile = SafeGetTile(check);
+			tile.RedWire = red;
+			tile.GreenWire = green;
+			tile.BlueWire = blue;
+			tile.YellowWire = yellow;
+			check.Y += dirY;
+		}
+		for (int x = 0; x <= distanceX; x++)
+		{
+			Tile tile = SafeGetTile(check);
+			tile.RedWire = red;
+			tile.GreenWire = green;
+			tile.BlueWire = blue;
+			tile.YellowWire = yellow;
+			check.X += dirX;
+		}
+	}
+
+	/// <summary>
+	/// Transform the tiles beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">Tile Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveBlock(List<Point> curve, float thick, int type, int force = 0)
+	{
+		for (int k = 0; k < curve.Count - 1; k++)
+		{
+			PlaceLineBlock(curve[k], curve[k + 1], thick, type, force);
+			if(k >= 1)
+			{
+				PlaceCircleAreaOfBlock(curve[k], thick / 32, type, force);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Transform the tiles beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">Tile Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveWall(List<Point> curve, float thick, int type, int force = 0)
+	{
+		for (int k = 0; k < curve.Count - 1; k++)
+		{
+			PlaceLineWall(curve[k], curve[k + 1], thick, type, force);
+			if (k >= 1)
+			{
+				PlaceCircleAreaOfWall(curve[k], thick / 32, type, force);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Transform the liquid beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">Tile Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveLiquid(List<Point> curve, float thick, int type, int force = 0)
+	{
+		for (int k = 0; k < curve.Count - 1; k++)
+		{
+			PlaceLineLiquid(curve[k], curve[k + 1], thick, type, force);
+			if (k >= 1)
+			{
+				PlaceCircleAreaOfLiquid(curve[k], thick / 32, type, force);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Transform the tiles beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">World Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveBlock(List<Vector2> curve, float thick, int type, int force = 0)
+	{
+		List<Point> curve_Point = new List<Point>();
+		foreach (var pos in curve)
+		{
+			curve_Point.Add(pos.ToTileCoordinates());
+		}
+		PlaceCurveBlock(curve_Point, thick, type, force);
+	}
+
+	/// <summary>
+	/// Transform the tiles beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">World Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveWall(List<Vector2> curve, float thick, int type, int force = 0)
+	{
+		List<Point> curve_Point = new List<Point>();
+		foreach (var pos in curve)
+		{
+			curve_Point.Add(pos.ToTileCoordinates());
+		}
+		PlaceCurveWall(curve_Point, thick, type, force);
+	}
+
+	/// <summary>
+	/// Transform the liquid beside the curve to the type. Notice that thick is in World Coord, 16 for a tile size.
+	/// </summary>
+	/// <param name="curve">World Coord</param>
+	/// <param name="thick">World Coord</param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
+	public static void PlaceCurveLiquid(List<Vector2> curve, float thick, int type, int force = 0)
+	{
+		List<Point> curve_Point = new List<Point>();
+		foreach (var pos in curve)
+		{
+			curve_Point.Add(pos.ToTileCoordinates());
+		}
+		PlaceCurveLiquid(curve_Point, thick, type, force);
 	}
 }

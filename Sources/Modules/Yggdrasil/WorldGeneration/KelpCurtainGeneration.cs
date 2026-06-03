@@ -6,6 +6,9 @@ using Everglow.Yggdrasil.KelpCurtain.Items.Materials;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
 using Everglow.Yggdrasil.KelpCurtain.Tiles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.IRProbe;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.LightningMechanism;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.UnderwaterGuillotine;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake.WaterDeliveryHoles;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.GeyserAirBuds;
 using Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
@@ -30,6 +33,10 @@ public class KelpCurtainGeneration
 
 	public static List<int> MazeUnderLake_YggdrasilBlackRockChestContents = new List<int>();
 
+	public static int UnderwaterTreasury_Bottom_Room_center_Y;
+
+	public static Vector2 VampireMatCaveCenter;
+
 	public static void BuildKelpCurtain()
 	{
 		Initialize();
@@ -53,6 +60,8 @@ public class KelpCurtainGeneration
 		MazeUnderLake();
 		DragonPond();
 		IsleOfBloom();
+		UnderwaterTreasury();
+		VampireMatCave();
 
 		// IsleOfBloom();
 		// BuildRainValley();
@@ -748,6 +757,10 @@ public class KelpCurtainGeneration
 			{
 				var tile = SafeGetTile(x, lakeBottomY - y);
 				tile.TileType = (ushort)ModContent.TileType<DarkLakeBottomMud>();
+				if (y < height - 5)
+				{
+					tile.wall = (ushort)ModContent.WallType<DarkLakeBottomMudWall>();
+				}
 				tile.HasTile = true;
 			}
 		}
@@ -1534,7 +1547,6 @@ public class KelpCurtainGeneration
 		{
 			for (int y = yBoundTop - 10; y <= yBoundTop + 10; y++)
 			{
-				// Exist a projection. SeedMap is not TileMap.
 				int value = y - yBoundTop;
 				var tile = SafeGetTile(x, y);
 				if (!tile.HasTile)
@@ -1658,7 +1670,7 @@ public class KelpCurtainGeneration
 			}
 		}
 
-		// Build rooms based on seeds. The rooms are not necessary for the maze, but they can increase the diversity of the maze and provide some interesting areas for players to explore.
+		// Build rooms based on seeds.
 		foreach (var pos in seeds)
 		{
 			bool inTheArea = MathUtils.IsPointInPolygon(MazeBoundPolygon, pos.ToWorldCoordinates());
@@ -2412,8 +2424,8 @@ public class KelpCurtainGeneration
 					}
 					foreach (var corePos in shouldClearTilePos)
 					{
-						KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(corePos.ToTileCoordinates(), 3, new List<int> { ModContent.TileType<HumicMud>(), ModContent.TileType<DarkLakeBottomMud>(), ModContent.TileType<YggdrasilBlackRock>(), ModContent.TileType<RichOxygenSponge>(), ModContent.TileType<HydraMud>() });
-						KillCircleAreaOfWallWithRandomNoiseInCertainType(corePos.ToTileCoordinates(), 4, new List<int> { ModContent.WallType<RichOxygenSpongeWall>() });
+						KillCircleAreaOfBlockWithRandomNoiseInCertainTypeOfTile(corePos.ToTileCoordinates(), 3, new List<int> { ModContent.TileType<HumicMud>(), ModContent.TileType<DarkLakeBottomMud>(), ModContent.TileType<YggdrasilBlackRock>(), ModContent.TileType<RichOxygenSponge>(), ModContent.TileType<HydraMud>() }, -1, 0);
+						KillCircleAreaOfWallWithRandomNoiseInCertainType(corePos.ToTileCoordinates(), 4, new List<int> { ModContent.WallType<RichOxygenSpongeWall>() }, -1, 0);
 					}
 				}
 			}
@@ -3150,6 +3162,626 @@ public class KelpCurtainGeneration
 	/// </summary>
 	public static void UnderwaterTreasury()
 	{
+		int center_x = (int)(Main.maxTilesX * 0.32f);
+		int center_y = (int)(Main.maxTilesY * 0.895f);
+		for (int dy = 0; dy < 1000; dy++)
+		{
+			var tile = SafeGetTile(center_x, center_y + dy);
+			if (tile.HasTile && tile.TileType == ModContent.TileType<StoneScaleWood>())
+			{
+				center_y += dy - 14;
+				break;
+			}
+		}
+		UnderwaterTreasury_Bottom_Room_center_Y = center_y;
+		UnderwaterTreasury_GenerateUnderWaterDungeon(center_x, center_y);
+	}
+
+	public static void UnderwaterTreasury_GenerateUnderWaterDungeon(int i, int j)
+	{
+		int cellHeight = 22;
+		int cellWidth = 34;
+		int cellDistance = 80;
+		int tunnelHeight = 16;
+		for (int xRoom = 0; xRoom < 1; xRoom++)
+		{
+			int centerX = i - xRoom * cellDistance;
+			int centerY = j;
+			UnderwaterTreasury_BrickRoom(centerX, centerY, cellWidth, cellHeight);
+
+			// Trigger of the trap #0
+			Point irPos = new Point(i - xRoom * cellDistance - cellWidth + 9, j);
+			Tile irProbeTile = SafeGetTile(irPos);
+			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_Normal>();
+			irProbeTile.TileFrameX = 36;
+			irProbeTile.HasTile = true;
+
+			// Trap #0
+			Point underwaterGuillotinePos = new Point(i - xRoom * cellDistance - 4, j - cellHeight + 9);
+			UnderwaterGuillotine underwaterGuillotine = TileLoader.GetTile(ModContent.TileType<UnderwaterGuillotine>()) as UnderwaterGuillotine;
+			if (underwaterGuillotine is not null)
+			{
+				underwaterGuillotine.PlaceOriginAtTopLeft(underwaterGuillotinePos.X, underwaterGuillotinePos.Y);
+			}
+
+			// Wire #0
+			ConnectWire(underwaterGuillotinePos, irPos);
+
+			// trigger #1
+			irPos = new Point(i - xRoom * cellDistance - 12, j - cellHeight + 9);
+			irProbeTile = SafeGetTile(irPos);
+			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan>();
+			irProbeTile.TileFrameX = 18;
+			irProbeTile.HasTile = true;
+
+			// Trap #1
+			underwaterGuillotinePos = new Point(i - xRoom * cellDistance - 22, j - cellHeight + 9);
+			if (underwaterGuillotine is not null)
+			{
+				underwaterGuillotine.PlaceOriginAtTopLeft(underwaterGuillotinePos.X, underwaterGuillotinePos.Y);
+			}
+
+			// Wire #1
+			ConnectWire(underwaterGuillotinePos, irPos, false, true);
+
+			// trigger #2
+			irPos = new Point(i - xRoom * cellDistance + 12, j - cellHeight + 9);
+			irProbeTile = SafeGetTile(irPos);
+			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan_Reverse>();
+			irProbeTile.TileFrameX = 18;
+			irProbeTile.HasTile = true;
+
+			// Trap #2
+			underwaterGuillotinePos = new Point(i - xRoom * cellDistance + 15, j - cellHeight + 9);
+			if (underwaterGuillotine is not null)
+			{
+				underwaterGuillotine.PlaceOriginAtTopLeft(underwaterGuillotinePos.X, underwaterGuillotinePos.Y);
+			}
+
+			// Wire #2
+			ConnectWire(underwaterGuillotinePos, irPos, false, false, true);
+
+			// Lightings
+			for (int t = 0; t < 4; t++)
+			{
+				int moveX = 6;
+				int moveY = 6;
+				switch (t)
+				{
+					case 0:
+						moveX = 6;
+						moveY = 6;
+						break;
+					case 1:
+						moveX = 20;
+						moveY = 7;
+						break;
+					case 2:
+						moveX = 11;
+						moveY = 8;
+						break;
+					case 3:
+						moveX = 7;
+						moveY = 11;
+						break;
+				}
+				int thick = 8;
+				int lampY = centerY - cellHeight + thick + moveY;
+				int lampX0 = centerX - cellWidth + thick + moveX;
+				int lampX1 = centerX + cellWidth - thick - moveX;
+				Tile lamp0 = SafeGetTile(lampX0, lampY);
+				Tile lamp1 = SafeGetTile(lampX1, lampY);
+				lamp0.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+				lamp0.HasTile = true;
+
+				lamp1.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+				lamp1.HasTile = true;
+			}
+		}
+		for (int xRoom = 0; xRoom < 1; xRoom++)
+		{
+			if (xRoom < 1)
+			{
+				int y = j + (cellHeight - tunnelHeight / 2) - 3;
+				UnderwaterTreasury_ConnectWaterErodedBrickTunnel(i - xRoom * cellDistance - (cellWidth - 7), y, i - xRoom * cellDistance - cellDistance + (cellWidth - 7), y, tunnelHeight);
+				Tile lamp0 = SafeGetTile(i - xRoom * cellDistance - (cellWidth - 7) - 0, y);
+				lamp0.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+				lamp0.HasTile = true;
+			}
+		}
+		UnderwaterTreasury_BrickRoom(i - 1 * cellDistance - 20, j - 90, cellWidth + 30, cellHeight);
+		int checkXRoom2 = i - 1 * cellDistance - 20 - (cellWidth + 10);
+		int checkYRoom2 = j - 95;
+		for (int k = 0; k < 30; k++)
+		{
+			int checkX = checkXRoom2 + k * 15;
+			int checkY = checkYRoom2 + (k % 2 == 0 ? 3 : 0);
+			Tile lamp = SafeGetTile(checkX, checkY);
+			if ((!lamp.HasTile || lamp.TileType != ModContent.TileType<WaterErodedGreenBrick>()) && lamp.wall == ModContent.WallType<WaterErodedGreenBrickWall_Fixed>())
+			{
+				lamp.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+				lamp.HasTile = true;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		UnderwaterTreasury_ConnectWaterErodedBrickTunnel_Serrated(new Point(i - 1 * cellDistance - 40, j - 64), new Point(i - 38, j + 9), 12, 8);
+	}
+
+	public static void UnderwaterTreasury_BrickRoom(int centerX, int centerY, int halfWidth, int halfHeight)
+	{
+		int thick = 8;
+
+		// Main structure
+		for (int x = centerX - halfWidth; x <= centerX + halfWidth; x++)
+		{
+			for (int y = centerY - halfHeight; y <= centerY + halfHeight; y++)
+			{
+				Tile tile = SafeGetTile(x, y);
+				int boundValue = halfWidth - Math.Abs(x - centerX);
+				int boundValue2 = halfHeight - Math.Abs(y - centerY);
+				boundValue = Math.Min(boundValue, boundValue2);
+				if (boundValue <= thick)
+				{
+					tile.TileType = (ushort)ModContent.TileType<WaterErodedGreenBrick>();
+					tile.HasTile = true;
+				}
+				if (boundValue > thick)
+				{
+					tile.HasTile = false;
+					if (boundValue > 1)
+					{
+						tile.WallType = (ushort)ModContent.WallType<WaterErodedGreenBrickWall_Fixed>();
+						tile.liquid = (byte)LiquidID.Water;
+						tile.LiquidAmount = 255;
+					}
+				}
+			}
+		}
+
+		// Alga
+		for (int algaX = 0; algaX < halfWidth * 2; algaX++)
+		{
+			int height = WorldGen.genRand.Next(-12, 18);
+			if (height > 0)
+			{
+				Tile algaBottom = SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick);
+				if (algaBottom.HasTile)
+				{
+					for (int algaY = 0; algaY < height; algaY++)
+					{
+						Tile algaTile = SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick - algaY - 1);
+						if (algaTile.HasTile)
+						{
+							break;
+						}
+						else
+						{
+							algaTile.TileType = (ushort)ModContent.TileType<JadeLakeGreenAlgae>();
+							algaTile.HasTile = true;
+						}
+					}
+				}
+			}
+		}
+
+		// Drain(bubbles for breathe)
+		Point outlet = new Point(centerX - 2, centerY);
+		PlaceFrameImportantTiles(outlet.X, outlet.Y, 4, 4, ModContent.TileType<DrainOutlet>());
+	}
+
+	/// <summary>
+	/// Create a tunnel with water-erodeed brick side between 2 points.
+	/// </summary>
+	/// <param name="p0"></param>
+	/// <param name="p1"></param>
+	/// <param name="width"></param>
+	public static void UnderwaterTreasury_ConnectWaterErodedBrickTunnel(Point p0, Point p1, float width)
+	{
+		UnderwaterTreasury_ConnectWaterErodedBrickTunnel(p0.X, p0.Y, p1.X, p1.Y, width);
+	}
+
+	/// <summary>
+	/// Create a tunnel with water-erodeed brick side between 2 points.
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="width"></param>
+	public static void UnderwaterTreasury_ConnectWaterErodedBrickTunnel(int x0, int y0, int x1, int y1, float width)
+	{
+		int sideThick = 6;
+		int maxStep = (int)(new Vector2(x1, y1) - new Vector2(x0, y0)).Length();
+		Vector2 dir = Vector2.Normalize(new Vector2(x1, y1) - new Vector2(x0, y0));
+		Vector2 checkPoint = new Vector2(x0, y0);
+		float halfWidth = width / 2f;
+		for (int s = 0; s < maxStep; s++)
+		{
+			checkPoint += dir;
+			for (int x = (int)(-halfWidth); x <= halfWidth; x++)
+			{
+				for (int y = (int)(-halfWidth); y <= halfWidth; y++)
+				{
+					Vector2 checkDir = new Vector2(x, y);
+					bool shouldKill = false;
+					if (checkDir.Length() < 3f)
+					{
+						shouldKill = true;
+					}
+					else
+					{
+						Vector2 normalCheckDir = checkDir.NormalizeSafe();
+						if (MathF.Abs(Vector2.Dot(normalCheckDir, dir)) <= 0.15f)
+						{
+							shouldKill = true;
+						}
+					}
+					if (shouldKill)
+					{
+						Tile tile = SafeGetTile((int)(x + checkPoint.X), (int)(y + checkPoint.Y));
+						float distance = checkDir.Length();
+						if (distance < halfWidth - (sideThick - 1))
+						{
+							tile.HasTile = false;
+							tile.WallType = (ushort)ModContent.WallType<WaterErodedGreenBrickWall_Fixed>();
+							tile.liquid = (byte)LiquidID.Water;
+							tile.LiquidAmount = 255;
+						}
+						if (distance >= halfWidth - (sideThick - 1))
+						{
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<WaterErodedGreenBrick>();
+							if (distance < halfWidth)
+							{
+								tile.WallType = (ushort)ModContent.WallType<WaterErodedGreenBrickWall_Fixed>();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Create a tunnel with water-erodeed brick side between 2 points.Traversing altitute by creating a zigzag path.
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="width"></param>
+	public static void UnderwaterTreasury_ConnectWaterErodedBrickTunnel_Serrated(int x0, int y0, int x1, int y1, float width, float sideThick)
+	{
+		UnderwaterTreasury_ConnectWaterErodedBrickTunnel_Serrated(new Point(x0, y0), new Point(x1, y1), width, sideThick);
+	}
+
+	/// <summary>
+	/// Create a tunnel with water-erodeed brick side between 2 points.Traversing altitute by creating a zigzag path.
+	/// </summary>
+	/// <param name="x0"></param>
+	/// <param name="y0"></param>
+	/// <param name="x1"></param>
+	/// <param name="y1"></param>
+	/// <param name="width"></param>
+	public static void UnderwaterTreasury_ConnectWaterErodedBrickTunnel_Serrated(Point point0, Point point1, float width, float sideThick)
+	{
+		// Calculate the shape
+		float centerThick = width - sideThick;
+		int distanceY = Math.Abs((point1 - point0).Y);
+		Point check = point0;
+		int dirY = 1;
+		if (point1.Y < point0.Y)
+		{
+			dirY = -1;
+		}
+		int jaggedX = 0;
+		int jaggedDir = (int)((WorldGen.genRand.Next(2) - 0.5f) * 2);
+
+		// Calclate the trail
+		List<Point> trailPos = new List<Point>();
+		List<int> inflectionPoint = new List<int>();
+		List<int> lumpLampPoint = new List<int>();
+		List<int> breathePoint = new List<int>();
+		List<int> platformPoint = new List<int>();
+		for (int y = 0; y < distanceY; y++)
+		{
+			trailPos.Add(check + new Point(jaggedX, 0));
+			check.Y += dirY;
+			jaggedX += jaggedDir * 3;
+			if (Math.Abs(jaggedX) > 24 && jaggedX * jaggedDir > 0)
+			{
+				jaggedDir *= -1;
+				inflectionPoint.Add(y);
+				lumpLampPoint.Add(y);
+				platformPoint.Add(y);
+				breathePoint.Add(y - 8);
+			}
+		}
+		check += new Point(jaggedX, 0);
+		int dirX = 1;
+		if (point1.X < check.X)
+		{
+			dirX = -1;
+		}
+		int distanceX = Math.Abs((point1 - check).X);
+		for (int x = 0; x <= distanceX; x++)
+		{
+			trailPos.Add(check);
+			check.X += dirX;
+			if (x % 24 == 16)
+			{
+				lumpLampPoint.Add(trailPos.Count);
+			}
+			if (x == 3)
+			{
+				breathePoint.Add(trailPos.Count);
+			}
+		}
+
+		// Build the Exterior
+		for (int s = 0; s < trailPos.Count; s++)
+		{
+			PlaceSquareAreaOfBlock(trailPos[s], (int)width, ModContent.TileType<WaterErodedGreenBrick>());
+			PlaceSquareAreaOfWall(trailPos[s], (int)width - 1, ModContent.WallType<WaterErodedGreenBrickWall_Fixed>());
+		}
+
+		// Build the inner Tunnel
+		for (int s = 0; s < trailPos.Count; s++)
+		{
+			PlaceSquareAreaOfBlock(trailPos[s], (int)centerThick, -1);
+			PlaceSquareAreaOfLiquid(trailPos[s], (int)width - 1, LiquidID.Water);
+		}
+
+		// Traps
+		for (int s = 0; s < trailPos.Count; s++)
+		{
+			// Lightning Mechanism
+			if (inflectionPoint.Contains(s))
+			{
+				Point point = trailPos[s];
+				Tile checkLeft = SafeGetTile(point + new Point(-8, 3));
+				Tile checkRight = SafeGetTile(point + new Point(8, 3));
+				Point probePos = point + new Point(0, -7);
+				if (checkLeft.HasTile)
+				{
+					PlaceFrameImportantTiles(point.X - 7, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>(), 90);
+					probePos += new Point(7, 0);
+					ConnectWire(probePos, new Point(point.X - 3, point.Y + 4));
+				}
+				if (checkRight.HasTile)
+				{
+					PlaceFrameImportantTiles(point.X + 3, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>());
+					probePos += new Point(-7, 0);
+					ConnectWire(probePos, new Point(point.X + 3, point.Y + 4));
+				}
+				Tile irProbe = SafeGetTile(probePos);
+				Tile irProbeTop = SafeGetTile(probePos + new Point(0, -1));
+				if (!irProbe.HasTile && irProbeTop.HasTile)
+				{
+					irProbe.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan>();
+					irProbe.HasTile = true;
+					irProbe.TileFrameX = 18;
+				}
+			}
+
+			// Lamps
+			if (lumpLampPoint.Contains(s))
+			{
+				Point point = trailPos[s] + new Point(0, -1);
+				Tile tile = SafeGetTile(point);
+				if (!tile.HasTile)
+				{
+					tile.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+					tile.HasTile = true;
+				}
+			}
+
+			// Drain ourlets
+			if (breathePoint.Contains(s))
+			{
+				Point point = trailPos[s] + new Point(-2, 1);
+				PlaceFrameImportantTiles(point.X, point.Y, 4, 4, ModContent.TileType<DrainOutlet>());
+			}
+
+			// Platforms
+			if (platformPoint.Contains(s))
+			{
+				Point point = trailPos[s] + new Point(0, 1);
+				Tile checkLeft = SafeGetTile(point + new Point(-8, 2));
+				Tile checkRight = SafeGetTile(point + new Point(8, 2));
+				if (checkLeft.HasTile)
+				{
+					int length = CheckSpaceLeft(point.X, point.Y);
+					for (int x = 1; x <= 3; x++)
+					{
+						Point pointCheck = point + new Point(-length, 0) + new Point(x, 0);
+						WorldGen.PlaceTile(pointCheck.X, pointCheck.Y, TileID.Platforms, false, true, -1, 9);
+					}
+					Point pointChest = point + new Point(-length, 0) + new Point(1, -1);
+
+					// TODO:Enable this.
+					// WorldGenMisc.PlaceChest(pointChest.X, pointChest.Y, ModContent.TileType<WaterErodedRustyCopperChest>(), new List<Item>(), 0);
+					length = CheckSpaceRight(point.X, point.Y);
+					for (int j = 0; j < 10; j++)
+					{
+						point = trailPos[s] + new Point(0, 1 + 2 * j);
+						for (int x = 1; x <= 2; x++)
+						{
+							Point pointCheck = point + new Point(length, 0) + new Point(-x, 0);
+							if (SafeGetTile(pointCheck).HasTile)
+							{
+								j = 20;
+								break;
+							}
+							WorldGen.PlaceTile(pointCheck.X, pointCheck.Y, TileID.Platforms, false, false, -1, 9);
+						}
+					}
+				}
+				if (checkRight.HasTile)
+				{
+					int length = CheckSpaceRight(point.X, point.Y);
+					for (int x = 1; x <= 3; x++)
+					{
+						Point pointCheck = point + new Point(length, 0) + new Point(-x, 0);
+						WorldGen.PlaceTile(pointCheck.X, pointCheck.Y, TileID.Platforms, false, true, -1, 9);
+					}
+					Point pointChest = point + new Point(length, 0) + new Point(-2, -1);
+
+					// TODO:Enable this.
+					// WorldGenMisc.PlaceChest(pointChest.X, pointChest.Y, ModContent.TileType<WaterErodedRustyCopperChest>(), new List<Item>(), 0);
+					length = CheckSpaceLeft(point.X, point.Y);
+					for (int j = 0; j < 10; j++)
+					{
+						point = trailPos[s] + new Point(0, 1 + 2 * j);
+						for (int x = 1; x <= 2; x++)
+						{
+							Point pointCheck = point + new Point(-length, 0) + new Point(x, 0);
+							if (SafeGetTile(pointCheck).HasTile)
+							{
+								j = 20;
+								break;
+							}
+							WorldGen.PlaceTile(pointCheck.X, pointCheck.Y, TileID.Platforms, false, true, -1, 9);
+						}
+					}
+				}
+			}
+		}
+		int overLength = 15;
+		if (dirX < 0)
+		{
+			KillRectangleAreaOfTile(trailPos[^1].X - (int)width - overLength, trailPos[^1].Y - (int)centerThick, trailPos[^1].X, trailPos[^1].Y + (int)centerThick);
+			PlaceRectangleAreaOfWall(trailPos[^1].X - (int)width - overLength, trailPos[^1].Y - (int)centerThick, trailPos[^1].X, trailPos[^1].Y + (int)centerThick, ModContent.WallType<WaterErodedGreenBrickWall_Fixed>());
+			PlaceRectangleAreaOfLiquid(trailPos[^1].X - (int)width - overLength, trailPos[^1].Y - (int)centerThick, trailPos[^1].X, trailPos[^1].Y + (int)centerThick, LiquidID.Water);
+		}
+		else
+		{
+			KillRectangleAreaOfTile(trailPos[^1].X, trailPos[^1].Y - (int)centerThick, trailPos[^1].X + (int)width + overLength, trailPos[^1].Y + (int)centerThick);
+			PlaceRectangleAreaOfWall(trailPos[^1].X, trailPos[^1].Y - (int)centerThick, trailPos[^1].X + (int)width + overLength, trailPos[^1].Y + (int)centerThick, ModContent.WallType<WaterErodedGreenBrickWall_Fixed>());
+			PlaceRectangleAreaOfLiquid(trailPos[^1].X, trailPos[^1].Y - (int)centerThick, trailPos[^1].X + (int)width + overLength, trailPos[^1].Y + (int)centerThick, LiquidID.Water);
+		}
+		KillRectangleAreaOfTile(trailPos[0].X - (int)centerThick, trailPos[0].Y - (int)width, trailPos[0].X + (int)centerThick, trailPos[0].Y);
+		PlaceRectangleAreaOfWall(trailPos[0].X - (int)centerThick, trailPos[0].Y - (int)width, trailPos[0].X + (int)centerThick, trailPos[0].Y, ModContent.WallType<WaterErodedGreenBrickWall_Fixed>());
+		PlaceRectangleAreaOfLiquid(trailPos[0].X - (int)centerThick, trailPos[0].Y - (int)width, trailPos[0].X + (int)centerThick, trailPos[0].Y, LiquidID.Water);
+	}
+
+	/// <summary>
+	/// The cave of Vampire Mat
+	/// </summary>
+	public static void VampireMatCave()
+	{
+		// Tunnel to the Maze;
+		int x = (int)(Main.maxTilesX * 0.388f);
+		int y = (int)(Main.maxTilesY * 0.894f);
+		Point entrance = new Point(x, y);
+		List<Point> cellRoom = BFSContinueEmpty(entrance, false, 1536);
+		if (cellRoom.Count < 100)
+		{
+			for (int k = 0; k < 100; k++)
+			{
+				int dk = GenRand.Next(40) - 20;
+				Point newEntrance = entrance + new Point(dk, dk * 4);
+				cellRoom = BFSContinueEmpty(newEntrance, false, 1536);
+				if (cellRoom.Count >= 100)
+				{
+					break;
+				}
+			}
+		}
+		Point room_centroid = GetCentroid(cellRoom);
+
+		// Cave of Vampire Mat.
+		int cave_x = (int)(Main.maxTilesX * 0.3435f);
+		int cave_y = (int)(Main.maxTilesY * 0.894f);
+		Point caveCenter = new Point(cave_x, cave_y);
+		VampireMatCaveCenter = caveCenter.ToWorldCoordinates();
+		List<Point> cave = GetCircleAreaOfTilePosWithRandomNoise(caveCenter, 54, 3);
+		List<Point> cave_bound = GetCircleAreaOfTilePosWithRandomNoise(caveCenter, 60, 3);
+		foreach (var pos in cave_bound)
+		{
+			var tile = SafeGetTile(pos);
+			if (tile.TileType == ModContent.TileType<DarkLakeBottomMud>() || tile.TileType == ModContent.TileType<MossProneSandSoil>())
+			{
+				if (cave.Contains(pos))
+				{
+					ChangeTile(tile, -1, (int)TileChangeState.Forceful);
+				}
+				else
+				{
+					ChangeTile(tile, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.Forceful);
+				}
+			}
+			tile.wall = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
+			tile.LiquidType = LiquidID.Water;
+			tile.LiquidAmount = 255;
+		}
+
+		PlaceLineBlock(caveCenter, room_centroid, 12 * 16, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.SolidBlock);
+		PlaceLineWall(caveCenter, room_centroid, 12 * 16, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.SolidBlock);
+		PlaceLineBlock(caveCenter, room_centroid, 8 * 16, -1, (int)TileChangeState.SolidBlock);
+
+		// Barnacle room.
+		Point barnacle_room_center = new Point((int)(Main.maxTilesX * 0.361f), UnderwaterTreasury_Bottom_Room_center_Y);
+		Point dungeon_bound = barnacle_room_center;
+		for (int dx = 0; dx < 300; dx++)
+		{
+			var tile = SafeGetTile(dungeon_bound.X, dungeon_bound.Y);
+			if (tile.HasTile && tile.TileType == ModContent.TileType<WaterErodedGreenBrick>())
+			{
+				break;
+			}
+			dungeon_bound.X--;
+		}
+		barnacle_room_center = dungeon_bound;
+		List<Point> barnaclePolygonRoom = new List<Point>();
+		for (int dx = 0; dx <= 40; dx += 5)
+		{
+			barnaclePolygonRoom.Add(barnacle_room_center + new Point(dx, (int)(-14 - 6 * MathF.Sin(dx / 40f * MathHelper.Pi * 1.5f))));
+		}
+		for (int dx = 40; dx >= 0; dx -= 5)
+		{
+			barnaclePolygonRoom.Add(barnacle_room_center + new Point(dx, (int)(14 + 6 * MathF.Sin(dx / 40f * MathHelper.Pi * 1.5f))));
+		}
+		PlacePolygonAreaOfBlock(barnaclePolygonRoom, -1, (int)TileChangeState.Forceful);
+		PlacePolygonBoundOfBlock(barnaclePolygonRoom, ModContent.TileType<SharpBarnacleLayer>(), 48, (int)TileChangeState.NoTile);
+		PlacePolygonAreaOfWall(barnaclePolygonRoom, ModContent.WallType<SharpBarnacleWall>(), (int)TileChangeState.Forceful);
+		List<Point> barnacleRoom = GetPolygonAreaOfTilePos(barnaclePolygonRoom);
+		foreach (var pos in barnacleRoom)
+		{
+			var tile = SafeGetTile(pos);
+			tile.LiquidType = LiquidID.Water;
+			tile.LiquidAmount = 255;
+		}
+		var gGCBCT = TileLoader.GetTile(ModContent.TileType<GiantGhostClawBarnacleCollideTile>()) as GiantGhostClawBarnacleCollideTile;
+		if (gGCBCT != null)
+		{
+			gGCBCT.PlaceOriginAtTopLeft(barnacle_room_center.X, barnacle_room_center.Y - 12);
+		}
+
+		// Tunnel to the cave of Vampire Mat.
+		List<Vector2> path_to_vampire_cave = new List<Vector2>();
+		Vector2 checkPos = (barnacle_room_center + new Point(37, 0)).ToWorldCoordinates();
+		Vector2 checkVel = new Vector2(128, 0);
+		for (int k = 0; k < 40; k++)
+		{
+			path_to_vampire_cave.Add(checkPos);
+			checkPos += checkVel;
+			Vector2 toTarget = caveCenter.ToWorldCoordinates() - checkPos;
+			if (toTarget.Length() < 120)
+			{
+				break;
+			}
+			toTarget = toTarget.NormalizeSafe();
+			checkVel = checkVel * 0.92f + toTarget * 128 * 0.08f;
+		}
+		PlaceCurveBlock(path_to_vampire_cave, 16 * 16, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.HasTile);
+		PlaceCurveWall(path_to_vampire_cave, 16 * 16, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.HasTile);
+		PlaceCurveBlock(path_to_vampire_cave, 12 * 16, -1, (int)TileChangeState.HasTile);
+		PlaceCurveLiquid(path_to_vampire_cave, 16 * 16, LiquidID.Water, (int)TileChangeState.HasTile);
 	}
 
 	/// <summary>

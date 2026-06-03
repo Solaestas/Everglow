@@ -14,6 +14,14 @@ public class VampireMat : ModNPC
 
 	public Rope BodyRope;
 
+	public enum TextureState
+	{
+		Flat,
+		TowardScreen,
+	}
+
+	public int NPCTextureState = 0;
+
 	public override void SetStaticDefaults()
 	{
 		Main.npcFrameCount[NPC.type] = 11;
@@ -82,18 +90,74 @@ public class VampireMat : ModNPC
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
+	public IEnumerator<ICoroutineInstruction> TentacleRelease()
+	{
+		for (int k = 0; k < 120; k++)
+		{
+			NPC.velocity *= 0.96f;
+			NPC.rotation *= 0.96f;
+			if (NPCTextureState == (int)TextureState.Flat)
+			{
+				if (NPC.frame.Y == 1060)
+				{
+					NPCTextureState = (int)TextureState.TowardScreen;
+					NPC.frame = new Rectangle(0, 0, 400, 400);
+					break;
+				}
+			}
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity *= 0f;
+		NPC.rotation *= 0f;
+		for (int k = 0; k < 19; k++)
+		{
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		yield return new WaitForFrames(300);
+		for (int k = 0; k < 8; k++)
+		{
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPCTextureState = (int)TextureState.Flat;
+		NPC.frame = new Rectangle(0, 0, 346, 106);
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
-		AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+		switch (Main.rand.Next(2))
+		{
+			case 0:
+				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+				break;
+			case 1:
+				AICoroutine.StartCoroutine(new Coroutine(TentacleRelease()));
+				break;
+		}
+
 		yield return new SkipThisFrame();
 	}
 
 	public override void FindFrame(int frameHeight)
 	{
-		float animationSpeed = 0.4f;
-		NPC.frameCounter += animationSpeed;
-		NPC.frameCounter %= Main.npcFrameCount[NPC.type];
-		NPC.frame.Y = (int)NPC.frameCounter * 106;
+		if(NPCTextureState == (int)TextureState.Flat)
+		{
+			float animationSpeed = 0.4f;
+			NPC.frameCounter += animationSpeed;
+			NPC.frameCounter %= Main.npcFrameCount[NPC.type];
+			NPC.frame.Y = (int)NPC.frameCounter * 106;
+		}
+		if (NPCTextureState == (int)TextureState.TowardScreen)
+		{
+		}
 	}
 
 	public override void HitEffect(NPC.HitInfo hit)
@@ -108,19 +172,24 @@ public class VampireMat : ModNPC
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
+		if (NPCTextureState == (int)TextureState.TowardScreen)
+		{
+			texture = ModAsset.VampireMat_Attack.Value;
+		}
 		var frame = NPC.frame;
 		var rotation = NPC.rotation;
 		var spriteEffect = NPC.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 		spriteBatch.Draw(texture, NPC.Center - Main.screenPosition, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
 
-		if(BodyRope is not null)
-		{
-			Texture2D point = Commons.ModAsset.TileBlock.Value;
-			foreach (var mass in BodyRope.Masses)
-			{
-				spriteBatch.Draw(point, mass.Position - Main.screenPosition, null, Color.White, 0, point.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
-			}
-		}
+
+		//if (BodyRope is not null)
+		//{
+		//	Texture2D point = Commons.ModAsset.TileBlock.Value;
+		//	foreach (var mass in BodyRope.Masses)
+		//	{
+		//		spriteBatch.Draw(point, mass.Position - Main.screenPosition, null, Color.White, 0, point.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
+		//	}
+		//}
 		return false;
 	}
 }

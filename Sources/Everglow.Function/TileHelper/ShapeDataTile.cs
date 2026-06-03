@@ -132,6 +132,15 @@ public abstract class ShapeDataTile : ModTile
 	/// <summary>
 	/// 从左上角安置一个造型物块
 	/// </summary>
+	/// <param name="pos"></param>
+	public virtual void PlaceOriginAtTopLeft(Point pos)
+	{
+		PlaceOriginAtTopLeft(pos.X, pos.Y);
+	}
+
+	/// <summary>
+	/// 从左上角安置一个造型物块
+	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	public virtual void PlaceOriginAtTopLeft(int x, int y)
@@ -155,6 +164,15 @@ public abstract class ShapeDataTile : ModTile
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// 从左下角安置一个造型物块
+	/// </summary>
+	/// <param name="pos"></param>
+	public virtual void PlaceOriginAtBottomLeft(Point pos)
+	{
+		PlaceOriginAtBottomLeft(pos.X, pos.Y);
 	}
 
 	/// <summary>
