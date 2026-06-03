@@ -104,4 +104,10 @@ public class BackgroundSystem : ModSystem
 
 		return true;
 	}
+
+	public bool HasBgSlide(string uniqueName)
+	{
+		return backgroundSlides.Any(x => x.UniqueName == uniqueName);
+	}
+
 }
