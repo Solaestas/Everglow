@@ -10,15 +10,14 @@ public class DeathJadeLakeBackground : ModSystem
 
 	public float Alpha = 0f;
 
-	public override void PostUpdateEverything()// 开启地下背景
+	public override void PostUpdateEverything()
 	{
 		const float increase = 0.02f;
 		if (Main.LocalPlayer.InModBiome<DeathJadeLakeBiome>() && Main.BackgroundEnabled)
 		{
-			DeathJadeLakeBiome dJLB = ModContent.GetInstance<DeathJadeLakeBiome>();
-			if (dJLB != null && Alpha == 0)
+			if (Alpha == 0)
 			{
-				dJLB.GetLiquidSurfaceY();
+				DeathJadeLakeBiome.GetLiquidSurfaceY();
 			}
 			if (Alpha < 1)
 			{
@@ -76,17 +75,16 @@ public class DeathJadeLakeBackground : ModSystem
 	/// <param name="bg"></param>
 	public static void DrawBackground(BackgroundSlideBase bg)
 	{
-		DeathJadeLakeBiome dJLB = ModContent.GetInstance<DeathJadeLakeBiome>();
-		if (dJLB == null)
-		{
-			return;
-		}
-		float drawTop = dJLB.LiquidSurfaceY;
+		float drawTop = DeathJadeLakeBiome.LiquidSurfaceY;
 		if (drawTop - Main.screenPosition.Y < -Main.offScreenRange)
 		{
 			drawTop = -Main.offScreenRange + Main.screenPosition.Y;
 		}
 		float drawBottom = Main.screenPosition.Y + Main.screenHeight + Main.offScreenRange;
+		if (drawTop > drawBottom)
+		{
+			return;
+		}
 		var bars = new List<Vertex2D>();
 		int yLayers = (int)((drawBottom - drawTop) / 16f);
 
@@ -104,10 +102,10 @@ public class DeathJadeLakeBackground : ModSystem
 			float rightClamp = Main.screenWidth + Main.offScreenRange + Main.screenPosition.X;
 			float rightBound = Main.maxTilesX * 16;
 			int tileY = (int)(drawTop / 16) + offsetY;
-			if (dJLB.RightBoundOfACertainY.ContainsKey(tileY))
+			if (DeathJadeLakeBiome.RightBoundOfACertainY.ContainsKey(tileY))
 			{
 				int rightX;
-				dJLB.RightBoundOfACertainY.TryGetValue(tileY, out rightX);
+				DeathJadeLakeBiome.RightBoundOfACertainY.TryGetValue(tileY, out rightX);
 				rightBound = rightX * 16;
 			}
 			if (rightClamp > rightBound)

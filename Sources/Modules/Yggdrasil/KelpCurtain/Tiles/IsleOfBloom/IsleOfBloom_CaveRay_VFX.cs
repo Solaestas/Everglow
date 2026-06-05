@@ -52,13 +52,5 @@ public class IsleOfBloom_CaveRay_VFX : TileVFX
 			bars.Add(drawPos + new Vector2(32, 0), color * fade, new Vector3(0.7f, timeValue, 0));
 		}
 		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleStrip);
-
-		List<Vector2> polygon = new List<Vector2>();
-		Vector2 centerPosWorld = OriginTilePos.ToWorldCoordinates() + new Vector2(0, 480);
-		polygon.Add(centerPosWorld + new Vector2(-100, -40) * 16);
-		polygon.Add(centerPosWorld + new Vector2(100, -40) * 16);
-		polygon.Add(centerPosWorld + new Vector2(130, 30) * 16);
-		polygon.Add(centerPosWorld + new Vector2(-130, 30) * 16);
-		EliminateLightManager.AddPolygon(polygon);
 	}
 }

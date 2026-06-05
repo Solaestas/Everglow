@@ -21,7 +21,7 @@ public class KelpCurtainBiome : ModBiome
 
 	public override string BackgroundPath => base.BackgroundPath;
 
-	public override string MapBackground => "Everglow/Yggdrasil/KelpCurtain/Backgrounds/KelpCurtain_MapBackground";
+	public override string MapBackground => ModAsset.KelpCurtain_MapBackground_Mod;
 
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<Water.KelpCurtainWaterStyle>();
 

@@ -13,6 +13,8 @@ public class BlackAwningBoat_ControlUI : Visual
 
 	public Vector2 Position;
 
+	public Vector2 MouseWorldCurrent;
+
 	public Player Owner;
 
 	public float AnimationTimer;
@@ -93,6 +95,7 @@ public class BlackAwningBoat_ControlUI : Visual
 
 	public void UpdateUI(UICircle ui)
 	{
+		MouseWorldCurrent = Main.MouseWorld;
 		ui.RelativeCenter = new Vector2((ui.UIType - 2) * 30, 60);
 		if (AnimationTimer < 30)
 		{
@@ -111,12 +114,12 @@ public class BlackAwningBoat_ControlUI : Visual
 		{
 			return;
 		}
-		if ((Main.MouseWorld - Position - ui.RelativeCenter).Length() < 14 && ui.Scale < 1.1f)
+		if ((MouseWorldCurrent - Position - ui.RelativeCenter).Length() < 14 && ui.Scale < 1.1f)
 		{
 			SoundEngine.PlaySound(SoundID.MenuClose);
 			ui.Scale = 1.2f;
 		}
-		if ((Main.MouseWorld - Position - ui.RelativeCenter).Length() >= 14 && ui.Scale > 1.1f)
+		if ((MouseWorldCurrent - Position - ui.RelativeCenter).Length() >= 14 && ui.Scale > 1.1f)
 		{
 			ui.Scale = 1f;
 		}
@@ -128,7 +131,7 @@ public class BlackAwningBoat_ControlUI : Visual
 		{
 			return;
 		}
-		if ((Main.MouseWorld - Position - ui.RelativeCenter).Length() < 20)
+		if ((MouseWorldCurrent - Position - ui.RelativeCenter).Length() < 20)
 		{
 			if (Main.mouseLeft && Main.mouseLeftRelease)
 			{
@@ -147,8 +150,34 @@ public class BlackAwningBoat_ControlUI : Visual
 					ParentBoat.Velocity += new Vector2(1, 0);
 					Owner.velocity += new Vector2(1, 0);
 				}
-				if(ui.UIType == 4)
+				if (ui.UIType == 3)
 				{
+					ParentBoat.LightOn = !ParentBoat.LightOn;
+				}
+				if (ui.UIType == 4)
+				{
+					for (int l = 0; l < 16; l++)
+					{
+						int type;
+						switch (Main.rand.Next(3))
+						{
+							case 0:
+								type = GoreID.ChimneySmoke1;
+								break;
+							case 1:
+								type = GoreID.ChimneySmoke2;
+								break;
+							case 2:
+								type = GoreID.ChimneySmoke3;
+								break;
+							default:
+								type = GoreID.ChimneySmoke1;
+								break;
+						}
+
+						var gore = Gore.NewGorePerfect(ParentBoat.Position + new Vector2(Main.rand.NextFloat(92), Main.rand.NextFloat(20)) - new Vector2(17, 18), new Vector2(0, Main.rand.NextFloat(1f)).RotatedByRandom(MathHelper.TwoPi), type);
+						gore.timeLeft = Main.rand.Next(60, 120);
+					}
 					ParentBoat.Active = false;
 				}
 			}

@@ -32,6 +32,6 @@ public class IsleOfBloom_Underground_far : BackgroundSlideBase
 
 	public override bool CanActive()
 	{
-		return Main.LocalPlayer.InModBiome<DeathJadeLakeBiome>();
+		return Main.LocalPlayer.InModBiome<IsleOfBloomBiome>();
 	}
 }

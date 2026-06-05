@@ -32,37 +32,6 @@ public class IsleOfBloom_CaveRay : ModTile, ISceneTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-
-		if (bgSystem.HasBgSlide("Everglow.Yggdrasil.KelpCurtain.Background.KelpCurtainSky")/* && !bgSystem.HasBgSlide("Everglow.Yggdrasil.KelpCurtain.Background.IsleOfBloom_Underground_close")*/)
-		{
-			List<Vector2> polygon = new List<Vector2>();
-			Vector2 centerPosWorld = new Point(i, j).ToWorldCoordinates() + new Vector2(0, 720);
-			polygon.Add(centerPosWorld + new Vector2(0, -12) * 16);
-			polygon.Add(centerPosWorld + new Vector2(130, 0) * 16);
-			polygon.Add(centerPosWorld + new Vector2(0, 12) * 16);
-			polygon.Add(centerPosWorld + new Vector2(-130, 0) * 16);
-			List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
-
-			IsleOfBloom_Underground_close iob_bg_close = new IsleOfBloom_Underground_close();
-			iob_bg_close.WorldAnchor = centerPosWorld;
-			iob_bg_close.BgTiles = bgArea;
-			bgSystem.AddBackgroundSlide(iob_bg_close);
-
-			IsleOfBloom_Underground_middle iob_bg_middle = new IsleOfBloom_Underground_middle();
-			iob_bg_middle.WorldAnchor = centerPosWorld;
-			iob_bg_middle.BgTiles = bgArea;
-			bgSystem.AddBackgroundSlide(iob_bg_middle);
-
-			IsleOfBloom_Underground_far iob_bg_far = new IsleOfBloom_Underground_far();
-			iob_bg_far.WorldAnchor = centerPosWorld;
-			iob_bg_far.BgTiles = bgArea;
-			bgSystem.AddBackgroundSlide(iob_bg_far);
-
-			IsleOfBloom_Underground_sky iob_bg_sky = new IsleOfBloom_Underground_sky();
-			iob_bg_sky.WorldAnchor = centerPosWorld;
-			bgSystem.AddBackgroundSlide(iob_bg_sky);
-		}
 		base.NearbyEffects(i, j, closer);
 	}
 

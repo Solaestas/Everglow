@@ -28,12 +28,7 @@ public class DeathJadeLakeWater_TyndallLight : BackgroundSlideBase
 			return;
 		}
 		Color baseColor = new Color(0.1f, 0.3f, 0.2f, 0f) * deathJadeLakeBackground.Alpha;
-		DeathJadeLakeBiome dJLB = ModContent.GetInstance<DeathJadeLakeBiome>();
-		if (dJLB == null)
-		{
-			return;
-		}
-		float drawTop = dJLB.LiquidSurfaceY;
+		float drawTop = DeathJadeLakeBiome.LiquidSurfaceY;
 		if (drawTop - Main.screenPosition.Y < -Main.offScreenRange)
 		{
 			drawTop = -Main.offScreenRange + Main.screenPosition.Y;
@@ -54,10 +49,10 @@ public class DeathJadeLakeWater_TyndallLight : BackgroundSlideBase
 			float rightClamp = Main.screenWidth + Main.offScreenRange;
 			float rightBound = Main.maxTilesX * 16;
 			int tileY = (int)(drawTop / 16) + offsetY;
-			if (dJLB.RightBoundOfACertainY.ContainsKey(tileY))
+			if (DeathJadeLakeBiome.RightBoundOfACertainY.ContainsKey(tileY))
 			{
 				int rightX;
-				dJLB.RightBoundOfACertainY.TryGetValue(tileY, out rightX);
+				DeathJadeLakeBiome.RightBoundOfACertainY.TryGetValue(tileY, out rightX);
 				rightBound = rightX * 16;
 			}
 			rightBound -= Main.screenPosition.X;

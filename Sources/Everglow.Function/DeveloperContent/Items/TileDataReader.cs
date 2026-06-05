@@ -185,6 +185,9 @@ public class TileDataReaderSystem : Visual
 				datas += "\nCan Fill Liquid Blocks: " + CheckLiquidTiles.Count;
 			}
 		}
+		//float waterLine;
+		//Collision.GetWaterLine(i, j, out waterLine);
+		//datas += "\n" + waterLine;
 
 		if (tile.WallType > WallID.None)
 		{

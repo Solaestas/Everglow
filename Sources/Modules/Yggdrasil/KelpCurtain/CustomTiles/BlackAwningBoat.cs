@@ -10,6 +10,8 @@ public class BlackAwningBoat : BoxEntity
 {
 	public bool OnSelect = false;
 
+	public bool LightOn = false;
+
 	public BlackAwningBoat_ControlUI LocalUIHelper;
 
 	public override void SetDefaults()
@@ -79,13 +81,26 @@ public class BlackAwningBoat : BoxEntity
 				}
 			}
 		}
+		if(LightOn)
+		{
+			Lighting.AddLight(Box.Center, new Vector3(1.2f, 0.7f, 0.3f) * 1.25f);
+		}
 	}
 
 	public override void Draw()
 	{
 		Texture2D boatTex = ModAsset.BlackAwningBoat.Value;
 		var frame = new Rectangle(0, 50, 100, 50);
+		if(!LightOn)
+		{
+			frame.Y = 0;
+		}
 		Main.spriteBatch.Draw(boatTex, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, frame, Lighting.GetColor(new Vector2(Box.Center.X, Box.Bottom).ToTileCoordinates()), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
+		if(LightOn)
+		{
+			frame.X += 100;
+			Main.spriteBatch.Draw(boatTex, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, frame, new Color(1f ,1f, 1f, 0), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
+		}
 		if(OnSelect)
 		{
 			Texture2D boatTex_highlight = ModAsset.BlackAwningBoat_Single_Highlight.Value;

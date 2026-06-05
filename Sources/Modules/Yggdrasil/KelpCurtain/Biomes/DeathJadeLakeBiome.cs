@@ -1,17 +1,15 @@
 using Everglow.Yggdrasil.Common;
-using Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 using Everglow.Yggdrasil.KelpCurtain.Water;
-using Everglow.Yggdrasil.WorldGeneration;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Biomes;
 
 public class DeathJadeLakeBiome : ModBiome
 {
-	public float LiquidSurfaceY = 0;
+	public static float LiquidSurfaceY = 0;
 
-	public Dictionary<int, int> RightBoundOfACertainY = [];
+	public static Dictionary<int, int> RightBoundOfACertainY = [];
 
-	public void GetLiquidSurfaceY()
+	public static void GetLiquidSurfaceY()
 	{
 		int checkY = (int)(Main.maxTilesY * 0.88f);
 		int checkX = Main.maxTilesX / 2;
@@ -33,7 +31,7 @@ public class DeathJadeLakeBiome : ModBiome
 			for (int x = checkX; x < Main.maxTilesX * 0.8f; x++)
 			{
 				var tileBound = TileUtils.SafeGetTile(x, checkBoundY);
-				if(tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
+				if (tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
 				{
 					valueX = x;
 					break;
@@ -50,7 +48,7 @@ public class DeathJadeLakeBiome : ModBiome
 	/// <summary>
 	/// TODO: BGM
 	/// </summary>
-	public override int Music => YggdrasilContent.QuickMusic(ModAsset.JellyBallHotbed_BGM_Path);
+	public override int Music => YggdrasilContent.QuickMusic(ModAsset.KelpCurtainBGM_Path);
 
 	public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
 
@@ -64,7 +62,7 @@ public class DeathJadeLakeBiome : ModBiome
 	/// <summary>
 	/// TODO:MapBackground
 	/// </summary>
-	public override string MapBackground => ModAsset.YggdrasilTown_MapBackground_Mod;
+	public override string MapBackground => ModAsset.KelpCurtain_MapBackground_Mod;
 
 	/// <summary>
 	/// TODO:WaterStyle
@@ -72,11 +70,6 @@ public class DeathJadeLakeBiome : ModBiome
 	public override ModWaterStyle WaterStyle => ModContent.GetInstance<KelpCurtainWaterStyle>();
 
 	public override Color? BackgroundColor => base.BackgroundColor;
-
-	public override void Load()
-	{
-		base.Load();
-	}
 
 	public override bool IsBiomeActive(Player player)
 	{
@@ -88,6 +81,55 @@ public class DeathJadeLakeBiome : ModBiome
 
 	public override void OnInBiome(Player player)
 	{
+		// Add water light
+		float lightTop = LiquidSurfaceY;
+		if (lightTop - Main.screenPosition.Y < -Main.offScreenRange)
+		{
+			lightTop = -Main.offScreenRange + Main.screenPosition.Y;
+		}
+		float lightBottom = Main.screenPosition.Y + Main.screenHeight + Main.offScreenRange;
+		lightBottom = Math.Min(lightBottom, LiquidSurfaceY + 45 * 16f);
+		if (lightTop > lightBottom)
+		{
+			return;
+		}
+		int yLayers = (int)((lightBottom - lightTop) / 16f);
+		for (int offsetY = 0; offsetY < yLayers; offsetY++)
+		{
+			float rightClamp = Main.screenWidth + Main.offScreenRange + Main.screenPosition.X;
+			float rightBound = Main.maxTilesX * 16;
+			int tileY = (int)(lightTop / 16) + offsetY;
+			if (RightBoundOfACertainY.ContainsKey(tileY))
+			{
+				int rightX;
+				RightBoundOfACertainY.TryGetValue(tileY, out rightX);
+				rightBound = rightX;
+			}
+			if (rightClamp > rightBound)
+			{
+				rightClamp = rightBound;
+			}
+			int y = tileY;
+			for (int x = (int)((Main.screenPosition.X - Main.offScreenRange) / 16f); x < rightClamp; x++)
+			{
+				var tile = Main.tile[x, y];
+				if (tile.LiquidAmount > 0 && tile.WallType == WallID.None)
+				{
+					Lighting.AddLight(x, y, 0.1f, 0.4f, 0.3f);
+				}
+			}
+			if(y == LiquidSurfaceY)
+			{
+				for (int x = (int)((Main.screenPosition.X - Main.offScreenRange) / 16f); x < rightClamp; x++)
+				{
+					var tile = Main.tile[x, y];
+					if (tile.LiquidAmount > 0)
+					{
+						tile.LiquidAmount = 255;
+					}
+				}
+			}
+		}
 		base.OnInBiome(player);
 	}
 }

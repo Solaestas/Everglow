@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.Common.Tiles;
 using Everglow.Yggdrasil.Common.Walls;
 using Everglow.Yggdrasil.KelpCurtain;
+using Everglow.Yggdrasil.KelpCurtain.Biomes;
 using Everglow.Yggdrasil.KelpCurtain.Items.Accessories;
 using Everglow.Yggdrasil.KelpCurtain.Items.Materials;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons;
@@ -63,6 +64,7 @@ public class KelpCurtainGeneration
 		UnderwaterTreasury();
 		VampireMatCave();
 
+		DeathJadeLakeBiome.GetLiquidSurfaceY();
 		// IsleOfBloom();
 		// BuildRainValley();
 	}
@@ -3678,21 +3680,35 @@ public class KelpCurtainGeneration
 		int x = (int)(Main.maxTilesX * 0.388f);
 		int y = (int)(Main.maxTilesY * 0.894f);
 		Point entrance = new Point(x, y);
-		List<Point> cellRoom = BFSContinueEmpty(entrance, false, 1536);
+		List<Point> cellRoom = BFSContinueEmpty(entrance, false, 1536, WaterDeliveryHoleTiles);
 		if (cellRoom.Count < 100)
 		{
 			for (int k = 0; k < 100; k++)
 			{
 				int dk = GenRand.Next(16) - 8;
 				Point newEntrance = entrance + new Point(dk + GenRand.Next(-3, 4), dk * 4 + GenRand.Next(-3, 4));
-				cellRoom = BFSContinueEmpty(newEntrance, false, 1536);
+				cellRoom = BFSContinueEmpty(newEntrance, false, 1536, WaterDeliveryHoleTiles);
 				if (cellRoom.Count >= 100)
 				{
 					break;
 				}
 			}
 		}
+		bool hasDeliveryHole = false;
+		foreach (var pos in cellRoom)
+		{
+			var tile = SafeGetTile(pos);
+			if (WaterDeliveryHoleTiles.Contains(tile.TileType))
+			{
+				hasDeliveryHole = true;
+				break;
+			}
+		}
 		Point room_centroid = GetCentroid(cellRoom);
+		if (!hasDeliveryHole)
+		{
+			MazeUnderLake_ConnectDeliveryHole(room_centroid.ToWorldCoordinates(), (room_centroid + new Point(1000, 0)).ToWorldCoordinates());
+		}
 
 		// Cave of Vampire Mat.
 		int cave_x = (int)(Main.maxTilesX * 0.3435f);
@@ -3723,6 +3739,27 @@ public class KelpCurtainGeneration
 		PlaceLineBlock(caveCenter, room_centroid, 12 * 16, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.SolidBlock);
 		PlaceLineWall(caveCenter, room_centroid, 12 * 16, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.SolidBlock);
 		PlaceLineBlock(caveCenter, room_centroid, 8 * 16, -1, (int)TileChangeState.SolidBlock);
+
+		// Board Sign
+		Point boardSignBottom = room_centroid;
+		for(int k = 0;k < 60;k++)
+		{
+			var tile = SafeGetTile(boardSignBottom);
+			if(IsTileSolid(boardSignBottom))
+			{
+				break;
+			}
+			boardSignBottom.Y += 1;
+		}
+		boardSignBottom.Y -= 1;
+		PlaceRectangleAreaOfBlock(boardSignBottom.X - 2, boardSignBottom.Y - 9, boardSignBottom.X + 2,  boardSignBottom.Y, -1, (int)TileChangeState.Forceful);
+		PlaceFrameImportantTilesAtTileObjectDataOrigin(boardSignBottom, ModContent.TileType<VampireMatCave_BoardSign>());
+
+		// Hanging Sign
+		Point hangingSignTop = caveCenter;
+		hangingSignTop.Y -= CheckSpaceUp(caveCenter);
+		PlaceRectangleAreaOfBlock(hangingSignTop.X - 2, hangingSignTop.Y, hangingSignTop.X + 2, hangingSignTop.Y + 14, -1, (int)TileChangeState.Forceful);
+		PlaceFrameImportantTilesAtTileObjectDataOrigin(hangingSignTop, ModContent.TileType<VampireMatCave_HangingSign>());
 
 		// Barnacle room.
 		Point barnacle_room_center = new Point((int)(Main.maxTilesX * 0.361f), UnderwaterTreasury_Bottom_Room_center_Y);
@@ -3793,6 +3830,22 @@ public class KelpCurtainGeneration
 				Point platformPos = tilePos + new Point(dx, 4);
 				var tile = SafeGetTile(platformPos);
 				tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
+				tile.HasTile = true;
+				if (dx == -3 || dx == 4)
+				{
+					var tileBelow = SafeGetTile(platformPos + new Point(0, 1));
+					tileBelow.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
+					tileBelow.HasTile = true;
+				}
+			}
+		}
+		for (int k = 0; k < 21; k++)
+		{
+			Point tilePos = caveCenter + new Vector2(0, -808).RotatedBy(k / 21f * MathHelper.TwoPi).ToTileCoordinates();
+			var tile = SafeGetTile(tilePos);
+			if(!tile.HasTile)
+			{
+				tile.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
 				tile.HasTile = true;
 			}
 		}
