@@ -11,6 +11,7 @@ public class IsleOfBloom_Underground_sky : BackgroundSlideBase
 		Texture = ModAsset.IsleOfBloom_Underground_sky.Value;
 		Distance = 2.8f;
 		UseColorStyle = 2;
+		LayerPriority = 2;
 		Shader = Effects.XWrap_YClamp_Shader;
 	}
 

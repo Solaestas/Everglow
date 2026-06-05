@@ -23,7 +23,7 @@ public class IsleOfBloom_CaveRay_VFX : TileVFX
 	{
 		Vector2 center = OriginTilePos.ToWorldCoordinates(8, 8) + new Vector2(0, 320);
 		Color color = new Color(0.4f, 0.4f, 0.6f, 0) * 0.1f;
-		float timeValue = Main.GlobalTimeWrappedHourly;
+		float timeValue = Main.GlobalTimeWrappedHourly * 0.05f;
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int dy = -30; dy <= 30; dy++)
 		{

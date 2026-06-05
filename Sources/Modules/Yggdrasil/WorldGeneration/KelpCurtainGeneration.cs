@@ -3683,8 +3683,8 @@ public class KelpCurtainGeneration
 		{
 			for (int k = 0; k < 100; k++)
 			{
-				int dk = GenRand.Next(40) - 20;
-				Point newEntrance = entrance + new Point(dk, dk * 4);
+				int dk = GenRand.Next(16) - 8;
+				Point newEntrance = entrance + new Point(dk + GenRand.Next(-3, 4), dk * 4 + GenRand.Next(-3, 4));
 				cellRoom = BFSContinueEmpty(newEntrance, false, 1536);
 				if (cellRoom.Count >= 100)
 				{
@@ -3782,6 +3782,20 @@ public class KelpCurtainGeneration
 		PlaceCurveWall(path_to_vampire_cave, 16 * 16, ModContent.WallType<YggdrasilBlackRockWall>(), (int)TileChangeState.HasTile);
 		PlaceCurveBlock(path_to_vampire_cave, 12 * 16, -1, (int)TileChangeState.HasTile);
 		PlaceCurveLiquid(path_to_vampire_cave, 16 * 16, LiquidID.Water, (int)TileChangeState.HasTile);
+
+		// Add DrainOutlet for player breathing.
+		for (int k = 0; k < 5; k++)
+		{
+			Point tilePos = caveCenter + new Vector2(0, -480).RotatedBy(k / 5f * MathHelper.TwoPi).ToTileCoordinates();
+			PlaceFrameImportantTilesAtTileObjectDataOrigin(tilePos, ModContent.TileType<DrainOutlet>());
+			for (int dx = -3; dx <= 4; dx++)
+			{
+				Point platformPos = tilePos + new Point(dx, 4);
+				var tile = SafeGetTile(platformPos);
+				tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
+				tile.HasTile = true;
+			}
+		}
 	}
 
 	/// <summary>

@@ -278,6 +278,35 @@ public partial class TileUtils
 		}
 	}
 
+	/// <summary>
+	/// Place frame important tiles at TileObjectData.Origin.
+	/// </summary>
+	/// <param name="tileCoord"></param>
+	/// <param name="type"></param>
+	/// <param name="startX"></param>
+	/// <param name="startY"></param>
+	public static void PlaceFrameImportantTilesAtTileObjectDataOrigin(Point tileCoord, int type, int startX = 0, int startY = 0)
+	{
+		int i = tileCoord.X;
+		int j = tileCoord.Y;
+		TileObjectData tileObjectData = TileObjectData.GetTileData(type, Main.LocalPlayer.HeldItem.placeStyle);
+		i -= tileObjectData.Origin.X;
+		j -= tileObjectData.Origin.Y;
+		int width = tileObjectData.Width;
+		int height = tileObjectData.Height;
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				var tile = SafeGetTile(x + i, y + j);
+				tile.TileType = (ushort)type;
+				tile.TileFrameX = (short)((x * 18) + startX);
+				tile.TileFrameY = (short)((y * 18) + startY);
+				tile.HasTile = true;
+			}
+		}
+	}
+
 	/// <returns>True when the given point can be killed safely(without chest).</returns>
 	public static bool ChestSafe(int x, int y)
 	{

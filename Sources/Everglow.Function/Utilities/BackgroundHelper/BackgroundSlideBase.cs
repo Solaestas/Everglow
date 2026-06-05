@@ -28,6 +28,13 @@ public abstract class BackgroundSlideBase
 	/// </summary>
 	public int UseColorStyle = 0;
 
+	/// <summary>
+	/// It has higher priority in ordering the layer of backgrounds then <see cref="Distance"/>.<br/>
+	/// Larger overlap the smaller.<br/>
+	/// In most cases it should be 0.
+	/// </summary>
+	public int LayerPriority = 0;
+
 	public virtual bool AllowMultiple => false;
 
 	/// <summary>

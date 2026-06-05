@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Background;
 
 public class KelpCurtainBackground : ModSystem
 {
-	public Vector2 BiomeCenter = new Vector2(9000, 157000);
+	public static Vector2 BiomeCenter = new Vector2(9000, 157000);
 	public bool ZoneKelp = false;
 
 	/// <summary>
@@ -136,6 +136,6 @@ public class KelpCurtainBackground : ModSystem
 		}
 
 		Color baseColor = Color.White * alpha;
-		DrawFarBG(baseColor);
+		//DrawFarBG(baseColor);
 	}
 }

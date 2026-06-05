@@ -13,6 +13,7 @@ public class IsleOfBloom_Underground_middle : BackgroundSlideBase
 		Texture = ModAsset.IsleOfBloom_Underground_middle.Value;
 		Distance = 1.7f;
 		UseColorStyle = 1;
+		LayerPriority = 2;
 		Shader = Effects.XWrap_YClamp_Shader;
 	}
 
@@ -24,7 +25,7 @@ public class IsleOfBloom_Underground_middle : BackgroundSlideBase
 	public override void Draw()
 	{
 		var bars = new List<Vertex2D>();
-		Add_TileBgVertice(this, BgTiles, bars);
+		BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, BgTiles, bars);
 		DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
 	}
 
