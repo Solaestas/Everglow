@@ -3759,7 +3759,11 @@ public class KelpCurtainGeneration
 		Point hangingSignTop = caveCenter;
 		hangingSignTop.Y -= CheckSpaceUp(caveCenter);
 		PlaceRectangleAreaOfBlock(hangingSignTop.X - 2, hangingSignTop.Y, hangingSignTop.X + 2, hangingSignTop.Y + 14, -1, (int)TileChangeState.Forceful);
-		PlaceFrameImportantTilesAtTileObjectDataOrigin(hangingSignTop, ModContent.TileType<VampireMatCave_HangingSign>());
+		VampireMatCave_HangingSign vMCHS = TileLoader.GetTile(ModContent.TileType<VampireMatCave_HangingSign>()) as VampireMatCave_HangingSign;
+		if (vMCHS is not null)
+		{
+			vMCHS.PlaceAtTileObjectDataOrigin(hangingSignTop.X, hangingSignTop.Y);
+		}
 
 		// Barnacle room.
 		Point barnacle_room_center = new Point((int)(Main.maxTilesX * 0.361f), UnderwaterTreasury_Bottom_Room_center_Y);

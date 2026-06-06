@@ -1,3 +1,4 @@
+using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
 using Terraria.DataStructures;
@@ -6,10 +7,12 @@ using Terraria.ObjectData;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DeathJadeLake;
 
-public class VampireMatCave_HangingSign : ModTile
+public class VampireMatCave_HangingSign : ShapeDataTile
 {
 	public override void SetStaticDefaults()
 	{
+		TotalWidth = 5;
+		TotalHeight = 14;
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = false;
 		Main.tileWaterDeath[Type] = false;
