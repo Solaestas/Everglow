@@ -65,6 +65,7 @@ public class KelpCurtainGeneration
 		VampireMatCave();
 
 		DeathJadeLakeBiome.GetLiquidSurfaceY();
+
 		// IsleOfBloom();
 		// BuildRainValley();
 	}
@@ -3741,24 +3742,26 @@ public class KelpCurtainGeneration
 		PlaceLineBlock(caveCenter, room_centroid, 8 * 16, -1, (int)TileChangeState.SolidBlock);
 
 		// Board Sign
-		Point boardSignBottom = room_centroid;
-		for(int k = 0;k < 60;k++)
+		Point boardSignBottom = room_centroid + new Point(3, 0);
+		for (int k = 0; k < 60; k++)
 		{
 			var tile = SafeGetTile(boardSignBottom);
-			if(IsTileSolid(boardSignBottom))
+			if (IsTileSolid(boardSignBottom))
 			{
 				break;
 			}
 			boardSignBottom.Y += 1;
 		}
 		boardSignBottom.Y -= 1;
-		PlaceRectangleAreaOfBlock(boardSignBottom.X - 2, boardSignBottom.Y - 9, boardSignBottom.X + 2,  boardSignBottom.Y, -1, (int)TileChangeState.Forceful);
-		PlaceFrameImportantTilesAtTileObjectDataOrigin(boardSignBottom, ModContent.TileType<VampireMatCave_BoardSign>());
+		VampireMatCave_BoardSign vMCBS = TileLoader.GetTile(ModContent.TileType<VampireMatCave_BoardSign>()) as VampireMatCave_BoardSign;
+		if (vMCBS is not null)
+		{
+			vMCBS.PlaceAtTileObjectDataOrigin(boardSignBottom.X, boardSignBottom.Y);
+		}
 
 		// Hanging Sign
-		Point hangingSignTop = caveCenter;
-		hangingSignTop.Y -= CheckSpaceUp(caveCenter);
-		PlaceRectangleAreaOfBlock(hangingSignTop.X - 2, hangingSignTop.Y, hangingSignTop.X + 2, hangingSignTop.Y + 14, -1, (int)TileChangeState.Forceful);
+		Point hangingSignTop = room_centroid + new Point(-2, 0);
+		hangingSignTop.Y -= CheckSpaceUp(hangingSignTop);
 		VampireMatCave_HangingSign vMCHS = TileLoader.GetTile(ModContent.TileType<VampireMatCave_HangingSign>()) as VampireMatCave_HangingSign;
 		if (vMCHS is not null)
 		{
@@ -3847,7 +3850,7 @@ public class KelpCurtainGeneration
 		{
 			Point tilePos = caveCenter + new Vector2(0, -808).RotatedBy(k / 21f * MathHelper.TwoPi).ToTileCoordinates();
 			var tile = SafeGetTile(tilePos);
-			if(!tile.HasTile)
+			if (!tile.HasTile)
 			{
 				tile.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
 				tile.HasTile = true;

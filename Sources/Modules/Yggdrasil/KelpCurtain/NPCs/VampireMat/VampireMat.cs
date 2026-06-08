@@ -20,6 +20,7 @@ public class VampireMat : ModNPC
 	{
 		Flat,
 		TowardScreen,
+		ProjRelease,
 	}
 
 	public int NPCTextureState = 0;
@@ -173,15 +174,53 @@ public class VampireMat : ModNPC
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
+	public IEnumerator<ICoroutineInstruction> ProjRelease()
+	{
+		for (int k = 0; k < 120; k++)
+		{
+			NPC.velocity *= 0.96f;
+			NPC.rotation *= 0.96f;
+			if (NPCTextureState == (int)TextureState.Flat)
+			{
+				if (NPC.frame.Y == 1060)
+				{
+					NPCTextureState = (int)TextureState.ProjRelease;
+					NPC.frame = new Rectangle(0, 0, 400, 400);
+					break;
+				}
+			}
+			yield return new SkipThisFrame();
+		}
+		Player player = Main.player[NPC.target];
+		NPC.velocity *= 0f;
+		Vector2 toTarget = player.Center - NPC.Center;
+		NPC.spriteDirection = 1;
+		NPC.rotation = toTarget.ToRotationSafe() + MathHelper.PiOver2;
+		for (int k = 0; k < 31; k++)
+		{
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPCTextureState = (int)TextureState.Flat;
+		NPC.frame = new Rectangle(0, 0, 346, 106);
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
-		switch (Main.rand.Next(2))
+		switch (Main.rand.Next(3))
 		{
 			case 0:
 				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
 				break;
 			case 1:
 				AICoroutine.StartCoroutine(new Coroutine(TentacleRelease()));
+				break;
+			case 2:
+				AICoroutine.StartCoroutine(new Coroutine(ProjRelease()));
 				break;
 		}
 
@@ -245,6 +284,10 @@ public class VampireMat : ModNPC
 				}
 				return false;
 			}
+		}
+		if (NPCTextureState == (int)TextureState.ProjRelease)
+		{
+			texture = ModAsset.VampireMat_ReleaseProj.Value;
 		}
 		var frame = NPC.frame;
 		var rotation = NPC.rotation;

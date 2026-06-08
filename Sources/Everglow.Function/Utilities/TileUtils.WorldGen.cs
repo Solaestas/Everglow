@@ -1787,7 +1787,7 @@ public partial class TileUtils
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static int CheckSpaceLeft(int x, int y)
+	public static int CheckSpaceLeft(int x, int y, bool ignore_none_solid = false)
 	{
 		int count = 0;
 		int x0 = x;
@@ -1796,7 +1796,7 @@ public partial class TileUtils
 		{
 			return count;
 		}
-		while (!SafeGetTile(x0, y0).HasTile)
+		while (!SafeGetTile(x0, y0).HasTile || (!IsTileSolid(x0, y0) && ignore_none_solid))
 		{
 			if (x0 < 0)
 			{
@@ -1814,7 +1814,7 @@ public partial class TileUtils
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static int CheckSpaceRight(int x, int y)
+	public static int CheckSpaceRight(int x, int y, bool ignore_none_solid = false)
 	{
 		int count = 0;
 		int x0 = x;
@@ -1823,7 +1823,7 @@ public partial class TileUtils
 		{
 			return count;
 		}
-		while (!SafeGetTile(x0, y0).HasTile)
+		while (!SafeGetTile(x0, y0).HasTile || (!IsTileSolid(x0, y0) && ignore_none_solid))
 		{
 			if (x0 > Main.maxTilesX)
 			{
@@ -1841,7 +1841,7 @@ public partial class TileUtils
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static int CheckSpaceUp(int x, int y)
+	public static int CheckSpaceUp(int x, int y, bool ignore_none_solid = false)
 	{
 		int count = 0;
 		int x0 = x;
@@ -1850,7 +1850,7 @@ public partial class TileUtils
 		{
 			return count;
 		}
-		while (!SafeGetTile(x0, y0).HasTile)
+		while (!SafeGetTile(x0, y0).HasTile || (!IsTileSolid(x0, y0) && ignore_none_solid))
 		{
 			if (y0 < 0)
 			{
@@ -1868,7 +1868,7 @@ public partial class TileUtils
 	/// <param name="x"></param>
 	/// <param name="y"></param>
 	/// <returns></returns>
-	public static int CheckSpaceDown(int x, int y)
+	public static int CheckSpaceDown(int x, int y, bool ignore_none_solid = false)
 	{
 		int count = 0;
 		int x0 = x;
@@ -1877,7 +1877,7 @@ public partial class TileUtils
 		{
 			return count;
 		}
-		while (!SafeGetTile(x0, y0).HasTile)
+		while (!SafeGetTile(x0, y0).HasTile || (!IsTileSolid(x0, y0) && ignore_none_solid))
 		{
 			if (y0 > Main.maxTilesY)
 			{
@@ -1899,24 +1899,24 @@ public partial class TileUtils
 		return CheckSpaceWidth(pos.X, pos.Y);
 	}
 
-	public static int CheckSpaceLeft(Point pos)
+	public static int CheckSpaceLeft(Point pos, bool ignore_none_solid = false)
 	{
-		return CheckSpaceLeft(pos.X, pos.Y);
+		return CheckSpaceLeft(pos.X, pos.Y, ignore_none_solid);
 	}
 
-	public static int CheckSpaceRight(Point pos)
+	public static int CheckSpaceRight(Point pos, bool ignore_none_solid = false)
 	{
-		return CheckSpaceRight(pos.X, pos.Y);
+		return CheckSpaceRight(pos.X, pos.Y, ignore_none_solid);
 	}
 
-	public static int CheckSpaceUp(Point pos)
+	public static int CheckSpaceUp(Point pos, bool ignore_none_solid = false)
 	{
-		return CheckSpaceUp(pos.X, pos.Y);
+		return CheckSpaceUp(pos.X, pos.Y, ignore_none_solid);
 	}
 
-	public static int CheckSpaceDown(Point pos)
+	public static int CheckSpaceDown(Point pos, bool ignore_none_solid = false)
 	{
-		return CheckSpaceDown(pos.X, pos.Y);
+		return CheckSpaceDown(pos.X, pos.Y, ignore_none_solid);
 	}
 
 	/// <summary>
