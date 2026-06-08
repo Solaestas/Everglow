@@ -3,6 +3,7 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
+using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Terraria.DataStructures;
 
@@ -202,6 +203,12 @@ public class VampireMat : ModNPC
 			{
 				NPC.frame.Y += 400;
 			}
+			if (k == 25)
+			{
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, toTarget.NormalizeSafe() * 6f, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball>(), 48, 2.5f, Main.myPlayer);
+				NPC.velocity -= toTarget.NormalizeSafe() * 12f;
+			}
+			NPC.velocity *= 0.9f;
 			yield return new SkipThisFrame();
 		}
 		NPCTextureState = (int)TextureState.Flat;
@@ -236,13 +243,32 @@ public class VampireMat : ModNPC
 			NPC.frameCounter %= Main.npcFrameCount[NPC.type];
 			NPC.frame.Y = (int)NPC.frameCounter * 106;
 		}
-		if (NPCTextureState == (int)TextureState.TowardScreen)
-		{
-		}
 	}
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
+	}
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
+	{
+		VampireMatHitCommonEffect(target);
+		base.OnHitPlayer(target, info);
+	}
+
+	public static void VampireMatHitCommonEffect(Player target)
+	{
+		if (target.HasBuff(BuffID.Gills))
+		{
+			target.ClearBuff(BuffID.Gills);
+		}
+		var screenEffectVFX = new ScreenScaringEffect()
+		{
+			Active = true,
+			Visible = true,
+			Timer = 0,
+			MaxTime = 120,
+		};
+		Ins.VFXManager.Add(screenEffectVFX);
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)

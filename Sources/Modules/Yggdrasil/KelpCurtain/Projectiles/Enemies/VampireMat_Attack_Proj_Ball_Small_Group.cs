@@ -1,0 +1,109 @@
+using Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
+using Terraria.DataStructures;
+
+namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
+
+public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
+{
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MagicProjectiles;
+
+	public struct SubProj
+	{
+		public Vector2 Position;
+		public Vector2 Velocity;
+		public bool Active;
+		public float Scale;
+		public float MaxTime;
+		public float Timer;
+	}
+
+	public List<SubProj> SubProjs = new List<SubProj>();
+
+	public override void SetDefaults()
+	{
+		Projectile.width = 20;
+		Projectile.height = 20;
+		Projectile.aiStyle = -1;
+		Projectile.timeLeft = 1200;
+		Projectile.penetrate = -1;
+		Projectile.tileCollide = false;
+		Projectile.ignoreWater = true;
+		Projectile.friendly = false;
+		Projectile.hostile = true;
+	}
+
+	public override void OnSpawn(IEntitySource source)
+	{
+		for (int k = 0; k < 40; k++)
+		{
+			var sproj = default(SubProj);
+			sproj.Position = Projectile.Center;
+			sproj.Velocity = new Vector2(0, -4).RotatedBy(k * MathHelper.TwoPi / 40f);
+			sproj.Active = true;
+			sproj.Scale = 0.4f;
+			sproj.MaxTime = 360;
+			sproj.Timer = 0;
+			SubProjs.Add(sproj);
+		}
+	}
+
+	public override void AI()
+	{
+		Projectile.velocity *= 0;
+		for (int i = SubProjs.Count - 1; i >= 0; i--)
+		{
+			var sp = SubProjs[i];
+			Lighting.AddLight(sp.Position, new Vector3(1f, 0.1f, 0.2f) * sp.Scale);
+			sp.Position += sp.Velocity;
+			sp.Velocity = sp.Velocity.NormalizeSafe() * (4f + MathF.Sin(i / 5f * MathHelper.TwoPi + (float)Main.time * 0.03f + Projectile.whoAmI) * 0.3f * MathF.Cos(Projectile.timeLeft / 60f));
+			sp.Timer++;
+			if(sp.MaxTime - sp.Timer < 60)
+			{
+				sp.Scale *= 0.96f;
+			}
+			SubProjs[i] = sp;
+			if (sp.Timer >= sp.MaxTime)
+			{
+				sp.Active = false;
+				SubProjs.RemoveAt(i);
+			}
+		}
+		if(SubProjs.Count <= 0)
+		{
+			Projectile.Kill();
+		}
+	}
+
+	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+	{
+		foreach (var sp in SubProjs)
+		{
+			int x = (int)sp.Position.X;
+			int y = (int)sp.Position.Y;
+			Rectangle subHitbox = new Rectangle(x - 10, y - 10, 20, 20);
+			if(subHitbox.Intersects(targetHitbox))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public override void OnHitPlayer(Player target, Player.HurtInfo info)
+	{
+		VampireMat.VampireMatHitCommonEffect(target);
+		base.OnHitPlayer(target, info);
+	}
+
+	public override bool PreDraw(ref Color lightColor)
+	{
+		Texture2D tex = ModAsset.VampireMat_Attack_Proj_Ball.Value;
+		Texture2D tex_black = ModAsset.VampireMat_Attack_Proj_Ball_black.Value;
+		foreach (var sp in SubProjs)
+		{
+			Main.EntitySpriteDraw(tex_black, sp.Position - Main.screenPosition, null, Color.White, 0, tex_black.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, null, new Color(1f, 0.2f, 0.3f, 0), 0, tex.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+		}
+		return false;
+	}
+}

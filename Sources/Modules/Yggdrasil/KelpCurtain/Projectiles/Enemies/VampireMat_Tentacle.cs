@@ -61,10 +61,7 @@ public class VampireMat_Tentacle : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		if (target.HasBuff(BuffID.Gills))
-		{
-			target.ClearBuff(BuffID.Gills);
-		}
+		VampireMat.VampireMatHitCommonEffect(target);
 		base.OnHitPlayer(target, info);
 	}
 
