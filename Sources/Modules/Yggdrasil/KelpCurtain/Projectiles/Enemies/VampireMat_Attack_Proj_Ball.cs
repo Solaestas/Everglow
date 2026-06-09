@@ -32,6 +32,14 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 		toPlayer = toPlayer.NormalizeSafe() * 6;
 		Projectile.velocity = toPlayer * 0.05f + Projectile.velocity * 0.95f;
 		Projectile.velocity = Projectile.velocity.NormalizeSafe() * 6f;
+		if(Projectile.timeLeft % 6 == 0)
+		{
+			Projectile.frame++;
+			if(Projectile.frame >= 10)
+			{
+				Projectile.frame = 0;
+			}
+		}
 	}
 
 	public override void OnKill(int timeLeft)
@@ -51,7 +59,8 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 		Texture2D tex_black = ModAsset.VampireMat_Attack_Proj_Ball_black.Value;
 		float drawScale = Projectile.scale * (MathF.Sin((float)Main.time * 0.15f + Projectile.whoAmI) * 0.25f + 1);
 		Main.EntitySpriteDraw(tex_black, Projectile.Center - Main.screenPosition, null, Color.White, 0, tex_black.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
-		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, null, new Color(1f, 0.2f, 0.3f, 0), 0, tex.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
+		Rectangle frame = new Rectangle(0, 90 * Projectile.frame, 90, 90);
+		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 0), 0,frame.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
 		return false;
 	}
 }

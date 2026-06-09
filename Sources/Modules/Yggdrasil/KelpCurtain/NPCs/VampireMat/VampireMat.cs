@@ -156,6 +156,10 @@ public class VampireMat : ModNPC
 						proj.rotation = -59.09f / 360f * MathHelper.TwoPi;
 						break;
 				}
+				for (int j = 0; j < 2; j++)
+				{
+					Projectile proj_tusk = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(4, 0).RotatedBy((j - 0.5f) * 0.6f + proj.rotation), ModContent.ProjectileType<VampireMat_Attack_Proj_Tusk>(), 55, 2.5f, NPC.target);
+				}
 				projRots.Remove(number);
 			}
 			yield return new SkipThisFrame();
@@ -218,6 +222,15 @@ public class VampireMat : ModNPC
 
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
+		if (NPC.target >= 0)
+		{
+			Player player = Main.player[NPC.target];
+			if ((player.Center - NPC.Center).Length() > 600)
+			{
+				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+				yield break;
+			}
+		}
 		switch (Main.rand.Next(3))
 		{
 			case 0:

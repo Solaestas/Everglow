@@ -30,6 +30,7 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.friendly = false;
 		Projectile.hostile = true;
+		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 4096;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -102,7 +103,9 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 		foreach (var sp in SubProjs)
 		{
 			Main.EntitySpriteDraw(tex_black, sp.Position - Main.screenPosition, null, Color.White, 0, tex_black.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
-			Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, null, new Color(1f, 0.2f, 0.3f, 0), 0, tex.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+			int frameNumber = (int)(TileUtils.GetFixedRandomNumber_SingleSeed(sp.GetHashCode(), 10) + Projectile.timeLeft / 12f) % 10;
+			Rectangle frame = new Rectangle(0, 90 * frameNumber, 90, 90);
+			Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 0), 0, frame.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
 		}
 		return false;
 	}
