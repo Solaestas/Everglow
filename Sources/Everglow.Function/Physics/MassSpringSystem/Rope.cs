@@ -234,9 +234,9 @@ public class Rope : IMassSpringMesh
 			int posY = i - offsetY;
 			if (posY < 0)
 			{
-				phasePos = 0;
+				posY = 0;
 			}
-			var position = start + new Vector2(0, restJointDistance * phasePos);
+			var position = start + new Vector2(0, mass * 10 * posY);
 			var m = rope._masses[i] = new Mass(mass, position, i == 0);
 			if (i == count - 1)
 			{

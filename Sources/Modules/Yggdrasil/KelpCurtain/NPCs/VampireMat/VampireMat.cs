@@ -57,7 +57,7 @@ public class VampireMat : ModNPC
 	{
 		NPC.localAI[0] = 0;
 		NPC.TargetClosest();
-		BodyRope = Rope.Create(NPC.Center + new Vector2(150, 0), NPC.Center - new Vector2(-150, 0), 20, 5, 5, 20, 5);
+		//BodyRope = Rope.Create(NPC.Center + new Vector2(150, 0), NPC.Center - new Vector2(-150, 0), 20, 5, 5, 20, 5);
 		AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
 	}
 
@@ -70,7 +70,6 @@ public class VampireMat : ModNPC
 	{
 		AICoroutine.Update();
 		BodyRope.Masses[0].Position = NPC.Center + new Vector2(150, 0).RotatedBy(NPC.rotation);
-		BodyRope.ApplyForce();
 	}
 
 	public IEnumerator<ICoroutineInstruction> Dash_0()

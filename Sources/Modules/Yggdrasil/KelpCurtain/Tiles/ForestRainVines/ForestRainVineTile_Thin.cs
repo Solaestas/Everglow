@@ -5,7 +5,7 @@ using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Special;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
-using static Everglow.Commons.TileHelper.HangingTile_LengthAdjustingSystem;
+using static Everglow.Commons.TileHelper.HangingTileLengthAdjustingSystem;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.ForestRainVines;
 
@@ -126,7 +126,7 @@ public class ForestRainVineTile_Thin : HangingTile
 	}
 
 	#region 按钮重绘
-	public override void DrawDefaultPanel(HangingTile_LengthAdjustingSystem hangingSystem, Player player, Color color, ref Queue<DrawStack> drawStacks)
+	public override void DrawDefaultPanel(HangingTileLengthAdjustingSystem hangingSystem, Player player, Color color, ref Queue<DrawStack> drawStacks)
 	{
 		drawStacks = new Queue<DrawStack>();
 
@@ -231,7 +231,7 @@ public class ForestRainVineTile_Thin : HangingTile
 		DrawEnergyCore(hangingSystem, rotCenter, newDrawColor, fade, ref drawStacks);
 	}
 
-	private void DrawEnergyPulse(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyPulse(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float pulseTime = (float)Main.timeForVisualEffects * 0.05f;
 		float pulseScale = 1f + (float)Math.Sin(pulseTime) * 0.2f;
@@ -262,7 +262,7 @@ public class ForestRainVineTile_Thin : HangingTile
 	}
 
 	// === 扩展方法：沿线条绘制能量流动效果 ===
-	private void DrawEnergyFlowAlongLine(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 start, Vector2 end, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyFlowAlongLine(HangingTileLengthAdjustingSystem hangingSystem, Vector2 start, Vector2 end, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float flowTime = (float)Main.timeForVisualEffects * 0.1f;
 		Vector2 direction = Vector2.Normalize(end - start);
@@ -304,7 +304,7 @@ public class ForestRainVineTile_Thin : HangingTile
 				 size * 0.6f, color, 1f, ref drawStacks);
 	}
 
-	private void DrawRotatingParticles(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawRotatingParticles(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float rotationTime = (float)Main.timeForVisualEffects * 0.03f;
 		int particleCount = 6;
@@ -328,7 +328,7 @@ public class ForestRainVineTile_Thin : HangingTile
 	}
 
 	// === 扩展方法：绘制中心能量核心 ===
-	private void DrawEnergyCore(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyCore(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float corePulse = 0.8f + (float)Math.Sin(Main.timeForVisualEffects * 0.08f) * 0.2f;
 

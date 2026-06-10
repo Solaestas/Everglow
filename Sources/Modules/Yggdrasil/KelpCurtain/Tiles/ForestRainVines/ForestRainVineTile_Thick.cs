@@ -2,7 +2,6 @@ using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.TileHelper;
 using Everglow.Yggdrasil.KelpCurtain.Items.Weapons.Special;
 using Terraria.GameContent.Drawing;
-using static Everglow.Commons.TileHelper.HangingTile_LengthAdjustingSystem;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.ForestRainVines;
 
@@ -58,7 +57,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		drawPos += offset;
 		if (index <= masses.Length - 6)
 		{
-			frame = new Rectangle(0, 16 + (index % 4) * 20, 24, 20);
+			frame = new Rectangle(0, 16 + index % 4 * 20, 24, 20);
 			spriteBatch.Draw(texture, drawPos, frame, tileLight, rotation, frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		}
 		else
@@ -122,7 +121,7 @@ public class ForestRainVineTile_Thick : HangingTile
 	}
 
 	#region 按钮重绘
-	public override void DrawDefaultPanel(HangingTile_LengthAdjustingSystem hangingSystem, Player player, Color color, ref Queue<DrawStack> drawStacks)
+	public override void DrawDefaultPanel(HangingTileLengthAdjustingSystem hangingSystem, Player player, Color color, ref Queue<DrawStack> drawStacks)
 	{
 		drawStacks = new Queue<DrawStack>();
 
@@ -132,6 +131,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		float maxCos = 0;
 		int maxK = 0;
 		Vector2 rotCenter = hangingSystem.FixPoint.ToWorldCoordinates();
+
 		// 完全保留父类的旋转计算逻辑，不添加摆动偏移
 		Vector2 cut = new Vector2(1, 0).RotatedBy(hangingSystem.HandleRotation + MathHelper.Pi);
 
@@ -153,6 +153,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		Color newDrawColor = Color.Lerp(baseGreen, color, 0.2f); // 轻微融合原色调
 
 		float nowFrameY = hangingSystem.StartFrameY60 / 60f + hangingSystem.HandleRotation * 2;
+
 		// 警告色改为绿红色渐变（保持原有警告逻辑）
 		if (nowFrameY < 5)
 		{
@@ -226,7 +227,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		DrawEnergyCore(hangingSystem, rotCenter, newDrawColor, fade, ref drawStacks);
 	}
 
-	private void DrawEnergyPulse(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyPulse(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float pulseTime = (float)Main.timeForVisualEffects * 0.05f;
 		float pulseScale = 1f + (float)Math.Sin(pulseTime) * 0.2f;
@@ -258,7 +259,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		}
 	}
 
-	private void DrawEnergyFlowAlongLine(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 start, Vector2 end, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyFlowAlongLine(HangingTileLengthAdjustingSystem hangingSystem, Vector2 start, Vector2 end, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float flowTime = (float)Main.timeForVisualEffects * 0.1f;
 		Vector2 direction = Vector2.Normalize(end - start);
@@ -268,9 +269,11 @@ public class ForestRainVineTile_Thick : HangingTile
 		int flowPoints = 8;
 		for (int i = 0; i < flowPoints; i++)
 		{
-			float progress = (i / (float)flowPoints) + (flowTime % 1f);
+			float progress = i / (float)flowPoints + flowTime % 1f;
 			if (progress > 1f)
+			{
 				progress -= 1f;
+			}
 
 			Vector2 pointPos = start + direction * length * progress;
 
@@ -298,7 +301,7 @@ public class ForestRainVineTile_Thick : HangingTile
 				 size * 0.6f, color, 1f, ref drawStacks);
 	}
 
-	private void DrawRotatingParticles(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawRotatingParticles(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float rotationTime = (float)Main.timeForVisualEffects * 0.03f;
 		int particleCount = 6;
@@ -321,7 +324,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		}
 	}
 
-	private void DrawEnergyCore(HangingTile_LengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
+	private void DrawEnergyCore(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, Color baseColor, float fade, ref Queue<DrawStack> drawStacks)
 	{
 		float corePulse = 0.8f + (float)Math.Sin(Main.timeForVisualEffects * 0.08f) * 0.2f;
 
