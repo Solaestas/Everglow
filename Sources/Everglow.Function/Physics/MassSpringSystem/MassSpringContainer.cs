@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Physics.MassSpringSystem;
 
-public class MassSpringSystem
+public class MassSpringContainer
 {
 	public List<Mass> Masses { get; }
 
@@ -8,7 +8,7 @@ public class MassSpringSystem
 
 	public float Damping { get; set; }
 
-	public MassSpringSystem()
+	public MassSpringContainer()
 	{
 		Masses = [];
 		Springs = [];

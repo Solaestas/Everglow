@@ -241,7 +241,7 @@ public class WizardLantern : LanternMoonNPC
 	}
 
 	public Rope LanternCloak = null;
-	public static MassSpringSystem WizardLanternMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer WizardLanternMassSpringSystem = new MassSpringContainer();
 	public static PBDSolver WizardLanternPBDSolver = new PBDSolver(8);
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

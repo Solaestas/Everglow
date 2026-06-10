@@ -13,7 +13,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 挂藤质点
 	/// </summary>
-	public static MassSpringSystem TwilightTreeVineMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer TwilightTreeVineMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver TwilightTreeVineEulerSolver = new EulerSolver(8);
 	public Dictionary<int, Dictionary<Point, Rope>> StyleVines = new Dictionary<int, Dictionary<Point, Rope>>();
 
@@ -23,7 +23,7 @@ public class TwilightTree : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		TwilightTreeVineMassSpringSystem = new MassSpringSystem();
+		TwilightTreeVineMassSpringSystem = new MassSpringContainer();
 		foreach (var style in StyleVines.Values)
 		{
 			foreach (var vine in style.Values)

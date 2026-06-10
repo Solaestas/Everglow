@@ -644,13 +644,13 @@ public class HangingTileUpdate : ModSystem
 	/// <summary>
 	/// 物块质点系统
 	/// </summary>
-	public static MassSpringSystem HangingTileMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer HangingTileMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver HangingTileEulerSolver = new EulerSolver(8);
 	public static PBDSolver HangingTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
-		HangingTileMassSpringSystem = new MassSpringSystem();
+		HangingTileMassSpringSystem = new MassSpringContainer();
 		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
 		{
 			foreach (var rope in HangingTile.RopesOfAllThisTileInTheWorld.Values)

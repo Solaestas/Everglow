@@ -11,7 +11,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 挂藤质点
 	/// </summary>
-	public static MassSpringSystem FluorescentTreeVineMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer FluorescentTreeVineMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver FluorescentTreeVineEulerSolver = new EulerSolver(8);
 	public Dictionary<int, Dictionary<Point, Rope>> StyleVines = new Dictionary<int, Dictionary<Point, Rope>>();
 
@@ -42,7 +42,7 @@ public class FluorescentTree : ModTile, ITileFluentlyDrawn
 		{
 			return;
 		}
-		FluorescentTreeVineMassSpringSystem = new MassSpringSystem();
+		FluorescentTreeVineMassSpringSystem = new MassSpringContainer();
 		foreach (var style in StyleVines.Values)
 		{
 			foreach (var vine in style.Values)

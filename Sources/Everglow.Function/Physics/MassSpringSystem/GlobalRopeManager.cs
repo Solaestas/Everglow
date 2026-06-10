@@ -2,29 +2,44 @@ namespace Everglow.Commons.Physics.MassSpringSystem;
 
 public class GlobalRopeManager : ModSystem
 {
-	public static EulerSolver EulerSolver = new EulerSolver(8);
+	private static EulerSolver EulerSolver { get; set; }
 
-	public static PBDSolver PBDSolver = new PBDSolver(8);
+	private static PBDSolver PBDSolver { get; set; }
 
-	public static List<MassSpringSystem> EularRopeSystems = [];
+	public static List<MassSpringContainer> EulerContainers { get; private set; }
 
-	public static List<MassSpringSystem> PBDRopeSystems = [];
+	public static List<MassSpringContainer> PBDContainers { get; private set; }
 
 	public override void Load()
 	{
-		base.Load();
+		EulerSolver = new EulerSolver(8);
+		PBDSolver = new PBDSolver(8);
+
+		EulerContainers = [];
+		PBDContainers = [];
+	}
+
+	public override void Unload()
+	{
+		EulerSolver = null;
+		PBDSolver = null;
+
+		EulerContainers.Clear();
+		EulerContainers = [];
+
+		PBDContainers.Clear();
+		PBDContainers = [];
 	}
 
 	public override void PostUpdateEverything()
 	{
-		foreach(var eularSys in EularRopeSystems)
+		foreach (var euler in EulerContainers)
 		{
-			EulerSolver.Step(eularSys, 1);
+			EulerSolver.Step(euler, 1);
 		}
-		foreach (var pbdSys in PBDRopeSystems)
+		foreach (var pbd in PBDContainers)
 		{
-			PBDSolver.Step(pbdSys, 1);
+			PBDSolver.Step(pbd, 1);
 		}
-		base.PostUpdateEverything();
 	}
 }

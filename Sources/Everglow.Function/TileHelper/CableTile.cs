@@ -816,13 +816,13 @@ public class CableTileUpdate : ModSystem
 	/// <summary>
 	/// 物块质点系统
 	/// </summary>
-	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer CableTileMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver CableTileEulerSolver = new EulerSolver(8);
 	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
-		CableTileMassSpringSystem = new MassSpringSystem();
+		CableTileMassSpringSystem = new MassSpringContainer();
 		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
 		{
 			foreach (var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)

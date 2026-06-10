@@ -34,7 +34,7 @@ public class UnitTest
 			Assert.AreEqual(i, mass.Position.X);
 		}
 
-		var system = new MassSpringSystem();
+		var system = new MassSpringContainer();
 		system.AddMassSpringMesh(rope);
 
 		var solver = new EulerSolver(10);

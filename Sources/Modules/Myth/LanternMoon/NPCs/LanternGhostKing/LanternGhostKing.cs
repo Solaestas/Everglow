@@ -41,7 +41,7 @@ public class LanternGhostKing : LanternMoonNPC
 	public string ShaderType = "Normal";
 
 	public Rope LanternTail = null;
-	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer LanternGhostKingMassSpringSystem = new MassSpringContainer();
 	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
 
 	public override void SetDefaults()
