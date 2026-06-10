@@ -1,4 +1,3 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Commons.Utilities;
@@ -19,7 +18,6 @@ namespace Everglow.Commons.TileHelper;
 /// </summary>
 public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 {
-	public override string Texture => "Everglow/Commons/TileHelper/HangingWinch";
 
 	/// <summary>
 	/// Max cable length : default 60
@@ -70,7 +68,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// How far should start drawing the rope in an area out of screen .
 	/// </summary>
 	public float DrawOffScreenRange = 1200f;
-
 
 	public string BulbTexturePath;
 
@@ -201,7 +198,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 			tile.TileFrameX = 0;
 			tile.TileFrameY += 18;
 		}
-		int style = tile.TileFrameX / 18 + (tile.TileFrameY / 18) * 4;
+		int style = tile.TileFrameX / 18 + tile.TileFrameY / 18 * 4;
 		MaxWireStyle = Math.Min(MaxWireStyle, 16);
 		if (style >= MaxWireStyle)
 		{
@@ -500,16 +497,20 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <returns></returns>
 	public override bool RightClick(int i, int j)
 	{
-		if (LengthAdjustable)
+		if (IsCanRightClick(i, j))
 		{
-			// 旋转
-			Tile tile = Main.tile[i, j];
-			if (Main.LocalPlayer.HeldItem.createTile == Main.tile[i, j].TileType && !ChainPlayer.ContainsKey(new Point(i, j)))
+			Point point = new Point(i, j);
+			if (LengthAdjustable && !RopeGraspingPlayer.ContainsKey(point))
 			{
-				HangingTileLengthAdjustingSystem vfx = new HangingTileLengthAdjustingSystem { FixPoint = new Point(i, j), Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
-				Ins.VFXManager.Add(vfx);
-				SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
-				ChainPlayer.Add(new Point(i, j), Main.LocalPlayer);
+				Tile tile = Main.tile[i, j];
+				if (!KnobAdjustingPlayers.ContainsKey(point))
+				{
+					HangingTileLengthAdjustingSystem vfx = new HangingTileLengthAdjustingSystem { FixPoint = point, Active = true, Visible = true, Style = 1, StartFrameY60 = tile.TileFrameY * 60 };
+					vfx.RegisterCustomPanelDrawing(DrawDefaultPanel);
+					Ins.VFXManager.Add(vfx);
+					SoundEngine.PlaySound(SoundID.Item17, new Vector2(i, j) * 16);
+					KnobAdjustingPlayers.Add(point, Main.LocalPlayer);
+				}
 			}
 		}
 		return base.RightClick(i, j);
@@ -592,7 +593,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		DrawDirectionRing(hangingSystem, newDrawColor, hangingSystem.HandleRotation - MathHelper.PiOver2, ref drawStacks);
 	}
 
-	public void DrawBound(HangingTileLengthAdjustingSystem hangingSystem, Color color, Player player, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawBound(HangingTileLengthAdjustingSystem hangingSystem, Color color, Player player, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -658,7 +659,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		}
 	}
 
-	public void DrawDirectionRing(HangingTileLengthAdjustingSystem hangingSystem, Color color, float rotation, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawDirectionRing(HangingTileLengthAdjustingSystem hangingSystem, Color color, float rotation, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -696,7 +697,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		drawStacks.Enqueue(new DrawStack(ModAsset.StarSlash.Value, bars, PrimitiveType.TriangleStrip));
 	}
 
-	public void DrawBackgroundPanel(HangingTileLengthAdjustingSystem hangingSystem, Color color, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawBackgroundPanel(HangingTileLengthAdjustingSystem hangingSystem, Color color, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -712,7 +713,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		drawStacks.Enqueue(new DrawStack(ModAsset.Trail_7_black.Value, bars, PrimitiveType.TriangleStrip));
 	}
 
-	public void DrawBlockBound(HangingTileLengthAdjustingSystem hangingSystem, Color color, float rotation, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawBlockBound(HangingTileLengthAdjustingSystem hangingSystem, Color color, float rotation, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -732,7 +733,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		drawStacks.Enqueue(new DrawStack(ModAsset.TileBlock.Value, bars, PrimitiveType.TriangleList));
 	}
 
-	public void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color, float highlight, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color, float highlight, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -768,7 +769,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		}
 	}
 
-	public void DrawLine_Black(HangingTileLengthAdjustingSystem hangingSystem, Vector2 pos1, Vector2 pos2, float width, ref Queue<DrawStack> drawStacks)
+	public virtual void DrawLine_Black(HangingTileLengthAdjustingSystem hangingSystem, Vector2 pos1, Vector2 pos2, float width, ref Queue<DrawStack> drawStacks)
 	{
 		if (drawStacks == null)
 		{
@@ -939,7 +940,6 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 			Lighting.AddLight(drawPos + Main.screenPosition, new Vector3(0.8f, 0.8f, 0.2f));
 		}
 	}
-
 
 	/// <summary>
 	/// Try to get the cable entity bound at (<paramref name="i"/>, <paramref name="j"/>).

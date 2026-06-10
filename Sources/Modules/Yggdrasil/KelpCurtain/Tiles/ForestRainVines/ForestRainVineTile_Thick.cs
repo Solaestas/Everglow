@@ -151,6 +151,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		// 基础色改为绿色系，保留原有透明度逻辑
 		Color baseGreen = new Color(0.3f, 0.8f, 0.4f); // 主绿色
 		Color newDrawColor = Color.Lerp(baseGreen, color, 0.2f); // 轻微融合原色调
+		Color outerRingColor = Color.Lerp(newDrawColor, new Color(0.0f, 0.2f, 0.5f), 0.6f);
 
 		float nowFrameY = hangingSystem.StartFrameY60 / 60f + hangingSystem.HandleRotation * 2;
 
@@ -158,10 +159,12 @@ public class ForestRainVineTile_Thick : HangingTile
 		if (nowFrameY < 5)
 		{
 			newDrawColor = Color.Lerp(newDrawColor, new Color(0.9f, 0.3f, 0.3f, 0.8f), (5 - nowFrameY) / 4f);
+			outerRingColor = Color.Lerp(outerRingColor, new Color(0.9f, 0.2f, 0.2f, 0.8f), (5 - nowFrameY) / 4f);
 		}
 		if (nowFrameY > MaxCableLength - 5)
 		{
 			newDrawColor = Color.Lerp(newDrawColor, new Color(0.9f, 0.3f, 0.3f, 0.8f), (nowFrameY - (MaxCableLength - 5)) / 4f);
+			outerRingColor = Color.Lerp(outerRingColor, new Color(0.9f, 0.2f, 0.2f, 0.8f), (nowFrameY - (MaxCableLength - 5)) / 4f);
 		}
 
 		// 完全保留父类的透明度计算逻辑
@@ -171,8 +174,6 @@ public class ForestRainVineTile_Thick : HangingTile
 			tK = hangingSystem.TimeToKill;
 		}
 		float fade = Math.Min(hangingSystem.Timer, tK) / 12f;
-
-		DrawEnergyPulse(hangingSystem, rotCenter, fade, ref drawStacks);
 
 		// 绘制线条（保持父类的长度、粗细和角度逻辑，仅改颜色）
 		for (int k = -10; k < 10; k++)
@@ -194,13 +195,6 @@ public class ForestRainVineTile_Thick : HangingTile
 					rotCenter + cut2 * (4 * hangingSystem.PanelRange - 12),
 					rotCenter + cut2 * (4 * hangingSystem.PanelRange + 36),
 					16, newDrawColor * fade, 1f, ref drawStacks);
-
-				// === 扩展效果2：为主线条添加能量流动效果 ===
-				DrawEnergyFlowAlongLine(
-					hangingSystem,
-					rotCenter + cut2 * (4 * hangingSystem.PanelRange - 12),
-					rotCenter + cut2 * (4 * hangingSystem.PanelRange + 36),
-					newDrawColor, fade, ref drawStacks);
 			}
 			else
 			{
@@ -216,7 +210,7 @@ public class ForestRainVineTile_Thick : HangingTile
 		DrawBound(hangingSystem, new Color(0.2f, 0.6f, 0.3f), player, ref drawStacks);
 
 		// 方向环保持父类的稳定角度，仅替换为绿色
-		DrawDirectionRing(hangingSystem, newDrawColor,
+		DrawDirectionRing(hangingSystem, outerRingColor,
 			hangingSystem.HandleRotation - MathHelper.PiOver2, // 移除所有摆动偏移，与父类一致
 			ref drawStacks);
 
@@ -227,20 +221,92 @@ public class ForestRainVineTile_Thick : HangingTile
 		DrawEnergyCore(hangingSystem, rotCenter, newDrawColor, fade, ref drawStacks);
 	}
 
-	private void DrawEnergyPulse(HangingTileLengthAdjustingSystem hangingSystem, Vector2 center, float fade, ref Queue<DrawStack> drawStacks)
+	public override void DrawLine(Vector2 pos1, Vector2 pos2, float width, Color color, float highlight, ref Queue<DrawStack> drawStacks)
 	{
-		float pulseTime = (float)Main.timeForVisualEffects * 0.05f;
-		float pulseScale = 1f + (float)Math.Sin(pulseTime) * 0.2f;
+		if (drawStacks == null)
+		{
+			drawStacks = new Queue<DrawStack>();
+		}
+		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
+		List<Vertex2D> bars = new List<Vertex2D>()
+		{
+			new Vertex2D(pos1 + normal, color, new Vector3(0, 0, 0)),
+			new Vertex2D(pos2 + normal, color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
 
-		// 外层脉动光环
-		Color pulseColor = new Color(0.4f, 0.9f, 0.5f, 0.3f) * fade;
-		DrawPulseRing(center, 80f * pulseScale, 6f, pulseColor, ref drawStacks);
+			new Vertex2D(pos1 - normal, color, new Vector3(0, 1, 0)),
+			new Vertex2D(pos2 + normal, color, new Vector3(1, 0, 0)),
+			new Vertex2D(pos2 - normal, color, new Vector3(1, 1, 0)),
+		};
+		drawStacks.Enqueue(new DrawStack(ModAsset.ForestRainVine_Cut.Value, bars, PrimitiveType.TriangleList));
+		if (highlight > 0)
+		{
+			Color bloomColor = color * highlight;
+			bloomColor.A = 0;
+			bars = new List<Vertex2D>()
+			{
+				 new Vertex2D(pos1 + normal, bloomColor, new Vector3(0, 0, 0)),
+				 new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
+				 new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
 
-		// 内层脉动光环（相位偏移）
-		float innerPulseTime = pulseTime + MathHelper.PiOver2;
-		float innerPulseScale = 1f + (float)Math.Sin(innerPulseTime) * 0.15f;
-		Color innerPulseColor = new Color(0.6f, 1f, 0.7f, 0.4f) * fade;
-		DrawPulseRing(center, 60f * innerPulseScale, 4f, innerPulseColor, ref drawStacks);
+				 new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
+				 new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
+				 new Vertex2D(pos2 - normal, bloomColor, new Vector3(1, 1, 0)),
+			};
+			drawStacks.Enqueue(new DrawStack(ModAsset.ForestRainVine_Cut_Bloom.Value, bars, PrimitiveType.TriangleList));
+		}
+	}
+
+	public override void DrawLine_Black(HangingTileLengthAdjustingSystem hangingSystem, Vector2 pos1, Vector2 pos2, float width, ref Queue<DrawStack> drawStacks)
+	{
+		if (drawStacks == null)
+		{
+			drawStacks = new Queue<DrawStack>();
+		}
+		Vector2 normal = Utils.SafeNormalize(pos1 - pos2, Vector2.zeroVector).RotatedBy(MathHelper.PiOver2) * width / 2f;
+		Color bloomColor = Color.White;
+		float tK = 12f;
+		if (hangingSystem.TimeToKill > 0)
+		{
+			tK = hangingSystem.TimeToKill;
+		}
+		float fade = Math.Min(hangingSystem.Timer, tK) / 12f;
+		bloomColor *= fade;
+		List<Vertex2D> bars = new List<Vertex2D>()
+		{
+			new Vertex2D(pos1 + normal, bloomColor, new Vector3(0, 0, 0)),
+			new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
+			new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
+
+			new Vertex2D(pos1 - normal, bloomColor, new Vector3(0, 1, 0)),
+			new Vertex2D(pos2 + normal, bloomColor, new Vector3(1, 0, 0)),
+			new Vertex2D(pos2 - normal, bloomColor, new Vector3(1, 1, 0)),
+		};
+		drawStacks.Enqueue(new DrawStack(ModAsset.ForestRainVine_Cut_Bloom_black.Value, bars, PrimitiveType.TriangleList));
+	}
+
+	public override void DrawDirectionRing(HangingTileLengthAdjustingSystem hangingSystem, Color color, float rotation, ref Queue<DrawStack> drawStacks)
+	{
+		if (drawStacks == null)
+		{
+			drawStacks = new Queue<DrawStack>();
+		}
+		color.A = 0;
+		Vector2 pos = hangingSystem.FixPoint.ToWorldCoordinates();
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int k = 0; k <= 60; k++)
+		{
+			bars.Add(pos + new Vector2(0, hangingSystem.PanelRange * 36).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), Color.White, new Vector3(k / 20f, 0, 0));
+			bars.Add(pos + new Vector2(0, hangingSystem.PanelRange * 0).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), Color.White, new Vector3(k / 20f, 1, 0));
+		}
+		drawStacks.Enqueue(new DrawStack(ModAsset.ForestRainVine_Matrix_black.Value, bars, PrimitiveType.TriangleStrip));
+		bars = new List<Vertex2D>();
+		for (int k = 0; k <= 60; k++)
+		{
+			bars.Add(pos + new Vector2(0, hangingSystem.PanelRange * 36).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(k / 20f, 0, 0));
+			bars.Add(pos + new Vector2(0, hangingSystem.PanelRange * 0).RotatedBy(k / 60f * MathHelper.TwoPi + rotation), color, new Vector3(k / 20f, 1, 0));
+		}
+		drawStacks.Enqueue(new DrawStack(ModAsset.ForestRainVine_Matrix.Value, bars, PrimitiveType.TriangleStrip));
 	}
 
 	private void DrawPulseRing(Vector2 center, float radius, float width, Color color, ref Queue<DrawStack> drawStacks)

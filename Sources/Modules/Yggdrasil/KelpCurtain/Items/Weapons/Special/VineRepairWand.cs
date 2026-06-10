@@ -22,8 +22,8 @@ public class VineRepairWand : ModItem
 
 	public override void SetDefaults()
 	{
-		Item.width = 32;
-		Item.height = 32;
+		Item.width = 34;
+		Item.height = 34;
 		Item.DamageType = DamageClass.Magic;
 		Item.damage = 0;
 		Item.knockBack = 0f;

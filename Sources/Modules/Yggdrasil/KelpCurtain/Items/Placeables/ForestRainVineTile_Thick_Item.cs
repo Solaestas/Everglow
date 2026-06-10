@@ -1,4 +1,6 @@
-namespace Everglow.Yggdrasil.KelpCurtain.Tiles.ForestRainVines;
+using Everglow.Yggdrasil.KelpCurtain.Tiles.ForestRainVines;
+
+namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
 public class ForestRainVineTile_Thick_Item : ModItem
 {
