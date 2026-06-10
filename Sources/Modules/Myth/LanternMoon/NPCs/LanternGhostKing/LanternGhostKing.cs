@@ -41,7 +41,7 @@ public class LanternGhostKing : LanternMoonNPC
 	public string ShaderType = "Normal";
 
 	public Rope LanternTail = null;
-	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer LanternGhostKingMassSpringSystem = new MassSpringContainer();
 	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
 
 	public override void SetDefaults()
@@ -1624,7 +1624,7 @@ public class LanternGhostKing : LanternMoonNPC
 	{
 		if (LanternTail == null)
 		{
-			LanternTail = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternTail = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f, 4f);
 			LanternGhostKingMassSpringSystem.AddMassSpringMesh(LanternTail);
 		}
 		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50).RotatedBy(NPC.rotation);

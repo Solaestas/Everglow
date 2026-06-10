@@ -341,7 +341,7 @@ public abstract class CableTile : ModTile, ITileFluentlyDrawn
 		if (tile.TileType == Type)
 		{
 			int counts = (int)new Vector2(i2 - i, j2 - j).Length() * 2 + 2;
-			Rope rope = Rope.Create(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
+			Rope rope = Rope.Create_Fixed_StartAndEnd_WithKnots(new Vector2(i, j) * 16 + new Vector2(8), new Vector2(i2, j2) * 16 + new Vector2(8), counts, Elasticity, RopeUnitMass, LampDistance, SingleLampMass);
 			return rope;
 		}
 		return null;
@@ -821,13 +821,13 @@ public class CableTileUpdate : ModSystem
 	/// <summary>
 	/// 物块质点系统
 	/// </summary>
-	public static MassSpringSystem CableTileMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer CableTileMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver CableTileEulerSolver = new EulerSolver(8);
 	public static PBDSolver CableTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
-		CableTileMassSpringSystem = new MassSpringSystem();
+		CableTileMassSpringSystem = new MassSpringContainer();
 		foreach (var cableTile in TileLoader.tiles.OfType<CableTile>())
 		{
 			foreach (var rope in cableTile.RopesOfAllThisTileInTheWorld.Values)

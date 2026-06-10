@@ -235,6 +235,12 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <param name="pos"></param>
 	public void UpdateGraspingPlayer(Player player, Rope rope, Point pos)
 	{
+		Tile tile = Main.tile[i, j];
+		int counts = MaxCableLength;
+		int restCount = tile.TileFrameY;
+		Rope rope = Rope.Create_Fixed_Start_Heavy_End(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
+		return rope;
+	}
 		var masses = rope.Masses;
 		var vineEndPosition = masses[^1].Position;
 
@@ -879,6 +885,26 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// Custom draw.
 	/// </summary>
+	public static MassSpringContainer HangingTileMassSpringSystem = new MassSpringContainer();
+	public static EulerSolver HangingTileEulerSolver = new EulerSolver(8);
+	public static PBDSolver HangingTilePBDSolver = new PBDSolver(8);
+
+	public override void PostUpdateEverything()
+	{
+		HangingTileMassSpringSystem = new MassSpringContainer();
+		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
+		{
+			foreach (var rope in HangingTile.RopesOfAllThisTileInTheWorld.Values)
+			{
+				HangingTileMassSpringSystem.AddMassSpringMesh(rope);
+			}
+		}
+		HangingTileEulerSolver.Step(HangingTileMassSpringSystem, 1);
+	}
+
+	public override void OnWorldLoad()
+	{
+		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
 	/// <param name="spriteBatch"></param>
 	/// <param name="texture"></param>
 	/// <param name="drawPos">Screen Position</param>
