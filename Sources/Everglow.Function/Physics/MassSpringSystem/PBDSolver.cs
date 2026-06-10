@@ -2,7 +2,7 @@ namespace Everglow.Commons.Physics.MassSpringSystem;
 
 public class PBDSolver(int iterations) : Solver
 {
-	public override void Step(MassSpringSystem system, float deltaTime)
+	public override void Step(MassSpringContainer system, float deltaTime)
 	{
 		float dt = deltaTime / iterations;
 		for (int k = 0; k < iterations; k++)

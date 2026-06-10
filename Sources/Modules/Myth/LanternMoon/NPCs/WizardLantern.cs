@@ -241,7 +241,7 @@ public class WizardLantern : LanternMoonNPC
 	}
 
 	public Rope LanternCloak = null;
-	public static MassSpringSystem WizardLanternMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer WizardLanternMassSpringSystem = new MassSpringContainer();
 	public static PBDSolver WizardLanternPBDSolver = new PBDSolver(8);
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -265,7 +265,7 @@ public class WizardLantern : LanternMoonNPC
 	{
 		if (LanternCloak == null)
 		{
-			LanternCloak = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternCloak = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f, 4f);
 			WizardLanternMassSpringSystem.AddMassSpringMesh(LanternCloak);
 		}
 		LanternCloak.Masses[0].Position = NPC.Center + new Vector2(0, 4).RotatedBy(NPC.rotation);
