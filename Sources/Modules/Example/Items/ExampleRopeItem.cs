@@ -26,19 +26,19 @@ public class ExampleRopeItem : ModItem
 		{
 			if (Main.mouseLeft && Main.mouseLeftRelease)
 			{
-				GlobalRopeManager.EulerContainers.Remove(EularSys);
+				GlobalRopeSystem.EulerContainers.Remove(EularSys);
 				EularSys = new MassSpringContainer();
 				ItemRope = Rope.Grow_Vine(ItemRope, 1);
 				EularSys.AddMassSpringMesh(ItemRope);
-				GlobalRopeManager.EulerContainers.Add(EularSys);
+				GlobalRopeSystem.EulerContainers.Add(EularSys);
 			}
 			if (Main.mouseRight && Main.mouseRightRelease)
 			{
-				GlobalRopeManager.EulerContainers.Remove(EularSys);
+				GlobalRopeSystem.EulerContainers.Remove(EularSys);
 				EularSys = new MassSpringContainer();
 				ItemRope = Rope.Cut_Vine(ItemRope, 1);
 				EularSys.AddMassSpringMesh(ItemRope);
-				GlobalRopeManager.EulerContainers.Add(EularSys);
+				GlobalRopeSystem.EulerContainers.Add(EularSys);
 			}
 		}
 	}
@@ -86,6 +86,6 @@ public class ExampleRopeItem : ModItem
 
 		// Rope.Create_Fixed_StartPos(Main.MouseWorld, 20, 5, 0.5f, 20);
 		EularSys.AddMassSpringMesh(ItemRope);
-		GlobalRopeManager.EulerContainers.Add(EularSys);
+		GlobalRopeSystem.EulerContainers.Add(EularSys);
 	}
 }

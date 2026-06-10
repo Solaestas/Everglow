@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Physics.MassSpringSystem;
 
-public class GlobalRopeManager : ModSystem
+public class GlobalRopeSystem : ModSystem
 {
 	private static EulerSolver EulerSolver { get; set; }
 
@@ -35,11 +35,25 @@ public class GlobalRopeManager : ModSystem
 	{
 		foreach (var euler in EulerContainers)
 		{
-			EulerSolver.Step(euler, 1);
+			if (euler.Solver is not null)
+			{
+				euler.Solver.Step(euler, 1);
+			}
+			else
+			{
+				EulerSolver.Step(euler, 1);
+			}
 		}
 		foreach (var pbd in PBDContainers)
 		{
-			PBDSolver.Step(pbd, 1);
+			if (pbd.Solver is not null)
+			{
+				pbd.Solver.Step(pbd, 1);
+			}
+			else
+			{
+				PBDSolver.Step(pbd, 1);
+			}
 		}
 	}
 }
