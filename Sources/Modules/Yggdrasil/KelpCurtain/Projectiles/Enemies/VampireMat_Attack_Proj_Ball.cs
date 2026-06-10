@@ -24,7 +24,7 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 
 	public override void AI()
 	{
-		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.1f, 0.2f) * Projectile.scale);
+		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.1f, 0.2f) * Projectile.scale * 5f);
 		var playerWhoAmI = Player.FindClosest(Projectile.Center, 0, 0);
 		if(playerWhoAmI < 0)
 		{
@@ -47,7 +47,14 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_Small_Group>(), 36, 2.5f, Main.myPlayer);
+		if (Main.rand.NextBool())
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_Small_Group>(), 36, 2.5f, Main.myPlayer);
+		}
+		else
+		{
+			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_Small_Group_1>(), 36, 2.5f, Main.myPlayer);
+		}
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)

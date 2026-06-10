@@ -1,9 +1,7 @@
-using Everglow.Commons.Mechanics.EliminateLight;
 using Everglow.Commons.Utilities.BackgroundHelper;
 using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.KelpCurtain.Background;
 using Everglow.Yggdrasil.KelpCurtain.Water;
-using MonoMod.Core.Platforms;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Biomes;
 
@@ -32,7 +30,7 @@ public class IsleOfBloomBiome : ModBiome
 	public override bool IsBiomeActive(Player player)
 	{
 		bool flag1 = player.InModBiome<KelpCurtainBiome>();
-		if(flag1 && Polygon_Bound.Count <= 0)
+		if (flag1 && Polygon_Bound.Count <= 0)
 		{
 			Polygon_Bound.Add(new Vector2(865, 18715));
 			Polygon_Bound.Add(new Vector2(865, 18655));
@@ -59,7 +57,7 @@ public class IsleOfBloomBiome : ModBiome
 
 	public void AddBackground(BackgroundSystem bgSystem)
 	{
-		List <Vector2> polygon = new List<Vector2>();
+		List<Vector2> polygon = new List<Vector2>();
 		Vector2 centerPosWorld = YggdrasilWorld.KelpCurtain_IsleOfBloom_CaveCenter.ToWorldCoordinates();
 		polygon.Add(centerPosWorld + new Vector2(0, -12) * 16);
 		polygon.Add(centerPosWorld + new Vector2(130, -4) * 16);

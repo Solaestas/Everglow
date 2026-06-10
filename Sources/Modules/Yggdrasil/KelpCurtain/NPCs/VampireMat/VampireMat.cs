@@ -4,6 +4,7 @@ using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
+using Everglow.Yggdrasil.WorldGeneration;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Terraria.DataStructures;
 
@@ -20,6 +21,8 @@ public class VampireMat : ModNPC
 	public MassSpringContainer EularSys = new MassSpringContainer();
 
 	public Vector2 RealCenter;
+
+	public bool DiveAtBackground = false;
 
 	public enum TextureState
 	{
@@ -55,6 +58,7 @@ public class VampireMat : ModNPC
 
 		NPC.noTileCollide = true;
 		NPC.aiStyle = -1;
+		DiveAtBackground = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -159,6 +163,25 @@ public class VampireMat : ModNPC
 			yield return new SkipThisFrame();
 		}
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
+	public IEnumerator<ICoroutineInstruction> Escape()
+	{
+		for (int k = 0; k < 9999; k++)
+		{
+			if(NPC.target >= 0)
+			{
+				Player player = Main.player[NPC.target];
+				if((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < 60 * 16)
+				{
+					AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+					yield break;
+				}
+			}
+			NPC.velocity *= 0.95f;
+			NPC.velocity.Y += 1;
+			yield return new SkipThisFrame();
+		}
 	}
 
 	public IEnumerator<ICoroutineInstruction> TentacleRelease()
@@ -358,14 +381,23 @@ public class VampireMat : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
-		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		var drawPos = RealCenter - Main.screenPosition;
-		if (NPCTextureState == (int)TextureState.TowardScreen)
+		if(!DiveAtBackground)
 		{
-			drawPos = NPC.Center - Main.screenPosition;
+			DrawSelf(NPC, this, spriteBatch, drawColor);
+		}
+		return false;
+	}
+
+	public static void DrawSelf(NPC npc, VampireMat vampireMat, SpriteBatch spriteBatch, Color drawColor)
+	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		var texture = ModContent.Request<Texture2D>(npc.ModNPC.Texture).Value;
+		var drawPos = vampireMat.RealCenter - Main.screenPosition;
+		if (vampireMat.NPCTextureState == (int)TextureState.TowardScreen)
+		{
+			drawPos = npc.Center - Main.screenPosition;
 			texture = ModAsset.VampireMat_Attack.Value;
-			if (TowardScreenAndAttacking)
+			if (vampireMat.TowardScreenAndAttacking)
 			{
 				List<Vertex2D> boss_bottom_bars = new List<Vertex2D>();
 				for (int k = 0; k < 20; k++)
@@ -389,43 +421,43 @@ public class VampireMat : ModNPC
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(sBS);
 				}
-				return false;
+				return;
 			}
 		}
-		if (NPCTextureState == (int)TextureState.ProjRelease)
+		if (vampireMat.NPCTextureState == (int)TextureState.ProjRelease)
 		{
-			drawPos = NPC.Center - Main.screenPosition;
+			drawPos = npc.Center - Main.screenPosition;
 			texture = ModAsset.VampireMat_ReleaseProj.Value;
 		}
 
-		var frame = NPC.frame;
-		if (NPCTextureState == (int)TextureState.Flat)
+		var frame = npc.frame;
+		if (vampireMat.NPCTextureState == (int)TextureState.Flat)
 		{
 			spriteBatch.End();
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-			if (BodyRope is null)
+			if (vampireMat.BodyRope is null)
 			{
 				spriteBatch.End();
 				spriteBatch.Begin(sBS);
-				return false;
+				return;
 			}
 			List<Vertex2D> bars = new List<Vertex2D>();
-			for (int k = 1; k < BodyRope.Masses.Length; k++)
+			for (int k = 1; k < vampireMat.BodyRope.Masses.Length; k++)
 			{
-				Vector2 dir = BodyRope.Masses[k].Position - BodyRope.Masses[k - 1].Position;
+				Vector2 dir = vampireMat.BodyRope.Masses[k].Position - vampireMat.BodyRope.Masses[k - 1].Position;
 				dir = dir.SafeNormalize(Vector2.Zero);
 				Vector2 normal = new Vector2(-dir.Y, dir.X) * 16;
-				Vector2 ropePos = BodyRope.Masses[k - 1].Position - Main.screenPosition;
-				float value = k / (float)BodyRope.Masses.Length;
-				if (NPC.velocity.X > 0)
+				Vector2 ropePos = vampireMat.BodyRope.Masses[k - 1].Position - Main.screenPosition;
+				float value = k / (float)vampireMat.BodyRope.Masses.Length;
+				if (npc.velocity.X > 0)
 				{
-					AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
-					AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
 				}
 				else
 				{
-					AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
-					AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
 				}
 			}
 			if (bars.Count > 0)
@@ -436,17 +468,30 @@ public class VampireMat : ModNPC
 		}
 		else
 		{
-			var rotation = NPC.rotation;
-			var spriteEffect = NPC.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+			var rotation = npc.rotation;
+			var spriteEffect = npc.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 			spriteBatch.Draw(texture, drawPos, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
 		}
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
-		return false;
 	}
 
-	private void AddVertex(List<Vertex2D> bars, Vector2 screenPos, Vector3 coord)
+	public void AddVertex(List<Vertex2D> bars, Vector2 screenPos, Vector3 coord)
 	{
 		bars.Add(screenPos, Lighting.GetColor((screenPos + Main.screenPosition).ToTileCoordinates()), coord);
+	}
+
+	public bool PlayerInCave()
+	{
+		if(NPC.target < 0)
+		{
+			return false;
+		}
+		Player player = Main.player[NPC.target];
+		if ((player.Center - RealCenter).Length() > 600)
+		{
+			return true;
+		}
+		return false;
 	}
 }

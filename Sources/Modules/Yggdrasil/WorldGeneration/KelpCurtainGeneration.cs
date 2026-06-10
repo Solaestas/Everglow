@@ -3726,13 +3726,21 @@ public class KelpCurtainGeneration
 				if (cave.Contains(pos))
 				{
 					ChangeTile(tile, -1, (int)TileChangeState.Forceful);
+					if((pos.ToWorldCoordinates() - VampireMatCaveCenter).Length() < 55 * 16)
+					{
+						tile.WallType = WallID.None;
+					}
+					else
+					{
+						tile.WallType = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
+					}
 				}
 				else
 				{
 					ChangeTile(tile, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.Forceful);
+					tile.WallType = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
 				}
 			}
-			tile.wall = (ushort)ModContent.WallType<YggdrasilBlackRockWall>();
 			tile.LiquidType = LiquidID.Water;
 			tile.LiquidAmount = 255;
 		}

@@ -5,9 +5,11 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 
-public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
+public class VampireMat_Attack_Proj_Ball_Small_Group_1 : ModProjectile
 {
 	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.MagicProjectiles;
+
+	public int Timer;
 
 	public struct SubProj
 	{
@@ -37,32 +39,43 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		for (int k = 0; k < 24; k++)
-		{
-			var sproj = default(SubProj);
-			sproj.Position = Projectile.Center;
-			sproj.Velocity = new Vector2(0, -4).RotatedBy(k * MathHelper.TwoPi / 24f);
-			sproj.Active = true;
-			sproj.Scale = 0.4f;
-			sproj.MaxTime = 360;
-			sproj.Timer = 0;
-			SubProjs.Add(sproj);
-		}
 	}
 
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
+		if(Timer <= 300 && Timer % 15 == 0)
+		{
+			int flat = Timer / 15 + 1;
+			int count = 2 * flat;
+			for (int k = 0; k < count; k++)
+			{
+				var sproj = default(SubProj);
+				sproj.Position = Projectile.Center + new Vector2(0, -60 * flat).RotatedBy(k * MathHelper.TwoPi / count + Projectile.whoAmI);
+				sproj.Velocity = Vector2.zeroVector;
+				sproj.Active = true;
+				sproj.Scale = 0f;
+				sproj.MaxTime = 30;
+				sproj.Timer = 0;
+				SubProjs.Add(sproj);
+			}
+		}
+		Timer++;
 		for (int i = SubProjs.Count - 1; i >= 0; i--)
 		{
 			var sp = SubProjs[i];
 			Lighting.AddLight(sp.Position, new Vector3(1f, 0.1f, 0.2f) * sp.Scale);
-			sp.Position += sp.Velocity;
-			sp.Velocity = sp.Velocity.NormalizeSafe() * (4f + MathF.Sin(i / 3f * MathHelper.TwoPi + (float)Main.time * 0.03f + Projectile.whoAmI) * 0.3f * MathF.Cos(Projectile.timeLeft / 60f));
 			sp.Timer++;
-			if(sp.MaxTime - sp.Timer < 60)
+			if(sp.MaxTime - sp.Timer < 10)
 			{
-				sp.Scale *= 0.96f;
+				sp.Scale *= 0.8f;
+			}
+			else
+			{
+				if(sp.Scale < 0.4f)
+				{
+					sp.Scale += 0.04f;
+				}
 			}
 			SubProjs[i] = sp;
 			if (sp.Timer >= sp.MaxTime)
@@ -81,6 +94,10 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 	{
 		foreach (var sp in SubProjs)
 		{
+			if (sp.Scale <= 0.2f)
+			{
+				continue;
+			}
 			int x = (int)sp.Position.X;
 			int y = (int)sp.Position.Y;
 			Rectangle subHitbox = new Rectangle(x - 10, y - 10, 20, 20);

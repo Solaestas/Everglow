@@ -16,11 +16,6 @@ public class IsleOfBloom_Underground_sky : BackgroundSlideBase
 		Shader = Effects.XWrap_YClamp_Shader;
 	}
 
-	public override void Update()
-	{
-		base.Update();
-	}
-
 	public override void Draw()
 	{
 		Main.spriteBatch.Draw(Texture, WorldAnchor - Main.screenPosition, null, Color.White, 0, Texture.Size() * 0.5f, new Vector2(4, 1), SpriteEffects.None, 0);

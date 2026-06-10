@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.EliminateLight;
 using Everglow.Commons.VFX.Scene;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles.IsleOfBloom;
