@@ -45,37 +45,39 @@ public class ExampleRopeItem : ModItem
 
 	public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
 	{
-		SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
-		spriteBatch.End();
-		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		if (ItemRope is null)
+		if (Main.LocalPlayer.HeldItem == Item)
 		{
-			AddRope();
+			SpriteBatchState sBS = GraphicsUtils.GetState(spriteBatch).Value;
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			if (ItemRope is null)
+			{
+				AddRope();
+			}
+			Texture2D tex = Commons.ModAsset.TileBlock.Value;
+			foreach (var mass in ItemRope.Masses)
+			{
+				spriteBatch.Draw(tex, mass.Position - Main.screenPosition, null, Color.White, 0, tex.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
+			}
+			List<Vertex2D> bars = new List<Vertex2D>();
+			for (int k = 1; k < ItemRope.Masses.Length; k++)
+			{
+				Vector2 dir = ItemRope.Masses[k].Position - ItemRope.Masses[k - 1].Position;
+				dir = dir.SafeNormalize(Vector2.Zero);
+				Vector2 normal = new Vector2(-dir.Y, dir.X) * 16;
+				Vector2 drawPos = ItemRope.Masses[k - 1].Position - Main.screenPosition;
+				float value = k / (float)ItemRope.Masses.Length;
+				bars.Add(drawPos + normal, Color.White, new Vector3(value, 0, 0));
+				bars.Add(drawPos - normal, Color.White, new Vector3(value, 1, 0));
+			}
+			if (bars.Count > 0)
+			{
+				Main.graphics.graphicsDevice.Textures[0] = tex;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+			spriteBatch.End();
+			spriteBatch.Begin(sBS);
 		}
-		Texture2D tex = Commons.ModAsset.TileBlock.Value;
-		foreach (var mass in ItemRope.Masses)
-		{
-			spriteBatch.Draw(tex, mass.Position - Main.screenPosition, null, Color.White, 0, tex.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
-		}
-		List<Vertex2D> bars = new List<Vertex2D>();
-		for (int k = 1; k < ItemRope.Masses.Length; k++)
-		{
-			Vector2 dir = ItemRope.Masses[k].Position - ItemRope.Masses[k - 1].Position;
-			dir = dir.SafeNormalize(Vector2.Zero);
-			Vector2 normal = new Vector2(-dir.Y, dir.X) * 16;
-			Vector2 drawPos = ItemRope.Masses[k - 1].Position - Main.screenPosition;
-			float value = k / (float)ItemRope.Masses.Length;
-			bars.Add(drawPos + normal, Color.White, new Vector3(value, 0, 0));
-			bars.Add(drawPos - normal, Color.White, new Vector3(value, 1, 0));
-		}
-		if (bars.Count > 0)
-		{
-			Main.graphics.graphicsDevice.Textures[0] = tex;
-			Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-		}
-		spriteBatch.End();
-		spriteBatch.Begin(sBS);
-		base.PostDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
 	}
 
 	public void AddRope()
