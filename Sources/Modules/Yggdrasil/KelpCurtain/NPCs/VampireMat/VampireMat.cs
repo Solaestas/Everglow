@@ -17,6 +17,8 @@ public class VampireMat : ModNPC
 
 	public Rope BodyRope;
 
+	public MassSpringContainer EularSys = new MassSpringContainer();
+
 	public enum TextureState
 	{
 		Flat,
@@ -57,7 +59,9 @@ public class VampireMat : ModNPC
 	{
 		NPC.localAI[0] = 0;
 		NPC.TargetClosest();
-		//BodyRope = Rope.Create(NPC.Center + new Vector2(150, 0), NPC.Center - new Vector2(-150, 0), 20, 5, 5, 20, 5);
+		BodyRope = Rope.Create_Vine(NPC.Center, 20, 1, 1, 17.3f);
+		EularSys.AddMassSpringMesh(BodyRope);
+		GlobalRopeSystem.EulerContainers.Add(EularSys);
 		AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
 	}
 
@@ -69,21 +73,43 @@ public class VampireMat : ModNPC
 	public override void AI()
 	{
 		AICoroutine.Update();
-		BodyRope.Masses[0].Position = NPC.Center + new Vector2(150, 0).RotatedBy(NPC.rotation);
+		BodyRope.Masses[0].Position = NPC.Center;
+		BodyRope.ApplyForce_VelocityDecay(0.2f);
 	}
 
 	public IEnumerator<ICoroutineInstruction> Dash_0()
 	{
 		yield return new WaitUntil(() => NPC.target >= 0);
-		Player player = Main.player[NPC.target];
-		int direction = NPC.Center.X > player.Center.X ? 1 : -1;
-
-		NPC.spriteDirection = direction;
-		Vector2 toTarget = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero) * 11f;
-		float rot = toTarget.ToRotation();
-		NPC.velocity = toTarget;
-		for (int k = 0; k < 30; k++)
+		bool reachTarget = false;
+		float rot = NPC.rotation;
+		int reachTimer = 0;
+		for (int k = 0; k < 240; k++)
 		{
+			Vector2 headPos = NPC.Center;
+			Player player = Main.player[NPC.target];
+			int direction = NPC.Center.X > player.Center.X ? 1 : -1;
+
+			NPC.spriteDirection = direction;
+			Vector2 toTarget = player.Center - headPos;
+			if (!reachTarget && toTarget.Length() < 30)
+			{
+				reachTarget = true;
+				reachTimer = 0;
+			}
+			if (!reachTarget)
+			{
+				toTarget = toTarget.SafeNormalize(Vector2.Zero) * 11f;
+				rot = toTarget.ToRotation();
+				NPC.velocity = toTarget;
+			}
+			else
+			{
+				reachTimer++;
+			}
+			if (reachTimer >= 45)
+			{
+				reachTarget = false;
+			}
 			NPC.rotation = rot * 0.05f + NPC.rotation * 0.95f;
 			yield return new SkipThisFrame();
 		}
@@ -230,7 +256,8 @@ public class VampireMat : ModNPC
 				yield break;
 			}
 		}
-		switch (Main.rand.Next(3))
+		//Main.rand.Next(3)
+		switch (0)
 		{
 			case 0:
 				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
@@ -290,6 +317,7 @@ public class VampireMat : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
 		var drawPos = NPC.Center - Main.screenPosition;
 		if (NPCTextureState == (int)TextureState.TowardScreen)
@@ -297,25 +325,24 @@ public class VampireMat : ModNPC
 			texture = ModAsset.VampireMat_Attack.Value;
 			if (TowardScreenAndAttacking)
 			{
-				List<Vertex2D> bars = new List<Vertex2D>();
+				List<Vertex2D> boss_bottom_bars = new List<Vertex2D>();
 				for (int k = 0; k < 20; k++)
 				{
 					Vector2 offset0 = new Vector2(200, 0).RotatedBy(k / 20f * MathHelper.TwoPi);
 					Vector2 offset1 = new Vector2(200, 0).RotatedBy((k + 1) / 20f * MathHelper.TwoPi);
 					Vector2 pos0 = drawPos + offset0 * (1 + MathF.Sin(k / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f);
 					Vector2 pos1 = drawPos + offset1 * (1 + MathF.Sin((k + 1) / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f);
-					SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos0, new Vector3((new Vector2(200, 1800) + offset0) / texture.Size(), 0), false);
-					SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos1, new Vector3((new Vector2(200, 1800) + offset1) / texture.Size(), 0), false);
-					SpriteBatchUtils.AddVertexWithEnv_Light(bars, drawPos, new Vector3(new Vector2(200, 1800) / texture.Size(), 0), false);
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos0, new Vector3((new Vector2(200, 1800) + offset0) / texture.Size(), 0), false);
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos1, new Vector3((new Vector2(200, 1800) + offset1) / texture.Size(), 0), false);
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, drawPos, new Vector3(new Vector2(200, 1800) / texture.Size(), 0), false);
 				}
-				if (bars.Count > 2)
+				if (boss_bottom_bars.Count > 2)
 				{
-					SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 					Main.graphics.GraphicsDevice.Textures[0] = texture;
-					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, bars.ToArray(), 0, bars.Count / 3);
+					Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, boss_bottom_bars.ToArray(), 0, boss_bottom_bars.Count / 3);
 
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(sBS);
@@ -327,19 +354,56 @@ public class VampireMat : ModNPC
 		{
 			texture = ModAsset.VampireMat_ReleaseProj.Value;
 		}
-		var frame = NPC.frame;
-		var rotation = NPC.rotation;
-		var spriteEffect = NPC.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-		spriteBatch.Draw(texture, drawPos, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
 
-		// if (BodyRope is not null)
-		// {
-		// Texture2D point = Commons.ModAsset.TileBlock.Value;
-		// foreach (var mass in BodyRope.Masses)
-		// {
-		// spriteBatch.Draw(point, mass.Position - Main.screenPosition, null, Color.White, 0, point.Size() * 0.5f, 0.5f, SpriteEffects.None, 0);
-		// }
-		// }
+		var frame = NPC.frame;
+		if (NPCTextureState == (int)TextureState.Flat)
+		{
+			spriteBatch.End();
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+			if (BodyRope is null)
+			{
+				spriteBatch.End();
+				spriteBatch.Begin(sBS);
+				return false;
+			}
+			List<Vertex2D> bars = new List<Vertex2D>();
+			for (int k = 1; k < BodyRope.Masses.Length; k++)
+			{
+				Vector2 dir = BodyRope.Masses[k].Position - BodyRope.Masses[k - 1].Position;
+				dir = dir.SafeNormalize(Vector2.Zero);
+				Vector2 normal = new Vector2(-dir.Y, dir.X) * 16;
+				Vector2 ropePos = BodyRope.Masses[k - 1].Position - Main.screenPosition;
+				float value = k / (float)BodyRope.Masses.Length;
+				if (NPC.velocity.X > 0)
+				{
+					AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
+					AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
+				}
+				else
+				{
+					AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
+					AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
+				}
+			}
+			if (bars.Count > 0)
+			{
+				Main.graphics.graphicsDevice.Textures[0] = texture;
+				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+			}
+		}
+		else
+		{
+			var rotation = NPC.rotation;
+			var spriteEffect = NPC.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+			spriteBatch.Draw(texture, drawPos, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
+		}
+		spriteBatch.End();
+		spriteBatch.Begin(sBS);
 		return false;
+	}
+
+	private void AddVertex(List<Vertex2D> bars, Vector2 screenPos, Vector3 coord)
+	{
+		bars.Add(screenPos, Lighting.GetColor((screenPos + Main.screenPosition).ToTileCoordinates()), coord);
 	}
 }
