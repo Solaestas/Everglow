@@ -19,6 +19,8 @@ public class VampireMat : ModNPC
 
 	public MassSpringContainer EularSys = new MassSpringContainer();
 
+	public Vector2 RealCenter;
+
 	public enum TextureState
 	{
 		Flat,
@@ -63,6 +65,7 @@ public class VampireMat : ModNPC
 		EularSys.AddMassSpringMesh(BodyRope);
 		GlobalRopeSystem.EulerContainers.Add(EularSys);
 		AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+		RealCenter = NPC.Center;
 	}
 
 	public override bool CheckActive()
@@ -73,8 +76,45 @@ public class VampireMat : ModNPC
 	public override void AI()
 	{
 		AICoroutine.Update();
-		BodyRope.Masses[0].Position = NPC.Center;
+		RealCenter += NPC.velocity;
+		BodyRope.Masses[0].Position = RealCenter;
 		BodyRope.ApplyForce_VelocityDecay(0.2f);
+		Rectangle hitBox = GetAABBBound(BodyRope);
+		NPC.position = hitBox.TopLeft();
+		NPC.width = hitBox.Width;
+		NPC.height = hitBox.Height;
+	}
+
+	public Rectangle GetAABBBound(Rope rope)
+	{
+		int min_x = int.MaxValue;
+		int max_x = 0;
+		int min_y = int.MaxValue;
+		int max_y = 0;
+		foreach (var mass in rope.Masses)
+		{
+			int mass_x = (int)mass.Position.X;
+			int mass_y = (int)mass.Position.Y;
+			if (mass_x < min_x)
+			{
+				min_x = mass_x;
+			}
+			if (mass_x > max_x)
+			{
+				max_x = mass_x;
+			}
+			if (mass_y < min_y)
+			{
+				min_y = mass_y;
+			}
+			if (mass_y > max_y)
+			{
+				max_y = mass_y;
+			}
+		}
+		int width = max_x - min_x;
+		int height = max_y - min_y;
+		return new Rectangle(min_x, min_y, width, height);
 	}
 
 	public IEnumerator<ICoroutineInstruction> Dash_0()
@@ -83,11 +123,11 @@ public class VampireMat : ModNPC
 		bool reachTarget = false;
 		float rot = NPC.rotation;
 		int reachTimer = 0;
-		for (int k = 0; k < 240; k++)
+		for (int k = 0; k < 90; k++)
 		{
-			Vector2 headPos = NPC.Center;
+			Vector2 headPos = RealCenter;
 			Player player = Main.player[NPC.target];
-			int direction = NPC.Center.X > player.Center.X ? 1 : -1;
+			int direction = RealCenter.X > player.Center.X ? 1 : -1;
 
 			NPC.spriteDirection = direction;
 			Vector2 toTarget = player.Center - headPos;
@@ -250,14 +290,15 @@ public class VampireMat : ModNPC
 		if (NPC.target >= 0)
 		{
 			Player player = Main.player[NPC.target];
-			if ((player.Center - NPC.Center).Length() > 600)
+			if ((player.Center - RealCenter).Length() > 600)
 			{
 				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
 				yield break;
 			}
 		}
-		//Main.rand.Next(3)
-		switch (0)
+
+		// Main.rand.Next(3)
+		switch (Main.rand.Next(3))
 		{
 			case 0:
 				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
@@ -319,9 +360,10 @@ public class VampireMat : ModNPC
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		var texture = ModContent.Request<Texture2D>(Texture).Value;
-		var drawPos = NPC.Center - Main.screenPosition;
+		var drawPos = RealCenter - Main.screenPosition;
 		if (NPCTextureState == (int)TextureState.TowardScreen)
 		{
+			drawPos = NPC.Center - Main.screenPosition;
 			texture = ModAsset.VampireMat_Attack.Value;
 			if (TowardScreenAndAttacking)
 			{
@@ -352,6 +394,7 @@ public class VampireMat : ModNPC
 		}
 		if (NPCTextureState == (int)TextureState.ProjRelease)
 		{
+			drawPos = NPC.Center - Main.screenPosition;
 			texture = ModAsset.VampireMat_ReleaseProj.Value;
 		}
 

@@ -1,4 +1,7 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Graphics;
 using Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 
@@ -55,12 +58,17 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, CustomBlendStates.Reverse, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
-		Texture2D tex_black = ModAsset.VampireMat_Attack_Proj_Ball_black.Value;
 		float drawScale = Projectile.scale * (MathF.Sin((float)Main.time * 0.15f + Projectile.whoAmI) * 0.25f + 1);
-		Main.EntitySpriteDraw(tex_black, Projectile.Center - Main.screenPosition, null, Color.White, 0, tex_black.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
 		Rectangle frame = new Rectangle(0, 90 * Projectile.frame, 90, 90);
-		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 0), 0,frame.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
+		Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, frame, new Color(1f, 1f, 1f, 1), 0, frame.Size() * 0.5f, drawScale, SpriteEffects.None, 0);
+
+		Main.spriteBatch.End();
+		Main.spriteBatch.Begin(sBS);
 		return false;
 	}
 }
