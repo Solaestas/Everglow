@@ -19,7 +19,7 @@ public class VampireMatCaveSky : BackgroundSlideBase
 
 	public override void Draw()
 	{
-		Main.spriteBatch.Draw(Texture, WorldAnchor - Main.screenPosition, null, Color.White, 0, Texture.Size() * 0.5f, new Vector2(4, 4), SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(Texture, WorldAnchor - Main.screenPosition, null, Color.White, 0, Texture.Size() * 0.5f, new Vector2(2f, 2f), SpriteEffects.None, 0);
 		EliminateLightManager.AddCircle(WorldAnchor, 65 * 16);
 		foreach(var npc in Main.npc)
 		{

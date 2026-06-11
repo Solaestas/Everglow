@@ -61,7 +61,7 @@ public class VampireMat_Tentacle : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		VampireMat.VampireMatHitCommonEffect(target);
+		VampireMat.VampireMatHitCommonEffect(target, info.Damage);
 		base.OnHitPlayer(target, info);
 	}
 
@@ -79,10 +79,10 @@ public class VampireMat_Tentacle : ModProjectile
 		for (int i = 0; i <= tentacle_dis; i += 10)
 		{
 			float wave = 0;
-			if(Timer > 60)
+			if (Timer > 60)
 			{
 				float decay = i / 600f;
-				if(decay > 1)
+				if (decay > 1)
 				{
 					decay = 1;
 				}

@@ -60,7 +60,7 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 			sp.Position += sp.Velocity;
 			sp.Velocity = sp.Velocity.NormalizeSafe() * (4f + MathF.Sin(i / 3f * MathHelper.TwoPi + (float)Main.time * 0.03f + Projectile.whoAmI) * 0.3f * MathF.Cos(Projectile.timeLeft / 60f));
 			sp.Timer++;
-			if(sp.MaxTime - sp.Timer < 60)
+			if (sp.MaxTime - sp.Timer < 60)
 			{
 				sp.Scale *= 0.96f;
 			}
@@ -71,7 +71,7 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 				SubProjs.RemoveAt(i);
 			}
 		}
-		if(SubProjs.Count <= 0)
+		if (SubProjs.Count <= 0)
 		{
 			Projectile.Kill();
 		}
@@ -84,7 +84,7 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 			int x = (int)sp.Position.X;
 			int y = (int)sp.Position.Y;
 			Rectangle subHitbox = new Rectangle(x - 10, y - 10, 20, 20);
-			if(subHitbox.Intersects(targetHitbox))
+			if (subHitbox.Intersects(targetHitbox))
 			{
 				return true;
 			}
@@ -94,7 +94,7 @@ public class VampireMat_Attack_Proj_Ball_Small_Group : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		VampireMat.VampireMatHitCommonEffect(target);
+		VampireMat.VampireMatHitCommonEffect(target, info.Damage);
 		base.OnHitPlayer(target, info);
 	}
 

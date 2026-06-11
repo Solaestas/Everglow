@@ -58,7 +58,6 @@ public class VampireMat : ModNPC
 
 		NPC.noTileCollide = true;
 		NPC.aiStyle = -1;
-		DiveAtBackground = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -158,6 +157,36 @@ public class VampireMat : ModNPC
 			yield return new SkipThisFrame();
 		}
 		for (int k = 0; k < 30; k++)
+		{
+			NPC.velocity *= 0.96f;
+			yield return new SkipThisFrame();
+		}
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
+	public IEnumerator<ICoroutineInstruction> Dash_1()
+	{
+		yield return new WaitUntil(() => NPC.target >= 0);
+		for (int k = 0; k <= 180; k++)
+		{
+			if(k % 30 == 0)
+			{
+				Vector2 headPos = RealCenter;
+				Player player = Main.player[NPC.target];
+				int direction = RealCenter.X > player.Center.X ? 1 : -1;
+				NPC.spriteDirection = direction;
+				Vector2 toTarget = player.Center - headPos;
+				toTarget = toTarget.SafeNormalize(Vector2.Zero) * 31f;
+				NPC.velocity = toTarget;
+			}
+			else
+			{
+				NPC.velocity *= 0.96f;
+			}
+
+			yield return new SkipThisFrame();
+		}
+		for (int k = 0; k < 10; k++)
 		{
 			NPC.velocity *= 0.96f;
 			yield return new SkipThisFrame();
@@ -324,7 +353,7 @@ public class VampireMat : ModNPC
 		switch (Main.rand.Next(3))
 		{
 			case 0:
-				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+				AICoroutine.StartCoroutine(new Coroutine(Dash_1()));
 				break;
 			case 1:
 				AICoroutine.StartCoroutine(new Coroutine(TentacleRelease()));
@@ -354,11 +383,11 @@ public class VampireMat : ModNPC
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		VampireMatHitCommonEffect(target);
+		VampireMatHitCommonEffect(target, info.Damage);
 		base.OnHitPlayer(target, info);
 	}
 
-	public static void VampireMatHitCommonEffect(Player target)
+	public static void VampireMatHitCommonEffect(Player target, int damage)
 	{
 		if (target.HasBuff(BuffID.Gills))
 		{
@@ -372,6 +401,15 @@ public class VampireMat : ModNPC
 			MaxTime = 120,
 		};
 		Ins.VFXManager.Add(screenEffectVFX);
+		NPC owner = NPCUtils.FindNearest(target.Center, ModContent.NPCType<VampireMat>());
+		owner.netUpdate = true;
+		int amount = damage * 2;
+		owner.HealEffect(amount, true);
+		owner.life += amount;
+		if(owner.life > owner.lifeMax)
+		{
+			owner.life = owner.lifeMax;
+		}
 	}
 
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)

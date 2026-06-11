@@ -40,7 +40,7 @@ public class VampireMat_Attack_Proj_Absorb : VisualProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		VampireMat.VampireMatHitCommonEffect(target);
+		VampireMat.VampireMatHitCommonEffect(target, info.Damage);
 		base.OnHitPlayer(target, info);
 	}
 

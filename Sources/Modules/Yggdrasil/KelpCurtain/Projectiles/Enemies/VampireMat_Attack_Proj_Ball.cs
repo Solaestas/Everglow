@@ -1,7 +1,6 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Graphics;
 using Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 
@@ -26,19 +25,19 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 	{
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.1f, 0.2f) * Projectile.scale * 5f);
 		var playerWhoAmI = Player.FindClosest(Projectile.Center, 0, 0);
-		if(playerWhoAmI < 0)
+		if (playerWhoAmI < 0)
 		{
 			return;
 		}
 		Player player = Main.player[playerWhoAmI];
-		Vector2	toPlayer = player.Center - Projectile.Center - Projectile.velocity;
+		Vector2 toPlayer = player.Center - Projectile.Center - Projectile.velocity;
 		toPlayer = toPlayer.NormalizeSafe() * 6;
 		Projectile.velocity = toPlayer * 0.05f + Projectile.velocity * 0.95f;
 		Projectile.velocity = Projectile.velocity.NormalizeSafe() * 6f;
-		if(Projectile.timeLeft % 6 == 0)
+		if (Projectile.timeLeft % 6 == 0)
 		{
 			Projectile.frame++;
-			if(Projectile.frame >= 10)
+			if (Projectile.frame >= 10)
 			{
 				Projectile.frame = 0;
 			}
@@ -59,7 +58,7 @@ public class VampireMat_Attack_Proj_Ball : ModProjectile
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
-		VampireMat.VampireMatHitCommonEffect(target);
+		VampireMat.VampireMatHitCommonEffect(target, info.Damage);
 		base.OnHitPlayer(target, info);
 	}
 
