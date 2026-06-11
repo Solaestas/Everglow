@@ -33,6 +33,10 @@ public class VampireMat : ModNPC
 
 	public int NPCTextureState = 0;
 
+	public int Phase = 1;
+
+	public int HitTimer = 0;
+
 	public bool TowardScreenAndAttacking = false;
 
 	public override void SetStaticDefaults()
@@ -86,6 +90,14 @@ public class VampireMat : ModNPC
 		NPC.position = hitBox.TopLeft();
 		NPC.width = hitBox.Width;
 		NPC.height = hitBox.Height;
+		if (Phase == 1 && NPC.life < NPC.lifeMax * 0.3f)
+		{
+			Phase = 2;
+		}
+		if (HitTimer > 0)
+		{
+			HitTimer--;
+		}
 	}
 
 	public Rectangle GetAABBBound(Rope rope)
@@ -119,6 +131,8 @@ public class VampireMat : ModNPC
 		int height = max_y - min_y;
 		return new Rectangle(min_x, min_y, width, height);
 	}
+
+	#region skills
 
 	public IEnumerator<ICoroutineInstruction> Dash_0()
 	{
@@ -169,7 +183,7 @@ public class VampireMat : ModNPC
 		yield return new WaitUntil(() => NPC.target >= 0);
 		for (int k = 0; k <= 180; k++)
 		{
-			if(k % 30 == 0)
+			if (k % 30 == 0)
 			{
 				Vector2 headPos = RealCenter;
 				Player player = Main.player[NPC.target];
@@ -198,10 +212,10 @@ public class VampireMat : ModNPC
 	{
 		for (int k = 0; k < 9999; k++)
 		{
-			if(NPC.target >= 0)
+			if (NPC.target >= 0)
 			{
 				Player player = Main.player[NPC.target];
-				if((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < 60 * 16)
+				if ((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < 60 * 16)
 				{
 					AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 					yield break;
@@ -209,6 +223,28 @@ public class VampireMat : ModNPC
 			}
 			NPC.velocity *= 0.95f;
 			NPC.velocity.Y += 1;
+			yield return new SkipThisFrame();
+		}
+	}
+
+	public IEnumerator<ICoroutineInstruction> GoBehiveBackground()
+	{
+		float speed = 0f;
+		for (int k = 0; k < 99999; k++)
+		{
+			speed += 0.2f;
+			if (speed >= 30)
+			{
+				speed = 30;
+			}
+			Vector2 toCenter = KelpCurtainGeneration.VampireMatCaveCenter - RealCenter;
+			NPC.velocity = toCenter.SafeNormalize(Vector2.Zero) * speed * 0.25f + NPC.velocity * 0.75f;
+			if (toCenter.Length() < speed * 1.5f)
+			{
+				DiveAtBackground = true;
+				AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+				yield break;
+			}
 			yield return new SkipThisFrame();
 		}
 	}
@@ -339,6 +375,11 @@ public class VampireMat : ModNPC
 
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
+		if (!PlayerInCave())
+		{
+			AICoroutine.StartCoroutine(new Coroutine(Escape()));
+			yield break;
+		}
 		if (NPC.target >= 0)
 		{
 			Player player = Main.player[NPC.target];
@@ -347,6 +388,11 @@ public class VampireMat : ModNPC
 				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
 				yield break;
 			}
+		}
+		if (Phase == 2 && !DiveAtBackground)
+		{
+			AICoroutine.StartCoroutine(new Coroutine(GoBehiveBackground()));
+			yield break;
 		}
 
 		// Main.rand.Next(3)
@@ -366,6 +412,8 @@ public class VampireMat : ModNPC
 		yield return new SkipThisFrame();
 	}
 
+	#endregion
+
 	public override void FindFrame(int frameHeight)
 	{
 		if (NPCTextureState == (int)TextureState.Flat)
@@ -379,6 +427,7 @@ public class VampireMat : ModNPC
 
 	public override void HitEffect(NPC.HitInfo hit)
 	{
+		HitTimer = 20;
 	}
 
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -402,13 +451,16 @@ public class VampireMat : ModNPC
 		};
 		Ins.VFXManager.Add(screenEffectVFX);
 		NPC owner = NPCUtils.FindNearest(target.Center, ModContent.NPCType<VampireMat>());
-		owner.netUpdate = true;
-		int amount = damage * 2;
-		owner.HealEffect(amount, true);
-		owner.life += amount;
-		if(owner.life > owner.lifeMax)
+		if(owner is not null)
 		{
-			owner.life = owner.lifeMax;
+			owner.netUpdate = true;
+			int amount = damage * 2;
+			owner.HealEffect(amount, true);
+			owner.life += amount;
+			if (owner.life > owner.lifeMax)
+			{
+				owner.life = owner.lifeMax;
+			}
 		}
 	}
 
@@ -419,7 +471,7 @@ public class VampireMat : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if(!DiveAtBackground)
+		if (!DiveAtBackground)
 		{
 			DrawSelf(NPC, this, spriteBatch, drawColor);
 		}
@@ -428,6 +480,7 @@ public class VampireMat : ModNPC
 
 	public static void DrawSelf(NPC npc, VampireMat vampireMat, SpriteBatch spriteBatch, Color drawColor)
 	{
+		Effect effect = ModAsset.VampireMat_HitEffect.Value;
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		var texture = ModContent.Request<Texture2D>(npc.ModNPC.Texture).Value;
 		var drawPos = vampireMat.RealCenter - Main.screenPosition;
@@ -458,6 +511,21 @@ public class VampireMat : ModNPC
 
 					Main.spriteBatch.End();
 					Main.spriteBatch.Begin(sBS);
+
+					if (vampireMat.HitTimer > 0)
+					{
+						Main.spriteBatch.End();
+						Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+						effect.Parameters["hitTimer"].SetValue(vampireMat.HitTimer);
+						effect.CurrentTechnique.Passes[0].Apply();
+
+						Main.graphics.GraphicsDevice.Textures[0] = texture;
+						Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, boss_bottom_bars.ToArray(), 0, boss_bottom_bars.Count / 3);
+
+						Main.spriteBatch.End();
+						Main.spriteBatch.Begin(sBS);
+					}
 				}
 				return;
 			}
@@ -502,6 +570,21 @@ public class VampireMat : ModNPC
 			{
 				Main.graphics.graphicsDevice.Textures[0] = texture;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+				if (vampireMat.HitTimer > 0)
+				{
+					Main.spriteBatch.End();
+					Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+					effect.Parameters["hitTimer"].SetValue(vampireMat.HitTimer);
+					effect.CurrentTechnique.Passes[0].Apply();
+
+					Main.graphics.graphicsDevice.Textures[0] = texture;
+					Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+					Main.spriteBatch.End();
+					Main.spriteBatch.Begin(sBS);
+				}
 			}
 		}
 		else
@@ -509,6 +592,20 @@ public class VampireMat : ModNPC
 			var rotation = npc.rotation;
 			var spriteEffect = npc.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 			spriteBatch.Draw(texture, drawPos, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
+
+			if (vampireMat.HitTimer > 0)
+			{
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+
+				effect.Parameters["hitTimer"].SetValue(vampireMat.HitTimer);
+				effect.CurrentTechnique.Passes[0].Apply();
+
+				spriteBatch.Draw(texture, drawPos, frame, drawColor, rotation, frame.Size() / 2, 0.8f, spriteEffect, 0);
+
+				Main.spriteBatch.End();
+				Main.spriteBatch.Begin(sBS);
+			}
 		}
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
@@ -521,12 +618,12 @@ public class VampireMat : ModNPC
 
 	public bool PlayerInCave()
 	{
-		if(NPC.target < 0)
+		if (NPC.target < 0)
 		{
 			return false;
 		}
 		Player player = Main.player[NPC.target];
-		if ((player.Center - RealCenter).Length() > 600)
+		if ((player.Center - RealCenter).Length() <= 60 * 16)
 		{
 			return true;
 		}
