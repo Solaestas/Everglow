@@ -45,17 +45,17 @@ public static class SpriteBatchUtils
 		return Lighting.GetColor(worldPosition.ToTileCoordinates());
 	}
 
-	public static void AddVertexWithEnv_Light(List<Vertex2D> bars, Vector2 worldPos, Vector3 texCoord, bool removeScreenPos = true)
+	public static void AddVertexWithEnv_Light(List<Vertex2D> bars, Vector2 worldPos, Vector3 texCoord, bool removeScreenPos = true, float colorFade = 1f)
 	{
 		Vector2 offset = Vector2.Zero;
 		if (removeScreenPos)
 		{
 			offset = -Main.screenPosition;
 		}
-		bars.Add(worldPos + offset, GetEnv_Light(worldPos + Main.screenPosition + offset), texCoord);
+		bars.Add(worldPos + offset, GetEnv_Light(worldPos + Main.screenPosition + offset) * colorFade, texCoord);
 	}
 
-	public static void AddVerticesForCircleRing(List<Vertex2D> bars, Vector2 position, float radius, float width, Color drawColor, float coorx_x_min, float coord_x_max)
+	public static void AddVerticesForCircleRing(List<Vertex2D> bars, Vector2 position, float radius, float width, Color drawColor, float coorx_x_min, float coord_x_max, float coord_z = 0)
 	{
 		int currentSize = bars.Count;
 		int count = (int)(radius / 4 + 10);
@@ -73,9 +73,9 @@ public static class SpriteBatchUtils
 				pos1 = position;
 				maxCoordY = 0.5f + radius / (width / 2f);
 			}
-			span[currentSize] = new Vertex2D(pos0, drawColor, new Vector3(coordX, 0, 0));
+			span[currentSize] = new Vertex2D(pos0, drawColor, new Vector3(coordX, 0, coord_z));
 			currentSize++;
-			span[currentSize] = new Vertex2D(pos1, drawColor, new Vector3(coordX, maxCoordY, 0));
+			span[currentSize] = new Vertex2D(pos1, drawColor, new Vector3(coordX, maxCoordY, coord_z));
 			currentSize++;
 		}
 		CollectionsMarshal.SetCount(bars, currentSize);

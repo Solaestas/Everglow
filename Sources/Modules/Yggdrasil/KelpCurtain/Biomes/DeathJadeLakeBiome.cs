@@ -84,6 +84,30 @@ public class DeathJadeLakeBiome : ModBiome
 
 	public override void OnInBiome(Player player)
 	{
+		// Vampire Mat
+		if ((Main.LocalPlayer.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < new Vector2(Main.screenWidth, Main.screenHeight).Length() / 2f + 60 * 16)
+		{
+			BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+			if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.KelpCurtain.Background.VampireMatCaveWall"))
+			{
+				List<Vector2> polygon = new List<Vector2>();
+				for (int k = 0; k < 40; k++)
+				{
+					polygon.Add(KelpCurtainGeneration.VampireMatCaveCenter + new Vector2(60 * 16, 0).RotatedBy(k / 40f * MathHelper.TwoPi));
+				}
+				List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
+
+				VampireMatCaveWall vmcw = new VampireMatCaveWall();
+				vmcw.WorldAnchor = KelpCurtainGeneration.VampireMatCaveCenter;
+				vmcw.BgTiles = bgArea;
+				bgSystem.AddBackgroundSlide(vmcw);
+
+				VampireMatCaveSky vmcs = new VampireMatCaveSky();
+				vmcs.WorldAnchor = KelpCurtainGeneration.VampireMatCaveCenter;
+				bgSystem.AddBackgroundSlide(vmcs);
+			}
+		}
+
 		// Add water light
 		float lightTop = LiquidSurfaceY;
 		if (lightTop - Main.screenPosition.Y < -Main.offScreenRange)
@@ -131,30 +155,6 @@ public class DeathJadeLakeBiome : ModBiome
 						tile.LiquidAmount = 255;
 					}
 				}
-			}
-		}
-
-		// Vampire Mat
-		if ((Main.LocalPlayer.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < new Vector2(Main.screenWidth, Main.screenHeight).Length() / 2f + 60 * 16)
-		{
-			BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-			if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.KelpCurtain.Background.VampireMatCaveWall"))
-			{
-				List<Vector2> polygon = new List<Vector2>();
-				for (int k = 0; k < 40; k++)
-				{
-					polygon.Add(KelpCurtainGeneration.VampireMatCaveCenter + new Vector2(60 * 16, 0).RotatedBy(k / 40f * MathHelper.TwoPi));
-				}
-				List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
-
-				VampireMatCaveWall vmcw = new VampireMatCaveWall();
-				vmcw.WorldAnchor = KelpCurtainGeneration.VampireMatCaveCenter;
-				vmcw.BgTiles = bgArea;
-				bgSystem.AddBackgroundSlide(vmcw);
-
-				VampireMatCaveSky vmcs = new VampireMatCaveSky();
-				vmcs.WorldAnchor = KelpCurtainGeneration.VampireMatCaveCenter;
-				bgSystem.AddBackgroundSlide(vmcs);
 			}
 		}
 		base.OnInBiome(player);

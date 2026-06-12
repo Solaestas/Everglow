@@ -37,7 +37,13 @@ public class VampireMat : ModNPC
 
 	public int HitTimer = 0;
 
+	public int CurrentSkillInPhase2 = 0;
+
 	public bool TowardScreenAndAttacking = false;
+
+	public static List<Vector2> BackgroundWallHoles = [new Vector2(0, 0), new Vector2(-616, -397), new Vector2(-535, 396), new Vector2(371, 610), new Vector2(611, -466),];
+
+	public static List<Vector2> TentacleInBackgroundPoints = [new Vector2(1000, 1000), new Vector2(385, 600), new Vector2(655, 765), new Vector2(767, 890), new Vector2(766, 1131), new Vector2(460, 1394), new Vector2(951, 1282), new Vector2(947, 1590), new Vector2(1109, 1219), new Vector2(1375, 1599), new Vector2(1190, 1393), new Vector2(1088, 1192), new Vector2(1297, 1147), new Vector2(1186, 1014), new Vector2(1497, 962), new Vector2(1316, 848), new Vector2(1451, 722), new Vector2(1675, 471), new Vector2(1874, 945),];
 
 	public override void SetStaticDefaults()
 	{
@@ -71,7 +77,7 @@ public class VampireMat : ModNPC
 		BodyRope = Rope.Create_Vine(NPC.Center, 20, 1, 1, 17.3f);
 		EularSys.AddMassSpringMesh(BodyRope);
 		GlobalRopeSystem.EulerContainers.Add(EularSys);
-		AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+		AICoroutine.StartCoroutine(new Coroutine(ChasePlayer()));
 		RealCenter = NPC.Center;
 	}
 
@@ -86,10 +92,13 @@ public class VampireMat : ModNPC
 		RealCenter += NPC.velocity;
 		BodyRope.Masses[0].Position = RealCenter;
 		BodyRope.ApplyForce_VelocityDecay(0.2f);
-		Rectangle hitBox = GetAABBBound(BodyRope);
-		NPC.position = hitBox.TopLeft();
-		NPC.width = hitBox.Width;
-		NPC.height = hitBox.Height;
+		if (NPCTextureState == (int)TextureState.Flat)
+		{
+			Rectangle hitBox = GetAABBBound(BodyRope);
+			NPC.position = hitBox.TopLeft();
+			NPC.width = hitBox.Width;
+			NPC.height = hitBox.Height;
+		}
 		if (Phase == 1 && NPC.life < NPC.lifeMax * 0.3f)
 		{
 			Phase = 2;
@@ -98,6 +107,7 @@ public class VampireMat : ModNPC
 		{
 			HitTimer--;
 		}
+		NPC.dontTakeDamage = DiveAtBackground;
 	}
 
 	public Rectangle GetAABBBound(Rope rope)
@@ -134,7 +144,7 @@ public class VampireMat : ModNPC
 
 	#region skills
 
-	public IEnumerator<ICoroutineInstruction> Dash_0()
+	public IEnumerator<ICoroutineInstruction> ChasePlayer()
 	{
 		yield return new WaitUntil(() => NPC.target >= 0);
 		bool reachTarget = false;
@@ -178,7 +188,7 @@ public class VampireMat : ModNPC
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
-	public IEnumerator<ICoroutineInstruction> Dash_1()
+	public IEnumerator<ICoroutineInstruction> ShortDash()
 	{
 		yield return new WaitUntil(() => NPC.target >= 0);
 		for (int k = 0; k <= 180; k++)
@@ -259,6 +269,8 @@ public class VampireMat : ModNPC
 			{
 				if (NPC.frame.Y == 1060)
 				{
+					NPC.width = 220;
+					NPC.height = 220;
 					NPCTextureState = (int)TextureState.TowardScreen;
 					NPC.frame = new Rectangle(0, 0, 400, 400);
 					break;
@@ -373,6 +385,257 @@ public class VampireMat : ModNPC
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
+	public IEnumerator<ICoroutineInstruction> TentacleRelease_Phase2()
+	{
+		Vector2 destination = KelpCurtainGeneration.VampireMatCaveCenter + BackgroundWallHoles[Main.rand.Next(BackgroundWallHoles.Count)];
+		for (int k = 0; k < 300; k++)
+		{
+			Vector2 toDest = destination - NPC.Center;
+			if (toDest.Length() > 200)
+			{
+				NPC.velocity = NPC.velocity * 0.9f + toDest.NormalizeSafe() * 20 * 0.1f;
+			}
+			else
+			{
+				NPC.velocity = NPC.velocity * 0.9f + toDest * 0.1f * 0.1f;
+			}
+			if (toDest.Length() < 10)
+			{
+				NPC.width = 220;
+				NPC.height = 220;
+				NPC.Center = destination;
+				NPCTextureState = (int)TextureState.TowardScreen;
+				NPC.frame = new Rectangle(0, 0, 400, 400);
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity *= 0f;
+		for (int k = 0; k < 19; k++)
+		{
+			if (k == 8)
+			{
+				DiveAtBackground = false;
+			}
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		TowardScreenAndAttacking = true;
+		yield return new WaitForFrames(6);
+		List<int> projRots = [0, 1, 2, 3, 4, 5, 6];
+		for (int k = 0; k < 34; k++)
+		{
+			if (k % 5 == 0)
+			{
+				Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Tentacle>(), 88, 5, NPC.target);
+				int number = projRots[Main.rand.Next(projRots.Count)];
+				switch (number)
+				{
+					case 0:
+						proj.rotation = -15.8f / 360f * MathHelper.TwoPi;
+						break;
+					case 1:
+						proj.rotation = 25.54f / 360f * MathHelper.TwoPi;
+						break;
+					case 2:
+						proj.rotation = 84.36f / 360f * MathHelper.TwoPi;
+						break;
+					case 3:
+						proj.rotation = 143.07f / 360f * MathHelper.TwoPi;
+						break;
+					case 4:
+						proj.rotation = -162.52f / 360f * MathHelper.TwoPi;
+						break;
+					case 5:
+						proj.rotation = -114.61f / 360f * MathHelper.TwoPi;
+						break;
+					case 6:
+						proj.rotation = -59.09f / 360f * MathHelper.TwoPi;
+						break;
+				}
+				for (int j = 0; j < 2; j++)
+				{
+					Projectile proj_tusk = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, new Vector2(6, 0).RotatedBy((j - 0.5f) * 0.6f + proj.rotation), ModContent.ProjectileType<VampireMat_Attack_Proj_Tusk>(), 55, 2.5f, NPC.target);
+				}
+				projRots.Remove(number);
+			}
+			yield return new SkipThisFrame();
+		}
+		yield return new WaitForFrames(180);
+		TowardScreenAndAttacking = false;
+		for (int k = 0; k < 8; k++)
+		{
+			if (k == 4)
+			{
+				DiveAtBackground = true;
+			}
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPCTextureState = (int)TextureState.Flat;
+		NPC.frame = new Rectangle(0, 0, 346, 106);
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
+	public IEnumerator<ICoroutineInstruction> VortexAbsorb()
+	{
+		Vector2 destination = KelpCurtainGeneration.VampireMatCaveCenter + BackgroundWallHoles[0];
+		for (int k = 0; k < 300; k++)
+		{
+			Vector2 toDest = destination - RealCenter;
+			if (toDest.Length() > 200)
+			{
+				NPC.velocity = NPC.velocity * 0.9f + toDest.NormalizeSafe() * 20 * 0.1f;
+			}
+			else
+			{
+				NPC.velocity = NPC.velocity * 0.9f + toDest * 0.1f * 0.1f;
+			}
+			if (toDest.Length() < 10)
+			{
+				NPC.width = 220;
+				NPC.height = 220;
+				NPC.Center = destination;
+				NPCTextureState = (int)TextureState.TowardScreen;
+				NPC.frame = new Rectangle(0, 0, 400, 400);
+				break;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPC.velocity *= 0f;
+		for (int k = 0; k < 19; k++)
+		{
+			if (k == 8)
+			{
+				DiveAtBackground = false;
+			}
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		TowardScreenAndAttacking = true;
+		yield return new WaitForFrames(6);
+		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Absorb>(), 1, 0, NPC.target);
+		if (Main.rand.NextBool())
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex2>(), 88, 5, NPC.target);
+		}
+		else
+		{
+			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex>(), 88, 5, NPC.target);
+		}
+		yield return new WaitForFrames(600);
+		TowardScreenAndAttacking = false;
+		for (int k = 0; k < 8; k++)
+		{
+			if (k == 4)
+			{
+				DiveAtBackground = true;
+			}
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPCTextureState = (int)TextureState.Flat;
+		NPC.frame = new Rectangle(0, 0, 346, 106);
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
+	public IEnumerator<ICoroutineInstruction> TentacleHide()
+	{
+		Player player = Main.player[NPC.target];
+		NPC.width = 220;
+		NPC.height = 220;
+		NPCTextureState = (int)TextureState.TowardScreen;
+		NPC.frame = new Rectangle(0, 0, 400, 400);
+		NPC.velocity *= 0f;
+		for (int k = 0; k < 19; k++)
+		{
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		TowardScreenAndAttacking = true;
+		for (int k = 0; k <= 26; k++)
+		{
+			NPC.alpha += 10;
+			if (NPC.alpha > 255)
+			{
+				NPC.alpha = 255;
+			}
+			NPC.scale -= 0.05f;
+			if(NPC.scale < 0)
+			{
+				NPC.scale = 0;
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int k = 0; k <= 600; k++)
+		{
+			float minDis = float.MaxValue;
+			Vector2 releasePos = Vector2.zeroVector;
+			List<Vector2> possiblePos = TentacleInBackgroundPoints;
+			if (k % 60 == 0 && k <= 480)
+			{
+				for (int j = possiblePos.Count - 1; j >= 0; j--)
+				{
+					Vector2 offsetPos = possiblePos[j] + KelpCurtainGeneration.VampireMatCaveCenter - new Vector2(1000);
+					float toPlayer = (offsetPos - player.Center).Length();
+					if (toPlayer < minDis)
+					{
+						releasePos = possiblePos[j];
+						minDis = toPlayer;
+					}
+				}
+				possiblePos.Remove(releasePos);
+				Vector2 truePos = releasePos + KelpCurtainGeneration.VampireMatCaveCenter - new Vector2(1000);
+				Projectile proj = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), truePos, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Tentacle_FromBackground>(), 88, 5, NPC.target);
+				proj.rotation = (player.Center - truePos).ToRotationSafe();
+			}
+			yield return new SkipThisFrame();
+		}
+		for (int k = 0; k <= 26; k++)
+		{
+			NPC.alpha -= 10;
+			if (NPC.alpha < 0)
+			{
+				NPC.alpha = 0;
+			}
+			NPC.scale += 0.05f;
+			if (NPC.scale > 1)
+			{
+				NPC.scale = 1;
+			}
+			yield return new SkipThisFrame();
+		}
+		TowardScreenAndAttacking = false;
+		for (int k = 0; k < 8; k++)
+		{
+			if (k % 4 == 3)
+			{
+				NPC.frame.Y += 400;
+			}
+			yield return new SkipThisFrame();
+		}
+		NPCTextureState = (int)TextureState.Flat;
+		NPC.frame = new Rectangle(0, 0, 346, 106);
+
+		TentacleInBackgroundPoints = [new Vector2(1000, 1000), new Vector2(385, 600), new Vector2(655, 765), new Vector2(767, 890), new Vector2(766, 1131), new Vector2(460, 1394), new Vector2(951, 1282), new Vector2(947, 1590), new Vector2(1109, 1219), new Vector2(1375, 1599), new Vector2(1190, 1393), new Vector2(1088, 1192), new Vector2(1297, 1147), new Vector2(1186, 1014), new Vector2(1497, 962), new Vector2(1316, 848), new Vector2(1451, 722), new Vector2(1675, 471), new Vector2(1874, 945),];
+		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+	}
+
 	public IEnumerator<ICoroutineInstruction> NextAttack()
 	{
 		if (!PlayerInCave())
@@ -380,12 +643,12 @@ public class VampireMat : ModNPC
 			AICoroutine.StartCoroutine(new Coroutine(Escape()));
 			yield break;
 		}
-		if (NPC.target >= 0)
+		if (NPC.target >= 0 && Phase == 1)
 		{
 			Player player = Main.player[NPC.target];
 			if ((player.Center - RealCenter).Length() > 600)
 			{
-				AICoroutine.StartCoroutine(new Coroutine(Dash_0()));
+				AICoroutine.StartCoroutine(new Coroutine(ChasePlayer()));
 				yield break;
 			}
 		}
@@ -396,16 +659,41 @@ public class VampireMat : ModNPC
 		}
 
 		// Main.rand.Next(3)
-		switch (Main.rand.Next(3))
+		switch (Phase)
 		{
-			case 0:
-				AICoroutine.StartCoroutine(new Coroutine(Dash_1()));
-				break;
 			case 1:
-				AICoroutine.StartCoroutine(new Coroutine(TentacleRelease()));
+				switch (Main.rand.Next(3))
+				{
+					case 0:
+						AICoroutine.StartCoroutine(new Coroutine(ShortDash()));
+						break;
+					case 1:
+						AICoroutine.StartCoroutine(new Coroutine(TentacleRelease()));
+						break;
+					case 2:
+						AICoroutine.StartCoroutine(new Coroutine(ProjRelease()));
+						break;
+				}
 				break;
+
 			case 2:
-				AICoroutine.StartCoroutine(new Coroutine(ProjRelease()));
+				CurrentSkillInPhase2++;
+				if (CurrentSkillInPhase2 >= 3)
+				{
+					CurrentSkillInPhase2 = 0;
+				}
+				switch (CurrentSkillInPhase2)
+				{
+					case 0:
+						AICoroutine.StartCoroutine(new Coroutine(VortexAbsorb()));
+						break;
+					case 1:
+						AICoroutine.StartCoroutine(new Coroutine(TentacleHide()));
+						break;
+					case 2:
+						AICoroutine.StartCoroutine(new Coroutine(TentacleRelease_Phase2()));
+						break;
+				}
 				break;
 		}
 
@@ -430,6 +718,15 @@ public class VampireMat : ModNPC
 		HitTimer = 20;
 	}
 
+	public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+	{
+		if (!DiveAtBackground)
+		{
+			return base.CanHitPlayer(target, ref cooldownSlot);
+		}
+		return false;
+	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		VampireMatHitCommonEffect(target, info.Damage);
@@ -451,7 +748,7 @@ public class VampireMat : ModNPC
 		};
 		Ins.VFXManager.Add(screenEffectVFX);
 		NPC owner = NPCUtils.FindNearest(target.Center, ModContent.NPCType<VampireMat>());
-		if(owner is not null)
+		if (owner is not null)
 		{
 			owner.netUpdate = true;
 			int amount = damage * 2;
@@ -480,6 +777,7 @@ public class VampireMat : ModNPC
 
 	public static void DrawSelf(NPC npc, VampireMat vampireMat, SpriteBatch spriteBatch, Color drawColor)
 	{
+		float fade = (255 - npc.alpha) / 255f;
 		Effect effect = ModAsset.VampireMat_HitEffect.Value;
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		var texture = ModContent.Request<Texture2D>(npc.ModNPC.Texture).Value;
@@ -495,11 +793,11 @@ public class VampireMat : ModNPC
 				{
 					Vector2 offset0 = new Vector2(200, 0).RotatedBy(k / 20f * MathHelper.TwoPi);
 					Vector2 offset1 = new Vector2(200, 0).RotatedBy((k + 1) / 20f * MathHelper.TwoPi);
-					Vector2 pos0 = drawPos + offset0 * (1 + MathF.Sin(k / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f);
-					Vector2 pos1 = drawPos + offset1 * (1 + MathF.Sin((k + 1) / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f);
-					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos0, new Vector3((new Vector2(200, 1800) + offset0) / texture.Size(), 0), false);
-					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos1, new Vector3((new Vector2(200, 1800) + offset1) / texture.Size(), 0), false);
-					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, drawPos, new Vector3(new Vector2(200, 1800) / texture.Size(), 0), false);
+					Vector2 pos0 = drawPos + offset0 * (1 + MathF.Sin(k / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f) * npc.scale;
+					Vector2 pos1 = drawPos + offset1 * (1 + MathF.Sin((k + 1) / 4f * MathHelper.TwoPi + (float)Main.time * 0.09f) * 0.1f) * npc.scale;
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos0, new Vector3((new Vector2(200, 1800) + offset0) / texture.Size(), 0), false, fade);
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, pos1, new Vector3((new Vector2(200, 1800) + offset1) / texture.Size(), 0), false, fade);
+					SpriteBatchUtils.AddVertexWithEnv_Light(boss_bottom_bars, drawPos, new Vector3(new Vector2(200, 1800) / texture.Size(), 0), false, fade);
 				}
 				if (boss_bottom_bars.Count > 2)
 				{
@@ -557,13 +855,13 @@ public class VampireMat : ModNPC
 				float value = k / (float)vampireMat.BodyRope.Masses.Length;
 				if (npc.velocity.X > 0)
 				{
-					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
-					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0), fade);
+					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0), fade);
 				}
 				else
 				{
-					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0));
-					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0));
+					vampireMat.AddVertex(bars, ropePos + normal, new Vector3(value, (frame.Y + frame.Height * 0.75f) / texture.Height, 0), fade);
+					vampireMat.AddVertex(bars, ropePos - normal, new Vector3(value, (frame.Y + frame.Height * 0.25f) / texture.Height, 0), fade);
 				}
 			}
 			if (bars.Count > 0)
@@ -611,9 +909,9 @@ public class VampireMat : ModNPC
 		spriteBatch.Begin(sBS);
 	}
 
-	public void AddVertex(List<Vertex2D> bars, Vector2 screenPos, Vector3 coord)
+	public void AddVertex(List<Vertex2D> bars, Vector2 screenPos, Vector3 coord, float fade = 1f)
 	{
-		bars.Add(screenPos, Lighting.GetColor((screenPos + Main.screenPosition).ToTileCoordinates()), coord);
+		bars.Add(screenPos, Lighting.GetColor((screenPos + Main.screenPosition).ToTileCoordinates()) * fade, coord);
 	}
 
 	public bool PlayerInCave()

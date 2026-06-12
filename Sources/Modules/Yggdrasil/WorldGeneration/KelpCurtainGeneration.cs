@@ -3844,13 +3844,19 @@ public class KelpCurtainGeneration
 			{
 				Point platformPos = tilePos + new Point(dx, 4);
 				var tile = SafeGetTile(platformPos);
-				tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock>();
+				tile.TileType = (ushort)ModContent.TileType<YggdrasilBlackRock_NoctilucentFluoriteLump_Platform>();
+				tile.TileFrameX = 0;
+				tile.TileFrameY = 0;
 				tile.HasTile = true;
-				if (dx == -3 || dx == 4)
+				if (dx == -3)
 				{
-					var tileBelow = SafeGetTile(platformPos + new Point(0, 1));
-					tileBelow.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
-					tileBelow.HasTile = true;
+					tile.TileFrameX = 36;
+					tile.TileFrameY = 0;
+				}
+				if (dx == 4)
+				{
+					tile.TileFrameX = 18;
+					tile.TileFrameY = 0;
 				}
 			}
 		}

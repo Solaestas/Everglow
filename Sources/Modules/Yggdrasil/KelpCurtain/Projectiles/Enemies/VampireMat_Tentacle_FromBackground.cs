@@ -5,11 +5,15 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 
-public class VampireMat_Tentacle : ModProjectile
+public class VampireMat_Tentacle_FromBackground : ModProjectile
 {
 	public NPC ParentVampireMat = null;
 
-	public int Timer;
+	public int Timer = 0;
+
+	public int Duration = 0;
+
+	public override string Texture => ModAsset.VampireMat_Tentacle_Mod;
 
 	public override void SetDefaults()
 	{
@@ -17,7 +21,7 @@ public class VampireMat_Tentacle : ModProjectile
 		Projectile.height = 80;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
-		Projectile.timeLeft = 180;
+		Projectile.timeLeft = 300;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.penetrate = -1;
@@ -50,8 +54,20 @@ public class VampireMat_Tentacle : ModProjectile
 			Projectile.active = false;
 			return;
 		}
-		Projectile.Center = ParentVampireMat.Center;
 		Timer++;
+		if (Timer < 10 || Timer > 60)
+		{
+			Duration++;
+		}
+		else
+		{
+			int playerIndex = Player.FindClosest(Projectile.Center, 1, 1);
+			if (playerIndex >= 0)
+			{
+				Player target = Main.player[playerIndex];
+				Projectile.rotation = (target.Center - Projectile.Center).ToRotationSafe();
+			}
+		}
 	}
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -80,7 +96,7 @@ public class VampireMat_Tentacle : ModProjectile
 		}
 		VampireMat vampireMat = ParentVampireMat.ModNPC as VampireMat;
 		Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-		float tentacle_dis = MathF.Sin(Timer / 180f * MathHelper.Pi) * 900;
+		float tentacle_dis = MathF.Sin(Duration / 180f * MathHelper.Pi) * 900;
 		List<Vector2> tentacleCurve = new List<Vector2>();
 		for (int i = 0; i <= tentacle_dis; i += 10)
 		{
@@ -96,7 +112,7 @@ public class VampireMat_Tentacle : ModProjectile
 			}
 			tentacleCurve.Add(Projectile.Center + new Vector2(tentacle_dis - i, wave).RotatedBy(Projectile.rotation) - Main.screenPosition);
 		}
-		List<Vertex2D> bars = SpriteBatchUtils.DrawCurveStrip_EnvironmentLight(tentacleCurve, 110, 1, (float)(texture.Width - tentacle_dis) / texture.Width);
+		List<Vertex2D> bars = DrawCurveStrip_EnvironmentLight_ForTentacles(tentacleCurve, 110, 1, (float)(texture.Width - tentacle_dis) / texture.Width);
 		if (bars.Count > 2)
 		{
 			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
@@ -126,5 +142,49 @@ public class VampireMat_Tentacle : ModProjectile
 			}
 		}
 		return false;
+	}
+
+
+	private List<Vertex2D> DrawCurveStrip_EnvironmentLight_ForTentacles(List<Vector2> curve, float width, float coord_x_min, float coord_x_max, float coord_y_min = 0, float coord_y_max = 1, bool curveHasScreenPos = false)
+	{
+		if (curve.Count < 2)
+		{
+			return [];
+		}
+		Vector2 lightSamplingOffset = Vector2.zeroVector;
+		if (!curveHasScreenPos)
+		{
+			lightSamplingOffset = Main.screenPosition;
+		}
+		List<Vertex2D> bars = new List<Vertex2D>();
+		for (int i = 0; i < curve.Count; i++)
+		{
+			Vector2 pos = curve[i];
+			Vector2 dir;
+			if (i == 0)
+			{
+				dir = curve[i + 1] - curve[i];
+			}
+			else
+			{
+				dir = curve[i] - curve[i - 1];
+			}
+			dir = dir.NormalizeSafe();
+			Vector2 normal = new Vector2(dir.Y, -dir.X) * width / 2f;
+			float value = i / (float)(curve.Count - 1);
+			float coordX = float.Lerp(coord_x_min, coord_x_max, value);
+			int rev_i = curve.Count - i;
+			if (rev_i < 5)
+			{
+				SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos + normal + lightSamplingOffset, new Vector3(coordX, coord_y_min, 0), true, rev_i / 5f);
+				SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos - normal + lightSamplingOffset, new Vector3(coordX, coord_y_max, 0), true, rev_i / 5f);
+			}
+			else
+			{
+				SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos + normal + lightSamplingOffset, new Vector3(coordX, coord_y_min, 0));
+				SpriteBatchUtils.AddVertexWithEnv_Light(bars, pos - normal + lightSamplingOffset, new Vector3(coordX, coord_y_max, 0));
+			}
+		}
+		return bars;
 	}
 }
