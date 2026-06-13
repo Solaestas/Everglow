@@ -27,9 +27,4 @@ public class ResetTheYggdrasilTown : ModItem
 		YggdrasilTownGeneration.BuildMidnightBayou();
 		return false;
 	}
-
-	public override bool? UseItem(Player player)
-	{
-		return base.UseItem(player);
-	}
 }
