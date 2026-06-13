@@ -772,19 +772,18 @@ public class VampireMat : ModNPC
 	public override void OnKill()
 	{
 		VampireMat_Summon.VampireMatSummonCD = 600;
+		for (int i = 0; i < 8; i++)
+		{
+			Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
+			int type = ModContent.Find<ModGore>("Everglow/VampireMat_Gore_" + i).Type;
+			Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(NPC.width), Main.rand.Next(NPC.height)), v0, type, NPC.scale);
+		}
 	}
 
 	public override void ModifyNPCLoot(NPCLoot npcLoot)
 	{
 		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<VampireMatTreasureBag>()));
 		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FleshOfVampireMat>(), 1, 1, 1));
-		//npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>()));
-		//npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>(), 10));
-
-		//var rule = new LeadingConditionRule(new Conditions.NotExpert());
-		//rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<DragonScaleHammer>(), ModContent.ItemType<EyeOfAnabiosis>(), ModContent.ItemType<FlurryingBlades>(), ModContent.ItemType<RockSpikeBallista>(), ModContent.ItemType<DeadBeetleEgg>(), ModContent.ItemType<BlueyWings>()));
-		//rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<RockGreaves>(), ModContent.ItemType<RockHelmet>(), ModContent.ItemType<RockPlateMail>()));
-		//npcLoot.Add(rule);
 		base.ModifyNPCLoot(npcLoot);
 	}
 
