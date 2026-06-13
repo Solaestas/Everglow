@@ -1,11 +1,13 @@
 using SubworldLibrary;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+namespace Everglow.Yggdrasil.Common;
 
 public class NPCSpawnManager : GlobalNPC
 {
 	private static HashSet<int> yggdrasilNPC = new HashSet<int>();
+
 	public static void RegisterNPC(int type) => yggdrasilNPC.Add(type);
+
 	public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo spawnInfo)
 	{
 		if (!SubworldSystem.IsActive<YggdrasilWorld>())
@@ -25,7 +27,6 @@ public class NPCSpawnManager : GlobalNPC
 		foreach (var pair in dict)
 		{
 			pool.Add(pair.Key, pair.Value);
-
 		}
 		pool.Add(NPCID.BlueSlime, 0.1f);
 		pool.Add(NPCID.GreenSlime, 0.1f);
@@ -55,10 +56,8 @@ public class NPCSpawnManager : GlobalNPC
 				pool.Add(NPCID.HoppinJack, 0.1f);
 			}
 		}
-
-
-
 	}
+
 	public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
 	{
 		if (SubworldSystem.IsActive<YggdrasilWorld>())
@@ -77,6 +76,7 @@ public class NPCSpawnManager : GlobalNPC
 			}
 		}
 	}
+
 	public static Vector2 FindTheIntersectionOfEllipseAndLine(float a, float b, float c, float d)
 	{
 		float a2 = (float)Math.Pow(a, 2);

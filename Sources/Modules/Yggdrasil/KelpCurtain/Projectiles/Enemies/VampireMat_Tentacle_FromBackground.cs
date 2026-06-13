@@ -1,6 +1,5 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
-using Microsoft.CodeAnalysis;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
@@ -72,7 +71,11 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		float tentacle_dis = MathF.Sin(Timer / 180f * MathHelper.Pi) * 900;
+		if(Duration < 60)
+		{
+			return false;
+		}
+		float tentacle_dis = MathF.Sin(Duration / 180f * MathHelper.Pi) * 900;
 		return CollisionUtils.Intersect(targetHitbox.Top(), targetHitbox.Bottom(), targetHitbox.Width, Projectile.Center, Projectile.Center + new Vector2(tentacle_dis, 0).RotatedBy(Projectile.rotation), 110);
 	}
 
@@ -101,14 +104,14 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 		for (int i = 0; i <= tentacle_dis; i += 10)
 		{
 			float wave = 0;
-			if (Timer > 60)
+			if (Duration > 60)
 			{
 				float decay = i / 600f;
 				if (decay > 1)
 				{
 					decay = 1;
 				}
-				wave = MathF.Sin((Timer - 60) / 120f * MathHelper.Pi) * MathF.Sin(i / 30f + Projectile.whoAmI + (float)Main.time * 0.06f) * 30 * decay;
+				wave = MathF.Sin((Duration - 60) / 120f * MathHelper.Pi) * MathF.Sin(i / 30f + Projectile.whoAmI + (float)Main.time * 0.06f) * 30 * decay;
 			}
 			tentacleCurve.Add(Projectile.Center + new Vector2(tentacle_dis - i, wave).RotatedBy(Projectile.rotation) - Main.screenPosition);
 		}
@@ -125,7 +128,7 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(sBS);
 
-			if(vampireMat is not null && vampireMat.HitTimer > 0)
+			if (vampireMat is not null && vampireMat.HitTimer > 0)
 			{
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -143,7 +146,6 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 		}
 		return false;
 	}
-
 
 	private List<Vertex2D> DrawCurveStrip_EnvironmentLight_ForTentacles(List<Vector2> curve, float width, float coord_x_min, float coord_x_max, float coord_y_min = 0, float coord_y_max = 1, bool curveHasScreenPos = false)
 	{

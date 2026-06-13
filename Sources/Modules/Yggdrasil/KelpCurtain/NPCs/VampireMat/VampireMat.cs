@@ -2,10 +2,10 @@ using Everglow.Commons.Coroutines;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Physics.MassSpringSystem;
+using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.WorldGeneration;
-using Everglow.Yggdrasil.YggdrasilTown.NPCs;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
@@ -606,6 +606,7 @@ public class VampireMat : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
+		yield return new WaitForFrames(120);
 		for (int k = 0; k <= 26; k++)
 		{
 			NPC.alpha -= 10;
