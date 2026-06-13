@@ -3,10 +3,17 @@ using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Commons.Physics.MassSpringSystem;
 using Everglow.Yggdrasil.Common;
+using Everglow.Yggdrasil.KelpCurtain.Items.Consumables;
+using Everglow.Yggdrasil.KelpCurtain.Items.Misc;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
+using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
+using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
 
@@ -762,9 +769,28 @@ public class VampireMat : ModNPC
 		}
 	}
 
+	public override void OnKill()
+	{
+		VampireMat_Summon.VampireMatSummonCD = 600;
+	}
+
+	public override void ModifyNPCLoot(NPCLoot npcLoot)
+	{
+		npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<VampireMatTreasureBag>()));
+		npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FleshOfVampireMat>(), 1, 1, 1));
+		//npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>()));
+		//npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.BossDrops.SquamousShellRelic>(), 10));
+
+		//var rule = new LeadingConditionRule(new Conditions.NotExpert());
+		//rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<DragonScaleHammer>(), ModContent.ItemType<EyeOfAnabiosis>(), ModContent.ItemType<FlurryingBlades>(), ModContent.ItemType<RockSpikeBallista>(), ModContent.ItemType<DeadBeetleEgg>(), ModContent.ItemType<BlueyWings>()));
+		//rule.OnSuccess(ItemDropRule.OneFromOptions(1, ModContent.ItemType<RockGreaves>(), ModContent.ItemType<RockHelmet>(), ModContent.ItemType<RockPlateMail>()));
+		//npcLoot.Add(rule);
+		base.ModifyNPCLoot(npcLoot);
+	}
+
 	public override float SpawnChance(NPCSpawnInfo spawnInfo)
 	{
-		return base.SpawnChance(spawnInfo);
+		return 0;
 	}
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

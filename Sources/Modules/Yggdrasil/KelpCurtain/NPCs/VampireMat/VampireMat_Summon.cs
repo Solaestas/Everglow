@@ -6,9 +6,20 @@ namespace Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
 
 public class VampireMat_Summon : ModPlayer
 {
+	public static int VampireMatSummonCD = 0;
+
+	public override void PostUpdate()
+	{
+		if(VampireMatSummonCD > 0)
+		{
+			VampireMatSummonCD--;
+		}
+		base.PostUpdate();
+	}
+
 	public override void OnHurt(Player.HurtInfo info)
 	{
-		if (Player.InModBiome<DeathJadeLakeBiome>())
+		if (VampireMatSummonCD <= 0 && Player.InModBiome<DeathJadeLakeBiome>())
 		{
 			if (NPC.CountNPCS(ModContent.NPCType<VampireMat>()) <= 0)
 			{
