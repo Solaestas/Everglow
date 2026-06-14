@@ -20,7 +20,7 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 		Projectile.height = 80;
 		Projectile.hostile = true;
 		Projectile.friendly = false;
-		Projectile.timeLeft = 300;
+		Projectile.timeLeft = 330;
 		Projectile.tileCollide = false;
 		Projectile.ignoreWater = true;
 		Projectile.penetrate = -1;
@@ -54,7 +54,7 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 			return;
 		}
 		Timer++;
-		if (Timer < 10 || Timer > 60)
+		if (Timer < 10 || Timer > 90)
 		{
 			Duration++;
 		}
@@ -71,7 +71,7 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(Duration < 60)
+		if(Duration < 12 || Duration > 170)
 		{
 			return false;
 		}

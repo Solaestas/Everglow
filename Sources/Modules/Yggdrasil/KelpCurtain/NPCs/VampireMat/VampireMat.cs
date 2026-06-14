@@ -8,10 +8,6 @@ using Everglow.Yggdrasil.KelpCurtain.Items.Misc;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.WorldGeneration;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Accessories.SquamousShell;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Armors.Rock;
-using Everglow.Yggdrasil.YggdrasilTown.Items.BossDrops;
-using Everglow.Yggdrasil.YggdrasilTown.Items.Weapons.SquamousShell;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -45,6 +41,8 @@ public class VampireMat : ModNPC
 	public int HitTimer = 0;
 
 	public int CurrentSkillInPhase2 = 0;
+
+	public int VortexStyle = 0;
 
 	public bool TowardScreenAndAttacking = false;
 
@@ -86,6 +84,7 @@ public class VampireMat : ModNPC
 		GlobalRopeSystem.EulerContainers.Add(EularSys);
 		AICoroutine.StartCoroutine(new Coroutine(ChasePlayer()));
 		RealCenter = NPC.Center;
+		VortexStyle = Main.rand.Next(2);
 	}
 
 	public override bool CheckActive()
@@ -227,16 +226,39 @@ public class VampireMat : ModNPC
 
 	public IEnumerator<ICoroutineInstruction> Escape()
 	{
+		int playerDeadTimer = 0;
 		for (int k = 0; k < 9999; k++)
 		{
 			if (NPC.target >= 0)
 			{
 				Player player = Main.player[NPC.target];
-				if ((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < 60 * 16)
+				if (player.active && !player.dead)
 				{
-					AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
-					yield break;
+					if ((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() < 60 * 16)
+					{
+						AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
+						yield break;
+					}
+					if ((player.Center - NPC.Center).Length() > 240 * 16)
+					{
+						NPC.active = false;
+						yield break;
+					}
 				}
+				else
+				{
+					playerDeadTimer++;
+					if(playerDeadTimer > 120)
+					{
+						NPC.active = false;
+						yield break;
+					}
+				}
+			}
+			else
+			{
+				NPC.active = false;
+				yield break;
 			}
 			NPC.velocity *= 0.95f;
 			NPC.velocity.Y += 1;
@@ -531,13 +553,19 @@ public class VampireMat : ModNPC
 		TowardScreenAndAttacking = true;
 		yield return new WaitForFrames(6);
 		Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Absorb>(), 1, 0, NPC.target);
-		if (Main.rand.NextBool())
+		switch (VortexStyle)
 		{
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex2>(), 88, 5, NPC.target);
+			case 0:
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex>(), 88, 5, NPC.target);
+				break;
+			case 1:
+				Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex2>(), 88, 5, NPC.target);
+				break;
 		}
-		else
+		VortexStyle++;
+		if(VortexStyle >= 2)
 		{
-			Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Center, Vector2.zeroVector, ModContent.ProjectileType<VampireMat_Attack_Proj_Ball_In_AbsorbVortex>(), 88, 5, NPC.target);
+			VortexStyle = 0;
 		}
 		yield return new WaitForFrames(600);
 		TowardScreenAndAttacking = false;
@@ -583,7 +611,7 @@ public class VampireMat : ModNPC
 				NPC.alpha = 255;
 			}
 			NPC.scale -= 0.05f;
-			if(NPC.scale < 0)
+			if (NPC.scale < 0)
 			{
 				NPC.scale = 0;
 			}
@@ -613,7 +641,7 @@ public class VampireMat : ModNPC
 			}
 			yield return new SkipThisFrame();
 		}
-		yield return new WaitForFrames(120);
+		yield return new WaitForFrames(150);
 		for (int k = 0; k <= 26; k++)
 		{
 			NPC.alpha -= 10;
@@ -651,9 +679,19 @@ public class VampireMat : ModNPC
 			AICoroutine.StartCoroutine(new Coroutine(Escape()));
 			yield break;
 		}
+		if (NPC.target < 0)
+		{
+			AICoroutine.StartCoroutine(new Coroutine(Escape()));
+			yield break;
+		}
+		Player player = Main.player[NPC.target];
+		if (!player.active || player.dead)
+		{
+			AICoroutine.StartCoroutine(new Coroutine(Escape()));
+			yield break;
+		}
 		if (NPC.target >= 0 && Phase == 1)
 		{
-			Player player = Main.player[NPC.target];
 			if ((player.Center - RealCenter).Length() > 600)
 			{
 				AICoroutine.StartCoroutine(new Coroutine(ChasePlayer()));
@@ -947,7 +985,7 @@ public class VampireMat : ModNPC
 			return false;
 		}
 		Player player = Main.player[NPC.target];
-		if ((player.Center - RealCenter).Length() <= 60 * 16)
+		if ((player.Center - KelpCurtainGeneration.VampireMatCaveCenter).Length() <= 60 * 16)
 		{
 			return true;
 		}

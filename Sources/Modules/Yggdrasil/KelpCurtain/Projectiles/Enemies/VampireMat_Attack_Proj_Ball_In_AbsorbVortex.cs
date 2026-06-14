@@ -37,6 +37,7 @@ public class VampireMat_Attack_Proj_Ball_In_AbsorbVortex : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = true;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 4096;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -59,7 +60,7 @@ public class VampireMat_Attack_Proj_Ball_In_AbsorbVortex : ModProjectile
 
 	public override void AI()
 	{
-		if (Timer % 4 == 0 && Timer < 450)
+		if (Timer % 24 == 0 && Timer < 450)
 		{
 			var sproj = default(SubProj);
 			sproj.Position = Projectile.Center;

@@ -41,17 +41,18 @@ public class VampireMat_Attack_Proj_Ball_In_AbsorbVortex2 : ModProjectile
 		Projectile.friendly = false;
 		Projectile.hostile = true;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 4096;
+		ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 	}
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		for (int k = 1; k < 6; k++)
+		for (int k = 1; k < 3; k++)
 		{
 			for (int j = 0; j < k * 10; j++)
 			{
 				var sproj = default(SubProj);
 				sproj.Position = Projectile.Center;
-				sproj.Velocity = new Vector2(0, -k * 160).RotatedBy(j / (k * 10f) * MathHelper.TwoPi);
+				sproj.Velocity = new Vector2(0, -k * 320).RotatedBy(j / (k * 10f) * MathHelper.TwoPi);
 				sproj.Active = true;
 				sproj.Scale = 0f;
 				sproj.MaxTime = 540;
@@ -63,7 +64,7 @@ public class VampireMat_Attack_Proj_Ball_In_AbsorbVortex2 : ModProjectile
 
 	public override void AI()
 	{
-		if (Timer % 4 == 0 && Timer < 450)
+		if (Timer % 24 == 0 && Timer < 450)
 		{
 			var sproj = default(SubProj);
 			sproj.Position = Projectile.Center;
