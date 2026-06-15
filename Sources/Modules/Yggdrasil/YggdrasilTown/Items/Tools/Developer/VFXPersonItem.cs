@@ -19,17 +19,10 @@ public class VFXPersonItem : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		VFXPerson person = new VFXPerson()
+		for (int k = 0; k < 10; k++)
 		{
-			Active = true,
-			Visible = true,
-			Position = Main.MouseWorld,
-			Velocity = Vector2.Zero,
-			Timer = 0,
-			MaxTime = 3000000,
-			SkinColor = new Color(209, 160, 156),
-		};
-		Ins.VFXManager.Add(person);
+			YggdrasilTownPersonManager.AddRandomPerson();
+		}
 		return false;
 	}
 }

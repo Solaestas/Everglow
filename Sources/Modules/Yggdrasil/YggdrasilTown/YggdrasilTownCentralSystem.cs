@@ -4,6 +4,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Kitchen.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using Everglow.Yggdrasil.YggdrasilTown.Projectiles.Miscs.PlayerArena;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
+using Everglow.Yggdrasil.YggdrasilTown.VFXs.RandomNPC;
 using SubworldLibrary;
 using Terraria.DataStructures;
 
@@ -94,6 +95,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 			RoadSignPost_ToArenaVFX.BuildArenaGen();
 			ResetedArena = true;
 		}
+		YggdrasilTownPersonManager.Update();
 		base.PostUpdateNPCs();
 	}
 

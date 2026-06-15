@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using Everglow.Commons.Vertex;
-using MathNet.Numerics;
 
 namespace Everglow.Commons.Utilities;
 
@@ -79,5 +78,112 @@ public static class SpriteBatchUtils
 			currentSize++;
 		}
 		CollectionsMarshal.SetCount(bars, currentSize);
+	}
+
+	/// <summary>
+	/// R:0-1<br/>G:0-1<br/>B:0-1
+	/// </summary>
+	/// <param name="rgb">R:0-1<br/>G:0-1<br/>B:0-1</param>
+	/// <returns>H:0-360<br/>S:0-1<br/>V:0-1</returns>
+	public static Vector3 RGBToHSV(Vector3 rgb)
+	{
+		float r = rgb.X;
+		float g = rgb.Y;
+		float b = rgb.Z;
+
+		float max = MathHelper.Max(MathHelper.Max(r, g), b);
+		float min = MathHelper.Min(MathHelper.Min(r, g), b);
+		float delta = max - min;
+
+		float h = 0f;
+		float s = max == 0 ? 0f : delta / max;
+		float v = max;
+
+		if (delta == 0)
+		{
+			h = 0f;
+		}
+		else
+		{
+			if (max == r)
+			{
+				h = ((g - b) / delta) % 6;
+			}
+			else if (max == g)
+			{
+				h = 2 + (b - r) / delta;
+			}
+			else if (max == b)
+			{
+				h = 4 + (r - g) / delta;
+			}
+
+			h *= 60;
+			if (h < 0)
+			{
+				h += 360;
+			}
+		}
+
+		return new Vector3(h, s, v);
+	}
+
+	/// <summary>
+	/// H:0-360<br/>S:0-1<br/>V:0-1
+	/// </summary>
+	/// <param name="hsv">H:0-360<br/>S:0-1<br/>V:0-1</param>
+	/// <returns>R:0-1<br/>G:0-1<br/>B:0-1</returns>
+	public static Vector3 HSVToRGB(Vector3 hsv)
+	{
+		float h = hsv.X;
+		float s = hsv.Y;
+		float v = hsv.Z;
+
+		if (s == 0)
+		{
+			return new Vector3(v, v, v);
+		}
+
+		h = h % 360f;
+		if (h < 0)
+		{
+			h += 360;
+		}
+
+		float sector = h / 60f;
+		int sectorIndex = (int)Math.Floor(sector);
+		float fractional = sector - sectorIndex;
+
+		float p = v * (1 - s);
+		float q = v * (1 - s * fractional);
+		float t = v * (1 - s * (1 - fractional));
+
+		switch (sectorIndex)
+		{
+			case 0:
+				return new Vector3(v, t, p);
+			case 1:
+				return new Vector3(q, v, p);
+			case 2:
+				return new Vector3(p, v, t);
+			case 3:
+				return new Vector3(p, q, v);
+			case 4:
+				return new Vector3(t, p, v);
+			default:
+				return new Vector3(v, p, q);
+		}
+	}
+
+	/// <summary>
+	/// Transforms Vector3(H, S, V) to RGB and returns a Color with the specified alpha.
+	/// </summary>
+	/// <param name="hsv">H:0-360<br/>S:0-1<br/>V:0-1</param>
+	/// <param name="a">0-1</param>
+	/// <returns></returns>
+	public static Color HSVToRGB_Color(this Vector3 hsv, float a)
+	{
+		Vector3 rgb = HSVToRGB(hsv);
+		return new Color(rgb.X, rgb.Y, rgb.Z, a);
 	}
 }
