@@ -32,6 +32,8 @@ public class VFXPerson : Visual
 
 	public int Sex;
 
+	public int ShoeStyle;
+
 	public bool Blocked;
 
 	public Color EyeColor;
@@ -39,6 +41,10 @@ public class VFXPerson : Visual
 	public Color SkinColor;
 
 	public Color HairColor;
+
+	public Color ClothColor;
+
+	public Color ShoeColor;
 
 	public override void OnSpawn()
 	{
@@ -179,6 +185,7 @@ public class VFXPerson : Visual
 
 	public override void Draw()
 	{
+		// Eye and Head
 		SpriteEffects flip = Direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 		Texture2D head = Terraria.GameContent.TextureAssets.Players[0, 0].Value;
 		Rectangle headFrame = new Rectangle(0, Frame * 56, 40, 56);
@@ -194,10 +201,12 @@ public class VFXPerson : Visual
 			bodyOffset = -2;
 		}
 
+		// Chest
 		Texture2D chest = Terraria.GameContent.TextureAssets.Players[0, 3].Value;
 		Rectangle chestFrame = new Rectangle(0, 0, 40, 56);
 		Ins.Batch.Draw(chest, Position + new Vector2(0, 24 + bodyOffset), chestFrame, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, chestFrame.Size() * 0.5f, 1f, flip);
 
+		// Armx and hands
 		Texture2D arm = Terraria.GameContent.TextureAssets.Players[0, 4].Value;
 		Texture2D hand = Terraria.GameContent.TextureAssets.Players[0, 5].Value;
 		Rectangle armFrame = new Rectangle(120, 56, 40, 56);
@@ -233,13 +242,58 @@ public class VFXPerson : Visual
 		Ins.Batch.Draw(hand, Position + new Vector2(0, 24 + bodyOffset), handFrame_back, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, handFrame_back.Size() * 0.5f, 1f, flip);
 		Ins.Batch.Draw(arm, Position + new Vector2(0, 24 + bodyOffset), armFrame_back, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, armFrame_back.Size() * 0.5f, 1f, flip);
 
+		// Clothes
+		Texture2D innerCloth = Terraria.GameContent.TextureAssets.Players[0, 6].Value;
+		Texture2D sleeve = Terraria.GameContent.TextureAssets.Players[0, 8].Value;
+		Rectangle innerClothFrame = chestFrame;
+		if (Sex == 1)
+		{
+			innerClothFrame.Y += 112;
+		}
+		Ins.Batch.Draw(innerCloth, Position + new Vector2(0, 24 + bodyOffset), innerClothFrame, Lighting.GetColor(Position.ToTileCoordinates(), ClothColor), 0, innerClothFrame.Size() * 0.5f, 1f, flip);
+		Ins.Batch.Draw(sleeve, Position + new Vector2(0, 24 + bodyOffset), armFrame_back, Lighting.GetColor(Position.ToTileCoordinates(), ClothColor), 0, armFrame_back.Size() * 0.5f, 1f, flip);
 		Ins.Batch.Draw(hand, Position + new Vector2(0, 24 + bodyOffset), handFrame, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, handFrame.Size() * 0.5f, 1f, flip);
 		Ins.Batch.Draw(arm, Position + new Vector2(0, 24 + bodyOffset), armFrame, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, armFrame.Size() * 0.5f, 1f, flip);
+		Ins.Batch.Draw(sleeve, Position + new Vector2(0, 24 + bodyOffset), armFrame, Lighting.GetColor(Position.ToTileCoordinates(), ClothColor), 0, armFrame.Size() * 0.5f, 1f, flip);
 
+		// Foot
 		Texture2D foot = Terraria.GameContent.TextureAssets.Players[0, 10].Value;
 		Rectangle footFrame = new Rectangle(0, Frame * 56, 40, 56);
-		Ins.Batch.Draw(foot, Position + new Vector2(0, -4), footFrame, Lighting.GetColor(Position.ToTileCoordinates(), SkinColor), 0, new Vector2(footFrame.Width * 0.5f, 0), 1f, flip);
+		Ins.Batch.Draw(foot, Position + new Vector2(0, -4), footFrame, Lighting.GetColor(Position.ToTileCoordinates(), ShoeStyle % 2 == 0 ? ShoeColor : SkinColor), 0, new Vector2(footFrame.Width * 0.5f, 0), 1f, flip);
 
+		// Shoes
+		Texture2D shoe = Terraria.GameContent.TextureAssets.Players[0, 11].Value;
+		switch (ShoeStyle)
+		{
+			case 0:
+				shoe = Terraria.GameContent.TextureAssets.Players[0, 11].Value;
+				break;
+			case 1:
+				shoe = Terraria.GameContent.TextureAssets.Players[0, 12].Value;
+				break;
+			case 2:
+				shoe = Terraria.GameContent.TextureAssets.Players[1, 11].Value;
+				break;
+			case 3:
+				shoe = Terraria.GameContent.TextureAssets.Players[1, 12].Value;
+				break;
+			case 4:
+				shoe = Terraria.GameContent.TextureAssets.Players[2, 11].Value;
+				break;
+			case 5:
+				shoe = Terraria.GameContent.TextureAssets.Players[2, 12].Value;
+				break;
+			case 6:
+				shoe = Terraria.GameContent.TextureAssets.Players[3, 11].Value;
+				break;
+			case 7:
+				shoe = Terraria.GameContent.TextureAssets.Players[3, 12].Value;
+				break;
+		}
+
+		Ins.Batch.Draw(shoe, Position + new Vector2(0, -4), footFrame, Lighting.GetColor(Position.ToTileCoordinates(), ShoeColor), 0, new Vector2(footFrame.Width * 0.5f, 0), 1f, flip);
+
+		// Hair
 		Main.instance.LoadHair(HairStyle);
 		Texture2D hair = Terraria.GameContent.TextureAssets.PlayerHair[HairStyle].Value;
 		Rectangle hairFrame = new Rectangle(0, (Frame - 6) * 56, 40, 56);

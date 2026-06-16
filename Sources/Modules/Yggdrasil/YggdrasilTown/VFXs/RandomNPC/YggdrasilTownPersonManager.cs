@@ -17,9 +17,13 @@ public class YggdrasilTownPersonManager
 			State = (int)VFXPerson.MoveState.Walk,
 			SkinColor = ChooseSkinColor(),
 			HairColor = new Vector3(Main.rand.NextFloat(360), MathF.Pow(Main.rand.NextFloat(), 0.25f), MathF.Pow(Main.rand.NextFloat(), 0.5f)).HSVToRGB_Color(1f),
+			ClothColor = new Vector3(Main.rand.NextFloat(360), MathF.Pow(Main.rand.NextFloat(), 2f), MathF.Pow(Main.rand.NextFloat(), 1.2f)).HSVToRGB_Color(1f),
+			ShoeColor = new Vector3(Main.rand.NextFloat(-30, 60), MathF.Pow(Main.rand.NextFloat(), 2f), MathF.Pow(Main.rand.NextFloat(), 2.5f)).HSVToRGB_Color(1f),
 			EyeColor = new Vector3(Main.rand.NextFloat(360), MathF.Pow(Main.rand.NextFloat(), 0.5f), Main.rand.NextFloat()).HSVToRGB_Color(1f),
 			HairStyle = Main.rand.Next(165),
 			Direction = Main.rand.NextBool() ? -1 : 1,
+			Sex = Main.rand.NextBool() ? 0 : 1,
+			ShoeStyle = Main.rand.Next(8),
 		};
 		Ins.VFXManager.Add(person);
 		People.Add(person);
