@@ -54,7 +54,6 @@ public class YggdrasilTownPersonManager
 
 	public static void Update()
 	{
-		Main.NewText(People.Count);
 		for (int k = People.Count - 1; k >= 0; k--)
 		{
 			if (!People[k].Active)

@@ -551,6 +551,7 @@ public class QuenchingBladeProj : MeleeProj
 			{
 				w *= (length - i - 1) / 10f;
 			}
+			w *= 0.1f;
 			float d = trail[i].ToRotation() + 3.14f + 1.57f;
 			if (d > 6.28f)
 			{

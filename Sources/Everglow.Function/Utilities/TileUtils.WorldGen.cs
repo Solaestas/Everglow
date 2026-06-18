@@ -2378,4 +2378,27 @@ public partial class TileUtils
 		}
 		PlaceCurveLiquid(curve_Point, thick, type, force);
 	}
+
+	/// <summary>
+	/// Place a prefabricated MapIO anchored top left at (x, y).
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="path"></param>
+	public static void BuildMapIO(int x, int y, string path)
+	{
+		var mapIO = new MapIO(x, y);
+		mapIO.Read(ModIns.Mod.GetFileStream(path));
+		var it = mapIO.GetEnumerator();
+		while (it.MoveNext())
+		{
+			WorldGen.SquareTileFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+			WorldGen.SquareWallFrame(it.CurrentCoord.X, it.CurrentCoord.Y);
+		}
+	}
+
+	public static void BuildMapIO(Point point, string path)
+	{
+		BuildMapIO(point.X, point.Y, path);
+	}
 }

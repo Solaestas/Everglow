@@ -448,7 +448,7 @@ public class QuenchingBladeProj_Smash : ModProjectile, IWarpProjectile_warpStyle
             {
                 warpValue = i / 10f;
             }
-            warpValue *= 0.8f;
+            warpValue *= 0.08f;
             var drawColor0 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, warpValue, 1);
             var drawColor1 = new Color(normal.X / 2f + 0.5f, normal.Y / 2f + 0.5f, warpValue * 0.3f, 1);
 
