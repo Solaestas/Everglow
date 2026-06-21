@@ -14,7 +14,7 @@ public class QuenchingBlade : ModItem
 
         Item.DamageType = DamageClass.Melee;
         Item.damage = 27;
-        Item.knockBack = 3;
+        Item.knockBack = 35;
 
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.UseSound = SoundID.Item1;
@@ -32,8 +32,9 @@ public class QuenchingBlade : ModItem
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
     {
         if (player.ownedProjectileCounts[type] <= 0)
-        {
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+		{
+			Main.NewText(Item.knockBack);
+			Projectile.NewProjectile(source, position, velocity, type, damage, 350, player.whoAmI);
         }
         return false;
     }

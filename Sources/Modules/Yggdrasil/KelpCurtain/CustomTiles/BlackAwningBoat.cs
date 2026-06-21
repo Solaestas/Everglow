@@ -33,7 +33,7 @@ public class BlackAwningBoat : BoxEntity
 		{
 			Velocity = new Vector2(Velocity.X, 2);
 		}
-		List<Point> collideTile = TileUtils.GetAABBAreaOfTilePos(Position + Velocity, Size);
+		List<Point> collideTile = TileUtils.GetAABBAreaOfTile(Position + Velocity, Size);
 		foreach(var pos in collideTile)
 		{
 			var tile = TileUtils.SafeGetTile(pos);

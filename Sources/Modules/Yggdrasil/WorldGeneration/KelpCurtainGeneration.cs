@@ -2805,10 +2805,10 @@ public class KelpCurtainGeneration
 			}
 			List<Vector2> polygon =
 			[
-				origin0.ToWorldCoordinates() + new Vector2(0, -40).RotatedBy(MathHelper.PiOver4 * style),
-				origin1.ToWorldCoordinates() + new Vector2(0, -40).RotatedBy(MathHelper.PiOver4 * style),
-				origin1.ToWorldCoordinates() + new Vector2(0, 40).RotatedBy(MathHelper.PiOver4 * style),
-				origin0.ToWorldCoordinates() + new Vector2(0, 40).RotatedBy(MathHelper.PiOver4 * style),
+				origin0.ToWorldCoordinates() + new Vector2(0, -48).RotatedBy(MathHelper.PiOver4 * style),
+				origin1.ToWorldCoordinates() + new Vector2(0, -48).RotatedBy(MathHelper.PiOver4 * style),
+				origin1.ToWorldCoordinates() + new Vector2(0, 48).RotatedBy(MathHelper.PiOver4 * style),
+				origin0.ToWorldCoordinates() + new Vector2(0, 48).RotatedBy(MathHelper.PiOver4 * style),
 			];
 			PlacePolygonAreaOfBlock(polygon, ModContent.TileType<YggdrasilBlackRock>(), (int)TileChangeState.NoTile);
 		}

@@ -28,14 +28,14 @@ public class TileFliperSystemVFX : Visual
 
 	public override void Update()
 	{
-		if(Owner.HeldItem.type == ModContent.ItemType<TileFliper>())
+		if (Owner.HeldItem.type == ModContent.ItemType<TileFliper>())
 		{
-			if(TileFliperItem is null)
+			if (TileFliperItem is null)
 			{
 				TileFliperItem = Owner.HeldItem;
 			}
 			TileFliper tf = TileFliperItem.ModItem as TileFliper;
-			if(tf != null)
+			if (tf != null)
 			{
 				tf.EnableFlipSystem = true;
 			}
@@ -46,7 +46,7 @@ public class TileFliperSystemVFX : Visual
 			return;
 		}
 
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			FixPoint = Main.MouseWorld.ToTileCoordinates();
 		}
@@ -54,7 +54,7 @@ public class TileFliperSystemVFX : Visual
 		{
 			ControlPoint = Main.MouseWorld.ToTileCoordinates();
 		}
-		if(Main.mouseRight && Main.mouseRightRelease)
+		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			FlipTheTileMap();
 		}
@@ -99,7 +99,7 @@ public class TileFliperSystemVFX : Visual
 	public void ReverseSlope(int i, int j)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.Slope == SlopeType.SlopeDownLeft)
+		if (tile.Slope == SlopeType.SlopeDownLeft)
 		{
 			tile.Slope = SlopeType.SlopeDownRight;
 			return;
@@ -140,7 +140,7 @@ public class TileFliperSystemVFX : Visual
 		var startPoint = new Point(drawTileArea.X, drawTileArea.Y);
 		Texture2D tex = ModAsset.TileBlock4x4.Value;
 		Color drawColor = new Color(0.4f, 0.2f, 1f, 0.3f);
-		for (int i = 0;i < drawTileArea.Width;i++)
+		for (int i = 0; i < drawTileArea.Width; i++)
 		{
 			for (int j = 0; j < drawTileArea.Height; j++)
 			{
@@ -170,7 +170,7 @@ public class TileFliperSystemVFX : Visual
 				{
 					drawFrame.Y = 48;
 				}
-				Ins.Batch.Draw(tex,drawPos ,drawFrame,drawColor,0,new Vector2(8),1f,SpriteEffects.None);
+				Ins.Batch.Draw(tex, drawPos, drawFrame, drawColor, 0, new Vector2(8), 1f, SpriteEffects.None);
 			}
 		}
 	}

@@ -527,6 +527,30 @@ public partial class TileUtils
 	}
 
 	/// <summary>
+	/// Get a list of tile coordinates in a circle area with random noise.
+	/// </summary>
+	/// <param name="pos">the center of the circle</param>
+	/// <param name="radius">the radius of the circle</param>
+	/// <param name="noiseSize">the max random noise that can be added to the radius</param>
+	/// <returns></returns>
+	public static List<Point> GetCircleAreaOfTilePos(Point pos, float radius)
+	{
+		List<Point> tiles = new List<Point>();
+		int radiusI = (int)(radius + 1);
+		for (int x = -radiusI; x <= radiusI; x++)
+		{
+			for (int y = -radiusI; y <= radiusI; y++)
+			{
+				if (new Vector2(x, y).Length() <= radius)
+				{
+					tiles.Add(new Point(x, y) + pos);
+				}
+			}
+		}
+		return tiles;
+	}
+
+	/// <summary>
 	/// Transform the tile within the circle(center, radius) to the type, but with a random noise affect on the bound.
 	/// </summary>
 	/// <param name="center">Tile coord center in Vector2.</param>
@@ -1015,6 +1039,12 @@ public partial class TileUtils
 		PlaceLineLiquid(pos0.ToWorldCoordinates(), pos1.ToWorldCoordinates(), thick, type, force);
 	}
 
+	/// <summary>
+	///
+	/// </summary>
+	/// <param name="tile"></param>
+	/// <param name="type"></param>
+	/// <param name="force"><see cref="TileChangeState"/></param>
 	public static void ChangeTile(Tile tile, int type, int force)
 	{
 		if (ChestSafe(tile) && CanChangeTile(tile, force))
@@ -1207,6 +1237,57 @@ public partial class TileUtils
 						visited.Add(point);
 					}
 					else if (theseTypeOnly.Contains(tile.TileType))
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+				}
+			}
+			if (queueChecked.Count > maxContinueCount || visited.Count > maxContinueCount)
+			{
+				break;
+			}
+		}
+		return visited;
+	}
+
+	public static List<Point> BFSContinueWall(Point checkPoint, int maxCount = 512, List<int> theseTypeOnly = default)
+	{
+		int maxContinueCount = maxCount;
+		(int, int)[] directions =
+		{
+			(0, 1),
+			(1, 0),
+			(0, -1),
+			(-1, 0),
+		};
+		Queue<Point> queueChecked = new Queue<Point>();
+
+		// Add first point to the queue.
+		queueChecked.Enqueue(checkPoint);
+		List<Point> visited = new List<Point>();
+
+		while (queueChecked.Count > 0)
+		{
+			var tilePos = queueChecked.Dequeue();
+
+			foreach (var (dx, dy) in directions)
+			{
+				int checkX = tilePos.X + dx;
+				int checkY = tilePos.Y + dy;
+				Point point = new Point(checkX, checkY);
+				Tile tile = SafeGetTile(checkX, checkY);
+
+				// Check bound and obstruction.
+				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
+					(tile.WallType > WallID.None || theseTypeOnly.Contains(WallID.None)) && !visited.Contains(point))
+				{
+					if (theseTypeOnly == default)
+					{
+						queueChecked.Enqueue(point);
+						visited.Add(point);
+					}
+					else if (theseTypeOnly.Contains(tile.WallType))
 					{
 						queueChecked.Enqueue(point);
 						visited.Add(point);
@@ -2062,9 +2143,13 @@ public partial class TileUtils
 			return polygon_Pos;
 		}
 		var bounds = MathUtils.GetPolygonAABBBound_Vector4(polygon);
-		for (int x = (int)bounds.X - 8; x < bounds.Z; x += 16)
+		bounds.X = bounds.X - bounds.X % 16 - 8;
+		bounds.Y = bounds.Y - bounds.Y % 16 - 8;
+		bounds.Z = bounds.Z - bounds.Z % 16 - 8;
+		bounds.W = bounds.W - bounds.W % 16 - 8;
+		for (int x = (int)bounds.X; x <= bounds.Z; x += 16)
 		{
-			for (int y = (int)bounds.Y - 8; y < bounds.W; y += 16)
+			for (int y = (int)bounds.Y; y <= bounds.W; y += 16)
 			{
 				if (MathUtils.IsPointInPolygon(polygon, new Vector2(x, y)))
 				{
@@ -2097,12 +2182,34 @@ public partial class TileUtils
 	/// </summary>
 	/// <param name="polygon"></param>
 	/// <returns></returns>
-	public static List<Point> GetAABBAreaOfTilePos(Vector2 worldPos, Vector2 size)
+	public static List<Point> GetAABBAreaOfTile(Vector2 worldPos, Vector2 size)
 	{
 		List<Point> tilePoses = new List<Point>();
 		for (int x = worldPos.ToTileCoordinates().X; x <= (worldPos + size).ToTileCoordinates().X; x++)
 		{
 			for (int y = worldPos.ToTileCoordinates().Y; y <= (worldPos + size).ToTileCoordinates().Y; y++)
+			{
+				tilePoses.Add(new Point(x, y));
+			}
+		}
+		return tilePoses;
+	}
+
+	/// <summary>
+	/// Get the tile positions in the given rectangle area. Tile coord.
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns></returns>
+	public static List<Point> GetAABBAreaOfTile(Point start, Point end)
+	{
+		int minX = Math.Min(start.X, end.X);
+		int minY = Math.Min(start.Y, end.Y);
+		int maxX = Math.Max(start.X, end.X);
+		int maxY = Math.Max(start.Y, end.Y);
+		List<Point> tilePoses = new List<Point>();
+		for (int x = minX; x <= maxX; x++)
+		{
+			for (int y = minY; y <= maxY; y++)
 			{
 				tilePoses.Add(new Point(x, y));
 			}
@@ -2283,7 +2390,7 @@ public partial class TileUtils
 		for (int k = 0; k < curve.Count - 1; k++)
 		{
 			PlaceLineBlock(curve[k], curve[k + 1], thick, type, force);
-			if(k >= 1)
+			if (k >= 1)
 			{
 				PlaceCircleAreaOfBlock(curve[k], thick / 32, type, force);
 			}
