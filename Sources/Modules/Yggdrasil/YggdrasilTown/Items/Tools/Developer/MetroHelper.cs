@@ -20,7 +20,7 @@ public class MetroHelper : ModItem
 
 	public override bool CanUseItem(Player player)
 	{
-		ColliderManager.Instance.Add<NormalMetro>(Main.MouseWorld);
+		ColliderManager.Instance.Add<YggdrasilTown_NormalMetro>(Main.MouseWorld);
 		return false;
 	}
 }

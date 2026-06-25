@@ -1,9 +1,9 @@
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 
-namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
+namespace Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
-public class FurnaceEmergencyLamp : ModTile
+public class MetroEmergencyLamp : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -32,8 +32,8 @@ public class FurnaceEmergencyLamp : ModTile
 	public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 	{
 		r = 1f;
-		g = 0.5f;
-		b = 0.1f;
+		g = 0.75f;
+		b = 0.6f;
 		base.ModifyLight(i, j, ref r, ref g, ref b);
 	}
 

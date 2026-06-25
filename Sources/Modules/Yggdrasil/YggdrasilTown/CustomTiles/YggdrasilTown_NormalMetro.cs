@@ -1,29 +1,55 @@
 using Everglow.Commons.CustomTiles.Abstracts;
 using Everglow.Commons.CustomTiles.Core;
-using Everglow.Yggdrasil.KelpCurtain.CustomTiles;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.CustomTiles;
 
-public class NormalMetro : BoxEntity
+public class YggdrasilTown_NormalMetro : BoxEntity
 {
-	public BlackAwningBoat_ControlUI LocalUIHelper;
+	public int StopTimer = 0;
+
+	public int Direction = -1;
+
+	public int StopTimeMax = 600;
+
+	public bool Moving = false;
+
+	public float TrackY = 0;
+
+	public float StationX = 0;
+
+	public float Speed = 0;
 
 	public override void SetDefaults()
 	{
 		Size = new Vector2(1696, 16);
-		LocalUIHelper = null;
 	}
 
 	public override Color MapColor => new Color(128, 131, 142);
 
-	public int Direction = 1;
-
 	public override void AI()
 	{
-		Velocity *= 0;
+		SetTrackY();
+		Position = new Vector2(Position.X, TrackY);
+		if (StopTimer == 0 && !Moving)
+		{
+			if (!SearchStation())
+			{
+				Direction *= -1;
+				SearchStation();
+			}
+		}
+		if (StationX != 0 && Math.Abs(Box.Center.X - StationX) > 16)
+		{
+			Moving = true;
+		}
+		if (Moving)
+		{
+			Accelerate();
+		}
+		Velocity = new Vector2(Direction * Speed, 0);
 		Position += Velocity;
-		Velocity = new Vector2(Direction * 0, 0);
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			Direction *= -1;
 		}
@@ -33,14 +59,53 @@ public class NormalMetro : BoxEntity
 		}
 	}
 
+	public void Accelerate()
+	{
+		if (MathF.Abs(Position.X + Size.X * 0.5f * Direction - StationX) > 800)
+		{
+			if (Speed < 30)
+			{
+				Speed += 0.2f;
+			}
+		}
+		else
+		{
+			if (Speed > 0)
+			{
+				Speed -= 0.2f;
+			}
+		}
+	}
+
+	public void SetTrackY()
+	{
+		TrackY = Position.Y - Position.Y % 16;
+	}
+
+	public bool SearchStation()
+	{
+		int y = (int)(TrackY / 16f - 3);
+		for (int dx = 10; dx < 2000; dx += 5)
+		{
+			int x = (int)(Box.Center.X / 16) + dx * Direction;
+			var tile = TileUtils.SafeGetTile(x, y);
+			if (tile.TileType == ModContent.TileType<MetroStationSign_YggdrasilTown>() || tile.TileType == ModContent.TileType<MetroStationSign_PylonSquare>())
+			{
+				StationX = x - tile.TileFrameX / 18 + 2;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public override void Draw()
 	{
-		Texture2D metro = ModAsset.NormalMetro.Value;
+		Texture2D metro = ModAsset.YggdrasilTown_NormalMetro.Value;
 		var frame = new Rectangle(108, 0, 848, 146);
 		var glow_frame = new Rectangle(108, 292, 848, 146);
 		var pos0 = new Vector2((Box.Center.X + Box.Left) * 0.5f, Box.Bottom);
 		Main.spriteBatch.Draw(metro, pos0 - Main.screenPosition, frame, Lighting.GetColor(pos0.ToTileCoordinates()), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
-		Main.spriteBatch.Draw(metro, pos0 - Main.screenPosition, glow_frame,  new Color(1f, 1f, 1f, 0), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
+		Main.spriteBatch.Draw(metro, pos0 - Main.screenPosition, glow_frame, new Color(1f, 1f, 1f, 0), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
 
 		var pos1 = new Vector2((Box.Center.X + Box.Right) * 0.5f, Box.Bottom);
 		Main.spriteBatch.Draw(metro, pos1 - Main.screenPosition, frame, Lighting.GetColor(pos1.ToTileCoordinates()), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
