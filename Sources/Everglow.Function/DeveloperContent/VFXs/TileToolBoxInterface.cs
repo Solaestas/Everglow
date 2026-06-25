@@ -5,8 +5,10 @@ using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
+using Terraria.GameContent;
 using static Everglow.Commons.Utilities.MathUtils;
 using static Everglow.Commons.Utilities.TileUtils;
+using static Everglow.Commons.VFX.CommonDusts.LightDust;
 
 namespace Everglow.Commons.DeveloperContent.VFXs;
 
@@ -22,6 +24,8 @@ public class TileToolBoxInterface : Visual
 	public int SelectedTool = -1;
 	public int MouseOverTool = -1;
 	public int Timer;
+	public int PlayerHeldItemTile = -1;
+	public int PlayerHeldItemWall = -1;
 
 	/// <summary>
 	/// 0: Tile, 1: Wall
@@ -29,13 +33,17 @@ public class TileToolBoxInterface : Visual
 	public int State = 0;
 	public bool Open = true;
 	public bool ShouldDrawMouseTlie = false;
+	public bool ShouldDrawBrushCoveredTlies = false;
+	public bool ShouldDrawSelectedTlies = false;
 	public bool RectangleSelecting = false;
+	public bool Brushing = false;
 	public bool ClickAnyButtonInThisFrame = false;
 	public bool CircleSelecting = false;
 	public Point RectangleSelectStart;
 	public Point RectangleSelectEnd;
 	public Point CircleSelectCenter;
 	public float CircleSelectRadius;
+	public float BrushSize = 16;
 	public string MouseText;
 
 	public enum ToolID
@@ -66,6 +74,9 @@ public class TileToolBoxInterface : Visual
 
 	public List<ToolButton> Tools = [];
 	public List<Point> SelectedTiles = [];
+	public List<Point> CurrentSelectedTiles = [];
+	public List<Point> BrushCoveredTiles = [];
+	public List<Point> BrushPaintedTiles = [];
 	public List<Point> PolygonSelectPoints = [];
 	public static Stack<(MapIO Mp, string Pt)> UndoMapIOs = [];
 	public static Stack<(MapIO Mp, string Pt)> RedoMapIOs = [];
@@ -79,7 +90,10 @@ public class TileToolBoxInterface : Visual
 			Initialization();
 		}
 		UpdateActive();
-		ClickAnyButtonInThisFrame = false;
+		if (ClickAnyButtonInThisFrame && Main.mouseLeftRelease)
+		{
+			ClickAnyButtonInThisFrame = false;
+		}
 
 		if (Main.mouseRight && Main.mouseRightRelease)
 		{
@@ -110,12 +124,28 @@ public class TileToolBoxInterface : Visual
 
 	public void UpdateActive()
 	{
-		if (Owner.HeldItem.type != ModContent.ItemType<TileToolBox>()
-			|| Owner.HeldItem.ModItem is not TileToolBox box
-			|| box.Visual != this)
+		if (Owner.HeldItem is not null)
 		{
-			Active = false;
-			return;
+			if (State == 0)
+			{
+				if (Owner.HeldItem.createTile != PlayerHeldItemTile && Owner.HeldItem.createTile >= 0)
+				{
+					CurrentTileType = Owner.HeldItem.createTile;
+				}
+			}
+			PlayerHeldItemTile = Owner.HeldItem.createTile;
+			if (State == 1)
+			{
+				if (Owner.HeldItem.createWall != PlayerHeldItemWall && Owner.HeldItem.createWall >= 1)
+				{
+					CurrentWallType = Owner.HeldItem.createWall;
+				}
+			}
+			PlayerHeldItemWall = Owner.HeldItem.createWall;
+		}
+		else
+		{
+			PlayerHeldItemTile = -1;
 		}
 		if (Open)
 		{
@@ -149,12 +179,15 @@ public class TileToolBoxInterface : Visual
 			Tools[t] = ui;
 		}
 		ShouldDrawMouseTlie = false;
+		ShouldDrawBrushCoveredTlies = false;
+		ShouldDrawSelectedTlies = false;
 		switch (SelectedTool)
 		{
 			case (int)ToolID.TilePicker:
 				ShouldDrawMouseTlie = true;
 				break;
 			case (int)ToolID.RectangleSelect:
+				ShouldDrawSelectedTlies = true;
 				ShouldDrawMouseTlie = true;
 				if (!ClickAnyButtonInThisFrame)
 				{
@@ -166,18 +199,22 @@ public class TileToolBoxInterface : Visual
 							RectangleSelectStart = Main.MouseWorld.ToTileCoordinates();
 						}
 						RectangleSelectEnd = Main.MouseWorld.ToTileCoordinates();
-						if (Main.mouseLeftRelease)
-						{
-							RectangleSelecting = false;
-						}
+						CurrentSelectedTiles = GetAABBAreaOfTile(RectangleSelectStart, RectangleSelectEnd);
 					}
-					SelectedTiles = GetAABBAreaOfTile(RectangleSelectStart, RectangleSelectEnd);
+					else
+					{
+						RectangleSelecting = false;
+						SelectedTiles.AddRangeDistinct(CurrentSelectedTiles);
+						CurrentSelectedTiles = [];
+					}
 				}
 				break;
 			case (int)ToolID.PolygonSelect:
+				ShouldDrawSelectedTlies = true;
 				ShouldDrawMouseTlie = true;
 				break;
 			case (int)ToolID.CircleSelect:
+				ShouldDrawSelectedTlies = true;
 				ShouldDrawMouseTlie = true;
 				if (!ClickAnyButtonInThisFrame)
 				{
@@ -190,12 +227,63 @@ public class TileToolBoxInterface : Visual
 							CircleSelectCenter = point;
 						}
 						CircleSelectRadius = (CircleSelectCenter.ToWorldCoordinates() - Main.MouseWorld).Length() / 16f;
-						if (Main.mouseLeftRelease)
-						{
-							CircleSelecting = false;
-						}
+						CurrentSelectedTiles = GetCircleAreaOfTilePos(CircleSelectCenter, CircleSelectRadius);
 					}
-					SelectedTiles = GetCircleAreaOfTilePos(CircleSelectCenter, CircleSelectRadius);
+					else
+					{
+						CircleSelecting = false;
+						SelectedTiles.AddRangeDistinct(CurrentSelectedTiles);
+						CurrentSelectedTiles = [];
+					}
+				}
+				break;
+			case (int)ToolID.MagicWand:
+				ShouldDrawSelectedTlies = true;
+				break;
+			case (int)ToolID.PaintBucket:
+				ShouldDrawSelectedTlies = true;
+				break;
+			case (int)ToolID.PaintBrush:
+				ShouldDrawBrushCoveredTlies = true;
+				if (!ClickAnyButtonInThisFrame)
+				{
+					Point brushStart = (Main.MouseWorld - new Vector2(BrushSize)).ToTileCoordinates();
+					Point brushEnd = (Main.MouseWorld + new Vector2(BrushSize)).ToTileCoordinates();
+					BrushCoveredTiles = GetAABBAreaOfTile(brushStart, brushEnd);
+					if (Main.mouseLeft)
+					{
+						Brushing = true;
+
+						// HashSet<Point> set = new HashSet<Point>(BrushPaintedTiles);
+						// foreach (var pos in BrushCoveredTiles)
+						// {
+						// set.Add(pos);
+						// }
+						// BrushPaintedTiles = set.ToList();
+						BrushPaintedTiles.AddRangeDistinct(BrushCoveredTiles);
+					}
+					if (!Main.mouseLeft && Brushing)
+					{
+						if (BrushPaintedTiles.Count > 0)
+						{
+							SaveStepToUndoable(BrushPaintedTiles);
+						}
+						foreach (var pos in BrushPaintedTiles)
+						{
+							var tile = SafeGetTile(pos);
+							if (State == 0)
+							{
+								ChangeTile(tile, CurrentTileType, 0);
+							}
+							if (State == 1)
+							{
+								ChangeWall(tile, CurrentWallType, 0);
+							}
+							WorldGen.TileFrame(pos.X, pos.Y, true, true);
+							WorldGen.SquareWallFrame(pos.X, pos.Y);
+						}
+						BrushPaintedTiles = [];
+					}
 				}
 				break;
 		}
@@ -206,9 +294,15 @@ public class TileToolBoxInterface : Visual
 		var mouseTile = SafeGetTile(Main.MouseWorld.ToTileCoordinates());
 		if (MouseOverTool >= 0)
 		{
+			if (SelectedTool == (int)ToolID.PolygonSelect)
+			{
+				SelectedTiles.AddRangeDistinct(CurrentSelectedTiles);
+				CurrentSelectedTiles = [];
+			}
 			if (MouseOverTool == SelectedTool)
 			{
 				SelectedTool = -1;
+				ClickAnyButtonInThisFrame = true;
 			}
 			else
 			{
@@ -238,8 +332,9 @@ public class TileToolBoxInterface : Visual
 						}
 						break;
 					case (int)ToolID.Unselect:
-						SelectedTool = -1;
 						SelectedTiles = [];
+						CurrentSelectedTiles = [];
+						PolygonSelectPoints = [];
 						break;
 					case (int)ToolID.SwitchTileAndWall:
 						State += 1;
@@ -249,6 +344,11 @@ public class TileToolBoxInterface : Visual
 						SelectedTool = MouseOverTool;
 						break;
 				}
+				if (MouseOverTool != -1)
+				{
+					ClickAnyButtonInThisFrame = true;
+				}
+				PolygonSelectPoints = [];
 			}
 		}
 		else
@@ -258,11 +358,14 @@ public class TileToolBoxInterface : Visual
 			switch (SelectedTool)
 			{
 				case -1:
-					Position = Main.MouseWorld;
-					Timer = 0;
+					if (Owner.HeldItem.type == ModContent.ItemType<TileToolBox>())
+					{
+						Position = Main.MouseWorld;
+						Timer = 0;
+					}
 					break;
 				case (int)ToolID.PaintBucket:
-					SaveStepToUndoable();
+					SaveStepToUndoable(SelectedTiles);
 					foreach (var pos in SelectedTiles)
 					{
 						if (State == 0)
@@ -274,6 +377,7 @@ public class TileToolBoxInterface : Visual
 							ChangeWall(SafeGetTile(pos), CurrentWallType, (int)TileChangeState.Forceful);
 						}
 						WorldGen.TileFrame(pos.X, pos.Y, true, true);
+						WorldGen.SquareWallFrame(pos.X, pos.Y);
 					}
 					break;
 				case (int)ToolID.TilePicker:
@@ -309,11 +413,11 @@ public class TileToolBoxInterface : Visual
 						}
 						if (PolygonSelectPoints.Count >= 3)
 						{
-							SelectedTiles = GetPolygonAreaOfTilePos(PolygonSelectPoints);
+							CurrentSelectedTiles = GetPolygonAreaOfTilePos(PolygonSelectPoints);
 						}
 						else
 						{
-							SelectedTiles.Clear();
+							CurrentSelectedTiles.Clear();
 						}
 					}
 					break;
@@ -325,25 +429,21 @@ public class TileToolBoxInterface : Visual
 						{
 							if (mouseTile.HasTile)
 							{
-								SelectedTiles = BFSContinueTile(point, false, 2048, [mouseTile.TileType]);
+								SelectedTiles.AddRangeDistinct(BFSContinueTile(point, false, 2048, [mouseTile.TileType]));
 							}
 							else
 							{
-								SelectedTiles = BFSContinueEmpty(point, false, 2048);
+								SelectedTiles.AddRangeDistinct(BFSContinueEmpty(point, false, 2048));
 							}
 						}
 						if (State == 1)
 						{
-							SelectedTiles = BFSContinueWall(point, 2048, [mouseTile.WallType]);
+							SelectedTiles.AddRangeDistinct(BFSContinueWall(point, 2048, [mouseTile.WallType]));
 						}
 					}
 					break;
 				case (int)ToolID.CircleSelect:
 					break;
-			}
-			if (SelectedTool >= -1)
-			{
-				ClickAnyButtonInThisFrame = true;
 			}
 		}
 	}
@@ -356,6 +456,11 @@ public class TileToolBoxInterface : Visual
 				Open = false;
 				break;
 			default:
+				if (SelectedTool == (int)ToolID.PolygonSelect)
+				{
+					SelectedTiles.AddRangeDistinct(CurrentSelectedTiles);
+					CurrentSelectedTiles = [];
+				}
 				SelectedTool = -1;
 				break;
 		}
@@ -446,8 +551,36 @@ public class TileToolBoxInterface : Visual
 		{
 			DrawTile(Main.MouseWorld.ToTileCoordinates(), new Color(1f, 0.75f, 0.15f, 0.4f));
 		}
-		DrawSelectedTiles();
+		if (ShouldDrawBrushCoveredTlies)
+		{
+			var drawColor = new Color(1f, 0.0f, 0.2f, 0.7f);
+			if (State == 1)
+			{
+				drawColor = new Color(0f, 0.6f, 0.1f, 0.7f);
+			}
+			DrawListOfTiles(BrushPaintedTiles, drawColor);
+			DrawListOfTiles(BrushCoveredTiles, new Color(0.7f, 0.4f, 0.4f, 0.4f));
+		}
+		if (ShouldDrawSelectedTlies)
+		{
+			DrawListOfTiles(CurrentSelectedTiles, new Color(0.7f, 0.4f, 0.4f, 0.4f));
+			DrawListOfTiles(SelectedTiles, new Color(0.7f, 0.4f, 0.4f, 0.4f) * 0.5f);
+		}
 		Main.instance.MouseText(MouseText, ItemRarityID.White);
+		if (State == 0 && CurrentTileType >= 0)
+		{
+			Main.instance.LoadTiles(CurrentTileType);
+			Texture2D tileTex = TextureAssets.Tile[CurrentTileType].Value;
+			var frame = new Rectangle(162, 54, 16, 16);
+			Ins.Batch.Draw(tileTex, Position, frame, Color.White, 0, frame.Size() * 0.5f, 1f, SpriteEffects.None);
+		}
+		if (State == 1 && CurrentWallType >= 1)
+		{
+			Main.instance.LoadWall(CurrentWallType);
+			Texture2D wallTex = TextureAssets.Wall[CurrentWallType].Value;
+			var frame = new Rectangle(324, 108, 32, 32);
+			Ins.Batch.Draw(wallTex, Position, frame, Color.White, 0, frame.Size() * 0.5f, 1f, SpriteEffects.None);
+		}
 	}
 
 	public void DrawSelectPolygon()
@@ -498,38 +631,37 @@ public class TileToolBoxInterface : Visual
 		Ins.Batch.Draw(tile, pos.ToWorldCoordinates(), null, color, 0, tile.Size() / 2f, 1f, SpriteEffects.None);
 	}
 
-	public void DrawSelectedTiles()
+	public void DrawListOfTiles(List<Point> tiles, Color drawColor)
 	{
 		Texture2D tex = ModAsset.TileBlock4x4.Value;
-		var drawColor = new Color(0.7f, 0.4f, 0.4f, 0.4f);
-		foreach (var pos in SelectedTiles)
+		foreach (var pos in tiles)
 		{
 			if (!VFXManager.InScreen(pos.ToWorldCoordinates(), 32))
 			{
 				continue;
 			}
 			Rectangle drawFrame = new Rectangle(16, 16, 16, 16);
-			if (!SelectedTiles.Contains(pos + new Point(-1, 0)))
+			if (!tiles.Contains(pos + new Point(-1, 0)))
 			{
 				drawFrame.X = 0;
 			}
-			if (!SelectedTiles.Contains(pos + new Point(0, -1)))
+			if (!tiles.Contains(pos + new Point(0, -1)))
 			{
 				drawFrame.Y = 0;
 			}
-			if (!SelectedTiles.Contains(pos + new Point(1, 0)))
+			if (!tiles.Contains(pos + new Point(1, 0)))
 			{
 				drawFrame.X = 32;
 			}
-			if (!SelectedTiles.Contains(pos + new Point(0, 1)))
+			if (!tiles.Contains(pos + new Point(0, 1)))
 			{
 				drawFrame.Y = 32;
 			}
-			if (!SelectedTiles.Contains(pos + new Point(-1, 0)) && !SelectedTiles.Contains(pos + new Point(1, 0)))
+			if (!tiles.Contains(pos + new Point(-1, 0)) && !tiles.Contains(pos + new Point(1, 0)))
 			{
 				drawFrame.X = 48;
 			}
-			if (!SelectedTiles.Contains(pos + new Point(0, -1)) && !SelectedTiles.Contains(pos + new Point(0, 1)))
+			if (!tiles.Contains(pos + new Point(0, -1)) && !tiles.Contains(pos + new Point(0, 1)))
 			{
 				drawFrame.Y = 48;
 			}
@@ -655,13 +787,13 @@ public class TileToolBoxInterface : Visual
 		return frame;
 	}
 
-	public Rectangle GetBoundOfSelectedTiles()
+	public Rectangle GetBoundOfTiles(List<Point> tiles)
 	{
 		int x = int.MaxValue;
 		int y = int.MaxValue;
 		int x_max = 0;
 		int y_max = 0;
-		foreach (var pos in SelectedTiles)
+		foreach (var pos in tiles)
 		{
 			if (pos.X < x)
 			{
@@ -698,9 +830,13 @@ public class TileToolBoxInterface : Visual
 		}
 	}
 
-	public void SaveStepToUndoable()
+	public void SaveStepToUndoable(List<Point> tiles)
 	{
-		Rectangle area = GetBoundOfSelectedTiles();
+		if (tiles.Count <= 0)
+		{
+			return;
+		}
+		Rectangle area = GetBoundOfTiles(tiles);
 		var mapIO = new MapIO(area);
 		string path = Path.Combine(Main.SavePath, "Mods", "ModDatas", "Everglow");
 		path = Path.Combine(path, "TileToolBox");

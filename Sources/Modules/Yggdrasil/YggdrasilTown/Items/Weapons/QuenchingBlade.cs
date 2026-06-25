@@ -33,8 +33,7 @@ public class QuenchingBlade : ModItem
     {
         if (player.ownedProjectileCounts[type] <= 0)
 		{
-			Main.NewText(Item.knockBack);
-			Projectile.NewProjectile(source, position, velocity, type, damage, 350, player.whoAmI);
+			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
         }
         return false;
     }

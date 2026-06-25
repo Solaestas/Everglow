@@ -182,22 +182,29 @@ public class VampireMat_Attack_Proj_Ball_In_AbsorbVortex2 : ModProjectile
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, CustomBlendStates.Reverse, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		Texture2D tex = ModAsset.VampireMat_Attack_Proj_Ball.Value;
 		foreach (var sp in SubProjs)
 		{
-			int frameNumber = (int)(TileUtils.GetFixedRandomNumber_SingleSeed(sp.GetHashCode(), 10) + Projectile.timeLeft / 12f) % 10;
-			Rectangle frame = new Rectangle(0, 90 * frameNumber, 90, 90);
-			Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 1f), 0, frame.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+			DrawSubProj(sp);
 		}
 
 		foreach (var sp in SubProjs_Style2)
 		{
-			int frameNumber = (int)(TileUtils.GetFixedRandomNumber_SingleSeed(sp.GetHashCode(), 10) + Projectile.timeLeft / 12f) % 10;
-			Rectangle frame = new Rectangle(0, 90 * frameNumber, 90, 90);
-			Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 1f), 0, frame.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+			DrawSubProj(sp);
 		}
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
 		return false;
+	}
+
+	public void DrawSubProj(SubProj sp)
+	{
+		Texture2D star = Commons.ModAsset.CrossStar.Value;
+		Main.EntitySpriteDraw(star, sp.Position - Main.screenPosition, null, new Color(1f, 0.2f, 0.3f, 0f) * MathF.Min(sp.Scale, 0.5f), 0, star.Size() * 0.5f, sp.Scale * 2f, SpriteEffects.None, 0);
+		Texture2D tex = ModAsset.VampireMat_Attack_Proj_Ball.Value;
+		int frameNumber = (int)(TileUtils.GetFixedRandomNumber_SingleSeed(sp.GetHashCode(), 10) + Projectile.timeLeft / 12f) % 10;
+		Rectangle frame = new Rectangle(0, 90 * frameNumber, 90, 90);
+		Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, frame, new Color(1f, 0.2f, 0.3f, 1f), 0, frame.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
+		frame.X += 90;
+		Main.EntitySpriteDraw(tex, sp.Position - Main.screenPosition, frame, new Color(1f, 1f, 1f, 1f), 0, frame.Size() * 0.5f, sp.Scale, SpriteEffects.None, 0);
 	}
 }

@@ -22,7 +22,7 @@ public class NormalMetro : BoxEntity
 	{
 		Velocity *= 0;
 		Position += Velocity;
-		Velocity = new Vector2(Direction * 25, 0);
+		Velocity = new Vector2(Direction * 0, 0);
 		if(Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			Direction *= -1;

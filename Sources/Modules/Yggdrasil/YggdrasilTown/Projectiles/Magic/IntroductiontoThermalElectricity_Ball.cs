@@ -38,7 +38,15 @@ public class IntroductiontoThermalElectricity_Ball : ModProjectile
 
 	public void HitTarget()
 	{
-		SoundEngine.PlaySound(SoundID.DD2_BallistaTowerShot, Projectile.Center);
+		switch (Main.rand.Next(2))
+		{
+			case 0:
+				SoundEngine.PlaySound(new SoundStyle(ModAsset.Introductiontothermalelectricity_explosion_1_Mod), Projectile.Center);
+				break;
+			case 1:
+				SoundEngine.PlaySound(new SoundStyle(ModAsset.Introductiontothermalelectricity_explosion_2_Mod), Projectile.Center);
+				break;
+		}
 		TimeToKill = TimeToKillMax;
 		for (int k = 0; k < 40; k++)
 		{

@@ -1,4 +1,5 @@
 using Everglow.Commons.DataStructures;
+using Everglow.Commons.Graphics;
 using Everglow.Yggdrasil.KelpCurtain.NPCs.VampireMat;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.TileEffect;
 using Terraria.DataStructures;
@@ -96,12 +97,12 @@ public class VampireMat_Attack_Proj_Absorb : ModProjectile
 	{
 		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Immediate, CustomBlendStates.Reverse, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
 		List<Vertex2D> bars = [];
 		List<Vertex2D> bars_dark = [];
 		float width = 150f;
-		SpriteBatchUtils.AddVerticesForCircleRing(bars, Projectile.Center, 960, width, new Color(1f, 0, 0, 0), rotationValue, 5 + rotationValue, 1 - Fade);
+		SpriteBatchUtils.AddVerticesForCircleRing(bars, Projectile.Center, 960, width, new Color(0.6f, 0.05f, 0.11f, 0), rotationValue, 10 + rotationValue, 1 - Fade);
 
 		if (bars.Count > 2)
 		{
@@ -111,7 +112,7 @@ public class VampireMat_Attack_Proj_Absorb : ModProjectile
 				Main.GameViewMatrix.TransformationMatrix *
 				Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
 			effect.CurrentTechnique.Passes[0].Apply();
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_13.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Trail_16.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 
@@ -124,40 +125,40 @@ public class VampireMat_Attack_Proj_Absorb : ModProjectile
 		int count = 200;
 		for (int k = 0; k <= count; k++)
 		{
-			float value = k / (float)count;
+			float value = k / (float)count * 3;
 			Vector2 pos_out = Projectile.Center - Main.screenPosition + new Vector2(0, -960).RotatedBy(MathHelper.TwoPi * value);
 			Vector2 pos_in = Projectile.Center - Main.screenPosition + new Vector2(0, -480).RotatedBy(MathHelper.TwoPi * value + 1f);
 			bars.Add(pos_out, Color.Transparent, new Vector3(value + timeValue, 0, 0));
-			bars.Add(pos_in, new Color(1f, 0, 0.2f, 0) * Fade, new Vector3(value + timeValue, 1, 0));
+			bars.Add(pos_in, new Color(0.3f, 0, 0.06f, 0) * Fade, new Vector3(value + timeValue, 1, 0));
 			bars_dark.Add(pos_out, Color.Transparent, new Vector3(value + timeValue, 0, 0));
-			bars_dark.Add(pos_in, Color.White * Fade, new Vector3(value + timeValue, 1, 0));
+			bars_dark.Add(pos_in, Color.White * Fade * 2, new Vector3(value + timeValue, 1, 0));
 		}
 
 		if (bars.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_spiderNet_dark.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveNet_black.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars_dark.ToArray(), 0, bars_dark.Count - 2);
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_spiderNet.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveNet.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 		bars = [];
 		bars_dark = [];
 		for (int k = 0; k <= count; k++)
 		{
-			float value = k / (float)count;
+			float value = k / (float)count * 3;
 			Vector2 pos_out = Projectile.Center - Main.screenPosition + new Vector2(0, -480).RotatedBy(MathHelper.TwoPi * value + 1f);
 			Vector2 pos_in = Projectile.Center - Main.screenPosition + new Vector2(0, -20).RotatedBy(MathHelper.TwoPi * value + 2f);
-			bars.Add(pos_out, new Color(1f, 0, 0.2f, 0) * Fade, new Vector3(value + timeValue, 0, 0));
-			bars.Add(pos_in, Color.Transparent, new Vector3(value + timeValue, 1, 0));
-			bars_dark.Add(pos_out, Color.Transparent, new Vector3(value + timeValue, 0, 0));
-			bars_dark.Add(pos_in, Color.White * Fade, new Vector3(value + timeValue, 1, 0));
+			bars.Add(pos_out, new Color(0.3f, 0, 0.06f, 0) * Fade, new Vector3(value + timeValue * 2, 0, 0));
+			bars.Add(pos_in, Color.Transparent, new Vector3(value + timeValue * 3, 1, 0));
+			bars_dark.Add(pos_out, Color.Transparent, new Vector3(value + timeValue * 2, 0, 0));
+			bars_dark.Add(pos_in, Color.White * Fade * 2, new Vector3(value + timeValue * 3, 1, 0));
 		}
 
 		if (bars.Count > 2)
 		{
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_spiderNet_dark.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveNet_black.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars_dark.ToArray(), 0, bars_dark.Count - 2);
-			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_spiderNet.Value;
+			Main.graphics.GraphicsDevice.Textures[0] = Commons.ModAsset.Noise_hiveNet.Value;
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		}
 
