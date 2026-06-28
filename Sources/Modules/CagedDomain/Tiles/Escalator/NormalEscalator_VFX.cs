@@ -1,5 +1,6 @@
 using Everglow.Commons.Enums;
 using Everglow.Commons.TileHelper;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
@@ -168,6 +169,8 @@ public class NormalEscalator_VFX : TileVFX
 				{
 					State = 0;
 				}
+				var tile = TileUtils.SafeGetTile(OriginTilePos);
+				tile.TileFrameY = (short)(State * 18);
 			}
 			return;
 		}

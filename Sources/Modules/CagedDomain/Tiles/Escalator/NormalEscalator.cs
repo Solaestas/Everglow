@@ -43,6 +43,7 @@ public class NormalEscalator : ModTile, ISceneTile
 			OriginTileType = Type,
 			Position = new Vector2(i * 16, j * 16),
 			Direction = dir,
+			State = tile.TileFrameY / 18,
 			Active = true,
 			Visible = true,
 		};
