@@ -146,7 +146,7 @@ public partial class TileUtils
 		}
 	}
 
-	public static void VertexDraw_Grid(Vector2 drawCenterPos, Rectangle frame, Vector2 origin, Texture2D tex, SpriteBatch spriteBatch, float rotation = 0)
+	public static void VertexDraw_Grid(Vector2 drawCenterPos, Rectangle frame, Vector2 origin, Texture2D tex, SpriteBatch spriteBatch, float rotation = 0, float alpha = 1f)
 	{
 		var drawPos = drawCenterPos;
 		List<Vertex2D> bars = new List<Vertex2D>();
@@ -164,10 +164,10 @@ public partial class TileUtils
 				Vector2 offset2 = (new Vector2(x * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
 				Vector2 offset3 = (new Vector2((x + 1) * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
 
-				AddLightColorVertex(bars, pos + offset0, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + y * unitY) / tex.Size(), 0));
-				AddLightColorVertex(bars, pos + offset1, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + y * unitY) / tex.Size(), 0));
-				AddLightColorVertex(bars, pos + offset2, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0));
-				AddLightColorVertex(bars, pos + offset3, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0));
+				AddLightColorVertex(bars, pos + offset0, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + y * unitY) / tex.Size(), 0), alpha);
+				AddLightColorVertex(bars, pos + offset1, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + y * unitY) / tex.Size(), 0), alpha);
+				AddLightColorVertex(bars, pos + offset2, new Vector3(new Vector2(frame.X + x * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0), alpha);
+				AddLightColorVertex(bars, pos + offset3, new Vector3(new Vector2(frame.X + (x + 1) * unitX, frame.Y + (y + 1) * unitY) / tex.Size(), 0), alpha);
 			}
 		}
 
@@ -178,9 +178,9 @@ public partial class TileUtils
 		}
 	}
 
-	public static void AddLightColorVertex(List<Vertex2D> bars, Vector2 worldPos, Vector3 coord)
+	public static void AddLightColorVertex(List<Vertex2D> bars, Vector2 worldPos, Vector3 coord, float alpha = 1f)
 	{
-		Color drawC = Lighting.GetColor(worldPos.ToTileCoordinates());
+		Color drawC = Lighting.GetColor(worldPos.ToTileCoordinates()) * alpha;
 		bars.Add(worldPos - Main.screenPosition, drawC, coord);
 	}
 }
