@@ -52,7 +52,7 @@ public class MetroStationSign_PylonSquare : ModTile
 		var tile = Main.tile[i, j];
 		if (tile.HasTile && tile.TileFrameX == 36 && tile.TileFrameY == 72 && ColliderManager.Instance.OfType<YggdrasilTown_NormalMetro>().Count() <= 0)
 		{
-			ColliderManager.Instance.Add<YggdrasilTown_NormalMetro>(new Point(i, j).ToWorldCoordinates());
+			ColliderManager.Instance.Add<YggdrasilTown_NormalMetro>(new Point(i, j).ToWorldCoordinates() + new Vector2(-1400, 0));
 		}
 	}
 }

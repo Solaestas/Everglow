@@ -16,7 +16,6 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.CyanVine;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.LampWood.Furniture;
-using Everglow.Yggdrasil.YggdrasilTown.Tiles.OriginPylon;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.TwilightForest;
 using Everglow.Yggdrasil.YggdrasilTown.Walls;
 using Everglow.Yggdrasil.YggdrasilTown.Walls.TwilightForest;
@@ -46,22 +45,25 @@ public class YggdrasilTownGeneration
 		BuildMidnightBayou();
 
 		Main.statusText = "Giant Cavenours Pillars...";
-		//BuildGiantYggdrasilPosts();
 
+		// BuildGiantYggdrasilPosts();
 		Main.statusText = "Building Twilight Castle...";
-		//BuildTwilightRelic();
 
+		// BuildTwilightRelic();
 		Main.statusText = "Constructing LampWood Forest Mesa...";
-		//BuildLampWoodLand();
 
+		// BuildLampWoodLand();
 		Main.statusText = "Planting Twilight Crystal Forest...";
-		//BuildTwilightLand();
 
+		// BuildTwilightLand();
 		Main.statusText = "Carving the Heavenly Portal...";
 		BuildHeavenlyPortal();
 
 		Main.statusText = "Constructing the Yggdrasil Town Below...";
-		BuildTownBelow();
+		BuildMainTown();
+
+		Main.statusText = "Mineralizing...";
+		BuildTangledSubmine();
 
 		Main.statusText = "Engraving Cage of Challengers...";
 		BuildStoneCageOfChallenges();
@@ -70,7 +72,8 @@ public class YggdrasilTownGeneration
 		BuildJellyBallHotbed();
 
 		Main.statusText = "Smoothing Yggdrasil Town...";
-		//SmoothYggdrasilTown();
+
+		// SmoothYggdrasilTown();
 	}
 
 	// public static int AzureGrottoCenterX;
@@ -164,7 +167,7 @@ public class YggdrasilTownGeneration
 		KillRectangleAreaOfTile(leftBound, startY - 10, rightBound, startY);
 
 		// 源晶塔
-		PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
+		// PlaceFrameImportantTiles(1395, startY - 37, 8, 12, ModContent.TileType<OriginPylon>());
 		PlaceFrameImportantTiles(1257, startY, 3, 1, ModContent.TileType<StoneBridgeTile>(), 0, 18);
 		PlaceFrameImportantTiles(1253, startY + 7, 7, 1, ModContent.TileType<StoneBridgeTile>(), 36, 36);
 		for (int x = leftBound + 5; x < rightBound - 5; x++)
@@ -337,7 +340,6 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void BuildAzureGrotto()
 	{
-	
 	}
 
 	/// <summary>
@@ -385,6 +387,7 @@ public class YggdrasilTownGeneration
 				Tile tileUp2 = SafeGetTile(x - 2, y - 1);
 				Tile tileUp3 = SafeGetTile(x - 3, y - 1);
 				Tile tileUp4 = SafeGetTile(x - 4, y - 1);
+				Tile tileMiddleUpUp = SafeGetTile(x - 2, y - 2);
 				Tile tileLeft1 = SafeGetTile(x - 1, y);
 				Tile tileLeft2 = SafeGetTile(x - 2, y);
 				Tile tileLeft3 = SafeGetTile(x - 3, y);
@@ -393,7 +396,7 @@ public class YggdrasilTownGeneration
 				{
 					continue;
 				}
-				if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile)
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tileLeft3.HasTile && tileLeft4.HasTile && tile.HasTile && !tileUp.HasTile && !tileUp4.HasTile! && !tileMiddleUpUp.HasTile)
 				{
 					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft3.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft4.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
@@ -403,7 +406,7 @@ public class YggdrasilTownGeneration
 						}
 					}
 				}
-				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile)
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp2.HasTile && !tileMiddleUpUp.HasTile)
 				{
 					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
@@ -413,7 +416,7 @@ public class YggdrasilTownGeneration
 						}
 					}
 				}
-				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile)
+				if (tileLeft1.HasTile && tileLeft2.HasTile && tile.HasTile && !tileUp1.HasTile && !tileMiddleUpUp.HasTile)
 				{
 					if (tileLeft1.TileType == ModContent.TileType<StoneScaleWood>() && tileLeft2.TileType == ModContent.TileType<StoneScaleWood>() && tile.TileType == ModContent.TileType<StoneScaleWood>())
 					{
@@ -726,7 +729,7 @@ public class YggdrasilTownGeneration
 	/// <summary>
 	/// 下天穹镇
 	/// </summary>
-	public static void BuildTownBelow()
+	public static void BuildMainTown()
 	{
 		// 圆壳罩住天穹镇
 		Point topLeft = new Point(20, Main.maxTilesY - 800);
@@ -788,7 +791,56 @@ public class YggdrasilTownGeneration
 		}
 		YggdrasilTownTopLeft = new Point(230, Main.maxTilesY - 600);
 		QuickBuild(YggdrasilTownTopLeft.X, YggdrasilTownTopLeft.Y, ModAsset.MapIOs_706x275YggdrasilTown_Path);
-		BuildTangledSubmine();
+
+		// Railway
+		for (int t = 0; t <= 120; t++)
+		{
+			int dx = t * 3;
+			int x = YggdrasilTownTopLeft.X + 706 + dx;
+			int y = YggdrasilTownTopLeft.Y + 189;
+			if (t == 120)
+			{
+				y -= 15;
+				QuickBuild(x, y, ModAsset.OriginalPylonStation231x31_Path);
+				break;
+			}
+			var checkPos = new Point(x + 2, y + 16);
+			var checkTile = SafeGetTile(checkPos);
+			if (checkTile.HasTile)
+			{
+				if (t % 15 == 14)
+				{
+					QuickBuild(x, y, ModAsset.MetroTunnelPiece_WithLamp3x16_Path);
+				}
+				else
+				{
+					QuickBuild(x, y, ModAsset.MetroTunnelPiece3x16_Path);
+				}
+			}
+			else
+			{
+				if (t % 9 == 4)
+				{
+					QuickBuild(x, y, ModAsset.MetroBridgePiece_withPier3x15_Path);
+					for (int dy = 0; dy < 300; dy++)
+					{
+						var tile = SafeGetTile(x + 1, y + dy + 15);
+						if (tile.WallType > WallID.None)
+						{
+							break;
+						}
+						else
+						{
+							ChangeWall(tile, ModContent.WallType<IronTrackScaffolding>(), (int)TileChangeState.Forceful);
+						}
+					}
+				}
+				else
+				{
+					QuickBuild(x, y, ModAsset.MetroBridgePiece3x15_Path);
+				}
+			}
+		}
 	}
 
 	/// <summary>
@@ -916,7 +968,7 @@ public class YggdrasilTownGeneration
 				{
 					if (valueNoise <= 1 && (tile.WallType == (ushort)ModContent.WallType<StoneDragonScaleWoodWall>() || tile.WallType == (ushort)ModContent.WallType<JellyBallSecretionWall>() || tile.WallType == (ushort)ModContent.WallType<DarkForestSoilWall>()))
 					{
-						tile.WallType = 0;
+						tile.WallType = WallID.None;
 					}
 				}
 				else if (valueNoise <= 1)
@@ -938,7 +990,7 @@ public class YggdrasilTownGeneration
 					{
 						if (valueNoise2 < 0.45f)
 						{
-							if (tile.WallType == 0)
+							if (tile.WallType == WallID.None)
 							{
 								tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 							}
@@ -968,7 +1020,7 @@ public class YggdrasilTownGeneration
 			int checkY = GenRand.Next(upBound, bottomBound);
 
 			// 如果上下左右都有大于100的空间且不在中心遗迹区
-			if (CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400 && (checkX < Main.maxTilesX - 200 && checkY < Main.maxTilesY - 620))
+			if (CheckSpaceWidth(checkX, checkY) > 100 && CheckSpaceDown(checkX, checkY) > 100 && CheckSpaceUp(checkX, checkY) > 100 && (new Vector2(checkX, checkY) - TwilightRelicCenter).Length() > 400 && checkX < Main.maxTilesX - 200 && checkY < Main.maxTilesY - 620)
 			{
 				// 计入一个森林平台数量
 				countLamp++;
@@ -1519,7 +1571,7 @@ public class YggdrasilTownGeneration
 				{
 					bValue += 1f;
 				}
-				if (tile.WallType > 0)
+				if (tile.WallType > WallID.None)
 				{
 					bValue += 0.5f;
 					if (x > step2X + 400)
@@ -2051,7 +2103,7 @@ public class YggdrasilTownGeneration
 				{
 					float height = 0.15f;
 					float value = Math.Abs(x0) * height + GenRand.NextFloat(1f);
-					if (y0 > value + 50 - (60 * height))
+					if (y0 > value + 50 - 60 * height)
 					{
 						tile.TileType = TileID.GoldCoinPile;
 						tile.HasTile = true;
@@ -2066,7 +2118,7 @@ public class YggdrasilTownGeneration
 	/// </summary>
 	public static void SmoothYggdrasilTown()
 	{
-		//SmoothTile_XXYY(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
+		// SmoothTile_XXYY(0, (int)(Main.maxTilesY * 0.9), Main.maxTilesX, Main.maxTilesY);
 	}
 
 	/// <summary>
@@ -2152,7 +2204,7 @@ public class YggdrasilTownGeneration
 					for (int j = y - roomHeight; j <= y; j++)
 					{
 						var tile = SafeGetTile(i, j);
-						if (tile.WallType <= 0)
+						if (tile.WallType <= WallID.None)
 						{
 							tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 						}
@@ -2166,7 +2218,7 @@ public class YggdrasilTownGeneration
 					for (int j = y - roomHeight; j <= y; j++)
 					{
 						var tile = SafeGetTile(i, j);
-						if (tile.WallType <= 0)
+						if (tile.WallType <= WallID.None)
 						{
 							tile.WallType = (ushort)ModContent.WallType<StoneDragonScaleWoodWall>();
 						}
@@ -2592,7 +2644,7 @@ public class YggdrasilTownGeneration
 			int y = endY + 1;
 			Tile tile = SafeGetTile(x, y);
 			Tile tileUp = SafeGetTile(x, y - 2);
-			if (tile.WallType != 0 && !tile.HasTile && tileUp.wall != 0 && !tileUp.HasTile)
+			if (tile.WallType != WallID.None && !tile.HasTile && tileUp.wall != 0 && !tileUp.HasTile)
 			{
 				emptyBottomX.Add(x);
 			}
@@ -2696,7 +2748,7 @@ public class YggdrasilTownGeneration
 					}
 					else
 					{
-						if (tile.WallType == 0)
+						if (tile.WallType == WallID.None)
 						{
 							tile.WallType = (ushort)contentWallType;
 						}

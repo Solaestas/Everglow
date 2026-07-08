@@ -30,8 +30,8 @@ public class YggdrasilWorldGeneration : ModSystem
 		{
 			Main.statusText = Terraria.Localization.Language.GetTextValue("Mods.Everglow.Common.WorldSystem.BuildtheTreeWorld");
 			TotalInitialize();
-			Main.spawnTileX = 1400;
-			Main.spawnTileY = 20630;
+			Main.spawnTileX = 1475;
+			Main.spawnTileY = 20600;
 			BuildYggdrasilTown();
 
 			BuildKelpCurtain();
