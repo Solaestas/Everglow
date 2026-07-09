@@ -15,7 +15,7 @@ public class YggdrasilTown_NormalMetro : BoxEntity
 
 	public int StopTimer = 0;
 
-	public int Direction = -1;
+	public int Direction = 1;
 
 	public int StopTimeMax = 600;
 

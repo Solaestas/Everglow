@@ -46,16 +46,16 @@ public class YggdrasilTownGeneration
 
 		Main.statusText = "Giant Cavenours Pillars...";
 
-		// BuildGiantYggdrasilPosts();
+		BuildGiantYggdrasilPosts();
 		Main.statusText = "Building Twilight Castle...";
 
-		// BuildTwilightRelic();
+		BuildTwilightRelic();
 		Main.statusText = "Constructing LampWood Forest Mesa...";
 
-		// BuildLampWoodLand();
+		BuildLampWoodLand();
 		Main.statusText = "Planting Twilight Crystal Forest...";
 
-		// BuildTwilightLand();
+		BuildTwilightLand();
 		Main.statusText = "Carving the Heavenly Portal...";
 		BuildHeavenlyPortal();
 
@@ -73,7 +73,7 @@ public class YggdrasilTownGeneration
 
 		Main.statusText = "Smoothing Yggdrasil Town...";
 
-		// SmoothYggdrasilTown();
+		SmoothYggdrasilTown();
 	}
 
 	// public static int AzureGrottoCenterX;
