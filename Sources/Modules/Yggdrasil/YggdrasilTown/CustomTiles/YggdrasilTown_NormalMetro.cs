@@ -193,10 +193,10 @@ public class YggdrasilTown_NormalMetro : BoxEntity
 	public override void Draw()
 	{
 		Texture2D metro = ModAsset.YggdrasilTown_NormalMetro.Value;
-		var frame = new Rectangle(108, 0, 848, 146);
-		var glow_frame = new Rectangle(108, 292, 848, 146);
+		var frame = new Rectangle(174, 165, 848, 160);
+		var glow_frame = new Rectangle(174, 495, 848, 160);
 		var outShellFrame = frame;
-		outShellFrame.Y += 146;
+		outShellFrame.Y -= 170;
 		var pos0 = new Vector2((Box.Center.X + Box.Left) * 0.5f, Box.Bottom);
 		TileUtils.VertexDraw_Grid(pos0 - Main.screenPosition, frame, new Vector2(frame.Width / 2f, frame.Height), metro, Main.spriteBatch, 0);
 		Main.spriteBatch.Draw(metro, pos0 - Main.screenPosition, glow_frame, new Color(1f, 1f, 1f, 0) * (1 - ShellAlpha), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
@@ -213,16 +213,16 @@ public class YggdrasilTown_NormalMetro : BoxEntity
 			TileUtils.VertexDraw_Grid(pos1 - Main.screenPosition, outShellFrame, new Vector2(frame.Width / 2f, frame.Height), metro, Main.spriteBatch, 0, ShellAlpha);
 		}
 
-		var headFrame = new Rectangle(0, 0, 106, 146);
-		var tailFrame = new Rectangle(958, 0, 106, 146);
+		var headFrame = new Rectangle(0, 0, 172, 160);
+		var tailFrame = new Rectangle(1024, 0, 172, 160);
 
-		var pos2 = new Vector2(Box.Left, Box.Bottom - 73);
-		var pos3 = new Vector2(Box.Right, Box.Bottom - 73);
+		var pos2 = new Vector2(Box.Left, Box.Bottom - 75);
+		var pos3 = new Vector2(Box.Right, Box.Bottom - 75);
 		TileUtils.VertexDraw_Grid(pos2 - Main.screenPosition, headFrame, new Vector2(headFrame.Width, headFrame.Height * 0.5f), metro, Main.spriteBatch, 0);
 		TileUtils.VertexDraw_Grid(pos3 - Main.screenPosition, tailFrame, new Vector2(0, tailFrame.Height * 0.5f), metro, Main.spriteBatch, 0);
 
-		headFrame.Y += 292;
-		tailFrame.Y += 292;
+		headFrame.Y += 330;
+		tailFrame.Y += 330;
 		Main.spriteBatch.Draw(metro, pos2 - Main.screenPosition, headFrame, new Color(1f, 1f, 1f, 0) * 0.36f, 0, new Vector2(headFrame.Width, headFrame.Height * 0.5f), 1, SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(metro, pos3 - Main.screenPosition, tailFrame, new Color(1f, 1f, 1f, 0) * 0.36f, 0, new Vector2(0, tailFrame.Height * 0.5f), 1, SpriteEffects.None, 0);
 	}
