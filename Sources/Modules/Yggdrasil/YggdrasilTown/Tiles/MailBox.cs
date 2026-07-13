@@ -43,8 +43,8 @@ public class MailBox : ModTile
 
 		// Placement
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
-		TileObjectData.newTile.Height = 2;
-		TileObjectData.newTile.Width = 3;
+		TileObjectData.newTile.Height = 3;
+		TileObjectData.newTile.Width = 2;
 		TileObjectData.newTile.Origin = new Point16(0, 2);
 		TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
 		TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
@@ -115,35 +115,26 @@ public class MailBox : ModTile
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		// Tile tile = Main.tile[i, j];
+		Tile tile = Main.tile[i, j];
 
-		// if (tile.TileFrameX == 36)
-		// {
-		// int left = i;
-		// int top = j;
-		// if (tile.TileFrameX % 54 != 0)
-		// {
-		// left -= tile.TileFrameX / 18;
-		// }
-		// if (tile.TileFrameY != 0)
-		// {
-		// top--;
-		// }
-		// int chestIndex = Chest.FindChest(left, top);
-		// if (chestIndex >= 0)
-		// {
-		// Chest chest = Main.chest[chestIndex];
-		// var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-		// if (Main.drawToScreen)
-		// {
-		// zero = Vector2.Zero;
-		// }
-		// var texture = ModContent.Request<Texture2D>(Texture).Value;
-		// spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + chest.frame * 38, 16, 16), Lighting.GetColor(i, j), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
-		// return false;
-		// }
-		// }
-		return base.PreDraw(i, j, spriteBatch);
+		int left = i;
+		int top = j;
+		left -= tile.TileFrameX / 18;
+		top -= tile.TileFrameY / 18;
+		int chestIndex = Chest.FindChest(left, top);
+		if (chestIndex >= 0)
+		{
+			Chest chest = Main.chest[chestIndex];
+			var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			if (Main.drawToScreen)
+			{
+				zero = Vector2.Zero;
+			}
+			var texture = ModContent.Request<Texture2D>(Texture).Value;
+			spriteBatch.Draw(texture, new Vector2(i, j) * 16 - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY + chest.frame * 54, 16, 16), Lighting.GetColor(i, j), 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+			return false;
+		}
+		return false;
 	}
 
 	public override bool RightClick(int i, int j)
@@ -256,7 +247,7 @@ public class MailBox : ModTile
 			player.cursorItemIconText = chest.name.Length > 0 ? chest.name : defaultName;
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<MeltingInputBox_Item>();
+				player.cursorItemIconID = ModContent.ItemType<MailBox_Item>();
 				player.cursorItemIconText = string.Empty;
 			}
 		}

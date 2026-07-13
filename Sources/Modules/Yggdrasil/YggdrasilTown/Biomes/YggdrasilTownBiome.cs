@@ -1,4 +1,5 @@
-using Everglow.Yggdrasil.WorldGeneration;
+using Everglow.Commons.Utilities.BackgroundHelper;
+using Everglow.Yggdrasil.YggdrasilTown.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
 
@@ -59,7 +60,7 @@ public class YggdrasilTownBiome : ModBiome
 	/// </summary>
 	public static Vector2 GetBiomeCenter()
 	{
-		if(!SubworldSystem.IsActive<YggdrasilWorld>())
+		if (!SubworldSystem.IsActive<YggdrasilWorld>())
 		{
 			CheckedBiomeCenter = false;
 			return Vector2.zeroVector;
@@ -99,7 +100,7 @@ public class YggdrasilTownBiome : ModBiome
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		if(YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
+		if (YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
 			return true;
 		}
@@ -142,6 +143,27 @@ public class YggdrasilTownBiome : ModBiome
 			Main.StopSlimeRain();
 		}
 		Main.bloodMoon = false;
+		BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+		if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+		{
+			AddBackground(bgSystem);
+		}
 		base.OnInBiome(player);
+	}
+
+	public void AddBackground(BackgroundSystem bgSystem)
+	{
+		List<Vector2> polygon = new List<Vector2>();
+		Vector2 centerPosWorld = BiomeCenter;
+		polygon.Add(centerPosWorld + new Vector2(-320, 0) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-320, -260) * 16);
+		polygon.Add(centerPosWorld + new Vector2(320, 260) * 16);
+		polygon.Add(centerPosWorld + new Vector2(320, 0) * 16);
+		List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
+
+		YggdrasilTown_Construct ytc = new YggdrasilTown_Construct();
+		ytc.WorldAnchor = centerPosWorld;
+		ytc.BgTiles = bgArea;
+		bgSystem.AddBackgroundSlide(ytc);
 	}
 }

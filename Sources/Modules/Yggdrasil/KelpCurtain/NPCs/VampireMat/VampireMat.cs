@@ -6,8 +6,11 @@ using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.KelpCurtain.Items.Consumables;
 using Everglow.Yggdrasil.KelpCurtain.Items.Misc;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
+using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.WorldGeneration;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
@@ -44,7 +47,17 @@ public class VampireMat : ModNPC
 
 	public int VortexStyle = 0;
 
+	public int StickPlayerTimer = 0;
+
+	public int FailToEscapeStickTimer = 0;
+
+	public int TotalDamageIntakeWhenStickPlayer = 0;
+
 	public bool TowardScreenAndAttacking = false;
+
+	public bool HitStuckPlayerAtTheLastMoment = false;
+
+	public bool StickPlayer = false;
 
 	public static List<Vector2> BackgroundWallHoles = [new Vector2(0, 0), new Vector2(-616, -397), new Vector2(-535, 396), new Vector2(371, 610), new Vector2(611, -466),];
 
@@ -113,6 +126,14 @@ public class VampireMat : ModNPC
 		{
 			HitTimer--;
 		}
+		if (StickPlayerTimer > 0)
+		{
+			StickPlayerTimer--;
+		}
+		if (FailToEscapeStickTimer > 0)
+		{
+			FailToEscapeStickTimer--;
+		}
 		NPC.dontTakeDamage = DiveAtBackground;
 	}
 
@@ -156,10 +177,10 @@ public class VampireMat : ModNPC
 		bool reachTarget = false;
 		float rot = NPC.rotation;
 		int reachTimer = 0;
+		Player player = Main.player[NPC.target];
 		for (int k = 0; k < 90; k++)
 		{
 			Vector2 headPos = RealCenter;
-			Player player = Main.player[NPC.target];
 			int direction = RealCenter.X > player.Center.X ? 1 : -1;
 
 			NPC.spriteDirection = direction;
@@ -184,25 +205,53 @@ public class VampireMat : ModNPC
 				reachTarget = false;
 			}
 			NPC.rotation = rot * 0.05f + NPC.rotation * 0.95f;
+			if (!TowardScreenAndAttacking && StickPlayerTimer <= 0)
+			{
+				if (IntersectWhenFlat(player))
+				{
+					StickPlayer = true;
+					StickPlayerTimer += 120;
+					VampireMatStickScreen vMSS = new VampireMatStickScreen();
+					vMSS.Owner = player;
+					vMSS.Active = true;
+					vMSS.Visible = true;
+					vMSS.MaxTime = 200;
+					vMSS.ParentNPC = NPC;
+					Ins.VFXManager.Add(vMSS);
+					break;
+				}
+			}
 			yield return new SkipThisFrame();
 		}
-		for (int k = 0; k < 30; k++)
+		for (int k = 0; k < 120; k++)
 		{
 			NPC.velocity *= 0.96f;
+			if (StickPlayer)
+			{
+				player.Center = NPC.Center;
+				if (k == 119)
+				{
+					HitStuckPlayerAtTheLastMoment = true;
+					FailToEscapeStickTimer = 45;
+					ReleasePlayer();
+				}
+			}
 			yield return new SkipThisFrame();
 		}
+		StickPlayer = false;
+		TotalDamageIntakeWhenStickPlayer = 0;
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
 	public IEnumerator<ICoroutineInstruction> ShortDash()
 	{
 		yield return new WaitUntil(() => NPC.target >= 0);
+		Player player = Main.player[NPC.target];
 		for (int k = 0; k <= 180; k++)
 		{
-			if (k % 30 == 0)
+			if (k % 30 == 0 && !StickPlayer)
 			{
 				Vector2 headPos = RealCenter;
-				Player player = Main.player[NPC.target];
 				int direction = RealCenter.X > player.Center.X ? 1 : -1;
 				NPC.spriteDirection = direction;
 				Vector2 toTarget = player.Center - headPos;
@@ -213,14 +262,41 @@ public class VampireMat : ModNPC
 			{
 				NPC.velocity *= 0.96f;
 			}
-
+			if (!TowardScreenAndAttacking && StickPlayerTimer <= 0)
+			{
+				if (IntersectWhenFlat(player))
+				{
+					StickPlayer = true;
+					StickPlayerTimer += 120;
+					VampireMatStickScreen vMSS = new VampireMatStickScreen();
+					vMSS.Owner = player;
+					vMSS.Active = true;
+					vMSS.Visible = true;
+					vMSS.MaxTime = 200;
+					vMSS.ParentNPC = NPC;
+					Ins.VFXManager.Add(vMSS);
+					break;
+				}
+			}
 			yield return new SkipThisFrame();
 		}
-		for (int k = 0; k < 10; k++)
+		for (int k = 0; k < 120; k++)
 		{
 			NPC.velocity *= 0.96f;
+			if (StickPlayer)
+			{
+				player.Center = NPC.Center;
+				if (k == 119)
+				{
+					HitStuckPlayerAtTheLastMoment = true;
+					FailToEscapeStickTimer = 45;
+					ReleasePlayer();
+				}
+			}
 			yield return new SkipThisFrame();
 		}
+		StickPlayer = false;
+		TotalDamageIntakeWhenStickPlayer = 0;
 		AICoroutine.StartCoroutine(new Coroutine(NextAttack()));
 	}
 
@@ -762,13 +838,64 @@ public class VampireMat : ModNPC
 	public override void HitEffect(NPC.HitInfo hit)
 	{
 		HitTimer = 20;
+		if (StickPlayer)
+		{
+			TotalDamageIntakeWhenStickPlayer += hit.Damage;
+			if (TotalDamageIntakeWhenStickPlayer >= 100)
+			{
+				ReleasePlayer();
+			}
+		}
+	}
+
+	public void ReleasePlayer()
+	{
+		StickPlayer = false;
+		Player player = Main.player[NPC.target];
+		TotalDamageIntakeWhenStickPlayer = 0;
+		Vector2 toCenter = KelpCurtainGeneration.VampireMatCaveCenter - player.Center;
+		player.velocity += toCenter.NormalizeSafe() * 12f;
+		player.position += toCenter.NormalizeSafe() * 100f;
+		if (toCenter.Length() > 800)
+		{
+			player.Center = KelpCurtainGeneration.VampireMatCaveCenter - toCenter.NormalizeSafe() * 720;
+		}
 	}
 
 	public override bool CanHitPlayer(Player target, ref int cooldownSlot)
 	{
 		if (!DiveAtBackground)
 		{
-			return base.CanHitPlayer(target, ref cooldownSlot);
+			if (!TowardScreenAndAttacking)
+			{
+				if (HitStuckPlayerAtTheLastMoment)
+				{
+					HitStuckPlayerAtTheLastMoment = false;
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return base.CanHitPlayer(target, ref cooldownSlot);
+			}
+		}
+		return false;
+	}
+
+	public bool IntersectWhenFlat(Player target)
+	{
+		if (!TowardScreenAndAttacking)
+		{
+			for (int k = 1; k < BodyRope.Masses.Length; k++)
+			{
+				Vector2 old_pos = BodyRope.Masses[k - 1].Position;
+				Vector2 pos = BodyRope.Masses[k].Position;
+				if (CollisionUtils.Intersect(old_pos,pos,10, target.Top, target.Bottom, target.width))
+				{
+					return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -797,7 +924,7 @@ public class VampireMat : ModNPC
 		if (owner is not null)
 		{
 			owner.netUpdate = true;
-			int amount = damage * 2;
+			int amount = damage * 2 + 98;
 			owner.HealEffect(amount, true);
 			owner.life += amount;
 			if (owner.life > owner.lifeMax)
