@@ -109,5 +109,4 @@ public class BackgroundSystem : ModSystem
 	{
 		return backgroundSlides.Any(x => x.UniqueName == uniqueName);
 	}
-
 }

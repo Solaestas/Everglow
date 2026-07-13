@@ -1,5 +1,4 @@
 using Everglow.Commons.Utilities.BackgroundHelper;
-using Everglow.Yggdrasil.KelpCurtain.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Background;
