@@ -9,6 +9,8 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 
 	public List<Point> BgTiles = new List<Point>();
 
+	public List<List<Point>> AreaTiles = [];
+
 	public List<Rectangle> WindowFrames = new List<Rectangle>();
 
 	public List<Rectangle> GlowingLogos = new List<Rectangle>();
@@ -16,6 +18,14 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 	public override void SetDefaults()
 	{
 		base.SetDefaults();
+		for (int k = 0; k < 3; k++)
+		{
+			int offsetX = (TileAnchor - new Vector2(260, -464).ToTileCoordinates()).X;
+			var area = BgTiles
+		   .Where(t => t.X >= (k - 0.5f) * 140 - 210 + offsetX && t.X < (k + 1.5f) * 140 - 210 + offsetX)
+		   .ToList();
+			AreaTiles.Add(area);
+		}
 		WindowFrames = new List<Rectangle>
 		{
 			new Rectangle(5344, 1104, 48, 64),
@@ -67,8 +77,9 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 			new Rectangle(608, 880, 48, 48),
 			new Rectangle(608, 976, 48, 48),
 			new Rectangle(608, 1072, 48, 48),
-			//new Rectangle(430, 1232, 18, 48),
-			//new Rectangle(174, 1232, 18, 48),
+
+			// new Rectangle(430, 1232, 18, 48),
+			// new Rectangle(174, 1232, 18, 48),
 		};
 
 		GlowingLogos = new List<Rectangle>
@@ -90,10 +101,15 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 
 	public override void Draw()
 	{
-		var bars = new List<Vertex2D>();
-		BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, BgTiles, bars);
-		DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
 		var topLeft = TileAnchor.ToWorldCoordinates() + new Vector2(260, -464) + new Vector2(-210, -89) * 16;
+		int index = (int)((Main.screenPosition.X + 480 + Main.screenWidth * 0.5f - topLeft.X) / 16 / 140);
+		index = Math.Clamp(index, 0, 2);
+		var bars = new List<Vertex2D>();
+		if (AreaTiles.Count > 0)
+		{
+			BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, AreaTiles[index], bars, 3);
+			DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
+		}
 		foreach (var rectangle in WindowFrames)
 		{
 			if ((Main.time + TileUtils.GetFixedRandomNumber_SingleSeed(rectangle.X - rectangle.Y)) * 10 % 10240 > 5120)
@@ -177,6 +193,7 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 
 	public override bool CanActive()
 	{
+		// return false;
 		return TileUtils.SafeGetTile(TileAnchor).TileType == ModContent.TileType<YggdrasilCommandBlock>();
 	}
 }

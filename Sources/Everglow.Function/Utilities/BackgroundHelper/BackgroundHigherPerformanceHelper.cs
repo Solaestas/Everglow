@@ -22,7 +22,8 @@ public static class BackgroundHigherPerformanceHelper
 	public static void Add_TileBgVertice(
 		BackgroundSlideBase bg,
 		List<Point> tiles,
-		List<Vertex2D> bars)
+		List<Vertex2D> bars,
+		int samplingUnit = 1)
 	{
 		if(bg.UseColorStyle != 1)
 		{
@@ -62,7 +63,6 @@ public static class BackgroundHigherPerformanceHelper
 		int lastY = visibleTiles[0].Pos.Y;
 		int lastX = visibleTiles[0].Pos.X;
 
-		int samplingUnit = 1;
 		if (bg is UnderBackgroundBackgroundSlideBase)
 		{
 			UnderBackgroundBackgroundSlideBase ubg = bg as UnderBackgroundBackgroundSlideBase;

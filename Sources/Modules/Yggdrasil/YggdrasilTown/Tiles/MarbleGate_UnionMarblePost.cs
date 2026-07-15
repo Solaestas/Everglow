@@ -23,7 +23,7 @@ public class MarbleGate_UnionMarblePost : TileVFX
 	public override void Draw()
 	{
 		List<Vertex2D> bars = new List<Vertex2D>();
-		SpriteBatchUtils.AddVertex_Grid(bars, Position + new Vector2(151, 128), null, Texture.Size() * new Vector2(0.5f, 1f), Texture, false, 32);
+		SpriteBatchUtils.AddVertex_Grid(bars, Position + new Vector2(151, 128), null, Texture.Size() * new Vector2(0.5f, 1f), Texture, false, 128);
 		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

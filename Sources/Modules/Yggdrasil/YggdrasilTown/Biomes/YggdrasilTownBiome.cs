@@ -169,7 +169,7 @@ public class YggdrasilTownBiome : ModBiome
 		List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
 
 		YggdrasilTown_Construct ytc = new YggdrasilTown_Construct();
-		ytc.WorldAnchor = centerPosWorld + new Vector2(0, 704);
+		ytc.WorldAnchor = centerPosWorld + new Vector2(32, 704);
 		ytc.TileAnchor = centerPosWorld.ToTileCoordinates() + new Point(-14, 29);
 		ytc.BgTiles = bgArea;
 		bgSystem.AddBackgroundSlide(ytc);
