@@ -6,7 +6,6 @@ using Everglow.Yggdrasil.Common;
 using Everglow.Yggdrasil.KelpCurtain.Items.Consumables;
 using Everglow.Yggdrasil.KelpCurtain.Items.Misc;
 using Everglow.Yggdrasil.KelpCurtain.Projectiles.Enemies;
-using Everglow.Yggdrasil.KelpCurtain.VFXs;
 using Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 using Everglow.Yggdrasil.WorldGeneration;
 using Microsoft.Xna.Framework.Graphics;

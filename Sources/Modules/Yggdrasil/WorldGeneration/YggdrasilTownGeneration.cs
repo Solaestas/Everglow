@@ -790,7 +790,7 @@ public class YggdrasilTownGeneration
 			}
 		}
 		YggdrasilTownTopLeft = new Point(230, Main.maxTilesY - 600);
-		QuickBuild(YggdrasilTownTopLeft.X, YggdrasilTownTopLeft.Y, ModAsset.MapIOs_706x275YggdrasilTown_Path);
+		QuickBuild(YggdrasilTownTopLeft.X, YggdrasilTownTopLeft.Y, ModAsset.YggdrasilTown_New_706x275_Path);
 
 		// Railway
 		for (int t = 0; t <= 120; t++)

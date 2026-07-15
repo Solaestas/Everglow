@@ -1,3 +1,4 @@
+using Everglow.Commons.DeveloperContent.Items;
 using Everglow.Commons.Utilities.BackgroundHelper;
 using Everglow.Yggdrasil.YggdrasilTown.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
@@ -156,13 +157,20 @@ public class YggdrasilTownBiome : ModBiome
 		List<Vector2> polygon = new List<Vector2>();
 		Vector2 centerPosWorld = BiomeCenter + new Vector2(228, -464);
 		polygon.Add(centerPosWorld + new Vector2(-210, 0) * 16);
-		polygon.Add(centerPosWorld + new Vector2(-210, -77) * 16);
-		polygon.Add(centerPosWorld + new Vector2(210, -77) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-210, -30) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-150, -60) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-50, -89) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-20, -89) * 16);
+		polygon.Add(centerPosWorld + new Vector2(60, -50) * 16);
+		polygon.Add(centerPosWorld + new Vector2(120, -65) * 16);
+		polygon.Add(centerPosWorld + new Vector2(170, -60) * 16);
+		polygon.Add(centerPosWorld + new Vector2(210, -20) * 16);
 		polygon.Add(centerPosWorld + new Vector2(210, 0) * 16);
 		List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
 
 		YggdrasilTown_Construct ytc = new YggdrasilTown_Construct();
 		ytc.WorldAnchor = centerPosWorld + new Vector2(0, 704);
+		ytc.TileAnchor = centerPosWorld.ToTileCoordinates() + new Point(-14, 29);
 		ytc.BgTiles = bgArea;
 		bgSystem.AddBackgroundSlide(ytc);
 	}

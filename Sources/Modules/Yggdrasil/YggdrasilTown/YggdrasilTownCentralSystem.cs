@@ -7,6 +7,7 @@ using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs.RandomNPC;
 using SubworldLibrary;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 
 namespace Everglow.Yggdrasil.YggdrasilTown;
 
@@ -37,6 +38,28 @@ public class YggdrasilTownCentralSystem : ModSystem
 	public static bool ResetedArena = true;
 
 	public static int ArenaScore;
+
+	public override void Load()
+	{
+		Ins.HookManager.AddHook(CodeLayer.PostDrawMapIcons, DrawMap_YggdrasilTown);
+		base.Load();
+	}
+
+	private void DrawMap_YggdrasilTown(Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale)
+	{
+		if (!SubworldSystem.IsActive<YggdrasilWorld>())
+		{
+			return;
+		}
+		Vector2 center = TownTopLeftWorldCoord + new Vector2(268, 162) * 16;
+		Vector2 position = (center / 16f - mapTopLeft) * mapScale + mapX2Y2AndOff;
+		var destination = new Rectangle((int)position.X - 1, (int)position.Y - 1, 2, 2);
+		if (mapRect != null ? destination.Intersects(mapRect.Value) : true)
+		{
+			Texture2D tex = ModAsset.TownMap.Value;
+			Main.spriteBatch.Draw(tex, position, null, Color.White * 0.5f, 0, tex.Size() * new Vector2(0.5f, 1f), mapScale * 0.5f, SpriteEffects.None, 0);
+		}
+	}
 
 	public override void OnWorldLoad()
 	{

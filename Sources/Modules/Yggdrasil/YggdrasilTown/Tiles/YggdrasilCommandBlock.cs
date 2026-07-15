@@ -1,3 +1,6 @@
+using Everglow.Commons.Utilities.BackgroundHelper;
+using Everglow.Commons.VFX.Scene;
+using Everglow.Yggdrasil.YggdrasilTown.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
 using SubworldLibrary;
@@ -41,5 +44,41 @@ public class YggdrasilCommandBlock : ModTile
 		{
 			YggdrasilTownCentralSystem.CheckNPC(ModContent.NPCType<Guard_of_YggdrasilTown>());
 		}
+	}
+
+	public override void NearbyEffects(int i, int j, bool closer)
+	{
+		var tile = Main.tile[i, j];
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		{
+			BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+			if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+			{
+				AddBackground(bgSystem, i, j);
+			}
+		}
+	}
+
+	public void AddBackground(BackgroundSystem bgSystem, int i, int j)
+	{
+		List<Vector2> polygon = new List<Vector2>();
+		Vector2 centerPosWorld = new Point(i, j).ToWorldCoordinates() + new Vector2(260, -464);
+		polygon.Add(centerPosWorld + new Vector2(-210, 0) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-210, -30) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-150, -60) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-50, -89) * 16);
+		polygon.Add(centerPosWorld + new Vector2(-20, -89) * 16);
+		polygon.Add(centerPosWorld + new Vector2(60, -50) * 16);
+		polygon.Add(centerPosWorld + new Vector2(120, -65) * 16);
+		polygon.Add(centerPosWorld + new Vector2(170, -60) * 16);
+		polygon.Add(centerPosWorld + new Vector2(210, -20) * 16);
+		polygon.Add(centerPosWorld + new Vector2(210, 0) * 16);
+		List<Point> bgArea = TileUtils.GetPolygonAreaOfTilePos(polygon);
+
+		YggdrasilTown_Construct ytc = new YggdrasilTown_Construct();
+		ytc.WorldAnchor = centerPosWorld + new Vector2(0, 704);
+		ytc.BgTiles = bgArea;
+		ytc.TileAnchor = new Point(i, j);
+		bgSystem.AddBackgroundSlide(ytc);
 	}
 }

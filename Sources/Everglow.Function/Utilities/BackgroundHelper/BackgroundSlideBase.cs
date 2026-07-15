@@ -250,6 +250,22 @@ public abstract class BackgroundSlideBase
 		}
 	}
 
+	public static void DrawVertexBackground(Texture2D texture, PrimitiveType primitiveType, List<Vertex2D> bars)
+	{
+		if (bars.Count > 2)
+		{
+			Main.graphics.graphicsDevice.Textures[0] = texture;
+			if (primitiveType == PrimitiveType.TriangleList)
+			{
+				Main.graphics.graphicsDevice.DrawUserPrimitives(primitiveType, bars.ToArray(), 0, bars.Count / 3);
+			}
+			if (primitiveType == PrimitiveType.TriangleStrip)
+			{
+				Main.graphics.graphicsDevice.DrawUserPrimitives(primitiveType, bars.ToArray(), 0, bars.Count - 2);
+			}
+		}
+	}
+
 	public class Effects
 	{
 		public static readonly Effect XClamp_YClamp_Shader = ModAsset.BgShader_X_Clamp_Y_Clamp.Value;

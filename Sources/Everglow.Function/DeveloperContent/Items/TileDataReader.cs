@@ -160,6 +160,7 @@ public class TileDataReaderSystem : Visual
 		string datas = "\nCoordinate: [" + i + ", " + j + "]";
 		datas += "\nHasTile: " + tile.HasTile;
 		datas += "\nType :" + tile.TileType;
+		//datas += "\nPaint :" + tile.BlockColorAndCoating().Invisible;
 		if (tile.HasTile)
 		{
 			datas += " " + TileID.Search.GetName(tile.TileType);

@@ -186,4 +186,62 @@ public static class SpriteBatchUtils
 		Vector3 rgb = HSVToRGB(hsv);
 		return new Color(rgb.X, rgb.Y, rgb.Z, a);
 	}
+
+	/// <summary>
+	/// Add vertices just like what Main.spriteBatch.Draw does. But sampling environment light at each vertex.
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="frame"></param>
+	/// <param name="origin"></param>
+	/// <param name="tex"></param>
+	/// <param name="screenPos"></param>
+	/// <param name="rotation"></param>
+	/// <param name="alpha"></param>
+	public static void AddVertex_Grid(List<Vertex2D> bars, Vector2 position, Rectangle? frame, Vector2 origin, Texture2D tex, bool screenPos = false, int gridSize = 16, float rotation = 0, float alpha = 1f)
+	{
+		var drawPos = position;
+		Vector2 pos = drawPos;
+		if (screenPos)
+		{
+			pos += Main.screenPosition;
+		}
+		Rectangle frame2 = frame ?? tex.Frame();
+		int xCount = frame2.Width / gridSize;
+		int yCount = frame2.Height / gridSize;
+		float unitX = frame2.Width / (float)xCount;
+		float unitY = frame2.Height / (float)yCount;
+		for (int x = 0; x < xCount; x++)
+		{
+			Vector2 offset_2 = (new Vector2(x * unitX, 0) - origin).RotatedBy(rotation);
+			Vector2 offset_1 = (new Vector2((x + 1) * unitX, 0) - origin).RotatedBy(rotation);
+			bars.Add(pos + offset_2, Color.Transparent, new Vector3(new Vector2(frame2.X + x * unitX, frame2.Y) / tex.Size(), 0));
+			bars.Add(pos + offset_1, Color.Transparent, new Vector3(new Vector2(frame2.X + (x + 1) * unitX, frame2.Y) / tex.Size(), 0));
+			for (int y = 0; y < yCount; y++)
+			{
+				Vector2 offset0 = (new Vector2(x * unitX, y * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset1 = (new Vector2((x + 1) * unitX, y * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset2 = (new Vector2(x * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
+				Vector2 offset3 = (new Vector2((x + 1) * unitX, (y + 1) * unitY) - origin).RotatedBy(rotation);
+
+				AddLightColorVertex(bars, pos + offset0, new Vector3(new Vector2(frame2.X + x * unitX, frame2.Y + y * unitY) / tex.Size(), 0), alpha, screenPos);
+				AddLightColorVertex(bars, pos + offset1, new Vector3(new Vector2(frame2.X + (x + 1) * unitX, frame2.Y + y * unitY) / tex.Size(), 0), alpha, screenPos);
+				AddLightColorVertex(bars, pos + offset2, new Vector3(new Vector2(frame2.X + x * unitX, frame2.Y + (y + 1) * unitY) / tex.Size(), 0), alpha, screenPos);
+				AddLightColorVertex(bars, pos + offset3, new Vector3(new Vector2(frame2.X + (x + 1) * unitX, frame2.Y + (y + 1) * unitY) / tex.Size(), 0), alpha, screenPos);
+			}
+			Vector2 offset4 = (new Vector2(x * unitX, yCount * unitY) - origin).RotatedBy(rotation);
+			Vector2 offset5 = (new Vector2((x + 1) * unitX, yCount * unitY) - origin).RotatedBy(rotation);
+			bars.Add(pos + offset4, Color.Transparent, new Vector3(new Vector2(frame2.X + x * unitX, frame2.Y + yCount * unitY) / tex.Size(), 0));
+			bars.Add(pos + offset5, Color.Transparent, new Vector3(new Vector2(frame2.X + (x + 1) * unitX, frame2.Y + yCount * unitY) / tex.Size(), 0));
+		}
+	}
+
+	public static void AddLightColorVertex(List<Vertex2D> bars, Vector2 worldPos, Vector3 coord, float alpha = 1f, bool screenPos = false)
+	{
+		Color drawC = Lighting.GetColor(worldPos.ToTileCoordinates()) * alpha;
+		if (screenPos)
+		{
+			worldPos -= Main.screenPosition;
+		}
+		bars.Add(worldPos, drawC, coord);
+	}
 }

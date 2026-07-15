@@ -1,4 +1,4 @@
-namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
+namespace Everglow.Yggdrasil.KelpCurtain.VFXs.VampireMat;
 
 [Pipeline(typeof(WCSPipeline))]
 public class VampireMatStickScreen : Visual
@@ -25,7 +25,7 @@ public class VampireMatStickScreen : Visual
 			Active = false;
 			return;
 		}
-		NPCs.VampireMat.VampireMat vMat = ParentNPC.ModNPC as NPCs.VampireMat.VampireMat;
+		var vMat = ParentNPC.ModNPC as NPCs.VampireMat.VampireMat;
 		if (MaxTime - Timer > 30 && (vMat.TotalDamageIntakeWhenStickPlayer >= 100 || !vMat.StickPlayer))
 		{
 			Timer = MaxTime - 30;
@@ -55,7 +55,7 @@ public class VampireMatStickScreen : Visual
 			Active = false;
 			return;
 		}
-		NPCs.VampireMat.VampireMat vMat = ParentNPC.ModNPC as NPCs.VampireMat.VampireMat;
+		var vMat = ParentNPC.ModNPC as NPCs.VampireMat.VampireMat;
 
 		List<Vertex2D> bars = [];
 		if (Owner is null || Main.LocalPlayer != Owner)
