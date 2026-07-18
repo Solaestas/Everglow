@@ -30,14 +30,20 @@ public class MissionContainer : UIContainerElement
 	/// </summary>
 	public static float Scale => Instance.ResolutionFactor;
 
+	[Obsolete]
 	public const int PanelWidth = 1360;
+	[Obsolete]
 	public const int PanelHeight = 800;
+
+	public int CurrentPanelWidth = 2048;
+
+	public int CurrentPanelHeight = 1440;
 
 	// ==================== UI elements ==================== //
 	private UIBlock _panel;
 	private UIMissionBackground _panelBackground;
-	private UIBlock _panelCoverContainer;
-	private UIImage _panelCover;
+	//private UIBlock _panelCoverContainer;
+	//private UIImage _panelCover;
 
 	private UIMissionDetail _missionDetail;
 	private UIMissionDetailSubContent _missionDetailSubContent;
@@ -155,6 +161,14 @@ public class MissionContainer : UIContainerElement
 		_panel = new UIBlock();
 		_panel.PanelColor = Color.Transparent;
 		_panel.CanDrag = true;
+		_panel.CanLeftResize = true;
+		_panel.CanRightResize = true;
+		_panel.CanTopResize = true;
+		_panel.CanBottomResize = true;
+		_panel.MinWidthPixel = 1200;
+		_panel.MinHeightPixel = 640;
+		_panel.Info.Width.SetValue(1820);
+		_panel.Info.Height.SetValue(1120);
 		_panel.Info.SetToCenter();
 		Register(_panel);
 
@@ -221,25 +235,30 @@ public class MissionContainer : UIContainerElement
 		_panel.Register(_close);
 
 		// Cover image
-		_panelCoverContainer = new UIBlock();
-		_panelCoverContainer.Info.HiddenOverflow = true;
-		_panelCoverContainer.Info.SetMargin(0);
-		_panelCoverContainer.Info.CanBeInteract = false;
-		_panelCoverContainer.PanelColor = Color.Transparent;
-		_panelCoverContainer.ShowBorder = (false, false, false, false);
-		_panel.Register(_panelCoverContainer);
+		//_panelCoverContainer = new UIBlock();
+		//_panelCoverContainer.Info.HiddenOverflow = true;
+		//_panelCoverContainer.Info.SetMargin(0);
+		//_panelCoverContainer.Info.CanBeInteract = false;
+		//_panelCoverContainer.PanelColor = Color.Transparent;
+		//_panelCoverContainer.ShowBorder = (false, false, false, false);
+		//_panel.Register(_panelCoverContainer);
 
-		_panelCover = new UIImage(ModAsset.MissionBoardCoverLayer.Value, Color.White);
-		_panelCover.Info.CanBeInteract = false;
-		_panelCoverContainer.Register(_panelCover);
+		//_panelCover = new UIImage(ModAsset.Marble_Texture.Value, Color.White);
+		//_panelCover.Info.CanBeInteract = false;
+		//_panelCoverContainer.Register(_panelCover);
 	}
 
 	public override void Calculation()
 	{
 		base.Calculation();
 
-		float width = PanelWidth * ResolutionFactor;
-		float height = PanelHeight * ResolutionFactor;
+		if (_panel.Info.Width.Pixel > 0 && _panel.Info.Height.Pixel > 0)
+		{
+			CurrentPanelWidth = (int)_panel.Info.Width.Pixel;
+			CurrentPanelHeight = (int)_panel.Info.Height.Pixel;
+		}
+		float width = CurrentPanelWidth * ResolutionFactor;
+		float height = CurrentPanelHeight * ResolutionFactor;
 
 		_panel.Info.Width.SetValue(width, 0f);
 		_panel.Info.Height.SetValue(height, 0f);
@@ -253,9 +272,9 @@ public class MissionContainer : UIContainerElement
 		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
 		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
 
-		_missionDetail.Info.Left.SetValue(608 * ResolutionFactor);
+		_missionDetail.Info.Left.SetValue(width * 0.3f);
 		_missionDetail.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetail.Info.Width.SetValue(710 * ResolutionFactor, 0f);
+		_missionDetail.Info.Width.SetValue(width * 0.65f, 0f);
 		_missionDetail.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 
 		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
@@ -271,17 +290,18 @@ public class MissionContainer : UIContainerElement
 		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
 		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
 		_missionList.Info.Width.SetValue(384f * ResolutionFactor, 0f);
-		_missionList.Info.Height.SetValue(360f * ResolutionFactor, 0f);
+		_missionList.Info.Height.SetValue(height - 540 * ResolutionFactor, 0f);
 
 		_close.Info.Width.SetValue(88 * ResolutionFactor);
 		_close.Info.Height.SetValue(38 * ResolutionFactor);
 		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
 
-		_panelCoverContainer.Info.Width.SetFull();
-		_panelCoverContainer.Info.Height.SetFull();
+		//_panelCoverContainer.Info.Width.SetFull();
+		//_panelCoverContainer.Info.Height.SetFull();
 
-		_panelCover.Info.Width.SetFull();
-		_panelCover.Info.Height.SetFull();
+		//_panelCover.Info.Width.SetFull();
+		//_panelCover.Info.Height.SetFull();
+		//_panelCover.SourceRectangle = new Rectangle(0, 0, (int)(CurrentPanelWidth * ResolutionFactor), (int)(CurrentPanelHeight * ResolutionFactor));
 	}
 
 	public override void Update(GameTime gt)

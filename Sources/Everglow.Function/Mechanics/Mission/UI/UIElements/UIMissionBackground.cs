@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 using Everglow.Commons.Mechanics.Mission.Presentation;
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -36,7 +35,15 @@ public class UIMissionBackground : UIBlock
 	public override void Draw(SpriteBatch sb)
 	{
 		base.Draw(sb);
+		Rectangle sourceRectangle = new Rectangle(0, 0, HitBox.Width, HitBox.Height);
+		sb.Draw(ModAsset.Marble_Texture.Value, HitBox, sourceRectangle, new Color(0.4f, 0.4f, 0.4f, 1));
+	}
 
+	public void OldDraw()
+	{
+		SpriteBatch sb = Main.spriteBatch;
+
+		// Remove the upper code.
 		sb.Draw(ModAsset.Mission_MarbleBoard.Value, HitBox, Color.White);
 		sb.Draw(ModAsset.Mission_MarbleBoard_background.Value, HitBox, Color.White);
 
@@ -78,7 +85,7 @@ public class UIMissionBackground : UIBlock
 		}
 
 		// dark reflect effect.
-		if(!blockedAtInner)
+		if (!blockedAtInner)
 		{
 			Texture2D reflectBeam2250_dark = ModAsset.Laser_Reflect22_50_black.Value;
 			{

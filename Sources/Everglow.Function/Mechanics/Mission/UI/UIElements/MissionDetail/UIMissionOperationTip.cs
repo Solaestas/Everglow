@@ -156,7 +156,7 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	{
 		// Draw background
 		var texture = ModAsset.Mission_MarbleBoard.Value;
-		sb.Draw(texture, _main.Info.TotalHitBox, new Rectangle(900, 300, 360, 240), Color.White);
+		//sb.Draw(texture, _main.Info.TotalHitBox, new Rectangle(900, 300, 360, 240), Color.White);
 
 		base.DrawChildren(sb);
 	}

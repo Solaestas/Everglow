@@ -187,51 +187,51 @@ public class UIMissionDetail : UIBlock
 		_timerIcon.Info.Height = _timer.Info.Height;
 
 		_description.Info.Width.SetValue(210 * Scale);
-		_description.Info.Height.SetValue(384 * Scale);
+		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 480) * Scale);
 		_description.Info.Left.SetValue(20 * Scale);
 		_description.Info.Top.SetValue(314 * Scale);
-
-		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		_descriptionTextScrollbar.Info.SetToCenter();
-		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
 
 		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
 		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
 		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
 		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 
+		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_descriptionTextScrollbar.Info.SetToCenter();
+		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
+		_objective.Info.Width.SetValue(210 * Scale);
+		_objective.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 480) * Scale);
+		_objective.Info.Left.SetValue((20 + 210 + 20) * Scale);
+		_objective.Info.Top.SetValue(_description.Info.Top);
+
 		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
 		_objectiveContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
 		_objectiveContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
 		_objectiveContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
-
-		_objective.Info.Width.SetValue(210 * Scale);
-		_objective.Info.Height.SetValue(384 * Scale);
-		_objective.Info.Left.SetValue((20 + 210 + 20) * Scale);
-		_objective.Info.Top.SetValue(_description.Info.Top);
 
 		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
 
 		_reward.Info.Width.SetValue(210 * Scale);
-		_reward.Info.Height.SetValue(284 * Scale);
+		_reward.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 580) * Scale);
 		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * Scale);
 		_reward.Info.Top.SetValue(_description.Info.Top);
-
-		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		_rewardTextScrollbar.Info.SetToCenter();
-		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);
 
 		_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
 		_rewardContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
 		_rewardContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
 		_rewardContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 
+		_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_rewardTextScrollbar.Info.SetToCenter();
+		_rewardTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
 		_changeMission.Info.Width.SetValue(80 * Scale);
 		_changeMission.Info.Height.SetValue(40 * Scale);
 		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * Scale);
-		_changeMission.Info.Top.SetValue((314 + 284 + 30) * Scale);
+		_changeMission.Info.Top.SetValue((ParentElement.Info.Height.Pixel - 240) * Scale);
 
 		if(oldScale != Scale)
 		{
