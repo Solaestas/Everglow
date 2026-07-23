@@ -375,6 +375,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// <param name="tag"></param>
 	public virtual void SaveData(TagCompound tag)
 	{
+		tag.Add(nameof(State), (int)State);
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(IsVisible), IsVisible);
 
@@ -404,6 +405,19 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// <param name="tag"></param>
 	public virtual void LoadData(TagCompound tag)
 	{
+		// Legacy flat `_missions` saves (after pool→list, before State persistence) omit this key.
+		// Enum default is Accepted (= 0); leaving it would wrongly Activate() via ApplyData.
+		// Missing State → Available (not activated on load). Pre-flat partitioned keys
+		// (`Everglow.MissionManage.{pool}.*`) are a manager-level format and not handled here.
+		if (tag.TryGet<int>(nameof(State), out var state) && Enum.IsDefined(typeof(PlayerMissionState), state))
+		{
+			State = (PlayerMissionState)state;
+		}
+		else
+		{
+			State = PlayerMissionState.Available;
+		}
+
 		if (tag.TryGet<long>(TimeSaveKey, out var mt))
 		{
 			Time = mt;
