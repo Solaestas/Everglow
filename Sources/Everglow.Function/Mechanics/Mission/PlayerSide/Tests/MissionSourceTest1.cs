@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.Core;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
