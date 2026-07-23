@@ -276,7 +276,7 @@ public class UIMissionDetail : UIBlock
 		var desText = new StringBuilder();
 
 		// Time limit
-		if (mission.TimeMax > 0)
+		if (mission.TimeLimit > 0)
 		{
 			desText.Append(mission.GetTime() + "\n");
 		}

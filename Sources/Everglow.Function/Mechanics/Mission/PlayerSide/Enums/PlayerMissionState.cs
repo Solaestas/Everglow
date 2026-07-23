@@ -13,27 +13,27 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 public enum PlayerMissionState
 {
 	/// <summary>
-	/// 已经被接取的任务池
+	/// 已经被接取
 	/// </summary>
 	Accepted,
 
 	/// <summary>
-	/// 可以被接取的任务池
+	/// 可以被接取
 	/// </summary>
 	Available,
 
 	/// <summary>
-	/// 任务失败的任务池
+	/// 任务失败
 	/// </summary>
 	Failed,
 
 	/// <summary>
-	/// 逾期未完成的任务池
+	/// 逾期未完成
 	/// </summary>
 	Overdue,
 
 	/// <summary>
-	/// 任务完成且已领取奖励的任务池
+	/// 任务完成且已领取奖励
 	/// </summary>
 	Completed,
 }

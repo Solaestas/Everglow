@@ -113,12 +113,12 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// <br>86400帧为泰拉内一天</br>
 	/// <br>值为-1时即不限时</br>
 	/// </summary>
-	public virtual long TimeMax => -1;
+	public virtual long TimeLimit => -1;
 
 	/// <summary>
 	/// 是否启用计时器
 	/// </summary>
-	public bool EnableTime => TimeMax > 0;
+	public bool EnableTime => TimeLimit > 0;
 
 	/// <summary>
 	/// 任务计时器
@@ -175,7 +175,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// 检查任务是否过期
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool CheckExpire() => TimeMax > 0 ? Time >= TimeMax : false;
+	public virtual bool CheckExpire() => TimeLimit > 0 ? Time >= TimeLimit : false;
 
 	/// <summary>
 	/// 任务可提交状态改变后HOOK
@@ -223,9 +223,9 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 		{
 			Time += PlayerMissionManager.UpdateInterval;
 
-			if (Time > TimeMax)
+			if (Time > TimeLimit)
 			{
-				Time = TimeMax;
+				Time = TimeLimit;
 			}
 		}
 	}

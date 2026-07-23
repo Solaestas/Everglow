@@ -15,13 +15,13 @@ internal class TimerStringDrawer : TextDrawer
 	{
 		if (_mission == null)
 			return Vector2.Zero;
-		if (_mission.TimeMax < 0)
+		if (_mission.TimeLimit < 0)
 		{
 			text = "Indefinitely";
 		}
 		else
 		{
-			var time = new TimeSpan(0, 0, (int)((_mission.TimeMax - _mission.Time) / 60));
+			var time = new TimeSpan(0, 0, (int)((_mission.TimeLimit - _mission.Time) / 60));
 			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
 		}
 		return base.GetTextSize(text);
@@ -46,9 +46,9 @@ internal class TimerStringDrawer : TextDrawer
 			return;
 		var pos = Position;
 		var text = "Indefinitely";
-		if (_mission.TimeMax >= 0)
+		if (_mission.TimeLimit >= 0)
 		{
-			var time = new TimeSpan(0, 0, (int)((_mission.TimeMax - _mission.Time) / 60));
+			var time = new TimeSpan(0, 0, (int)((_mission.TimeLimit - _mission.Time) / 60));
 			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
 		}
 		sb.DrawString(Font, text, Position + Offset, Color, Scale, Rotation,

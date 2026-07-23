@@ -192,12 +192,12 @@ public class UIMissionItem : UIBlock
 
 	private void DrawTimerProgress()
 	{
-		if (Mission.TimeMax < 0)
+		if (Mission.TimeLimit < 0)
 		{
 			return;
 		}
 
-		var progress = 1 - Mission.Time / (float)Mission.TimeMax;
+		var progress = 1 - Mission.Time / (float)Mission.TimeLimit;
 		var colorValue = MathF.Sqrt(progress);
 		var offset = (int)(45 * MissionContainer.Scale);
 		var dest = new Rectangle(HitBox.X + offset, HitBox.Y, (int)((HitBox.Width - offset) * progress), HitBox.Height);

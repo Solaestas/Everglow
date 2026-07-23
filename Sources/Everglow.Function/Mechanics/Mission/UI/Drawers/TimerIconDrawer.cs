@@ -22,7 +22,7 @@ internal class TimerIconDrawer : DrawerItem
 	{
 		if (_mission == null)
 			_mission = PlayerMissionManager.GetMission(MissionName);
-		if (_mission == null || _mission.TimeMax < 0)
+		if (_mission == null || _mission.TimeLimit < 0)
 			return;
 		var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
 		var overflowHiddenRasterizerState = new RasterizerState
@@ -39,7 +39,7 @@ internal class TimerIconDrawer : DrawerItem
 		effect.Parameters["uScaleFactor"].SetValue(Vector2.One / Size);
 		effect.Parameters["uRadius"].SetValue(Size / 2f);
 		effect.Parameters["uThickness"].SetValue(1f);
-		effect.Parameters["uProgress"].SetValue(_mission.TimeMax == 0 ? 1f : (float)(_mission.Time / (double)_mission.TimeMax));
+		effect.Parameters["uProgress"].SetValue(_mission.TimeLimit == 0 ? 1f : (float)(_mission.Time / (double)_mission.TimeLimit));
 		effect.Parameters["uColor"].SetValue(new Vector4(Color.R / 255f, Color.G / 255f, Color.B / 255f, Color.A / 255f));
 		effect.Parameters["uOpposite"].SetValue(true);
 		effect.Parameters["uInterval"].SetValue(new Vector2(0, 0));

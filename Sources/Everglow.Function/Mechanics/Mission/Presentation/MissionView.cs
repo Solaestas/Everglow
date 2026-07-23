@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 
@@ -9,7 +10,23 @@ public class MissionView
 {
 	public MissionView(PlayerMissionBase mission)
 	{
+		DisplayName = mission.DisplayName;
+		State = MapState(mission.State);
+		Type = mission.Type;
+		TimeLimit = mission.TimeLimit;
+		Source = mission.Source;
+		Progress = mission.Progress;
+		Visible = mission.IsVisible;
+		Retriable = false;
 
+		CompletedSteps = mission.Objectives.AllObjectives.Count(x => x.Completed);
+		TotalSteps = mission.Objectives.AllObjectives.Count;
+
+		Description = mission.Description;
+		//CompletedObjectives = mission.Objectives.AllObjectives.Where(o => o.Completed).Select(o => new ObjectiveView(o));
+
+		Rewards = mission.RewardItems;
+		//ExtraRewards = mission.ExtraRewardsText;
 	}
 
 	public MissionView(WorldMissionBase mission)
@@ -18,7 +35,7 @@ public class MissionView
 		State = MapState(mission.State);
 		Type = mission.Type;
 		TimeLimit = mission.TimeLimit;
-		TimeRemaining = mission.Time;
+		Time = mission.Time;
 		Source = mission.Source;
 		Progress = mission.Progress;
 		Visible = mission.Visible;
@@ -42,9 +59,9 @@ public class MissionView
 	public string DisplayName;
 	public UIMissionState State;
 	public MissionType Type;
-	public int TimeLimit;
-	public int TimeRemaining;
-	public MissionSource Source;
+	public long TimeLimit;
+	public long Time;
+	public MissionSourceBase Source;
 	public float Progress;
 	public bool Visible;
 	public bool Retriable;
@@ -72,11 +89,24 @@ public class MissionView
 	{
 		return state switch
 		{
-			WorldMissionState.Locked => UIMissionState.World_Locked,
-			WorldMissionState.Active => UIMissionState.World_Active,
-			WorldMissionState.Completed => UIMissionState.World_Completed,
-			WorldMissionState.Failed => UIMissionState.World_Failed,
+			WorldMissionState.Locked => UIMissionState.Locked,
+			WorldMissionState.Active => UIMissionState.Accepted,
+			WorldMissionState.Completed => UIMissionState.Completed,
+			WorldMissionState.Failed => UIMissionState.Failed,
 			_ => throw new InvalidDataException("Unknown world mission state."),
+		};
+	}
+
+	public static UIMissionState MapState(PlayerMissionState state)
+	{
+		return state switch
+		{
+			PlayerMissionState.Available => UIMissionState.Available,
+			PlayerMissionState.Accepted => UIMissionState.Accepted,
+			PlayerMissionState.Failed => UIMissionState.Failed,
+			PlayerMissionState.Overdue => UIMissionState.Overdue,
+			PlayerMissionState.Completed => UIMissionState.Completed,
+			_ => throw new InvalidDataException("Unknown player mission state."),
 		};
 	}
 }
