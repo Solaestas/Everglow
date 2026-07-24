@@ -2,7 +2,7 @@ using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 {
-	internal class UIMissionTextVerticalScrollbar : UIVerticalScrollbar
+	public class UIMissionTextVerticalScrollbar : UIVerticalScrollbar
 	{
 		public override float Scale => 1f;
 

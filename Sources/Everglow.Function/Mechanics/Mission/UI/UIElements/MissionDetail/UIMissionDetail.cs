@@ -1,8 +1,6 @@
-using System.Reflection;
 using System.Text;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
-using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
@@ -25,15 +23,15 @@ public class UIMissionDetail : UIBlock
 	private UIBlock _timer;
 	private UIImage _timerIcon;
 
-	private UIBlock _description;
+	private UIMissionBlock _description;
 	private UIContainerPanel _descriptionContainer;
 	private UIMissionTextVerticalScrollbar _descriptionTextScrollbar;
 
-	private UIBlock _objective;
+	private UIMissionBlock _objective;
 	private UIContainerPanel _objectiveContainer;
 	private UIMissionTextVerticalScrollbar _objectiveTextScrollbar;
 
-	private UIBlock _reward;
+	private UIMissionBlock _reward;
 	private UIContainerPanel _rewardContainer;
 	private UIMissionTextVerticalScrollbar _rewardTextScrollbar;
 
@@ -100,7 +98,7 @@ public class UIMissionDetail : UIBlock
 		_timer.Register(_timerIcon);
 
 		// Description
-		_description = new UIBlock();
+		_description = new UIMissionBlock();
 		_description.PanelColor = ComponentColor;
 		_description.BorderColor = Color.Gray;
 		Register(_description);
@@ -113,7 +111,7 @@ public class UIMissionDetail : UIBlock
 		_description.Register(_descriptionContainer);
 
 		// Objective
-		_objective = new UIBlock();
+		_objective = new UIMissionBlock();
 		_objective.PanelColor = ComponentColor;
 		_objective.BorderColor = Color.Gray;
 		Register(_objective);
@@ -126,7 +124,7 @@ public class UIMissionDetail : UIBlock
 		_objective.Register(_objectiveContainer);
 
 		// Reward
-		_reward = new UIBlock();
+		_reward = new UIMissionBlock();
 		_reward.PanelColor = ComponentColor;
 		_reward.BorderColor = Color.Gray;
 		Register(_reward);
@@ -165,6 +163,9 @@ public class UIMissionDetail : UIBlock
 	{
 		base.Calculation();
 
+		float detailPanelWidth = Math.Max((ParentElement.Info.Width.Pixel - 800) / 4f, 210);
+		float detailPanelDistance = detailPanelWidth * 0.125f;
+
 		_icon.Info.Width.SetValue(420 * Scale);
 		_icon.Info.Height.SetValue(256 * Scale);
 		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
@@ -186,9 +187,9 @@ public class UIMissionDetail : UIBlock
 		_timerIcon.Info.Width = _timer.Info.Width;
 		_timerIcon.Info.Height = _timer.Info.Height;
 
-		_description.Info.Width.SetValue(210 * Scale);
+		_description.Info.Width.SetValue(detailPanelWidth * Scale);
 		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 480) * Scale);
-		_description.Info.Left.SetValue(20 * Scale);
+		_description.Info.Left.SetValue(detailPanelDistance * Scale);
 		_description.Info.Top.SetValue(314 * Scale);
 
 		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
@@ -200,9 +201,9 @@ public class UIMissionDetail : UIBlock
 		_descriptionTextScrollbar.Info.SetToCenter();
 		_descriptionTextScrollbar.Info.Left.SetValue(-8f, 1f);
 
-		_objective.Info.Width.SetValue(210 * Scale);
+		_objective.Info.Width.SetValue(detailPanelWidth * Scale);
 		_objective.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 480) * Scale);
-		_objective.Info.Left.SetValue((20 + 210 + 20) * Scale);
+		_objective.Info.Left.SetValue((detailPanelDistance + detailPanelWidth + detailPanelDistance) * Scale);
 		_objective.Info.Top.SetValue(_description.Info.Top);
 
 		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
@@ -214,9 +215,9 @@ public class UIMissionDetail : UIBlock
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
 
-		_reward.Info.Width.SetValue(210 * Scale);
+		_reward.Info.Width.SetValue(detailPanelWidth * Scale);
 		_reward.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 580) * Scale);
-		_reward.Info.Left.SetValue((20 + 210 + 20 + 210 + 20) * Scale);
+		_reward.Info.Left.SetValue((detailPanelDistance + detailPanelWidth + detailPanelDistance + detailPanelWidth + detailPanelDistance) * Scale);
 		_reward.Info.Top.SetValue(_description.Info.Top);
 
 		_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
@@ -230,14 +231,14 @@ public class UIMissionDetail : UIBlock
 
 		_changeMission.Info.Width.SetValue(80 * Scale);
 		_changeMission.Info.Height.SetValue(40 * Scale);
-		_changeMission.Info.Left.SetValue((20 + 210 + 20 + 210 + 20 + 105 - 40) * Scale);
+		_changeMission.Info.Left.SetValue((detailPanelWidth * 2.5f + detailPanelDistance * 3 - 40) * Scale);
 		_changeMission.Info.Top.SetValue((ParentElement.Info.Height.Pixel - 240) * Scale);
 
-		if(oldScale != Scale)
+		if (oldScale != Scale)
 		{
 			oldScale = Scale;
 
-			if(SelectedItem != null)
+			if (SelectedItem != null)
 			{
 				ResetTexts();
 				SetTexts(SelectedItem.Mission);
@@ -424,5 +425,14 @@ public class UIMissionDetail : UIBlock
 		{
 			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
 		}
+	}
+
+	protected override void DrawSelf(SpriteBatch sb)
+	{
+		base.DrawSelf(sb);
+	}
+
+	public void DrawMissionPanel(int x, int y, int w, int h)
+	{
 	}
 }
