@@ -56,7 +56,7 @@ public class MissionContainer : UIContainerElement
 	private UIBlock _close;
 
 	// ==================== Private data fields ==================== //
-	private float resolutionFactor;
+	private float resolutionFactor = 1;
 
 	/// <summary>
 	/// The factor used to scale the UI elements inside the mission system.
@@ -129,19 +129,19 @@ public class MissionContainer : UIContainerElement
 	{
 		resolution *= 0.6f;
 
-		if (resolution.X > PanelWidth && resolution.Y > PanelHeight)
+		if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
 		{
 			ResolutionFactor = 1;
 		}
 		else
 		{
-			if (resolution.X / resolution.Y > PanelWidth / (float)PanelHeight)
+			if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
 			{
-				ResolutionFactor = resolution.Y / PanelHeight;
+				ResolutionFactor = resolution.Y / CurrentPanelHeight;
 			}
 			else
 			{
-				ResolutionFactor = resolution.X / PanelWidth;
+				ResolutionFactor = resolution.X / CurrentPanelWidth;
 			}
 		}
 	}
@@ -167,8 +167,8 @@ public class MissionContainer : UIContainerElement
 		_panel.CanBottomResize = true;
 		_panel.MinWidthPixel = 1200;
 		_panel.MinHeightPixel = 640;
-		_panel.Info.Width.SetValue(1820);
-		_panel.Info.Height.SetValue(1120);
+		_panel.Info.Width.SetValue(2048);
+		_panel.Info.Height.SetValue(1440);
 		_panel.Info.SetToCenter();
 		Register(_panel);
 

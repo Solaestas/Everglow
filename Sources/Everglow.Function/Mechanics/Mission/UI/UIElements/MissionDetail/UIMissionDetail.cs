@@ -30,6 +30,7 @@ public class UIMissionDetail : UIBlock
 	private UIMissionBlock _objective;
 	private UIContainerPanel _objectiveContainer;
 	private UIMissionTextVerticalScrollbar _objectiveTextScrollbar;
+	private UIMissionHourglassTimer _objectiveTimer;
 
 	private UIMissionBlock _reward;
 	private UIContainerPanel _rewardContainer;
@@ -123,6 +124,10 @@ public class UIMissionDetail : UIBlock
 		_objectiveContainer.SetVerticalScrollbar(_objectiveTextScrollbar);
 		_objective.Register(_objectiveContainer);
 
+		_objectiveTimer = new UIMissionHourglassTimer();
+		_objectiveTimer.MaxTime = 120;
+		_objective.Register(_objectiveTimer);
+
 		// Reward
 		_reward = new UIMissionBlock();
 		_reward.PanelColor = ComponentColor;
@@ -214,6 +219,11 @@ public class UIMissionDetail : UIBlock
 		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-8f, 1f);
+
+		_objectiveTimer.Info.Left.SetValue(48f);
+		_objectiveTimer.Info.Top.SetValue(_objective.Info.Height.Pixel - 80f);
+		_objectiveTimer.Info.Width.SetValue(0);
+		_objectiveTimer.Info.Height.SetValue(0);
 
 		_reward.Info.Width.SetValue(detailPanelWidth * Scale);
 		_reward.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 580) * Scale);

@@ -36,7 +36,7 @@ public class UIMissionBackground : UIBlock
 	{
 		base.Draw(sb);
 		Rectangle sourceRectangle = new Rectangle(0, 0, HitBox.Width, HitBox.Height);
-		sb.Draw(ModAsset.Marble_Texture.Value, HitBox, sourceRectangle, new Color(0.4f, 0.4f, 0.4f, 1));
+		sb.Draw(ModAsset.Marble_Texture.Value, HitBox, sourceRectangle, new Color(1f, 1f, 1f, 1));
 	}
 
 	public void OldDraw()
