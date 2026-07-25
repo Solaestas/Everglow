@@ -48,15 +48,15 @@ public class YggdrasilCommandBlock : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		var tile = Main.tile[i, j];
-		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
-		{
-			BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-			if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
-			{
-				AddBackground(bgSystem, i, j);
-			}
-		}
+		//var tile = Main.tile[i, j];
+		//if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		//{
+		//	BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+		//	if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+		//	{
+		//		AddBackground(bgSystem, i, j);
+		//	}
+		//}
 	}
 
 	public void AddBackground(BackgroundSystem bgSystem, int i, int j)

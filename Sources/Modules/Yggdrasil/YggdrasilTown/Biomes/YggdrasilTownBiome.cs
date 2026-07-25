@@ -144,11 +144,11 @@ public class YggdrasilTownBiome : ModBiome
 			Main.StopSlimeRain();
 		}
 		Main.bloodMoon = false;
-		BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-		if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
-		{
-			AddBackground(bgSystem);
-		}
+		//BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+		//if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+		//{
+		//	AddBackground(bgSystem);
+		//}
 		base.OnInBiome(player);
 	}
 
