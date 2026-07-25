@@ -10,6 +10,7 @@ public class BarrierBlock : ModTile
 		Main.tileMergeDirt[Type] = true;
 		Main.tileBlockLight[Type] = false;
 		AddMapEntry(Color.Transparent);
+		MinPick = int.MaxValue;
 	}
 
 	public override void PlaceInWorld(int i, int j, Item item)
@@ -20,11 +21,15 @@ public class BarrierBlock : ModTile
 
 	public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
-	public override bool CanKillTile(int i, int j, ref bool blockDamaged) => base.CanKillTile(i, j, ref blockDamaged);
+	public override bool CanKillTile(int i, int j, ref bool blockDamaged) => false;
 
-	public override bool CanExplode(int i, int j) => base.CanExplode(i, j);
+	public override bool CanExplode(int i, int j) => false;
 
-	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) => base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
+	{
+		noBreak = true;
+		return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+	}
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
@@ -76,8 +81,7 @@ public class BarrierBlock : ModTile
 
 	public static bool PlayerHeldBarrierItem(Player player)
 	{
-		//return true;
-
+		// return true;
 		return player.HeldItem.type == ModContent.ItemType<BarrierBlock_Item>() || player.HeldItem.type == ModContent.ItemType<BarrierPlatform_Item>() || player.HeldItem.hammer > 0 | player.HeldItem.pick > 0;
 	}
 }

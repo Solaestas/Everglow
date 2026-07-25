@@ -105,9 +105,17 @@ public class YggdrasilTown_Construct : BackgroundSlideBase
 		int index = (int)((Main.screenPosition.X + 480 + Main.screenWidth * 0.5f - topLeft.X) / 16 / 140);
 		index = Math.Clamp(index, 0, 2);
 		var bars = new List<Vertex2D>();
-		if (AreaTiles.Count > 0)
+		if (Main.screenWidth <= 2560)
 		{
-			BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, AreaTiles[index], bars, 3);
+			if (AreaTiles.Count > 0)
+			{
+				BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, AreaTiles[index], bars, 3);
+				DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
+			}
+		}
+		else
+		{
+			BackgroundHigherPerformanceHelper.Add_TileBgVertice(this, BgTiles, bars, 3);
 			DrawVertexBackground(this, PrimitiveType.TriangleStrip, bars);
 		}
 		foreach (var rectangle in WindowFrames)

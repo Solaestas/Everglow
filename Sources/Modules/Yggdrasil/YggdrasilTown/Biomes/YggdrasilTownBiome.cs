@@ -1,5 +1,6 @@
 using Everglow.Commons.DeveloperContent.Items;
 using Everglow.Commons.Utilities.BackgroundHelper;
+using Everglow.Yggdrasil.KelpCurtain.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles;
 using SubworldLibrary;
@@ -144,11 +145,27 @@ public class YggdrasilTownBiome : ModBiome
 			Main.StopSlimeRain();
 		}
 		Main.bloodMoon = false;
-		//BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-		//if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
-		//{
-		//	AddBackground(bgSystem);
-		//}
+
+		BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+		Town_Sky town_Sky = new Town_Sky();
+		town_Sky.WorldAnchor = BiomeCenter;
+		bgSystem.AddBackgroundSlide(town_Sky);
+
+		Town_Far town_Far = new Town_Far();
+		town_Far.WorldAnchor = BiomeCenter;
+		bgSystem.AddBackgroundSlide(town_Far);
+
+		Town_Middle town_Middle = new Town_Middle();
+		town_Middle.WorldAnchor = BiomeCenter + new Vector2(0, -500);
+		bgSystem.AddBackgroundSlide(town_Middle);
+
+		Town_Close town_Close = new Town_Close();
+		town_Close.WorldAnchor = BiomeCenter + new Vector2(0, -900);
+		bgSystem.AddBackgroundSlide(town_Close);
+		if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+		{
+			AddBackground(bgSystem);
+		}
 		base.OnInBiome(player);
 	}
 
