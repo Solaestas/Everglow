@@ -231,7 +231,7 @@ ModContent.Request<Effect>("Everglow/<模块名>/Effects/Xxx");    // 手写路�
 
 规则以根目录 `.editorconfig`（`root = true`）为准，全项目启用 `StyleCop.Analyzers.Unstable`（多数文档/排序类规则已关闭）。要点：
 
-- **Tab 缩进（宽度 4）、LF、UTF-8、文件末尾加新行**。禁止把缩进改成空格。
+- **Tab 缩进（宽度 4）、LF、UTF-8（无 BOM）、文件末尾加新行**。禁止把缩进改成空格。
 - **大括号 Allman 风格**（开括号独占一行）；控制语句必须带大括号。
 - 命名：类型/方法/属性/事件/枚举 PascalCase；接口 `I` 前缀；私有字段 camelCase（跟随所在文件，不加 `_`/`m_` 前缀）；常量 PascalCase。
 - namespace 用**文件作用域**形式（`namespace Everglow.Food.Items;`），新文件一律如此。

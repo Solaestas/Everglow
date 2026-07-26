@@ -248,7 +248,7 @@ Apply these checks on every PR (in addition to the general process above). For e
 
 ### Conventions
 - [ ] C# files use file-scoped namespace (`namespace Everglow.<Module>.<Area>.<Type>;`).
-- [ ] Tab indentation (width 4), LF, trailing newline, Allman braces, braces mandatory on control statements.
+- [ ] Tab indentation (width 4), LF, trailing newline, UTF-8 without BOM, Allman braces, braces mandatory on control statements.
 - [ ] No new `?` nullable annotations in `Sources/Everglow` or `Sources/Everglow.Function` (only `Everglow.UnitTests` enables `<Nullable>`).
 - [ ] Don't mass-reformat historical files — style is mixed deliberately (AGENTS.md "最小改动").
 - [ ] No binary/art assets committed (`.png/.obj/.ttf/.atlas/.xnb` under `Resources/`, `Libraries/`, module assets, `Tools/*.exe|dll`, `icon*.png` are read-only — do not modify).
