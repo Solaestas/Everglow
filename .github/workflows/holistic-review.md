@@ -1,6 +1,6 @@
 ---
 description: "Review a pull request's changes for correctness, performance, and consistency with Everglow project conventions described in AGENTS.md. Triggered on PR events (open / push / reopen / ready). Supports incremental re-review by reading the PR's own review history. Submits a customized GitHub pull request review via the safe-outputs API."
-model: deepseek-chat
+model: deepseek-v4-flash
 
 permissions:
   contents: read
@@ -258,24 +258,26 @@ on:
 # ─────────────────────────────────────────────────────────────────────────────
 # Engine configuration
 #
-# Default: codex engine → OpenAI-compatible /v1 endpoint → DeepSeek.
-#   To use OpenAI directly: delete OPENAI_BASE_URL and change the secret to OPENAI_API_KEY.
-#   To use Kimi/Moonshot:  OPENAI_BASE_URL: "https://api.moonshot.cn/v1",  model: moonshot-v1-128k,  network.allowed: [api.moonshot.cn]
-#   To use Xiaomi MiMo:   OPENAI_BASE_URL: "https://api.xiaomi.com/v1",   model: mimo-7b-rl,         network.allowed: [api.xiaomi.com]
+# Default: Copilot CLI in BYOK mode → DeepSeek Anthropic-compatible endpoint.
+#   Why not `engine.id: codex`? Codex CLI speaks OpenAI Responses API
+#   (`/v1/responses`). DeepSeek only implements Chat Completions / Anthropic
+#   Messages — Codex therefore hits api.openai.com (401) or DeepSeek `/v1/responses`
+#   (404). Copilot BYOK + anthropic wire avoids that protocol mismatch.
 #
-# ⚠️ Caveat: the `codex` engine invokes the official @openai/codex CLI, which
-#   talks the OpenAI Responses API (not Chat Completions) and uses codex-specific
-#   MCP / output-schema features. Some OpenAI-compatible providers only implement
-#   Chat Completions. If your provider rejects Responses-API calls, switch to
-#   the Copilot BYOK mode (set engine.id: copilot and the COPILOT_PROVIDER_*
-#   env vars — see README-ai-review.md). The safe-outputs review API is identical
-#   across all engines; only model quality differs.
+#   Only secret needed: DEEPSEEK_API_KEY (BYOK skips COPILOT_GITHUB_TOKEN).
+#   Models: deepseek-v4-flash (default) or deepseek-v4-pro.
+#   Alternate OpenAI-compat path (may 400 on multi-turn reasoning):
+#     COPILOT_PROVIDER_TYPE: openai
+#     COPILOT_PROVIDER_BASE_URL: https://api.deepseek.com/v1
+#     COPILOT_PROVIDER_WIRE_API: completions
 # ─────────────────────────────────────────────────────────────────────────────
 engine:
-  id: codex
+  id: copilot
   env:
-    OPENAI_BASE_URL: "https://api.deepseek.com/v1"
-    OPENAI_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+    COPILOT_PROVIDER_BASE_URL: https://api.deepseek.com/anthropic
+    COPILOT_PROVIDER_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+    COPILOT_PROVIDER_TYPE: anthropic
+    COPILOT_MODEL: deepseek-v4-flash
     EVERGLOW_PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
     EVERGLOW_PR_BASE_REF: ${{ github.event.pull_request.base.ref || github.event.inputs.pr_base_ref }}
     EVERGLOW_PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.inputs.pr_head_sha }}

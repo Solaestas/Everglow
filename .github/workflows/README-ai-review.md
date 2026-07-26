@@ -4,7 +4,7 @@
 
 **事件驱动**:PR `opened` / `synchronize` / `reopened` / `ready_for_review` 时直接跑 worker;也可 `workflow_dispatch` 指定 PR 号强制复评。Agent 读 `AGENTS.md` 与审查 skill,经增量复评规则分析后,用 GitHub Review API 提交一份 `## Holistic Review` + 行内建议(带 `suggestion` 一键应用块)。
 
-**完全开源、零成本、不绑 Copilot 订阅**——默认接 DeepSeek,也可换 Kimi/MiMo/OpenAI。
+**完全开源、零成本、不绑 Copilot 订阅**——默认 Copilot BYOK + DeepSeek,也可换 Kimi/OpenAI/Anthropic 等。
 
 ## 架构
 
@@ -79,6 +79,8 @@ gh secret set DEEPSEEK_API_KEY --repo <你的用户名>/Everglow
 
 粘贴你的 DeepSeek API key(在 https://platform.deepseek.com/api_keys 申请,几块钱够用很久)。
 
+> ⚠️ **不需要 OpenAI / Codex / Copilot 订阅。** 默认引擎是 Copilot CLI 的 **BYOK** 模式,推理全部打到 DeepSeek(`api.deepseek.com/anthropic`)。仓库里只要有 `DEEPSEEK_API_KEY` 即可;不必设 `CODEX_API_KEY` / `OPENAI_API_KEY` / `COPILOT_GITHUB_TOKEN`。
+
 ### 3. 生成 `holistic-review.lock.yml`(gh-aw 编译)
 
 `holistic-review.md` 是人写的源;GitHub Actions 实际跑的是编译后的 `.lock.yml`。在仓库根执行:
@@ -114,21 +116,23 @@ gh workflow run "Everglow Holistic Review" `
 
 ## 切换引擎
 
-`holistic-review.md` 的 `engine:` 块默认是 **DeepSeek**。改 frontmatter 切到别的:
+默认已是 **Copilot BYOK → DeepSeek**(Anthropic 兼容端点)。**不要用 `engine.id: codex` 接 DeepSeek**:Codex CLI 走 OpenAI Responses API(`/v1/responses`),DeepSeek 没有该接口,会表现为打 `api.openai.com` 的 401,或打 DeepSeek `/v1/responses` 的 404。
+
+`holistic-review.md` 的 `engine:` 块可改成别的:
 
 | 引擎 | provider | 文档明确支持 | 协议风险 | 配置差异 |
 |---|---|---|---|---|
-| **DeepSeek**(默认) | `codex` + `OPENAI_BASE_URL=https://api.deepseek.com/v1` | ✅ gh-aw 文档明示 | ⚠️ codex CLI 走 OpenAI Responses API,DeepSeek 实测可用 | secret `DEEPSEEK_API_KEY` |
-| **Kimi/Moonshot** | `codex`,改 `OPENAI_BASE_URL=https://api.moonshot.cn/v1`,改 `model=moonshot-v1-128k`,在 `network.allowed` 增 `api.moonshot.cn` | ✅ | ⚠️ 同上 | secret `KIMI_API_KEY` |
-| **Xiaomi MiMo** | `codex`,改 `OPENAI_BASE_URL=https://api.xiaomi.com/v1`,改 `model=mimo-7b-rl`,在 `network.allowed` 增 `api.xiaomi.com` | ✅ | ⚠️ 同上 | secret `MIMO_API_KEY` |
-| **OpenAI 官方** | `codex`,删 `OPENAI_BASE_URL`,改 `model=gpt-5-codex` 或 `gpt-4o` | ✅ | ✅ 原生 | secret `OPENAI_API_KEY` |
-| **Anthropic** | `claude`,改 `engine.id: claude`,换 model 字段,删 OPENAI 区块,`network.allowed` 增 `api.anthropic.com` | ✅ | ✅ | secret `ANTHROPIC_API_KEY` |
-| **Gemini** | `gemini`,同上换 `engine.id: gemini`,`network.allowed` 增 `generativelanguage.googleapis.com` | ✅ | ✅ | secret `GEMINI_API_KEY` |
-| **Copilot 订阅** | `copilot`,删所有 OPENAI/DEEPSEEK 字段,改 secret `COPILOT_GITHUB_TOKEN`(fine-grained PAT,授 Copilot Requests read) | ✅ | ✅ | 需 GitHub Copilot 订阅 |
+| **DeepSeek BYOK**(默认) | `copilot` + `COPILOT_PROVIDER_TYPE=anthropic` + `https://api.deepseek.com/anthropic` | ✅ | ✅ 走 Anthropic Messages,避开 Responses/reasoning_content 坑 | secret `DEEPSEEK_API_KEY` only(BYOK 跳过 `COPILOT_GITHUB_TOKEN`) |
+| **DeepSeek OpenAI 兼容** | `copilot` + `TYPE=openai` + `https://api.deepseek.com/v1` + `WIRE_API=completions` | ✅ | ⚠️ 多轮可能因 `reasoning_content` 回传 400 | 同上 |
+| **Kimi/Moonshot** | `copilot` BYOK,改 `BASE_URL`/`MODEL`,在 `network.allowed` 增 `api.moonshot.cn` | ✅ | ⚠️ 视对方是否支持所选 wire | secret 换成对方 key |
+| **OpenAI 官方** | `codex`,设 `OPENAI_API_KEY`,删 BYOK 字段 | ✅ | ✅ 原生 Responses | secret `OPENAI_API_KEY` |
+| **Anthropic** | `claude`,换 model,`network.allowed` 增 `api.anthropic.com` | ✅ | ✅ | secret `ANTHROPIC_API_KEY` |
+| **Gemini** | `gemini`,同上 | ✅ | ✅ | secret `GEMINI_API_KEY` |
+| **Copilot 订阅**(GitHub 路由) | `copilot`,删全部 `COPILOT_PROVIDER_*` | ✅ | ✅ | secret `COPILOT_GITHUB_TOKEN` |
 
-⚠️ **关于 codex 引擎 + 国产 OpenAI 兼容服务的协议风险**:codex 引擎底层调 `@openai/codex` CLI,它用 OpenAI **Responses API** 和一些 codex 专属特性(MCP、`--output-schema`),而非普通 Chat Completions。DeepSeek 当前实测兼容 Responses API、能跑通;若 Kimi/MiMo 等返回 400/404,改用上面表格里的 **Copilot BYOK 模式**(在 `engine.env` 设 `COPILOT_PROVIDER_TYPE=openai`、`COPILOT_PROVIDER_BASE_URL=...`、`COPILOT_PROVIDER_API_KEY=...`、`COPILOT_PROVIDER_WIRE_API=completions`),它走 Chat Completions,兼容性最广。
+⚠️ **为何默认不用 codex+DeepSeek**:`Execute Codex CLI` 一步即使用 `OPENAI_BASE_URL=https://api.deepseek.com/v1`,仍会调 `/v1/responses`(或绕过代理打 `api.openai.com`/`chatgpt.com`)。DeepSeek 官方只保证 Chat Completions 与 Anthropic Messages。
 
-**`safeoutputs` 的 review API 与引擎无关** —— 不管模型是哪家的,输出格式、`suggestion` 语法、Holistic Review 结构、审查清单都一样,只是模型产出质量有差异。要换引擎,只改 `holistic-review.md` 的 `engine:` 块和 secret,然后重跑 `gh aw compile`。
+**`safeoutputs` 的 review API 与引擎无关** —— 换引擎只改 `holistic-review.md` 的 `engine:` 块和 secret,然后重跑 `gh aw compile`。
 
 ## 输出长什么样
 
