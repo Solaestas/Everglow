@@ -110,6 +110,7 @@ Rules for the suggestion block:
 - The block must contain **complete, valid** code that would compile if applied — not a sketch.
 - Only use a suggestion block when you can write the exact replacement. If you can only describe the fix in prose (e.g. "refactor this method to …"), put it in the `### Detailed Findings` section without a fence.
 - **Never emit a no-op suggestion.** If the suggested body is identical to the current line(s), do not use a `suggestion` fence (and usually do not comment at all). Classic failure mode: claiming "add a trailing newline" while suggesting the same line text unchanged — GitHub Apply then either does nothing useful or silently violates repo style.
+- **Never flag or "fix" EOF / trailing newlines in this repo.** `.editorconfig` sets `insert_final_newline = false` and `AGENTS.md` requires 文件末尾不加新行. Missing final newline is **correct** here, not a defect. Do not suggest adding one.
 - Do **not** use the suggestion fence for non-code content (config YAML, hjson, plain prose, `.gitattributes`). For non-C# files, describe the change in prose (or use a non-`suggestion` fence such as ```yaml … ``` / ```hjson … ``` only as an illustration). GitHub's "Apply suggestion" button only fires on the `suggestion` fence inside a review thread adjacent to a diff line, so use it sparingly and correctly.
 
 ---
