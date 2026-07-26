@@ -45,7 +45,10 @@ Everglow/                        仓库根
 │                                Everglow.Scripts（模块管理 CLI）、AtlasCutter、ImageRGBAConvert 等
 ├─ Localization/                 旧版遗留单体 hjson（非现行体系，勿新增内容）
 ├─ Documents/                    中文设计/流程文档
-└─ .github/workflows/            CI：build-and-test.yml（唯一 workflow）
+└─ .github/workflows/            构建 + AI 审查 workflow
+   ├─ build-and-test.yml          .NET 构建与测试
+   ├─ holistic-review.lock.yml    AI 审查(gh-aw 编译)
+   └─ agentics-maintenance.yml    gh-aw 自动维护
 ```
 
 ## 构建
