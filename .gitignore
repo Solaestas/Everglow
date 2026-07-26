@@ -377,3 +377,6 @@ Everglow.dll
 /Resources/Localization/en-US.hjson.bak
 /Resources/Localization/ru-RU.hjson.bak
 *.bak
+
+# gh-aw compile cache (do not commit)
+.github/aw/
