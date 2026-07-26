@@ -26,7 +26,7 @@ public class NaiveExecuter : IDrawCommandExecuter, IDrawCommandVisitor
 	{
 		Main.graphics.graphicsDevice.RasterizerState = command.PipelineStateObject.RasterizerState;
 		graphicsDevice.Textures[0] = command.PipelineStateObject.Texture;
-		this.graphicsDevice.DrawUserIndexedPrimitives<T>(command.PrimitiveType, command.Vertices.ToArray(), command.VertexStart, command.VertexCount, 
+		this.graphicsDevice.DrawUserIndexedPrimitives<T>(command.PrimitiveType, command.Vertices.ToArray(), command.VertexStart, command.VertexCount,
 			command.Indices.ToArray(), command.IndexStart, command.GeometryCount);
 	}
 

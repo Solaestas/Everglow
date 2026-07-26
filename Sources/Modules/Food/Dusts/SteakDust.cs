@@ -1,4 +1,5 @@
 namespace Everglow.Food.Dusts;
+
 public class SteakDust : ModDust
 {
 	public override void OnSpawn(Dust dust)

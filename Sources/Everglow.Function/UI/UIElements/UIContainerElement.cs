@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.UI.UIElements
+namespace Everglow.Commons.UI.UIElements
 {
 	internal abstract class UIContainerElement : BaseElement
 	{

@@ -8,7 +8,7 @@ public class RockElemental_Energy : ModDust
 	{
 		dust.position += dust.velocity;
 		bool moved = false;
-		if(dust.customData is Projectile proj)
+		if (dust.customData is Projectile proj)
 		{
 			if (proj.active && proj.ModProjectile is RockElemental_ThrowingStone rockElemental_ThrowingStone)
 			{
@@ -36,7 +36,7 @@ public class RockElemental_Energy : ModDust
 			dust.active = false;
 			return false;
 		}
-		if(!moved)
+		if (!moved)
 		{
 			dust.scale *= 0.8f;
 		}

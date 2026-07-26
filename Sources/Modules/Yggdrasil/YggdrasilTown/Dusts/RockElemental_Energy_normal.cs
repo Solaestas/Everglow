@@ -7,7 +7,7 @@ public class RockElemental_Energy_normal : ModDust
 	public override bool Update(Dust dust)
 	{
 		dust.position += dust.velocity;
-		if(!dust.noGravity)
+		if (!dust.noGravity)
 		{
 			dust.velocity.Y += 0.15f;
 		}

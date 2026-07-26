@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.Enums;
+using Everglow.Commons.Enums;
 
 namespace Everglow.Commons.VFX.Visuals;
 

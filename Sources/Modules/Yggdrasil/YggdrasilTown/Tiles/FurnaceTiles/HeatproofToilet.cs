@@ -13,7 +13,8 @@ public class HeatproofToilet : ModTile
 {
 	public const int NextStyleHeight = 40; // Calculated by adding all CoordinateHeights + CoordinatePaddingFix.Y applied to all of them + 2
 
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
@@ -47,15 +48,18 @@ public class HeatproofToilet : ModTile
 		TileObjectData.addTile(Type);
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) {
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
 		num = fail ? 1 : 3;
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+	{
 		return settings.player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance); // Avoid being able to trigger it from long range
 	}
 
-	public override void ModifySittingTargetInfo(int i, int j, ref TileRestingInfo info) {
+	public override void ModifySittingTargetInfo(int i, int j, ref TileRestingInfo info)
+	{
 		// It is very important to know that this is called on both players and NPCs, so do not use Main.LocalPlayer for example, use info.restingEntity
 		Tile tile = Framing.GetTileSafely(i, j);
 
@@ -64,7 +68,8 @@ public class HeatproofToilet : ModTile
 
 		info.TargetDirection = -1;
 
-		if (tile.TileFrameX != 0) {
+		if (tile.TileFrameX != 0)
+		{
 			info.TargetDirection = 1; // Facing right if sat down on the right alternate (added through addAlternate in SetStaticDefaults earlier)
 		}
 
@@ -73,7 +78,8 @@ public class HeatproofToilet : ModTile
 		info.AnchorTilePosition.X = i; // Our chair is only 1 wide, so nothing special required
 		info.AnchorTilePosition.Y = j;
 
-		if (tile.TileFrameY % NextStyleHeight == 0) {
+		if (tile.TileFrameY % NextStyleHeight == 0)
+		{
 			info.AnchorTilePosition.Y++; // Here, since our chair is only 2 tiles high, we can just check if the tile is the top-most one, then move it 1 down
 		}
 
@@ -81,15 +87,18 @@ public class HeatproofToilet : ModTile
 		info.ExtraInfo.IsAToilet = true;
 
 		// Here we add a custom fun effect to this tile that vanilla toilets do not have. This shows how you can type cast the restingEntity to Player and use visualOffset as well.
-		if (info.RestingEntity is Player player && player.HasBuff(BuffID.Stinky)) {
+		if (info.RestingEntity is Player player && player.HasBuff(BuffID.Stinky))
+		{
 			info.VisualOffset = Main.rand.NextVector2Circular(2, 2);
 		}
 	}
 
-	public override bool RightClick(int i, int j) {
+	public override bool RightClick(int i, int j)
+	{
 		Player player = Main.LocalPlayer;
 
-		if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Avoid being able to trigger it from long range
+		if (player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+		{ // Avoid being able to trigger it from long range
 			player.GamepadEnableGrappleCooldown();
 			player.sitting.SitDown(player, i, j);
 		}
@@ -97,10 +106,12 @@ public class HeatproofToilet : ModTile
 		return true;
 	}
 
-	public override void MouseOver(int i, int j) {
+	public override void MouseOver(int i, int j)
+	{
 		Player player = Main.LocalPlayer;
 
-		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance)) { // Match condition in RightClick. Interaction should only show if clicking it does something
+		if (!player.IsWithinSnappngRangeToTile(i, j, PlayerSittingHelper.ChairSittingMaxDistance))
+		{ // Match condition in RightClick. Interaction should only show if clicking it does something
 			return;
 		}
 
@@ -108,12 +119,14 @@ public class HeatproofToilet : ModTile
 		player.cursorItemIconEnabled = true;
 		player.cursorItemIconID = ModContent.ItemType<HeatproofToilet_item>();
 
-		if (Main.tile[i, j].TileFrameX / 18 < 1) {
+		if (Main.tile[i, j].TileFrameX / 18 < 1)
+		{
 			player.cursorItemIconReversed = true;
 		}
 	}
 
-	public override void HitWire(int i, int j) {
+	public override void HitWire(int i, int j)
+	{
 		// Spawn the toilet effect here when triggered by a signal
 		Tile tile = Main.tile[i, j];
 
@@ -123,7 +136,8 @@ public class HeatproofToilet : ModTile
 		Wiring.SkipWire(spawnX, spawnY);
 		Wiring.SkipWire(spawnX, spawnY + 1);
 
-		if (Wiring.CheckMech(spawnX, spawnY, 60)) {
+		if (Wiring.CheckMech(spawnX, spawnY, 60))
+		{
 			Projectile.NewProjectile(Wiring.GetProjectileSource(spawnX, spawnY), spawnX * 16 + 8, spawnY * 16 + 12, 0f, 0f, ProjectileID.ToiletEffect, 0, 0f, Main.myPlayer);
 		}
 	}

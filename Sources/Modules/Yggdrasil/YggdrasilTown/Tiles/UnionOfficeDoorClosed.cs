@@ -105,7 +105,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles
 				{
 					direction = -1;
 				}
-				if(CanOpenDoor(i, j, direction))
+				if (CanOpenDoor(i, j, direction))
 				{
 					OpenOfficeDoor(i, j, direction);
 				}
@@ -128,7 +128,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles
 					for (int y = 0; y < 6; y++)
 					{
 						Tile checkTile = TileUtils.SafeGetTile(i - originalTileFrameX / 18 + x + 2, j - originalTileFrameY / 18 + y);
-						if(checkTile.HasTile)
+						if (checkTile.HasTile)
 						{
 							if (!Main.tileCut[checkTile.TileType])
 							{

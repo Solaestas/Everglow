@@ -56,9 +56,9 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile
 		{
 			return;
 		}
-		if(EndPoint != Vector2.Zero)
+		if (EndPoint != Vector2.Zero)
 		{
-			if(!Crystalized)
+			if (!Crystalized)
 			{
 				Crystalized = true;
 				var projectile = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), EndPoint, Vector2.zeroVector, ModContent.ProjectileType<YggdrasilAmberLaser_crystal>(), Projectile.damage / 2, 0, Projectile.owner);
@@ -158,7 +158,7 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile
 		{
 			player.direction = 1;
 		}
-		if(EndPoint != Vector2.zeroVector)
+		if (EndPoint != Vector2.zeroVector)
 		{
 			int duplicateTimes = 1;
 			for (int i = 0; i < duplicateTimes; i++)
@@ -176,7 +176,7 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile
 				};
 				Ins.VFXManager.Add(somg);
 			}
-			if(player.itemTime > 6)
+			if (player.itemTime > 6)
 			{
 				for (int i = 0; i < 2; i++)
 				{

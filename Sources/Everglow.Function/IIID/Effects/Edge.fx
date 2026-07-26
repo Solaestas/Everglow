@@ -1,4 +1,4 @@
-sampler uImage0 : register(s0);
+ï»¿sampler uImage0 : register(s0);
 
 int RenderTargetSize;
 
@@ -15,17 +15,17 @@ float4 edge(float2 coords : TEXCOORD0) : COLOR0
     float4 color = tex2D(uImage0, coords);
     if (color.a != 0)
         return color;
-    // »ñÈ¡Ã¿¸öÏñËØµÄÕýÈ·´óÐ¡
+    // ï¿½ï¿½È¡Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½È·ï¿½ï¿½Ð¡
     float dx = 2;
     float dy = 2;
     bool flag = false;
-    // ¶ÔÖÜÎ§8¸ñ½øÐÐÅÐ¶¨
+    // ï¿½ï¿½ï¿½ï¿½Î§8ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
     for (int i = -1; i <= 1; i++)
     {
         for (int j = -1; j <= 1; j++)
         {
             float4 c = tex2D(uImage0, (coords * 1280 + float2(dx * i, dy * j)) / 1280);
-            // Èç¹ûÈÎºÎÒ»¸öÏñËØÓÐÑÕÉ«
+            // ï¿½ï¿½ï¿½ï¿½Îºï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
             if (any(c))
             {
                 if (c.r + c.b + c.g >= 1.5)

@@ -1,4 +1,4 @@
-#define OCTAVES 4
+﻿#define OCTAVES 4
 #define LACUNARITY 2.0
 #define GAIN 0.5
 

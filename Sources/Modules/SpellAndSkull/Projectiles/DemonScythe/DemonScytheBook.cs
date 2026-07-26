@@ -1,4 +1,4 @@
-﻿using Everglow.SpellAndSkull.Projectiles;
+using Everglow.SpellAndSkull.Projectiles;
 using Terraria.Audio;
 
 namespace Everglow.SpellAndSkull.Projectiles.DemonScythe;

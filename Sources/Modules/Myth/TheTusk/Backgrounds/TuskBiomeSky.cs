@@ -350,9 +350,9 @@ public class TuskBiomeSky : CustomSky
 				{
 					n -= 0.4f;
 				}
-                Vx.Add(new Vertex3D_2(center + offset * 1, new Vector3(u / counts, 0, 0), c));
+				Vx.Add(new Vertex3D_2(center + offset * 1, new Vector3(u / counts, 0, 0), c));
 				Vx.Add(new Vertex3D_2(center + offset * n, new Vector3(u / counts, 1f, 0), c));
-            }
+			}
 			Main.graphics.GraphicsDevice.Textures[0] = CloudLine[i];//GlodenBloodScaleMirror
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, Vx.ToArray(), 0, Vx.Count - 2);
 		}

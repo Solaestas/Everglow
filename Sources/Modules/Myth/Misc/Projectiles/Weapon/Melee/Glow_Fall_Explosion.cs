@@ -64,7 +64,7 @@ public class Glow_Fall_Explosion : ModProjectile, IWarpProjectile_warpStyle2
 			Color drawC = new Color(0f, 0.4f, 0.8f, 0);
 			Vector2 star = new Vector2(0, 100 * Projectile.scale * Projectile.ai[2]).RotatedBy(i * Math.PI / 7 * 4 + Projectile.ai[0]);
 			float width = 20f;
-			if(Projectile.timeLeft < 20)
+			if (Projectile.timeLeft < 20)
 			{
 				width = Projectile.timeLeft;
 			}

@@ -29,7 +29,7 @@ public class DevilHeartStaff_proj : TrailingProjectile
 	public override void AI()
 	{
 		base.AI();
-		if(Main.rand.NextBool(4))
+		if (Main.rand.NextBool(4))
 		{
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(0.6f, 1.4f)).RotatedByRandom(MathHelper.TwoPi) + Projectile.velocity;
 			var dust = new DevilHeart_Spark

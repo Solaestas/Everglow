@@ -1,4 +1,4 @@
-sampler uImage0 : register(s0);
+﻿sampler uImage0 : register(s0);
 texture uNoise;
 sampler uNoiseSampler =
 sampler_state

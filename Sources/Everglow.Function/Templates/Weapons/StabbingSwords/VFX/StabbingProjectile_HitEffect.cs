@@ -24,7 +24,7 @@ public class StabbingProjectile_HitEffect : Visual
 	public override void Update()
 	{
 		Timer++;
-		if(Timer >= MaxTime)
+		if (Timer >= MaxTime)
 		{
 			Active = false;
 			return;
@@ -37,7 +37,7 @@ public class StabbingProjectile_HitEffect : Visual
 		Texture2D tex = ModAsset.SparkLight.Value;
 		float colorFade = MathF.Max(0, 1 - Timer / MaxTime);
 		colorFade = MathF.Pow(colorFade, 0.5f);
-		if(Color.A > 0)
+		if (Color.A > 0)
 		{
 			Texture2D tex_black = ModAsset.SparkDark.Value;
 			Ins.Batch.Draw(tex_black, Position, null, Color.White * (Color.A / 255f), Rotation, new Vector2(218, 128), Scale * colorFade, SpriteEffects.None);

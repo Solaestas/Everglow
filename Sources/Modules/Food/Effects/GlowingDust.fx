@@ -1,4 +1,4 @@
-sampler uImage0 : register(s0);
+ï»¿sampler uImage0 : register(s0);
 sampler uImage1 : register(s1);
 float3 uColor;
 float3 uSecondaryColor;
@@ -19,7 +19,7 @@ float2 uTargetPosition;
 
 float4 PixelShaderFunction(float2 coords : TEXCOORD0) : COLOR0
 {
-	float4 color = tex2D(uImage0, float2(coords.x, 0.5 - coords.y + coords.y / uColor.r));//ºì¶ÈÓÃÀ´´æ±â¶È£¬¾ÍÏñÄÒÖ×£¬Ô½ºìÔ½Ô² £¬Ô½µ­Ô½±â
+	float4 color = tex2D(uImage0, float2(coords.x, 0.5 - coords.y + coords.y / uColor.r));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×£ï¿½Ô½ï¿½ï¿½Ô½Ô² ï¿½ï¿½Ô½ï¿½ï¿½Ô½ï¿½ï¿½
 
 	return color;
 }

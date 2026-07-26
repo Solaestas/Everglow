@@ -37,11 +37,11 @@ public class GoldLanternLine : ModProjectile
 		{
 			Projectile.velocity *= 0.97f;
 		}
-		if(Timer == 80)
+		if (Timer == 80)
 		{
 			LaserDirection = (player.Center - Projectile.Center).ToRotation();
 		}
-		if(Timer == 100)
+		if (Timer == 100)
 		{
 			SoundEngine.PlaySound(SoundID.Item75, Projectile.Center);
 		}

@@ -43,7 +43,7 @@ public class LanternGoldenShieldFragiles : Visual
 		Color c0 = new Color(0.45f, 0.27f, 0.09f, 0.3f);
 		Color c1 = new Color(1f, 0.8f, 0.5f, 0.6f);
 		Color drawC = Color.Lerp(c0, c1, MathF.Cos(Rotation2) * 0.5f + 0.5f);
-		if(Timer < 5)
+		if (Timer < 5)
 		{
 			drawC = new Color(1f, 1f, 1f, 1f);
 			tex = ModAsset.LanternGoldenShieldFragiles_White.Value;

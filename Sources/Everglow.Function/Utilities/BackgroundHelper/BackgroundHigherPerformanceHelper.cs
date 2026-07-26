@@ -24,7 +24,7 @@ public static class BackgroundHigherPerformanceHelper
 		List<Point> tiles,
 		List<Vertex2D> bars)
 	{
-		if(bg.UseColorStyle != 1)
+		if (bg.UseColorStyle != 1)
 		{
 			Add_TileBgVertice_NolightMap(bg, tiles, bars);
 			return;

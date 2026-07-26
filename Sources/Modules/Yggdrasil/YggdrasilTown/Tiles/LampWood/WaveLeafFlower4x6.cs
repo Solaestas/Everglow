@@ -163,7 +163,7 @@ public class WaveLeafFlower4x6 : ModTile, ITileFluentlyDrawn
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX % 72 == 0 && tile.TileFrameY == 72)
 		{
-			if(tile.TileFrameX >= 72)
+			if (tile.TileFrameX >= 72)
 			{
 				Lighting.AddLight(i + 1, j - 5, 0.7f, 0.0f, 0);
 			}

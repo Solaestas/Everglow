@@ -30,8 +30,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Spine {
-	public class PathAttachment : VertexAttachment {
+namespace Spine
+{
+	public class PathAttachment : VertexAttachment
+	{
 		internal float[] lengths;
 		internal bool closed, constantSpeed;
 
@@ -40,11 +42,13 @@ namespace Spine {
 		public bool Closed { get { return closed; } set { closed = value; } }
 		public bool ConstantSpeed { get { return constantSpeed; } set { constantSpeed = value; } }
 
-		public PathAttachment (String name)
-			: base(name) {
+		public PathAttachment(String name)
+			: base(name)
+		{
 		}
 
-		public override Attachment Copy () {
+		public override Attachment Copy()
+		{
 			PathAttachment copy = new PathAttachment(this.Name);
 			CopyTo(copy);
 			copy.lengths = new float[lengths.Length];

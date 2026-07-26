@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.Buffs.Fragrans;
+namespace Everglow.Myth.Misc.Buffs.Fragrans;
 
 public class MoonAndFragransIII : ModBuff
 {

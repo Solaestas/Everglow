@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.FixCoins;
+namespace Everglow.Myth.Misc.FixCoins;
 
 public class FixCoinCrit3 : FixCoinItem
 {

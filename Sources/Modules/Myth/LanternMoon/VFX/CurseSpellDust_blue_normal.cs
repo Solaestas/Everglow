@@ -57,7 +57,7 @@ public class CurseSpellDust_blue_normal : Visual
 		Texture2D tex = Commons.ModAsset.LightPoint2.Value;
 		var drawColor = new Color(0.6f, 0.6f, 1f, 0);
 		float fade = 1;
-		if(MaxTime - Timer < 30)
+		if (MaxTime - Timer < 30)
 		{
 			fade = (MaxTime - Timer) / 30f;
 		}

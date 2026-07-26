@@ -2,6 +2,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
+
 public class GhostHit : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";

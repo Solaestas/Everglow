@@ -20,7 +20,7 @@ public class FireflyInferno : ModBuff
 		npc.lifeRegen = -buffDamage;
 		npc.SetLifeRegenExpectedLossPerSecond((int)(1 + npc.velocity.Length() * 2.4f));
 
-		if(Main.rand.NextBool(4))
+		if (Main.rand.NextBool(4))
 		{
 			GenerateSmog(1, new Vector2(Main.rand.NextFloat(npc.width), Main.rand.NextFloat(npc.height)) + npc.position, 1);
 		}

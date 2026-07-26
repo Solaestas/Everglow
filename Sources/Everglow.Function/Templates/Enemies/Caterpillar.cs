@@ -1004,7 +1004,7 @@ public abstract class Caterpillar : ModNPC
 	/// <param name="hit"></param>
 	public override void HitEffect(NPC.HitInfo hit)
 	{
-		if(DustType != -1)
+		if (DustType != -1)
 		{
 			for (int j = 0; j < Segments.Count; j++)
 			{

@@ -31,7 +31,7 @@ public class CorruptDust : ModProjectile
 		}
 		else
 		{
-			for(int t = 0;t < 3;t++)
+			for (int t = 0; t < 3; t++)
 			{
 				float timeValue = Projectile.timeLeft / 60f;
 				int index = Dust.NewDust(Projectile.Center - new Vector2(5), 2, 2, ModContent.DustType<BlueGlowAppear>(), 0f, 0f, 0, default, Main.rand.NextFloat(0.2f, 0.9f) * timeValue);

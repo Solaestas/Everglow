@@ -50,7 +50,7 @@ public class NormalGore : Visual
 				Velocity *= 0;
 			}
 		}
-		if(!collide)
+		if (!collide)
 		{
 			Velocity += new Vector2(0, 0.25f);
 		}
@@ -60,11 +60,11 @@ public class NormalGore : Visual
 	{
 		float fade = 1f;
 		float timeValue = MaxTime - Timer;
-		if(timeValue < 120)
+		if (timeValue < 120)
 		{
 			fade *= timeValue / 120f;
 		}
-		Ins.Batch.Draw(Texture, Position, null, Lighting.GetColor(Position.ToTileCoordinates()) *fade, Rotation, Texture.Size() * 0.5f, Scale, SpriteEffects.None);
+		Ins.Batch.Draw(Texture, Position, null, Lighting.GetColor(Position.ToTileCoordinates()) * fade, Rotation, Texture.Size() * 0.5f, Scale, SpriteEffects.None);
 
 		// Ins.Batch.Draw(tex, Position, null, DrawColor, Rotation + MathHelper.PiOver2, tex.Size() * 0.5f, new Vector2(Fade, 2) * Scale, SpriteEffects.None);
 	}

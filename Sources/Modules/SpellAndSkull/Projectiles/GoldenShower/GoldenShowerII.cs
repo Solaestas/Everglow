@@ -3,6 +3,7 @@ using Everglow.Commons.VFX.CommonVFXDusts;
 using Terraria.Audio;
 
 namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
+
 public class GoldenShowerII : ModProjectile
 {
 	public override void SetDefaults()
@@ -61,11 +62,11 @@ public class GoldenShowerII : ModProjectile
 	public override void AI()
 	{
 		int vfxFrequency = 200;
-		if(Ins.VisualQuality.High)
+		if (Ins.VisualQuality.High)
 		{
 			vfxFrequency = 3;
 		}
-		if(VFXManager.InScreen(Projectile.position, 160))
+		if (VFXManager.InScreen(Projectile.position, 160))
 		{
 			if (Main.rand.NextBool(vfxFrequency))
 			{
@@ -76,12 +77,12 @@ public class GoldenShowerII : ModProjectile
 				}
 			}
 		}
-		
+
 		float kTime = 1f;
 		if (Projectile.timeLeft < 90f)
 			kTime = Projectile.timeLeft / 90f;
 		Lighting.AddLight((int)(Projectile.Center.X / 16), (int)(Projectile.Center.Y / 16), 0.32f * kTime, 0.23f * kTime, 0);
-		for(int x = 0; x < 8;x++)
+		for (int x = 0; x < 8; x++)
 		{
 			Vector2 BasePos = Projectile.Center - new Vector2(4) + Projectile.velocity * Main.rand.NextFloat(1f);
 			var d0 = Dust.NewDustDirect(BasePos, 0, 0, DustID.Ichor, 0, 0, 0, default, 0.6f);
@@ -89,7 +90,7 @@ public class GoldenShowerII : ModProjectile
 			d0.velocity *= 0;
 		}
 		Projectile.velocity.Y += 0.15f;
-		
+
 		if (Projectile.timeLeft == 210)
 			Projectile.friendly = true;
 	}

@@ -16,7 +16,7 @@ public class Bones2 : ModDust
 		dust.velocity.Y += 0.2f;
 		dust.velocity *= 0.98f;
 		dust.rotation += (dust.dustIndex - 50f) / 600f / dust.scale;
-		if (TileUtils.PlatformCollision(dust.position +  new Vector2(dust.velocity.X, 0) + new Vector2(4)))
+		if (TileUtils.PlatformCollision(dust.position + new Vector2(dust.velocity.X, 0) + new Vector2(4)))
 		{
 			dust.velocity.X *= -0.5f;
 			dust.position += dust.velocity;

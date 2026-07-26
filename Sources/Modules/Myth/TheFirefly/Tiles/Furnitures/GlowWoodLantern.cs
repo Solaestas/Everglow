@@ -23,7 +23,7 @@ public class GlowWoodLantern : ModTile, ITileFluentlyDrawn
 		Main.tileLighted[Type] = true;
 		Main.tileSolid[Type] = false;
 		Main.tileNoFail[Type] = true;
-		
+
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
 
 		AdjTiles = new int[] { TileID.HangingLanterns };
@@ -71,7 +71,7 @@ public class GlowWoodLantern : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) 
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		FurnitureUtils.LanternFluentDraw(screenPosition, pos, spriteBatch, tileDrawing);
 	}

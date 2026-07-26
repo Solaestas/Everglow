@@ -112,7 +112,7 @@ public class BrittleRockSlingshotProj : SlingshotProjectile
 		for (int i = 0; i < Power; i += 10)
 		{
 			float wave = Power / 130f;
-			Color drawColor2 = new Color(0.6f + Main.rand.NextFloat(-wave,wave), 0.2f, 0.9f + Main.rand.NextFloat(-wave, wave), 0.1f) * (Power / 100f);
+			Color drawColor2 = new Color(0.6f + Main.rand.NextFloat(-wave, wave), 0.2f, 0.9f + Main.rand.NextFloat(-wave, wave), 0.1f) * (Power / 100f);
 			Main.spriteBatch.Draw(stoneGlow, SlingshotStringTail + new Vector2(0, Main.rand.NextFloat(Power / 40f)).RotatedByRandom(MathHelper.TwoPi), null, drawColor2, 0, stone.Size() * 0.5f, MathF.Pow(Power / 130f, 0.3f), SpriteEffects.None, 0);
 		}
 		for (int i = 0; i < Power; i += 20)

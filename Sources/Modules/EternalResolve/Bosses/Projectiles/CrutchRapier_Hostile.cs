@@ -2,12 +2,12 @@ using Everglow.EternalResolve.Items.Weapons.StabbingSwords;
 
 namespace Everglow.EternalResolve.Bosses.Projectiles
 {
-    public class CrutchRapier_Hostile : Rapier_Hostile
-    {
-        public override void SetDefaults()
-        {
-            Color = new Color(155, 162, 164);
-            base.SetDefaults();
+	public class CrutchRapier_Hostile : Rapier_Hostile
+	{
+		public override void SetDefaults()
+		{
+			Color = new Color(155, 162, 164);
+			base.SetDefaults();
 			MaxDarkAttackUnitCount = 4;
 			OldColorFactor = 0.3f;
 			CurrentColorFactor = 0.2f;

@@ -80,7 +80,7 @@ public class BeetleDashTraceDust : Visual
 	{
 		float timeValue = timer * 0.02f;
 		float colorValue = 1;
-		if(timer > maxTime - 30)
+		if (timer > maxTime - 30)
 		{
 			colorValue = (maxTime - timer) / 30f;
 		}
@@ -91,7 +91,7 @@ public class BeetleDashTraceDust : Visual
 			{
 				Vector2 pos = trails.ToArray()[i];
 				Vector2 posNext = trails.ToArray()[i] + velocity;
-				if(i != trails.Count - 1)
+				if (i != trails.Count - 1)
 				{
 					posNext = trails.ToArray()[i + 1];
 				}

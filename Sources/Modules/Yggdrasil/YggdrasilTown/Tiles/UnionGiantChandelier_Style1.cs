@@ -210,7 +210,7 @@ public class UnionGiantChandelier_Style1 : ShapeDataTile, ITileFluentlyDrawn
 		{
 			int style = (tileFrameX % 144) / 18;
 			var frame = new Rectangle(style * 12, 252, 12, 46);
-			if(tileFrameX >= 144)
+			if (tileFrameX >= 144)
 			{
 				frame.X += 144;
 			}

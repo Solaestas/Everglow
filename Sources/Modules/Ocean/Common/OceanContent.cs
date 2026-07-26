@@ -1,4 +1,4 @@
-﻿namespace Everglow.Ocean.Common;
+namespace Everglow.Ocean.Common;
 
 public class OceanContent
 {

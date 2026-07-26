@@ -31,7 +31,7 @@ public class GlowWoodChandelierType4 : ModTile, ITileFluentlyDrawn
 
 		DustType = ModContent.DustType<BlueGlow>();
 		AdjTiles = new int[] { TileID.Chandeliers };
-		
+
 		// Placement - Standard Chandelier Setup Below
 		TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 		TileObjectData.newTile.Origin = new Point16(1, 0);

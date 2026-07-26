@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
 public class SunFlowerpetal : ModProjectile

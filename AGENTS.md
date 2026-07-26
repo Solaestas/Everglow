@@ -1,4 +1,4 @@
-# AGENTS.md
+﻿# AGENTS.md
 
 > 面向 AI 编码 agent 的项目指南。修改本仓库代码前请完整阅读；当你改动了本文涉及的流程/结构/约定时，请同步更新本文。
 > 约定优先级：本文件 < 各目录下更具体的文档（如 `Sources/Everglow.Function/Mechanics/Mission/CONTRACTS.md`）。

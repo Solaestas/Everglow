@@ -8,7 +8,7 @@ public class LiveFluorescentWoodWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = ModContent.DustType<FluorescentTreeDust>();
-				HitSound = SoundID.Dig;
+		HitSound = SoundID.Dig;
 		AddMapEntry(new Color(33, 1, 53));
 	}
 }

@@ -24,7 +24,7 @@ public class Fevens_Bat_Small : Visual
 		position += velocity;
 		rotation = MathHelper.PiOver4 * 3;
 		var startPos = new Vector2(ai[1], ai[2]);
-		if((startPos - position).Length() > 40 && timer < maxTime - 60)
+		if ((startPos - position).Length() > 40 && timer < maxTime - 60)
 		{
 			velocity = Vector2.Normalize(startPos - position).RotatedByRandom(0.9) * 3;
 		}
@@ -38,7 +38,7 @@ public class Fevens_Bat_Small : Visual
 		float frameY = (int)timeValue % frameCount;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color drawColor = Color.White;
-		if(pocession < 0.8f)
+		if (pocession < 0.8f)
 		{
 			drawColor = Color.Lerp(drawColor, Color.Red, (pocession - 0.2f) / 0.6f);
 		}

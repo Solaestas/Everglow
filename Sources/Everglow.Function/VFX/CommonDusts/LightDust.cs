@@ -21,7 +21,7 @@ public class LightDust : Visual
 	public AIStyle aiStyle = AIStyle.Normal;
 	public float alpha;
 	public enum AIStyle
-	{ 
+	{
 		Normal,
 		Rotation,
 		Rotation2
@@ -30,35 +30,35 @@ public class LightDust : Visual
 	public override void OnSpawn()
 	{
 
-    }
+	}
 	public override void Update()
 	{
 		position += velocity;
 		timeleft--;
 		if (timeleft < 0)
 			Kill();
-		if(alpha<1)
+		if (alpha < 1)
 		{
 			alpha += 0.1f;
 		}
 		if (aiStyle == AIStyle.Normal)
 		{
-			
+
 		}
-		else if(aiStyle==AIStyle.Rotation)
+		else if (aiStyle == AIStyle.Rotation)
 		{
 			velocity = velocity.RotatedBy(0.04f);
 		}
 		else
 		{
-            velocity = velocity.RotatedBy(-0.04f);
-        }
-        if (timeleft < maxTimeleft * 0.6f)
-        {
-            scale *= 0.93f;
-            velocity *= 0.95f;
-        }
-    }
+			velocity = velocity.RotatedBy(-0.04f);
+		}
+		if (timeleft < maxTimeleft * 0.6f)
+		{
+			scale *= 0.93f;
+			velocity *= 0.95f;
+		}
+	}
 
 	public override void Draw()
 	{
@@ -73,5 +73,5 @@ public class LightDust : Visual
 			Ins.Batch.Draw(tex, drawPos, null, c, 0, tex.Size() / 2, scale, 0);
 			Ins.Batch.Draw(tex, drawPos, null, c, 0, tex.Size() / 2, scale, 0);
 		}
-    }
+	}
 }

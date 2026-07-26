@@ -3,12 +3,12 @@ namespace Everglow.Commons.Utilities;
 public static partial class MathUtils
 {
 	/// <summary>
- /// smoothstep插值
- /// </summary>
- /// <param name="value"> </param>
- /// <param name="from"> </param>
- /// <param name="to"> </param>
- /// <returns> </returns>
+	/// smoothstep插值
+	/// </summary>
+	/// <param name="value"> </param>
+	/// <param name="from"> </param>
+	/// <param name="to"> </param>
+	/// <returns> </returns>
 	public static float SmoothStep(this float value, float from, float to)
 	{
 		value = Clamp((value - from) / (to - from), 0, 1);

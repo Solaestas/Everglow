@@ -65,7 +65,7 @@ public class HitEffectSpark : Visual
 				dir = dir.RotatedBy(MathHelper.PiOver2) * Scale * fade;
 				var value = i / (float)(TrailPos.Count - 1);
 				var drawC = DrawColor;
-				if(!SelfLight)
+				if (!SelfLight)
 				{
 					drawC = Lighting.GetColor(pos.ToTileCoordinates(), drawC);
 					drawC.A = 0;

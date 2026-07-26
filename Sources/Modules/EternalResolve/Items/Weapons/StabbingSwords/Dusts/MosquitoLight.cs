@@ -1,6 +1,6 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
-    public class MosquitoLight : ModDust
+	public class MosquitoLight : ModDust
 	{
 		public override bool Update(Dust dust)
 		{

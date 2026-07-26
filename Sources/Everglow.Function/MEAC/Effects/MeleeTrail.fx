@@ -1,4 +1,4 @@
-texture2D tex0;
+﻿texture2D tex0;
 sampler2D uShapeTex = sampler_state
 {
     Texture = <tex0>;

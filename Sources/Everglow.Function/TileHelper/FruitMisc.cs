@@ -2,6 +2,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.Utilities;
 namespace Everglow.Commons.TileHelper;
+
 public class ShakeTreeTweak
 {
 	public abstract class FruitPickerTool : ModItem
@@ -39,7 +40,7 @@ public class ShakeTreeTweak
 	{
 		On_WorldGen.ShakeTree += (orig, i, j) =>
 		{
-			if(_shakeTreeCoord != new Point(i, j))
+			if (_shakeTreeCoord != new Point(i, j))
 			{
 				orig(i, j);
 			}

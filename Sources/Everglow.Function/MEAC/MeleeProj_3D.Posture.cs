@@ -17,7 +17,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		{
 			Vector3 currentPos3D = WeaponAxis + new Vector3(0, 0, CenterZ);
 			Vector2 currentPos = Project(currentPos3D, ProjectionMatrix());
-			if(Owner.gravDir == -1)
+			if (Owner.gravDir == -1)
 			{
 				currentPos.Y *= -1;
 			}

@@ -1,4 +1,4 @@
-texture2D tex0;
+ï»¿texture2D tex0;
 sampler2D uShapeTex = sampler_state
 {
     Texture = <tex0>;
@@ -43,10 +43,10 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //Ö÷ÎÆÀí
-    c = tex2D(uColorTex, float2(c.r * coord.z, 1 - c.r * coord.z)); //È¡ÑÕÉ«
+    float4 c = tex2D(uShapeTex, float2(coord.x, coord.y)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    c = tex2D(uColorTex, float2(c.r * coord.z, 1 - c.r * coord.z)); //È¡ï¿½ï¿½É«
     float a = 1 - (c.r - 1) * 0.7f;
-    c *= a; //³ËÉÏÍ¸Ã÷¶È
+    c *= a; //ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½
     return c * Light * coord.z;
 }
 

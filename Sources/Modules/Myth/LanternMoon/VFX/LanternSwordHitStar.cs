@@ -25,7 +25,7 @@ public class LanternSwordHitStar : Visual
 	{
 		float pocession = 1 - Timer / MaxTime;
 		var drawColor = new Color(1f, 0.7f, 0.3f, 0);
-		if(Timer > 3)
+		if (Timer > 3)
 		{
 			drawColor = new Color(1f, 0f, 0f, 0);
 		}

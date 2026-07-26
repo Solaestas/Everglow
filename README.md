@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 <img src="https://github.com/Solaestas/Everglow/blob/master/Sources/Everglow/icon.png" alt="Everglow" width="200">
 

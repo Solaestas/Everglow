@@ -1,4 +1,4 @@
-! This is a demonstration !
+﻿! This is a demonstration !
 ! 此为演示版 !
 
 Everglow is a comprehensive content mod, dedicated to add rich and interesting playable content to Terraria

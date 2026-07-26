@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Everglow.Commons.Skeleton2D.Renderer.DrawCommands;
+
 public abstract class DrawCommand
 {
 	public abstract void Accept(IDrawCommandVisitor visitor);

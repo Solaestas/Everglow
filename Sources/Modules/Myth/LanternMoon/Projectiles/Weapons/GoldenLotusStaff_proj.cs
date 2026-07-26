@@ -355,7 +355,7 @@ public class GoldenLotusStaff_proj : TrailingProjectile
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(target.type != NPCID.TargetDummy && DashTimer > 0)
+		if (target.type != NPCID.TargetDummy && DashTimer > 0)
 		{
 			var star = new HitStarAndWave
 			{

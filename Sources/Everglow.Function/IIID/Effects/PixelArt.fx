@@ -1,4 +1,4 @@
-sampler uImage0 : register(s0);
+ï»¿sampler uImage0 : register(s0);
 
 int RenderTargetSize;
 
@@ -18,7 +18,7 @@ float4 PS_BlendBloom(float2 coords : TEXCOORD0) : COLOR0
 {
    /* float3 rgb = (0,0,0);
     int n=0;
-    // ¶ÔÖÜÎ§8¸ñ½øÐÐÅÐ¶¨
+    // ï¿½ï¿½ï¿½ï¿½Î§8ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
     for (int i = -10; i <= 10; i++)
     {
         for (int j = -10; j <= 10; j++)

@@ -62,7 +62,7 @@ public class TerraViewerHowitzer_grenade_fall : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style == 1)
+		if (style == 1)
 		{
 			float k1 = 20f;
 			float colorValue0 = (2400 - Projectile.timeLeft) / k1;

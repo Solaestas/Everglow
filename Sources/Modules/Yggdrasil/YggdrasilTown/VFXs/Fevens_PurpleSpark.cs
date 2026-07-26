@@ -72,7 +72,7 @@ public class Fevens_PurpleSparkDust : Visual
 	{
 		float pocession = timer / maxTime;
 		Vector2 toCorner = new Vector2(scale, 0);
-		if(velocity != Vector2.zeroVector)
+		if (velocity != Vector2.zeroVector)
 		{
 			toCorner = new Vector2(scale, 0).RotatedBy(velocity.ToRotation());
 		}

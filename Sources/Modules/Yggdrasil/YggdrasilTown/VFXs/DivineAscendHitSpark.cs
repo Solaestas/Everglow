@@ -23,7 +23,7 @@ public class DivineAscendHitSpark : Visual
 		Velocity *= MathF.Pow(0.98f, Velocity.Length());
 		float rotValue = MathF.Sin((float)Main.time * 0.03f + ai[0]) * 0.01f;
 		Velocity = Velocity.RotatedBy(rotValue);
-		if((MaxTime - Timer) / 100f < Scale)
+		if ((MaxTime - Timer) / 100f < Scale)
 		{
 			Scale = (MaxTime - Timer) / 100f;
 		}

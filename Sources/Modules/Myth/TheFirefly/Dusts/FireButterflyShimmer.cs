@@ -20,9 +20,9 @@ public class FireButterflyShimmer : ModDust
 			dust.color.R -= 10;
 			dust.scale += 0.05f;
 		}
-		if(Main.rand.NextBool(6))
+		if (Main.rand.NextBool(6))
 		{
-			if(dust.frame.Y < 18)
+			if (dust.frame.Y < 18)
 			{
 				dust.frame.Y += 9;
 			}
@@ -56,7 +56,7 @@ public class FireButterflyShimmer : ModDust
 
 	public override Color? GetAlpha(Dust dust, Color lightColor)
 	{
-		if(dust.frame.Y == 9)
+		if (dust.frame.Y == 9)
 		{
 			return new Color(60, 120, 255, 255) * Main.rand.NextFloat(0.1f, 10f);
 		}

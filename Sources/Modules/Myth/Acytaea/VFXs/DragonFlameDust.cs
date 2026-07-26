@@ -56,7 +56,7 @@ public class DragonFlameDust : Visual
 			flame = Color.Lerp(new Color(0.5f, 0f, 0f, 0), new Color(1f, 0.6f, 0f, 0), pocession * 2f);
 		}
 		flame.A = 100;
-		if(MaxTime - Timer < 10f)
+		if (MaxTime - Timer < 10f)
 		{
 			flame *= (MaxTime - Timer) * 0.1f;
 		}

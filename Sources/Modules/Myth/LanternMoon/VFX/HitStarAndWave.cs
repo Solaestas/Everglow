@@ -18,7 +18,7 @@ public class HitStarAndWave : Visual
 
 	public override void Update()
 	{
-		if(Timer == 0)
+		if (Timer == 0)
 		{
 			StartScale = Scale;
 		}

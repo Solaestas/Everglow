@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
+namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
 
 internal class SpineGun : ModProjectile
 {

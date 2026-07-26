@@ -260,9 +260,9 @@ public class MeltingInputBox : ModTile
 		else
 		{
 			Chest chest = Main.chest[chestIndex];
-			if(chest.frame == 0)
+			if (chest.frame == 0)
 			{
-				
+
 			}
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
 			player.cursorItemIconText = chest.name.Length > 0 ? chest.name : defaultName;

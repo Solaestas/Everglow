@@ -1,4 +1,4 @@
-sampler uImage0 : register(s0);
+﻿sampler uImage0 : register(s0);
 
 struct PSInput
 {

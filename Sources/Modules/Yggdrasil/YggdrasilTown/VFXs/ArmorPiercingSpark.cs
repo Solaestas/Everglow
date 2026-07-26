@@ -47,7 +47,7 @@ public class ArmorPiercingSpark : Visual
 		}
 		if (ai[0] > 2)
 		{
-			if(timer % 2 == 0)
+			if (timer % 2 == 0)
 			{
 				Frame++;
 			}
