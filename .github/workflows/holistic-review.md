@@ -1,4 +1,4 @@
-﻿---
+---
 description: "Review a pull request's changes for correctness, performance, and consistency with Everglow project conventions described in AGENTS.md. Triggered on PR events (open / push / reopen / ready). Supports incremental re-review by reading the PR's own review history. Submits a customized GitHub pull request review via the safe-outputs API."
 model: deepseek-v4-flash
 

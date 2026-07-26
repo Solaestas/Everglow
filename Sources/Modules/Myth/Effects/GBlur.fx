@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 float2 uImageSize0;
 bool uHorizontal;
 float uDelta;

@@ -1,4 +1,4 @@
-﻿const float NoiseResolution = 4.0; //  0.4
+const float NoiseResolution = 4.0; //  0.4
 const float Lacunarity = 2.0; // 2.0 // intuitive measure of gappiness / heterogenity or variability
 const float Gain = 0.6; // 0.6
 const float Ball_rad = 0.45; // 0.45

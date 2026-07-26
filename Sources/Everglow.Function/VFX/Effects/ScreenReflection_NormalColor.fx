@@ -1,4 +1,4 @@
-﻿sampler uScreenBuffer : register(s0);
+sampler uScreenBuffer : register(s0);
 sampler2D uImage0 : register(s1);
 
 // Shlick 菲涅尔项近似公式中的F0

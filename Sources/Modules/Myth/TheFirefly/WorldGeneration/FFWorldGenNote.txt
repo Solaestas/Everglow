@@ -1,4 +1,4 @@
-﻿Translated using DeepL Translator | 使用DeepL 翻译器进行翻译
+Translated using DeepL Translator | 使用DeepL 翻译器进行翻译
 
 Cocoon: Current default WorldGen Map for Firefly Biome in Firefly Subworld
 CocoonWorld: Current default WorldGen Map for Firefly Subworld

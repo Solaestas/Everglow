@@ -1,4 +1,4 @@
-﻿sampler2D originalTexture : register(s0);
+sampler2D originalTexture : register(s0);
 sampler2D noise : register(s1);
 sampler2D wave : register(s2);
 sampler2D water : register(s3);

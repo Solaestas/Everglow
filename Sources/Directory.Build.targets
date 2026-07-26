@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
 	<UsingTask TaskName="WriteResource"
 			   AssemblyFile="$(MSBuildThisFileDirectory)..\Tools\Everglow.Tasks.dll" />
 	<UsingTask TaskName="ReadResource"

@@ -1,4 +1,4 @@
-﻿sampler2D uImage0 : register(s0);
+sampler2D uImage0 : register(s0);
 texture uLight;
 float uSize;
 float uTime;

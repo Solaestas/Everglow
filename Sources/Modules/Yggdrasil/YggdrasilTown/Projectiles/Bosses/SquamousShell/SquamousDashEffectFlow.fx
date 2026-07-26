@@ -1,4 +1,4 @@
-﻿sampler2D uImage0 : register(s0);//Base color
+sampler2D uImage0 : register(s0);//Base color
 float4x4 uTransform;
 
 struct VSInput

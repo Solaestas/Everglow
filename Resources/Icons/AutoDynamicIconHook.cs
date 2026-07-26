@@ -1,4 +1,4 @@
-﻿using Terraria.UI;
+using Terraria.UI;
 using MonoMod.RuntimeDetour.HookGen;
 using Terraria.GameContent.UI.Elements;
 using ReLogic.Content;

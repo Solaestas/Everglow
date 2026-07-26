@@ -1,4 +1,4 @@
-﻿namespace Everglow.Scripts;
+namespace Everglow.Scripts;
 
 public abstract class Completer
 {

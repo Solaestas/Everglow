@@ -1,4 +1,4 @@
-﻿### Yggdrasil Levels 天穹树分层:
+### Yggdrasil Levels 天穹树分层:
  - Yggdrasil Town 天穹镇 
  - Kelp Curtain 苍苔帘幕 <-- Currently working on
  - Corrupt Worm Hive 蛆败之穴

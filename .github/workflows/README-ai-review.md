@@ -1,4 +1,4 @@
-﻿# Everglow AI Review Bot
+# Everglow AI Review Bot
 
 仿照 [dotnet/runtime](https://github.com/dotnet/runtime/tree/main/.github/workflows) 的 Holistic Review 机制,为 Everglow 仓库接入 GitHub PR 自动审查。
 

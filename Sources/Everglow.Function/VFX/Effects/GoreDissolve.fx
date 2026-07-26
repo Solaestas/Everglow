@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 texture2D uDissolveNoise;
 sampler2D uDissolveNoiseTex = sampler_state
 {

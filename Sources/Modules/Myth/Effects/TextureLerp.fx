@@ -1,4 +1,4 @@
-﻿sampler2D Texture1 : register(s0);
+sampler2D Texture1 : register(s0);
 Texture2D lerptarget;
 sampler2D Texture2 = sampler_state
 {

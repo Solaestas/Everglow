@@ -1,1 +1,1 @@
-﻿global using Entry = (string ItemSpec, string ModPath);
+global using Entry = (string ItemSpec, string ModPath);

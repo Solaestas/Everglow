@@ -1,4 +1,4 @@
-﻿sampler2D uImage0 : register(s0);
+sampler2D uImage0 : register(s0);
 
 float4 uColor;
 float4x4 uTransform;

@@ -1,4 +1,4 @@
-﻿---
+---
 name: code-review
 description: Review code changes in the Everglow tModLoader mod for correctness, performance, and consistency with project conventions described in AGENTS.md. Use when reviewing PRs or code changes.
 ---

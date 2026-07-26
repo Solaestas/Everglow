@@ -1,1 +1,1 @@
-﻿global using static Everglow.Scripts.Utils;
+global using static Everglow.Scripts.Utils;
