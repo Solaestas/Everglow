@@ -109,7 +109,8 @@ Rules for the suggestion block:
 - The code inside **must** use the same indentation as the surrounding code (tabs for `*.cs` in this repo; verify by reading the file).
 - The block must contain **complete, valid** code that would compile if applied — not a sketch.
 - Only use a suggestion block when you can write the exact replacement. If you can only describe the fix in prose (e.g. "refactor this method to …"), put it in the `### Detailed Findings` section without a fence.
-- Do **not** use the suggestion fence for non-code content (config YAML, hjson, plain prose). For non-C# files, the fence language should match the file (e.g. ```yaml … ``` for `build.txt`, ```hjson … ``` for localization). GitHub's suggestion button only fires on the `suggestion` fence inside a review thread adjacent to a diff line, so use it sparingly and correctly.
+- **Never emit a no-op suggestion.** If the suggested body is identical to the current line(s), do not use a `suggestion` fence (and usually do not comment at all). Classic failure mode: claiming "add a trailing newline" while suggesting the same line text unchanged — GitHub Apply then either does nothing useful or silently violates repo style.
+- Do **not** use the suggestion fence for non-code content (config YAML, hjson, plain prose, `.gitattributes`). For non-C# files, describe the change in prose (or use a non-`suggestion` fence such as ```yaml … ``` / ```hjson … ``` only as an illustration). GitHub's "Apply suggestion" button only fires on the `suggestion` fence inside a review thread adjacent to a diff line, so use it sparingly and correctly.
 
 ---
 
