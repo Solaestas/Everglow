@@ -30,7 +30,7 @@ public class StrangeTuskStone4 : ModTile
 		DustType = 1;
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(100, 90, 90), modTranslation);
-						HitSound = SoundID.DD2_SkeletonHurt;
+		HitSound = SoundID.DD2_SkeletonHurt;
 	}
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{

@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Minortopography.GiantPinetree.Dusts;
 using SteelSeries.GameSense;
 using Terraria.Audio;
@@ -23,7 +23,7 @@ public class FrostBall : ModProjectile
 	public override void AI()
 	{
 		Projectile.rotation += 0.3f;
-		
+
 		if (Projectile.Center.X > Main.screenPosition.X - 100 && Projectile.Center.X < Main.screenPosition.X + Main.screenWidth + 100 && Projectile.Center.Y > Main.screenPosition.Y - 100 && Projectile.Center.Y < Main.screenPosition.Y + Main.screenWidth + 100)
 		{
 			if (Main.rand.NextBool(2))
@@ -81,7 +81,7 @@ public class FrostBall : ModProjectile
 			}
 		}
 
-		Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4),0,0,DustID.Ice, 0, 0, 0, default, Main.rand.NextFloat(0.75f, 1.25f));
+		Dust dust = Dust.NewDustDirect(Projectile.Center - new Vector2(4), 0, 0, DustID.Ice, 0, 0, 0, default, Main.rand.NextFloat(0.75f, 1.25f));
 		dust.noGravity = true;
 		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
 		{
@@ -93,7 +93,7 @@ public class FrostBall : ModProjectile
 		}
 
 		//超过一定时间开始下坠
-		if(Projectile.timeLeft < 320)
+		if (Projectile.timeLeft < 320)
 		{
 			Projectile.velocity.Y += 0.25f;
 			Projectile.velocity *= 0.98f;
@@ -130,11 +130,11 @@ public class FrostBall : ModProjectile
 		GenerateIceDust(20);
 		GenerateSnowPiece(10);
 		SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
-		foreach(Projectile proj in Main.projectile)
+		foreach (Projectile proj in Main.projectile)
 		{
-			if(proj.type == ModContent.ProjectileType<FrostBomb>())
+			if (proj.type == ModContent.ProjectileType<FrostBomb>())
 			{
-				if((proj.Center - Projectile.Center).Length() < 150f)
+				if ((proj.Center - Projectile.Center).Length() < 150f)
 				{
 					if (proj.active && proj.timeLeft > 5)
 					{

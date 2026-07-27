@@ -1,4 +1,4 @@
-﻿sampler2D notUsed : register(s0);
+sampler2D notUsed : register(s0);
 sampler2D waterDisortion : register(s1);
 sampler2D waterTarget : register(s2);
 

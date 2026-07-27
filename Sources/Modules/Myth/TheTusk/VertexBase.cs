@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheTusk;
+namespace Everglow.Myth.TheTusk;
 
 public class VertexBase
 {

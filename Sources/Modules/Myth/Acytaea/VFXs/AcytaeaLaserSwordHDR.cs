@@ -2,6 +2,7 @@ using Everglow.Myth.Acytaea.Projectiles;
 using Terraria;
 
 namespace Everglow.Myth.Acytaea.VFXs;
+
 public class AcytaeaLaserSwordHDRPipeline : Pipeline
 {
 	public override void Load()
@@ -125,17 +126,17 @@ public class AcytaeaLaserSwordHDREffect : Visual
 		float width = Main.screenWidth;
 		float height = Main.screenHeight;
 		float pocession = timer / maxTime;
-		
+
 		pocession -= 0.5f;
 		pocession = MathF.Abs(pocession);
 
 		pocession *= 2;
 		pocession = 1 - pocession;
-		
+
 		pocession = Math.Clamp(pocession, 0, 0.5f);
 
 		pocession *= Math.Clamp(2f - (playerCenter - position).Length() / 1000f, 0, 1);
-		
+
 		pocession = MathF.Sin(pocession * MathF.PI);
 		Color background = Color.Lerp(new Color(160, 255, 255, 255), new Color(160, 222, 160, 255), pocession);
 		Vector3 coord = new Vector3(new Vector2(0.5f), 0);
@@ -157,12 +158,12 @@ public class AcytaeaLaserSwordHDREffect : Visual
 				if (p.type == ModContent.ProjectileType<AcytaeaLaserSword>())
 				{
 					AcytaeaLaserSword acyLaser = p.ModProjectile as AcytaeaLaserSword;
-					if(acyLaser != null)
-					{				
+					if (acyLaser != null)
+					{
 						Vector2 baseCenter = acyLaser.EndPos - Main.screenPosition;
 						float size = 220f;
 
-						for(int x = 0;x < 30;x++)
+						for (int x = 0; x < 30; x++)
 						{
 							float coordX = x / 30f;
 							float coordXNext = (x + 1) / 30f;

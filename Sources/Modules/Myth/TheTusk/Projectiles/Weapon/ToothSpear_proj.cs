@@ -218,7 +218,7 @@ public class ToothSpear_proj : ModProjectile
 		effect = Commons.ModAsset.Trailing.Value;
 		effect.Parameters["uTransform"].SetValue(model * projection);
 		effect.CurrentTechnique.Passes["HeatMap"].Apply();
-		
+
 		Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 		Main.graphics.graphicsDevice.Textures[1] = ModAsset.TuskKnife_meleeColor.Value;
 		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;

@@ -93,7 +93,7 @@ public class FreezeFeather : ModProjectile
 			ice.color.G = (byte)Main.rand.Next(240);
 		}
 
-		if(Projectile.Center.X > Main.screenPosition.X - 100 && Projectile.Center.X < Main.screenPosition.X + Main.screenWidth + 100 && Projectile.Center.Y > Main.screenPosition.Y - 100 && Projectile.Center.Y < Main.screenPosition.Y + Main.screenWidth + 100)
+		if (Projectile.Center.X > Main.screenPosition.X - 100 && Projectile.Center.X < Main.screenPosition.X + Main.screenWidth + 100 && Projectile.Center.Y > Main.screenPosition.Y - 100 && Projectile.Center.Y < Main.screenPosition.Y + Main.screenWidth + 100)
 		{
 			if (Main.rand.NextBool(2))
 			{
@@ -251,7 +251,7 @@ public class FreezeFeather : ModProjectile
 		}
 		AmmoHit();
 	}
-	public  void AmmoHit()
+	public void AmmoHit()
 	{
 		timeTokill = 20;
 		Projectile.tileCollide = false;

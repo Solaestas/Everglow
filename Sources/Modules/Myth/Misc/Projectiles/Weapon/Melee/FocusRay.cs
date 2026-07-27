@@ -28,9 +28,10 @@ public class FocusRay : ModProjectile
 	}
 	public override void AI()
 	{
-		if(StickTarget == null)
+		if (StickTarget == null)
 		{
-			Projectile.active = false; return;
+			Projectile.active = false;
+			return;
 		}
 		Projectile.Center = StickTarget.Center;
 	}

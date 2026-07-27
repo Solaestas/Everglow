@@ -3,6 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class CurseFlamePipeline : Pipeline
 {
 	public override void Load()

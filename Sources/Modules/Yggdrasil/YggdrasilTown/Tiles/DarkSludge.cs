@@ -59,7 +59,7 @@ public class DarkSludge : ModTile, ISceneTile
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		if(!Main.tile[i, j - 1].HasTile && !Ins.VisualQuality.Low)
+		if (!Main.tile[i, j - 1].HasTile && !Ins.VisualQuality.Low)
 		{
 			return false;
 		}

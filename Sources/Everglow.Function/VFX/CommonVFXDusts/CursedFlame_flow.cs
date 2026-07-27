@@ -24,7 +24,7 @@ public class CursedFlame_flowPipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.CursedFlame_flow;
-		
+
 	}
 	public override void BeginRender()
 	{
@@ -113,7 +113,7 @@ public class CursedFlame_flowDust : FlowDraw
 			bars.Add(oldPos[i] + normal * ai[2], drawColor, new Vector3(0.7f, ai[0], i / 80f - timeValue));
 			bars.Add(oldPos[i] - normal * ai[2], drawColor, new Vector3(0.3f, ai[0] + 0.2f, i / 80f - timeValue));
 		}
-		if(bars.Count > 2)
+		if (bars.Count > 2)
 			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 	}
 }

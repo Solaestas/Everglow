@@ -2,6 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class VaporPipeline : Pipeline
 {
 	public override void Load()

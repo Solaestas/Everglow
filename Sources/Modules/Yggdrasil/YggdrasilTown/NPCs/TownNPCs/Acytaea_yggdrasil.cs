@@ -462,7 +462,7 @@ public class Acytaea_yggdrasil : ModNPC
 
 		State = 4;
 		yield return new WaitForFrames(10);
-		if(attackDirection == -1)
+		if (attackDirection == -1)
 		{
 			State = 6;
 		}

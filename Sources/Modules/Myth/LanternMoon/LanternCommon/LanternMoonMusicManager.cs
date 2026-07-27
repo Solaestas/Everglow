@@ -29,11 +29,11 @@ public class LanternMoonMusicManager : MusicHelper
 			StartMusic(ModAsset.LanternMoonMusic_15_Melody_Loop_Mod, 3, true);
 			StartMusic(ModAsset.LanternMoonMusic_15_Percussion_Loop_Mod, 3, true);
 		}
-		if(Wave15StartTimer < 360000)
+		if (Wave15StartTimer < 360000)
 		{
 			Wave15StartTimer++;
 		}
-		if(CustomMusicCues.Count > 0)
+		if (CustomMusicCues.Count > 0)
 		{
 			LanternMoonInvasionEvent LanternMoon = ModContent.GetInstance<LanternMoonInvasionEvent>();
 			if (NPC.CountNPCS(ModContent.NPCType<LanternGhostKing>()) < 1)
@@ -50,7 +50,7 @@ public class LanternMoonMusicManager : MusicHelper
 
 	public override void EndMusicEffect(string path)
 	{
-		if(Wave15StartTimer >= 360000)
+		if (Wave15StartTimer >= 360000)
 		{
 			if (path == ModAsset.LanternMoonMusic_Pre15_Accompaniment_Head_Mod)
 			{

@@ -2,6 +2,7 @@ using Everglow.Food.Dusts;
 using Terraria.DataStructures;
 
 namespace Everglow.Food.Projectiles;
+
 internal class CreamChocolateCup_ChocolateBars : ModProjectile
 {
 	public override void SetDefaults()
@@ -29,7 +30,7 @@ internal class CreamChocolateCup_ChocolateBars : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		for(int x = 0;x < 15;x++)
+		for (int x = 0; x < 15; x++)
 		{
 			Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4) - new Vector2(4f), 8, 8, ModContent.DustType<ChcolateDust>());
 			d.velocity = Projectile.velocity * 0.5f + new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(6.283);
@@ -42,7 +43,7 @@ internal class CreamChocolateCup_ChocolateBars : ModProjectile
 	{
 		Texture2D mainTex = ModAsset.CreamChocolateCup_ChocolateBars.Value;
 		Rectangle rectangle = new Rectangle(Projectile.frame % 5 * 20, Projectile.frame > 5 ? 0 : 22, 20, 22);
-		Main.spriteBatch.Draw(mainTex, Projectile.Center - Main.screenPosition, rectangle, lightColor,Projectile.rotation,new Vector2(10, 11),1f,SpriteEffects.None,0);
+		Main.spriteBatch.Draw(mainTex, Projectile.Center - Main.screenPosition, rectangle, lightColor, Projectile.rotation, new Vector2(10, 11), 1f, SpriteEffects.None, 0);
 		return false;
 	}
 }

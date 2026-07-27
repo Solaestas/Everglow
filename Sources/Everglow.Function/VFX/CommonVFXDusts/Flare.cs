@@ -6,7 +6,7 @@ using SteelSeries.GameSense;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-//Ê¹ÓÃÀý£º
+//ä½¿ç”¨ä¾‹ï¼š
 /*
  * GradientColor flareColor = new GradientColor();
         flareColor.colorList.Add((new Color(1f, 0.5f, 0f), 0f));

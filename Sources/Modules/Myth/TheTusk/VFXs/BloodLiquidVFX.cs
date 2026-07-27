@@ -89,7 +89,7 @@ internal class BloodLiquidDust : ShaderDraw
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
+			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
 			}
@@ -99,7 +99,7 @@ internal class BloodLiquidDust : ShaderDraw
 			ai[2] += 0.02f;
 			alpha += 0.004f;
 			velocity *= 0.9f;
-			if(MathF.Abs(velocity.X) > 2)
+			if (MathF.Abs(velocity.X) > 2)
 			{
 				velocity.X *= 0.8f;
 			}
@@ -149,7 +149,7 @@ internal class BloodLiquidDust : ShaderDraw
 			{
 				widthDown *= 0f;
 			}
-			
+
 			float drawAlpha = MathF.Pow(1 - alpha, 3f);
 			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width + widthUp, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));
 			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width + widthDown, drawcRope, new Vector3(0.4f + ai[0], (i + 15 - len) / 30f + timer / 1500f * velocity.Length() * drawAlpha, drawAlpha));

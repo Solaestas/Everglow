@@ -1,6 +1,6 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
-    public class StarShine_purple_withoutPlayer : ModDust
+	public class StarShine_purple_withoutPlayer : ModDust
 	{
 		public override string Texture => "Everglow/EternalResolve/Items/Weapons/StabbingSwords/Dusts/StarShine_purple";
 		public override void OnSpawn(Dust dust)

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.LanternMoon.Dusts;
+namespace Everglow.Myth.LanternMoon.Dusts;
 
 public class Flame3 : ModDust
 {

@@ -47,7 +47,7 @@ public class GiantCampFire : ModTile, ISceneTile
 		Tile tile = Main.tile[i, j];
 		if (tile.TileFrameX == 36 && tile.TileFrameY == 18 && !Main.gamePaused)
 		{
-			if(Main.rand.NextBool(3))
+			if (Main.rand.NextBool(3))
 			{
 				var spark = new FireSparkDust
 				{
@@ -130,14 +130,14 @@ public class GiantCampFire_flame_fore : ForegroundVFX
 			zValue = MathF.Pow(zValue, 0.4f);
 			float colorR = MathF.Sin(MathF.Pow(value, 0.2f) * MathF.PI) * 0.95f;
 			float colorG = 0;
-			if(t == 0)
+			if (t == 0)
 			{
 				colorG = MathF.Pow(value, 0.4f);
 			}
 			float xValue = 9 * MathF.Sin(value * 32 + timeValue * 16) * value + value * value * Main.windSpeedCurrent * 870f;
 			bars.Add(position + new Vector2(30 * (1 - value) + xValue, -t * 9f), new Color(colorR, colorG, value, 0f), new Vector3(0, value * 1.3f - timeValue, zValue));
 			bars.Add(position + new Vector2(-30 * (1 - value) + xValue, -t * 9f), new Color(colorR, colorG, value, 0f), new Vector3(1, value * 1.3f - timeValue, zValue));
-			if(t == 39)
+			if (t == 39)
 			{
 				bars.Add(position + new Vector2(xValue, -t * 9f), new Color(0, colorG, 1, 0f), new Vector3(0, value * 1.3f - timeValue, zValue));
 				bars.Add(position + new Vector2(xValue, -t * 9f), new Color(0, colorG, 1, 0f), new Vector3(1, value * 1.3f - timeValue, zValue));

@@ -4,6 +4,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.EternalResolve.VFXs;
+
 public class Spark_EnchantedStabPipeline : Pipeline
 {
 	public override void Load()
@@ -54,7 +55,7 @@ public class Spark_EnchantedStabDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.98f;
-		if(!noGravity)
+		if (!noGravity)
 		{
 			velocity += new Vector2(Main.windSpeedCurrent * 0.4f, 0.6f);
 		}
@@ -69,11 +70,11 @@ public class Spark_EnchantedStabDust : Visual
 			timer += 10;
 		}
 		var tile = Main.tile[(int)(position.X / 16), (int)(position.Y / 16)];
-		if(position.Y % 1 < tile.LiquidAmount / 256f)
+		if (position.Y % 1 < tile.LiquidAmount / 256f)
 		{
 			timer += 120;
 		}
-		if(scale < 0.5f)
+		if (scale < 0.5f)
 		{
 			timer += 20;
 		}

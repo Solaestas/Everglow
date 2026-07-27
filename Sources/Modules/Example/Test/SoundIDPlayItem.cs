@@ -15,10 +15,10 @@ public class SoundIDPlayItem : ModItem
 	public int soundID = 0;
 	public override void HoldItem(Player player)
 	{
-		if(Main.mouseLeft && Main.mouseLeftRelease)
+		if (Main.mouseLeft && Main.mouseLeftRelease)
 		{
 			soundID++;
-			if(soundID >= SoundID.TrackableLegacySoundCount)
+			if (soundID >= SoundID.TrackableLegacySoundCount)
 			{
 				soundID = 0;
 			}

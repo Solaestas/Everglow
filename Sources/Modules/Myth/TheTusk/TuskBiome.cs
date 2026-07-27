@@ -28,7 +28,7 @@ public class TuskBiome : ModBiome
 
 	public override void SetStaticDefaults()
 	{
-		//TODO:×çÖäÖ®ò¢
+		//TODO:Ã—Ã§Ã–Ã¤Ã–Â®Ã²Â¢
 	}
 
 	public override bool IsBiomeActive(Player player)

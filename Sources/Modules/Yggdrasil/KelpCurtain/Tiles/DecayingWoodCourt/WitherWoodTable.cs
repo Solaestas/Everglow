@@ -8,7 +8,8 @@ namespace Everglow.Yggdrasil.KelpCurtain.Tiles.DecayingWoodCourt;
 
 public class WitherWoodTable : ModTile
 {
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileTable[Type] = true;
 		Main.tileSolidTop[Type] = true;
@@ -33,7 +34,8 @@ public class WitherWoodTable : ModTile
 		AddMapEntry(new Color(200, 200, 200), Language.GetText("MapObject.Table"));
 	}
 
-	public override void NumDust(int x, int y, bool fail, ref int num) {
+	public override void NumDust(int x, int y, bool fail, ref int num)
+	{
 		num = fail ? 1 : 3;
 	}
 }

@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
 
@@ -7,7 +7,7 @@ public class MeleeHit2 : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Null");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 40;

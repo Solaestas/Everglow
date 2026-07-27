@@ -51,7 +51,7 @@ public class SplashPipeline : Pipeline
 	}
 
 }
-[Pipeline(typeof(SplashPipeline),typeof(BloomPipeline))]
+[Pipeline(typeof(SplashPipeline), typeof(BloomPipeline))]
 public class Splash : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;

@@ -27,7 +27,7 @@ public class ToothBow : HandholdProjectile
 		ArmRootPos = player.MountedCenter + new Vector2(-4 * dir, -2);
 		float backValue = (player.itemTimeMax - player.itemTime) / (float)player.itemTimeMax;
 		Player.CompositeArmStretchAmount compositeArmStretchAmount = Player.CompositeArmStretchAmount.Full;
-		if(backValue < 0.5f)
+		if (backValue < 0.5f)
 		{
 			if (backValue > 0.1f)
 			{

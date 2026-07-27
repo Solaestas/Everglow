@@ -5,6 +5,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Renderers;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee;
+
 public class Glow : ModProjectile
 {
 	public override void SetStaticDefaults()
@@ -26,7 +27,7 @@ public class Glow : ModProjectile
 		Projectile.ignoreWater = true;
 		Projectile.ownerHitCheck = true;
 		Projectile.ownerHitCheckDistance = 140f;
-		Projectile.usesOwnerMeleeHitCD = true; 
+		Projectile.usesOwnerMeleeHitCD = true;
 		Projectile.stopsDealingDamageAfterPenetrateHits = true;
 
 		Projectile.aiStyle = -1;

@@ -17,7 +17,7 @@ public class Armor15CrackNPC : GlobalNPC
 {
 	public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
 	{
-		if(npc.HasBuff(ModContent.BuffType<Armor15Cracked>()))
+		if (npc.HasBuff(ModContent.BuffType<Armor15Cracked>()))
 		{
 			modifiers.Defense.Base -= 15;
 		}

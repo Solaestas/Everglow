@@ -20,7 +20,7 @@ public class WhisperingGhostGas : ModDust
 	{
 		dust.rotation += 0.4f;
 		dust.alpha += 3;
-		if(dust.alpha > 254)
+		if (dust.alpha > 254)
 		{
 			dust.active = false;
 		}

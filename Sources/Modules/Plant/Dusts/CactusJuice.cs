@@ -1,4 +1,4 @@
-﻿namespace Everglow.Plant.Dusts;
+namespace Everglow.Plant.Dusts;
 
 public class CactusJuice : ModDust
 {

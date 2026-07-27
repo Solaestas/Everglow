@@ -28,7 +28,7 @@ public class AbTuskFlesh : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		if(NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
+		if (NPC.CountNPCS(ModContent.NPCType<BloodTusk>()) <= 0)
 		{
 			NPC tusk = NPC.NewNPCDirect(default, i * 16, j * 16 - 1000, ModContent.NPCType<BloodTusk>());
 			tusk.active = true;

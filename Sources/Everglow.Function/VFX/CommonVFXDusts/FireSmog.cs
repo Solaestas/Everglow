@@ -2,6 +2,7 @@ using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class FireSmogPipeline : Pipeline
 {
 	public override void Load()

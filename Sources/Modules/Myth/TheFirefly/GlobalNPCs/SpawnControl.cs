@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.WorldGeneration;
+using Everglow.Myth.TheFirefly.WorldGeneration;
 
 namespace Everglow.Myth.TheFirefly.GlobalNPCs;
 

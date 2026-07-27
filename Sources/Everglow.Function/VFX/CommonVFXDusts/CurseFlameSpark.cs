@@ -3,6 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class CurseFlameSparkPipeline : Pipeline
 {
 	public override void Load()
@@ -63,7 +64,7 @@ public class CurseFlameSparkDust : Visual
 			velocity *= -0.2f;
 			timer += 10;
 		}
-		if(scale < 0.5f)
+		if (scale < 0.5f)
 		{
 			timer += 20;
 		}

@@ -1,4 +1,4 @@
-﻿sampler2D _MainTex : register(s0);
+sampler2D _MainTex : register(s0);
 
 struct PSInput
 {

@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaLaserSword2 : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -111,7 +112,7 @@ public class AcytaeaLaserSword2 : ModProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		float width = 36;
-		if(Projectile.timeLeft > 264)
+		if (Projectile.timeLeft > 264)
 		{
 			width = 300 - Projectile.timeLeft;
 		}
@@ -165,7 +166,7 @@ public class AcytaeaLaserSword2 : ModProjectile
 		Main.spriteBatch.Begin(sBS);
 		float range = 80 + MathF.Sin((float)Main.timeForVisualEffects * 0.04f) * 20;
 		List<Vertex2D> rings = new List<Vertex2D>();
-		for(int x = 0;x < 45;x++)
+		for (int x = 0; x < 45; x++)
 		{
 			Vector2 arrow = new Vector2(range, 0).RotatedBy(x / 45d * MathHelper.TwoPi);
 			Vector2 arrowFar = new Vector2(range + width * 2, 0).RotatedBy(x / 45d * MathHelper.TwoPi);

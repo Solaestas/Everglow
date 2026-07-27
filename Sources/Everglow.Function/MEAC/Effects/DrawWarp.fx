@@ -29,7 +29,7 @@ float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float4 drawColor = input.Color;
     float2 coord = input.Texcoord.xy;
-	float4 c = tex2D(uImage0, coord.xy);//Ö÷ÎÆÀí
+	float4 c = tex2D(uImage0, coord.xy);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     float4 finalColor = float4(drawColor.r, drawColor.g * c.r, 0, c.a);
 	return finalColor;
 }
@@ -42,7 +42,7 @@ float4 PixelShaderFunction2(PSInput input) : COLOR0
     coordXY.y /= input.Texcoord.z;
     coordXY += float2(0.5, 0.5);
     coordXY.y = clamp(coordXY.y, 0, 1);
-    float4 c = tex2D(uImage0, coordXY); //Ö÷ÎÆÀí
+    float4 c = tex2D(uImage0, coordXY); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     float4 finalColor = float4(drawColor.r, drawColor.g, c.r * drawColor.b, drawColor.a);
     return finalColor;
 }

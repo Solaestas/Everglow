@@ -1,4 +1,5 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
+
 public class FilthyFragilePipeline : Pipeline
 {
 	public override void Load()
@@ -52,7 +53,7 @@ public class FilthyFragileDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.92f;
-		if(timer < 40)
+		if (timer < 40)
 		{
 			scale *= 0.95f;
 		}
@@ -81,7 +82,7 @@ public class FilthyFragileDust : Visual
 		float pocession = timer / maxTime;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		int sideCount = 5;
-		if(coord.X < 0.3f)
+		if (coord.X < 0.3f)
 		{
 			sideCount = 3;
 		}

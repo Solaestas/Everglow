@@ -204,7 +204,7 @@ public class JadeLakeGreenAlgae : ModTile, ITileFluentlyDrawn
 			// 支持发光涂料
 			tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(tilePos.X, tilePos.Y - j, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 			tileLight = tileDrawing.DrawTiles_GetLightOverride(tilePos.X, tilePos.Y - j, tile, type, 0, 0, tileLight);
-			if(height > 10 && height - j <= 10)
+			if (height > 10 && height - j <= 10)
 			{
 				tileLight *= (height - j) / 20f + 0.5f;
 			}

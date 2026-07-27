@@ -48,10 +48,10 @@ public class FireCrackerLauncher_tile : ModTile
 		GenerateSmog(30, aimPos);
 		GenerateSpark(60, aimPos);
 		Projectile p = Projectile.NewProjectileDirect(null, aimPos, new Vector2(Main.rand.NextFloat(-1f, 1f), -45) * Main.rand.NextFloat(0.95f, 1.05f), ModContent.ProjectileType<RisingFirework>(), 50, 0f, Main.LocalPlayer.whoAmI, 0.2f, 0);
-		if(p != null)
+		if (p != null)
 		{
 			RisingFirework risingFirework = p.ModProjectile as RisingFirework;
-			if(risingFirework != null)
+			if (risingFirework != null)
 			{
 				risingFirework.MoveSight = false;
 			}

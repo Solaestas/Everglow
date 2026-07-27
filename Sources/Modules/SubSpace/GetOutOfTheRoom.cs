@@ -1,5 +1,6 @@
 using Everglow.Commons.UI.UIContainers.Sidebar.SidebarElements;
 namespace Everglow.SubSpace;
+
 public class GetOutOfTheRoom : SidebarElementBase
 {
 	public override Texture2D Icon => ModAsset.GetOutOfTheRoom.Value;

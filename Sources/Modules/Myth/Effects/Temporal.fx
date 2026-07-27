@@ -1,4 +1,4 @@
-﻿sampler curTexture : register(s0);
+sampler curTexture : register(s0);
 sampler prevTexture : register(s1);
 float2 uImageSize0;
 float2 uImageSize1;

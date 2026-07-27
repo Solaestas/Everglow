@@ -78,7 +78,7 @@ public class ValueBarHelper
 
 		var frameColor = new Color(0.05f, 0.05f, 0.08f, 0.6f);
 		var frameInnerColor = new Color(0.15f, 0.25f, 0.38f, 0.4f);
-		if(centerIcon is not null)
+		if (centerIcon is not null)
 		{
 			frameInnerColor = color1;
 		}

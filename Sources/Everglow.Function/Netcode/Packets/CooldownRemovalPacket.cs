@@ -41,7 +41,7 @@ public class CooldownRemovalPacket : IPacket
 	{
 		public void Handle(IPacket packet, int whoAmI)
 		{
-			foreach(var id in ((CooldownRemovalPacket)packet).cooldownIDs)
+			foreach (var id in ((CooldownRemovalPacket)packet).cooldownIDs)
 			{
 				Main.player[whoAmI].GetModPlayer<EverglowPlayer>().cooldowns.Remove(id);
 
