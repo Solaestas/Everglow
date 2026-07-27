@@ -61,7 +61,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			CurrentFade *= 0.5f;
 		}
 		DrawTrailFade.Enqueue(CurrentFade);
-		if(DrawTrailFade.Count > maxSlashTrailLength)
+		if (DrawTrailFade.Count > maxSlashTrailLength)
 		{
 			DrawTrailFade.Dequeue();
 		}
@@ -182,7 +182,7 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 			}
 			else if (timer < 42 * meleeTime)
 			{
-				if(timer > 12 * meleeTime)
+				if (timer > 12 * meleeTime)
 				{
 					NoTrail = false;
 				}
@@ -243,12 +243,12 @@ public class EvilHalbertBarnacle_proj : MeleeProj
 		{
 			NoTrail = true;
 			NoWeapon = true;
-			if(timer == 1)
+			if (timer == 1)
 			{
 				TargetVel = Main.MouseWorld - player.MountedCenter;
 				TargetVel = TargetVel.NormalizeSafe();
 			}
-			if(timer % 5 == 1 && timer < 27)
+			if (timer % 5 == 1 && timer < 27)
 			{
 				Vector2 dir = TargetVel.RotatedBy((timer - 11) / 10f);
 				Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), player.Center, dir * 5, ModContent.ProjectileType<EvilHalbertBarnacle_proj_Thrust>(), Projectile.damage, Projectile.knockBack, player.whoAmI);

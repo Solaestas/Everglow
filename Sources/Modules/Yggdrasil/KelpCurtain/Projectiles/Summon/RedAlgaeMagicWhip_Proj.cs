@@ -44,12 +44,12 @@ public class RedAlgaeMagicWhip_Proj : WhipProjectile
 					Ins.VFXManager.Add(redAlgaeDust);
 				}
 
-				if(Main.rand.NextBool(2))
+				if (Main.rand.NextBool(2))
 				{
 					int randSegment = Main.rand.Next(WhipPointsForCollision.Count - 10, WhipPointsForCollision.Count);
 					Vector2 spinningpoint = WhipPointsForCollision[randSegment] - WhipPointsForCollision[randSegment - 1];
 
-					if(!Main.rand.NextBool(6))
+					if (!Main.rand.NextBool(6))
 					{
 						var redAlgaeDust = new RedAlgae_Small_Dust();
 						redAlgaeDust.Position = WhipPointsForCollision[randSegment];
@@ -100,7 +100,7 @@ public class RedAlgaeMagicWhip_Proj : WhipProjectile
 			{
 				frame = 0;
 			}
-			if(i == list0.Count - 2)
+			if (i == list0.Count - 2)
 			{
 				frame = 4;
 			}
@@ -118,7 +118,7 @@ public class RedAlgaeMagicWhip_Proj : WhipProjectile
 			}
 			var scale = new Vector2(1f, (positionAdd.Length() + 2f) / rectangle.Height * 2f);
 			Main.spriteBatch.Draw(mainTexture, list0[i] - Main.screenPosition, new Rectangle?(rectangle), color, rotation, origin, scale, SpriteEffects.None, 0f);
-			if(frame == 4)
+			if (frame == 4)
 			{
 				Main.spriteBatch.Draw(mainTexture, list0[i] - Main.screenPosition, new Rectangle?(rectangle), glowColor, rotation, origin, scale, SpriteEffects.None, 0f);
 			}

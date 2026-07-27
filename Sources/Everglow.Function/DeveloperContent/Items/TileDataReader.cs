@@ -122,7 +122,7 @@ public class TileDataReaderSystem : Visual
 			drawColor = Color.Gray;
 		}
 		DrawBlockBound(i, j, drawColor);
-		if(tile.HasTile)
+		if (tile.HasTile)
 		{
 			if (ContinueTiles.Count < MaxContinueCount)
 			{
@@ -208,7 +208,7 @@ public class TileDataReaderSystem : Visual
 	public void UpdateContinueTiles(int i, int j)
 	{
 		Tile tile = TileUtils.SafeGetTile(i, j);
-		if(tile.HasTile)
+		if (tile.HasTile)
 		{
 			SurfaceTiles = TileUtils.BFSSurface(new Point(i, j), 625);
 			ContinueTiles = TileUtils.BFSContinueTile(new Point(i, j), false, 625);

@@ -32,6 +32,6 @@ public class QuenchingBlade_SmashVFX : Visual
 		int frameNumber = (int)(timeValue * frameCount);
 		Rectangle frame = new Rectangle(0, frameNumber * 610, 720, 610);
 		SpriteEffects effects = Direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-		Ins.Batch.Draw(ModAsset.QuenchingBlade_SmashVFX.Value,Position,frame,Color.White,0,new Vector2(frame.Width * 0.5f, frame.Height),1f,effects);
+		Ins.Batch.Draw(ModAsset.QuenchingBlade_SmashVFX.Value, Position, frame, Color.White, 0, new Vector2(frame.Width * 0.5f, frame.Height), 1f, effects);
 	}
 }

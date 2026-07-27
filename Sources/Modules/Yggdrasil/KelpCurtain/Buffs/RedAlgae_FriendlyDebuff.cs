@@ -12,7 +12,7 @@ public class RedAlgae_FriendlyDebuff : ModBuff
 	public override void Update(NPC npc, ref int buffIndex)
 	{
 		npc.color = Color.Lerp(npc.color, new Color(0.7f, 0.1f, 0.6f), 0.1f);
-		if(Main.rand.NextBool(12))
+		if (Main.rand.NextBool(12))
 		{
 			Vector2 vel = new Vector2(0, Main.rand.NextFloat(2)).RotatedByRandom(MathHelper.TwoPi);
 			var redAlgaeDust = new RedAlgae_Small_Dust();

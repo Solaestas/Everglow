@@ -46,7 +46,7 @@ public class FemaleLampLeaves : ModTile, ISceneTile
 		}
 		for (int x = -1; x < 2; x++)
 		{
-			if(x == 0)
+			if (x == 0)
 			{
 				continue;
 			}
@@ -58,7 +58,7 @@ public class FemaleLampLeaves : ModTile, ISceneTile
 			leaf.Flip_H = i > 0;
 			Ins.VFXManager.Add(leaf);
 		}
-		if(Main.rand.NextBool(3))
+		if (Main.rand.NextBool(3))
 		{
 			FemaleLampLeaves_leaf_fore topLeaf = new FemaleLampLeaves_leaf_fore { Position = new Vector2(i, j) * 16, Active = true, Visible = true, OriginTilePos = new Point(i, j), OriginTileType = Type };
 			topLeaf.rotation = mainRot + MathHelper.Pi;

@@ -58,7 +58,7 @@ public class FireflyBlueLiquidDrop : Visual
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.02f;
-			if(Ins.VisualQuality.Low)
+			if (Ins.VisualQuality.Low)
 			{
 				timer += 4;
 			}
@@ -80,7 +80,7 @@ public class FireflyBlueLiquidDrop : Visual
 			timer += 20;
 		}
 		float pocession = 1 - timer / maxTime;
-	    float c = pocession * scale * 0.08f;
+		float c = pocession * scale * 0.08f;
 		Lighting.AddLight(position, 0, c * 0.3f, c * 0.8f);
 	}
 

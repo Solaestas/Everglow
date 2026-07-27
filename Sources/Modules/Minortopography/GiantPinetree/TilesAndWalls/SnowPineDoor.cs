@@ -13,7 +13,7 @@ public class SnowPineDoor : ModTile
 		Main.tileSolid[Type] = false;
 		Main.tileLavaDeath[Type] = true;
 		Main.tileNoSunLight[Type] = true;
-		TileID.Sets.HousingWalls[Type] = true; 
+		TileID.Sets.HousingWalls[Type] = true;
 		TileID.Sets.HasOutlines[Type] = true;
 		TileID.Sets.DisableSmartCursor[Type] = true;
 

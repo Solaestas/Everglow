@@ -32,13 +32,13 @@ public class LampWoodForest : ModBiome
 
 	public override void OnInBiome(Player player)
 	{
-		if(Main.maxRaining > 0)
+		if (Main.maxRaining > 0)
 		{
 			Main.maxRaining = 0;
 			Main.StopRain();
 			Main.raining = false;
 		}
-		if(Main.slimeRain)
+		if (Main.slimeRain)
 		{
 			Main.StopSlimeRain();
 		}

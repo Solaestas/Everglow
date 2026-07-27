@@ -80,7 +80,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 					break;
 				}
 			}
-			if(Timer > 30)
+			if (Timer > 30)
 			{
 				Power = 70;
 				Projectile.velocity -= (Projectile.rotation - MathHelper.PiOver4).ToRotationVector2() * 35;
@@ -180,7 +180,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 			toTarget = toTarget.NormalizeSafe() * speed;
 			toTarget.Y *= 0.5f;
 			Projectile.velocity += toTarget * 0.1f;
-			if(Projectile.velocity.Length() > 15f)
+			if (Projectile.velocity.Length() > 15f)
 			{
 				Vector2 vel = Projectile.velocity * Main.rand.NextFloat(0.5f, 1.15f) * 0.1f;
 				var dust = new BarnacleTissueDust
@@ -335,7 +335,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 			}
 			float factor = i / (float)SmoothTrail.Count * mulFac;
 			float width = TrailWidthFunction(factor);
-			if(i == 0)
+			if (i == 0)
 			{
 				width = 0;
 			}
@@ -362,7 +362,7 @@ public class EvilHalbertBarnacle_proj_shuttle : TrailingProjectile
 
 			float trailWidth2 = TrailWidth * 0.4f;
 			float oldThin = ThinnerTrail.ToArray()[trailThinnerIndex];
-			Color trailColor2 = Color.Lerp(TrailColor * 0.3f, new Color(0.2f, 0.8f, 1, 0),1- Math.Clamp((oldThin - 0.5f) * 2, 0, 1));
+			Color trailColor2 = Color.Lerp(TrailColor * 0.3f, new Color(0.2f, 0.8f, 1, 0), 1 - Math.Clamp((oldThin - 0.5f) * 2, 0, 1));
 			trailColor2 *= 2;
 			width *= MathF.Pow(oldThin, 3f);
 			bars4.Add(drawPos + new Vector2(0, 1).RotatedBy(MathHelper.TwoPi * 2f / 3f) * trailWidth2, trailColor2, new Vector3(factor, 1, width));

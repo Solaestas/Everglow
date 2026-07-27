@@ -24,10 +24,10 @@ public class ForestRainVineTile_Thin : HangingTile
 
 	public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
 	{
-		if(j >= 20)
+		if (j >= 20)
 		{
 			Tile tileUp = Main.tile[i, j - 1];
-			if(tileUp.Slope != SlopeType.Solid)
+			if (tileUp.Slope != SlopeType.Solid)
 			{
 				tileUp.Slope = SlopeType.Solid;
 			}

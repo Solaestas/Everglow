@@ -1,4 +1,4 @@
-﻿using Everglow.Food.FoodUtilities;
+using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food;
 

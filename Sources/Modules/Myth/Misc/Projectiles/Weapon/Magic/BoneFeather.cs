@@ -88,7 +88,7 @@ public class BoneFeather : StickNPCProjectile
 		}
 		else
 		{
-			if(StuckNPC == -2)
+			if (StuckNPC == -2)
 			{
 				Projectile.Kill();
 			}
@@ -161,9 +161,9 @@ public class BoneNPCModifier : GlobalNPC
 				BoneFeather bf = p.ModProjectile as BoneFeather;
 				if (bf.StuckNPC == npc.whoAmI)
 				{
-					if(bf.timeTokill > 0)
+					if (bf.timeTokill > 0)
 					{
-						if((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
+						if ((p.type == projectile.type && bf.timeTokill < 540 * (p.extraUpdates + 1)) || p.type != projectile.type)
 						{
 							modifiers.ScalingBonusDamage += 0.07f;
 							bf.AmmoHit();

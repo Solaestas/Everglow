@@ -27,7 +27,7 @@ public class RedAlgaeHitStar : Visual
 		Texture2D star = Commons.ModAsset.StarSlash.Value;
 		float value = Timer / MaxTime;
 		Color color = new Color(1f, 0.9f, 0.8f, 0);
-		if(value > 0.5f)
+		if (value > 0.5f)
 		{
 			color = new Color(0.7f, 0.1f, 0.2f, 0);
 		}

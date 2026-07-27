@@ -164,7 +164,7 @@ internal class LargeFireBulb : ModTile, ITileFluentlyDrawn
 		{
 			i -= 1;
 		}
-		if(!Main.rand.NextBool(15))
+		if (!Main.rand.NextBool(15))
 		{
 			return;
 		}

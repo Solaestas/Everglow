@@ -3726,7 +3726,7 @@ public class KelpCurtainGeneration
 				if (cave.Contains(pos))
 				{
 					ChangeTile(tile, -1, (int)TileChangeState.Forceful);
-					if((pos.ToWorldCoordinates() - VampireMatCaveCenter).Length() < 55 * 16)
+					if ((pos.ToWorldCoordinates() - VampireMatCaveCenter).Length() < 55 * 16)
 					{
 						tile.WallType = WallID.None;
 					}

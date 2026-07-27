@@ -54,7 +54,7 @@ public class DevilHeart_Spark_II : Visual
 		}
 		float timeLeftValue = timer / maxTime;
 		var lightColor = new Color(221, 155, 255, 250);
-		if(dHSparkColor.colorList.Count > 0)
+		if (dHSparkColor.colorList.Count > 0)
 		{
 			lightColor = dHSparkColor.GetColor(timeLeftValue);
 		}

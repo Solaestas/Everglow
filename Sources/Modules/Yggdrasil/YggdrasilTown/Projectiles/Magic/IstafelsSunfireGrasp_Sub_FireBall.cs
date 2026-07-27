@@ -139,7 +139,7 @@ public class IstafelsSunfireGrasp_Sub_FireBall : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style == 1)
+		if (style == 1)
 		{
 			Color drawC;
 			if (index < 6)

@@ -11,7 +11,8 @@ public class MeatLantern_Proj : MeleeProj
 		maxAttackType = 3;
 		maxSlashTrailLength = 20;
 		longHandle = true;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		;
 		autoEnd = false;
 		canLongLeftClick = true;
 	}
@@ -385,8 +386,8 @@ public class MeatLantern_Proj : MeleeProj
 		for (int i = 0; i < 60; i++)
 		{
 			Vector2 v = Vector2.One.RotatedByRandom(MathF.PI * 2) * 2;
-			Dust d = Dust.NewDustDirect(target.Center + v*5, 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
-			d.velocity = target.velocity * 0.3f +v;
+			Dust d = Dust.NewDustDirect(target.Center + v * 5, 40, 40, ModContent.DustType<MeatLanternDust>(), 0, 0, 0, default, Main.rand.NextFloat(0.5f, 1.5f));
+			d.velocity = target.velocity * 0.3f + v;
 			d.noGravity = true;
 		}
 

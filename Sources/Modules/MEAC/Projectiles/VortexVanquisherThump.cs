@@ -43,7 +43,7 @@ public class VortexVanquisherThump : ModProjectile
 		else
 		{
 			player.velocity *= 0.6f;
-			if(Projectile.timeLeft == 1)
+			if (Projectile.timeLeft == 1)
 			{
 				Projectile.Kill();
 			}

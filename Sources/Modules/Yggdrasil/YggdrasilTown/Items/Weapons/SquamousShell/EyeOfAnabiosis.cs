@@ -40,7 +40,7 @@ public class EyeOfAnabiosis : ModItem
 
 	public override void HoldItem(Player player)
 	{
-		if(Main.myPlayer == player.whoAmI)
+		if (Main.myPlayer == player.whoAmI)
 		{
 			player.ListenMouseWorld();
 

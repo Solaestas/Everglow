@@ -24,7 +24,7 @@ public class RedAlgae_Spark : Visual
 		{
 			Scale *= 0.95f;
 		}
-		if(ai.Length > 0)
+		if (ai.Length > 0)
 		{
 			Velocity *= ai[0];
 		}

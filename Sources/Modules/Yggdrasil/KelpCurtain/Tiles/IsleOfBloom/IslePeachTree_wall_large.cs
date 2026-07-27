@@ -113,7 +113,7 @@ public class IslePeachTree_wall_large : ModTile, ITileFluentlyDrawn
 				origin = new Vector2(192, 83);
 				break;
 		}
-		if(rotation > 0.02f)
+		if (rotation > 0.02f)
 		{
 			GenerateDust(tilePos.X, tilePos.Y, origin, frame);
 		}

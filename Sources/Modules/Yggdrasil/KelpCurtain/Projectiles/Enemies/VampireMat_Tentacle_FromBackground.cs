@@ -71,7 +71,7 @@ public class VampireMat_Tentacle_FromBackground : ModProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(Duration < 12 || Duration > 170)
+		if (Duration < 12 || Duration > 170)
 		{
 			return false;
 		}

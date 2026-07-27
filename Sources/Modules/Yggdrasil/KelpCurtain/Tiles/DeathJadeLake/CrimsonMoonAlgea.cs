@@ -154,7 +154,7 @@ public class CrimsonMoonAlgea : ModTile, ITileFluentlyDrawn
 			if (!(tileUp.TileType == Type && tileUp.HasTile))
 			{
 				lastTile = true;
-				if(tileUp.TileType == ModContent.TileType<CrimsonMoonAlgea_fruit>())
+				if (tileUp.TileType == ModContent.TileType<CrimsonMoonAlgea_fruit>())
 				{
 					lastTileHasFruit = true;
 				}
@@ -165,7 +165,7 @@ public class CrimsonMoonAlgea : ModTile, ITileFluentlyDrawn
 			var frame = new Rectangle(14, 132 + 34 * style, 36, 32);
 			if (lastTile)
 			{
-				if(lastTileHasFruit)
+				if (lastTileHasFruit)
 				{
 					frame = new Rectangle(64 * style, 66, 64, 64);
 				}
@@ -214,11 +214,11 @@ public class CrimsonMoonAlgea : ModTile, ITileFluentlyDrawn
 			{
 				spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 			}
-			if(lastTile)
+			if (lastTile)
 			{
 				frame.X += 192;
 				spriteBatch.Draw(tex, drawPos, frame, new Color(0.1f, 0.1f, 0.1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
-				if(lastTileHasFruit)
+				if (lastTileHasFruit)
 				{
 					Lighting.AddLight(drawPos + new Vector2(0, -40).RotatedBy(rotation) + Main.screenPosition, new Vector3(1.5f, 1.3f, 1f) * (1.5f + MathF.Sin(Main.GlobalTimeWrappedHourly + TileUtils.GetFixedRandomNumber_SingleSeed(tilePos.GetHashCode())) * 0.5f));
 				}

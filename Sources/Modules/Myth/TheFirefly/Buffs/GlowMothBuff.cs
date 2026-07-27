@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheFirefly.Buffs;
+namespace Everglow.Myth.TheFirefly.Buffs;
 
 public class GlowMothBuff : ModBuff
 {

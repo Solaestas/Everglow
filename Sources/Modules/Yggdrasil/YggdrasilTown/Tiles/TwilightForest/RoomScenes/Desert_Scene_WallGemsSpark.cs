@@ -33,7 +33,7 @@ public class Desert_Scene_WallGemsSpark : Visual
 	public override void Update()
 	{
 		Timer++;
-		if(Timer >= MaxTime)
+		if (Timer >= MaxTime)
 		{
 			Kill();
 			return;

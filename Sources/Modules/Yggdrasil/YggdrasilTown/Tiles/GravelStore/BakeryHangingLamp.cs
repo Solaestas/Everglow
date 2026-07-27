@@ -155,7 +155,7 @@ public class BakeryHangingLamp : ModTile, ITileFluentlyDrawn
 		{
 			heightStrength = 1f;
 		}
-		if(tile.TileFrameY >= 36)
+		if (tile.TileFrameY >= 36)
 		{
 			heightStrength = 2f;
 		}

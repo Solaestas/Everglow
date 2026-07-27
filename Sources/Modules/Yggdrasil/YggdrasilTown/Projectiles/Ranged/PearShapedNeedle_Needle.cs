@@ -38,14 +38,14 @@ public class PearShapedNeedle_Needle : ModProjectile
 				hit = true;
 			}
 			Rectangle hitbox = new Rectangle((int)endPos.X, (int)endPos.Y, Projectile.width, Projectile.height);
-			foreach(var npc in Main.npc)
+			foreach (var npc in Main.npc)
 			{
-				if(npc != null && npc.active && npc.Hitbox.Intersects(hitbox))
+				if (npc != null && npc.active && npc.Hitbox.Intersects(hitbox))
 				{
 					hit = true;
 				}
 			}
-			if(hit)
+			if (hit)
 			{
 				break;
 			}

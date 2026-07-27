@@ -10,7 +10,7 @@ public class Photolysis : ModBuff
 
 	public override void Update(NPC npc, ref int buffIndex)
 	{
-		if(Main.rand.NextBool(3))
+		if (Main.rand.NextBool(3))
 		{
 			Dust dust = Dust.NewDustDirect(npc.TopLeft - new Vector2(4), npc.width, npc.height, ModContent.DustType<Dusts.LampWood_Dust_fluorescent_appear>());
 			dust.alpha = 0;

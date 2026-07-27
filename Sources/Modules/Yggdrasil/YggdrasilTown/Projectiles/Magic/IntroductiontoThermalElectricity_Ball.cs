@@ -108,18 +108,18 @@ public class IntroductiontoThermalElectricity_Ball : ModProjectile
 			{
 				Projectile.Kill();
 			}
-			if(TimeToKill < 10)
+			if (TimeToKill < 10)
 			{
 				Projectile.friendly = false;
 			}
 		}
 		else
 		{
-			if(Main.rand.NextBool())
+			if (Main.rand.NextBool())
 			{
 				return;
 			}
-			if(Main.rand.NextBool(3))
+			if (Main.rand.NextBool(3))
 			{
 				var dust = new IntroductiontoThermalElectricity_Plasma_Trail
 				{

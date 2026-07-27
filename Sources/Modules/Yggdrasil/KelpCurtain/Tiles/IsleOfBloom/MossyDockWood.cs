@@ -19,7 +19,7 @@ public class MossyDockWood : ModTile
 	public override bool CanExplode(int i, int j)
 	{
 		var tileTop = Main.tile[i, j - 1];
-		if(tileTop.HasTile && tileTop.TileType == ModContent.TileType<BlackAwningBoatSign>())
+		if (tileTop.HasTile && tileTop.TileType == ModContent.TileType<BlackAwningBoatSign>())
 		{
 			return false;
 		}

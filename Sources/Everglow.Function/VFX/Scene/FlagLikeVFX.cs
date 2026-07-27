@@ -115,7 +115,7 @@ public class FlagLikeVFX : TileVFX
 	{
 		Vector2 position = Meshgrid[xIndex, yIndex];
 		Vector2 texCoord = new Vector2(xIndex, yIndex) / Texture.Size() * 16;
-		if(Flip_H)
+		if (Flip_H)
 		{
 			texCoord.X = 1 - texCoord.X;
 		}

@@ -110,7 +110,7 @@ public class CrimsonSpell : ModNPC
 				{
 					NPC.ai[0] = 500;
 				}
-				else if((NPC.Center - player.Center).Length() > 600)
+				else if ((NPC.Center - player.Center).Length() > 600)
 				{
 					NPC.ai[0] = 500;
 				}
@@ -161,7 +161,7 @@ public class CrimsonSpell : ModNPC
 					checkPoint += new Vector2(0, 10);
 					if (Collision.SolidCollision(checkPoint - NPC.Size * 0.5f, NPC.width, NPC.height))
 					{
-						if((checkPoint - player.Center).Length() >= 100)
+						if ((checkPoint - player.Center).Length() >= 100)
 						{
 							NPC.Center = checkPoint + new Vector2(0, 0);
 							return;
@@ -179,7 +179,7 @@ public class CrimsonSpell : ModNPC
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if(NPC.alpha >= 250)
+		if (NPC.alpha >= 250)
 		{
 			return false;
 		}

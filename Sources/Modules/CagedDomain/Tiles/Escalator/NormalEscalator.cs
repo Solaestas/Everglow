@@ -62,7 +62,7 @@ public class NormalEscalator : ModTile, ISceneTile
 			}
 			Tile tile = Main.tile[i, j];
 			int dir = 1;
-			if(tile.TileFrameX == 18)
+			if (tile.TileFrameX == 18)
 			{
 				dir = -1;
 			}

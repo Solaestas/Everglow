@@ -48,7 +48,7 @@ internal class TreePlacer : ModItem
 		{
 			Tile tile = TileUtils.SafeGetTile(i, j - g);
 			Tile tileRight = TileUtils.SafeGetTile(i + 1, j - g);
-			if(!ChestSafe(i, j - g - 1) || !ChestSafe(i + 1, j - g - 1))
+			if (!ChestSafe(i, j - g - 1) || !ChestSafe(i + 1, j - g - 1))
 			{
 				Height = g + 1;
 			}

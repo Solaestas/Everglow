@@ -74,11 +74,11 @@ public class FurnaceNumberAxis : TileVFX
 		}
 		Score = YggdrasilTownFurnaceSystem.CurrentScore;
 		Timer++;
-		if(Timer >= 3628800)
+		if (Timer >= 3628800)
 		{
 			Timer = 0;
 		}
-		if(Timer % 6 == 0)
+		if (Timer % 6 == 0)
 		{
 			string scoreText = Score.ToString();
 			for (int i = 0; i < 10; i++)
@@ -92,11 +92,11 @@ public class FurnaceNumberAxis : TileVFX
 						value = 0;
 					}
 				}
-				if(NumberSlotFrameY[i] != value * 3)
+				if (NumberSlotFrameY[i] != value * 3)
 				{
 					NumberSlotFrameY[i]++;
 				}
-				if(NumberSlotFrameY[i] > 29)
+				if (NumberSlotFrameY[i] > 29)
 				{
 					NumberSlotFrameY[i] = 0;
 				}

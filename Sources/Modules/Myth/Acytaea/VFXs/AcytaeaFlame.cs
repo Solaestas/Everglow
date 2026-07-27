@@ -57,9 +57,9 @@ internal class AcytaeaFlameDust : ShaderDraw
 
 	public override void Update()
 	{
-		if(oldPos.Count == 0)
+		if (oldPos.Count == 0)
 		{
-			for(int x = 0;x < 15;x++)
+			for (int x = 0; x < 15; x++)
 			{
 				position += velocity;
 				oldPos.Add(position);

@@ -39,7 +39,7 @@ public class RedAlgaeDust : Visual
 		Velocity = Velocity.RotatedBy(ai[0]);
 		ai[0] *= 0.96f;
 		Velocity *= 0.98f;
-		if(ai.Length >= 2)
+		if (ai.Length >= 2)
 		{
 			Rotation += ai[1];
 		}

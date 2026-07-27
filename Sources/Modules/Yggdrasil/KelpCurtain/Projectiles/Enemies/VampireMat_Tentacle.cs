@@ -109,7 +109,7 @@ public class VampireMat_Tentacle : ModProjectile
 			Main.spriteBatch.End();
 			Main.spriteBatch.Begin(sBS);
 
-			if(vampireMat is not null && vampireMat.HitTimer > 0)
+			if (vampireMat is not null && vampireMat.HitTimer > 0)
 			{
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

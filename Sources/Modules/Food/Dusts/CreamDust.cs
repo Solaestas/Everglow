@@ -1,6 +1,7 @@
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Food.Dusts;
+
 public class CreamDust : ModDust
 {
 	public override void OnSpawn(Dust dust)

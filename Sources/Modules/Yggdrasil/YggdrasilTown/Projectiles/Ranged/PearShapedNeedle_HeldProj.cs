@@ -23,7 +23,7 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 	{
 		Timer++;
 		float preparedTime = 13 * PrepareChargeAnimationPerNeedle;
-		if(Timer % 3 == 0 && Timer >= 3 && Timer <= preparedTime)
+		if (Timer % 3 == 0 && Timer >= 3 && Timer <= preparedTime)
 		{
 			SoundEngine.PlaySound(22, Projectile.Center);
 		}
@@ -154,7 +154,7 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 		Color reflectColor = lightColor * reflect;
 		reflectColor.A = 0;
 		Main.EntitySpriteDraw(needleReflect, drawPos, null, reflectColor, rotation, needleReflect.Size() * 0.5f, 1f, SpriteEffects.None, 0);
-		if(reflect > 0.5f)
+		if (reflect > 0.5f)
 		{
 			Vector2 addPos = new Vector2(7, -7).RotatedBy(rotation);
 			Main.EntitySpriteDraw(needleReflectStar, drawPos + addPos, null, reflectColor * 2, 0, needleReflectStar.Size() * 0.5f, (reflect - 0.5f) * 3f, SpriteEffects.None, 0);
@@ -218,7 +218,7 @@ public class PearShapedNeedle_HeldProj : HandholdProjectile
 				}
 			}
 		}
-		if(succeed)
+		if (succeed)
 		{
 			SoundEngine.PlaySound(SoundID.DD2_SkyDragonsFuryShot, Projectile.Center);
 		}

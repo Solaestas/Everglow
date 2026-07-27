@@ -73,13 +73,13 @@ public class VampireMatCave_HangingSign : ShapeDataTile, ITileFluentlyDrawn
 			int totalPushTime = 140;
 			float pushForcePerFrame = 0.96f;
 			float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(offsetPos.X, offsetPos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
-			if(j == 5)
+			if (j == 5)
 			{
 				highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(offsetPos.X - 2, offsetPos.Y, 5, 9, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 			}
 			windCycle -= highestWindGridPushComplex;
 			float rotation = windCycle * 0.21f;
-			if(j < 5)
+			if (j < 5)
 			{
 				rotation -= lastOffset.X / (22f + j * 3f);
 			}
@@ -120,7 +120,7 @@ public class VampireMatCave_HangingSign : ShapeDataTile, ITileFluentlyDrawn
 			var drawPos = drawCenterPos + lastOffset;
 			var tileSpriteEffect = SpriteEffects.None;
 			spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
-			if(j == 5)
+			if (j == 5)
 			{
 				frame.X += 80;
 				spriteBatch.Draw(tex, drawPos, frame, tileLight * 3, rotation, origin, 1f, tileSpriteEffect, 0f);

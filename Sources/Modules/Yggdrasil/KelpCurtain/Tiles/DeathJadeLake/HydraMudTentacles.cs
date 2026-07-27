@@ -257,7 +257,7 @@ public class HydraMudTentacles_fore : TileVFX
 	public void AddDrawingFace(List<Vertex2D> bars, Vector2 Direction, Vector2 Position, float length = 1, Vector2 offset = default)
 	{
 		Tile tile = Main.tile[OriginTilePos];
-		if(tile.Slope == SlopeType.Solid && !tile.halfBrick())
+		if (tile.Slope == SlopeType.Solid && !tile.halfBrick())
 		{
 			Tile directionTile = Main.tile[OriginTilePos + Direction.ToPoint()];
 			if (TileUtils.IsTileSolid(directionTile))
@@ -277,7 +277,7 @@ public class HydraMudTentacles_fore : TileVFX
 			rot = MathHelper.Pi - rot;
 		}
 		float frameYModify = 0f;
-		if(cos < 0.2f)
+		if (cos < 0.2f)
 		{
 			frameYModify = 0.5f;
 		}

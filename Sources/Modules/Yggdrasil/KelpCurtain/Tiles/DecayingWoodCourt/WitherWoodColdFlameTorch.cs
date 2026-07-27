@@ -114,7 +114,7 @@ public class WitherWoodColdFlameTorch : ModTile
 		{
 			offsetY = -10;
 		}
-		if(tileFrameX >= 22 && tileFrameX <= 44)
+		if (tileFrameX >= 22 && tileFrameX <= 44)
 		{
 			offsetY = -20;
 		}

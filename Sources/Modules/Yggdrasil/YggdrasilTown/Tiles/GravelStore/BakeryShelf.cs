@@ -28,7 +28,7 @@ public class BakeryShelf : ModTile
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.TileFrameY == 90)
+		if (tile.TileFrameY == 90)
 		{
 			Lighting.AddLight(i, j, 0.6f, 0.6f, 0.5f);
 		}

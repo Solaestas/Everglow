@@ -246,7 +246,7 @@ public class CrimsonMoonAlgaeSummonStaff_minion : ModProjectile
 		}
 		else
 		{
-			if(ProjectileAttackCooling <= 0)
+			if (ProjectileAttackCooling <= 0)
 			{
 				Projectile.velocity = Projectile.velocity * 0.95f + toTarget.NormalizeSafe() * 16f * 0.05f;
 				if (toTarget.Length() < 20f || Projectile.Hitbox.Intersects(target.Hitbox))
@@ -257,7 +257,7 @@ public class CrimsonMoonAlgaeSummonStaff_minion : ModProjectile
 			}
 			else
 			{
-				if(ProjectileAttackCooling > 40)
+				if (ProjectileAttackCooling > 40)
 				{
 					ProjectileAttackCooling = 40;
 				}

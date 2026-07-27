@@ -4,7 +4,7 @@ public class TuskSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
 {
 	public override void ModifyFarFades(float[] fades, float transitionSpeed)
 	{
-		
+
 	}
 
 	public override int ChooseFarTexture()

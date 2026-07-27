@@ -15,10 +15,10 @@ public class Union_Y_Stairs_ban_2nd_floor : TileVFX
 	public override void Update()
 	{
 		Rectangle rectangle = new Rectangle((int)(Position.X - Texture.Width / 2f), (int)(Position.Y - Texture.Height / 2f), Texture.Width, Texture.Height);
-		foreach(var player in Main.player)
+		foreach (var player in Main.player)
 		{
 			// TODO: Enough score in mission system to enter 2nd floor
-			if(player.Hitbox.Intersects(rectangle))
+			if (player.Hitbox.Intersects(rectangle))
 			{
 				player.Top = new Vector2(player.Top.X, rectangle.Bottom().Y);
 				player.velocity.Y = 0;

@@ -1,4 +1,4 @@
-﻿sampler2D uImage : register(s0);
+sampler2D uImage : register(s0);
 texture2D uPowder;
 sampler2D uPowderTex = sampler_state
 {

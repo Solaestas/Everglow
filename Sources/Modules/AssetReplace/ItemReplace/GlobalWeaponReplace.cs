@@ -12,7 +12,7 @@ public class GlobalWeaponReplace : GlobalItem
 {
 	public override void SetDefaults(Item entity)
 	{
-		if(entity.type == ItemID.PiercingStarlight)
+		if (entity.type == ItemID.PiercingStarlight)
 		{
 			entity.shoot = ModContent.ProjectileType<PiercingStarlight_new>();
 		}

@@ -85,7 +85,7 @@ public class SideHangingLantern_Red : ModTile, ITileFluentlyDrawn
 			offXByDir = -5;
 		}
 
-		if(tile.TileFrameY >= 54)
+		if (tile.TileFrameY >= 54)
 		{
 			DrawLanternPiece(new Rectangle(40, 110, 22, 32), 0.16f, 12 + offXByDir, 8, pos + new Point(0, 1), pos + new Point(0, 1), drawCenterPos, spriteBatch, tileDrawing);
 		}
@@ -134,7 +134,7 @@ public class SideHangingLantern_Red : ModTile, ITileFluentlyDrawn
 
 		// 支持发光涂料
 		Color tileLight;
-		if(color != new Color())
+		if (color != new Color())
 		{
 			tileLight = color;
 		}

@@ -22,14 +22,14 @@ public class CurseSpellDust : Visual
 		Position += Velocity;
 		Velocity *= 0.95f;
 		Lighting.AddLight(Position, Scale * 0.1f, Scale * 0.001f, Scale * 0.003f);
-		if(!Collided && Collision.IsWorldPointSolid(Position))
+		if (!Collided && Collision.IsWorldPointSolid(Position))
 		{
 			Collided = true;
 		}
-		if(Collided)
+		if (Collided)
 		{
 			Velocity *= 0;
-			if(MaxTime - Timer > 30)
+			if (MaxTime - Timer > 30)
 			{
 				Timer = MaxTime - 30;
 			}
@@ -49,7 +49,7 @@ public class CurseSpellDust : Visual
 		Texture2D tex = Commons.ModAsset.LightPoint2.Value;
 		var drawColor = new Color(1f, 0.01f, 0.03f, 0);
 		float fade = 1;
-		if(MaxTime - Timer < 30)
+		if (MaxTime - Timer < 30)
 		{
 			fade = (MaxTime - Timer) / 30f;
 		}

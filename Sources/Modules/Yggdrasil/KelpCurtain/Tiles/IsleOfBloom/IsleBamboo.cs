@@ -268,7 +268,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 
 			var drawPos = drawCenterPos + lastOffset;
 			var tileSpriteEffect = SpriteEffects.None;
-			if(j > 1)
+			if (j > 1)
 			{
 				if (lastTileDis <= 0 || lastTileDis > 11)
 				{
@@ -277,7 +277,7 @@ public class IsleBamboo : ModTile, ITileFluentlyDrawn
 			}
 			else
 			{
-				if(j == 0)
+				if (j == 0)
 				{
 					int value = TileUtils.GetFixedRandomNumber(tile);
 					frame = new Rectangle(18 * (value % 3), 34 * (value % 2), 18, 34);

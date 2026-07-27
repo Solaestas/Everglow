@@ -29,8 +29,10 @@
 
 using System;
 
-namespace Spine {
-	public class TransformConstraintData : ConstraintData {
+namespace Spine
+{
+	public class TransformConstraintData : ConstraintData
+	{
 		internal ExposedList<BoneData> bones = new ExposedList<BoneData>();
 		internal BoneData target;
 		internal float rotateMix, translateMix, scaleMix, shearMix;
@@ -54,7 +56,8 @@ namespace Spine {
 		public bool Relative { get { return relative; } set { relative = value; } }
 		public bool Local { get { return local; } set { local = value; } }
 
-		public TransformConstraintData (string name) : base(name) {
+		public TransformConstraintData(string name) : base(name)
+		{
 		}
 	}
 }

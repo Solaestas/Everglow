@@ -1,6 +1,7 @@
 using Everglow.SpellAndSkull.GlobalItems;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FireFeatherMagic;
+
 internal class FlameRingPipeline : Pipeline
 {
 	public override void Load()

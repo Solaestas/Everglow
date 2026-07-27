@@ -117,11 +117,11 @@ public class NormalEscalator_VFX : TileVFX
 					// TODO: Player frame
 
 					int stateDir = 1;
-					if(State == (int)WorkState.Downward)
+					if (State == (int)WorkState.Downward)
 					{
 						stateDir = -1;
 					}
-					if(State == (int)WorkState.Cease)
+					if (State == (int)WorkState.Cease)
 					{
 						stateDir = 0;
 					}
@@ -351,7 +351,7 @@ public class NormalEscalator_VFX : TileVFX
 		else if (State == (int)WorkState.Downward)
 		{
 			StepValue -= MoveingSpeed;
-			if(StepValue < 0)
+			if (StepValue < 0)
 			{
 				StepValue += 16000;
 			}

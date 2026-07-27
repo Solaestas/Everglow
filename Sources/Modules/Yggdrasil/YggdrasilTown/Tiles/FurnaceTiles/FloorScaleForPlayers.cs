@@ -43,7 +43,7 @@ public class FloorScaleForPlayers : ModTile, ISceneTile
 		{
 			if (YggdrasilTownFurnaceSystem.SwitchPlayerCooling == 0)
 			{
-				if(YggdrasilTownFurnaceSystem.CurrentPlayer == null || YggdrasilTownFurnaceSystem.CurrentPlayer != player)
+				if (YggdrasilTownFurnaceSystem.CurrentPlayer == null || YggdrasilTownFurnaceSystem.CurrentPlayer != player)
 				{
 					YggdrasilTownFurnaceSystem.SwitchPlayerCooling = 30;
 					YggdrasilTownFurnaceSystem.CurrentPlayer = player;

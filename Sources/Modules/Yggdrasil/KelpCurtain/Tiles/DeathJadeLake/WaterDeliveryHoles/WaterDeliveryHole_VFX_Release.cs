@@ -78,7 +78,7 @@ public class WaterDeliveryHole_VFX_Release : TileVFX
 			bars_side_right.Add(Position + pos + new Vector2(0, 0), drawColor, new Vector3(coordX + timeValue, 0.5f, 0));
 
 
-			if(k < Timer)
+			if (k < Timer)
 			{
 				strongBloomColor = drawColor * 2 * fadeTime;
 			}

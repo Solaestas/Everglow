@@ -31,7 +31,7 @@ public class WaterSluice_Scene_shockwave : Visual
 	public override void Update()
 	{
 		Timer++;
-		if(Timer >= MaxTime)
+		if (Timer >= MaxTime)
 		{
 			Kill();
 			return;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
+namespace Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 internal class CrystalStormBook : MagicBookProjectile
 {

@@ -62,12 +62,12 @@ public class Wither_Activated_Dog_Summon_background : ModProjectile
 			bars2.Add(drawPos + ringWidth * 2f, drawColor2 * fade * 2, new Vector3(-i / 3f * Projectile.spriteDirection - timeValue * 1.5f, 0, 0));
 			bars2.Add(drawPos - ringWidth * 2f, drawColor2 * fade * 2, new Vector3(-i / 3f * Projectile.spriteDirection - timeValue * 1.5f, 1, 0));
 
-			if(((-i / 3f * Projectile.spriteDirection - timeValue * 1.5f) + 10000) % 1 is > 0.5f and < 0.75f)
+			if (((-i / 3f * Projectile.spriteDirection - timeValue * 1.5f) + 10000) % 1 is > 0.5f and < 0.75f)
 			{
 				Lighting.AddLight(drawPos + Main.screenPosition, new Vector3(1f, 0.9f, 0.2f) * fade);
 			}
 		}
-		if(bars.Count > 0 && bars_Dark.Count > 0 && bars2.Count > 0)
+		if (bars.Count > 0 && bars_Dark.Count > 0 && bars2.Count > 0)
 		{
 			SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 			Main.spriteBatch.End();

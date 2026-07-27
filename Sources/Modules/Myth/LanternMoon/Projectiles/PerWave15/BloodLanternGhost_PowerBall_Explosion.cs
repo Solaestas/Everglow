@@ -62,7 +62,7 @@ public class BloodLanternGhost_PowerBall_Explosion : ModProjectile
 		}
 		else
 		{
-			if(Projectile.timeLeft > 20)
+			if (Projectile.timeLeft > 20)
 			{
 				Vector2 pos = Vector2.zeroVector;
 				Vector2 vel = new Vector2(0, 8).RotatedByRandom(MathHelper.TwoPi);
@@ -114,7 +114,7 @@ public class BloodLanternGhost_PowerBall_Explosion : ModProjectile
 			rot -= totalRot * 0.3f;
 			velocity = velocity.RotatedBy(rot);
 			totalRot += rot;
-			if(Main.rand.NextBool(9) && size > 0.2f)
+			if (Main.rand.NextBool(9) && size > 0.2f)
 			{
 				float rot2 = Main.rand.NextFloat(-0.7f, 0.7f);
 				Vector2 vel2 = velocity.RotatedBy(-rot2);
@@ -209,7 +209,7 @@ public class BloodLanternGhost_PowerBall_Explosion : ModProjectile
 				}
 				bars_bolt.Add(drawPos + pos + width, lightningColor * mulColor, new Vector3(i / 30f, 0, bolt.Joint[i].Z));
 				bars_bolt.Add(drawPos + pos - width, lightningColor * mulColor, new Vector3(i / 30f, 1, bolt.Joint[i].Z));
-				if(i % 6 == 0)
+				if (i % 6 == 0)
 				{
 					Lighting.AddLight(drawPos + pos, new Vector3(1f, 1f, 0.1f) * fade * mulColor);
 				}

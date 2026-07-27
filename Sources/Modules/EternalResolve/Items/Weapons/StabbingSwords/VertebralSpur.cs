@@ -17,5 +17,5 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			PowerfulStabProj = ModContent.ProjectileType<VertebralSpur_Pro_Stab>();
 			base.SetDefaults();
 		}
-    }
+	}
 }

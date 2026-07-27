@@ -1,4 +1,4 @@
-﻿float4x4 uTransform;
+float4x4 uTransform;
 
 struct VSInput
 {

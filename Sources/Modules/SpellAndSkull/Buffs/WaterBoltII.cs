@@ -1,4 +1,4 @@
-﻿namespace Everglow.SpellAndSkull.Buffs;
+namespace Everglow.SpellAndSkull.Buffs;
 
 public class WaterBoltII : ModBuff
 {

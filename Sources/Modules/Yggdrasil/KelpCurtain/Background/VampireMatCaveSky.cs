@@ -21,14 +21,14 @@ public class VampireMatCaveSky : BackgroundSlideBase
 	{
 		Main.spriteBatch.Draw(Texture, WorldAnchor - Main.screenPosition, null, Color.White, 0, Texture.Size() * 0.5f, new Vector2(2f, 2f), SpriteEffects.None, 0);
 		EliminateLightManager.AddCircle(WorldAnchor, 65 * 16);
-		foreach(var npc in Main.npc)
+		foreach (var npc in Main.npc)
 		{
-			if(npc is not null && npc.active && npc.type == ModContent.NPCType<VampireMat>())
+			if (npc is not null && npc.active && npc.type == ModContent.NPCType<VampireMat>())
 			{
 				VampireMat mat = npc.ModNPC as VampireMat;
-				if(mat is not null)
+				if (mat is not null)
 				{
-					if(mat.DiveAtBackground)
+					if (mat.DiveAtBackground)
 					{
 						VampireMat.DrawSelf(npc, mat, Main.spriteBatch, Lighting.GetColor(npc.Center.ToTileCoordinates()));
 					}

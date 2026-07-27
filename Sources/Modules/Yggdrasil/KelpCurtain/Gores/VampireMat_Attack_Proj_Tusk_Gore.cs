@@ -26,7 +26,7 @@ public class VampireMat_Attack_Proj_Tusk_Gore : Visual
 	public override void Update()
 	{
 		Timer++;
-		if(MaxTime - Timer < 30)
+		if (MaxTime - Timer < 30)
 		{
 			Fade = (MaxTime - Timer) / 30f;
 		}
@@ -34,12 +34,12 @@ public class VampireMat_Attack_Proj_Tusk_Gore : Visual
 		{
 			Fade = 1;
 		}
-		if(Timer >= MaxTime)
+		if (Timer >= MaxTime)
 		{
 			Active = false;
 			return;
 		}
-		if(!Stop)
+		if (!Stop)
 		{
 			Position += Velocity;
 			Rotation += RotateSpeed;
@@ -57,7 +57,7 @@ public class VampireMat_Attack_Proj_Tusk_Gore : Visual
 				Velocity.Y *= -Main.rand.NextFloat(0.25f, 0.96f);
 				RotateSpeed *= Main.rand.NextFloat(0.25f, 0.96f);
 			}
-			if(Velocity.Length() < 1f)
+			if (Velocity.Length() < 1f)
 			{
 				Stop = true;
 			}
@@ -66,12 +66,12 @@ public class VampireMat_Attack_Proj_Tusk_Gore : Visual
 
 	public override void Draw()
 	{
-		if(Timer < 20)
+		if (Timer < 20)
 		{
 			Rectangle whiteFrame = Frame;
 			whiteFrame.X += 36;
 			Color drawColor = Color.White;
-			if(Timer >= 10)
+			if (Timer >= 10)
 			{
 				drawColor *= (20 - Timer) / 10f;
 			}

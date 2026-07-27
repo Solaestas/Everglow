@@ -323,7 +323,7 @@ public class VampireMat : ModNPC
 				else
 				{
 					playerDeadTimer++;
-					if(playerDeadTimer > 120)
+					if (playerDeadTimer > 120)
 					{
 						NPC.active = false;
 						yield break;
@@ -638,7 +638,7 @@ public class VampireMat : ModNPC
 				break;
 		}
 		VortexStyle++;
-		if(VortexStyle >= 2)
+		if (VortexStyle >= 2)
 		{
 			VortexStyle = 0;
 		}
@@ -890,7 +890,7 @@ public class VampireMat : ModNPC
 			{
 				Vector2 old_pos = BodyRope.Masses[k - 1].Position;
 				Vector2 pos = BodyRope.Masses[k].Position;
-				if (CollisionUtils.Intersect(old_pos,pos,10, target.Top, target.Bottom, target.width))
+				if (CollisionUtils.Intersect(old_pos, pos, 10, target.Top, target.Bottom, target.width))
 				{
 					return true;
 				}

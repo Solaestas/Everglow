@@ -1,4 +1,5 @@
 namespace Everglow.Myth.TheFirefly.VFXs;
+
 public class MothBlueFirePipeline : Pipeline
 {
 	public override void Load()
@@ -49,7 +50,7 @@ public class MothBlueFireDust : Visual
 			timer = maxTime;
 		}
 		velocity *= 0.9f;
-		if(ai.Length >= 3)
+		if (ai.Length >= 3)
 		{
 			velocity += new Vector2(Main.windSpeedCurrent * 0.1f, -0.1f) * ai[2];
 		}

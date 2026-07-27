@@ -15,12 +15,12 @@ public class RichOxygenSpongeWall : ModWall
 
 	public override void RandomUpdate(int i, int j)
 	{
-		for(int x = -1;x < 2;x++)
+		for (int x = -1; x < 2; x++)
 		{
-			for (int y = -1;y < 2; y++)
+			for (int y = -1; y < 2; y++)
 			{
 				Tile checkTile = TileUtils.SafeGetTile(x + i, y + j);
-				if(!checkTile.HasTile)
+				if (!checkTile.HasTile)
 				{
 					WorldGen.PlaceTile(x + i, y + j, ModContent.TileType<RichOxygenSponge>());
 				}

@@ -524,13 +524,13 @@ public class KitchenSystemUI : GameInterfaceLayer
 				SoundEngine.PlaySound(SoundID.MenuClose);
 				IsDragging = true;
 				DragStartMousePos = Main.MouseScreen;
-				if(Maximized)
+				if (Maximized)
 				{
 					DragStartPanelPos = MainPanelOrigin;
 				}
 				else
 				{
-					DragStartPanelPos =MainPanelOriginMinimized;
+					DragStartPanelPos = MainPanelOriginMinimized;
 				}
 			}
 			if (Main.mouseLeftRelease && IsDragging)
@@ -661,7 +661,7 @@ public class KitchenSystemUI : GameInterfaceLayer
 	{
 		if (IsDragging)
 		{
-			if(Maximized)
+			if (Maximized)
 			{
 				MainPanelOrigin = DragStartPanelPos + Main.MouseScreen - DragStartMousePos;
 			}

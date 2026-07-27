@@ -15,7 +15,7 @@ public class RedAlgae_Spark_SpinAroundEntity : Visual
 	public float[] ai;
 	public float Timer;
 	public float MaxTime;
-	public float Scale; 
+	public float Scale;
 	public float MaxScale;
 	public float Rotation;
 

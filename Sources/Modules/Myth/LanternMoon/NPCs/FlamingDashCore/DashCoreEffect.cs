@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.LanternMoon.NPCs.FlamingDashCore;
+namespace Everglow.Myth.LanternMoon.NPCs.FlamingDashCore;
 
 public class DashCoreEffect : ModSystem
 {

@@ -42,7 +42,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 			var currentTile = TileUtils.SafeGetTile(i, j);
 			int currentStyle = TileObjectData.GetTileStyle(currentTile);
 			TileObjectData currentObjectData = TileObjectData.GetTileData(currentTile.TileType, currentStyle);
-			if(!TileAtOriginPos(currentTile, currentStyle, currentObjectData))
+			if (!TileAtOriginPos(currentTile, currentStyle, currentObjectData))
 			{
 				return;
 			}
@@ -98,7 +98,7 @@ public class WaterDeliveryHole_TeleportPlayer : ModPlayer
 				}
 				foreach (var dest in destinations)
 				{
-					if(dest.Item3 != bestDir)
+					if (dest.Item3 != bestDir)
 					{
 						continue;
 					}

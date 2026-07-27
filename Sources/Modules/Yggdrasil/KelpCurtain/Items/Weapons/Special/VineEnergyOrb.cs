@@ -72,7 +72,7 @@ public class VineEnergyOrb : ModProjectile
 		UpdateTrail(currentPosition, rotation);
 
 		// 动态大小和透明度
-		Projectile.scale = 0.3f + pulse * 0.15f; 
+		Projectile.scale = 0.3f + pulse * 0.15f;
 		Projectile.alpha = (int)(80 + Math.Sin(pulseTimer * 2) * 20);
 
 		// 生成粒子效果
@@ -292,12 +292,12 @@ public class VineEnergyOrb : ModProjectile
 					trailColor,
 					segmentRotation,
 					new Vector2(0, 0.5f),
-					new Vector2(segmentLength, trailWidth), 
+					new Vector2(segmentLength, trailWidth),
 					SpriteEffects.None,
 					0);
 
 				Color innerTrailColor = new Color(120, 255, 120, (int)(200 * trailAlpha)) * (Projectile.alpha / 255f);
-				float innerTrailWidth = trailWidth * 0.4f; 
+				float innerTrailWidth = trailWidth * 0.4f;
 
 				Main.EntitySpriteDraw(
 					texture,

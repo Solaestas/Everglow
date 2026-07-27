@@ -107,7 +107,7 @@ public class IslePeachTree_wall_small : ModTile, ITileFluentlyDrawn
 				origin = new Vector2(53, 30);
 				break;
 			case 1:
-				frame = new Rectangle(112, 4,98, 52);
+				frame = new Rectangle(112, 4, 98, 52);
 				origin = new Vector2(64, 42);
 				break;
 			case 2:

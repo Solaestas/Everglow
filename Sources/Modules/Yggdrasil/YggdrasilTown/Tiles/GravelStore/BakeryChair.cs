@@ -96,16 +96,16 @@ public class BakeryChair : ModTile
 	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.TileFrameY == 0)
+		if (tile.TileFrameY == 0)
 		{
 			Rectangle frame = new Rectangle(0, 0, 24, 38);
-			if(tile.TileFrameX == 18)
+			if (tile.TileFrameX == 18)
 			{
 				frame.X += 26;
 			}
 			Texture2D tex = ModAsset.BakeryChair_full.Value;
 			Vector2 zero = new Vector2(Main.offScreenRange);
-			if(Main.drawToScreen)
+			if (Main.drawToScreen)
 			{
 				zero = Vector2.zeroVector;
 			}

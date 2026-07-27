@@ -69,14 +69,14 @@ public class RedAlgaeMagicStaff_Proj : ModProjectile
 		Lighting.AddLight(Projectile.Center, new Vector3(1f, 0.9f, 0.8f) * 0.5f);
 
 		Vector2 closestTargetPos = new Vector2(-10000);
-		foreach(var npc in Main.npc)
+		foreach (var npc in Main.npc)
 		{
-			if(npc is not null && npc.active)
+			if (npc is not null && npc.active)
 			{
-				if(!npc.friendly && !npc.dontTakeDamage && npc.CanBeChasedBy(Projectile))
+				if (!npc.friendly && !npc.dontTakeDamage && npc.CanBeChasedBy(Projectile))
 				{
 					Vector2 toTargetCheck = npc.Center - Projectile.Center;
-					if(toTargetCheck.Length() < (closestTargetPos - Projectile.Center).Length())
+					if (toTargetCheck.Length() < (closestTargetPos - Projectile.Center).Length())
 					{
 						closestTargetPos = npc.Center;
 					}

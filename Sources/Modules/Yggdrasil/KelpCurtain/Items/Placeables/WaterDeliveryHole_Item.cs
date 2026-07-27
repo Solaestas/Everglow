@@ -54,7 +54,7 @@ public class WaterDeliveryHole_Item : ModItem
 				Item.placeStyle = 0;
 			}
 		}
-		if(State == 2)
+		if (State == 2)
 		{
 			Main.placementPreview = true;
 		}

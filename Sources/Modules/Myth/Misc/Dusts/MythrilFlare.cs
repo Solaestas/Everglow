@@ -1,4 +1,5 @@
 namespace Everglow.Myth.Misc.Dusts;
+
 public class MythrilFlare : ModDust
 {
 	public override void OnSpawn(Dust dust)

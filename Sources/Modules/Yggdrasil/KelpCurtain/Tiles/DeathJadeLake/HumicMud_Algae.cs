@@ -277,7 +277,7 @@ public class HumicMud_Algae_fore : TileVFX
 			rot = MathHelper.Pi - rot;
 		}
 		float frameYModify = 0f;
-		if(cos < 0.2f)
+		if (cos < 0.2f)
 		{
 			frameYModify = 0.5f;
 		}

@@ -85,7 +85,7 @@ public class VampireMatCave_BoardSign : ShapeDataTile, ITileFluentlyDrawn
 			AddWorldVertex(bars, kelpPos + new Vector2(windCycle * 10 - 11, y * 16), new Vector2(92, 106 + y * 16), tex);
 			AddWorldVertex(bars, kelpPos + new Vector2(windCycle * 10 + 11, y * 16), new Vector2(114, 106 + y * 16), tex);
 		}
-		if(bars.Count > 2)
+		if (bars.Count > 2)
 		{
 			spriteBatch.GraphicsDevice.Textures[0] = tex;
 			spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

@@ -167,7 +167,7 @@ public class UnregisteredPylon : EverglowPylonBase<UnregisteredPylonTileEntity>
 					checkTile.TileFrameX = (short)(x * 18);
 					checkTile.TileFrameY = (short)(y * 18);
 				}
-				if(x == 0 && y == 0)
+				if (x == 0 && y == 0)
 				{
 					TileEntity tileEntityOld;
 					TileEntity.ByPosition.TryGetValue(new Point16(checkPoint.X, checkPoint.Y), out tileEntityOld);
@@ -177,7 +177,7 @@ public class UnregisteredPylon : EverglowPylonBase<UnregisteredPylonTileEntity>
 						TileEntity.PlaceEntityNet(checkPoint.X, checkPoint.Y, ModContent.TileEntityType<HolographicPylonTileEntity>());
 					}
 				}
-				if(x == 1 && y == 3)
+				if (x == 1 && y == 3)
 				{
 					UnlockVFX(checkPoint.X, checkPoint.Y);
 				}

@@ -178,11 +178,11 @@ public class KelpMoss : ModTile, ITileFluentlyDrawn
 
 		Vector2 worldPos_drop = lastSegmentPos + Main.screenPosition + dropOffset.RotatedBy(lastRot);
 		float dropValue = (TileUtils.GetFixedRandomNumber(tilePos, 600) + (int)Main.time) % 600 - 300;
-		if(dropValue < 0)
+		if (dropValue < 0)
 		{
 			dropValue = 0;
 		}
-		if(dropValue == 299 && !Main.gamePaused)
+		if (dropValue == 299 && !Main.gamePaused)
 		{
 			Dust.NewDustPerfect(worldPos_drop, ModContent.DustType<KelpWaterDrop>(), Vector2.zeroVector);
 		}

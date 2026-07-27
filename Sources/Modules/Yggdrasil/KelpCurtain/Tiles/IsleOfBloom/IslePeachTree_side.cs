@@ -125,7 +125,7 @@ public class IslePeachTree_side : ModTile, ITileFluentlyDrawn, ITileOffsetOverSc
 		int totalPushTime = 140;
 		float pushForcePerFrame = 0.96f;
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X - 20, tilePos.Y - 10, 20, 10, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
-		if(tile.TileFrameX == 180)
+		if (tile.TileFrameX == 180)
 		{
 			highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y - 10, 20, 10, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		}

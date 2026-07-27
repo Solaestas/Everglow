@@ -34,10 +34,10 @@ public class BlackAwningBoat : BoxEntity
 			Velocity = new Vector2(Velocity.X, 2);
 		}
 		List<Point> collideTile = TileUtils.GetAABBAreaOfTile(Position + Velocity, Size);
-		foreach(var pos in collideTile)
+		foreach (var pos in collideTile)
 		{
 			var tile = TileUtils.SafeGetTile(pos);
-			if(tile.HasTile && Main.tileSolid[tile.type])
+			if (tile.HasTile && Main.tileSolid[tile.type])
 			{
 				Velocity *= 0;
 				break;
@@ -56,12 +56,12 @@ public class BlackAwningBoat : BoxEntity
 				LocalUIHelper.Closing = true;
 			}
 		}
-		if(Velocity.Length() > 0.001f)
+		if (Velocity.Length() > 0.001f)
 		{
 			bool shouldReleaseProj = true;
-			foreach(var proj in Main.projectile)
+			foreach (var proj in Main.projectile)
 			{
-				if(proj is not null && proj.active && proj.type == ModContent.ProjectileType<BlackAwningBoat_WaterDistort>())
+				if (proj is not null && proj.active && proj.type == ModContent.ProjectileType<BlackAwningBoat_WaterDistort>())
 				{
 					BlackAwningBoat_WaterDistort bABWD0 = proj.ModProjectile as BlackAwningBoat_WaterDistort;
 					if (bABWD0 is not null && bABWD0.ParentBoat == this)
@@ -71,7 +71,7 @@ public class BlackAwningBoat : BoxEntity
 					}
 				}
 			}
-			if(shouldReleaseProj)
+			if (shouldReleaseProj)
 			{
 				Projectile p0 = Projectile.NewProjectileDirect(Main.LocalPlayer.GetSource_FromAI(), Box.Center, Velocity, ModContent.ProjectileType<BlackAwningBoat_WaterDistort>(), 0, 0, Main.myPlayer);
 				BlackAwningBoat_WaterDistort bABWD = p0.ModProjectile as BlackAwningBoat_WaterDistort;
@@ -81,7 +81,7 @@ public class BlackAwningBoat : BoxEntity
 				}
 			}
 		}
-		if(LightOn)
+		if (LightOn)
 		{
 			Lighting.AddLight(Box.Center, new Vector3(1.2f, 0.7f, 0.3f) * 1.25f);
 		}
@@ -91,17 +91,17 @@ public class BlackAwningBoat : BoxEntity
 	{
 		Texture2D boatTex = ModAsset.BlackAwningBoat.Value;
 		var frame = new Rectangle(0, 50, 100, 50);
-		if(!LightOn)
+		if (!LightOn)
 		{
 			frame.Y = 0;
 		}
 		Main.spriteBatch.Draw(boatTex, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, frame, Lighting.GetColor(new Vector2(Box.Center.X, Box.Bottom).ToTileCoordinates()), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
-		if(LightOn)
+		if (LightOn)
 		{
 			frame.X += 100;
-			Main.spriteBatch.Draw(boatTex, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, frame, new Color(1f ,1f, 1f, 0), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
+			Main.spriteBatch.Draw(boatTex, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, frame, new Color(1f, 1f, 1f, 0), 0, new Vector2(frame.Width / 2f, frame.Height), 1, SpriteEffects.None, 0);
 		}
-		if(OnSelect)
+		if (OnSelect)
 		{
 			Texture2D boatTex_highlight = ModAsset.BlackAwningBoat_Single_Highlight.Value;
 			Main.spriteBatch.Draw(boatTex_highlight, new Vector2(Box.Center.X, Box.Bottom) - Main.screenPosition, null, Lighting.GetColor(new Vector2(Box.Center.X, Box.Bottom).ToTileCoordinates()), 0, new Vector2(boatTex_highlight.Width / 2f, boatTex_highlight.Height), 1, SpriteEffects.None, 0);

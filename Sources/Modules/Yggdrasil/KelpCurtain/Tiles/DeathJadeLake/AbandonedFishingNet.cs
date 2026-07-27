@@ -48,7 +48,7 @@ public class AbandonedFishingNet : ModTile, ITileFluentlyDrawn
 	private void DrawFluctuatingFishingNet(Point tilePos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		var tile = Main.tile[tilePos];
-		if(!TileDrawing.IsVisible(tile))
+		if (!TileDrawing.IsVisible(tile))
 		{
 			return;
 		}
@@ -57,7 +57,7 @@ public class AbandonedFishingNet : ModTile, ITileFluentlyDrawn
 		tex ??= ModAsset.JadeLakeGreenAlgae.Value;
 		Rectangle frame = new Rectangle(2, 50, 48, 18);
 		int dir = 1;
-		if(tile.TileFrameX >= 54)
+		if (tile.TileFrameX >= 54)
 		{
 			dir = -1;
 		}
@@ -71,9 +71,9 @@ public class AbandonedFishingNet : ModTile, ITileFluentlyDrawn
 			Color lightColor = Lighting.GetColor((drawCenterPos + Main.screenPosition).ToTileCoordinates());
 			float coordX = (float)(Utils.Lerp(frame.X, frame.X + frame.Width, value) / tex.Width);
 			bars.Add(drawPos + new Vector2(0, frame.Height * 0.5f), lightColor, new Vector3(coordX, (float)(frame.Y + frame.Height) / tex.Height, 0));
-			bars.Add(drawPos+ new Vector2(0, -frame.Height * 0.5f), lightColor,new Vector3(coordX, (float)frame.Y / tex.Height, 0));
+			bars.Add(drawPos + new Vector2(0, -frame.Height * 0.5f), lightColor, new Vector3(coordX, (float)frame.Y / tex.Height, 0));
 		}
-		if(bars.Count > 2)
+		if (bars.Count > 2)
 		{
 			spriteBatch.GraphicsDevice.Textures[0] = tex;
 			spriteBatch.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);

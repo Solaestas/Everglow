@@ -58,7 +58,7 @@ public class GreenRelicSlotTable : ModTile
 				{
 					for (int y = 0; y < 40; y++)
 					{
-						if(Main.rand.NextBool(4))
+						if (Main.rand.NextBool(4))
 						{
 							Vector2 v0 = new Vector2(0, Main.rand.NextFloat(0, 6f)).RotatedByRandom(MathHelper.TwoPi);
 							int type = ModContent.Find<ModGore>("Everglow/CyanBrickGore" + Main.rand.Next(7)).Type;

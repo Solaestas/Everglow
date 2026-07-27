@@ -13,7 +13,7 @@ public class RedAlgae_GasRing : Visual
 
 	public override void Update()
 	{
-		if(Timer < 1)
+		if (Timer < 1)
 		{
 			Fade = 1;
 		}

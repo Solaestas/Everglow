@@ -2,6 +2,7 @@ using Everglow.Food.Items.Weapons;
 using Terraria.DataStructures;
 
 namespace Everglow.Food.Projectiles;
+
 public class CreamChocolateCupStaff_proj : ModProjectile
 {
 	public override void SetDefaults()
@@ -38,7 +39,7 @@ public class CreamChocolateCupStaff_proj : ModProjectile
 			Projectile.velocity *= 0;
 			if (player.itemTime == 0)
 			{
-				if(player.ItemCheck_PayMana(player.HeldItem, true))
+				if (player.ItemCheck_PayMana(player.HeldItem, true))
 				{
 					player.ItemCheck_ApplyManaRegenDelay(player.HeldItem);
 					player.itemTime = player.itemTimeMax;
@@ -202,10 +203,10 @@ public class CreamChocolateCupStaff_proj_held : ModProjectile
 		{
 			Projectile.Kill();
 		}
-		if(player.HeldItem.type != ModContent.ItemType<CreamChocolateCupStaff>())
+		if (player.HeldItem.type != ModContent.ItemType<CreamChocolateCupStaff>())
 		{
 			Projectile.Kill();
-		}	
+		}
 	}
 
 	public override bool PreDraw(ref Color lightColor)

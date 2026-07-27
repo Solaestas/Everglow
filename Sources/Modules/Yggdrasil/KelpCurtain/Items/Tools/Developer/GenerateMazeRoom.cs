@@ -49,19 +49,19 @@ public class GenerateMazeRoom : ModItem
 		Point tilePos = worldPos.ToTileCoordinates();
 		Point buildPos = tilePos;
 		int dir = 1;
-		if(GenRand.NextBool())
+		if (GenRand.NextBool())
 		{
 			dir = -1;
 		}
 		int space = CheckSpaceLeft(tilePos.X, tilePos.Y);
-		if(dir == -1)
+		if (dir == -1)
 		{
 			space = CheckSpaceRight(tilePos.X, tilePos.Y);
 		}
 		buildPos.X -= space * dir;
 		int randomAddPosX = GenRand.Next(0, 4);
 		buildPos.X += randomAddPosX * dir;
-		if(dir == 1)
+		if (dir == 1)
 		{
 			if (GetUniformTile(buildPos.X, buildPos.Y - 9, 10, 10) == -1)
 			{

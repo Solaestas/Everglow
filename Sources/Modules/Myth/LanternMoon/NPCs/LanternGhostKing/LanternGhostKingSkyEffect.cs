@@ -8,7 +8,7 @@ public class LanternGhostKingSkyEffect : ModSystem
 
 	public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
 	{
-		if(Active)
+		if (Active)
 		{
 			Color colorShine = new Color(1f, 0.3f, 0.2f, 1f);
 			if (SkyPower > 0)

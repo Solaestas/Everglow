@@ -239,9 +239,9 @@ public class BloodTusk : ModNPC
 		}
 		if (State == (int)States.Phase2)
 		{
-			foreach(Player player in Main.player)
+			foreach (Player player in Main.player)
 			{
-				if(player.active)
+				if (player.active)
 				{
 					if (player.Center.Y < NPC.Top.Y - 400)
 					{

@@ -28,7 +28,7 @@ public class YggdrasilWorldPylonDust : ModDust
 			dust.active = false;
 		}
 
-		if(dust.frame.Y <= 10)
+		if (dust.frame.Y <= 10)
 		{
 			Lighting.AddLight(dust.position, new Vector3(0.5f, 0.4f, 0.35f) * dust.scale);
 		}

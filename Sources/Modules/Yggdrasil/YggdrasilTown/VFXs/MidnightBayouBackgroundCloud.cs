@@ -35,16 +35,16 @@ public class MidnightBayouBackgroundCloud : Visual
 		Fade = 0.4f;
 		float timeLeft = MaxTime - Timer;
 		float thretholdTime = 120;
-		if(timeLeft < thretholdTime)
+		if (timeLeft < thretholdTime)
 		{
 			Fade *= timeLeft / thretholdTime;
 		}
-		if(Timer < thretholdTime)
+		if (Timer < thretholdTime)
 		{
 			Fade *= Timer / thretholdTime;
 		}
 		var background = ModContent.GetInstance<YggdrasilTownBackground>();
-		if(background is not null)
+		if (background is not null)
 		{
 			Fade *= background.BackgroundAlphaMidnightBayou;
 		}
@@ -52,7 +52,7 @@ public class MidnightBayouBackgroundCloud : Visual
 
 	public override void Draw()
 	{
-		if(CloudTexture is null)
+		if (CloudTexture is null)
 		{
 			return;
 		}

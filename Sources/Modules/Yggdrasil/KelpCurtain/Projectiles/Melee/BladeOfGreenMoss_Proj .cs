@@ -10,7 +10,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 	{
 		maxAttackType = 4;
 		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		;
 		autoEnd = false;
 		canLongLeftClick = true;
 		maxClickTimer = 240;
@@ -53,8 +54,8 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 			value /= 4f;
 			value = Math.Min(value, (60 - timer) * 0.3f) / 5;
 			Texture2D star = Commons.ModAsset.StarSlash.Value;
-			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection*0.175f) * 0.4f;
-			Lighting.AddLight(Projectile.Center+ mainAxisDirection * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value*10);
+			Vector2 starPos = Projectile.Center - Main.screenPosition + mainAxisDirection.RotatedBy(Projectile.spriteDirection * 0.175f) * 0.4f;
+			Lighting.AddLight(Projectile.Center + mainAxisDirection * 0.4f, new Vector3(0.1f, 0.36f, 0.24f) * value * 10);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), 0, star.Size() / 2f, new Vector2(0.4f, 0.5f) * value, SpriteEffects.None, 0);
 			Main.spriteBatch.Draw(star, starPos, null, new Color(0.1f, 1f, 0.6f, 0f), MathHelper.PiOver2, star.Size() / 2f, new Vector2(0.6f, 0.9f) * value, SpriteEffects.None, 0);
 		}
@@ -214,7 +215,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, -1.2f), 0.1f );
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(120, targetRot, -1.2f), 0.1f);
 				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
 
@@ -233,7 +234,7 @@ public class BladeOfGreenMoss_Proj : MeleeProj
 				{
 					canHit = true;
 					mainAxisDirection = Vector2Elipse(200, Projectile.rotation, -1.2f, Projectile.ai[0], 1000);
-					Projectile.rotation += Projectile.spriteDirection * 0.42f ;
+					Projectile.rotation += Projectile.spriteDirection * 0.42f;
 				}
 
 				BodyRotation = (float)Math.Sin((timer - 114.514) / 18d * Math.PI) * 0.7f * player.direction * player.gravDir;

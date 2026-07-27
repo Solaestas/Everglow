@@ -51,7 +51,7 @@ public class DarkDragon_Scene_Dust : Visual
 			Kill();
 			return;
 		}
-		if(MoveLogic == 0)
+		if (MoveLogic == 0)
 		{
 			Rotation += 0.1f;
 			Scale *= 0.995f;
@@ -59,14 +59,14 @@ public class DarkDragon_Scene_Dust : Visual
 			Velocity.Y += Scale * 0.01f;
 			Position += Velocity;
 		}
-		if(MoveLogic == 1)
+		if (MoveLogic == 1)
 		{
 			Rotation += 0.1f;
 			Scale *= 0.98f;
 			Velocity *= 0.98f;
 			Position += Velocity;
 		}
-		if(Scale <= 0.05)
+		if (Scale <= 0.05)
 		{
 			Kill();
 			return;

@@ -276,7 +276,7 @@ public class WaterSluice_Liquid_Scene : TileVFX
 			float liquidCut = (16 - drawPos0.Y % 16) * 16f;
 			if ((Collision.IsWorldPointSolid(drawPos0) && !Main.tileSolidTop[tile.TileType]) || tile.LiquidAmount > liquidCut)
 			{
-				if(Direction == -1)
+				if (Direction == -1)
 				{
 					GenerateWaterfallDust(worldPos + new Vector2(0, 0), drawPos0 + offset0, 4, 0.5f, 7, 0.5f, 0f, 1f, 0f);
 					GenerateWaterfallDust(worldPos + new Vector2(0, 0), drawPos0 + offset0, 4, 0.5f, 7, 0.5f, 0.5f, 1f, 1f);

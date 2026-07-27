@@ -254,7 +254,7 @@ internal class GreenSungloThorns : ModProjectile
 		}
 	}
 
-	private float t=1f;
+	private float t = 1f;
 	private float a = Main.rand.NextFloat(2.5f, 3.5f);
 	private float b = Main.rand.NextFloat(2.5f, 3.5f);
 

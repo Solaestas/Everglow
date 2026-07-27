@@ -155,7 +155,7 @@ public class ArcI_proj : ModProjectile
 				if (distance < closest)
 				{
 					Vector2 toMouse = Owner.MouseWorld() - npc.Center;
-					if(toMouse.Length()< nearestToMouse)
+					if (toMouse.Length() < nearestToMouse)
 					{
 						nearestToMouse = toMouse.Length();
 						index = npc.whoAmI;

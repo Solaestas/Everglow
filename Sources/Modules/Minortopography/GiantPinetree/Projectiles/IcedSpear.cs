@@ -33,7 +33,7 @@ public class IcedSpear : ModProjectile
 			playerDir = 1;
 		if (shot)
 		{
-			if(Projectile.wet)
+			if (Projectile.wet)
 			{
 				Projectile.timeLeft -= 2;
 			}
@@ -205,7 +205,7 @@ public class IcedSpear : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		if(timeLeft > 60)
+		if (timeLeft > 60)
 		{
 			for (int x = 0; x < 16; x++)
 			{
@@ -216,7 +216,7 @@ public class IcedSpear : ModProjectile
 		}
 
 		Vector2 v = new Vector2(0, Main.rand.NextFloat(0, 3f)).RotatedByRandom(6.283d) * Projectile.velocity.Length() / 10f;
-		Gore gore =  Gore.NewGoreDirect(null, Projectile.Center + v, v, ModContent.Find<ModGore>("Everglow/IcedSpear_gore").Type, 1f);
+		Gore gore = Gore.NewGoreDirect(null, Projectile.Center + v, v, ModContent.Find<ModGore>("Everglow/IcedSpear_gore").Type, 1f);
 		gore.velocity = Projectile.velocity;
 		gore.rotation = Projectile.rotation - MathF.PI / 4f;
 	}

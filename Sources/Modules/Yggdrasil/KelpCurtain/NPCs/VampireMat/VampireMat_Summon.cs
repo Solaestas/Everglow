@@ -10,7 +10,7 @@ public class VampireMat_Summon : ModPlayer
 
 	public override void PostUpdate()
 	{
-		if(VampireMatSummonCD > 0)
+		if (VampireMatSummonCD > 0)
 		{
 			VampireMatSummonCD--;
 		}

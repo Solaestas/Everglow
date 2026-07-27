@@ -178,7 +178,7 @@ public abstract class MagicBookProjectile : ModProjectile
 		DrawBack(Book);
 		if (UseGlow)
 			DrawBack(BookGlow, 1);
-		if(PaperTexture != null)
+		if (PaperTexture != null)
 		{
 			DrawPaper(PaperTexture);
 		}

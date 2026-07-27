@@ -92,7 +92,7 @@ public class WhisperingGhost : ModNPC
 		}
 		NPC.spriteDirection = NPC.velocity.X > 0 ? 1 : -1;
 		NPC.localAI[0] += 1;
-		if(NPC.localAI[0] > 8)
+		if (NPC.localAI[0] > 8)
 		{
 			NPC.localAI[0] = 0;
 			Dust dust = Dust.NewDustDirect(NPC.Center - new Vector2(4) + new Vector2(Main.rand.NextFloat(-15, 15), 15), 0, 0, ModContent.DustType<WhisperingGhostGasSmalling>());

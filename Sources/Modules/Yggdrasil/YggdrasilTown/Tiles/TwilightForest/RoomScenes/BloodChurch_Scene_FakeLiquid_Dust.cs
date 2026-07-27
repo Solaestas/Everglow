@@ -30,12 +30,12 @@ public class BloodChurch_Scene_FakeLiquid_Dust : Visual
 	public override void Update()
 	{
 		Timer++;
-		if(Timer >= MaxTime)
+		if (Timer >= MaxTime)
 		{
 			Kill();
 			return;
 		}
-		if(Position.Y > MaxPosY)
+		if (Position.Y > MaxPosY)
 		{
 			Kill();
 			return;

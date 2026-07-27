@@ -198,7 +198,7 @@ public class Wither_Activated_Dog : ModProjectile
 			{
 				Projectile.velocity.X = Math.Sign(Projectile.velocity.X) * maxSpeed;
 			}
-			if(Collision.IsWorldPointSolid(Projectile.Bottom + new Vector2(0, 16)))
+			if (Collision.IsWorldPointSolid(Projectile.Bottom + new Vector2(0, 16)))
 			{
 				Projectile.velocity.Y -= 1f;
 			}

@@ -83,7 +83,7 @@ public class RockQuakeCone : Visual
 			Vector2 width = vel.NormalizeSafe().RotatedBy(MathHelper.PiOver2) * 40;
 			float fade = y / (float)(maxLength - 1);
 			float shapeFade = 1 - fade;
-			if(progress > 0.7f)
+			if (progress > 0.7f)
 			{
 				fade -= (progress - 0.7f) / 0.3f;
 			}

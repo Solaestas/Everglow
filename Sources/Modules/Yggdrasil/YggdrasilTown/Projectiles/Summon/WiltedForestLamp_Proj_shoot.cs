@@ -91,7 +91,7 @@ public class WiltedForestLamp_Proj_shoot : TrailingProjectile
 			Ins.VFXManager.Add(dustVFX);
 		}
 		var colorLight = new Vector3(0.4f, 0.7f, 0.2f);
-		if(TimeAfterEntityDestroy > 0)
+		if (TimeAfterEntityDestroy > 0)
 		{
 			colorLight *= TimeAfterEntityDestroy / 40f;
 		}

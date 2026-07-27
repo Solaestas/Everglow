@@ -43,7 +43,7 @@ internal class DevilFlame3DSickleDust : Visual
 		{
 			trails.Dequeue();
 		}
-		if(maxTime - timer < 22)
+		if (maxTime - timer < 22)
 		{
 			ai[2] = MathHelper.Lerp(ai[2], 1f, 0.18f);
 		}
@@ -71,7 +71,7 @@ internal class DevilFlame3DSickleDust : Visual
 			Vector3 pos3DOld = trails.ToArray()[i - 1];
 			float width = (i - 1) / (float)Math.Max(trails.Count - 2f, 1);
 			width = MathF.Sin(width * MathF.PI) * scale;
-			if(trails.Count <= 4)
+			if (trails.Count <= 4)
 			{
 				width = 0f;
 			}

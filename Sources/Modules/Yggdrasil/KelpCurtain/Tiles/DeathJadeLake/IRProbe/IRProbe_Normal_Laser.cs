@@ -57,7 +57,7 @@ public class IRProbe_Normal_Laser : TileVFX
 	{
 		bool oldPlayerHit = AnyPlayerCollision;
 		Position = OriginTilePos.ToWorldCoordinates();
-		if(!NoneRotation)
+		if (!NoneRotation)
 		{
 			Position += new Vector2(0, -8).RotatedBy(Rotation);
 		}

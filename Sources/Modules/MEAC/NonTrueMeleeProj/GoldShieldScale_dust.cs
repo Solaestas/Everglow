@@ -16,7 +16,7 @@ public class GoldShieldScale_dust : ModDust
 		dust.position += dust.velocity;
 		dust.velocity *= 0.96f;
 		dust.rotation += dust.velocity.X * 0.02f;
-		if(dust.scale < 0.1f)
+		if (dust.scale < 0.1f)
 		{
 			dust.active = false;
 		}

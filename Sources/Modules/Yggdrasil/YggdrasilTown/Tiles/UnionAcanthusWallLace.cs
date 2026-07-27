@@ -42,7 +42,7 @@ public class UnionAcanthusWallLace : ModTile
 		}
 		if (tileLeft.TileType == Type && tileRight.TileType != Type)
 		{
-			tile.TileFrameX =36;
+			tile.TileFrameX = 36;
 		}
 		if (tileLeft.TileType != Type && tileRight.TileType == Type)
 		{

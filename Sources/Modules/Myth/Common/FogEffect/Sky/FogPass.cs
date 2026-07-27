@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.Common.FogEffect.Configs;
+using Everglow.Myth.Common.FogEffect.Configs;
 using ReLogic.Content;
 namespace Everglow.Myth.Common.FogEffect.Sky;
 

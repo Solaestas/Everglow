@@ -31,16 +31,16 @@ public class BambooLeaf : Visual
 		Velocity *= 0.9f;
 		Velocity += new Vector2(Main.windSpeedCurrent * 0.3f, 0.1f);
 		Velocity = Velocity.RotatedBy(MathF.Sin((float)Main.time * 0.03f + ai[0]) * 0.05f);
-		if(Collision.IsWorldPointSolid(Position))
+		if (Collision.IsWorldPointSolid(Position))
 		{
 			Rotation = 0;
 			Velocity *= 0;
-			if(MaxTime - Timer > 60)
+			if (MaxTime - Timer > 60)
 			{
 				Timer = MaxTime - 60;
 			}
 		}
-		else if(TileUtils.SafeGetTile(Position.ToTileCoordinates()).LiquidAmount > 0)
+		else if (TileUtils.SafeGetTile(Position.ToTileCoordinates()).LiquidAmount > 0)
 		{
 			Rotation = 0;
 			Velocity *= 0;

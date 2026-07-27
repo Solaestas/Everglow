@@ -8,7 +8,7 @@ public class Schorl_GoldenDust : ModDust
 		dust.velocity *= 0.99f;
 		dust.scale *= 0.95f;
 		dust.position += dust.velocity;
-		if(dust.scale < 0.1f)
+		if (dust.scale < 0.1f)
 		{
 			dust.active = false;
 		}

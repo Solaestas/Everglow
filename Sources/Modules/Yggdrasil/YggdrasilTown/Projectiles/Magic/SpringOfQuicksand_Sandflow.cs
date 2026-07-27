@@ -74,7 +74,7 @@ public class SpringOfQuicksand_Sandflow : TrailingProjectile
 		{
 			float fall = k * k * 0.5f;
 			fall = Math.Min(fall, 150);
-			if(targetHitbox.Intersects(new Rectangle((int)Projectile.oldPos[k].X, (int)Projectile.oldPos[k].Y, Projectile.width, (int)fall)))
+			if (targetHitbox.Intersects(new Rectangle((int)Projectile.oldPos[k].X, (int)Projectile.oldPos[k].Y, Projectile.width, (int)fall)))
 			{
 				return true;
 			}
@@ -106,7 +106,7 @@ public class SpringOfQuicksand_Sandflow : TrailingProjectile
 				drawColor.R = (byte)(lightC.R * drawColor.R / 255f * 0.75f);
 				drawColor.G = (byte)(lightC.G * drawColor.G / 255f * 0.6f);
 				drawColor.B = (byte)(lightC.B * drawColor.B / 255f * 0.2f);
-				if(factor > 0.2f)
+				if (factor > 0.2f)
 				{
 					drawColor *= (0.8f - factor) / 0.6f;
 				}

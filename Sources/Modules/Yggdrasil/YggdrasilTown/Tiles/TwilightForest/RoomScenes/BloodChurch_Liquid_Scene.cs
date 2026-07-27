@@ -36,7 +36,7 @@ public class BloodChurch_Liquid_Scene : TileVFX
 
 	public override void Update()
 	{
-		if(LiquidAreas.Count <= 0)
+		if (LiquidAreas.Count <= 0)
 		{
 			bool flipH = FlipHorizontally(OriginTilePos.X, OriginTilePos.Y);
 			int Direction = 1;
@@ -48,9 +48,9 @@ public class BloodChurch_Liquid_Scene : TileVFX
 			}
 			LiquidAreas.Add(new Rectangle((OriginTilePos.X + 14 * Direction) * 16 + offsetX, (OriginTilePos.Y + 18) * 16, 192, 16));
 		}
-		foreach(Player player in Main.player)
+		foreach (Player player in Main.player)
 		{
-			if(player != null && player.active && player.velocity.Length() > 1)
+			if (player != null && player.active && player.velocity.Length() > 1)
 			{
 				foreach (Rectangle liquid in LiquidAreas)
 				{
@@ -71,7 +71,7 @@ public class BloodChurch_Liquid_Scene : TileVFX
 		splashStart = Math.Max(splashStart, liquidBox.X);
 		splashEnd = Math.Min(splashEnd, liquidBox.X + liquidBox.Width);
 		float length = splashEnd - splashStart;
-		for(int x = 0; x < length / 6; x++)
+		for (int x = 0; x < length / 6; x++)
 		{
 			Vector2 pos = new Vector2(splashStart + Main.rand.NextFloat(length), liquidBox.Y);
 			Dust dust = Dust.NewDustPerfect(Position, ModContent.DustType<GenerateSplash>(), Vector2.zeroVector);

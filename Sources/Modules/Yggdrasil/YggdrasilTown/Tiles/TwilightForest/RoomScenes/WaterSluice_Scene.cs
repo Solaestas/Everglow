@@ -158,12 +158,12 @@ public class WaterSluice_Scene : ModTile, ISceneTile
 			JungleWaterAreas.Add(myArea);
 		}
 
-		for(int x = myArea.X;x < myArea.X + myArea.Width;x++)
+		for (int x = myArea.X; x < myArea.X + myArea.Width; x++)
 		{
-			for(int y = myArea.Y; y < myArea.Y + myArea.Height; y++)
+			for (int y = myArea.Y; y < myArea.Y + myArea.Height; y++)
 			{
 				var tile = TileUtils.SafeGetTile(x, y);
-				if(tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 0)
+				if (tile.LiquidType == LiquidID.Water && tile.LiquidAmount > 0)
 				{
 					Lighting.AddLight(x, y, 0.1f, 0.5f, 1f);
 				}

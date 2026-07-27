@@ -125,7 +125,7 @@ public abstract class ClubProjSmash : MeleeProj
 				Player.fullRotationOrigin = new Vector2(Player.width / 2, Player.height);
 				Player.fullRotation = MathF.Sin((timer - 14 * timeMul) / (25f * timeMul) * MathHelper.Pi) * 0.6f * Player.direction * Player.gravDir;
 				Player.legRotation = -Player.fullRotation;
-				if(Player.gravDir == -1)
+				if (Player.gravDir == -1)
 				{
 					Player.fullRotationOrigin = new Vector2(Player.width / 2, 0);
 					Player.legRotation = 0;

@@ -92,9 +92,9 @@ public class IslePeachTree_large : ModTile, ITileFluentlyDrawn
 		}
 
 		int topY = j;
-		for(int y = 0;y < 12;y++)
+		for (int y = 0; y < 12; y++)
 		{
-			if(TileUtils.SafeGetTile(i, j - y).TileType != Type)
+			if (TileUtils.SafeGetTile(i, j - y).TileType != Type)
 			{
 				topY = j - y + 1;
 				break;
@@ -179,9 +179,9 @@ public class IslePeachTree_large : ModTile, ITileFluentlyDrawn
 		}
 		windCycle += highestWindGridPushComplex * 0.25f;
 		float rotation = windCycle * 0.1f;
-		if(windCycle > 0.17f && toTop == 1)
+		if (windCycle > 0.17f && toTop == 1)
 		{
-			if(!Main.gamePaused && Main.rand.NextBool(2))
+			if (!Main.gamePaused && Main.rand.NextBool(2))
 			{
 				var petal = new PeachBlossom
 				{
@@ -194,7 +194,7 @@ public class IslePeachTree_large : ModTile, ITileFluentlyDrawn
 					Frame = Main.rand.Next(10),
 					ai = new float[] { Main.rand.NextFloat(1f, 8f), -1 },
 				};
-				if(styleTop == 1)
+				if (styleTop == 1)
 				{
 					petal.Position = tilePos.ToWorldCoordinates() + new Vector2(0, Main.rand.NextFloat()).RotatedByRandom(MathHelper.TwoPi) * new Vector2(1, 0.5f) * 240 + new Vector2(0, -80);
 				}
