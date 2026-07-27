@@ -46,7 +46,7 @@ public class LargeBloodLanternGhost_Matrix_Summon : ModProjectile
 		}
 		else
 		{
-			if(Projectile.timeLeft > 60)
+			if (Projectile.timeLeft > 60)
 			{
 				Projectile.timeLeft = 60;
 				Timer = 60;

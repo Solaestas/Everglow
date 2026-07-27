@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.Interfaces;
+namespace Everglow.Commons.Interfaces;
 
 public interface IHookHandler
 {

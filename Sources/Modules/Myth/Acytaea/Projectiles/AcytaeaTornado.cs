@@ -4,6 +4,7 @@ using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaTornado : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -29,7 +30,7 @@ public class AcytaeaTornado : ModProjectile
 	{
 		Player player = Main.player[Player.FindClosest(Projectile.Center, 0, 0)];
 		Timer++;
-		if(TornadoBottom != Vector2.zeroVector)
+		if (TornadoBottom != Vector2.zeroVector)
 		{
 			GenerateVFX();
 		}
@@ -87,7 +88,7 @@ public class AcytaeaTornado : ModProjectile
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
-		
+
 		for (int x = 0; x < 16 * value2; x++)
 		{
 			Vector2 newVec = new Vector2(0, Main.rand.NextFloat(4f, 12f)).RotatedByRandom(6.283) + new Vector2(0, -12) * value2;
@@ -129,7 +130,7 @@ public class AcytaeaTornado : ModProjectile
 			return false;
 		}
 		Rectangle r = new Rectangle(projHitbox.X, projHitbox.Y - (int)(600 * heightValue), 80, (int)(1200 * heightValue));
-		if(TornadoBottom.Y < projHitbox.Y + (int)(600 * heightValue))
+		if (TornadoBottom.Y < projHitbox.Y + (int)(600 * heightValue))
 		{
 			r.Height = (int)(TornadoBottom.Y - (projHitbox.Y - (int)(600 * heightValue)));
 		}
@@ -145,21 +146,21 @@ public class AcytaeaTornado : ModProjectile
 		float uTime = (float)Main.time * 0.02f * Math.Abs(width) / 80f;
 		int tolerance = 3;
 		int length = (int)Timer;
-		if(length >= 40)
+		if (length >= 40)
 		{
 			length = 40;
 		}
 		float heightValue = 15;
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			heightValue = 20;
 		}
-		if(Main.masterMode)
+		if (Main.masterMode)
 		{
 			heightValue = 30;
 		}
 		var bars = new List<Vertex2D>();
-		for(int k = -length; k < length; k++)
+		for (int k = -length; k < length; k++)
 		{
 			float value = (length - Math.Abs(k)) / 10f;
 			if (value > 1)
@@ -171,8 +172,8 @@ public class AcytaeaTornado : ModProjectile
 			mulWidth *= 1.2f * heightValue / 20f;
 			float worm = MathF.Sin(k * 0.44f + (float)Main.timeForVisualEffects * 0.03f) * 10 * mulWidth;
 			bars.Add(Projectile.Center + new Vector2(-width * mulWidth + worm, k * heightValue), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY - worm * 0.01f, 0));
-			bars.Add(Projectile.Center + new Vector2(width * mulWidth + worm, k * heightValue), color * value, new Vector3(0.2f + uTime + k / valueX , k / valueY + deltaY - worm * 0.01f, 1));
-			if(k > 0 && tolerance == 3)
+			bars.Add(Projectile.Center + new Vector2(width * mulWidth + worm, k * heightValue), color * value, new Vector3(0.2f + uTime + k / valueX, k / valueY + deltaY - worm * 0.01f, 1));
+			if (k > 0 && tolerance == 3)
 			{
 				if (Collision.SolidCollision(Projectile.Center + new Vector2(0, k * heightValue + heightValue), 0, 0))
 				{
@@ -184,7 +185,7 @@ public class AcytaeaTornado : ModProjectile
 			{
 				tolerance--;
 			}
-			if(tolerance <= 0)
+			if (tolerance <= 0)
 			{
 				TornadoBottom = Projectile.Center + new Vector2(0, k * heightValue + heightValue);
 				break;
@@ -198,7 +199,7 @@ public class AcytaeaTornado : ModProjectile
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		tornado.Parameters["uTransform"].SetValue(model * projection);
 		float value2 = 1f;
-		if(Projectile.timeLeft < 60)
+		if (Projectile.timeLeft < 60)
 		{
 			value2 = Projectile.timeLeft / 60f;
 		}
@@ -221,7 +222,7 @@ public class AcytaeaTornado : ModProjectile
 		DrawTornado(Commons.ModAsset.Noise_crack_dense_black.Value, new Color(1f, 1f, 1f, 1f), -160, "DarkEffect", 0.1f, 0.13f);
 		DrawTornado(Commons.ModAsset.Noise_burn.Value, new Color(1f, 0, 0.4f, 0), -110, "RedEffect", 0.2f, 0.13f);
 		DrawTornado(Commons.ModAsset.Noise_perlin.Value, new Color(1f, 0, 0.4f, 0.7f), -80, "RedEffect", 0.2f, 0.13f);
-		
+
 		DrawTornado(Commons.ModAsset.Noise_perlin.Value, new Color(1f, 0, 0.4f, 0.7f), 80, "RedEffect", 0.2f);
 		DrawTornado(Commons.ModAsset.Noise_burn.Value, new Color(1f, 0, 0.4f, 0), 110, "RedEffect", 0.2f);
 		DrawTornado(Commons.ModAsset.Noise_crack_dense_black.Value, new Color(1f, 1f, 1f, 1f), 160, "DarkEffect", 0.1f);

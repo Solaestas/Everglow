@@ -16,7 +16,7 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 
 	public override void PostUpdateEverything()
 	{
-		if(Main.netMode != NetmodeID.Server)
+		if (Main.netMode != NetmodeID.Server)
 		{
 			CurrentPlayer = Main.LocalPlayer;
 		}
@@ -25,7 +25,7 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 			FurnacePlayer fPlayer = CurrentPlayer.GetModPlayer<FurnacePlayer>();
 			CurrentScore = fPlayer.FurnaceScore;
 		}
-		if(CurrentEnergy >= 1000)
+		if (CurrentEnergy >= 1000)
 		{
 			CurrentEnergy--;
 		}
@@ -37,7 +37,7 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 		{
 			CurrentEnergy = EnergtMax;
 		}
-		if(SwitchPlayerCooling > 0)
+		if (SwitchPlayerCooling > 0)
 		{
 			SwitchPlayerCooling--;
 		}

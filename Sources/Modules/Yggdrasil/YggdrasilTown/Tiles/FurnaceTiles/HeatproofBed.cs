@@ -11,7 +11,8 @@ public class HeatproofBed : ModTile
 {
 	public const int NextStyleHeight = 38; // Calculated by adding all CoordinateHeights + CoordinatePaddingFix.Y applied to all of them + 2
 
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileFrameImportant[Type] = true;
 		Main.tileLavaDeath[Type] = true;
@@ -36,32 +37,38 @@ public class HeatproofBed : ModTile
 		AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Bed"));
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+	{
 		return true;
 	}
 
-	public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY) {
+	public override void ModifySmartInteractCoords(ref int width, ref int height, ref int frameWidth, ref int frameHeight, ref int extraY)
+	{
 		// Because beds have special smart interaction, this splits up the left and right side into the necessary 2x2 sections
 		width = 2; // Default to the Width defined for TileObjectData.newTile
 		height = 2; // Default to the Height defined for TileObjectData.newTile
-		//extraY = 0; // Depends on how you set up frameHeight and CoordinateHeights and CoordinatePaddingFix.Y
+					//extraY = 0; // Depends on how you set up frameHeight and CoordinateHeights and CoordinatePaddingFix.Y
 	}
 
-	public override void ModifySleepingTargetInfo(int i, int j, ref TileRestingInfo info) {
+	public override void ModifySleepingTargetInfo(int i, int j, ref TileRestingInfo info)
+	{
 		// Default values match the regular vanilla bed
 		// You might need to mess with the info here if your bed is not a typical 4x2 tile
 		info.VisualOffset.Y += 4f; // Move player down a notch because the bed is not as high as a regular bed
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) {
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
 		num = 1;
 	}
 
-	public override bool RightClick(int i, int j) {
+	public override bool RightClick(int i, int j)
+	{
 		return FurnitureUtils.BedRightClick(i, j);
 	}
 
-	public override void MouseOver(int i, int j) {
+	public override void MouseOver(int i, int j)
+	{
 		FurnitureUtils.BedMouseOver<HeatproofBed_item>(i, j);
 	}
 }

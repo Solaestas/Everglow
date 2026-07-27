@@ -68,7 +68,7 @@ public class BloodSplash : Visual
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
+			if (velocity.Length() < 0.02f)
 			{
 				Active = false;
 			}
@@ -78,7 +78,7 @@ public class BloodSplash : Visual
 			scale += 0.02f;
 			alpha += 0.004f;
 			velocity *= 0.9f;
-			if(MathF.Abs(velocity.X) > 2)
+			if (MathF.Abs(velocity.X) > 2)
 			{
 				velocity.X *= 0.8f;
 			}

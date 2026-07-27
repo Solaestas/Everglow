@@ -37,7 +37,7 @@ public class SpongeOxygenBubble : ModProjectile
 				Projectile.frame = 0;
 			}
 		}
-		if(!Projectile.wet)
+		if (!Projectile.wet)
 		{
 			Projectile.active = false;
 		}

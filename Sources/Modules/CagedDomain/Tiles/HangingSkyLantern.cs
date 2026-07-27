@@ -95,8 +95,9 @@ public class HangingSkyLantern : ModTile, ITileFluentlyDrawn
 	private void DrawLanternPiece(int frameX, int frameHeight, float swayCoefficient, int offsetX, Point tilePos, Point paintPos, Vector2 drawCenterPos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		// 回声涂料	
-		if (!TileDrawing.IsVisible(Main.tile[paintPos])) return;	
-		
+		if (!TileDrawing.IsVisible(Main.tile[paintPos]))
+			return;
+
 		if (!TileDrawing.IsVisible(Main.tile[paintPos]))
 			return;
 

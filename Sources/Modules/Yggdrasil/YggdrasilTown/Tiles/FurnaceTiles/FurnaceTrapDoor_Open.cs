@@ -79,7 +79,7 @@ public class FurnaceTrapDoor_Open : ModTile
 	{
 		var tile = TileUtils.SafeGetTile(i, j);
 		var pos = new Point(i - tile.TileFrameX / 18 + 4, j - tile.TileFrameY / 18).ToWorldCoordinates();
-		if((Main.LocalPlayer.Center - pos).Length() > 300)
+		if ((Main.LocalPlayer.Center - pos).Length() > 300)
 		{
 			CloseTrapDoor(i, j);
 		}

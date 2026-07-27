@@ -1,4 +1,4 @@
-﻿sampler2D uImage0 : register(s0);
+sampler2D uImage0 : register(s0);
 sampler2D uImage1 : register(s1);
 float uvMulti;
 float uDissolve;

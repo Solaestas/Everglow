@@ -93,11 +93,11 @@ public class GiantGhostClawBarnacleCollideTile : ShapeDataTile, ISceneTile
 		Tile tile = Main.tile[i, j];
 		tile.LiquidType = LiquidID.Water;
 		tile.LiquidAmount = 255;
-		if(tile.TileFrameX == 0 && tile.TileFrameY == 36)
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 36)
 		{
-			if(YggdrasilWorld.CanEnterTheGiantGhoseClawBarnacle)
+			if (YggdrasilWorld.CanEnterTheGiantGhoseClawBarnacle)
 			{
-				for(int x = 0; x < TotalWidth;x++)
+				for (int x = 0; x < TotalWidth; x++)
 				{
 					for (int y = 0; y < TotalHeight; y++)
 					{
@@ -129,7 +129,7 @@ public class GiantGhostClawBarnacleCollideTile : ShapeDataTile, ISceneTile
 				if (PixelHasTile[i, j] >= 200)
 				{
 					ushort type = Type;
-					if(j > 2 && j < 20 && i <= 2)
+					if (j > 2 && j < 20 && i <= 2)
 					{
 						type = (ushort)ModContent.TileType<GiantGhostClawBarnacleDoorTile>();
 					}

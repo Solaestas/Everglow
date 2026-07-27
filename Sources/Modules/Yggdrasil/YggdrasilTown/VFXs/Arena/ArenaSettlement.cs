@@ -50,7 +50,7 @@ public class ArenaSettlement : Visual
 			return;
 		}
 
-		if(State == 1 && !ShouldKill)
+		if (State == 1 && !ShouldKill)
 		{
 			foreach (Player player in Main.player)
 			{
@@ -233,9 +233,9 @@ public class ArenaSettlement : Visual
 
 	public void Retry()
 	{
-		if(BossNPC == null || !BossNPC.active)
+		if (BossNPC == null || !BossNPC.active)
 		{
-			if(NPCType != -1)
+			if (NPCType != -1)
 			{
 				NPC npc = NPC.NewNPCDirect(WorldGen.GetItemSource_FromTileBreak(180, 194), 180 * 16, 194 * 16, NPCType);
 				BossNPC = npc;
@@ -254,9 +254,9 @@ public class ArenaSettlement : Visual
 			{
 				tNLIY.SetDefaultsToArena();
 			}
-			foreach(Player player in Main.player)
+			foreach (Player player in Main.player)
 			{
-				if(player != null)
+				if (player != null)
 				{
 					player.respawnTimer = 0;
 					player.position = new Point(60, 144).ToWorldCoordinates();

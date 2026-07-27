@@ -324,7 +324,7 @@ public class WizardLantern : LanternMoonNPC
 			{
 				directionVec = LanternCloak.Masses[i + 1].Position - LanternCloak.Masses[i].Position + new Vector2(0, 3);
 			}
-			if(directionVec.Length() > 200)
+			if (directionVec.Length() > 200)
 			{
 				return;
 			}

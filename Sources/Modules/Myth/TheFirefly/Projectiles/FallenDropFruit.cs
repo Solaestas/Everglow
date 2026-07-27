@@ -20,15 +20,15 @@ public class FallenDropFruit : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		foreach(Projectile projectile in Main.projectile)
+		foreach (Projectile projectile in Main.projectile)
 		{
-			if(projectile.active)
+			if (projectile.active)
 			{
-				if(projectile.timeLeft == 6000 && projectile.type == Type)
+				if (projectile.timeLeft == 6000 && projectile.type == Type)
 				{
-					if(projectile.Center == Projectile.Center)
+					if (projectile.Center == Projectile.Center)
 					{
-						if(projectile != Projectile)
+						if (projectile != Projectile)
 						{
 							projectile.Kill();
 						}

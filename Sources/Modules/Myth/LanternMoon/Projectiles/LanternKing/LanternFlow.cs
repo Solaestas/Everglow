@@ -340,7 +340,7 @@ public class LanternFlow : TrailingProjectile
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float wid = 0.3f;
-		if(Projectile.timeLeft < 300)
+		if (Projectile.timeLeft < 300)
 		{
 			wid *= Projectile.timeLeft / 300f;
 		}

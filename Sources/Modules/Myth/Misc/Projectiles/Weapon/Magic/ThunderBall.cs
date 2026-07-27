@@ -96,7 +96,7 @@ public class ThunderBall : ModProjectile
 				{
 					Player player = Main.player[Projectile.owner];
 					NPC.HitModifiers npchitmodifier = new NPC.HitModifiers();
-					NPC.HitInfo hit = npchitmodifier.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f),Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
+					NPC.HitInfo hit = npchitmodifier.ToHitInfo(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f), Main.rand.NextFloat(100f) < player.GetTotalCritChance(Projectile.DamageType), 2);
 					Main.npc[j].StrikeNPC(hit, true, true);
 					NetMessage.SendStrikeNPC(Main.npc[j], hit);
 					HasCool[j] = 15;

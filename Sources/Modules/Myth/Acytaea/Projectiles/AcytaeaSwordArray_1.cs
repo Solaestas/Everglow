@@ -3,6 +3,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaSwordArray_1 : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -40,7 +41,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			Projectile.Kill();
 		}
 		subProjActive = new List<bool>();
-		for (int x = 0;x < Projectile.ai[1];x++)
+		for (int x = 0; x < Projectile.ai[1]; x++)
 		{
 			subProjActive.Add(true);
 		}
@@ -55,15 +56,15 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			return;
 		}
 		Timer++;
-		if(Timer < 100)
+		if (Timer < 100)
 		{
 			Projectile.rotation = 0;
 			Vector2 center = Owner.Center + new Vector2(0, -455);
-			foreach(var proj in Main.projectile)
+			foreach (var proj in Main.projectile)
 			{
-				if(proj != null && proj.active)
+				if (proj != null && proj.active)
 				{
-					if(proj.type == ModContent.ProjectileType<AcytaeaMagicArraySword>())
+					if (proj.type == ModContent.ProjectileType<AcytaeaMagicArraySword>())
 					{
 						AcytaeaMagicArraySword aMAS = proj.ModProjectile as AcytaeaMagicArraySword;
 						center = aMAS.EndPos;
@@ -74,9 +75,9 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			Projectile.Center = center;
 			Range = Timer * Projectile.ai[2];
 		}
-		else if(Timer > 100 && Timer < 130)
+		else if (Timer > 100 && Timer < 130)
 		{
-			if(Timer % 14 == 0)
+			if (Timer % 14 == 0)
 			{
 				Projectile.frame++;
 			}
@@ -92,7 +93,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			GenerateVFX();
 		}
 		AddRot += Omega;
-		if(Timer > 100)
+		if (Timer > 100)
 		{
 			for (int k = 0; k < subProjActive.Count; k++)
 			{
@@ -106,9 +107,9 @@ public class AcytaeaSwordArray_1 : ModProjectile
 			}
 		}
 
-		foreach(bool active in subProjActive)
+		foreach (bool active in subProjActive)
 		{
-			if(active)
+			if (active)
 			{
 				return;
 			}
@@ -165,13 +166,13 @@ public class AcytaeaSwordArray_1 : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		for(int k = 0;k < subProjActive.Count; k++)
+		for (int k = 0; k < subProjActive.Count; k++)
 		{
 			Vector2 deltaVector = new Vector2(0, Range).RotatedBy(k / (float)subProjActive.Count * MathHelper.TwoPi + AddRot);
 			Rectangle newProjectileHitBox = projHitbox;
 			newProjectileHitBox.X += (int)deltaVector.X;
 			newProjectileHitBox.Y += (int)deltaVector.Y;
-			if(newProjectileHitBox.Intersects(targetHitbox) && subProjActive[k])
+			if (newProjectileHitBox.Intersects(targetHitbox) && subProjActive[k])
 			{
 				if (Timer > 100)
 				{
@@ -226,7 +227,7 @@ public class AcytaeaSwordArray_1 : ModProjectile
 		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int k = 0; k < subProjActive.Count; k++)
 		{
-			if(subProjActive[k])
+			if (subProjActive[k])
 			{
 				Vector2 deltaVector = new Vector2(0, Range).RotatedBy(k / (float)subProjActive.Count * MathHelper.TwoPi + AddRot);
 				float rot = MathF.Atan2(deltaVector.Y, deltaVector.X) + MathHelper.PiOver4 + Projectile.rotation;

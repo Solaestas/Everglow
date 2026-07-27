@@ -41,7 +41,7 @@ public class Leaf_VFX_Spin : Visual
 		float frameY = (int)timeValue % frameCount;
 		Vector2 toCorner = new Vector2(0, scale).RotatedBy(rotation);
 		Color drawColor = color;
-		if(pocession < 0.8f)
+		if (pocession < 0.8f)
 		{
 			drawColor = Color.Lerp(drawColor, color, (pocession - 0.2f) / 0.6f);
 		}

@@ -56,7 +56,7 @@ public class IRProbe_Normal_Laser : ForegroundVFX
 	{
 		bool oldPlayerHit = AnyPlayerCollision;
 		position = originTile.ToWorldCoordinates();
-		if(!NoneRotation)
+		if (!NoneRotation)
 		{
 			position += new Vector2(0, -8).RotatedBy(Rotation);
 		}

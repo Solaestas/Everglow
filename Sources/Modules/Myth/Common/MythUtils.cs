@@ -130,7 +130,7 @@ public class MythUtils
 	public static float GetHourHandRotation()
 	{
 		double timeInSecond = Main.time + 16200;
-		if(!Main.dayTime)
+		if (!Main.dayTime)
 		{
 			timeInSecond = Main.time + 70200;
 			if (timeInSecond > 86400)

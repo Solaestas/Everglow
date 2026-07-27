@@ -215,7 +215,7 @@ public class Restauranteur : TownNPC_LiveInYggdrasil
 
 	public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 	{
-		if(!Attacking)
+		if (!Attacking)
 		{
 			Texture2D texMain = ModAsset.Restauranteur.Value;
 			Vector2 drawPos = NPC.Center - screenPos + new Vector2(0, NPC.height - NPC.frame.Height) * 0.5f;

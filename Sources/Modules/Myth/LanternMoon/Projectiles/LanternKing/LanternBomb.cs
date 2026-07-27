@@ -112,11 +112,11 @@ public class LanternBomb : ModProjectile
 		ScreenShaker Gsplayer = Main.player[Projectile.owner].GetModPlayer<ScreenShaker>();
 		Gsplayer.FlyCamPosition = new Vector2(0, 33).RotatedByRandom(6.283);
 		float scale = 0.6f;
-		if(Main.expertMode)
+		if (Main.expertMode)
 		{
 			scale = 0.7f;
 		}
-		if(Main.masterMode)
+		if (Main.masterMode)
 		{
 			scale = 1.26f;
 		}

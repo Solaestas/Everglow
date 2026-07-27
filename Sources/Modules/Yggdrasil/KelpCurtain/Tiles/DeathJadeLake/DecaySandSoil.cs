@@ -58,7 +58,7 @@ public class DecaySandSoil : ModTile
 
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{
-		if(!fail)
+		if (!fail)
 		{
 			num = 0;
 		}

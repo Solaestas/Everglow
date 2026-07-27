@@ -365,7 +365,7 @@ public class QuenchingBladeProj : MeleeProj
 			if (timer == 1)
 			{
 				float dir = -3.5f;
-				if(player.direction == -1)
+				if (player.direction == -1)
 				{
 					dir = 3.5f;
 				}

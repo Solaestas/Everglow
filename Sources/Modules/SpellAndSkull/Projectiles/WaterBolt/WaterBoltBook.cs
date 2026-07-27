@@ -11,7 +11,7 @@ internal class WaterBoltBook : MagicBookProjectile
 		DustType = DustID.WaterCandle;
 		ItemType = ItemID.WaterBolt;
 		effectColor = new Color(30, 60, 225, 100);
-		
+
 		TexCoordTop = new Vector2(6, 0);
 		TexCoordLeft = new Vector2(0, 24);
 		TexCoordDown = new Vector2(22, 24);

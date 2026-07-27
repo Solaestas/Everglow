@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheTusk.Backgrounds;
+using Everglow.Myth.TheTusk.Backgrounds;
 using Everglow.Myth.TheTusk.Water;
 using Terraria.Graphics.Capture;
 using Terraria.Localization;
@@ -23,7 +23,7 @@ public class TuskSurfaceBiome : ModBiome
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Cursed Jaw");
-			}
+	}
 	public override void Load()
 	{
 		//On.Terraria.Main.DrawWaters += Main_DrawWaters;

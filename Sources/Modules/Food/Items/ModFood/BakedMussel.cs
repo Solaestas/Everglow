@@ -4,6 +4,7 @@ using Everglow.Food.Buffs.ModFoodBuffs;
 using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food.Items.ModFood;
+
 public class BakedMussel : FoodBase
 {
 	public override FoodInfo FoodInfo

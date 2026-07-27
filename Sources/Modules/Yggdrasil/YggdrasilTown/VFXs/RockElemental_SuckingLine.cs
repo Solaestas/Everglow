@@ -18,15 +18,15 @@ public class RockElemental_SuckingLine : Visual
 
 	public override void Update()
 	{
-		if(VFXOwner == null || !VFXOwner.active || VFXOwner.type != ModContent.ProjectileType<RockElemental_ThrowingStone>())
+		if (VFXOwner == null || !VFXOwner.active || VFXOwner.type != ModContent.ProjectileType<RockElemental_ThrowingStone>())
 		{
 			Active = false;
 			return;
 		}
 		RockElemental_ThrowingStone rockElemental_ThrowingStone = VFXOwner.ModProjectile as RockElemental_ThrowingStone;
-		if(rockElemental_ThrowingStone != null)
+		if (rockElemental_ThrowingStone != null)
 		{
-			if(rockElemental_ThrowingStone.PolymerizationTimer < 0)
+			if (rockElemental_ThrowingStone.PolymerizationTimer < 0)
 			{
 				timer += 2;
 			}

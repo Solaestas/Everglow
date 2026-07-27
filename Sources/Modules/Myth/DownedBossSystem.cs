@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Myth;

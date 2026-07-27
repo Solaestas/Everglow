@@ -163,12 +163,12 @@ public class LanternMoonInvasionEvent : ReplicaEvent
 		{
 			musicSystem.FadeMusic(musicSystem.CustomMusicCues[i], 120);
 		}
-		if(Wave <= 14)
+		if (Wave <= 14)
 		{
 			musicSystem.StartMusic(ModAsset.LanternMoonMusic_Pre15_Accompaniment_Head_Mod, 3, false);
 			musicSystem.StartMusic(ModAsset.LanternMoonMusic_Pre15_Percussion_Head_Mod, 3, false);
 		}
-		else if(Wave == 15)
+		else if (Wave == 15)
 		{
 			musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Accompaniment_Loop_Mod, 3, true);
 			musicSystem.StartMusic(ModAsset.LanternMoonMusic_15_Melody_Loop_Mod, 3, true);

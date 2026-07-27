@@ -30,11 +30,11 @@ public class ShieldTile : ModTile
 		Tile tile = Main.tile[i, j];
 		if (tile != null)
 		{
-			if(tile.TileFrameX > 0)
+			if (tile.TileFrameX > 0)
 			{
 				tile.TileFrameX -= 18;
 			}
-			else if(tile.TileFrameY > 0)
+			else if (tile.TileFrameY > 0)
 			{
 				tile.TileFrameY -= 18;
 				tile.TileFrameX += 342;
@@ -54,14 +54,14 @@ public class ShieldTile : ModTile
 	{
 		Tile tile = Main.tile[i, j];
 		var offset = new Vector2(Main.offScreenRange);
-		if(Main.drawToScreen)
+		if (Main.drawToScreen)
 		{
 			offset = Vector2.zeroVector;
 		}
 		var drawPos = new Point(i, j).ToWorldCoordinates() + offset - Main.screenPosition;
 		Texture2D tex = ModAsset.ShieldTile.Value;
 		spriteBatch.Draw(tex, drawPos, new Rectangle(tile.TileFrameX, tile.TileFrameY + 54, 16, 16), new Color(0.1f, 0.1f, 0.3f, 0), 0, new Vector2(8), 1f, SpriteEffects.None, 0);
-		if(Main.netMode != NetmodeID.Server)
+		if (Main.netMode != NetmodeID.Server)
 		{
 			Player player = Main.LocalPlayer;
 			if (player.Bottom.ToTileCoordinates().X == i && player.Bottom.ToTileCoordinates().Y == j - 1)

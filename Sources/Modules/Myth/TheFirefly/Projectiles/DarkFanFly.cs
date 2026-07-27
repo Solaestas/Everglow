@@ -192,7 +192,7 @@ internal class DarkFanFly : ModProjectile
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertex.ToArray(), 0, vertex.Count / 3);
 
 
-		
+
 	}
 
 	public override bool OnTileCollide(Vector2 oldVelocity)

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Acytaea.Dusts;
+namespace Everglow.Myth.Acytaea.Dusts;
 
 public class RedEffect2 : ModDust
 {

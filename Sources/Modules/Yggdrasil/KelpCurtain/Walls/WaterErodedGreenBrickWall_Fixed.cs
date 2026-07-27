@@ -36,7 +36,7 @@ public class WaterErodedGreenBrickWall_Fixed : ModWall
 
 	public override void KillWall(int i, int j, ref bool fail)
 	{
-		fail= true;
+		fail = true;
 		base.KillWall(i, j, ref fail);
 	}
 

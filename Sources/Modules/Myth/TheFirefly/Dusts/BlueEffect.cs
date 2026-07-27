@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheFirefly.Dusts;
+namespace Everglow.Myth.TheFirefly.Dusts;
 
 public class BlueEffect : ModDust
 {

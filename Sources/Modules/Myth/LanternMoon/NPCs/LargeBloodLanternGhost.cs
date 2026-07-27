@@ -129,7 +129,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 				{
 					if (Timer < 35)
 					{
-						if(SummonPos != Vector2.zeroVector)
+						if (SummonPos != Vector2.zeroVector)
 						{
 							NPC.Center = Vector2.Lerp(NPC.Center, player.Center + SummonPos, 0.05f);
 						}
@@ -163,9 +163,9 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 					{
 						NPC.direction = NPC.velocity.X > 0 ? 1 : -1;
 					}
-					if(Timer < 60)
+					if (Timer < 60)
 					{
-						if(toTarget.Length() > 200)
+						if (toTarget.Length() > 200)
 						{
 							NPC.velocity = toTarget.SafeNormalize(Vector2.Zero) * 0.8f + NPC.velocity * 0.9f;
 						}
@@ -219,7 +219,7 @@ public class LargeBloodLanternGhost : LanternMoonNPC
 		{
 			State = newState;
 		}
-		if(State == 1)
+		if (State == 1)
 		{
 			SummonPos = new Vector2(0, -Main.rand.NextFloat(480, 540)).RotatedBy(Main.rand.NextFloat(-1.7f, 1.7f));
 		}

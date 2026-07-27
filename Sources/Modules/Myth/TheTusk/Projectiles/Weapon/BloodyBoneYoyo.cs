@@ -219,7 +219,7 @@ public class BloodyBoneYoyo : YoyoProjectile
 
 	public override void ModifyOnHitBounce(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(TantacleHit)
+		if (TantacleHit)
 		{
 			TantacleHit = false;
 			Projectile.velocity += Vector2.Normalize(Projectile.Center - target.Center) / (Weight + 0.01f);

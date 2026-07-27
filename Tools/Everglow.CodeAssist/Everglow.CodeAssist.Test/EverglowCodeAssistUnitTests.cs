@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = Everglow.CodeAssist.Test.CSharpCodeFixVerifier<
 	Everglow.CodeAssist.EverglowCodeAssistAnalyzer,

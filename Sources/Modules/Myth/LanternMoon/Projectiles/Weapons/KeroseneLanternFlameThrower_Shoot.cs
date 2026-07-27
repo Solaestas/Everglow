@@ -100,7 +100,7 @@ public class KeroseneLanternFlameThrower_Shoot : ModProjectile
 			for (int k = 0; k < 30; k++)
 			{
 				newVelocity = Projectile.oldVelocity.RotatedBy(MathHelper.Pi * k / 30f * dir);
-				if(CanEmit(emitDustPos, newVelocity))
+				if (CanEmit(emitDustPos, newVelocity))
 				{
 					break;
 				}

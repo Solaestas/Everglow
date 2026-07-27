@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.Modules;
+namespace Everglow.Commons.Modules;
 
 public class DependencyGraph
 {

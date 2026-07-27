@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.CorruptWormHive.Tiles;
+namespace Everglow.Yggdrasil.CorruptWormHive.Tiles;
 
 public class BloodLightCrystalEntity : ModTileEntity
 {

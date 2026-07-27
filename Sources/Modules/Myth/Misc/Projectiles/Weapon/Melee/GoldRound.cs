@@ -37,13 +37,13 @@ public class GoldRound : ModProjectile
 			Vector2 aimTarget = player.Center;
 			float minDis = 1500;
 			Projectile aimProj = null;
-			foreach(Projectile proj in Main.projectile)
+			foreach (Projectile proj in Main.projectile)
 			{
-				if(proj.active)
+				if (proj.active)
 				{
-					if(proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<GoldRoundYoyo>())
+					if (proj.owner == Projectile.owner && proj.type == ModContent.ProjectileType<GoldRoundYoyo>())
 					{
-						if((proj.Center - Projectile.Center).Length() < minDis)
+						if ((proj.Center - Projectile.Center).Length() < minDis)
 						{
 							minDis = (proj.Center - Projectile.Center).Length();
 							aimTarget = proj.Center;
@@ -52,10 +52,10 @@ public class GoldRound : ModProjectile
 					}
 				}
 			}
-			if(minDis < 30)
+			if (minDis < 30)
 			{
 				Projectile.Kill();
-				if(aimProj != null)
+				if (aimProj != null)
 				{
 					GoldRoundYoyo gRY = aimProj.ModProjectile as GoldRoundYoyo;
 					if (gRY != null)
@@ -84,10 +84,10 @@ public class GoldRound : ModProjectile
 	{
 		Texture2D t = ModAsset.GoldRound.Value;
 		Color c0 = new Color(0.5f, 0.3f, 0.04f, 0);
-		Main.spriteBatch.Draw(t, Projectile.Center-Main.screenPosition, null, c0, Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, c0, Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
 		if (Projectile.timeLeft > 1470)
 		{
-			for(int x = 0;x < Projectile.timeLeft - 1470;x+=3)
+			for (int x = 0; x < Projectile.timeLeft - 1470; x += 3)
 			{
 				Main.spriteBatch.Draw(t, Projectile.Center - Main.screenPosition, null, c0, Projectile.rotation, t.Size() * 0.5f, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
 			}
