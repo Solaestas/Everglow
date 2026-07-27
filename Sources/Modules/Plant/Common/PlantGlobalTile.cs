@@ -1,4 +1,4 @@
-﻿using Everglow.Plant.Items.Weapons.Melee;
+using Everglow.Plant.Items.Weapons.Melee;
 
 namespace Everglow.Plant.Common;
 

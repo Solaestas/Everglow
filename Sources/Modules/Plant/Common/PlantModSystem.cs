@@ -1,4 +1,4 @@
-﻿using Terraria.ModLoader.IO;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.Plant.Common;
 

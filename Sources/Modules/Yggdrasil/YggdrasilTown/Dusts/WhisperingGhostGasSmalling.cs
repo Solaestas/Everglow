@@ -20,7 +20,7 @@ public class WhisperingGhostGasSmalling : ModDust
 		dust.rotation += 0.4f;
 		dust.position += dust.velocity;
 		dust.velocity *= 0.96f;
-		if(dust.scale < 0.4)
+		if (dust.scale < 0.4)
 		{
 			dust.active = false;
 		}

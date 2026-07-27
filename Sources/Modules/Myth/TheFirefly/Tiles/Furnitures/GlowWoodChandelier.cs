@@ -83,7 +83,8 @@ public class GlowWoodChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 	}
 
 	public TileDrawing.TileFlameData GetTileFlameData(int tileX, int tileY, int type, int tileFrameY) =>
-		new TileDrawing.TileFlameData() {
+		new TileDrawing.TileFlameData()
+		{
 			flameCount = 7,
 			flameTexture = flameTexture.Value,
 			flameRangeXMin = -10,

@@ -29,7 +29,7 @@ public class Everglow : Mod
 	{
 		Ins.Begin();
 		Ins.Add(Logger);
-		if(!Main.dedServ)
+		if (!Main.dedServ)
 		{
 			Ins.Add(Main.instance.GraphicsDevice);
 			Ins.Add(Main.spriteBatch);

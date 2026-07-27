@@ -16,7 +16,7 @@ public class AmberStickNPC : GlobalNPC
 {
 	public override void PostAI(NPC npc)
 	{
-		if(npc.HasBuff(ModContent.BuffType<AmberStick>()))
+		if (npc.HasBuff(ModContent.BuffType<AmberStick>()))
 		{
 			npc.position -= npc.velocity * 0.9f;
 		}

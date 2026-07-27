@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.TheFirefly.Dusts;
+using Everglow.Myth.TheFirefly.Dusts;
 using Terraria;
 
 namespace Everglow.Myth.TheFirefly.Projectiles;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.Dusts.Fragrans;
+namespace Everglow.Myth.Misc.Dusts.Fragrans;
 
 public class Fragrans : ModDust
 {

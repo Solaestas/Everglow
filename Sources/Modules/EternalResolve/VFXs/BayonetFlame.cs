@@ -4,6 +4,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.EternalResolve.VFXs;
+
 public class BayonetFlamePipeline : Pipeline
 {
 	public override void Load()

@@ -1,4 +1,4 @@
-﻿sampler uScreenBuffer : register(s0);
+sampler uScreenBuffer : register(s0);
 
 float3 uBaseColor;
 

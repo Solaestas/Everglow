@@ -241,7 +241,7 @@ internal class SightOfTileProj : ModProjectile
 					source.Y = 32;
 				}
 				Tile tile = Main.tile[x, y];
-				if(!IsHalfBrick(x, y))
+				if (!IsHalfBrick(x, y))
 				{
 					Main.spriteBatch.Draw(t, new Rectangle(x * 16 - ScPosX, y * 16 - ScPosY, 16, 16), source, GetTileColor(x, y, baseColor));
 				}
@@ -314,7 +314,7 @@ internal class SightOfTileProj : ModProjectile
 			{
 				frame.X = 90;
 			}
-			if(emptyPart)
+			if (emptyPart)
 			{
 				frame.Y = 18;
 				if (tile.IsHalfBlock)

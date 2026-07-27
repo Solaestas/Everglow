@@ -9,7 +9,8 @@ public class DragonScaleHammerProj : MeleeProj
 		Projectile.width = 20;
 		maxAttackType = 4;
 		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		;
 		longHandle = true;
 		Projectile.scale *= 1.1f;
 	}
@@ -154,7 +155,7 @@ public class DragonScaleHammerProj : MeleeProj
 				float timeValue = timer - 30;
 				timeValue = timeValue / 30f;
 				Projectile.rotation += Projectile.spriteDirection * 0.095f * timeValue * timeValue;
-				mainAxisDirection = Vector2Elipse(140 + timeValue * 0.7f, Projectile.rotation, 1.3f,- 0.4f * player.direction);
+				mainAxisDirection = Vector2Elipse(140 + timeValue * 0.7f, Projectile.rotation, 1.3f, -0.4f * player.direction);
 			}
 			if (timer > 80 + 20 * timeMul)
 				NextAttackType();
@@ -245,7 +246,7 @@ public class DragonScaleHammerProj : MeleeProj
 			{
 				useSlash = false;
 				LockPlayerDir(player);
-				float targetRot = - MathHelper.PiOver2 - player.direction * 1.6f;
+				float targetRot = -MathHelper.PiOver2 - player.direction * 1.6f;
 				mainAxisDirection = Vector2.Lerp(mainAxisDirection, targetRot.ToRotationVector2() * 120, 0.15f);
 				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
 				Projectile.rotation = mainAxisDirection.ToRotation();
@@ -268,7 +269,7 @@ public class DragonScaleHammerProj : MeleeProj
 			}
 			if (timer == 32)
 				AttSound(new SoundStyle(Commons.ModAsset.TrueMeleeSwing_Mod).WithPitchOffset(-0.6f));
-			if (timer >80 + 25 * timeMul)
+			if (timer > 80 + 25 * timeMul)
 				NextAttackType();
 		}
 	}

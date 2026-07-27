@@ -26,7 +26,7 @@ public class SporeRingDust : Visual
 		}
 		position += velocity;
 		velocity *= 0.9f;
-		if(timer > 40)
+		if (timer > 40)
 		{
 			scale *= 0.9f;
 		}

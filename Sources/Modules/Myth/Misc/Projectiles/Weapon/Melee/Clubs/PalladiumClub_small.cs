@@ -79,10 +79,10 @@ public class PalladiumClub_small : ModProjectile, IWarpProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		float power = Math.Max(StrikeOmegaDecrease - MathF.Pow(target.knockBackResist / 4f, 3), MinStrikeOmegaDecrease);
-		if(target.type != NPCID.TargetDummy && HealValue < Projectile.ai[0] * 30)
+		if (target.type != NPCID.TargetDummy && HealValue < Projectile.ai[0] * 30)
 		{
 			HealValue++;
-			CombatText.NewText(target.Hitbox,new Color(255, 125, 6, 255),"♥ + 1");
+			CombatText.NewText(target.Hitbox, new Color(255, 125, 6, 255), "♥ + 1");
 		}
 		Omega *= power;
 		modifiers.FinalDamage /= power;
@@ -373,7 +373,7 @@ public class PalladiumClub_small : ModProjectile, IWarpProjectile
 	public override void OnKill(int timeLeft)
 	{
 		Player player = Main.player[Projectile.owner];
-		if(HealValue > 0 && (Projectile.Center - player.Center).Length() < 100)
+		if (HealValue > 0 && (Projectile.Center - player.Center).Length() < 100)
 		{
 			player.Heal((int)HealValue);
 		}

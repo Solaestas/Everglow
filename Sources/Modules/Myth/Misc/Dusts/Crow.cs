@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.Dusts;
+namespace Everglow.Myth.Misc.Dusts;
 
 public class Crow : ModDust
 {

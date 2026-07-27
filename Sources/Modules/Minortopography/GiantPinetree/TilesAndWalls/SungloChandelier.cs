@@ -42,7 +42,7 @@ public class SungloChandelier : ModTile, ITileFluentlyDrawn, ITileFlameData
 
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
-		if(!Main.gamePaused)
+		if (!Main.gamePaused)
 		{
 			Tile tile = Main.tile[i, j];
 			if (tile.TileFrameX == 0 && tile.TileFrameY % 54 == 0)

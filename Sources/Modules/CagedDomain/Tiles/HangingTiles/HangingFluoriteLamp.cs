@@ -34,7 +34,7 @@ public class HangingFluoriteLamp : HangingTile
 		for (int i = 0; i < masses.Length; i++)
 		{
 			Mass thisMass = masses[i];
-			if(i < MaxCableLength - tile.TileFrameY)
+			if (i < MaxCableLength - tile.TileFrameY)
 			{
 				thisMass.IsStatic = true;
 				thisMass.Position = pos.ToWorldCoordinates();
@@ -56,7 +56,7 @@ public class HangingFluoriteLamp : HangingTile
 			windCycle += highestWindGridPushComplex;
 			if (!Main.gamePaused)
 			{
-				if(i < masses.Length - 1)
+				if (i < masses.Length - 1)
 				{
 					rope.ApplyForceSpecial(i, new Vector2(windCycle / 4.0f, 0.4f * thisMass.Value));
 				}

@@ -36,7 +36,7 @@ namespace Everglow.EternalResolve.Projectiles
 		public override void HitTileEffect(Vector2 hitPosition, float rotation, float power)
 		{
 			HitTileSparkColor = new Color(230, 120, 195, 120);
-			if(Main.rand.NextBool(5))
+			if (Main.rand.NextBool(5))
 			{
 				HitTileSparkColor = new Color(255, 231, 0, 0);
 				power *= 1.5f;

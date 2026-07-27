@@ -182,7 +182,7 @@ public class YggdrasilTownCentralSystem : ModSystem
 
 	public static bool InFurnace_YggdrasilTown()
 	{
-		if(Main.dedServ)
+		if (Main.dedServ)
 		{
 			return false;
 		}
@@ -343,7 +343,7 @@ public class ArenaPlayer : ModPlayer
 				}
 				Player.GetDamage(DamageClass.Generic) *= DamageReduce;
 			}
-			if(ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
+			if (ShieldCooling <= 0 && Player.ownedProjectileCounts[ModContent.ProjectileType<PlayerDefence>()] <= 0)
 			{
 				ShieldCooling = 0;
 				var tile = TileUtils.SafeGetTile((Player.Bottom + new Vector2(0, 16)).ToTileCoordinates());
@@ -439,7 +439,7 @@ public class ArenaPlayer : ModPlayer
 			if (TargetBoss != null && TargetBoss.active)
 			{
 				TownNPC_LiveInYggdrasil tNLIY = TargetBoss.ModNPC as TownNPC_LiveInYggdrasil;
-				if(tNLIY != null)
+				if (tNLIY != null)
 				{
 					tNLIY.PopFailVFX();
 				}

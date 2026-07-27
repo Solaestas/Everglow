@@ -41,7 +41,7 @@ public class CorruptOrbStonePost : ModTile
 			zero = Vector2.Zero;
 		Texture2D tex = ModAsset.CorruptOrbStonePost_glow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(1f, 1f, 1f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-		if(tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			float energyValue = 1f;
 			Vector2 powerCenter = new Vector2(i, j) * 16;
@@ -108,7 +108,7 @@ public class CorruptOrbStonePost : ModTile
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		if(closer && !NPC.downedBoss2)
+		if (closer && !NPC.downedBoss2)
 		{
 			var tile = Main.tile[i, j];
 			if (tile.TileFrameX == 18 && tile.TileFrameY == 18)
@@ -119,9 +119,9 @@ public class CorruptOrbStonePost : ModTile
 				{
 					if (!Main.gamePaused)
 					{
-						foreach(Projectile projectile in Main.projectile)
+						foreach (Projectile projectile in Main.projectile)
 						{
-							if(projectile != null && projectile.active)
+							if (projectile != null && projectile.active)
 							{
 								if (projectile.type == ModContent.ProjectileType<PylonStonePostProj_corrupt>())
 								{
@@ -137,7 +137,7 @@ public class CorruptOrbStonePost : ModTile
 					}
 				}
 			}
-		}	
+		}
 		base.NearbyEffects(i, j, closer);
 	}
 	public override bool CanExplode(int i, int j)

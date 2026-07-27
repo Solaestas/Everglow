@@ -11,6 +11,7 @@ using Terraria.Graphics.Effects;
 
 
 namespace Everglow.MEAC.PlanetBeFall;
+
 internal class DrawIIID : ModSystem
 {
 	public float BloomIntensity = 1;

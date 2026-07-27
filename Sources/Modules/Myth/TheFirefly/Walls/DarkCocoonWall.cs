@@ -6,6 +6,6 @@ public class DarkCocoonWall : ModWall
 	{
 		Main.wallHouse[Type] = true;
 		DustType = 191;
-				AddMapEntry(new Color(10, 10, 10));
+		AddMapEntry(new Color(10, 10, 10));
 	}
 }

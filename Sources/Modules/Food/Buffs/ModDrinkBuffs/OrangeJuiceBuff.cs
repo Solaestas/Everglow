@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.Buffs.ModDrinkBuffs;
+namespace Everglow.Food.Buffs.ModDrinkBuffs;
 
 public class OrangeJuiceBuff : ModBuff
 {

@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 texture2D uPerlin;
 sampler2D uPerlinTex = sampler_state
 {

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.VFX;
+namespace Everglow.Commons.VFX;
 
 /// <summary>
 /// 表示一种IVisual所需的所有Pipeline的排列

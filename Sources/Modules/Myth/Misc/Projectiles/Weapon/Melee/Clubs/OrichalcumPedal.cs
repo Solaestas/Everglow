@@ -79,7 +79,7 @@ public class OrichalcumPedal : ModProjectile
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = 1;
-		if(Projectile.alpha > 0)
+		if (Projectile.alpha > 0)
 		{
 			dissolveDuration = 1 - Projectile.alpha / 255f - 0.2f;
 		}

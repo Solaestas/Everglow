@@ -64,7 +64,7 @@ public class ThunderSpell_Thunder : ModProjectile, IBloomProjectile
 	public override void AI()
 	{
 		Timer++;
-		if(Timer > 10)
+		if (Timer > 10)
 		{
 			Projectile.hostile = false;
 		}
@@ -110,7 +110,7 @@ public class ThunderSpell_Thunder : ModProjectile, IBloomProjectile
 		{
 			Vector2 pos = new Vector2(LightingBoltTrail[i].X, LightingBoltTrail[i].Y);
 			Vector2 dir = -new Vector2(LightingBoltTrail[0].X, LightingBoltTrail[0].Y);
-			if(i < LightingBoltTrail.Count - 1)
+			if (i < LightingBoltTrail.Count - 1)
 			{
 				Vector2 posNext = new Vector2(LightingBoltTrail[i + 1].X, LightingBoltTrail[i + 1].Y);
 				dir = posNext - pos;

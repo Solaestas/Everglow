@@ -245,7 +245,7 @@ public class UnderWaterDungeon : ModItem
 			if (height > 0)
 			{
 				Tile algaBottom = TileUtils.SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick);
-				if(algaBottom.HasTile)
+				if (algaBottom.HasTile)
 				{
 					for (int algaY = 0; algaY < height; algaY++)
 					{

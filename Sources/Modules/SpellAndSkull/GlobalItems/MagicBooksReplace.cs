@@ -32,7 +32,7 @@ public class MagicBooksReplace : GlobalItem
 	}
 	public void AddContentsToMagicBookList(int type)
 	{
-		if(!MagicBookType.Contains(type))
+		if (!MagicBookType.Contains(type))
 		{
 			MagicBookType.Add(type);
 		}
@@ -246,7 +246,7 @@ public class MagicBooksReplace : GlobalItem
 		if (item.type == ItemID.BookofSkulls)
 		{
 			if (player.GetModPlayer<MagicBookPlayer>().MagicBookLevel == 1)
-		    {		
+			{
 				if (Main.mouseRight && Main.mouseRightRelease && mplayer.HandCooling <= 0 && player.statMana > player.HeldItem.mana * 2)
 				{
 					for (int g = -5; g < 150; g++)

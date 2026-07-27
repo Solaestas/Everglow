@@ -1,4 +1,4 @@
-﻿using Terraria.Audio;
+using Terraria.Audio;
 using Terraria.Localization;
 
 namespace Everglow.Myth.Misc.Projectiles;
@@ -8,7 +8,7 @@ public class CloudBall : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("CloudBall");
-				ProjectileID.Sets.TrailingMode[Type] = 2;
+		ProjectileID.Sets.TrailingMode[Type] = 2;
 		ProjectileID.Sets.TrailCacheLength[Type] = 10;
 	}
 

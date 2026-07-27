@@ -33,13 +33,16 @@ using System.Collections.Generic;
 namespace Spine
 {
 	/// <summary>The base class for all constraint datas.</summary>
-	public abstract class ConstraintData {
+	public abstract class ConstraintData
+	{
 		internal readonly string name;
 		internal int order;
 		internal bool skinRequired;
 
-		public ConstraintData (string name) {
-			if (name == null) throw new ArgumentNullException("name", "name cannot be null.");
+		public ConstraintData(string name)
+		{
+			if (name == null)
+				throw new ArgumentNullException("name", "name cannot be null.");
 			this.name = name;
 		}
 
@@ -55,7 +58,8 @@ namespace Spine
 		///<seealso cref="Skin.Constraints"/>
 		public bool SkinRequired { get { return skinRequired; } set { skinRequired = value; } }
 
-		override public string ToString () {
+		override public string ToString()
+		{
 			return name;
 		}
 	}

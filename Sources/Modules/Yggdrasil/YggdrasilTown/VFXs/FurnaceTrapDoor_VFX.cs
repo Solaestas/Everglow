@@ -41,7 +41,7 @@ public class FurnaceTrapDoor_VFX : Visual
 		}
 		if (timer > maxTime - 50)
 		{
-			if(Open)
+			if (Open)
 			{
 				OpenTrapDoor(tileX, tileY);
 			}

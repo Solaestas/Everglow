@@ -25,7 +25,7 @@ public class GreenLanternRedStar : Visual
 		Position += Velocity;
 		Rotation += RotateSpeed;
 		Velocity *= 0.99f;
-		if(Gravity)
+		if (Gravity)
 		{
 			Velocity.Y += 0.25f;
 		}

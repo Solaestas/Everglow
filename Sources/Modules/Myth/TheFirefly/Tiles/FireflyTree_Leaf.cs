@@ -1,4 +1,4 @@
-﻿using Terraria.DataStructures;
+using Terraria.DataStructures;
 
 namespace Everglow.Myth.TheFirefly.Tiles;
 

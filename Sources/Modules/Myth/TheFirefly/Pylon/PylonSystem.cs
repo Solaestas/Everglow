@@ -1,4 +1,4 @@
-﻿using Terraria.GameContent;
+using Terraria.GameContent;
 using Terraria.Localization;
 using Terraria.ModLoader.IO;
 

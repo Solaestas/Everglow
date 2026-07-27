@@ -42,7 +42,7 @@ public class TuskBloodPool_close : ModProjectile
 				}
 			}
 		}
-		if(Projectile.timeLeft == 90)
+		if (Projectile.timeLeft == 90)
 		{
 			foreach (Point point in DissolvingTile)
 			{

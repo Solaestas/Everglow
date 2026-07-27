@@ -1,4 +1,4 @@
-﻿using ReLogic.Content;
+using ReLogic.Content;
 
 namespace Everglow.Myth.Common.VFXPipelines;
 

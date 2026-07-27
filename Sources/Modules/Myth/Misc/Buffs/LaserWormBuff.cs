@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Misc.Buffs;
+namespace Everglow.Myth.Misc.Buffs;
 
 public class LaserWormBuff : ModBuff
 {

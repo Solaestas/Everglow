@@ -108,7 +108,7 @@ public class DevilHeartStaff_proj_II : TrailingProjectile
 			};
 			Ins.VFXManager.Add(dustVFX);
 		}
-		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center,Vector2.zeroVector,ModContent.ProjectileType<DevilHeartStaff_proj_Kill>(),Projectile.damage, Projectile.knockBack * 2, Projectile.owner);
+		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DevilHeartStaff_proj_Kill>(), Projectile.damage, Projectile.knockBack * 2, Projectile.owner);
 	}
 
 	public override void DrawSelf()
@@ -124,7 +124,7 @@ public class DevilHeartStaff_proj_II : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style == 1)
+		if (style == 1)
 		{
 			return ProjTrailColor.GetColor(index / (float)SmoothedOldPos.Count);
 		}

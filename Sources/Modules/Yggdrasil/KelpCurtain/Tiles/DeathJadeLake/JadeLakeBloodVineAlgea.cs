@@ -223,7 +223,7 @@ public class JadeLakeBloodVineAlgea : ModTile, ITileFluentlyDrawn
 			var tileSpriteEffect = SpriteEffects.None;
 			spriteBatch.Draw(tex, drawPos, frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 			float size = MathF.Sin((j / (float)height) * MathHelper.Pi * 0.85f) + 0.2f;
-			if(joint)
+			if (joint)
 			{
 				frame = new Rectangle(36, 8, 14, 38);
 				origin = new Vector2(7, 38);

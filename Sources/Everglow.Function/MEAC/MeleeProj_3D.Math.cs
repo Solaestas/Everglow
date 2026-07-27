@@ -53,7 +53,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		int Size = Math.Min(Main.screenWidth, Main.screenHeight);
 
-		float SizeCorrectionFlag = 1000f / Main.screenHeight *  MeleeProj_3D_Configs.AngleofFOV / MathHelper.PiOver4; // 1000 is a randomly made-up magic number
+		float SizeCorrectionFlag = 1000f / Main.screenHeight * MeleeProj_3D_Configs.AngleofFOV / MathHelper.PiOver4; // 1000 is a randomly made-up magic number
 
 		// Normalized Device Coordinates
 		if (homogenousPoint.W != 0)

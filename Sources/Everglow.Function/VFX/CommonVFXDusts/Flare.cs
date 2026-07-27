@@ -6,7 +6,7 @@ using SteelSeries.GameSense;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
 
-//Ê¹ÓÃÀý£º
+//ÃŠÂ¹Ã“ÃƒÃ€Ã½Â£Âº
 /*
  * GradientColor flareColor = new GradientColor();
         flareColor.colorList.Add((new Color(1f, 0.5f, 0f), 0f));
@@ -31,19 +31,19 @@ public class FlarePipeline : Pipeline
 	public override void Load()
 	{
 		effect = ModAsset.Flare;
-		
+
 	}
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
 		Ins.Batch.Begin(BlendState.Additive, DepthStencilState.None, SamplerState.AnisotropicClamp, RasterizerState.CullNone);
 		Main.graphics.graphicsDevice.Textures[1] = ModAsset.Noise_perlin.Value;
-        effect.Parameters["uTransform"].SetValue(
-            Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
-            Main.GameViewMatrix.TransformationMatrix *
-            Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
-        effect.CurrentTechnique.Passes[0].Apply();
-    }
+		effect.Parameters["uTransform"].SetValue(
+			Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) *
+			Main.GameViewMatrix.TransformationMatrix *
+			Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1));
+		effect.CurrentTechnique.Passes[0].Apply();
+	}
 
 	public override void EndRender()
 	{
@@ -65,22 +65,23 @@ public class Flare : Visual
 	public Entity Owner;
 
 	public float speedLimits = 1;
-	public Flare() {
-        
-    }
+	public Flare()
+	{
+
+	}
 	public override void OnSpawn()
 	{
-        rotation = Main.rand.NextFloat(6.28f);
-    }
+		rotation = Main.rand.NextFloat(6.28f);
+	}
 	public override void Update()
 	{
 		position += velocity;
 		velocity.Y += gravity;
 		velocity *= speedLimits;
-        //scale *= 0.99f;
-       
-        timeleft--;
-		if (timeleft<=0)
+		//scale *= 0.99f;
+
+		timeleft--;
+		if (timeleft <= 0)
 			Active = false;
 		if (Collision.SolidCollision(position, 10, 10))
 		{
@@ -95,7 +96,7 @@ public class Flare : Visual
 		Vector2 drawPos = position;
 		if (Owner != null)
 			drawPos += Owner.Center;
-		
-		Ins.Batch.Draw(ModAsset.Flare_Tex.Value,drawPos, null, c, rotation, new Vector2(64), scale, 0);
+
+		Ins.Batch.Draw(ModAsset.Flare_Tex.Value, drawPos, null, c, rotation, new Vector2(64), scale, 0);
 	}
 }

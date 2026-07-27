@@ -1,4 +1,4 @@
-﻿using Terraria.Localization;
+using Terraria.Localization;
 using Terraria.ObjectData;
 
 namespace Everglow.Myth.TheTusk.Tiles;
@@ -30,7 +30,7 @@ public class BloodifyPlatform : ModTile
 		AddToArray(ref TileID.Sets.RoomNeeds.CountsAsDoor);
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(168, 11, 0), modTranslation);
-						HitSound = SoundID.Grass;
+		HitSound = SoundID.Grass;
 	}
 	public override bool CreateDust(int i, int j, ref int type)
 	{

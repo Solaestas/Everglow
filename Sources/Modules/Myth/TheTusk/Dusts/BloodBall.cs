@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.TheTusk.Dusts;
+namespace Everglow.Myth.TheTusk.Dusts;
 
 public class BloodBall : ModDust
 {

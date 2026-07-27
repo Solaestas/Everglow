@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.OmniElementItems.Dusts;
+namespace Everglow.Myth.OmniElementItems.Dusts;
 
 public class GreenParticle : ModDust
 {

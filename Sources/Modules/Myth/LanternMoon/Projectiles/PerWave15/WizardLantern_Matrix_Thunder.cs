@@ -113,13 +113,13 @@ public class WizardLantern_Matrix_Thunder : ModProjectile
 				for (int i = 0; i < 4; i++)
 				{
 					float addRot = MathHelper.PiOver4;
-					if(Timer == 20)
+					if (Timer == 20)
 					{
 						addRot = 0;
 					}
 					Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, Timer * 1.4f + 80).RotatedBy(i / 4f * MathHelper.TwoPi + addRot), Vector2.zeroVector, ModContent.ProjectileType<ThunderSpell>(), 1, 0f, Main.myPlayer, i);
 					p0.spriteDirection = -1;
-					if(Timer == 10)
+					if (Timer == 10)
 					{
 						p0.spriteDirection = 1;
 					}
