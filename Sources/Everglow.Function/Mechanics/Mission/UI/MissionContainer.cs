@@ -35,9 +35,9 @@ public class MissionContainer : UIContainerElement
 	[Obsolete]
 	public const int PanelHeight = 800;
 
-	public int CurrentPanelWidth = 2048;
+	public int CurrentPanelWidth = 1840;
 
-	public int CurrentPanelHeight = 1440;
+	public int CurrentPanelHeight = 1024;
 
 	// ==================== UI elements ==================== //
 	private UIBlock _panel;
@@ -127,8 +127,6 @@ public class MissionContainer : UIContainerElement
 	/// <param name="resolution"></param>
 	private void UpdateResolutionFactor(Vector2 resolution)
 	{
-		resolution *= 0.6f;
-
 		if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
 		{
 			ResolutionFactor = 1;
@@ -257,8 +255,8 @@ public class MissionContainer : UIContainerElement
 			CurrentPanelWidth = (int)_panel.Info.Width.Pixel;
 			CurrentPanelHeight = (int)_panel.Info.Height.Pixel;
 		}
-		float width = CurrentPanelWidth * ResolutionFactor;
-		float height = CurrentPanelHeight * ResolutionFactor;
+		float width = CurrentPanelWidth;
+		float height = CurrentPanelHeight;
 
 		_panel.Info.Width.SetValue(width, 0f);
 		_panel.Info.Height.SetValue(height, 0f);
@@ -272,10 +270,10 @@ public class MissionContainer : UIContainerElement
 		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
 		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
 
-		_missionDetail.Info.Left.SetValue(width * 0.3f);
-		_missionDetail.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetail.Info.Width.SetValue(width * 0.65f, 0f);
-		_missionDetail.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetail.Info.Left.SetValue(740, 0);
+		_missionDetail.Info.Top.SetValue(60);
+		_missionDetail.Info.Width.SetValue(width - 800);
+		_missionDetail.Info.Height.SetValue(height - 120);
 
 		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
 		_missionDetailSubContent.Info.Top.SetValue(46 * ResolutionFactor);
