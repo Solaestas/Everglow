@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 texture2D tex0;
 sampler2D uShapeTex = sampler_state
 {

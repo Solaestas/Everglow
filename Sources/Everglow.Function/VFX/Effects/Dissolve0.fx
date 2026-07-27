@@ -1,4 +1,4 @@
-﻿sampler2D uImage0 : register(s0);
+sampler2D uImage0 : register(s0);
 sampler2D uImage1 : register(s1);
 float _DissolveFactor;
 float4 PixelShaderFunction(float2 uv : TEXCOORD0,float4 drawColor:COLOR0) : COLOR0

@@ -9,7 +9,7 @@ public class GlowingHeal : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("");
-			}
+	}
 	public override void SetDefaults()
 	{
 		NPC.width = 10;

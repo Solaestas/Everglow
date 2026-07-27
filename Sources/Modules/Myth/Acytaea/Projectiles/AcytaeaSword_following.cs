@@ -3,6 +3,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaSword_following : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -49,11 +50,11 @@ public class AcytaeaSword_following : ModProjectile
 			Projectile.rotation = MathHelper.PiOver4 * 3 + Projectile.velocity.X * 0.04f;
 			Vector2 aimCenter = Owner.Center + new Vector2(-30 * Owner.direction, 20 + 10 * MathF.Sin((float)Main.time * 0.002f));
 			Vector2 toAim = aimCenter - Projectile.Center - Projectile.velocity;
-			if(toAim.Length() > 5)
+			if (toAim.Length() > 5)
 			{
 				toAim = Utils.SafeNormalize(toAim, Vector2.zeroVector) * 27;
 			}
-			
+
 			Projectile.velocity = Projectile.velocity * 0.95f + toAim * 0.05f;
 		}
 		else

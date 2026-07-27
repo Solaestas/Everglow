@@ -33,7 +33,7 @@ public class DissolveAndNoDissolvePipeline : Pipeline
 		BeginRenderDissolve();
 		foreach (var visual in visuals)
 		{
-			if(visual is DissolveGore)
+			if (visual is DissolveGore)
 			{
 				DissolveGore dissolveGore = visual as DissolveGore;
 				if (dissolveGore != null)

@@ -64,11 +64,11 @@ public class LanternFlameWall : ModProjectile
 				break;
 			}
 		}
-		if(!hasLanterKing)
+		if (!hasLanterKing)
 		{
 			Decay -= 0.01f;
 		}
-		if(Decay <= 0)
+		if (Decay <= 0)
 		{
 			Projectile.Kill();
 			return;
@@ -107,7 +107,7 @@ public class LanternFlameWall : ModProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(GapStart == Vector2.zeroVector || GapEnd == Vector2.zeroVector)
+		if (GapStart == Vector2.zeroVector || GapEnd == Vector2.zeroVector)
 		{
 			return false;
 		}
@@ -144,14 +144,14 @@ public class LanternFlameWall : ModProjectile
 			var toGap = MathF.Abs(phase - GapPosAndRange.X);
 			if (toGap < GapPosAndRange.Y * 1.25f)
 			{
-				if(checkGapStart == Vector2.zeroVector)
+				if (checkGapStart == Vector2.zeroVector)
 				{
 					checkGapStart = pos;
 					GapStart = checkGapStart;
 				}
 				var phaseNext = h + 1 - distance * 0.5f;
 				var toGapNext = MathF.Abs(phaseNext - GapPosAndRange.X);
-				if(toGapNext >= GapPosAndRange.Y * 1.25f)
+				if (toGapNext >= GapPosAndRange.Y * 1.25f)
 				{
 					if (checkGapEnd == Vector2.zeroVector)
 					{

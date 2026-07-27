@@ -96,7 +96,7 @@ public class SquamousShell : ModNPC
 		NPC.velocity.Y = 2f;
 		_coroutineManager.StartCoroutine(new Coroutine(Landing()));
 		var data = Mod.GetFileBytes(ModAsset.monsterj_Path);
-		if(!Main.dedServ)
+		if (!Main.dedServ)
 		{
 			if (SquamousShellSkeleton == null)
 			{
@@ -222,7 +222,7 @@ public class SquamousShell : ModNPC
 		Player target = Main.player[NPC.target];
 
 		// if target no stand in solid top.
-		if (!TileUtils.PlatformCollision(target.Bottom) && !TileUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position,target.width, target.height + 48))
+		if (!TileUtils.PlatformCollision(target.Bottom) && !TileUtils.PlatformCollision(target.Bottom + new Vector2(0, 8)) && !Collision.SolidCollision(target.position, target.width, target.height + 48))
 		{
 			_coroutineManager.StartCoroutine(new Coroutine(NextAttack()));
 			yield break;

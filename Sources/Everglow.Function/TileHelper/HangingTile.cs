@@ -322,7 +322,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 
 	public override void MouseOver(int i, int j)
 	{
-		if(LengthAdjustable)
+		if (LengthAdjustable)
 		{
 			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
 			{

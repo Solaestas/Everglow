@@ -29,9 +29,11 @@
 
 using System;
 
-namespace Spine {
+namespace Spine
+{
 	/// <summary>Attachment that displays a texture region using a mesh.</summary>
-	public class MeshAttachment : VertexAttachment, IHasRendererObject {
+	public class MeshAttachment : VertexAttachment, IHasRendererObject
+	{
 		internal float regionOffsetX, regionOffsetY, regionWidth, regionHeight, regionOriginalWidth, regionOriginalHeight;
 		private MeshAttachment parentMesh;
 		internal float[] uvs, regionUVs;
@@ -65,11 +67,14 @@ namespace Spine {
 		public float RegionOriginalWidth { get { return regionOriginalWidth; } set { regionOriginalWidth = value; } }
 		public float RegionOriginalHeight { get { return regionOriginalHeight; } set { regionOriginalHeight = value; } } // Unrotated, unstripped size.
 
-		public MeshAttachment ParentMesh {
+		public MeshAttachment ParentMesh
+		{
 			get { return parentMesh; }
-			set {
+			set
+			{
 				parentMesh = value;
-				if (value != null) {
+				if (value != null)
+				{
 					bones = value.bones;
 					vertices = value.vertices;
 					worldVerticesLength = value.worldVerticesLength;
@@ -88,17 +93,21 @@ namespace Spine {
 		public float Width { get; set; }
 		public float Height { get; set; }
 
-		public MeshAttachment (string name)
-			: base(name) {
+		public MeshAttachment(string name)
+			: base(name)
+		{
 		}
 
-		public void UpdateUVs () {
+		public void UpdateUVs()
+		{
 			float[] regionUVs = this.regionUVs;
-			if (this.uvs == null || this.uvs.Length != regionUVs.Length) this.uvs = new float[regionUVs.Length];
+			if (this.uvs == null || this.uvs.Length != regionUVs.Length)
+				this.uvs = new float[regionUVs.Length];
 			float[] uvs = this.uvs;
 			float u = RegionU, v = RegionV, width = 0, height = 0;
 
-			if (RegionDegrees == 90) {
+			if (RegionDegrees == 90)
+			{
 				float textureHeight = this.regionWidth / (RegionV2 - RegionV);
 				float textureWidth = this.regionHeight / (RegionU2 - RegionU);
 				u -= (RegionOriginalHeight - RegionOffsetY - RegionHeight) / textureWidth;
@@ -106,11 +115,14 @@ namespace Spine {
 				width = RegionOriginalHeight / textureWidth;
 				height = RegionOriginalWidth / textureHeight;
 
-				for (int i = 0, n = uvs.Length; i < n; i += 2) {
+				for (int i = 0, n = uvs.Length; i < n; i += 2)
+				{
 					uvs[i] = u + regionUVs[i + 1] * width;
 					uvs[i + 1] = v + (1 - regionUVs[i]) * height;
 				}
-			} else if (RegionDegrees == 180) {
+			}
+			else if (RegionDegrees == 180)
+			{
 				float textureWidth = this.regionWidth / (RegionU2 - RegionU);
 				float textureHeight = this.regionHeight / (RegionV2 - RegionV);
 				u -= (RegionOriginalWidth - RegionOffsetX - RegionWidth) / textureWidth;
@@ -118,11 +130,14 @@ namespace Spine {
 				width = RegionOriginalWidth / textureWidth;
 				height = RegionOriginalHeight / textureHeight;
 
-				for (int i = 0, n = uvs.Length; i < n; i += 2) {
+				for (int i = 0, n = uvs.Length; i < n; i += 2)
+				{
 					uvs[i] = u + (1 - regionUVs[i]) * width;
 					uvs[i + 1] = v + (1 - regionUVs[i + 1]) * height;
 				}
-			} else if (RegionDegrees == 270) {
+			}
+			else if (RegionDegrees == 270)
+			{
 				float textureWidth = this.regionWidth / (RegionU2 - RegionU);
 				float textureHeight = this.regionHeight / (RegionV2 - RegionV);
 				u -= RegionOffsetY / textureWidth;
@@ -130,11 +145,14 @@ namespace Spine {
 				width = RegionOriginalHeight / textureWidth;
 				height = RegionOriginalWidth / textureHeight;
 
-				for (int i = 0, n = uvs.Length; i<n; i += 2) {
+				for (int i = 0, n = uvs.Length; i < n; i += 2)
+				{
 					uvs[i] = u + (1 - regionUVs[i + 1]) * width;
 					uvs[i + 1] = v + regionUVs[i] * height;
 				}
-			} else {
+			}
+			else
+			{
 				float textureWidth = this.regionWidth / (RegionU2 - RegionU);
 				float textureHeight = this.regionHeight / (RegionV2 - RegionV);
 				u -= RegionOffsetX / textureWidth;
@@ -142,15 +160,18 @@ namespace Spine {
 				width = RegionOriginalWidth / textureWidth;
 				height = RegionOriginalHeight / textureHeight;
 
-				for (int i = 0, n = uvs.Length; i < n; i += 2) {
+				for (int i = 0, n = uvs.Length; i < n; i += 2)
+				{
 					uvs[i] = u + regionUVs[i] * width;
 					uvs[i + 1] = v + regionUVs[i + 1] * height;
 				}
 			}
 		}
 
-		public override Attachment Copy () {
-			if (parentMesh != null) return NewLinkedMesh();
+		public override Attachment Copy()
+		{
+			if (parentMesh != null)
+				return NewLinkedMesh();
 
 			MeshAttachment copy = new MeshAttachment(this.Name);
 			copy.RendererObject = RendererObject;
@@ -183,7 +204,8 @@ namespace Spine {
 			copy.HullLength = HullLength;
 
 			// Nonessential.
-			if (Edges != null) {
+			if (Edges != null)
+			{
 				copy.Edges = new int[Edges.Length];
 				Array.Copy(Edges, 0, copy.Edges, 0, Edges.Length);
 			}
@@ -193,7 +215,8 @@ namespace Spine {
 		}
 
 		///<summary>Returns a new mesh with this mesh set as the <see cref="ParentMesh"/>.
-		public MeshAttachment NewLinkedMesh () {
+		public MeshAttachment NewLinkedMesh()
+		{
 			MeshAttachment mesh = new MeshAttachment(Name);
 			mesh.RendererObject = RendererObject;
 			mesh.regionOffsetX = regionOffsetX;

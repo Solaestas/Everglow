@@ -71,7 +71,7 @@ public class PineSprite : ModProjectile
 		{
 			Projectile.Kill();
 		}
-		Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4)/*Half size of a dust texture*/ + new Vector2(0, -8),0, 0, DustID.IceTorch);
+		Dust d = Dust.NewDustDirect(Projectile.Center - new Vector2(4)/*Half size of a dust texture*/ + new Vector2(0, -8), 0, 0, DustID.IceTorch);
 		d.noGravity = true;
 		d.scale = Main.rand.NextFloat(0.85f, 1.15f);
 	}

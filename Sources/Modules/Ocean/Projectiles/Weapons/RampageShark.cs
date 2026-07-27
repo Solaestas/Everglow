@@ -110,7 +110,8 @@ public class RampageShark : ModProjectile
 			Projectile.Center = player.MountedCenter + Vector2.Normalize(toMouse) * 6;
 			{
 
-			};
+			}
+			;
 			Projectile.velocity *= 0;
 			if (Projectile.timeLeft % player.HeldItem.useTime == 0)
 				Shoot();

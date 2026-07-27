@@ -1,4 +1,5 @@
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+
 internal class BoneRingPipeline : Pipeline
 {
 	public override void Load()

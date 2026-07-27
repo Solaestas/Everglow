@@ -1,4 +1,4 @@
-﻿using Terraria;
+using Terraria;
 using Terraria.Localization;
 
 namespace Everglow.Myth.Misc.Projectiles.Typeless;
@@ -8,7 +8,7 @@ public class FlowerPetalPurple : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Flower Petal Purple");
-				Main.projFrames[Projectile.type] = 8;
+		Main.projFrames[Projectile.type] = 8;
 	}
 	public override void SetDefaults()
 	{

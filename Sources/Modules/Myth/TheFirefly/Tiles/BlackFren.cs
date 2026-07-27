@@ -26,13 +26,14 @@ public class BlackFren : ModTile, ITileFluentlyDrawn
 	public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 	{
 		var tile = Main.tile[i, j];
-		if (tile.TileFrameX % 36 == 0 && tile.TileFrameY % 36 == 0) {
+		if (tile.TileFrameX % 36 == 0 && tile.TileFrameY % 36 == 0)
+		{
 			TileFluentDrawManager.AddFluentPoint(this, i, j);
 		}
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) 
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		FurnitureUtils.MultiTileGrassFluentDraw(screenPosition, tileDrawing, spriteBatch, pos, ModAsset.BlackFrenGlow.Value);
 	}

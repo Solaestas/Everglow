@@ -31,13 +31,13 @@ public class BlueStarFlower : ModProjectile
 
 	public override void AI()
 	{
-		if(Projectile.scale < 1)
+		if (Projectile.scale < 1)
 		{
 			Projectile.scale += 0.02f;
 		}
-		if(OwnerCorruptMoth != null)
+		if (OwnerCorruptMoth != null)
 		{
-			if(OwnerCorruptMoth.active && OwnerCorruptMoth.type == ModContent.NPCType<CorruptMoth>())
+			if (OwnerCorruptMoth.active && OwnerCorruptMoth.type == ModContent.NPCType<CorruptMoth>())
 			{
 				Vector2 aimCenter = OwnerCorruptMoth.Center + new Vector2(100 * OwnerCorruptMoth.spriteDirection, -80).RotatedBy(OwnerCorruptMoth.rotation * OwnerCorruptMoth.spriteDirection);
 				Projectile.Center = aimCenter * 0.2f + Projectile.Center * 0.8f;
@@ -156,7 +156,7 @@ public class BlueStarFlower : ModProjectile
 				Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, v, ModContent.ProjectileType<BlackCorruptRain3>(), Projectile.damage / 6, 0f, Main.myPlayer, Main.rand.NextFloat(MathF.PI * 2));
 			}
 		}
-		if(Main.masterMode)
+		if (Main.masterMode)
 		{
 			//for (int i = 0; i < 4; i++)
 			//{

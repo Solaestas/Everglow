@@ -73,11 +73,11 @@ public class FireFeather : ModDust
 		var tile = Main.tile[(int)(dust.position.X / 16), (int)(dust.position.Y / 16)];
 		bool wet = dust.position.Y % 1 < tile.LiquidAmount / 256f;
 		float value = 1f;
-		if(dust.scale < 1.5f)
+		if (dust.scale < 1.5f)
 		{
 			value = dust.scale - 0.5f;
 		}
-		if(wet)
+		if (wet)
 		{
 			value = 0.05f;
 		}

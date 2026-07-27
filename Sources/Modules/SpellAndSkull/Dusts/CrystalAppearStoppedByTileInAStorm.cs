@@ -1,4 +1,4 @@
-﻿using Everglow.SpellAndSkull.Projectiles.CrystalStorm;
+using Everglow.SpellAndSkull.Projectiles.CrystalStorm;
 
 namespace Everglow.SpellAndSkull.Dusts;
 

@@ -37,7 +37,7 @@ public class GreenFlameProj : TrailingProjectile
 				if (npc.ModNPC is LanternMoonNPC && npc != OwnerNPC && npc.life < npc.lifeMax)
 				{
 					Vector2 toTarget = npc.Center - Projectile.Center;
-					if(toTarget.Length() < minDis)
+					if (toTarget.Length() < minDis)
 					{
 						minDis = toTarget.Length();
 						targetNPC = npc;
@@ -45,18 +45,18 @@ public class GreenFlameProj : TrailingProjectile
 				}
 			}
 		}
-		if(targetNPC is null)
+		if (targetNPC is null)
 		{
 			Projectile.velocity = Projectile.velocity.RotatedBy(MathF.Sin((float)Main.time * 0.3f) * 0.3f);
 		}
 		else
 		{
 			Vector2 toTarget = targetNPC.Center - Projectile.Center - Projectile.velocity;
-			if(toTarget.Length() < 20 && TimeAfterEntityDestroy < 0)
+			if (toTarget.Length() < 20 && TimeAfterEntityDestroy < 0)
 			{
 				int healAmount = Main.rand.Next(75, 125);
 				targetNPC.life += healAmount;
-				if(targetNPC.life > targetNPC.lifeMax)
+				if (targetNPC.life > targetNPC.lifeMax)
 				{
 					targetNPC.life = targetNPC.lifeMax;
 				}

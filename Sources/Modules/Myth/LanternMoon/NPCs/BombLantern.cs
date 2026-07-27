@@ -78,7 +78,7 @@ public class BombLantern : LanternMoonNPC
 		if (DizzyTime <= 120)
 		{
 			float value = 1f;
-			if(DizzyTime > 0)
+			if (DizzyTime > 0)
 			{
 				value = 1 - DizzyTime / 120f;
 			}
@@ -384,7 +384,7 @@ public class BombLantern : LanternMoonNPC
 			}
 		}
 
-		if(DizzyLightUpTime > 0)
+		if (DizzyLightUpTime > 0)
 		{
 			float deathValue = ExplosionTimer / 15f;
 			Color glow1C = new Color(deathValue, deathValue * deathValue, deathValue * deathValue * deathValue, 0);

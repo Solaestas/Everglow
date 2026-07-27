@@ -1,4 +1,5 @@
 namespace Everglow.Myth.Misc.Dusts;
+
 public class IceCrystal : ModDust
 {
 	public override void OnSpawn(Dust dust)
@@ -15,9 +16,9 @@ public class IceCrystal : ModDust
 		dust.scale *= 0.98f;
 		dust.velocity *= 0.99f;
 		dust.velocity = dust.velocity.RotatedBy((dust.color.G - 120) / 2550f);
-		if(Main.rand.NextBool(6) && !Main.gamePaused)
+		if (Main.rand.NextBool(6) && !Main.gamePaused)
 		{
-			if(dust.frame.Y < 18)
+			if (dust.frame.Y < 18)
 			{
 				dust.frame.Y += 9;
 			}

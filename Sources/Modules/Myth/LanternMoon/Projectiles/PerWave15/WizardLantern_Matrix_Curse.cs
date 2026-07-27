@@ -40,7 +40,7 @@ public class WizardLantern_Matrix_Curse : ModProjectile
 					float addRot = 0;
 					Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center + new Vector2(0, Timer * 1.4f + 80).RotatedBy(i / 6f * MathHelper.TwoPi + addRot), Vector2.zeroVector, ModContent.ProjectileType<CurseSpell>(), 20, 0f, Main.myPlayer, i);
 					p0.spriteDirection = -1;
-					if(Timer == 10)
+					if (Timer == 10)
 					{
 						p0.spriteDirection = 1;
 					}
@@ -148,7 +148,7 @@ public class WizardLantern_Matrix_Curse : ModProjectile
 			bars_shadowRing_dark.Add(drawPos + radius_out, Color.White * colorFade, new Vector3(xCoord + Timer * 0.0004f + 0.3f + Projectile.whoAmI * 0.35f, 0, 1));
 
 			bars_shadowRing.Add(drawPos + radius, darkColor * colorFade, new Vector3(xCoord + Timer * 0.0009f + Projectile.whoAmI * 0.35f, 1, fade2));
-			bars_shadowRing.Add(drawPos + radius_out * 1.1f, darkColor , new Vector3(xCoord + Timer * 0.0009f + Projectile.whoAmI * 0.35f, 0, fade2));
+			bars_shadowRing.Add(drawPos + radius_out * 1.1f, darkColor, new Vector3(xCoord + Timer * 0.0009f + Projectile.whoAmI * 0.35f, 0, fade2));
 			Lighting.AddLight(drawPos + radius * 1.2f, new Vector3(0.0f, 0.01f, 0.4f) * fade2);
 		}
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);

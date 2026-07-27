@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 sampler uDepthImage : register(s1);
 
 float uBias;

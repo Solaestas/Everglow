@@ -37,7 +37,7 @@ public class BoneFeather_spine : ModProjectile
 		{
 			VelocityPerStep = VelocityPerStep.RotatedBy(Omega);
 			float length = 20f;
-			if(Projectile.timeLeft < 180)
+			if (Projectile.timeLeft < 180)
 			{
 				length = (Projectile.timeLeft - 120) / 3f;
 			}
@@ -61,12 +61,12 @@ public class BoneFeather_spine : ModProjectile
 	public List<Vector2> OldPos = new List<Vector2>();
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		foreach(Vector2 v in OldPos)
+		foreach (Vector2 v in OldPos)
 		{
 			int topX = (int)(v.X - Projectile.width * 0.5f);
 			int topY = (int)(v.Y - Projectile.height * 0.5f);
 			Rectangle r0 = new Rectangle(topX, topY, Projectile.width, Projectile.height);
-			if(Rectangle.Intersect(r0, targetHitbox) != Rectangle.emptyRectangle)
+			if (Rectangle.Intersect(r0, targetHitbox) != Rectangle.emptyRectangle)
 			{
 				return true;
 			}

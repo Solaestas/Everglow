@@ -46,7 +46,7 @@ public class MeteorClub : ClubProj
 	{
 		var color = new Color(MathF.Sqrt(Omega), Omega * Omega * 0.8f, Omega * Omega * 0.2f, Omega * 0.3f);
 		var bars = CreateTrailVertices(useSpecialAplha: true, trailColor: color);
-		if(bars == null)
+		if (bars == null)
 		{
 			return;
 		}

@@ -35,7 +35,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 					return false;
 				}
 			}
-			if(player.statLife <= 15)
+			if (player.statLife <= 15)
 			{
 				return false;
 			}
@@ -51,5 +51,5 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 				Register();
 			base.AddRecipes();
 		}
-    }
+	}
 }

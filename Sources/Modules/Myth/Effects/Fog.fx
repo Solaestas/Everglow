@@ -1,4 +1,4 @@
-﻿sampler screenImage : register(s0);
+sampler screenImage : register(s0);
 sampler bloomImage : register(s1);
 float2 uImageSize0;
 float3 uViewAbsorptionRatio;

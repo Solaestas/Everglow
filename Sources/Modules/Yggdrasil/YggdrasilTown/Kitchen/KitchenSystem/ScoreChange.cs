@@ -51,7 +51,7 @@ public class ScoreChange
 		}
 		else
 		{
-			if(KitchenSystemUI.Maximized)
+			if (KitchenSystemUI.Maximized)
 			{
 				AnchorPos = KitchenSystemUI.MainPanelOrigin + new Vector2(-310, 170);
 			}

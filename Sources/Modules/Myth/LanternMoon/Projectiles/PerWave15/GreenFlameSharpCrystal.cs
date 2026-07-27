@@ -36,7 +36,7 @@ public class GreenFlameSharpCrystal : TrailingProjectile
 			float timeValue = Timer / 60f;
 			Lighting.AddLight(Projectile.Center, new Vector3(1.2f, 0, 0) * (1 - timeValue));
 		}
-		if(Timer == 60)
+		if (Timer == 60)
 		{
 			Projectile.velocity = Projectile.velocity.SafeNormalize(Vector2.Zero) * 30f;
 		}
@@ -96,7 +96,7 @@ public class GreenFlameSharpCrystal : TrailingProjectile
 			fade *= Projectile.timeLeft / 60f;
 		}
 		float fade2 = 1f;
-		if(Timer < 60f)
+		if (Timer < 60f)
 		{
 			fade2 = Timer / 60f;
 		}
@@ -157,7 +157,7 @@ public class GreenFlameSharpCrystal : TrailingProjectile
 			{
 				fade *= Projectile.timeLeft / 60f;
 			}
-			if(style == 1)
+			if (style == 1)
 			{
 				Color c0 = base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
 				Color c1 = new Color(0.1f, 0, 0.6f, 0);
@@ -166,7 +166,7 @@ public class GreenFlameSharpCrystal : TrailingProjectile
 				c1.G = (byte)(lightC.G * c1.G / 255f);
 				c1.B = (byte)(lightC.B * c1.B / 255f);
 				Color c2 = Color.Lerp(c0, c1, factor) * fade;
-				if(Timer < 60)
+				if (Timer < 60)
 				{
 					Color c3 = new Color(0.2f, 1f, 1f, 0);
 					float timeValue = Timer / 60f;

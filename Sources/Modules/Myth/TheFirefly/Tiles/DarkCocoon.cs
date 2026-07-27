@@ -158,7 +158,7 @@ public class DarkCocoon : ModTile
 				}
 				if (Main.netMode != NetmodeID.Server)
 				{
-					if(length > 3)
+					if (length > 3)
 					{
 						LargeFireBulb.PlaceMe(i, j + 1, (ushort)Main.rand.Next(4));
 					}

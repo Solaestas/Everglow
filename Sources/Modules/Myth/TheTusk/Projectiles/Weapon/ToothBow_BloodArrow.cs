@@ -3,6 +3,7 @@ using Terraria.DataStructures;
 using static Terraria.NPC.NPCNameFakeLanguageCategoryPassthrough;
 
 namespace Everglow.Myth.TheTusk.Projectiles.Weapon;
+
 public class ToothBow_BloodArrow : ModProjectile
 {
 	public override void SetDefaults()
@@ -38,13 +39,13 @@ public class ToothBow_BloodArrow : ModProjectile
 		Power *= 0.75f;
 		if (!Collision.SolidCollision(Projectile.Center, 0, 0))
 		{
-			Projectile.velocity.Y += 0.2f;		
+			Projectile.velocity.Y += 0.2f;
 		}
 		else
 		{
 			Projectile.velocity *= Vector2.zeroVector;
 		}
-		
+
 		if (stickNPC != -1)
 		{
 			StickToTarget();
@@ -94,7 +95,7 @@ public class ToothBow_BloodArrow : ModProjectile
 	}
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if(Power > 1f)
+		if (Power > 1f)
 		{
 			Texture2D texGlow = ModAsset.ToothBow_BloodArrow_glow.Value;
 			float value = Power / 40f;
@@ -113,7 +114,7 @@ public class ToothBow_BloodArrow : ModProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(Projectile.ai[0] != 3)
+		if (Projectile.ai[0] != 3)
 		{
 			HitCount++;
 			Power = 40f;
@@ -134,7 +135,7 @@ public class ToothBow_BloodArrow : ModProjectile
 							proj.friendly = true;
 							tBBA.HitCount++;
 							tBBA.Power += 40;
-							if(tBBA.HitCount > 6)
+							if (tBBA.HitCount > 6)
 							{
 								proj.Kill();
 							}
@@ -156,7 +157,7 @@ public class ToothBow_BloodArrow : ModProjectile
 	}
 	public override void OnKill(int timeLeft)
 	{
-		for(int i = 0; i < 7;i++)
+		for (int i = 0; i < 7; i++)
 		{
 			Gore gore = Gore.NewGoreDirect(null, Projectile.Center + new Vector2(i * 20 - 70, 0).RotatedBy(Projectile.rotation), Projectile.velocity, ModContent.Find<ModGore>("Everglow/ToothBow_BloodArrow_gore" + i).Type, 1f);
 			gore.position = Projectile.Center + new Vector2(i * 20 - 70, 0).RotatedBy(Projectile.rotation) - new Vector2(gore.Width, gore.Height) / 2f;

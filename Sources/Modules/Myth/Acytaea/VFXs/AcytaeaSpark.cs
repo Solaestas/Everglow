@@ -40,9 +40,9 @@ internal class AcytaeaSparkDust : ShaderDraw
 
 	public override void Update()
 	{
-		if(oldPos.Count == 0)
+		if (oldPos.Count == 0)
 		{
-			for(int x = 0;x < 7;x++)
+			for (int x = 0; x < 7; x++)
 			{
 				position += velocity;
 				oldPos.Add(position);

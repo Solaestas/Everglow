@@ -80,7 +80,7 @@ public class SideHangingLantern_White : ModTile, ITileFluentlyDrawn
 		}
 		else
 		{
-			DrawLanternPiece(new Rectangle(36, 0, 36, 54), 0, 3, 0, pos , pos + new Point(0, 0), drawCenterPos, spriteBatch, tileDrawing);
+			DrawLanternPiece(new Rectangle(36, 0, 36, 54), 0, 3, 0, pos, pos + new Point(0, 0), drawCenterPos, spriteBatch, tileDrawing);
 			offXByDir = -5;
 		}
 

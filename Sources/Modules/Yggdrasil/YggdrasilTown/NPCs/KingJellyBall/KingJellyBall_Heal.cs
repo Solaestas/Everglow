@@ -96,7 +96,7 @@ public class KingJellyBall_Heal : Visual
 		{
 			mulColor *= Timer / 10f;
 		}
-		if(Timer > MaxTime - 11)
+		if (Timer > MaxTime - 11)
 		{
 			mulColor *= (MaxTime - Timer) / 10f;
 		}

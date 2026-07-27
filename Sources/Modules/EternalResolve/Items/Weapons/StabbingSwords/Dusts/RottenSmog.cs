@@ -14,7 +14,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 				dust.active = false;
 			}
 			Projectile proj = Main.projectile[dust.color.G * 255 + dust.color.R];
-			if(!proj.active || proj == null || proj.type != ModContent.ProjectileType<RottenGoldBayonet_Mark>())
+			if (!proj.active || proj == null || proj.type != ModContent.ProjectileType<RottenGoldBayonet_Mark>())
 			{
 				dust.scale *= 0.1f;
 			}
@@ -27,7 +27,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 				//dust.velocity += (acceleration.Length() - 20) / 400f * normalizeAcceleration;
 				dust.scale += 0.02f;
 			}
-			else if(proj.timeLeft == 54f)
+			else if (proj.timeLeft == 54f)
 			{
 				Vector2 acceleration = proj.Center - dust.position;
 				Vector2 normalizeAcceleration = Utils.SafeNormalize(acceleration, Vector2.zeroVector);
@@ -38,7 +38,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 				dust.velocity *= 0.95f;
 				dust.scale *= 0.95f;
 			}
-			if(dust.scale < 0.02f)
+			if (dust.scale < 0.02f)
 			{
 				dust.active = false;
 			}

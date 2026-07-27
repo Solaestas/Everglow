@@ -35,7 +35,7 @@ public class LargeBloodLanternGhost_Minion : ModProjectile
 	public override void AI()
 	{
 		Timer++;
-		if(OwnerNPC != null && OwnerNPC.active && OwnerNPC.type == ModContent.NPCType<LargeBloodLanternGhost>())
+		if (OwnerNPC != null && OwnerNPC.active && OwnerNPC.type == ModContent.NPCType<LargeBloodLanternGhost>())
 		{
 			if (Timer < 60)
 			{
@@ -63,7 +63,7 @@ public class LargeBloodLanternGhost_Minion : ModProjectile
 				{
 					targetPos = player.Center;
 				}
-				if(targetPos != Vector2.zeroVector)
+				if (targetPos != Vector2.zeroVector)
 				{
 					var toTarget = targetPos - Projectile.Center - Projectile.velocity;
 					Projectile.velocity = toTarget.SafeNormalize(Vector2.Zero) * 4 * 0.1f + Projectile.velocity * 0.9f;
@@ -76,7 +76,7 @@ public class LargeBloodLanternGhost_Minion : ModProjectile
 			fade = Projectile.timeLeft / 60f;
 			Projectile.hostile = false;
 		}
-		if(Timer > 60)
+		if (Timer > 60)
 		{
 			Projectile.rotation = MathF.Sin(Timer * 0.07f + Projectile.whoAmI) * 0.04f + Projectile.rotation * 0.9f;
 		}
@@ -106,7 +106,7 @@ public class LargeBloodLanternGhost_Minion : ModProjectile
 			drawColor = new Color(1f, 1f, 1f, 0);
 			bloomColor = new Color(1f, 1f, 1f, 0);
 		}
-		if(Timer >= 30 && Timer < 60)
+		if (Timer >= 30 && Timer < 60)
 		{
 			float value = (Timer - 30) / 30f;
 			drawColor = Color.Lerp(new Color(1f, 1f, 1f, 0), drawColor, value);

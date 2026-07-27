@@ -88,7 +88,7 @@ public class RockSmog_ConeDust : Visual
 		List<Vertex2D> bars = new List<Vertex2D>();
 		Vector2[] oldPoses = oldPos.ToArray();
 
-		if(oldPoses.Length <= 2)
+		if (oldPoses.Length <= 2)
 		{
 			bars.Add(position, new Color(0, light, pocession), new Vector3(ai[0], timeValue, light));
 			bars.Add(position, new Color(0, light, pocession), new Vector3(ai[0], timeValue, light));
@@ -106,7 +106,7 @@ public class RockSmog_ConeDust : Visual
 				bars.Add(oldPoses[i] - normal, new Color(0, light, pocession), new Vector3(ai[0] + i / 10f, 0.8f, width));
 			}
 		}
-		if(bars.Count > 0)
+		if (bars.Count > 0)
 		{
 			Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
 		}

@@ -69,9 +69,9 @@ public class MillionLightStaff_Proj : TrailingProjectile
 		if (TimeAfterEntityDestroy >= 0)
 		{
 			Projectile.velocity *= 0;
-			if(Style == 0)
+			if (Style == 0)
 			{
-				if(TimeAfterEntityDestroy <= TrailLength - 2)
+				if (TimeAfterEntityDestroy <= TrailLength - 2)
 				{
 					Projectile.friendly = false;
 				}
@@ -108,7 +108,7 @@ public class MillionLightStaff_Proj : TrailingProjectile
 				};
 				Ins.VFXManager.Add(somg);
 			}
-			if(Timer > 30)
+			if (Timer > 30)
 			{
 				if (Projectile.wet && !Projectile.lavaWet)
 				{
@@ -232,7 +232,7 @@ public class MillionLightStaff_Proj : TrailingProjectile
 
 	public override void DestroyEntity()
 	{
-		if(Style == 0)
+		if (Style == 0)
 		{
 			Projectile.velocity = Projectile.oldVelocity;
 			var oldCenter = Projectile.Center;

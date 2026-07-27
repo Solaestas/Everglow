@@ -34,7 +34,7 @@ public class Fevens_LightingBoltDust : Visual
 			trails.Dequeue();
 		}
 		position += velocity;
-		if(Main.rand.NextBool(8))
+		if (Main.rand.NextBool(8))
 		{
 			velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.8f, 0.8f));
 		}

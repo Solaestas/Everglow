@@ -37,7 +37,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 		public override void AI()
 		{
 			Player player = Main.player[Projectile.owner];
-			if(Weapon == null)
+			if (Weapon == null)
 			{
 				Projectile.Kill();
 				return;
@@ -50,7 +50,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 				{
 					toMouse = Vector2.UnitX * player.direction;
 				}
-				if(toMouse.X < 0)
+				if (toMouse.X < 0)
 				{
 					player.direction = -1;
 				}
@@ -59,7 +59,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 					player.direction = 1;
 				}
 				float mulHeldPos = 4f;
-				if(player.itemAnimationMax - player.itemAnimation < 5)
+				if (player.itemAnimationMax - player.itemAnimation < 5)
 				{
 					float value = (player.itemAnimationMax - player.itemAnimation) / 5f;
 					mulHeldPos *= value * value;
@@ -73,7 +73,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 				Projectile.velocity = toMouse;
 				Projectile.rotation = toMouse.ToRotation();
 				player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, Projectile.rotation - MathHelper.PiOver2);
-				if(player.gravDir == -1)
+				if (player.gravDir == -1)
 				{
 					player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, new Vector2(toMouse.X, -toMouse.Y).ToRotation() - MathHelper.PiOver2);
 				}
@@ -92,7 +92,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 		}
 		public virtual void Shoot()
 		{
-			if(Weapon == null || ShootProjType == -1)
+			if (Weapon == null || ShootProjType == -1)
 			{
 				return;
 			}
@@ -112,7 +112,7 @@ namespace Everglow.Commons.Templates.Weapons.CrossBow
 		{
 			Player player = Main.player[Projectile.owner];
 			ModItem crossBow = player.HeldItem.ModItem;
-			if(ShootProjType > 0)
+			if (ShootProjType > 0)
 			{
 				Texture2D arrow = TextureAssets.Projectile[ShootProjType].Value;
 			}

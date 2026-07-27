@@ -26,7 +26,8 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 		longHandle = true;
 		maxAttackType = 4;
 		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		;
 		autoEnd = false;
 	}
 	public override string TrailShapeTex()
@@ -277,11 +278,11 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 	{
 		Player player = Main.player[Projectile.owner];
 		int times = (int)Math.Floor(player.meleeSpeed);
-		if(Main.rand.NextFloat(0, 1f) < player.meleeSpeed % 1f)
+		if (Main.rand.NextFloat(0, 1f) < player.meleeSpeed % 1f)
 		{
 			times += 1;
 		}
-		for(int x = 0;x < times;x++)
+		for (int x = 0; x < times; x++)
 		{
 			Vector2 newVec = mainAxisDirection;
 			newVec *= player.gravDir;

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.LanternMoon.Buffs;
+namespace Everglow.Myth.LanternMoon.Buffs;
 
 public class WhiteImmune : ModBuff
 {

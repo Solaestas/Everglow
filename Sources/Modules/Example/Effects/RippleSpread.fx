@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 
 // 每横纵像素所占据的纹理坐标值
 float2 uDeltaXY;
