@@ -128,7 +128,7 @@ public class LargeBloodLanternGhost_Tentacles : ModProjectile
 		}
 		else
 		{
-			foreach(var tentacle in TentacleEntities)
+			foreach (var tentacle in TentacleEntities)
 			{
 				for (int g = 0; g < 3; g++)
 				{

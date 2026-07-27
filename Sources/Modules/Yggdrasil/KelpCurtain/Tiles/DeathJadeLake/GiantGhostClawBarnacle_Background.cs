@@ -40,7 +40,7 @@ public class GiantGhostClawBarnacle_Background : BackgroundVFX
 				AddBars(i + 1, j + 1, bars);
 			}
 		}
-		if(bars.Count > 0)
+		if (bars.Count > 0)
 		{
 			Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleList);
 		}

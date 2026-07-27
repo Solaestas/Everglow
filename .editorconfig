@@ -11,11 +11,12 @@ indent_size = 4
 indent_style = tab
 tab_width = 4
 
-# 新行首选项
-end_of_line = crlf
-insert_final_newline = false
+# 行尾风格（统一使用 LF 换行符）
+end_of_line = lf
+# 文件末尾加新行
+insert_final_newline = true
 
-# 编码
+# 编码（UTF-8 无 BOM）
 charset = utf-8
 dotnet_style_qualification_for_field = false:silent
 dotnet_style_qualification_for_property = false:silent

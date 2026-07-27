@@ -3,6 +3,7 @@ using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.Commons.VFX.CommonVFXDusts;
+
 public class FireSparkPipeline : Pipeline
 {
 	public override void Load()
@@ -66,11 +67,11 @@ public class FireSparkDust : Visual
 			timer += 10;
 		}
 		var tile = Main.tile[(int)(position.X / 16), (int)(position.Y / 16)];
-		if(position.Y % 1 < tile.LiquidAmount / 256f)
+		if (position.Y % 1 < tile.LiquidAmount / 256f)
 		{
 			timer += 120;
 		}
-		if(scale < 0.5f)
+		if (scale < 0.5f)
 		{
 			timer += 20;
 		}

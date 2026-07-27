@@ -183,7 +183,7 @@ public class Tusk_ground_little : ModProjectile
 
 		// Gum
 		float frameY = 0;
-		if(Projectile.timeLeft is > 5 and < 72)
+		if (Projectile.timeLeft is > 5 and < 72)
 		{
 			frameY = 0.5f;
 		}

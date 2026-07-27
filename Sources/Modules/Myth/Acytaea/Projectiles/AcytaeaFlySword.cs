@@ -4,6 +4,7 @@ using Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaFlySword : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -56,11 +57,11 @@ public class AcytaeaFlySword : ModProjectile
 			{
 				Projectile.velocity.Y += 0.5f;
 			}
-			foreach(Player p in Main.player)
+			foreach (Player p in Main.player)
 			{
-				if(p != null && p.active && !p.dead)
+				if (p != null && p.active && !p.dead)
 				{
-					if(Rectangle.Intersect(Projectile.Hitbox, p.Hitbox) != Rectangle.emptyRectangle)
+					if (Rectangle.Intersect(Projectile.Hitbox, p.Hitbox) != Rectangle.emptyRectangle)
 					{
 						AmmoHit();
 					}

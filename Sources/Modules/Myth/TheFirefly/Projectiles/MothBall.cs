@@ -22,7 +22,7 @@ public class MothBall : ModProjectile
 
 	public void GenerateBranchedLighting()
 	{
-		var lightning = new BranchedLightning(100f, 9f ,Projectile.position, Main.rand.NextVector2Unit().ToRotation(), 25f, 0);
+		var lightning = new BranchedLightning(100f, 9f, Projectile.position, Main.rand.NextVector2Unit().ToRotation(), 25f, 0);
 		Ins.VFXManager.Add(lightning);
 	}
 
@@ -60,7 +60,8 @@ public class MothBall : ModProjectile
 			if (Projectile.timeLeft > 10 && Main.rand.NextFloat() < (0.15 + 0.2 * (50 - Projectile.timeLeft) / 40))
 			{
 				GenerateBranchedLighting();
-			} else
+			}
+			else
 			{
 				GenerateLightingBolt();
 			}
@@ -128,10 +129,10 @@ public class MothBall : ModProjectile
 				}
 			}
 		}
-        // base.OnKill(timeLeft);
-        //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
-    }
-    public override bool PreDraw(ref Color lightColor)
+		// base.OnKill(timeLeft);
+		//Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.CorruptMoth.FruitBomb>(), 0, 0f, Main.myPlayer, 1);
+	}
+	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D Light = ModAsset.CorruptLight.Value;
 		int frameX = (Projectile.frame % 6);

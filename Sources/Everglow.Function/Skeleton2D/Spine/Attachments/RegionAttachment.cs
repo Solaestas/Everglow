@@ -29,9 +29,11 @@
 
 using System;
 
-namespace Spine {
+namespace Spine
+{
 	/// <summary>Attachment that displays a texture region.</summary>
-	public class RegionAttachment : Attachment, IHasRendererObject {
+	public class RegionAttachment : Attachment, IHasRendererObject
+	{
 		public const int BLX = 0;
 		public const int BLY = 1;
 		public const int ULX = 2;
@@ -71,18 +73,21 @@ namespace Spine {
 		public float[] Offset { get { return offset; } }
 		public float[] UVs { get { return uvs; } }
 
-		public RegionAttachment (string name)
-			: base(name) {
+		public RegionAttachment(string name)
+			: base(name)
+		{
 		}
 
-		public void UpdateOffset () {
+		public void UpdateOffset()
+		{
 			float width = this.width;
 			float height = this.height;
 			float localX2 = width * 0.5f;
 			float localY2 = height * 0.5f;
 			float localX = -localX2;
 			float localY = -localY2;
-			if (regionOriginalWidth != 0) { // if (region != null)
+			if (regionOriginalWidth != 0)
+			{ // if (region != null)
 				localX += regionOffsetX / regionOriginalWidth * width;
 				localY += regionOffsetY / regionOriginalHeight * height;
 				localX2 -= (regionOriginalWidth - regionOffsetX - regionWidth) / regionOriginalWidth * width;
@@ -118,10 +123,12 @@ namespace Spine {
 			offset[BRY] = localYCos + localX2Sin;
 		}
 
-		public void SetUVs (float u, float v, float u2, float v2, bool rotate) {
+		public void SetUVs(float u, float v, float u2, float v2, bool rotate)
+		{
 			float[] uvs = this.uvs;
 			// UV values differ from RegionAttachment.java
-			if (rotate) {
+			if (rotate)
+			{
 				uvs[URX] = u;
 				uvs[URY] = v2;
 				uvs[BRX] = u;
@@ -130,7 +137,9 @@ namespace Spine {
 				uvs[BLY] = v;
 				uvs[ULX] = u2;
 				uvs[ULY] = v2;
-			} else {
+			}
+			else
+			{
 				uvs[ULX] = u;
 				uvs[ULY] = v2;
 				uvs[URX] = u;
@@ -147,7 +156,8 @@ namespace Spine {
 		/// <param name="worldVertices">The output world vertices. Must have a length greater than or equal to offset + 8.</param>
 		/// <param name="offset">The worldVertices index to begin writing values.</param>
 		/// <param name="stride">The number of worldVertices entries between the value pairs written.</param>
-		public void ComputeWorldVertices (Bone bone, float[] worldVertices, int offset, int stride = 2) {
+		public void ComputeWorldVertices(Bone bone, float[] worldVertices, int offset, int stride = 2)
+		{
 			float[] vertexOffset = this.offset;
 			float bwx = bone.worldX, bwy = bone.worldY;
 			float a = bone.a, b = bone.b, c = bone.c, d = bone.d;
@@ -179,7 +189,8 @@ namespace Spine {
 			//offset += stride;
 		}
 
-		public override Attachment Copy () {
+		public override Attachment Copy()
+		{
 			RegionAttachment copy = new RegionAttachment(this.Name);
 			copy.RendererObject = RendererObject;
 			copy.regionOffsetX = regionOffsetX;

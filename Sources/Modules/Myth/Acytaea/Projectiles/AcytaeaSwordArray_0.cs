@@ -1,6 +1,7 @@
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaSwordArray_0 : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -39,7 +40,7 @@ public class AcytaeaSwordArray_0 : ModProjectile
 	{
 		Timer++;
 		//CheckFrame();
-		if(Owner == null || !Owner.active)
+		if (Owner == null || !Owner.active)
 		{
 			Projectile.Kill();
 		}
@@ -52,9 +53,9 @@ public class AcytaeaSwordArray_0 : ModProjectile
 			timeValue = 1f;
 		}
 		Projectile.Center = Owner.Center + new Vector2(0, Projectile.ai[2]).RotatedBy(Projectile.ai[1] * timeValue);
-		if(Timer > 120)
+		if (Timer > 120)
 		{
-			if(Main.rand.Next(Math.Min(Timer, 480), 480) > 470)
+			if (Main.rand.Next(Math.Min(Timer, 480), 480) > 470)
 			{
 				Projectile.Kill();
 			}
@@ -63,7 +64,7 @@ public class AcytaeaSwordArray_0 : ModProjectile
 	public override void OnKill(int timeLeft)
 	{
 		Vector2 toNPC = Owner.Center - Projectile.Center;
-		Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(),Projectile.Center, -toNPC * 0.2f, ModContent.ProjectileType<AcytaeaFlySword>(), Projectile.damage, Projectile.knockBack);
+		Projectile p = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, -toNPC * 0.2f, ModContent.ProjectileType<AcytaeaFlySword>(), Projectile.damage, Projectile.knockBack);
 		p.frame = Main.rand.Next(4);
 		p.frameCounter = Main.rand.Next(6);
 	}

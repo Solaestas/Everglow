@@ -250,5 +250,5 @@ namespace Everglow.MEAC.PlanetBeFall.Projectiles.NonIIIDProj.GoldenCrack
 
 	}
 
-	
+
 }

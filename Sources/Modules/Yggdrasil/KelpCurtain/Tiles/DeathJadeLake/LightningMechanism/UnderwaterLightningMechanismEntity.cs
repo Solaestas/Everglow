@@ -26,7 +26,7 @@ public class UnderwaterLightningMechanismEntity : ModTileEntity
 		{
 			CurrentFrame = StartFrame;
 		}
-		if(state == MechanismState.Resting)
+		if (state == MechanismState.Resting)
 		{
 			frameCounter++;
 			if (frameCounter >= FrameTimer)

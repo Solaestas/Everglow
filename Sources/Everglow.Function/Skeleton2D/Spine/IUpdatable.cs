@@ -27,11 +27,13 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-namespace Spine {
+namespace Spine
+{
 
 	///<summary>The interface for items updated by <see cref="Skeleton.UpdateWorldTransform()"/>.</summary>
-	public interface IUpdatable {
-		void Update ();
+	public interface IUpdatable
+	{
+		void Update();
 
 		///<summary>Returns false when this item has not been updated because a skin is required and the <see cref="Skeleton.Skin">active
 		/// skin</see> does not contain this item.</summary>

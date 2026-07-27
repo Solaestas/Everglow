@@ -19,14 +19,14 @@ public class RockElemental_fragments : ModDust
 			{
 				dust.velocity *= 0.4f;
 				dust.alpha += 5;
-				if(dust.alpha >= 255)
+				if (dust.alpha >= 255)
 				{
 					dust.active = false;
 				}
 				return false;
 			}
 		}
-		if(!dust.noGravity)
+		if (!dust.noGravity)
 		{
 			dust.velocity.Y += 0.2f * dust.scale;
 		}

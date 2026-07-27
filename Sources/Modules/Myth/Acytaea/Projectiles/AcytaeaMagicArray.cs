@@ -5,6 +5,7 @@ using Terraria.Audio;
 using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaMagicArray : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";

@@ -423,7 +423,7 @@ public class YggdrasilWorldGeneration : ModSystem
 				Tile tile = TileUtils.SafeGetTile(check);
 				if (ChestSafe(check.X, check.Y))
 				{
-					if(type >= 0)
+					if (type >= 0)
 					{
 						tile.TileType = (ushort)type;
 						tile.HasTile = true;

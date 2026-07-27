@@ -25,7 +25,7 @@ public class CylindricalLantern_explosion : ModProjectile
 	{
 		Timer++;
 		Projectile.velocity *= 0;
-		if(Timer == 60)
+		if (Timer == 60)
 		{
 			SmallFlame(Projectile.Center, 120);
 			LargeFlame(Projectile.Center, 10);

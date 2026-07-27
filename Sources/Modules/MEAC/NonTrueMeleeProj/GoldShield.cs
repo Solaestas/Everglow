@@ -423,13 +423,13 @@ public class GoldShieldUIDrawer : ModSystem
 	}
 	public void ShieldBarDraw(SpriteBatch spriteBatch)
 	{
-		
+
 		Player p = Main.LocalPlayer;
 
 		if (p.GetModPlayer<GoldShieldPlayer>().HasShield)
 		{
-			
-			
+
+
 			if (Main.ResourceSetsManager.ActiveSet.DisplayedName == Language.GetTextValue("UI.HealthManaStyle_Default"))
 			{
 				p.GetModPlayer<GoldShieldPlayer>().ClassicDraw();
@@ -521,12 +521,12 @@ public class GoldShieldUIDrawer : ModSystem
 					int DamageBlocked = Math.Min(info.Damage, (int)GoldShieldDurability);
 					GoldShieldDurability -= DamageBlocked;
 					shieldsTookHit = true;
-					info.Damage-= DamageBlocked;
-					if (GoldShieldDurability<=0)
+					info.Damage -= DamageBlocked;
+					if (GoldShieldDurability <= 0)
 					{
-						GoldShieldDurability=0;
+						GoldShieldDurability = 0;
 					}
-					if (shieldsTookHit && DamageBlocked!=0)
+					if (shieldsTookHit && DamageBlocked != 0)
 					{
 						CombatText.NewText(new Rectangle((int)Player.Center.X - 10, (int)Player.Center.Y - 10, 20, 20), Color.Gold, DamageBlocked);
 						proj.ai[0] = 10;
@@ -539,7 +539,7 @@ public class GoldShieldUIDrawer : ModSystem
 					if (proj.ai[1] <= 0)
 					{
 						proj.ai[1] = 0;
-	
+
 						proj.timeLeft = 15;
 					}
 				}
@@ -687,7 +687,7 @@ public class GoldShieldUIDrawer : ModSystem
 
 		public void FancyDraw(FancyClassicPlayerResourcesDisplaySet Displayset)
 		{
-	
+
 			SpriteBatch spriteBatch = Main.spriteBatch;
 			PlayerStatsSnapshot playerStatsSnapshot = new PlayerStatsSnapshot(Player);
 			int MaxGoldShieldDurability;

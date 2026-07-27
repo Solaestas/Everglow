@@ -29,8 +29,10 @@
 
 using System;
 
-namespace Spine {
-	public class BoneData {
+namespace Spine
+{
+	public class BoneData
+	{
 		internal int index;
 		internal string name;
 		internal BoneData parent;
@@ -80,21 +82,26 @@ namespace Spine {
 		public bool SkinRequired { get { return skinRequired; } set { skinRequired = value; } }
 
 		/// <param name="parent">May be null.</param>
-		public BoneData (int index, string name, BoneData parent) {
-			if (index < 0) throw new ArgumentException("index must be >= 0", "index");
-			if (name == null) throw new ArgumentNullException("name", "name cannot be null.");
+		public BoneData(int index, string name, BoneData parent)
+		{
+			if (index < 0)
+				throw new ArgumentException("index must be >= 0", "index");
+			if (name == null)
+				throw new ArgumentNullException("name", "name cannot be null.");
 			this.index = index;
 			this.name = name;
 			this.parent = parent;
 		}
 
-		override public string ToString () {
+		override public string ToString()
+		{
 			return name;
 		}
 	}
 
 	[Flags]
-	public enum TransformMode {
+	public enum TransformMode
+	{
 		//0000 0 Flip Scale Rotation
 		Normal = 0, // 0000
 		OnlyTranslation = 7, // 0111

@@ -44,18 +44,18 @@ PSInput VertexShaderFunction(VSInput input)
 float4 PixelShaderFunction(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 c = tex2D(uShapeTex, float2(coord.x + uTime, coord.y)); //Ö÷ÎÆÀí
-    c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //³ËÑÕÉ«Í¼
+    float4 c = tex2D(uShapeTex, float2(coord.x + uTime, coord.y)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    c *= tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //ï¿½ï¿½ï¿½ï¿½É«Í¼
     return c * coord.z;
 }
 
 float4 PixelShaderFunction2(PSInput input) : COLOR0
 {
     float3 coord = input.Texcoord;
-    float4 c = tex2D(uShapeTex, float2(coord.x + uTime, coord.y)); //Ö÷ÎÆÀí
-    c = tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //È¡ÑÕÉ«
+    float4 c = tex2D(uShapeTex, float2(coord.x + uTime, coord.y)); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    c = tex2D(uColorTex, float2(c.r * coord.z, 0.5)); //È¡ï¿½ï¿½É«
     float a = 1 - (c.r - 1) * 0.7f;
-    c *= a; //³ËÉÏÍ¸Ã÷¶È
+    c *= a; //ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½
     return c;
 }
 

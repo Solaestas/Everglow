@@ -26,7 +26,7 @@ public class GiantGhostClawBarnacle_VFX : ForegroundVFX
 				if (collideMap[i, j] >= 200)
 				{
 					Point topLeft = originTile + new Point(i, j);
-					Rectangle collisionFrame = new Rectangle(topLeft.X * 16, topLeft.Y * 16, 16,16);
+					Rectangle collisionFrame = new Rectangle(topLeft.X * 16, topLeft.Y * 16, 16, 16);
 					if (Rectangle.Intersect(collisionFrame, Main.LocalPlayer.Hitbox) != Rectangle.emptyRectangle)
 					{
 						inside = true;
@@ -34,12 +34,12 @@ public class GiantGhostClawBarnacle_VFX : ForegroundVFX
 					}
 				}
 			}
-			if(inside)
+			if (inside)
 			{
 				break;
 			}
 		}
-		if(inside)
+		if (inside)
 		{
 			Transparency = Transparency * 0.9f + 0.05f * 0.1f;
 		}

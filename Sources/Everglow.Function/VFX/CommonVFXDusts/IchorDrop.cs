@@ -64,7 +64,7 @@ public class IchorDrop : Visual
 		if (Collision.SolidCollision(position, 0, 0))
 		{
 			velocity *= -0.02f;
-			if(Ins.VisualQuality.Low)
+			if (Ins.VisualQuality.Low)
 			{
 				timer += 4;
 			}
@@ -86,8 +86,8 @@ public class IchorDrop : Visual
 			timer += 20;
 		}
 		float pocession = 1 - timer / maxTime;
-	    float c = pocession * scale * 0.08f;
-	    Lighting.AddLight(position, c* 0.8f, c* 0.4f, 0);
+		float c = pocession * scale * 0.08f;
+		Lighting.AddLight(position, c * 0.8f, c * 0.4f, 0);
 	}
 
 	public override void Draw()

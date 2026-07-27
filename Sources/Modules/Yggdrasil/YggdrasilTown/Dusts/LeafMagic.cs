@@ -29,7 +29,7 @@ public class LeafMagic : ModDust
 		{
 			dust.frame = new Rectangle(0, 0, 8, 8);
 		}
-		else if((float)dust.customData < 75f)
+		else if ((float)dust.customData < 75f)
 		{
 			dust.frame = new Rectangle(0, 10, 8, 8);
 		}

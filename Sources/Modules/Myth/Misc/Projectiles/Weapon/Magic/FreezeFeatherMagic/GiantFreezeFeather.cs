@@ -125,7 +125,7 @@ public class GiantFreezeFeather : ModProjectile
 			ice.color.G = (byte)Main.rand.Next(240);
 		}
 
-		
+
 		if (Projectile.position.Y <= 320 || Projectile.position.Y >= Main.maxTilesY * 16 - 320)
 		{
 			Projectile.Kill();
@@ -342,7 +342,7 @@ public class GiantFreezeFeather : ModProjectile
 			};
 			Ins.VFXManager.Add(smog);
 		}
-		for(int g = 0; g < Frequency * 12; g++)
+		for (int g = 0; g < Frequency * 12; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, mulVelocity * Main.rand.NextFloat(0f, 8f)).RotatedByRandom(MathHelper.TwoPi);
 			var somg = new IceParticleDust

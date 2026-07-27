@@ -30,9 +30,9 @@ public class LanternExplosionDecayBlackLines : Visual
 	{
 		float pocession = Timer / MaxTime;
 		pocession = MathF.Pow(pocession, 0.4f);
-		if(Timer <= 2)
+		if (Timer <= 2)
 		{
-			if(Scale <= 160)
+			if (Scale <= 160)
 			{
 				pocession = 0;
 			}

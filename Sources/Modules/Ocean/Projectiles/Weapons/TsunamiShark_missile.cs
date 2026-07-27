@@ -61,7 +61,7 @@ public class TsunamiShark_missile : ModProjectile
 	}
 	private IEnumerator<ICoroutineInstruction> DecreasingSpeed()
 	{
-		for(int x = 0;x < 60;x++)
+		for (int x = 0; x < 60; x++)
 		{
 			Projectile.velocity *= 0.9f;
 			yield return new SkipThisFrame();
@@ -79,7 +79,7 @@ public class TsunamiShark_missile : ModProjectile
 	{
 		while (true)
 		{
-			if(Main.rand.NextBool((int)(20f / (Projectile.velocity.Length() + 1f) + 1)))
+			if (Main.rand.NextBool((int)(20f / (Projectile.velocity.Length() + 1f) + 1)))
 			{
 				Dust dust = Dust.NewDustDirect(Projectile.Center, 0, 0, DustID.Water, 0, 0, 200, default);
 				dust.velocity = Vector2.Normalize(Projectile.velocity) * 2f;
@@ -94,7 +94,7 @@ public class TsunamiShark_missile : ModProjectile
 	{
 		while (true)
 		{
-			if(maxVel < 27)
+			if (maxVel < 27)
 			{
 				maxVel += 0.3f;
 			}
@@ -104,13 +104,13 @@ public class TsunamiShark_missile : ModProjectile
 			if (tsunamiS != null)
 			{
 				NPC target = tsunamiS.MarkedTarget;
-				if(target != null)
+				if (target != null)
 				{
-					if(OldTarget == null)
+					if (OldTarget == null)
 					{
 						OldTarget = target;
 						uint length = (uint)Main.rand.Next(120);
-						for(int a = 0;a < length;a++)
+						for (int a = 0; a < length; a++)
 						{
 							Projectile.friendly = false;
 							Vector2 swing = new Vector2(MathF.Sin((float)Main.time * 0.3f + Projectile.whoAmI) * 72 * Projectile.ai[0] * Projectile.ai[0], MathF.Sin((float)Main.time * 0.1f + Projectile.whoAmI * 0.1f) * 10 - Projectile.ai[0] * 200 + 200);
@@ -227,7 +227,7 @@ public class TsunamiShark_missile : ModProjectile
 		DrawWaterDarkTrail();
 		DrawWaterTrail();
 		Texture2D shark = ModAsset.TsunamiShark_missile.Value;
-		if(TimeTokill < 0)
+		if (TimeTokill < 0)
 		{
 			Lighting.AddLight(Projectile.Center, 0, 0.4f, 1f);
 			Main.spriteBatch.Draw(shark, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, shark.Size() / 2f, 1f, SpriteEffects.None, 0);

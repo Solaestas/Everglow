@@ -215,7 +215,7 @@ public class FoodRequestPanel
 
 		// Allow cancel manually
 		Rectangle cancelBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).X - 40, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, 90)).Y - 14, 80, 20);
-		if(!Maximized)
+		if (!Maximized)
 		{
 			cancelBox = new Rectangle((int)(AnchorPos + MainPanelOriginMinimized).X + 30 - 15, (int)(AnchorPos + MainPanelOriginMinimized).Y - 60 - 15, 30, 30);
 		}
@@ -242,7 +242,7 @@ public class FoodRequestPanel
 		// display ingredients
 		string mouseText = string.Empty;
 		Rectangle foodBox = new Rectangle((int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).X - 30, (int)(AnchorPos + MainPanelOrigin + new Vector2(0, -30)).Y - 30, 60, 60);
-		if(!Maximized)
+		if (!Maximized)
 		{
 			foodBox = new Rectangle((int)(AnchorPos + MainPanelOriginMinimized + new Vector2(0, -30)).X - 17, (int)(AnchorPos + MainPanelOriginMinimized + new Vector2(0, -30)).Y - 17, 34, 34);
 		}

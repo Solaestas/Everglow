@@ -5,10 +5,10 @@ namespace Everglow.Yggdrasil.KelpCurtain.Items.Placeables;
 
 public class JadeLakeSargassum_Item : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-    public override void SetDefaults()
-    {
-        Item.DefaultToPlaceableTile(ModContent.TileType<JadeLakeSargassum>());
-    }
+	public override void SetDefaults()
+	{
+		Item.DefaultToPlaceableTile(ModContent.TileType<JadeLakeSargassum>());
+	}
 }

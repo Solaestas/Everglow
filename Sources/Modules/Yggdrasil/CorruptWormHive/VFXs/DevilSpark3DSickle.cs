@@ -49,7 +49,7 @@ public class DevilSpark3DSickleDust : Visual
 			trails.Dequeue();
 		}
 		position3D += velocity3D;
-		if(velocity3D.Length() > 10f)
+		if (velocity3D.Length() > 10f)
 		{
 			velocity3D *= 0.9f;
 		}

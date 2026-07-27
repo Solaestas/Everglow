@@ -17,7 +17,7 @@ public abstract class FoodRecipes : ModSystem
 		public int Type;
 		public int Num;
 
-		public CookingUnitWithOrder(int type, int num , params int[][] itemgroup)
+		public CookingUnitWithOrder(int type, int num, params int[][] itemgroup)
 		{
 			Ingredients = itemgroup;
 

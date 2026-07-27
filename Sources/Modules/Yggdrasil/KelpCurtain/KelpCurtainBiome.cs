@@ -35,7 +35,7 @@ public class KelpCurtainBiome : ModBiome
 		{
 			if (Main.screenPosition.Y > Main.maxTilesY * 0.72f * 16 && Main.screenPosition.Y < Main.maxTilesY * 0.9f * 16)
 			{
-				if(player.Center.X >= FindClosestStratumBoundPointX(player) * 16)
+				if (player.Center.X >= FindClosestStratumBoundPointX(player) * 16)
 				{
 					return true;
 				}
@@ -46,7 +46,7 @@ public class KelpCurtainBiome : ModBiome
 
 	public float FindClosestStratumBoundPointX(Player player)
 	{
-		if(StratumBoundCurve.Count > 0)
+		if (StratumBoundCurve.Count > 0)
 		{
 			float minY = int.MaxValue;
 			float currentX = -1;

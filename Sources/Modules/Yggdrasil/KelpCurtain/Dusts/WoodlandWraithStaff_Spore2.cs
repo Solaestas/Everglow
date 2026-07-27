@@ -10,7 +10,7 @@ public class WoodlandWraithStaff_Spore2 : ModDust
 		dust.position += dust.velocity;
 		dust.velocity *= 0.97f;
 		dust.scale *= 0.98f;
-		if(dust.scale < 0.05f)
+		if (dust.scale < 0.05f)
 		{
 			dust.active = false;
 		}

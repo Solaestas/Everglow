@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.OmniElementItems.Projectiles;
+namespace Everglow.Myth.OmniElementItems.Projectiles;
 
 internal class LilyHarpWave : ModProjectile
 {

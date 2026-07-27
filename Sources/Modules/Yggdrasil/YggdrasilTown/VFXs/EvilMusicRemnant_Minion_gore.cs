@@ -69,7 +69,7 @@ public class EvilMusicRemnant_Minion_gore : Visual
 		}
 		else
 		{
-			if(Velocity.Length() < 10f)
+			if (Velocity.Length() < 10f)
 			{
 				Velocity *= 0;
 				ai[0] *= 0f;
@@ -113,7 +113,7 @@ public class EvilMusicRemnant_Minion_gore : Visual
 		float frameCount = 6;
 		float frameY = Style;
 		float dissolvePro = -0.4f;
-		if(MaxTime - Timer < 120)
+		if (MaxTime - Timer < 120)
 		{
 			dissolvePro = 1 - (MaxTime - Timer) / 120f;
 			dissolvePro *= 1.4f;

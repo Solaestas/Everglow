@@ -9,7 +9,7 @@ public class ToothMagicSplit : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Tooth Magic Ball");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 18;

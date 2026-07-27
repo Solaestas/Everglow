@@ -74,7 +74,7 @@ public abstract class HandholdProjectile : ModProjectile
 			}
 			Projectile.rotation += addRot;
 			Projectile.Center = ArmRootPos + new Vector2(0, 1).RotatedBy(Projectile.rotation - Math.PI * 0.75) * DepartLength;
-			
+
 			Projectile.timeLeft = player.itemTimeMax;
 		}
 		if (!player.controlUseItem)

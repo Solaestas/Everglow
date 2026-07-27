@@ -70,7 +70,7 @@ public class Rope : IMassSpringMesh
 		Rope rope = new Rope(count);
 		for (int i = 0; i < count; i++)
 		{
-			if(i - amount >= 0)
+			if (i - amount >= 0)
 			{
 				var m = rope._masses[i] = new Mass(mass, vine._masses[i - amount].Position + new Vector2(0, amount * springLength), false);
 				m.Velocity = new Vector2(0, 0.1f).RotatedBy(i);

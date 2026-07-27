@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.Buffs.VanillaFoodBuffs;
+namespace Everglow.Food.Buffs.VanillaFoodBuffs;
 
 public class SugarCookieBuff : ModBuff
 {

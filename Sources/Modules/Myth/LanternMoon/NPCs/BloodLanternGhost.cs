@@ -76,7 +76,7 @@ public class BloodLanternGhost : LanternMoonNPC
 			//}
 			StayPosition = player.Center + toPlayer;
 		}
-		if(Timer > 1 && Timer < 60)
+		if (Timer > 1 && Timer < 60)
 		{
 			NPC.Center = Vector2.Lerp(NPC.Center, StayPosition, 0.02f);
 		}
@@ -97,12 +97,12 @@ public class BloodLanternGhost : LanternMoonNPC
 				}
 			}
 		}
-		if(Timer == 60)
+		if (Timer == 60)
 		{
 			NPC.velocity *= 0;
 			Projectile p0 = Projectile.NewProjectileDirect(NPC.GetSource_FromAI(), NPC.Bottom, Vector2.zeroVector, ModContent.ProjectileType<BloodLanternGhost_PowerBall>(), 20, 0f, Main.myPlayer);
 			BloodLanternGhost_PowerBall bLGPB = p0.ModProjectile as BloodLanternGhost_PowerBall;
-			if(bLGPB is not null)
+			if (bLGPB is not null)
 			{
 				bLGPB.OwnerNPC = NPC;
 			}

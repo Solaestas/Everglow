@@ -27,7 +27,7 @@ public class SteamBox2Recipe : FoodRecipes
 					[ModContent.ItemType<RawXiaoLongBao>()],
 					[ModContent.ItemType<RawXiaoLongBao>()],
 					[ItemID.BottledWater])
-            },
+			},
 		};
 
 		CookingUnitMenu = new List<CookingUnit>

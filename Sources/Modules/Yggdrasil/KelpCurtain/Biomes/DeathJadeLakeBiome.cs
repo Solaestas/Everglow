@@ -33,7 +33,7 @@ public class DeathJadeLakeBiome : ModBiome
 			for (int x = checkX; x < Main.maxTilesX * 0.8f; x++)
 			{
 				var tileBound = TileUtils.SafeGetTile(x, checkBoundY);
-				if(tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
+				if (tileBound.HasTile && tileBound.TileType == ModContent.TileType<Tiles.OldMoss>())
 				{
 					valueX = x;
 					break;

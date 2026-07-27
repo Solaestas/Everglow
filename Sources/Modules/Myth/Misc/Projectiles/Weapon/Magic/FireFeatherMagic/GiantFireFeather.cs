@@ -88,7 +88,7 @@ public class GiantFireFeather : ModProjectile
 				}
 			}
 		}
-		
+
 		if (Projectile.position.X <= 320 || Projectile.position.X >= Main.maxTilesX * 16 - 320)
 		{
 			Projectile.Kill();
@@ -159,10 +159,10 @@ public class GiantFireFeather : ModProjectile
 
 			trueL++;
 		}
-		if(TimeTokill > 0)
+		if (TimeTokill > 0)
 		{
 			trueL = Math.Max(trueL, TimeTokill);
-			if(trueL == 0)
+			if (trueL == 0)
 			{
 				return;
 			}
@@ -178,7 +178,7 @@ public class GiantFireFeather : ModProjectile
 				break;
 
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
-			if(normalDir == Vector2.zeroVector)
+			if (normalDir == Vector2.zeroVector)
 			{
 				continue;
 			}
@@ -186,7 +186,7 @@ public class GiantFireFeather : ModProjectile
 			var factor = i / (float)trueL;
 			var w = MathHelper.Lerp(1f, 0.05f, factor);
 			float x0 = factor * 0.6f - (float)(Main.timeForVisualEffects / 35d) + 10000;
-			if(i > 2)
+			if (i > 2)
 			{
 				if ((Projectile.oldPos[i - 2] - Projectile.oldPos[i - 1]) == Vector2.zeroVector)
 				{

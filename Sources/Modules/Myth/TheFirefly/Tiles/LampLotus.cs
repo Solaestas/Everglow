@@ -74,12 +74,12 @@ public class LampLotus : ModTile, ITileFluentlyDrawn
 		Vector2 lastOffset = new Vector2(0, 8);
 		for (int j = 0; j < 30; j++)
 		{
-			if(tilePos.Y - j < 21)
+			if (tilePos.Y - j < 21)
 			{
 				return;
 			}
 			var tile = Main.tile[tilePos + new Point(0, -j)];
-			if(!(tile.TileType == Type && tile.HasTile))
+			if (!(tile.TileType == Type && tile.HasTile))
 			{
 				return;
 			}
@@ -91,7 +91,7 @@ public class LampLotus : ModTile, ITileFluentlyDrawn
 			}
 			ushort type = tile.TileType;
 			var frame = new Rectangle(5, 62, 18, 18);
-			if(lastTile)
+			if (lastTile)
 			{
 				frame = new Rectangle(28 * tile.TileFrameX / 18, 42, 28, 28);
 			}
@@ -136,7 +136,7 @@ public class LampLotus : ModTile, ITileFluentlyDrawn
 			if (lastTile)
 			{
 				frame.Y -= 37;
-				spriteBatch.Draw(tex, drawCenterPos + lastOffset, frame, new Color(1f, 1f, 1f ,0), rotation, origin, 1f, tileSpriteEffect, 0f);
+				spriteBatch.Draw(tex, drawCenterPos + lastOffset, frame, new Color(1f, 1f, 1f, 0), rotation, origin, 1f, tileSpriteEffect, 0f);
 			}
 			lastOffset += new Vector2(0, -16).RotatedBy(rotation);
 		}

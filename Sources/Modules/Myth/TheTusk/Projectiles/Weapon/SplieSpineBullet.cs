@@ -10,7 +10,7 @@ public class SplieSpineBullet : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("SplieSpineBullet");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 8;

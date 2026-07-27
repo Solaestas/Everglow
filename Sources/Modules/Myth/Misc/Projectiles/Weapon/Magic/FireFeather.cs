@@ -70,9 +70,9 @@ public class FireFeather : ModProjectile
 					Projectile.velocity *= 0.96f;
 					Projectile.timeLeft -= Main.rand.Next(40, 80);
 				}
-				if(Projectile.timeLeft < 300)
+				if (Projectile.timeLeft < 300)
 				{
-					if(Projectile.extraUpdates == 0)
+					if (Projectile.extraUpdates == 0)
 					{
 						Projectile.velocity.Y += 0.1f;
 					}
@@ -199,7 +199,7 @@ public class FireFeather : ModProjectile
 
 		AmmoHit();
 	}
-	public  void AmmoHit()
+	public void AmmoHit()
 	{
 		timeTokill = 20;
 		Projectile.tileCollide = false;

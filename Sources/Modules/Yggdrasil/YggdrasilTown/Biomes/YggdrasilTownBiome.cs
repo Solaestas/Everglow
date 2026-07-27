@@ -59,7 +59,7 @@ public class YggdrasilTownBiome : ModBiome
 	/// </summary>
 	public static Vector2 GetBiomeCenter()
 	{
-		if(!SubworldSystem.IsActive<YggdrasilWorld>())
+		if (!SubworldSystem.IsActive<YggdrasilWorld>())
 		{
 			CheckedBiomeCenter = false;
 			return Vector2.zeroVector;
@@ -99,7 +99,7 @@ public class YggdrasilTownBiome : ModBiome
 	/// <returns></returns>
 	public static bool BiomeActive()
 	{
-		if(YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
+		if (YggdrasilTownCentralSystem.InCanteen_YggdrasilTown())
 		{
 			return true;
 		}

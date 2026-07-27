@@ -29,7 +29,8 @@
 
 using System;
 
-namespace Spine {
+namespace Spine
+{
 	/// <summary>
 	/// Stores a bone's current pose.
 	/// <para>
@@ -38,7 +39,8 @@ namespace Spine {
 	/// constraint or application code modifies the world transform after it was computed from the local transform.
 	/// </para>
 	/// </summary>
-	public class Bone : IUpdatable {
+	public class Bone : IUpdatable
+	{
 		static public bool yDown;
 
 		internal BoneData data;
@@ -117,9 +119,12 @@ namespace Spine {
 		public float WorldScaleY { get { return (float)Math.Sqrt(b * b + d * d); } }
 
 		/// <param name="parent">May be null.</param>
-		public Bone (BoneData data, Skeleton skeleton, Bone parent) {
-			if (data == null) throw new ArgumentNullException("data", "data cannot be null.");
-			if (skeleton == null) throw new ArgumentNullException("skeleton", "skeleton cannot be null.");
+		public Bone(BoneData data, Skeleton skeleton, Bone parent)
+		{
+			if (data == null)
+				throw new ArgumentNullException("data", "data cannot be null.");
+			if (skeleton == null)
+				throw new ArgumentNullException("skeleton", "skeleton cannot be null.");
 			this.data = data;
 			this.skeleton = skeleton;
 			this.parent = parent;
@@ -127,17 +132,20 @@ namespace Spine {
 		}
 
 		/// <summary>Same as <see cref="UpdateWorldTransform"/>. This method exists for Bone to implement <see cref="Spine.IUpdatable"/>.</summary>
-		public void Update () {
+		public void Update()
+		{
 			UpdateWorldTransform(x, y, rotation, scaleX, scaleY, shearX, shearY);
 		}
 
 		/// <summary>Computes the world transform using the parent bone and this bone's local transform.</summary>
-		public void UpdateWorldTransform () {
+		public void UpdateWorldTransform()
+		{
 			UpdateWorldTransform(x, y, rotation, scaleX, scaleY, shearX, shearY);
 		}
 
 		/// <summary>Computes the world transform using the parent bone and the specified local transform.</summary>
-		public void UpdateWorldTransform (float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY) {
+		public void UpdateWorldTransform(float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY)
+		{
 			ax = x;
 			ay = y;
 			arotation = rotation;
@@ -149,7 +157,8 @@ namespace Spine {
 			Skeleton skeleton = this.skeleton;
 
 			Bone parent = this.parent;
-			if (parent == null) { // Root bone.
+			if (parent == null)
+			{ // Root bone.
 				float rotationY = rotation + 90 + shearY, sx = skeleton.ScaleX, sy = skeleton.ScaleY;
 				a = MathUtils.CosDeg(rotation + shearX) * scaleX * sx;
 				b = MathUtils.CosDeg(rotationY) * scaleY * sx;
@@ -164,79 +173,89 @@ namespace Spine {
 			worldX = pa * x + pb * y + parent.worldX;
 			worldY = pc * x + pd * y + parent.worldY;
 
-			switch (data.transformMode) {
-			case TransformMode.Normal: {
-					float rotationY = rotation + 90 + shearY;
-					float la = MathUtils.CosDeg(rotation + shearX) * scaleX;
-					float lb = MathUtils.CosDeg(rotationY) * scaleY;
-					float lc = MathUtils.SinDeg(rotation + shearX) * scaleX;
-					float ld = MathUtils.SinDeg(rotationY) * scaleY;
-					a = pa * la + pb * lc;
-					b = pa * lb + pb * ld;
-					c = pc * la + pd * lc;
-					d = pc * lb + pd * ld;
-					return;
-				}
-			case TransformMode.OnlyTranslation: {
-					float rotationY = rotation + 90 + shearY;
-					a = MathUtils.CosDeg(rotation + shearX) * scaleX;
-					b = MathUtils.CosDeg(rotationY) * scaleY;
-					c = MathUtils.SinDeg(rotation + shearX) * scaleX;
-					d = MathUtils.SinDeg(rotationY) * scaleY;
-					break;
-				}
-			case TransformMode.NoRotationOrReflection: {
-					float s = pa * pa + pc * pc, prx;
-					if (s > 0.0001f) {
-						s = Math.Abs(pa * pd - pb * pc) / s;
-						pa /= skeleton.ScaleX;
-						pc /= skeleton.ScaleY;
-						pb = pc * s;
-						pd = pa * s;
-						prx = MathUtils.Atan2(pc, pa) * MathUtils.RadDeg;
-					} else {
-						pa = 0;
-						pc = 0;
-						prx = 90 - MathUtils.Atan2(pd, pb) * MathUtils.RadDeg;
+			switch (data.transformMode)
+			{
+				case TransformMode.Normal:
+					{
+						float rotationY = rotation + 90 + shearY;
+						float la = MathUtils.CosDeg(rotation + shearX) * scaleX;
+						float lb = MathUtils.CosDeg(rotationY) * scaleY;
+						float lc = MathUtils.SinDeg(rotation + shearX) * scaleX;
+						float ld = MathUtils.SinDeg(rotationY) * scaleY;
+						a = pa * la + pb * lc;
+						b = pa * lb + pb * ld;
+						c = pc * la + pd * lc;
+						d = pc * lb + pd * ld;
+						return;
 					}
-					float rx = rotation + shearX - prx;
-					float ry = rotation + shearY - prx + 90;
-					float la = MathUtils.CosDeg(rx) * scaleX;
-					float lb = MathUtils.CosDeg(ry) * scaleY;
-					float lc = MathUtils.SinDeg(rx) * scaleX;
-					float ld = MathUtils.SinDeg(ry) * scaleY;
-					a = pa * la - pb * lc;
-					b = pa * lb - pb * ld;
-					c = pc * la + pd * lc;
-					d = pc * lb + pd * ld;
-					break;
-				}
-			case TransformMode.NoScale:
-			case TransformMode.NoScaleOrReflection: {
-					float cos = MathUtils.CosDeg(rotation), sin = MathUtils.SinDeg(rotation);
-					float za = (pa * cos + pb * sin) / skeleton.ScaleX;
-					float zc = (pc * cos + pd * sin) / skeleton.ScaleY;
-					float s = (float)Math.Sqrt(za * za + zc * zc);
-					if (s > 0.00001f) s = 1 / s;
-					za *= s;
-					zc *= s;
-					s = (float)Math.Sqrt(za * za + zc * zc);
-					if (data.transformMode == TransformMode.NoScale
-						&& (pa * pd - pb * pc < 0) != (skeleton.ScaleX < 0 != skeleton.ScaleY < 0)) s = -s;
+				case TransformMode.OnlyTranslation:
+					{
+						float rotationY = rotation + 90 + shearY;
+						a = MathUtils.CosDeg(rotation + shearX) * scaleX;
+						b = MathUtils.CosDeg(rotationY) * scaleY;
+						c = MathUtils.SinDeg(rotation + shearX) * scaleX;
+						d = MathUtils.SinDeg(rotationY) * scaleY;
+						break;
+					}
+				case TransformMode.NoRotationOrReflection:
+					{
+						float s = pa * pa + pc * pc, prx;
+						if (s > 0.0001f)
+						{
+							s = Math.Abs(pa * pd - pb * pc) / s;
+							pa /= skeleton.ScaleX;
+							pc /= skeleton.ScaleY;
+							pb = pc * s;
+							pd = pa * s;
+							prx = MathUtils.Atan2(pc, pa) * MathUtils.RadDeg;
+						}
+						else
+						{
+							pa = 0;
+							pc = 0;
+							prx = 90 - MathUtils.Atan2(pd, pb) * MathUtils.RadDeg;
+						}
+						float rx = rotation + shearX - prx;
+						float ry = rotation + shearY - prx + 90;
+						float la = MathUtils.CosDeg(rx) * scaleX;
+						float lb = MathUtils.CosDeg(ry) * scaleY;
+						float lc = MathUtils.SinDeg(rx) * scaleX;
+						float ld = MathUtils.SinDeg(ry) * scaleY;
+						a = pa * la - pb * lc;
+						b = pa * lb - pb * ld;
+						c = pc * la + pd * lc;
+						d = pc * lb + pd * ld;
+						break;
+					}
+				case TransformMode.NoScale:
+				case TransformMode.NoScaleOrReflection:
+					{
+						float cos = MathUtils.CosDeg(rotation), sin = MathUtils.SinDeg(rotation);
+						float za = (pa * cos + pb * sin) / skeleton.ScaleX;
+						float zc = (pc * cos + pd * sin) / skeleton.ScaleY;
+						float s = (float)Math.Sqrt(za * za + zc * zc);
+						if (s > 0.00001f)
+							s = 1 / s;
+						za *= s;
+						zc *= s;
+						s = (float)Math.Sqrt(za * za + zc * zc);
+						if (data.transformMode == TransformMode.NoScale
+							&& (pa * pd - pb * pc < 0) != (skeleton.ScaleX < 0 != skeleton.ScaleY < 0))
+							s = -s;
 
-					float r = MathUtils.PI / 2 + MathUtils.Atan2(zc, za);
-					float zb = MathUtils.Cos(r) * s;
-					float zd = MathUtils.Sin(r) * s;
-					float la = MathUtils.CosDeg(shearX) * scaleX;
-					float lb = MathUtils.CosDeg(90 + shearY) * scaleY;
-					float lc = MathUtils.SinDeg(shearX) * scaleX;
-					float ld = MathUtils.SinDeg(90 + shearY) * scaleY;
-					a = za * la + zb * lc;
-					b = za * lb + zb * ld;
-					c = zc * la + zd * lc;
-					d = zc * lb + zd * ld;
-					break;
-				}
+						float r = MathUtils.PI / 2 + MathUtils.Atan2(zc, za);
+						float zb = MathUtils.Cos(r) * s;
+						float zd = MathUtils.Sin(r) * s;
+						float la = MathUtils.CosDeg(shearX) * scaleX;
+						float lb = MathUtils.CosDeg(90 + shearY) * scaleY;
+						float lc = MathUtils.SinDeg(shearX) * scaleX;
+						float ld = MathUtils.SinDeg(90 + shearY) * scaleY;
+						a = za * la + zb * lc;
+						b = za * lb + zb * ld;
+						c = zc * la + zd * lc;
+						d = zc * lb + zd * ld;
+						break;
+					}
 			}
 
 			a *= skeleton.ScaleX;
@@ -245,7 +264,8 @@ namespace Spine {
 			d *= skeleton.ScaleY;
 		}
 
-		public void SetToSetupPose () {
+		public void SetToSetupPose()
+		{
 			BoneData data = this.data;
 			x = data.x;
 			y = data.y;
@@ -262,10 +282,12 @@ namespace Spine {
 		///
 		/// Some information is ambiguous in the world transform, such as -1,-1 scale versus 180 rotation.
 		/// </summary>
-		internal void UpdateAppliedTransform () {
+		internal void UpdateAppliedTransform()
+		{
 			appliedValid = true;
 			Bone parent = this.parent;
-			if (parent == null) {
+			if (parent == null)
+			{
 				ax = worldX;
 				ay = worldY;
 				arotation = MathUtils.Atan2(c, a) * MathUtils.RadDeg;
@@ -290,12 +312,15 @@ namespace Spine {
 			float rd = id * d - ic * b;
 			ashearX = 0;
 			ascaleX = (float)Math.Sqrt(ra * ra + rc * rc);
-			if (ascaleX > 0.0001f) {
+			if (ascaleX > 0.0001f)
+			{
 				float det = ra * rd - rb * rc;
 				ascaleY = det / ascaleX;
 				ashearY = MathUtils.Atan2(ra * rb + rc * rd, det) * MathUtils.RadDeg;
 				arotation = MathUtils.Atan2(rc, ra) * MathUtils.RadDeg;
-			} else {
+			}
+			else
+			{
 				ascaleX = 0;
 				ascaleY = (float)Math.Sqrt(rb * rb + rd * rd);
 				ashearY = 0;
@@ -303,7 +328,8 @@ namespace Spine {
 			}
 		}
 
-		public void WorldToLocal (float worldX, float worldY, out float localX, out float localY) {
+		public void WorldToLocal(float worldX, float worldY, out float localX, out float localY)
+		{
 			float a = this.a, b = this.b, c = this.c, d = this.d;
 			float invDet = 1 / (a * d - b * c);
 			float x = worldX - this.worldX, y = worldY - this.worldY;
@@ -311,35 +337,44 @@ namespace Spine {
 			localY = (y * a * invDet - x * c * invDet);
 		}
 
-		public void LocalToWorld (float localX, float localY, out float worldX, out float worldY) {
+		public void LocalToWorld(float localX, float localY, out float worldX, out float worldY)
+		{
 			worldX = localX * a + localY * b + this.worldX;
 			worldY = localX * c + localY * d + this.worldY;
 		}
 
-		public float WorldToLocalRotationX {
-			get {
+		public float WorldToLocalRotationX
+		{
+			get
+			{
 				Bone parent = this.parent;
-				if (parent == null) return arotation;
+				if (parent == null)
+					return arotation;
 				float pa = parent.a, pb = parent.b, pc = parent.c, pd = parent.d, a = this.a, c = this.c;
 				return MathUtils.Atan2(pa * c - pc * a, pd * a - pb * c) * MathUtils.RadDeg;
 			}
 		}
 
-		public float WorldToLocalRotationY {
-			get {
+		public float WorldToLocalRotationY
+		{
+			get
+			{
 				Bone parent = this.parent;
-				if (parent == null) return arotation;
+				if (parent == null)
+					return arotation;
 				float pa = parent.a, pb = parent.b, pc = parent.c, pd = parent.d, b = this.b, d = this.d;
 				return MathUtils.Atan2(pa * d - pc * b, pd * b - pb * d) * MathUtils.RadDeg;
 			}
 		}
 
-		public float WorldToLocalRotation (float worldRotation) {
+		public float WorldToLocalRotation(float worldRotation)
+		{
 			float sin = MathUtils.SinDeg(worldRotation), cos = MathUtils.CosDeg(worldRotation);
 			return MathUtils.Atan2(a * sin - c * cos, d * cos - b * sin) * MathUtils.RadDeg + rotation - shearX;
 		}
 
-		public float LocalToWorldRotation (float localRotation) {
+		public float LocalToWorldRotation(float localRotation)
+		{
 			localRotation -= rotation - shearX;
 			float sin = MathUtils.SinDeg(localRotation), cos = MathUtils.CosDeg(localRotation);
 			return MathUtils.Atan2(cos * c + sin * d, cos * a + sin * b) * MathUtils.RadDeg;
@@ -349,7 +384,8 @@ namespace Spine {
 		/// Rotates the world transform the specified amount and sets isAppliedValid to false.
 		/// </summary>
 		/// <param name="degrees">Degrees.</param>
-		public void RotateWorld (float degrees) {
+		public void RotateWorld(float degrees)
+		{
 			float a = this.a, b = this.b, c = this.c, d = this.d;
 			float cos = MathUtils.CosDeg(degrees), sin = MathUtils.SinDeg(degrees);
 			this.a = cos * a - sin * c;
@@ -359,7 +395,8 @@ namespace Spine {
 			appliedValid = false;
 		}
 
-		override public string ToString () {
+		override public string ToString()
+		{
 			return data.name;
 		}
 	}

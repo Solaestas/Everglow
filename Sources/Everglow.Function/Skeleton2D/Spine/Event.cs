@@ -29,9 +29,11 @@
 
 using System;
 
-namespace Spine {
+namespace Spine
+{
 	/// <summary>Stores the current pose values for an Event.</summary>
-	public class Event {
+	public class Event
+	{
 		internal readonly EventData data;
 		internal readonly float time;
 		internal int intValue;
@@ -51,13 +53,16 @@ namespace Spine {
 		public float Volume { get { return volume; } set { volume = value; } }
 		public float Balance { get { return balance; } set { balance = value; } }
 
-		public Event (float time, EventData data) {
-			if (data == null) throw new ArgumentNullException("data", "data cannot be null.");
+		public Event(float time, EventData data)
+		{
+			if (data == null)
+				throw new ArgumentNullException("data", "data cannot be null.");
 			this.time = time;
 			this.data = data;
 		}
 
-		override public string ToString () {
+		override public string ToString()
+		{
 			return this.data.Name;
 		}
 	}

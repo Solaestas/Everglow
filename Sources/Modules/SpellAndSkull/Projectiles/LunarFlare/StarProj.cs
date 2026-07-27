@@ -1,4 +1,4 @@
-﻿namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
 internal class StarProj : ModProjectile
 {

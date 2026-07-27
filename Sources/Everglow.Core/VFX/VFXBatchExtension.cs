@@ -1,4 +1,4 @@
-﻿namespace Everglow.Commons.VFX;
+namespace Everglow.Commons.VFX;
 
 public static class VFXBatchExtension
 {

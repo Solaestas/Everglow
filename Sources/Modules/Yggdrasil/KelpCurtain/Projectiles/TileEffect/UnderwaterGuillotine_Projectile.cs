@@ -54,7 +54,7 @@ public class UnderwaterGuillotine_Projectile : ModProjectile
 					newVelocity.Y *= Main.rand.NextFloat(0.1f, 1.4f);
 					newVelocity.X *= 0.01f;
 					Vector2 posCheck = Projectile.Top + new Vector2((g - 7) * 10, 8);
-					for(int h = 0;h < 100;h++)
+					for (int h = 0; h < 100; h++)
 					{
 						posCheck.Y += 41;
 						if (Collision.IsWorldPointSolid(posCheck))
@@ -91,7 +91,7 @@ public class UnderwaterGuillotine_Projectile : ModProjectile
 		{
 			if (Timer >= 150)
 			{
-				if(Timer == 150)
+				if (Timer == 150)
 				{
 					Collision.HitTiles(Projectile.position, new Vector2(0, -1), Projectile.width, Projectile.height);
 				}
