@@ -1,4 +1,5 @@
 namespace Everglow.Commons;
+
 public class ShakerInfo
 {
 	internal Vector2 center;

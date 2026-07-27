@@ -15,7 +15,7 @@ public class CyanVineOreTile : ModTile
 		MinPick = 40;
 		DustType = ModContent.DustType<Dusts.CyanVine>();
 
-		var modTranslation  = CreateMapEntryName();
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(80, 130, 154), modTranslation);
 	}
 	public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

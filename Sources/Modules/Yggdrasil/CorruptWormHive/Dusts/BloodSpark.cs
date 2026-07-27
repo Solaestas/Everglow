@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.CorruptWormHive.Dusts;
+namespace Everglow.Yggdrasil.CorruptWormHive.Dusts;
 
 public class BloodSpark : ModDust
 {

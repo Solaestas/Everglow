@@ -32,7 +32,7 @@ public class VisualizedMusicTrack : Visual
 		{
 			PauseTime = 0;
 		}
-		if(PauseTime >= 60)
+		if (PauseTime >= 60)
 		{
 			Active = false;
 		}

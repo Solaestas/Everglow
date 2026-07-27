@@ -188,7 +188,7 @@ public class ChineseCookingRange : ModTile, ITileFluentlyDrawn
 			float xx = Utils.RandomInt(ref randSeed, -10, 11) * 0.25f;
 			float yy = Utils.RandomInt(ref randSeed, -10, 1) * 0.25f;
 
-			spriteBatch.Draw(flameTexture,new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + yy + k * 0.2f) + zero, new Rectangle(frameX, frameY + 72, width, height),color, 0f, default, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(flameTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + xx, j * 16 - (int)Main.screenPosition.Y + yy + k * 0.2f) + zero, new Rectangle(frameX, frameY + 72, width, height), color, 0f, default, 1f, SpriteEffects.None, 0f);
 		}
 		Lighting.AddLight(new Point(i, j).ToWorldCoordinates(), new Vector3(0.8f, 0.6f, 0.8f));
 

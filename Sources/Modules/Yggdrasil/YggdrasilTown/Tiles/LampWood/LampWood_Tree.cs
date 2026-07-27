@@ -71,16 +71,16 @@ public class LampWood_Tree : ModTile
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
 		Tile tile = Main.tile[i, j];
-		if(tile.TileFrameY == 2)
+		if (tile.TileFrameY == 2)
 		{
-			if(Main.rand.NextBool(7))
+			if (Main.rand.NextBool(7))
 			{
 				float wind = Main.windSpeedCurrent / 15f;
 				float rot = wind + (float)Math.Sin(j + Main.timeForVisualEffects / 30f) * wind * 0.3f;
 				Vector2 v0 = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 40f).RotatedByRandom(6.283);
 				Dust dust = Dust.NewDustDirect(new Vector2(i * 16, j * 16) + v0 + new Vector2(0, -180).RotatedBy(rot), 16, 16, ModContent.DustType<LampWood_Dust_fluorescent_appear>());
 				dust.alpha = 0;
-				dust.rotation = Main.rand.NextFloat(0.7f,1.4f);
+				dust.rotation = Main.rand.NextFloat(0.7f, 1.4f);
 				dust.velocity = v0 * 0.03f + new Vector2(wind * 4, 0);
 			}
 		}
@@ -155,7 +155,7 @@ public class LampWood_Tree : ModTile
 				break;
 		}
 		var origin = new Vector2(Width / 2f, Height);
-		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin, 1, j % 2 == 1? SpriteEffects.None: SpriteEffects.FlipHorizontally, 0);
+		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY, Width, Height), color, Rot, origin, 1, j % 2 == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		spriteBatch.Draw(treeTexture, new Vector2(i * 16 + OffsetX + 8, j * 16 + OffsetY) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX * Width, TexCoordY + 400, Width, Height), new Color(1f, 1f, 1f, 0), Rot, origin, 1, j % 2 == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 		if (TexCoordY == 0)
 		{

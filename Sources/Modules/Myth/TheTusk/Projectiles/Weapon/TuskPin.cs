@@ -45,12 +45,12 @@ public class TuskPin : ModProjectile
 	public override void AI()
 	{
 		Projectile.hide = true;
-		if(!HasHitTile)
+		if (!HasHitTile)
 		{
 			if (Projectile.timeLeft < 60)
 			{
 				timeCounter++;
-				if(timeCounter < 200)
+				if (timeCounter < 200)
 				{
 					Projectile.timeLeft = 50;
 				}
@@ -75,7 +75,7 @@ public class TuskPin : ModProjectile
 			var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 			var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 			float dissolveDuration = Projectile.timeLeft / 30f - 0.2f;
-			if(Projectile.timeLeft > 30)
+			if (Projectile.timeLeft > 30)
 			{
 				dissolveDuration = 1f;
 			}
@@ -94,7 +94,7 @@ public class TuskPin : ModProjectile
 		}
 		else
 		{
-			if(Projectile.timeLeft < 85)
+			if (Projectile.timeLeft < 85)
 			{
 				Main.EntitySpriteDraw(textureBlack, Projectile.Center - Main.screenPosition, null, Color.White * (Math.Min(1, (85 - Projectile.timeLeft) / 5f)), Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None);
 			}
@@ -111,7 +111,7 @@ public class TuskPin : ModProjectile
 				Main.EntitySpriteDraw(textureWhite, Projectile.Center - Main.screenPosition, null, Color.Lerp(Color.Red, Color.Transparent, Math.Min(1, (70 - Projectile.timeLeft) / 5f)), Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None);
 			}
 		}
-		
+
 		return false;
 	}
 }

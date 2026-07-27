@@ -43,7 +43,7 @@ public class Rock_Concentrating_dust : Visual
 		position += velocity;
 		velocity *= 0.95f;
 		Vector2 toProj = proj.Center - position - velocity;
-		if(toProj.Length() < 10)
+		if (toProj.Length() < 10)
 		{
 			timer = maxTime;
 			Active = false;

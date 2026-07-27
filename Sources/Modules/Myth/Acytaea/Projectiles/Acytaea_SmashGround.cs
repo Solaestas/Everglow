@@ -29,7 +29,7 @@ public class Acytaea_SmashGround : ModProjectile
 	public override void AI()
 	{
 		Projectile.velocity *= 0;
-		if(Projectile.timeLeft == 59)
+		if (Projectile.timeLeft == 59)
 		{
 			ShakerManager.AddShaker(Projectile.Center, new Vector2(0, -1), 40, 30f, 160, 0.9f, 0.8f, 120);
 			for (int x = 0; x < 600; x++)
@@ -102,7 +102,7 @@ public class Acytaea_SmashGround : ModProjectile
 		range *= 270f;
 		flame = Color.Lerp(flame, new Color(0.5f, 0f, 0f, 0), 0.7f);
 		flame *= MathF.Pow(value, 0.5f);
-		List <Vertex2D> bars = new List<Vertex2D>();
+		List<Vertex2D> bars = new List<Vertex2D>();
 		for (int t = 0; t <= 30; t++)
 		{
 			Vector2 radius = new Vector2(0, -range).RotatedBy(t / 30d * MathHelper.TwoPi);

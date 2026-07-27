@@ -22,7 +22,7 @@ public class StoneTuskSmall : ModTile
 		DustType = 191;
 		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(112, 83, 67), modTranslation);
-						HitSound = SoundID.DD2_SkeletonHurt;
+		HitSound = SoundID.DD2_SkeletonHurt;
 	}
 	public override void NumDust(int i, int j, bool fail, ref int num)
 	{

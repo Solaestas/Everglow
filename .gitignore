@@ -3,10 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# ºöÂÔ.xnbÎÄ¼ş
+# ï¿½ï¿½ï¿½ï¿½.xnbï¿½Ä¼ï¿½
 *.xnb
 
-# ºöÂÔTestÄ¿Â¼ÏÂµÄÆäËûÎÄ¼ş
+# ï¿½ï¿½ï¿½ï¿½TestÄ¿Â¼ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 Sources/Everglow.Function/Test/*.*
 
 # User-specific files
@@ -377,3 +377,6 @@ Everglow.dll
 /Resources/Localization/en-US.hjson.bak
 /Resources/Localization/ru-RU.hjson.bak
 *.bak
+
+# gh-aw compile cache (do not commit)
+.github/aw/

@@ -1,4 +1,4 @@
-﻿sampler2D dustInfo : register(s0);
+sampler2D dustInfo : register(s0);
 
 float3 uColor;
 float2 uResolution;

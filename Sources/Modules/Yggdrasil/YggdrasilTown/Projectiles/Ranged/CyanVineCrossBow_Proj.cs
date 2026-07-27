@@ -1,6 +1,7 @@
 using Everglow.Commons.Templates.Weapons.CrossBow;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
+
 public class CyanVineCrossBow_Proj : CrossBowProjectile
 {
 	public override void SetDef()

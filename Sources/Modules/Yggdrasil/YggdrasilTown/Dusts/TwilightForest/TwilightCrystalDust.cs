@@ -50,7 +50,7 @@ public class TwilightCrystalDust : ModDust
 				dust.active = false;
 			}
 		}
-		Lighting.AddLight(dust.position, new Vector3(0.03f,0.3f, 0.65f) * (1 - dust.alpha / 255f));
+		Lighting.AddLight(dust.position, new Vector3(0.03f, 0.3f, 0.65f) * (1 - dust.alpha / 255f));
 		return false;
 	}
 }

@@ -1,6 +1,6 @@
-﻿namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
+namespace Everglow.SpellAndSkull.Projectiles.LunarFlare;
 
-internal class LunarFlareBook : MagicBookProjectile
+public class LunarFlareBook : MagicBookProjectile
 {
 	public override void SetDef()
 	{
@@ -10,6 +10,7 @@ internal class LunarFlareBook : MagicBookProjectile
 		effectColor = new Color(15, 125, 175, 0);
 		MulDamage = 2.5f;
 	}
+
 	public override void SpecialAI()
 	{
 		Player player = Main.player[Projectile.owner];

@@ -26,16 +26,19 @@ public class PaintedTextureSystem : ModSystem
 
 		TexturePathLookup[tileVariationkey] = path;
 
-        if (!paintSystem._tilesRenders.TryGetValue(tileVariationkey, out value)) {
-            value = new PaintedTextureHolder {
-                Key = tileVariationkey
-            };
-            paintSystem._tilesRenders.Add(tileVariationkey, value);
-        }
+		if (!paintSystem._tilesRenders.TryGetValue(tileVariationkey, out value))
+		{
+			value = new PaintedTextureHolder
+			{
+				Key = tileVariationkey
+			};
+			paintSystem._tilesRenders.Add(tileVariationkey, value);
+		}
 
-        if (!value.IsReady) {
-            paintSystem._requests.Add(value);
-        }
+		if (!value.IsReady)
+		{
+			paintSystem._requests.Add(value);
+		}
 
 		return null;
 	}

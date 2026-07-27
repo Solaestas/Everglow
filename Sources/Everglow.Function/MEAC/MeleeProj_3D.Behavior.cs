@@ -194,7 +194,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 		Attack_RotativeSwing(mouseDir, meleeSpeed);
 
 		var ss = new SoundStyle(ModAsset.TrueMeleeSword_Mod);
-		if(CurrentAttackType % 2 == 1)
+		if (CurrentAttackType % 2 == 1)
 		{
 			ss = new SoundStyle(ModAsset.TrueMeleeSwordSwap_Mod);
 		}

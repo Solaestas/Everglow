@@ -1015,7 +1015,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 		NPC.TargetClosest(false);
 		if (StartedFight)
 		{
-			if(!Fail)
+			if (!Fail)
 			{
 				BossTimer++;
 			}
@@ -1281,7 +1281,7 @@ public abstract class TownNPC_LiveInYggdrasil : ModNPC
 
 	public void PopFailVFX()
 	{
-		if(!Fail)
+		if (!Fail)
 		{
 			var fIB = new SettlementBackground
 			{

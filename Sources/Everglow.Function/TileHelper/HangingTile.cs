@@ -162,7 +162,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 		Tile tile = Main.tile[i, j];
 		int counts = MaxCableLength;
 		int restCount = tile.TileFrameY;
-		Rope rope = Rope.CreateWithHangHead(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
+		Rope rope = Rope.Create_Fixed_Start_Heavy_End(new Point(i, j).ToWorldCoordinates(), counts, Elasticity, RopeUnitMass, SingleLampMass, MaxCableLength - restCount);
 		return rope;
 	}
 
@@ -322,7 +322,7 @@ public abstract class HangingTile : ModTile, ITileFluentlyDrawn
 
 	public override void MouseOver(int i, int j)
 	{
-		if(LengthAdjustable)
+		if (LengthAdjustable)
 		{
 			if (!MouseOverPoint.ContainsKey(Main.LocalPlayer))
 			{
@@ -644,13 +644,13 @@ public class HangingTileUpdate : ModSystem
 	/// <summary>
 	/// 物块质点系统
 	/// </summary>
-	public static MassSpringSystem HangingTileMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer HangingTileMassSpringSystem = new MassSpringContainer();
 	public static EulerSolver HangingTileEulerSolver = new EulerSolver(8);
 	public static PBDSolver HangingTilePBDSolver = new PBDSolver(8);
 
 	public override void PostUpdateEverything()
 	{
-		HangingTileMassSpringSystem = new MassSpringSystem();
+		HangingTileMassSpringSystem = new MassSpringContainer();
 		foreach (var HangingTile in TileLoader.tiles.OfType<HangingTile>())
 		{
 			foreach (var rope in HangingTile.RopesOfAllThisTileInTheWorld.Values)

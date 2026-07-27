@@ -2,13 +2,13 @@ namespace Everglow.CagedDomain.Items;
 
 public class ChineseStyleFloorLamp : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Placeables;
 
-    public override void SetDefaults()
-    {
-        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.ChineseStyleFloorLamp>());
-        Item.width = 18;
-        Item.height = 38;
-        Item.value = 1000;
-    }
+	public override void SetDefaults()
+	{
+		Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.ChineseStyleFloorLamp>());
+		Item.width = 18;
+		Item.height = 38;
+		Item.value = 1000;
+	}
 }

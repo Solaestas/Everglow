@@ -44,7 +44,7 @@ public class PylonStonePostProj_crimson : TrailingProjectile
 
 	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
 	{
-		if(style == 1)
+		if (style == 1)
 		{
 			Color drawC = Color.Lerp(TrailColor, new Color(0.4f, 0f, 1f, 0), index / (float)SmoothedOldPos.Count);
 			return drawC;

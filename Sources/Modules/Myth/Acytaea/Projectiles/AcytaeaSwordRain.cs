@@ -1,6 +1,7 @@
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaSwordRain : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -22,12 +23,12 @@ public class AcytaeaSwordRain : ModProjectile
 	}
 	public override void AI()
 	{
-		if(Projectile.timeLeft % 4 == 1 && Projectile.timeLeft > 120)
+		if (Projectile.timeLeft % 4 == 1 && Projectile.timeLeft > 120)
 		{
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center - new Vector2(Main.rand.NextFloat(-100f, 100f), 2000), new Vector2(0, 40), ModContent.ProjectileType<AcytaeaFlySword_2>(), Projectile.damage * 2 / 3, 4);
 			p0.timeLeft = 600;
 		}
-		if(Projectile.timeLeft < 15)
+		if (Projectile.timeLeft < 15)
 		{
 			Projectile.scale *= 0.7f;
 		}
@@ -59,7 +60,7 @@ public class AcytaeaSwordRain : ModProjectile
 
 		float deltaX = (300 - Projectile.timeLeft) / 14f;
 		float scaleW = 1.9f - deltaX;
-		if(scaleW > 0)
+		if (scaleW > 0)
 		{
 			deltaX = MathF.Sin(deltaX);
 			Main.spriteBatch.Draw(tex, Projectile.Center + new Vector2(deltaX * 150, 0) - Main.screenPosition, null, new Color(1f, 0, 0.4f, 0), 0, tex.Size() * 0.5f, new Vector2(scaleW, 5f) * Projectile.scale, SpriteEffects.None, 0);

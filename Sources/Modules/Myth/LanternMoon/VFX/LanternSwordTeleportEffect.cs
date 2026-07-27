@@ -42,7 +42,7 @@ public class LanternSwordTeleportEffect : Visual
 			{
 				colorFade *= 1 + t / 10f;
 			}
-			if(t > 100)
+			if (t > 100)
 			{
 				colorFade *= 1 + (100 - t) / 10f;
 			}

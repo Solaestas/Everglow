@@ -20,7 +20,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 		}
 		public override void UpdateVanitySet(Player player)
 		{
-			if(player.wet)
+			if (player.wet)
 			{
 				StaminaCost = 0.4875f;
 			}

@@ -108,7 +108,7 @@ public class CyanFrostProj : ModProjectile
 		Dust diamond2 = Dust.NewDustPerfect(Projectile.Center + new Vector2(100, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 1.8f * Projectile.Opacity);
 		diamond2.noGravity = true;
 		diamond2.rotation = Projectile.rotation + MathHelper.PiOver2;
-		if(Projectile.timeLeft % 2 == 1)
+		if (Projectile.timeLeft % 2 == 1)
 		{
 			Dust diamond3 = Dust.NewDustPerfect(Projectile.Center + new Vector2(170, 0).RotatedBy(Projectile.rotation), ModContent.DustType<IceScale>(), Vector2.zeroVector, 100, Color.SkyBlue * Projectile.Opacity, 3.8f * Projectile.Opacity);
 			diamond3.noGravity = true;

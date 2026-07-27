@@ -35,7 +35,7 @@ public class NewWaterBolt : TrailingProjectile
 
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(TimeAfterEntityDestroy < 0)
+		if (TimeAfterEntityDestroy < 0)
 		{
 			return base.Colliding(projHitbox, targetHitbox);
 		}

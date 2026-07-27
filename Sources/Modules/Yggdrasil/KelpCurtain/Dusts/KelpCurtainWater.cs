@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.KelpCurtain.Dusts;
+namespace Everglow.Yggdrasil.KelpCurtain.Dusts;
 
 public class KelpCurtainWater : ModDust
 {

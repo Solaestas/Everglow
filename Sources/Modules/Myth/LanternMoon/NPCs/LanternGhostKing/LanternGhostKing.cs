@@ -41,7 +41,7 @@ public class LanternGhostKing : LanternMoonNPC
 	public string ShaderType = "Normal";
 
 	public Rope LanternTail = null;
-	public static MassSpringSystem LanternGhostKingMassSpringSystem = new MassSpringSystem();
+	public static MassSpringContainer LanternGhostKingMassSpringSystem = new MassSpringContainer();
 	public static PBDSolver LanternGhostKingPBDSolver = new PBDSolver(8);
 
 	public override void SetDefaults()
@@ -1592,9 +1592,9 @@ public class LanternGhostKing : LanternMoonNPC
 			var bloom = ModAsset.LanternGhostKing_BodyBloom.Value;
 			spriteBatch.Draw(bloom, NPC.Center - Main.screenPosition, null, new Color(1f, 0.8f, 0.2f, 0) * GoldenShieldBreakBloomValueFunction(), 0, bloom.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
 		}
-		if(GoldenShieldBreakEffectTimer is >= 40 and < 50)
+		if (GoldenShieldBreakEffectTimer is >= 40 and < 50)
 		{
-			if(GoldenShieldBreakEffectTimer % 10 > 4)
+			if (GoldenShieldBreakEffectTimer % 10 > 4)
 			{
 				var crack = ModAsset.LanternGhostKing_Body_CrackVFXEffect.Value;
 				spriteBatch.Draw(crack, NPC.Center - Main.screenPosition, null, new Color(1f, 1f, 0.6f, 0.5f), 0, crack.Size() * 0.5f, NPC.scale, SpriteEffects.None, 0f);
@@ -1624,7 +1624,7 @@ public class LanternGhostKing : LanternMoonNPC
 	{
 		if (LanternTail == null)
 		{
-			LanternTail = Rope.Create(Main.MouseWorld, 8, 2f, 0.4f);
+			LanternTail = Rope.Create_Fixed_StartPos(Main.MouseWorld, 8, 2f, 0.4f, 4f);
 			LanternGhostKingMassSpringSystem.AddMassSpringMesh(LanternTail);
 		}
 		LanternTail.Masses[0].Position = NPC.Center + new Vector2(0, 50).RotatedBy(NPC.rotation);

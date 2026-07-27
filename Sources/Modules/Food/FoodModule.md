@@ -1,4 +1,4 @@
-﻿# EverGlow原版食物系统重置<!-- omit in toc -->
+# EverGlow原版食物系统重置<!-- omit in toc -->
 
 众所周知，原版泰拉瑞亚拥有相当多的食物，食物来源也五花八门，但一共也就提供四种buff：
 

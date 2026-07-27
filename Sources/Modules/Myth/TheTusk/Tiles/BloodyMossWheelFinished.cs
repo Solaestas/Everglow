@@ -23,7 +23,7 @@ public class BloodyMossWheelFinished : ModTile
 		TileObjectData.addTile(Type);
 		DustType = 4;
 		var modTranslation = CreateMapEntryName();
-						AddMapEntry(new Color(0, 0, 0, 0), modTranslation);
+		AddMapEntry(new Color(0, 0, 0, 0), modTranslation);
 	}
 	public override bool CanExplode(int i, int j)
 	{
@@ -40,7 +40,7 @@ public class BloodyMossWheelFinished : ModTile
 	{
 		TileI = i;
 		TileJ = j;
-		DrawAll(sb);		
+		DrawAll(sb);
 	}
 	public override void NearbyEffects(int i, int j, bool closer)
 	{

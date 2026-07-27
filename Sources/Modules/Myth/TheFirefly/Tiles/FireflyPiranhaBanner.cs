@@ -48,7 +48,7 @@ public class FireflyPiranhaBanner : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) 
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
 	{
 		FurnitureUtils.BannerFluentDraw(screenPosition, pos, spriteBatch, tileDrawing);
 	}

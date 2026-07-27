@@ -18,7 +18,7 @@ public class ItemTooltipGlobal : GlobalItem
 
 		// 原版代码
 		Vector2 zero = Vector2.Zero;
-		bool yoyoLogo = lines.Any(l => l.Name == "OneDropLogo");	
+		bool yoyoLogo = lines.Any(l => l.Name == "OneDropLogo");
 		List<DrawableTooltipLine> drawableLines = lines.Select((x, i) => new DrawableTooltipLine(x, i, 0, 0, Color.White)).ToList();
 		for (int j = 0; j < drawableLines.Count; j++)
 		{

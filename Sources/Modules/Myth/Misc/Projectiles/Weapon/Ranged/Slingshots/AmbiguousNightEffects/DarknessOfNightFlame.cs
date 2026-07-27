@@ -98,7 +98,7 @@ internal class DarknessOfNightDust : ShaderDraw
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
 			var drawcRope = new Color(fx * fx * fx * 2 - 0.1f, 0.5f, 1, 150 / 255f);
 			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			if(timer < 10)
+			if (timer < 10)
 			{
 				width *= timer / 10f;
 			}

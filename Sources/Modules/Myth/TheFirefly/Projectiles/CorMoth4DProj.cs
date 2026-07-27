@@ -9,7 +9,7 @@ public class CorMoth4DProj : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Dream Butterfly");
-				Main.projFrames[Projectile.type] = 4;
+		Main.projFrames[Projectile.type] = 4;
 	}
 
 	public override void SetDefaults()
@@ -114,7 +114,8 @@ public class CorMoth4DProj : ModProjectile
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		Texture2D Light = ModAsset.FixCoinLight3.Value;;
+		Texture2D Light = ModAsset.FixCoinLight3.Value;
+		;
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		var origin = new Vector2(tex.Width / 2, tex.Height / 6);
 		Rectangle sourceRec = tex.Frame(1, 4, 0, Projectile.frame % 4);

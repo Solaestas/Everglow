@@ -26,10 +26,10 @@ public class MothBuffTarget : GlobalNPC
 	{
 		if (npc.HasBuff(ModContent.BuffType<OnMoth>()))
 		{
-			if(projectile.DamageType == DamageClass.Summon)
+			if (projectile.DamageType == DamageClass.Summon)
 			{
 				float velocityValue = MathF.Log(npc.velocity.Length() + 1) / 10f;
-				if(!npc.collideX && !npc.collideY)
+				if (!npc.collideX && !npc.collideY)
 				{
 
 				}
@@ -46,7 +46,7 @@ public class MothBuffTarget : GlobalNPC
 			float colorValue = 1;
 
 			int buffIndex = npc.FindBuffIndex(ModContent.BuffType<OnMoth>());
-			if(npc.buffTime[buffIndex] < 72)
+			if (npc.buffTime[buffIndex] < 72)
 			{
 				colorValue = npc.buffTime[buffIndex] / 60f - 0.2f;
 			}

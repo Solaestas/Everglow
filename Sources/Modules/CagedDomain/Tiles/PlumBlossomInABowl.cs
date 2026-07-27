@@ -30,7 +30,7 @@ public class PlumBlossomInABowl : ModTile
 		TileObjectData.newTile.Origin = new Point16(0, 8);
 		TileObjectData.addTile(Type);
 		DustType = 1;
-		var modTranslation  = CreateMapEntryName();
+		var modTranslation = CreateMapEntryName();
 		AddMapEntry(new Color(90, 90, 90), modTranslation);
 		HitSound = SoundID.DD2_SkeletonHurt;
 	}

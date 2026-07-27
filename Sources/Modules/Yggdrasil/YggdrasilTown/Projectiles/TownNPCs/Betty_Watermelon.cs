@@ -75,7 +75,7 @@ public class Betty_Watermelon : TrailingProjectile
 			var d = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Betty_Watermelon_Skin_Dust>());
 			d.velocity = new Vector2(0, MathF.Sqrt(Main.rand.NextFloat(1f)) * 3.6f).RotatedByRandom(6.283);
 			d.scale = Main.rand.NextFloat(0.8f, 2f);
-			if(d.frame.Y == 0)
+			if (d.frame.Y == 0)
 			{
 				d.scale *= 0.5f;
 			}

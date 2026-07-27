@@ -24,7 +24,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 
 	public override void AI()
 	{
-		if(Projectile.wet && !Projectile.lavaWet)
+		if (Projectile.wet && !Projectile.lavaWet)
 		{
 			Projectile.Kill();
 		}
@@ -64,7 +64,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		}
 		else
 		{
-			if(FoundTarget)
+			if (FoundTarget)
 			{
 				if (Projectile.timeLeft > 60)
 				{
@@ -121,7 +121,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 
 	public override void OnKill(int timeLeft)
 	{
-		if(timeLeft > 15)
+		if (timeLeft > 15)
 		{
 			Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<Lantern_ExplosionEffect>(), Projectile.damage, 2, Projectile.owner, 3);
 		}
@@ -139,7 +139,7 @@ public class LanternYoyo_fireYoyo : ModProjectile
 		Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
 		Color drawColor = Color.Lerp(new Color(1f, 0.48f, 0.1f, 0), new Color(1f, 1f, 0.7f, 0), MathF.Sin((float)Main.time * 0.08f + Projectile.whoAmI) * 0.5f + 0.5f);
 		float drawSize = 1f;
-		if(Projectile.timeLeft < 60)
+		if (Projectile.timeLeft < 60)
 		{
 			drawSize *= Projectile.timeLeft / 60f;
 		}

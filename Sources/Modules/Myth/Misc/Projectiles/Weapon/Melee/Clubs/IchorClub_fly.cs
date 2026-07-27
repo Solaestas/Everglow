@@ -267,7 +267,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 	public void GenerateVFX(int Frequency)
 	{
 		float mulVelocity = Main.rand.NextFloat(0.75f, 1.5f);
-		for (int g = 0; g < Frequency ; g++)
+		for (int g = 0; g < Frequency; g++)
 		{
 			float mulScale = Main.rand.NextFloat(6f, 14f);
 			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0.99f, 1f)) * HitLength, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);
@@ -275,7 +275,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 			{
 				startPos *= -1;
 			}
-			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f)*0.5f;
+			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f) * 0.5f;
 			var blood = new IchorDrop
 			{
 				velocity = velocity,
@@ -297,7 +297,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 			{
 				startPos *= -1;
 			}
-			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f)*0.5f;
+			Vector2 velocity = startPos.RotatedBy(MathHelper.PiOver2) * Omega * Main.rand.NextFloat(0.2f, 0.9f) * 0.5f;
 			var blood = new IchorDrop
 			{
 				velocity = velocity,
@@ -311,7 +311,7 @@ public class IchorClub_fly : ModProjectile, IWarpProjectile
 			};
 			Ins.VFXManager.Add(blood);
 		}
-		for (int g = 0; g < Frequency ; g++)
+		for (int g = 0; g < Frequency; g++)
 		{
 			Vector2 afterVelocity = new Vector2(0, Main.rand.NextFloat(3f)).RotatedByRandom(MathHelper.TwoPi);
 			Vector2 startPos = new Vector2(MathF.Sqrt(Main.rand.NextFloat(0f, 1f)) * 56f, 0).RotatedBy(Projectile.rotation + MathHelper.PiOver4 * Projectile.spriteDirection);

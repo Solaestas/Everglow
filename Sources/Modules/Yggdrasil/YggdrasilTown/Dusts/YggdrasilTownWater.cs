@@ -1,4 +1,4 @@
-﻿namespace Everglow.Yggdrasil.YggdrasilTown.Dusts;
+namespace Everglow.Yggdrasil.YggdrasilTown.Dusts;
 
 public class YggdrasilTownWater : ModDust
 {

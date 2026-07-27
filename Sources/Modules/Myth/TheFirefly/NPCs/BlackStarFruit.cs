@@ -37,9 +37,9 @@ public class BlackStarFruit : ModNPC
 	{
 		NPC.position.Y -= 35f;
 		NPC.position.X += Main.rand.NextFloat(-16, 16);
-		foreach(var npc in Main.npc)
+		foreach (var npc in Main.npc)
 		{
-			if(npc.active && npc.type == Type)
+			if (npc.active && npc.type == Type)
 			{
 				if ((npc.Center - NPC.Center).Length() < 200)
 				{

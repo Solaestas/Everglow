@@ -1,3 +1,6 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Mechanics.EliminateLight;
+
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Ranged.Slingshots;
 
 public class AmbiguousLine : ModProjectile
@@ -14,14 +17,19 @@ public class AmbiguousLine : ModProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 60;
 	}
+
 	public override void AI()
 	{
 		Projectile.scale = Projectile.timeLeft / 60f;
 		if (Projectile.timeLeft <= 58)
+		{
 			Projectile.friendly = false;
+		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
+		SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		foreach (var proj in Main.projectile)
@@ -29,14 +37,17 @@ public class AmbiguousLine : ModProjectile
 			if (proj.whoAmI > Projectile.whoAmI)
 			{
 				if (proj.ai[0] == Projectile.ai[0])
+				{
 					DrawShadowLine(proj.Center - Main.screenPosition, Projectile.Center - Main.screenPosition, Projectile.scale * 5);
+				}
 			}
 		}
 		Main.spriteBatch.End();
-		Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-
+		Main.spriteBatch.Begin(sBS);
+		EliminateLightManager.AddCircle(Projectile.Center, Projectile.timeLeft);
 		return false;
 	}
+
 	public override void PostDraw(Color lightColor)
 	{
 		Texture2D shadow = ModAsset.CursedHit.Value;
@@ -46,6 +57,7 @@ public class AmbiguousLine : ModProjectile
 		Main.spriteBatch.Draw(blackHole, Projectile.Center - Main.screenPosition, null, Color.White, 0, blackHole.Size() / 2f, 0.06f * MathF.Sqrt(Projectile.scale), SpriteEffects.None, 0);
 		Main.spriteBatch.Draw(blue, Projectile.Center - Main.screenPosition, null, new Color(1f, 1f, 1f, 0), 0, blue.Size() / 2f, 0.10f * Projectile.scale, SpriteEffects.None, 0);
 	}
+
 	public void DrawShadowLine(Vector2 StartPos, Vector2 EndPos, float width)
 	{
 		Color color = Color.White;

@@ -9,7 +9,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class HeatproofClock : ModTile
 {
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileFrameImportant[Type] = true;
 		Main.tileNoAttach[Type] = true;
@@ -29,11 +30,13 @@ public class HeatproofClock : ModTile
 		AddMapEntry(new Color(200, 200, 200), Language.GetText("ItemName.GrandfatherClock"));
 	}
 
-	public override bool RightClick(int x, int y) {
+	public override bool RightClick(int x, int y)
+	{
 		return FurnitureUtils.ClockRightClick();
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) {
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
 		num = fail ? 1 : 3;
 	}
 }

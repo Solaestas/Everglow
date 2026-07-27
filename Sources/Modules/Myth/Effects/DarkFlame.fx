@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 texture uImage1;
 sampler2D s3 = sampler_state
 {

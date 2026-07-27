@@ -75,7 +75,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 				{
 					float hitRot = (currentPos - oldPos).ToRotationSafe() + MathHelper.PiOver2;
 					Vector2 pos = targetHitbox.Center();
-					HitNPCVFX(hitRot,pos);
+					HitNPCVFX(hitRot, pos);
 					return true;
 				}
 			}
@@ -101,7 +101,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void ProduceWaterRipples(Vector2 beamDims)
 	{
-		if(!Main.dedServ)
+		if (!Main.dedServ)
 		{
 			var shaderData = (WaterShaderData)Terraria.Graphics.Effects.Filters.Scene["WaterDistortion"].GetShader();
 			float waveSine = 1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
@@ -148,7 +148,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 	public virtual void ScreenShake()
 	{
-		if(MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
+		if (MeleeProj_3D_Configs.ShouldMeleeWeaponScreenShake)
 		{
 			ShakerManager.AddShaker(Owner.MountedCenter + CurrentWeaponTipPosition(), new Vector2(0, -1).RotatedByRandom(MathHelper.TwoPi), 18, 0.8f, 16, 0.9f, 0.8f, 30);
 		}

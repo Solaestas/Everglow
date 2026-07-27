@@ -35,9 +35,9 @@ public class BloodTuskLongSpice : ModProjectile
 
 	public override void AI()
 	{
-		if(Tusk != null)
+		if (Tusk != null)
 		{
-			if(StartDeltaPos == default)
+			if (StartDeltaPos == default)
 			{
 				StartDeltaPos = StartPos - Tusk.Center;
 			}
@@ -50,7 +50,7 @@ public class BloodTuskLongSpice : ModProjectile
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float k = 0;
-		if(Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, StartPos + new Vector2(Projectile.ai[0], Projectile.ai[1]), 10, ref k))
+		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, StartPos + new Vector2(Projectile.ai[0], Projectile.ai[1]), 10, ref k))
 		{
 			return true;
 		}

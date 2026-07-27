@@ -63,7 +63,7 @@ public class ThunderSpell_AttachPlayer : ModProjectile
 	{
 		Timer++;
 		Projectile.velocity *= 0;
-		if(AttachedPlayer == null)
+		if (AttachedPlayer == null)
 		{
 			return;
 		}

@@ -23,7 +23,7 @@ public class SettlementBackground : Visual
 
 	public override void Update()
 	{
-		if(BossNPC == null || !BossNPC.active)
+		if (BossNPC == null || !BossNPC.active)
 		{
 			foreach (var npc in Main.npc)
 			{
@@ -56,7 +56,7 @@ public class SettlementBackground : Visual
 			Active = false;
 			return;
 		}
-		if(!tNLIY.StartedFight && BossNPC.active)
+		if (!tNLIY.StartedFight && BossNPC.active)
 		{
 			ShouldKill = true;
 		}
@@ -94,7 +94,7 @@ public class SettlementBackground : Visual
 			pocession = 1;
 		}
 		var drawColor = new Color(0f, 0.75f, 0, 0f);
-		if(State == 0)
+		if (State == 0)
 		{
 			drawColor = new Color(0f, 0.25f, 0, 0f);
 		}

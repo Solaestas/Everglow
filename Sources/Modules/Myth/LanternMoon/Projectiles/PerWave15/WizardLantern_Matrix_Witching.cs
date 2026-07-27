@@ -216,7 +216,7 @@ public class WizardLantern_Matrix_Witching : ModProjectile
 			float scale = 0.5f * colorFade * (1 + MathF.Sin(i / 8f * MathHelper.Pi * 3 + (float)Main.time * 0.05f) * 0.25f);
 			Main.EntitySpriteDraw(blackSpot, pos - Main.screenPosition, null, new Color(1f, 1f, 1f, 1f), 0, blackSpot.Size() * 0.5f, scale, SpriteEffects.None, 0);
 			Main.EntitySpriteDraw(redSpot, pos - Main.screenPosition, null, new Color(1f, 0.05f, 0.1f, 0), 0, redSpot.Size() * 0.5f, scale, SpriteEffects.None, 0);
-			Lighting.AddLight(pos ,new Vector3(0.75f, 0, 0) * colorFade);
+			Lighting.AddLight(pos, new Vector3(0.75f, 0, 0) * colorFade);
 		}
 		for (int i = 0; i < 24; i++)
 		{

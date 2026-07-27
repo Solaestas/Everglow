@@ -1,4 +1,4 @@
-﻿using Everglow.Myth.LanternMoon.Buffs;
+using Everglow.Myth.LanternMoon.Buffs;
 using Everglow.Myth.LanternMoon.Projectiles.DashCore;
 using Terraria;
 using Terraria.Audio;
@@ -12,7 +12,7 @@ public class YellowCore : ModNPC
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Yellow Core");
-				Main.npcFrameCount[NPC.type] = 4;
+		Main.npcFrameCount[NPC.type] = 4;
 	}
 	public override void SetDefaults()
 	{
