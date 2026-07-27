@@ -5,144 +5,127 @@ using static Terraria.GameContent.Prefixes.PrefixLegacy;
 namespace Everglow.Commons.Templates.Weapons.Clubs;
 
 /// <summary>
-/// Default damage = 5 width*height = 48*48 useT = useA = 4 useStyle = ItemUseStyleID.Shoot rare = ItemRarityID.White value = 50
-/// noMelee = true noUseGraphic = true autoReuse = true
-/// DamageType = DamageClass.Melee
-/// knockBack = 4f shootSpeed = 1f
+/// A template for club-type weapons.
 /// </summary>
 public abstract class ClubItem : ModItem
 {
-    public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
+	public override string LocalizationCategory => LocalizationUtils.Categories.MeleeWeapons;
 
-    public override void SetStaticDefaults()
-    {
-    }
+	/// <summary>
+	/// Type of projectile used for normal attack.
+	/// </summary>
+	public int ProjType { get; protected set; }
 
-    public override void SetDefaults()
-    {
-        Item.damage = 5;
-        Item.width = 48;
-        Item.height = 48;
-        Item.useTime = 4;
-        Item.value = 50;
-        Item.useTime = 8;
-        Item.useAnimation = 8;
+	/// <summary>
+	/// Type of projectile used for smash down attack.
+	/// </summary>
+	public int ProjSmashType { get; protected set; }
 
-        Item.autoReuse = true;
-        Item.noMelee = true;
-        Item.noUseGraphic = true;
+	public override void SetStaticDefaults()
+	{
+		ItemSets.SwordsHammersAxesPicks[Type] = true;
+	}
 
-        Item.shootSpeed = 1f;
-        Item.knockBack = 16f;
+	public sealed override void SetDefaults()
+	{
+		Item.damage = 5;
+		Item.width = 48;
+		Item.height = 48;
+		Item.useTime = 4;
+		Item.value = 50;
+		Item.useTime = 8;
+		Item.useAnimation = 8;
 
-        Item.DamageType = DamageClass.Melee;
-        Item.useStyle = ItemUseStyleID.Thrust;
-        Item.rare = ItemRarityID.White;
+		Item.autoReuse = true;
+		Item.noMelee = true;
+		Item.noUseGraphic = true;
 
-        SetDef();
-        Item.shoot = ProjType;
-        ItemSets.SwordsHammersAxesPicks[Type] = true;
-    }
+		Item.shootSpeed = 1f;
+		Item.knockBack = 16f;
 
-    public override bool AllowPrefix(int pre)
-    {
-        return true;
-    }
+		Item.DamageType = DamageClass.Melee;
+		Item.useStyle = ItemUseStyleID.Thrust;
+		Item.rare = ItemRarityID.White;
 
-    public override bool MeleePrefix()
-    {
-        return true;
-    }
+		SetCustomDefaults();
+		Item.shoot = ProjType;
+	}
 
-    public virtual void SetDef()
-    {
-    }
+	/// <summary>
+	/// This is where you set all your item's stat, such as width, damage, knockback, etc.
+	/// <br/>Also special properties of club weapon: <see cref="ProjType"/> and <see cref="ProjSmashType"/>.
+	/// <para/>Called after <see cref="SetDefaults"/>. The native <see cref="SetDefaults"/> has been marked as <c>sealed</c> for better protection.
+	/// </summary>
+	public virtual void SetCustomDefaults()
+	{
+	}
 
-    public int ProjType;
-    public int ProjTypeSmash;
+	public override bool AllowPrefix(int pre) => true;
 
-    public override bool AltFunctionUse(Player player) => CanDown(player);
+	public override bool MeleePrefix() => true;
 
-    public bool CanDown(Player player)
-    {
-        for (int h = 0; h < 7; h++)
-        {
-            Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-            Point bottomPos = pos.ToTileCoordinates();
-            bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
-            bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-            if (TileCollisionUtils.PlatformCollision(pos) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
-            {
-                return false;
-            }
-        }
-        for (int h = 7; h < 120; h++)
-        {
-            Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-            Point bottomPos = pos.ToTileCoordinates();
-            bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
-            bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
-            if (TileCollisionUtils.PlatformCollision(pos) || (player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+	public override bool AltFunctionUse(Player player) => ProjSmashType > ProjectileID.None && CanSmashDown(player);
 
-    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-    {
-        if (player.altFunctionUse != 2)
-        {
-            if (player.ownedProjectileCounts[type] < 1)
-            {
-                Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-            }
-            return false;
-        }
-        int typeDown = ProjTypeSmash;
-        if (typeDown > 0)
-        {
-            if (CanDown(player))
-            {
-                if (player.ownedProjectileCounts[typeDown] < 1 && Main.mouseLeftRelease)
-                {
-                    player.mount.Dismount(player);
-                    var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, typeDown, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
-                    p.scale = Item.scale;
+	private static bool CanSmashDown(Player player)
+	{
+		for (int h = 0; h < 7; h++)
+		{
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			Point bottomPos = pos.ToTileCoordinates();
+			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+			if (TileUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+			{
+				return false;
+			}
+		}
+		for (int h = 7; h < 120; h++)
+		{
+			Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
+			Point bottomPos = pos.ToTileCoordinates();
+			bottomPos.X = Math.Clamp(bottomPos.X, 20, Main.maxTilesX - 20);
+			bottomPos.Y = Math.Clamp(bottomPos.Y, 20, Main.maxTilesY - 20);
+			if (TileUtils.PlatformCollision(pos) || ((player.waterWalk || player.waterWalk2) && Main.tile[bottomPos].LiquidAmount > 0 && !player.wet))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
-                    // 查重
-                    if (player.ownedProjectileCounts[type] >= 1)
-                    {
-                        foreach (Projectile proj in Main.projectile)
-                        {
-                            if (proj != null && proj.active)
-                            {
-                                if (proj.owner == player.whoAmI && proj.type == type)
-                                {
-                                    proj.Kill();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (player.ownedProjectileCounts[type] + player.ownedProjectileCounts[typeDown] < 1)
-                {
-                    var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-                    p.scale = Item.scale;
-                }
-            }
-        }
-        else
-        {
-            if (player.ownedProjectileCounts[type] < 1)
-            {
-                Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
-            }
-        }
-        return false;
-    }
+	public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+	{
+		if (player.altFunctionUse != 2)
+		{
+			// Left click: Hold and rotate.
+			if (player.ownedProjectileCounts[type] < 1)
+			{
+				Projectile.NewProjectile(source, position + velocity * 2f, Vector2.Zero, type, damage, knockback, player.whoAmI, 0f, 0f);
+			}
+		}
+		else
+		{
+			// Right click: Smash down.
+			if (player.ownedProjectileCounts[ProjSmashType] < 1 && Main.mouseLeftRelease)
+			{
+				player.mount.Dismount(player);
+				var p = Projectile.NewProjectileDirect(source, position + velocity * 2f, Vector2.Zero, ProjSmashType, (int)(damage * 1.62f), knockback, player.whoAmI, 0f, 0f);
+				p.scale = Item.scale;
+
+				// Kill duplicate.
+				if (player.ownedProjectileCounts[type] >= 1)
+				{
+					foreach (Projectile proj in Main.projectile)
+					{
+						if (proj.active && proj.owner == player.whoAmI && proj.type == type)
+						{
+							proj.Kill();
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
 }

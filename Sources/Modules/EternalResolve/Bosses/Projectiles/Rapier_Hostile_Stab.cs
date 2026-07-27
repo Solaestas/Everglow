@@ -1,5 +1,7 @@
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.CommonVFXDusts;
@@ -7,48 +9,60 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
+
 namespace Everglow.EternalResolve.Bosses.Projectiles
 {
 	public abstract class Rapier_Hostile_Stab : ModProjectile, IWarpProjectile
 	{
 		public int itemType;
+
 		/// <summary>
 		/// 常规颜色
 		/// </summary>
 		public Color Color = Color.White;
+
 		/// <summary>
 		/// 阴影强度
 		/// </summary>
-		public float Shade = 0f;
+		public float CurrentColorFactor = 0f;
+
 		/// <summary>
 		/// 重影深度
 		/// </summary>
-		public float TradeShade = 0f;
+		public float OldColorFactor = 0f;
+
 		/// <summary>
 		/// 重影彩色部分亮度
 		/// </summary>
-		public float TradeLightColorValue = 0f;
+		public float OldLightColorValue = 0f;
+
 		/// <summary>
 		/// 重影大小缩变,小于1
 		/// </summary>
-		public float FadeScale = 0f;
+		public float ScaleMultiplicative_Modifier = 0f;
+
 		/// <summary>
 		/// 刀光宽度1
 		/// </summary>
-		public float DrawWidth = 1f;
+		public float AttackEffectWidth = 1f;
+
 		/// <summary>
 		/// 重影深度缩变,小于1
-		/// </summary>  
-		public float FadeShade = 0f;
+		/// </summary>
+		public float ShadeMultiplicative_Modifier = 0f;
+
 		/// <summary>
 		/// 重影彩色部分亮度缩变,小于1
 		/// </summary>
-		public float FadeLightColorValue = 0f;
+		public float LightColorValueMultiplicative_Modifier = 0f;
+
 		/// <summary>
 		/// 表示刺剑攻击长度,标准长度1
 		/// </summary>
-		public float MaxLength = 1f;
+		public float AttackLength = 1f;
+
 		public override string Texture => Commons.ModAsset.StabbingProjectile_Mod;
+
 		public override void SetDefaults()
 		{
 			Projectile.width = 10;
@@ -62,12 +76,14 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			Projectile.tileCollide = false;
 			Projectile.aiStyle = -1;
 		}
+
 		public Vector2 StartCenter = Vector2.zeroVector;
 		public Vector2 EndPos = Vector2.zeroVector;
 		public int ToKill = 120;
+
 		public override void OnSpawn(IEntitySource source)
 		{
-			SoundStyle ss = new SoundStyle(Commons.ModAsset.SwordSwing_Mod);
+			SoundStyle ss = new SoundStyle(Commons.ModAsset.StabbingSwordSound_Mod);
 			SoundEngine.PlaySound(ss, Projectile.Center);
 			StartCenter = Projectile.Center;
 
@@ -76,13 +92,12 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Projectile.timeLeft = 40;
 				Projectile.extraUpdates++;
 			}
-
 		}
+
 		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-
 			float point = 0;
-			Vector2 end = Projectile.Center + Projectile.velocity * 80 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 80 * AttackLength;
 			if (EndPos != Vector2.zeroVector)
 			{
 				end = EndPos;
@@ -96,19 +111,20 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			}
 			return false;
 		}
+
 		public override void AI()
 		{
 			if (Projectile.timeLeft % 15 == 0 && Projectile.ai[1] != 2)
 			{
 				StabVFX v = new StabVFX()
 				{
-					pos = Projectile.Center + Projectile.velocity * MaxLength * 140,
+					pos = Projectile.Center + Projectile.velocity * AttackLength * 140,
 					vel = Vector2.Normalize(Projectile.velocity),
 					color = Color.Lerp(Color, Color.White, 0.2f),
 					scale = 10,
 					maxtime = 20,
 					timeleft = 20,
-					alpha = 0.8f
+					alpha = 0.8f,
 				};
 				Ins.VFXManager.Add(v);
 			}
@@ -116,12 +132,14 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			if (Projectile.ai[1] == 0)
 			{
 				Main.npc[(int)Projectile.ai[0]].spriteDirection = Projectile.spriteDirection;
-				Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * MaxLength;
+				Projectile.Center = Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 50 * AttackLength;
 			}
 			else
 			{
 				if (Projectile.timeLeft > 2)
+				{
 					Projectile.Center += Projectile.velocity * 8;
+				}
 			}
 
 			if (Projectile.timeLeft <= 2)
@@ -131,7 +149,6 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			}
 			if (ToKill >= 120)
 			{
-
 				Projectile.rotation = Projectile.velocity.ToRotation();
 				Projectile.spriteDirection = Projectile.direction;
 			}
@@ -139,9 +156,11 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			{
 				Projectile.extraUpdates = 24;
 				if (ToKill < 0)
+				{
 					Projectile.Kill();
+				}
 			}
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (!Collision.CanHitLine(StartCenter, 1, 1, end, 1, 1))
 			{
 				if (EndPos == Vector2.zeroVector)
@@ -151,6 +170,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				}
 			}
 		}
+
 		public virtual void HitTile()
 		{
 			SoundStyle ss = SoundID.NPCHit4;
@@ -167,11 +187,12 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 					maxTime = Main.rand.Next(1, 25),
 					scale = Main.rand.NextFloat(0.1f, Main.rand.NextFloat(10f, 27.0f)),
 					rotation = Main.rand.NextFloat(6.283f),
-					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) }
+					ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.13f, 0.13f) },
 				};
 				Ins.VFXManager.Add(spark);
 			}
 		}
+
 		private void ProduceWaterRipples(Vector2 beamDims)
 		{
 			Vector2 mainVec = Projectile.velocity;
@@ -181,28 +202,30 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
 			shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, mainVec.ToRotation());
 		}
+
 		public override bool PreDraw(ref Color lightColor)
 		{
 			DrawItem(lightColor);
 			return false;
 		}
+
 		public virtual void DrawItem(Color lightColor)
 		{
-
 			int type = itemType;
 			Texture2D itemTexture = TextureAssets.Item[type].Value;
 			Main.spriteBatch.Draw(itemTexture, Main.npc[(int)Projectile.ai[0]].Center + Projectile.velocity * 40 - Main.screenPosition, null, lightColor, Projectile.rotation + MathF.PI * 0.25f, itemTexture.Size() / 2f, 1, SpriteEffects.None, 0f);
 		}
+
 		public override void PostDraw(Color lightColor)
 		{
 			DrawEffect(lightColor);
 		}
+
 		public virtual void DrawEffect(Color lightColor)
 		{
-
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 25 * ToKill / 120f * AttackEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -213,15 +236,16 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			float dark = MathF.Sin(value * MathF.PI) * 4;
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 120) * 0.4f * Shade,new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 120)* 0.4f* Shade,new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,Color.White* 0.4f * dark* Shade,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,Color.White* 0.9f * dark* Shade,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 120) * 0.4f * CurrentColorFactor, new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 120) * 0.4f * CurrentColorFactor, new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, Color.White * 0.4f * dark * CurrentColorFactor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, Color.White * 0.4f * dark * CurrentColorFactor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, Color.White * 0.9f * dark * CurrentColorFactor, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, Color.White * 0.9f * dark * CurrentColorFactor, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -233,7 +257,7 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_black.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 			Color alphaColor = Color;
 			alphaColor.A = 0;
@@ -241,18 +265,19 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			alphaColor.G = (byte)(alphaColor.G * lightColor.G / 255f);
 			alphaColor.B = (byte)(alphaColor.B * lightColor.B / 255f);
 
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 36 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 36 * ToKill / 120f * AttackEffectWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor * 1.2f,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor * 1.2f,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor * 1.2f, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor * 1.2f, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -264,25 +289,26 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail_1.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 
 			alphaColor.A = 0;
 			alphaColor.R = (byte)(565 * lightColor.R / 255f);
 			alphaColor.G = (byte)(565 * lightColor.G / 255f);
 			alphaColor.B = (byte)(565 * lightColor.B / 255f);
-			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * DrawWidth;
+			normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 24 * ToKill / 120f * AttackEffectWidth;
 			bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized,new Color(0, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized,alphaColor,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized,alphaColor,new Vector3(0f + time, 1, 1))
+				new Vertex2D(start + normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized, new Color(0, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end + normalized, alphaColor, new Vector3(0f + time, 0, 1)),
+				new Vertex2D(end - normalized, alphaColor, new Vector3(0f + time, 1, 1)),
 			};
 			if (bars.Count >= 3)
 			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(Main.spriteBatch).Value;
 				Main.spriteBatch.End();
 				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 				Effect effect = Commons.ModAsset.StabSwordEffect.Value;
@@ -294,14 +320,15 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 				Main.graphics.graphicsDevice.Textures[0] = Commons.ModAsset.Trail.Value;
 				Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				Main.spriteBatch.Begin(sBS);
 			}
 		}
+
 		public void DrawWarp(VFXBatch sb)
 		{
-			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * DrawWidth;
+			Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 20 * ToKill / 120f * AttackEffectWidth;
 			Vector2 start = StartCenter;
-			Vector2 end = Projectile.Center + Projectile.velocity * 100 * MaxLength;
+			Vector2 end = Projectile.Center + Projectile.velocity * 100 * AttackLength;
 			if (EndPos != Vector2.Zero)
 			{
 				end = EndPos;
@@ -311,17 +338,17 @@ namespace Everglow.EternalResolve.Bosses.Projectiles
 			float time = (float)(Main.time * 0.03);
 			Color alphaColor = Color;
 			alphaColor.A = 0;
-			alphaColor.R = (byte)(((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-			alphaColor.G = 120;
+			alphaColor.R = (byte)(((Projectile.velocity.ToRotation() + Math.PI * 3) % MathHelper.TwoPi) / MathHelper.TwoPi * 255);
+			alphaColor.G = 12;
 
 			List<Vertex2D> bars = new List<Vertex2D>
 			{
-				new Vertex2D(start + normalized- Main.screenPosition,new Color(alphaColor.R, 0, 0, 0),new Vector3(1 + time, 0, 0)),
-				new Vertex2D(start - normalized- Main.screenPosition,new Color(alphaColor.R, 0, 0, 0),new Vector3(1 + time, 1, 0)),
-				new Vertex2D(middle + normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1)),
-				new Vertex2D(end - Main.screenPosition,alphaColor,new Vector3(0f + time, 0.5f, 1))
+				new Vertex2D(start + normalized - Main.screenPosition, new Color(alphaColor.R, 0, 0, 0), new Vector3(1 + time, 0, 0)),
+				new Vertex2D(start - normalized - Main.screenPosition, new Color(alphaColor.R, 0, 0, 0), new Vector3(1 + time, 1, 0)),
+				new Vertex2D(middle + normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+				new Vertex2D(middle - normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+				new Vertex2D(end - Main.screenPosition, alphaColor, new Vector3(0f + time, 0.5f, 1)),
+				new Vertex2D(end - Main.screenPosition, alphaColor, new Vector3(0f + time, 0.5f, 1)),
 			};
 			sb.Draw(Commons.ModAsset.Trail_1.Value, bars, PrimitiveType.TriangleStrip);
 		}

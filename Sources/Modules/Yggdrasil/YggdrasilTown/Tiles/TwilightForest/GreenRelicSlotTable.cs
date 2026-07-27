@@ -49,7 +49,7 @@ public class GreenRelicSlotTable : ModTile
 					item.active = false;
 					return false;
 				}
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(i, j);
+				Tile tile = TileUtils.SafeGetTile(i, j);
 				Point topLeftPoint = new Point(i - tile.TileFrameX / 18, j - tile.TileFrameY / 18);
 				YggdrasilWorldGeneration.KillRectangleAreaOfTile(topLeftPoint.X - 1, topLeftPoint.Y, topLeftPoint.X + 3, topLeftPoint.Y + 42);
 				YggdrasilWorldGeneration.SmoothTile(topLeftPoint.X - 2, topLeftPoint.Y, topLeftPoint.X + 4, topLeftPoint.Y + 42);

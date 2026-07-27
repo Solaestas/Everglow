@@ -1,6 +1,7 @@
 using Everglow.Commons.FeatureFlags;
 using Everglow.Commons.Netcode.Abstracts;
 using Everglow.Commons.Utilities;
+using SubworldLibrary;
 using Packet_ID = System.Int32;
 
 #pragma warning disable SA1121 // Use built-in type alias
@@ -121,6 +122,89 @@ public class PacketResolver
 		{
 			Send(packet);
 		}
+	}
+
+	private byte[] SubworldPacketData(IPacket packet)
+	{
+		using MemoryStream ms = new();
+		using (BinaryWriter bw = new(ms))
+		{
+			// 写入来源玩家ID
+			var sourceEnd = NetUtils.IsServer ? -1 : Main.myPlayer;
+			bw.Write(sourceEnd);
+
+			// 写入封包ID
+			int id = packetIDMapping[packet.GetType()];
+			if (CompileTimeFeatureFlags.NetworkPacketIDUseInt32)
+			{
+				bw.Write(id);
+			}
+			else
+			{
+				bw.Write((byte)id);
+			}
+
+			// 写入封包数据
+			packet.Send(bw);
+			bw.Flush();
+		}
+
+		return ms.ToArray();
+	}
+
+	/// <summary>
+	/// Send packet to main server via <see cref="SubworldLibrary"/>.
+	/// <br/>This method should only be called on server.
+	/// <br/>Use <see cref="SubworldSystem.Current"/> to check the subworld type.
+	/// </summary>
+	/// <param name="packet"></param>
+	public void SendToMainServer(IPacket packet)
+	{
+		// 单人模式不要有任何动作
+		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
+			return;
+		}
+
+		var data = SubworldPacketData(packet);
+		SubworldSystem.SendToMainServer(_mod, data);
+	}
+
+	/// <summary>
+	/// Send packet to specific sub server via <see cref="SubworldLibrary"/>.
+	/// <br/>This method should only be called on server.
+	/// <br/>Use <see cref="SubworldSystem.Current"/> with <c>SubworldSystem.Current == null</c> to ensure main server.
+	/// </summary>
+	/// <param name="packet"></param>
+	/// <param name="subserver"></param>
+	public void SendToSubServer(IPacket packet, int subserver)
+	{
+		// 单人模式不要有任何动作
+		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
+			return;
+		}
+
+		var data = SubworldPacketData(packet);
+		SubworldSystem.SendToSubserver(subserver, _mod, data);
+	}
+
+	/// <summary>
+	/// Send packet to all sub server via <see cref="SubworldLibrary"/>.
+	/// <br/>This method should only be called on server.
+	/// <br/>Use <see cref="SubworldSystem.Current"/> with <c>SubworldSystem.Current == null</c> to ensure main server.
+	/// </summary>
+	/// <param name="packet"></param>
+	public void SendToAllSubservers(IPacket packet)
+	{
+		// 单人模式不要有任何动作
+		if (Main.netMode == NetmodeID.SinglePlayer)
+		{
+			return;
+		}
+
+		var data = SubworldPacketData(packet);
+		SubworldSystem.SendToAllSubservers(_mod, data);
 	}
 
 	/// <summary>

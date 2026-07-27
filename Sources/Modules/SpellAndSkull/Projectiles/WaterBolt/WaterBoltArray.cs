@@ -3,7 +3,7 @@ using Everglow.Commons.VFX;
 using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
 namespace Everglow.SpellAndSkull.Projectiles.WaterBolt;
 
-internal class WaterBoltArray : ModProjectile, IWarpProjectile
+public class WaterBoltArray : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -95,6 +95,6 @@ internal class WaterBoltArray : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 70, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 52, new Color(64, 7, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 17);
 	}
 }

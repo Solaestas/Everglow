@@ -22,19 +22,19 @@ public class ResistanceWireBayonet : StabbingSwordItem
 		Item.rare = ItemRarityID.Green;
 		Item.value = Item.sellPrice(0, 2, 0, 0);
 		Item.shoot = ModContent.ProjectileType<ResistanceWireBayonet_proj>();
-		StabMulDamage = 4f;
+		PowerfulStabDamageFlat = 4f;
 		PowerfulStabProj = ModContent.ProjectileType<ResistanceWireBayonet_proj_stab>();
 		base.SetDefaults();
 	}
 
 	public override bool AltFunctionUse(Player player)
 	{
-		if (stabCD > 0)
+		if (CurrentPowerfulStabCD > 0)
 		{
 			return false;
 		}
 
-		if (!player.GetModPlayer<PlayerStamina>().CheckStamina(staminaCost * 45))
+		if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost * 45))
 		{
 			return false;
 		}

@@ -219,12 +219,12 @@ public class MothLand : ModSystem
 						case 3:
 							if (pixel.R == 165 && pixel.G == 0 && pixel.B == 255)
 							{
-								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<MothWorldDoor>());
+								TileUtils.PlaceFrameImportantTiles(a + x, b + y, 5, 7, ModContent.TileType<MothWorldDoor>());
 							}
 
 							if (pixel.R == 45 && pixel.G == 49 && pixel.B == 255)
 							{
-								MythUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<FireflyPylon>());
+								TileUtils.PlaceFrameImportantTiles(a + x, b + y, 3, 4, ModContent.TileType<FireflyPylon>());
 								TEModdedPylon moddedPylon = ModContent.GetInstance<FireflyPylonTileEntity>();
 								moddedPylon.Position = new Point16(a + x, b + y);
 
@@ -602,7 +602,7 @@ public class MothLand : ModSystem
 			}
 			if (count == 0)
 			{
-				MythUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
+				TileUtils.PlaceFrameImportantTiles(i - 1, j + 1, 3, 3, ModContent.TileType<Tiles.Furnitures.GlowingDrop>());
 			}
 		}
 		if (WorldGen.genRand.NextBool(16))// 巨型萤火吊

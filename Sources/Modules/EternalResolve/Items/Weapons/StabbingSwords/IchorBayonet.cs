@@ -1,9 +1,9 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class IchorBayonet : StabbingSwordItem
+	public class IchorBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//灵液刺剑
@@ -14,8 +14,8 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.LightRed;
 			Item.value = Item.sellPrice(0, 15, 27, 86);
 			Item.shoot = ModContent.ProjectileType<IchorBayonet_Pro>();
-			StabMulDamage = 4f;
-			staminaCost = 0.82f;
+			PowerfulStabDamageFlat = 4f;
+			StaminaCost = 0.82f;
 			PowerfulStabProj = ModContent.ProjectileType<IchorBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}

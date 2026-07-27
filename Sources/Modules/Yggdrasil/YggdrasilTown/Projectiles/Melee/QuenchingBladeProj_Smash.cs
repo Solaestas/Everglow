@@ -1,7 +1,5 @@
-using Everglow.Commons.CustomTiles.EntityColliding;
 using Everglow.Commons.DataStructures;
 using Everglow.Yggdrasil.YggdrasilTown.VFXs;
-using Everglow.Yggdrasil.YggdrasilTown.VFXs.TownNPCAttack;
 using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee;
@@ -103,7 +101,7 @@ public class QuenchingBladeProj_Smash : ModProjectile, IWarpProjectile_warpStyle
         {
             Omega = 0;
 
-            if (!TileCollisionUtils.PlatformCollision(Projectile.Center + FallingMove - new Vector2(30), 60, 60))
+            if (!TileUtils.PlatformCollision(Projectile.Center + FallingMove - new Vector2(30), 60, 60))
             {
                 FallingVel.Y += 1.5f;
             }

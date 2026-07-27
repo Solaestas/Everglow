@@ -51,7 +51,7 @@ public class PrimordialJadeWinged_Spear : ModItem
         for (int h = 0; h < 14; h++)
         {
             Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-            if (TileCollisionUtils.PlatformCollision(pos))
+            if (TileUtils.PlatformCollision(pos))
             {
                 CanDown = false;
                 return;
@@ -60,7 +60,7 @@ public class PrimordialJadeWinged_Spear : ModItem
         for (int h = 14; h < 120; h++)
         {
             Vector2 pos = player.Center + new Vector2(0, h * 16 * player.gravDir);
-            if (TileCollisionUtils.PlatformCollision(pos))
+            if (TileUtils.PlatformCollision(pos))
             {
                 CanDown = true;
                 return;

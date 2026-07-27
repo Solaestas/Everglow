@@ -620,7 +620,7 @@ public class Fevens : TownNPC_LiveInYggdrasil
 			{
 				NPC.velocity.Y += 1f;
 			}
-			if (TileCollisionUtils.PlatformCollision(NPC.Bottom))
+			if (TileUtils.PlatformCollision(NPC.Bottom))
 			{
 				NPC.velocity *= 0;
 				break;

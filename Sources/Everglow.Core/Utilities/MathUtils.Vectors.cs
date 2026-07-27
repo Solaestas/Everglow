@@ -121,4 +121,69 @@ public static partial class MathUtils
 	{
 		return new Vector2(-vector.Y, vector.X).NormalizeSafe();
 	}
+
+	/// <summary>
+	/// Converts a set of spherical coordinates to their equivalent Cartesian coordinates.
+	/// </summary>
+	/// <remarks>The method assumes that the angles are specified in radians and that the radius is non-negative.
+	/// Supplying a negative radius may result in unexpected output.</remarks>
+	/// <param name="sphericalCoordinates">A <see cref="Vector3"/> representing the spherical coordinates, where the X component is the radius, the Y
+	/// component is the polar angle (theta), and the Z component is the azimuthal angle (phi), all in radians.</param>
+	/// <returns>A <see cref="Vector3"/> containing the Cartesian coordinates corresponding to the specified spherical coordinates.</returns>
+	public static Vector3 SphericalToCartesian(Vector3 sphericalCoordinates)
+	{
+		float r = sphericalCoordinates.X;
+		float theta = sphericalCoordinates.Y;
+		float phi = sphericalCoordinates.Z;
+
+		float z = r * (float)Math.Sin(theta) * (float)Math.Cos(phi);
+		float x = r * (float)Math.Sin(theta) * (float)Math.Sin(phi);
+		float y = r * (float)Math.Cos(theta);
+
+		return new Vector3(x, y, z);
+	}
+
+	/// <summary>
+	/// Converts a set of Cartesian coordinates to their equivalent spherical coordinates.
+	/// </summary>
+	/// <remarks>The conversion assumes a right-handed coordinate system. The polar angle (theta) ranges from 0 to
+	/// π, and the azimuthal angle (phi) ranges from -π/2 to π/2. All angles are returned in radians.</remarks>
+	/// <param name="cartesianCoordinates">The Cartesian coordinates to convert, represented as a <see cref="Vector3"/> where X, Y, and Z correspond to the
+	/// respective axes.</param>
+	/// <returns>A <see cref="Vector3"/> containing the spherical coordinates, where the X component is the radius, the Y component
+	/// is the polar angle (theta), and the Z component is the azimuthal angle (phi), all in radians.</returns>
+	public static Vector3 CartesianToSpherical(Vector3 cartesianCoordinates)
+	{
+		double x = cartesianCoordinates.X;
+		double y = cartesianCoordinates.Y;
+		double z = cartesianCoordinates.Z;
+
+		double r = Math.Sqrt(x * x + y * y + z * z);
+		double theta = Math.Acos(y / r);
+
+		double phi = MathHelper.PiOver2 - Math.Atan(z / x);
+		if (x < 0)
+		{
+			phi = -Math.Atan(z / x) - MathHelper.PiOver2;
+		}
+		return new Vector3((float)r, (float)theta, (float)phi);
+	}
+
+	/// <summary>
+	/// Rotates the specified axis so that it becomes perpendicular to a given fixed axis.
+	/// </summary>
+	/// <remarks>This method adjusts the orientation of the rotateAxis vector so that it is perpendicular to the
+	/// fixAxis vector, preserving the original direction as much as possible. The operation modifies the rotateAxis
+	/// parameter directly.</remarks>
+	/// <param name="fixAxis">The fixed reference axis to which the rotated axis will be made perpendicular. This vector should be normalized
+	/// before calling the method.</param>
+	/// <param name="rotateAxis">The axis to rotate. This vector is modified in place to become perpendicular to the fixed axis.</param>
+	public static void RotateToPerpendicular(Vector3 fixAxis, ref Vector3 rotateAxis)
+	{
+		Vector3 perpendicularAxis = Vector3.Normalize(Vector3.Cross(fixAxis, rotateAxis));
+		float angle = Vector3.Dot(fixAxis, rotateAxis) / fixAxis.Length() / rotateAxis.Length();
+		angle = MathF.Acos(angle);
+		Quaternion rotation = Quaternion.CreateFromAxisAngle(perpendicularAxis, MathHelper.PiOver2 - angle);
+		rotateAxis = Vector3.Transform(rotateAxis, rotation);
+	}
 }

@@ -4,13 +4,13 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class StarDancer_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 12;
 		Item.value = 1114;
 		Item.rare = ItemRarityID.Blue;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.StarDancer_smash>();
 	}
 	public override void AddRecipes()
 	{

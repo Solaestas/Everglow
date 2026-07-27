@@ -7,7 +7,7 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Ranged;
 
 public class CyanBullet : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.DamageType = DamageClass.Ranged;
 		Projectile.width = 20;
@@ -17,12 +17,15 @@ public class CyanBullet : TrailingProjectile
 		Projectile.aiStyle = -1;
 		Projectile.penetrate = 6;
 		Projectile.timeLeft = 3600;
-		TrailTexture = Commons.ModAsset.Trail.Value;
-		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
-		TrailColor = new Color(0.3f, 0.7f, 0.8f, 0f);
-		TrailWidth = 6f;
+
+		SelfLuminous = true;
+		WarpStrength = 0.1f;
+		TrailBackgroundDarkness = 0.8f;
+		TrailTexture = Commons.ModAsset.Trail_7.Value;
+		TrailTextureBlack = Commons.ModAsset.Trail_7_black.Value;
+		TrailLength = 7;
+		TrailColor = new Color(0.2f, 0.9f, 0.5f, 0f);
+		TrailWidth = 5f;
 	}
 
 	public override void OnSpawn(IEntitySource source)
@@ -31,21 +34,25 @@ public class CyanBullet : TrailingProjectile
 		base.OnSpawn(source);
 	}
 
-	public override void AI()
+	public override bool PreAI()
 	{
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy >= 0)
+		{
+			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f) * TimeAfterEntityDestroy / 7f);
+		}
+		return true;
+	}
+
+	public override void Behaviors()
+	{
+		if (TimeAfterEntityDestroy < 0)
 		{
 			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f));
-		}
-		else
-		{
-			Lighting.AddLight(Projectile.Center, new Vector3(0.3f, 0.7f, 0.8f) * TimeTokill / 7f);
 		}
 		if (Projectile.timeLeft == 3540)
 		{
 			Projectile.damage -= 2;
 		}
-		base.AI();
 	}
 
 	public override void DrawSelf()
@@ -61,12 +68,25 @@ public class CyanBullet : TrailingProjectile
 		return;
 	}
 
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0)
+	{
+		if (style == 1)
+		{
+			float value = index / (float)SmoothedOldPos.Count;
+			Color color = Color.Lerp(TrailColor, new Color(0, 14, 255, 0), value);
+			return color;
+		}
+		return base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+	}
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		base.OnHitNPC(target, hit, damageDone);
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntityEffect()
 	{
 		SoundEngine.PlaySound(SoundID.NPCHit4.WithVolumeScale(0.8f), Projectile.Center);
 		for (int i = 0; i < 5; i++)
@@ -86,6 +106,5 @@ public class CyanBullet : TrailingProjectile
 			};
 			Ins.VFXManager.Add(spark);
 		}
-		base.KillMainStructure();
 	}
 }

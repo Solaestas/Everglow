@@ -2,9 +2,10 @@ using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using static Everglow.SpellAndSkull.Common.SpellAndSkullUtils;
+
 namespace Everglow.SpellAndSkull.Projectiles.RazorbladeTyphoon;
 
-internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
+public class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 {
 	public override void SetDefaults()
 	{
@@ -16,10 +17,12 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		Projectile.timeLeft = 10000;
 		Projectile.tileCollide = false;
 	}
+
 	public override bool? CanCutTiles()
 	{
 		return false;
 	}
+
 	public override void AI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -30,13 +33,17 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		{
 			Projectile.timeLeft = player.itemTime + 60;
 			if (timer < 30)
+			{
 				timer++;
+			}
 		}
 		else
 		{
 			timer--;
 			if (timer < 0)
+			{
 				Projectile.Kill();
+			}
 		}
 		Player.CompositeArmStretchAmount PCAS = Player.CompositeArmStretchAmount.Full;
 
@@ -57,8 +64,8 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 	{
 		Projectile.hide = false;
 		DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(0.6f, 0.6f, 0.6f, 0.6f));
-		//DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
 
+		// DrawMagicArray(Commons.ModAsset.Trail_5_black.Value, new Color(1f, 1f, 1f, 1f));
 		DrawMagicArray(Commons.ModAsset.Trail_5.Value, new Color(36, 180, 255, 0));
 		return false;
 	}
@@ -90,8 +97,6 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 		DrawTexLine(Point5, Point6, c1, c1, Water);
 		DrawTexLine(Point6, Point4, c1, c1, Water);
 	}
-
-
 
 	public void DrawTexLine(Vector2 StartPos, Vector2 EndPos, Color color1, Color color2, Texture2D tex)
 	{
@@ -141,8 +146,7 @@ internal class RazorbladeTyphoonArray : ModProjectile, IWarpProjectile
 
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-
 		Player player = Main.player[Projectile.owner];
-		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 150, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 6);
+		DrawTexCircle(spriteBatch, timer * 1.2f, 82, new Color((int)(255 * (Math.Sin(Main.timeForVisualEffects * 0.12f) + 1) / 2d), 15, 255, 0), player.Center + ringPos - Main.screenPosition, Commons.ModAsset.Trail_5.Value, Main.timeForVisualEffects / 6);
 	}
 }

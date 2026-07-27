@@ -61,12 +61,21 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 
 		trailVecsUp.Enqueue(mainVecUp);
 		if (trailVecsUp.Count > trailLength)
+		{
 			trailVecsUp.Dequeue();
+		}
+
 		trailVecsDown.Enqueue(mainVecDown);
 		if (trailVecsDown.Count > trailLength)
+		{
 			trailVecsDown.Dequeue();
+		}
+
 		if (Projectile.owner == 255)
+		{
 			Projectile.ai[1] = 1f;
+		}
+
 		if (Projectile.ai[1] != 0f)
 		{
 			Projectile.ignoreWater = false;
@@ -74,13 +83,18 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 			if (Projectile.ai[1] >= 25f)
 			{
 				if (Projectile.ai[1] == 25f)
+				{
 					SoundEngine.PlaySound(SoundID.NPCHit11);
+				}
+
 				Projectile.aiStyle = 25;
 				return;
 			}
 		}
 		if (Projectile.ai[1] > 10f)
+		{
 			Projectile.tileCollide = true;
+		}
 
 		if (!player.active || player.dead || player.CCed || !player.channel)
 		{
@@ -112,12 +126,16 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		player.itemTime = player.itemTimeMax - 1;
 		player.SetCompositeArmFront(true, 0, player.AngleToSafe(Projectile.Center) * player.gravDir - MathHelper.PiOver2);
 		if (SpinAcc < 17f)
+		{
 			SpinAcc += 0.05f;
+		}
 		else
 		{
 			SwirlTime++;
 			if (SwirlTime > 300)
+			{
 				player.AddBuff(BuffID.Confused, Math.Clamp((SwirlTime - 300) / 6, 0, 120));
+			}
 		}
 		if (Projectile.ai[1] == 0f)
 		{
@@ -134,10 +152,16 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 			player.fullRotationOrigin = new Vector2(0, 60f);
 			player.fullRotation = -vector.X * 0.01f * SpinAcc;
 			if (vector.Y > 0f)
+			{
 				player.heldProj = Projectile.whoAmI;
+			}
+
 			Projectile.velocity = Projectile.DirectionFromSafe(player.Center);
 			if (Main.mouseRightRelease)
+			{
 				player.velocity.X += SpinAcc * Math.Clamp((Main.MouseWorld.X - player.Center.X) / 300f, -1f, 1f) * 0.04f / (player.velocity.Length() + 3);
+			}
+
 			Projectile.knockBack = SpinAcc * 0.4f + 1;
 		}
 		else
@@ -152,16 +176,16 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		// TODO 144
-		//int size = target.width * target.height;
-		//if (Projectile.ai[1] <= 10f)
-		//	damage = (int)(damage / 5d * 0.45f * SpinAcc);
-		//else
-		//	damage = (int)(Projectile.damage * 0.45f * SpinAcc);
-		//if (size > 1000 && Projectile.ai[1] != 0)
-		//{
-		//	Projectile.penetrate = 0;
-		//	Projectile.Kill();
-		//}
+		// int size = target.width * target.height;
+		// if (Projectile.ai[1] <= 10f)
+		// damage = (int)(damage / 5d * 0.45f * SpinAcc);
+		// else
+		// damage = (int)(Projectile.damage * 0.45f * SpinAcc);
+		// if (size > 1000 && Projectile.ai[1] != 0)
+		// {
+		// Projectile.penetrate = 0;
+		// Projectile.Kill();
+		// }
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -180,7 +204,10 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 		if (Projectile.velocity.X == oldVelocity.X)
 		{
 			if (Projectile.velocity.Y != oldVelocity.Y)
+			{
 				Projectile.velocity.Y = -oldVelocity.Y * 0.5f;
+			}
+
 			if (Math.Abs(Projectile.velocity.Y) > 1.4f)
 			{
 				SoundEngine.PlaySound(SoundID.Dig);
@@ -262,7 +289,6 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 			Main.spriteBatch.Draw(chain, (Projectile.Center + player.Center) / 2f - Main.screenPosition, null, alpha, Projectile.AngleToSafe(player.Center),
 				chain.Size() / 2f, new Vector2((Projectile.Center - player.Center).Length() / 62f, Projectile.scale), 0, 0f);
 		}
-;
 		Texture2D flower = PlantUtils.GetTexture("Everglow/Plant/Projectiles/Melee/CactusBallFlower");
 		float dir = Projectile.ai[1] < 15f ? Projectile.AngleFromSafe(player.Center) : Projectile.velocity.ToRotation();
 		Main.spriteBatch.Draw(flower, Projectile.Center - dir.ToRotationVector2() * 25f * Projectile.scale - Main.screenPosition, null,
@@ -297,7 +323,9 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 	{
 		float w;
 		if (factor > 0.5f)
+		{
 			w = MathHelper.Lerp(0.5f, 0.7f, factor);
+		}
 		else
 		{
 			w = MathHelper.Lerp(0f, 0.5f, factor * 2f);
@@ -309,7 +337,7 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 	public void DrawTrail(Color color)
 	{
 		Player player = Main.player[Projectile.owner];
-		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList());//平滑
+		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList()); // 平滑
 		var SmoothTrailUp = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailXUp.Count; x++)
 		{
@@ -318,7 +346,10 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 
 		int length = SmoothTrailUp.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trailUp = SmoothTrailUp.ToArray();
 
 		var bars = new List<Vertex2D>();
@@ -350,21 +381,24 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 	public void DrawWarp(VFXBatch sb)
 	{
 		Player player = Main.player[Projectile.owner];
-		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList());//平滑
+		List<Vector2> SmoothTrailXUp = GraphicsUtils.CatmullRom(trailVecsUp.ToList()); // 平滑
 		var SmoothTrailUp = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailXUp.Count; x++)
 		{
 			SmoothTrailUp.Add(SmoothTrailXUp[x]);
 		}
 		var SmoothTrailDown = new List<Vector2>();
-		List<Vector2> SmoothTrailXDown = GraphicsUtils.CatmullRom(trailVecsDown.ToList());//平滑
+		List<Vector2> SmoothTrailXDown = GraphicsUtils.CatmullRom(trailVecsDown.ToList()); // 平滑
 		for (int x = 0; x < SmoothTrailXDown.Count; x++)
 		{
 			SmoothTrailDown.Add(SmoothTrailXDown[x]);
 		}
 		int length = SmoothTrailUp.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trailUp = SmoothTrailUp.ToArray();
 
 		var bars = new List<Vertex2D>();
@@ -377,8 +411,8 @@ public class CactusBallProj : ModProjectile, IWarpProjectile
 			Vector2 Radial = Utils.SafeNormalize(trailUp[i] - trailUp[i - 1], new Vector2(1, 0));
 			Radial = Radial.RotatedBy(Math.PI / 2d);
 
-			bars.Add(new Vertex2D(trailUp[i] + Radial * 25f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 15f, 0, 1), new Vector3(factor, 1, w)));
-			bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 15f, 0, 1), new Vector3(factor, 0, w)));
+			bars.Add(new Vertex2D(trailUp[i] + Radial * 25f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 150f, 0, 1), new Vector3(factor, 1, w)));
+			bars.Add(new Vertex2D(trailUp[i] - Radial * 15f - Main.screenPosition, new Color(dir * SpinAcc / 15f, w * SpinAcc / 150f, 0, 1), new Vector3(factor, 0, w)));
 		}
 
 		sb.Draw(ModContent.Request<Texture2D>("Everglow/Plant/Projectiles/Melee/CactusBallTrail").Value, bars, PrimitiveType.TriangleStrip);

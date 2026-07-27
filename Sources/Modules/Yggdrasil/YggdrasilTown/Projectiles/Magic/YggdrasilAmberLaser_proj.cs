@@ -9,7 +9,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Magic;
 
-public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
+public class YggdrasilAmberLaser_proj : HandholdProjectile
 {
 	public override void SetDef()
 	{
@@ -311,9 +311,5 @@ public class YggdrasilAmberLaser_proj : HandholdProjectile, IWarpProjectile
 		Main.spriteBatch.Draw(star, starCenter, null, drawC * 0.6f, MathHelper.PiOver4 + timeValue, star.Size() / 2f, 1.3f * duration, se, 0);
 		Main.spriteBatch.Draw(star, starCenter, null, drawC * 0.6f, -MathHelper.PiOver4 + timeValue, star.Size() / 2f, 1.3f * duration, se, 0);
 		return false;
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
 	}
 }

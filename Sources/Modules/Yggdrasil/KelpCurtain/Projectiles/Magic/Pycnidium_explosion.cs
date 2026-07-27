@@ -180,10 +180,8 @@ public class Pycnidium_explosion : ModProjectile, IWarpProjectile
 		{
 			colorV *= Projectile.ai[0] / 10f;
 		}
-
 		Texture2D t = Commons.ModAsset.Trail.Value;
-
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 40f, 22 * (1 - value), new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 40f, 22 * (1 - value), new Color(colorV, colorV * 0.02f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

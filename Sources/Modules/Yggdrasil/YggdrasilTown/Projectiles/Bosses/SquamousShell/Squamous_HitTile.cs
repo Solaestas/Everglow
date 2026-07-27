@@ -103,6 +103,6 @@ public class Squamous_HitTile : ModProjectile, IWarpProjectile
             width = Projectile.timeLeft;
         }
 
-        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 24f * Projectile.ai[0], width * 0.5f, new Color(colorV, colorV * 0.6f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+        DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 24f * Projectile.ai[0], width * 0.5f, new Color(colorV, colorV * 0.06f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
     }
 }

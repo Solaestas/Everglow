@@ -205,4 +205,13 @@ public struct AABB
 	{
 		return $"({position.X}, {position.Y}, {size.X}, {size.Y})";
 	}
+
+	public static implicit operator Rectangle(AABB aabb)
+	{
+		return new(
+		(int)aabb.position.X,
+		(int)aabb.position.Y,
+		(int)aabb.size.X,
+		(int)aabb.size.Y);
+	}
 }

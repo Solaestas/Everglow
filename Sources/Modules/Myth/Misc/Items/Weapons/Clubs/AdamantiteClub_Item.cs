@@ -4,13 +4,13 @@ namespace Everglow.Myth.Misc.Items.Weapons.Clubs;
 
 public class AdamantiteClub_Item : ClubItem
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Item.damage = 74;
 		Item.value = 3690;
 		Item.rare = ItemRarityID.LightRed;
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.AdamantiteClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.AdamantiteClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.AdamantiteClub_smash>();
 	}
 	public override void AddRecipes()
 	{

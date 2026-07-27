@@ -11,9 +11,9 @@ public class WoodenClub_Item : ClubItem
 			.AddTile(TileID.WorkBenches)
 			.Register();
 	}
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		ProjType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.WoodenClub>();
-		ProjTypeSmash = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.WoodenClub_smash>();
+		ProjSmashType = ModContent.ProjectileType<Projectiles.Weapon.Melee.Clubs.WoodenClub_smash>();
 	}
 }

@@ -141,8 +141,8 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		Color c = new Color(0.7f * MathF.Sqrt(1 - timeValue) * (1 - timeValue), 1f * (1 - timeValue), 0.3f * (1 - timeValue), 0f);
 		Main.spriteBatch.Draw(shadow, Projectile.Center - Main.screenPosition, null, c * dark, 0, shadow.Size() / 2f, 2.2f / 15f * dark, SpriteEffects.None, 0);
 		Color cDark = new Color(0, 0, 0, 1f - timeValue);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 200 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
-		DrawTexCircle(MathF.Sqrt(timeValue) * 120, 40 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 70, 200 * (1 - timeValue), cDark, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_2_black_thick.Value);
+		DrawTexCircle(MathF.Sqrt(timeValue) * 70, 40 * (1 - timeValue), c * 0.4f, Projectile.Center - Main.screenPosition, Commons.ModAsset.Trail_6.Value);
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
@@ -187,7 +187,7 @@ public class BacterialAgent_explosion : ModProjectile, IWarpProjectile
 		float value = (200 - Projectile.timeLeft) / 200f;
 		float colorV = 0.9f * (1 - value);
 		Texture2D t = Commons.ModAsset.Trail.Value;
-		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 40f, 22 * (1 - value), new Color(colorV, colorV * 0.2f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
+		DrawTexCircle_VFXBatch(spriteBatch, MathF.Sqrt(value) * 68f, 22 * (1 - value), new Color(colorV, colorV * 0.006f, colorV, 0f), Projectile.Center - Main.screenPosition, t, Math.PI * 0.5);
 	}
 
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

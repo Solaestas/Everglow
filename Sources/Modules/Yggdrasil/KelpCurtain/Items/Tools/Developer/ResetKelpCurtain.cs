@@ -44,7 +44,7 @@ public class ResetKelpCurtain : ModItem
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (tile.TileType != excludeType)
 				{
 					tile.ClearEverything();

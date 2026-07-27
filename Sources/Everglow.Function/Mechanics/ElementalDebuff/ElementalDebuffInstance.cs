@@ -1,3 +1,5 @@
+using Everglow.Commons.Utilities;
+
 namespace Everglow.Commons.Mechanics.ElementalDebuff;
 
 public sealed class ElementalDebuffInstance
@@ -160,9 +162,16 @@ public sealed class ElementalDebuffInstance
 		BuildUp = 0;
 		TimeLeft = Handler.Duration;
 
-		if (!npc.dontTakeDamage)
+		if (!npc.dontTakeDamage && Main.myPlayer == ProccedBy)
 		{
-			npc.lifeRegenCount -= Handler.ProcDamage * 120;
+			var modifier = npc.GetIncomingStrikeModifiers(DamageClass.Default, 0);
+			var hitInfo = modifier.ToHitInfo(Handler.ProcDamage, false, 0);
+			npc.StrikeNPC(hitInfo);
+
+			if (!NetUtils.IsSingle)
+			{
+				NetMessage.SendStrikeNPC(npc, hitInfo);
+			}
 		}
 
 		Handler.PostProc(npc);
@@ -183,6 +192,7 @@ public sealed class ElementalDebuffInstance
 			}
 
 			npc.lifeRegen -= Handler.DotDamage;
+			npc.SetLifeRegenExpectedLossPerSecond(Handler.DotDamage);
 		}
 	}
 

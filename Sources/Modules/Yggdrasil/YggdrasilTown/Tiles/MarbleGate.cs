@@ -46,7 +46,7 @@ public class MarbleGate : RoomDoorTile, ISceneTile
 
 	public void AddScene(int i, int j)
 	{
-		Tile tile = SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 		{
 			MarbleGate_BackgroundTile mGBT = new MarbleGate_BackgroundTile { position = new Vector2(i, j) * 16, Active = true, Visible = true, originTile = new Point(i, j), originType = Type };

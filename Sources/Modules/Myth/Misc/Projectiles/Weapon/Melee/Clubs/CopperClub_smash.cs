@@ -1,8 +1,11 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class CopperClub_smash : ClubProj_Smash_metal
+public class CopperClub_smash : ClubProjSmash
 {
-	public override string Texture => "Everglow/" + ModAsset.CopperClub_Path;
+	public override string Texture => ModAsset.CopperClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
 }

@@ -1,10 +1,10 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords;
-using Everglow.EternalResolve.Items.Weapons.StabbingSwords.Projectiles;
+using Everglow.EternalResolve.Projectiles;
 using Terraria.DataStructures;
 
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 {
-    public class BloodGoldBayonet : StabbingSwordItem
+	public class BloodGoldBayonet : StabbingSwordItem
 	{
 		//TODO:翻译
 		//命中敌人后有1/25的概率吸血,吸血量为造成伤害的30%
@@ -18,15 +18,15 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.sellPrice(0, 1, 2, 0);
 			Item.shoot = ModContent.ProjectileType<BloodGoldBayonet_Pro>();
-			StabMulDamage = 4f;
+			PowerfulStabDamageFlat = 4f;
 			PowerfulStabProj = ModContent.ProjectileType<BloodGoldBayonet_Pro_Stab>();
 			base.SetDefaults();
 		}
 		public override bool AltFunctionUse(Player player)
 		{
-			if (stabCD > 0)
+			if (CurrentPowerfulStabCD > 0)
 				return false;
-			if (!player.GetModPlayer<PlayerStamina>().CheckStamina(staminaCost * 45))
+			if (!player.GetModPlayer<StabbingSwordStaminaPlayer>().CheckStamina(StaminaCost * 45))
 				return false;
 			foreach (Projectile proj in Main.projectile)
 			{

@@ -52,7 +52,7 @@ public class UnderWaterDungeon : ModItem
 
 			// Trigger of the trap #0
 			Point irPos = new Point(i - xRoom * cellDistance - cellWidth + 9, j);
-			Tile irProbeTile = SafeGetTile(irPos);
+			Tile irProbeTile = TileUtils.SafeGetTile(irPos);
 			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_Normal>();
 			irProbeTile.TileFrameX = 36;
 			irProbeTile.HasTile = true;
@@ -70,7 +70,7 @@ public class UnderWaterDungeon : ModItem
 
 			// trigger #1
 			irPos = new Point(i - xRoom * cellDistance - 12, j - cellHeight + 9);
-			irProbeTile = SafeGetTile(irPos);
+			irProbeTile = TileUtils.SafeGetTile(irPos);
 			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan>();
 			irProbeTile.TileFrameX = 18;
 			irProbeTile.HasTile = true;
@@ -87,7 +87,7 @@ public class UnderWaterDungeon : ModItem
 
 			// trigger #2
 			irPos = new Point(i - xRoom * cellDistance + 12, j - cellHeight + 9);
-			irProbeTile = SafeGetTile(irPos);
+			irProbeTile = TileUtils.SafeGetTile(irPos);
 			irProbeTile.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan_Reverse>();
 			irProbeTile.TileFrameX = 18;
 			irProbeTile.HasTile = true;
@@ -130,8 +130,8 @@ public class UnderWaterDungeon : ModItem
 				int lampY = centerY - cellHeight + thick + moveY;
 				int lampX0 = centerX - cellWidth + thick + moveX;
 				int lampX1 = centerX + cellWidth - thick - moveX;
-				Tile lamp0 = SafeGetTile(lampX0, lampY);
-				Tile lamp1 = SafeGetTile(lampX1, lampY);
+				Tile lamp0 = TileUtils.SafeGetTile(lampX0, lampY);
+				Tile lamp1 = TileUtils.SafeGetTile(lampX1, lampY);
 				lamp0.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
 				lamp0.HasTile = true;
 
@@ -145,7 +145,7 @@ public class UnderWaterDungeon : ModItem
 			{
 				int y = j + (cellHeight - tunnelHeight / 2) - 3;
 				ConnectWaterErodedBrickTunnel(i - xRoom * cellDistance - (cellWidth - 7), y, i - xRoom * cellDistance - cellDistance + (cellWidth - 7), y, tunnelHeight);
-				Tile lamp0 = SafeGetTile(i - xRoom * cellDistance - (cellWidth - 7) - 0, y);
+				Tile lamp0 = TileUtils.SafeGetTile(i - xRoom * cellDistance - (cellWidth - 7) - 0, y);
 				lamp0.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
 				lamp0.HasTile = true;
 			}
@@ -157,7 +157,7 @@ public class UnderWaterDungeon : ModItem
 		{
 			int checkX = checkXRoom2 + k * 15;
 			int checkY = checkYRoom2 + (k % 2 == 0 ? 3 : 0);
-			Tile lamp = SafeGetTile(checkX, checkY);
+			Tile lamp = TileUtils.SafeGetTile(checkX, checkY);
 			if ((!lamp.HasTile || lamp.TileType != ModContent.TileType<WaterErodedGreenBrick>()) && lamp.wall == ModContent.WallType<WaterErodedGreenBrickWall_Fixed>())
 			{
 				lamp.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
@@ -189,7 +189,7 @@ public class UnderWaterDungeon : ModItem
 		}
 		for (int y = 0; y < distanceY; y++)
 		{
-			Tile tile = SafeGetTile(check);
+			Tile tile = TileUtils.SafeGetTile(check);
 			tile.RedWire = red;
 			tile.GreenWire = green;
 			tile.BlueWire = blue;
@@ -198,7 +198,7 @@ public class UnderWaterDungeon : ModItem
 		}
 		for (int x = 0; x <= distanceX; x++)
 		{
-			Tile tile = SafeGetTile(check);
+			Tile tile = TileUtils.SafeGetTile(check);
 			tile.RedWire = red;
 			tile.GreenWire = green;
 			tile.BlueWire = blue;
@@ -216,7 +216,7 @@ public class UnderWaterDungeon : ModItem
 		{
 			for (int y = centerY - halfHeight; y <= centerY + halfHeight; y++)
 			{
-				Tile tile = SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				int boundValue = halfWidth - Math.Abs(x - centerX);
 				int boundValue2 = halfHeight - Math.Abs(y - centerY);
 				boundValue = Math.Min(boundValue, boundValue2);
@@ -244,12 +244,12 @@ public class UnderWaterDungeon : ModItem
 			int height = WorldGen.genRand.Next(-12, 18);
 			if (height > 0)
 			{
-				Tile algaBottom = SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick);
+				Tile algaBottom = TileUtils.SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick);
 				if(algaBottom.HasTile)
 				{
 					for (int algaY = 0; algaY < height; algaY++)
 					{
-						Tile algaTile = SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick - algaY - 1);
+						Tile algaTile = TileUtils.SafeGetTile(centerX - halfWidth + algaX, centerY + halfHeight - thick - algaY - 1);
 						if (algaTile.HasTile)
 						{
 							break;
@@ -266,7 +266,7 @@ public class UnderWaterDungeon : ModItem
 
 		// Drain(bubbles for breathe)
 		Point outlet = new Point(centerX - 2, centerY);
-		PlaceFrameImportantTiles(outlet.X, outlet.Y, 4, 4, ModContent.TileType<DrainOutlet>());
+		TileUtils.PlaceFrameImportantTiles(outlet.X, outlet.Y, 4, 4, ModContent.TileType<DrainOutlet>());
 	}
 
 	/// <summary>
@@ -318,7 +318,7 @@ public class UnderWaterDungeon : ModItem
 					}
 					if (shouldKill)
 					{
-						Tile tile = SafeGetTile((int)(x + checkPoint.X), (int)(y + checkPoint.Y));
+						Tile tile = TileUtils.SafeGetTile((int)(x + checkPoint.X), (int)(y + checkPoint.Y));
 						float distance = checkDir.Length();
 						if (distance < halfWidth - (sideThick - 1))
 						{
@@ -439,23 +439,23 @@ public class UnderWaterDungeon : ModItem
 			if (inflectionPoint.Contains(s))
 			{
 				Point point = trailPos[s];
-				Tile checkLeft = SafeGetTile(point + new Point(-8, 3));
-				Tile checkRight = SafeGetTile(point + new Point(8, 3));
+				Tile checkLeft = TileUtils.SafeGetTile(point + new Point(-8, 3));
+				Tile checkRight = TileUtils.SafeGetTile(point + new Point(8, 3));
 				Point probePos = point + new Point(0, -7);
 				if (checkLeft.HasTile)
 				{
-					PlaceFrameImportantTiles(point.X - 7, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>(), 90);
+					TileUtils.PlaceFrameImportantTiles(point.X - 7, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>(), 90);
 					probePos += new Point(7, 0);
 					ConnectWire(probePos, new Point(point.X - 3, point.Y + 4));
 				}
 				if (checkRight.HasTile)
 				{
-					PlaceFrameImportantTiles(point.X + 3, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>());
+					TileUtils.PlaceFrameImportantTiles(point.X + 3, point.Y + 3, 5, 3, ModContent.TileType<UnderwaterLightningMechanism_H>());
 					probePos += new Point(-7, 0);
 					ConnectWire(probePos, new Point(point.X + 3, point.Y + 4));
 				}
-				Tile irProbe = SafeGetTile(probePos);
-				Tile irProbeTop = SafeGetTile(probePos + new Point(0, -1));
+				Tile irProbe = TileUtils.SafeGetTile(probePos);
+				Tile irProbeTop = TileUtils.SafeGetTile(probePos + new Point(0, -1));
 				if (!irProbe.HasTile && irProbeTop.HasTile)
 				{
 					irProbe.TileType = (ushort)ModContent.TileType<IRProbe_90_Degree_Scan>();
@@ -468,7 +468,7 @@ public class UnderWaterDungeon : ModItem
 			if (lumpLampPoint.Contains(s))
 			{
 				Point point = trailPos[s] + new Point(0, -1);
-				Tile tile = SafeGetTile(point);
+				Tile tile = TileUtils.SafeGetTile(point);
 				if (!tile.HasTile)
 				{
 					tile.TileType = (ushort)ModContent.TileType<NoctilucentFluoriteLump>();
@@ -480,15 +480,15 @@ public class UnderWaterDungeon : ModItem
 			if (breathePoint.Contains(s))
 			{
 				Point point = trailPos[s] + new Point(-2, 1);
-				PlaceFrameImportantTiles(point.X, point.Y, 4, 4, ModContent.TileType<DrainOutlet>());
+				TileUtils.PlaceFrameImportantTiles(point.X, point.Y, 4, 4, ModContent.TileType<DrainOutlet>());
 			}
 
 			// Platforms
 			if (platformPoint.Contains(s))
 			{
 				Point point = trailPos[s] + new Point(0, 1);
-				Tile checkLeft = SafeGetTile(point + new Point(-8, 2));
-				Tile checkRight = SafeGetTile(point + new Point(8, 2));
+				Tile checkLeft = TileUtils.SafeGetTile(point + new Point(-8, 2));
+				Tile checkRight = TileUtils.SafeGetTile(point + new Point(8, 2));
 				if (checkLeft.HasTile)
 				{
 					int length = CheckSpaceLeft(point.X, point.Y);
@@ -508,7 +508,7 @@ public class UnderWaterDungeon : ModItem
 						for (int x = 1; x <= 2; x++)
 						{
 							Point pointCheck = point + new Point(length, 0) + new Point(-x, 0);
-							if (SafeGetTile(pointCheck).HasTile)
+							if (TileUtils.SafeGetTile(pointCheck).HasTile)
 							{
 								j = 20;
 								break;
@@ -536,7 +536,7 @@ public class UnderWaterDungeon : ModItem
 						for (int x = 1; x <= 2; x++)
 						{
 							Point pointCheck = point + new Point(-length, 0) + new Point(x, 0);
-							if (SafeGetTile(pointCheck).HasTile)
+							if (TileUtils.SafeGetTile(pointCheck).HasTile)
 							{
 								j = 20;
 								break;
@@ -571,7 +571,7 @@ public class UnderWaterDungeon : ModItem
 		{
 			for (int y = y0; y <= y1; y += 1)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				if (tile.TileType != excludeType)
 				{
 					tile.ClearEverything();

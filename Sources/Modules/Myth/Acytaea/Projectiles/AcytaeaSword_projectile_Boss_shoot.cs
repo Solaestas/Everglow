@@ -1,6 +1,5 @@
 using Everglow.Commons.MEAC.Enums;
 using Everglow.Myth.Acytaea.Buffs;
-using Everglow.Myth.Acytaea.NPCs;
 using Everglow.Myth.Acytaea.VFXs;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -11,6 +10,7 @@ namespace Everglow.Myth.Acytaea.Projectiles;
 public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile, IBloomProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
+
 	public override void SetDefaults()
 	{
 		Projectile.aiStyle = -1;
@@ -32,6 +32,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		shaderType = MeleeTrailShaderType.ArcBladeTransparentedByZ;
 		trailVecs = new Queue<Vector2>(trailLength + 1);
 	}
+
 	public int attackType = 0;
 	public int maxAttackType = 1;
 	public Vector2 mainVec;
@@ -42,6 +43,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 	public bool useTrail = true;
 	public bool longHandle = false;
 	public MeleeTrailShaderType shaderType = MeleeTrailShaderType.ArcBladeAutoTransparent;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		int index = (int)Projectile.ai[0];
@@ -54,6 +56,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 			Projectile.Kill();
 		}
 	}
+
 	public override void AI()
 	{
 		if (OwnerNPC == -1)
@@ -73,17 +76,19 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		{
 			trailVecs.Enqueue(mainVec);
 			if (trailVecs.Count > trailLength)
+			{
 				trailVecs.Dequeue();
+			}
 		}
-		else//清空！
+		else// 清空！
 		{
 			trailVecs.Clear();
 		}
-		//ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
 
+		// ProduceWaterRipples(new Vector2(mainVec.Length(), 30));
 		if (attackType == 0)
 		{
-			if (timer < 30)//前摇
+			if (timer < 30)// 前摇
 			{
 				float targetRot = -MathHelper.PiOver2 - Owner.spriteDirection * 0.5f;
 				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
@@ -91,7 +96,10 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 				Projectile.rotation = mainVec.ToRotation();
 			}
 			if (timer == 20)
+			{
 				SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
+			}
+
 			if (timer > 33 && timer < 60)
 			{
 				Projectile.extraUpdates = 1;
@@ -103,14 +111,14 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 				}
 				else
 				{
-					if (Main.rand.Next((int)(90)) < (60 - timer) * 10)
+					if (Main.rand.Next(90) < (60 - timer) * 10)
 					{
 						GenerateVFX();
 					}
 				}
-				if(timer == 50)
+				if (timer == 50)
 				{
-					for(int x = 0;x < 5;x++)
+					for (int x = 0; x < 5; x++)
 					{
 						Vector2 v = new Vector2(340, 0).RotatedBy(-Owner.direction * 1.9f + MathF.PI * 0.5f + (x - 2f) / 10d * MathHelper.TwoPi);
 						Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, v, ModContent.ProjectileType<AcytaeaFlySword_1>(), Projectile.damage * 2 / 3, 4);
@@ -127,30 +135,35 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Projectile.Center = Owner.Center + mainVec * 0.02f;
 		Projectile.spriteDirection = Owner.spriteDirection;
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		DrawTrail(lightColor);
 		DrawSelf(Main.spriteBatch, lightColor);
 		return false;
 	}
+
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		float point = 0;
 		if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center + mainVec * Projectile.scale * (longHandle ? 0.2f : 0.1f), Projectile.Center + mainVec * Projectile.scale, Projectile.height, ref point))
 		{
 			if (Collision.CanHitLine(Projectile.position, Projectile.width, Projectile.height, targetHitbox.TopLeft(), targetHitbox.Width, targetHitbox.Height))
+			{
 				return true;
+			}
 		}
 
 		return false;
 	}
-	public void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = new Vector4(), Vector2 drawScale = new Vector2(), Texture2D glowTexture = null)
+
+	public void DrawSelf(SpriteBatch spriteBatch, Color lightColor, Vector4 diagonal = default(Vector4), Vector2 drawScale = default(Vector2), Texture2D glowTexture = null)
 	{
-		if (diagonal == new Vector4())
+		if (diagonal == default(Vector4))
 		{
 			diagonal = new Vector4(0, 1, 1, 0);
 		}
-		if (drawScale == new Vector2())
+		if (drawScale == default(Vector2))
 		{
 			drawScale = new Vector2(0, 1);
 			if (longHandle)
@@ -166,7 +179,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		if(timer < 30)
+		if (timer < 30)
 		{
 			DrawVertexByTwoLine(tex2, new Color(255, 255, 255, 0) * (timer / 30f), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
 		}
@@ -187,6 +200,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	public void DrawVertexByTwoLine(Texture2D texture, Color drawColor, Vector2 textureCoordStart, Vector2 textureCoordEnd, Vector2 positionStart, Vector2 positionEnd)
 	{
 		Vector2 coordVector = textureCoordEnd - textureCoordStart;
@@ -210,10 +224,12 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Main.graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertex2Ds.ToArray(), 0, vertex2Ds.Count - 2);
 	}
+
 	public override bool ShouldUpdatePosition()
 	{
 		return false;
 	}
+
 	public override void CutTiles()
 	{
 		DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
@@ -222,59 +238,78 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Vector2 beamEndPos = beamStartPos + mainVec;
 		Utils.PlotTileLine(beamStartPos, beamEndPos, Projectile.width * Projectile.scale, cut);
 	}
+
 	public string TrailShapeTex()
 	{
 		return Commons.ModAsset.Melee_Mod;
 	}
+
 	public string TrailColorTex()
 	{
 		return "Everglow/Myth/Acytaea/Projectiles/Acytaea_meleeColor";
 	}
+
 	public virtual float TrailAlpha(float factor)
 	{
 		float w;
 		w = MathHelper.Lerp(0f, 1, factor);
 		return w;
 	}
+
 	public BlendState TrailBlendState()
 	{
 		return BlendState.NonPremultiplied;
 	}
+
 	public static Vector2 Vector2Elipse(float radius, float rot0, float rot1, float rot2 = 0, float viewZ = 1000)
 	{
 		Vector3 v = Vector3.Transform(Vector3.UnitX, Matrix.CreateRotationZ(rot0)) * radius;
 		v = Vector3.Transform(v, Matrix.CreateRotationX(-rot1));
 		if (rot2 != 0)
+		{
 			v = Vector3.Transform(v, Matrix.CreateRotationZ(-rot2));
+		}
+
 		float k = -viewZ / (v.Z - viewZ);
 		return k * new Vector2(v.X, v.Y);
 	}
+
 	public void DrawBloom()
 	{
 		DrawTrail(Color.White);
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
+
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 		for (int i = 0; i < length; i++)
 		{
 			float factor = i / (length - 1f);
-			float w = 1f;
+			float w = 0.1f;
 			float d = trail[i].ToRotation() + 3.14f + 1.57f;
 			if (d > 6.28f)
+			{
 				d -= 6.28f;
+			}
+
 			float dir = d / MathHelper.TwoPi;
 
 			float dir1 = dir;
@@ -282,7 +317,10 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 			{
 				float d1 = trail[i - 1].ToRotation() + 3.14f + 1.57f;
 				if (d1 > 6.28f)
+				{
 					d1 -= 6.28f;
+				}
+
 				dir1 = d1 / MathHelper.TwoPi;
 			}
 
@@ -314,10 +352,12 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 
 		spriteBatch.Draw(ModContent.Request<Texture2D>(Commons.ModAsset.Melee_Warp_Mod).Value, bars, PrimitiveType.TriangleStrip);
 	}
+
 	public void End()
 	{
 		Projectile.Kill();
 	}
+
 	public override void OnKill(int timeLeft)
 	{
 		foreach (var proj in Main.projectile)
@@ -341,6 +381,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		}
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<AcytaeaSword_following>(), 0, 0f, -1, OwnerNPC);
 	}
+
 	private void GenerateVFX()
 	{
 		int times = 3;
@@ -357,7 +398,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) },
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
@@ -374,29 +415,35 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 36),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(8f, 10f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(8f, 10f) },
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}
 	}
+
 	public void DrawTrail(Color color)
 	{
-		if(trailVecs.Count <= 1)
+		if (trailVecs.Count <= 1)
 		{
 			return;
 		}
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
 		if (trailVecs.Count != 0)
+		{
 			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		}
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
+		{
 			return;
+		}
+
 		Vector2[] trail = SmoothTrail.ToArray();
 		var bars = new List<Vertex2D>();
 
@@ -422,8 +469,8 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Effect MeleeTrail = Commons.ModAsset.MeleeTrail.Value;
 		MeleeTrail.Parameters["uTransform"].SetValue(model * projection);
 		Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(TrailShapeTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-		//Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
+		// Main.graphics.GraphicsDevice.Textures[1] = ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 		MeleeTrail.Parameters["tex1"].SetValue(ModContent.Request<Texture2D>(TrailColorTex(), ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 		MeleeTrail.CurrentTechnique.Passes[shaderType.ToString()].Apply();
 
@@ -431,6 +478,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 	}
+
 	public override void OnHitPlayer(Player target, Player.HurtInfo info)
 	{
 		for (int x = 0; x < 25; x++)
@@ -445,7 +493,7 @@ public class AcytaeaSword_projectile_Boss_shoot : ModProjectile, IWarpProjectile
 				Visible = true,
 				position = positionVFX,
 				maxTime = Main.rand.Next(14, 16),
-				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) }
+				ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.04f, 0.04f), Main.rand.NextFloat(18f, 30f) },
 			};
 			Ins.VFXManager.Add(acytaeaFlame);
 		}

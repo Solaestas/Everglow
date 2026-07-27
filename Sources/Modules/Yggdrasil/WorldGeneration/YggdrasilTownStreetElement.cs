@@ -68,7 +68,7 @@ public class Lamppost : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y - Height, 1, 6, TileID.Lampposts);
+		TileUtils.PlaceFrameImportantTiles(x, y - Height, 1, 6, TileID.Lampposts);
 		base.Build(ref x, y);
 	}
 }
@@ -92,7 +92,7 @@ public class Bench : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y - Height, 3, 2, TileID.Benches);
+		TileUtils.PlaceFrameImportantTiles(x, y - Height, 3, 2, TileID.Benches);
 		base.Build(ref x, y);
 	}
 }
@@ -116,7 +116,7 @@ public class Crate : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y - Height, 2, 2, TileID.FishingCrate);
+		TileUtils.PlaceFrameImportantTiles(x, y - Height, 2, 2, TileID.FishingCrate);
 		base.Build(ref x, y);
 	}
 }
@@ -140,9 +140,9 @@ public class ThreeCrate : YggdrasilTownStreetElement
 		{
 			return;
 		}
-		PlaceFrameImportantTiles(x, y - 2, 2, 2, TileID.FishingCrate);
-		PlaceFrameImportantTiles(x + 2, y - 2, 2, 2, TileID.FishingCrate);
-		PlaceFrameImportantTiles(x + 1, y - Height, 2, 2, TileID.FishingCrate);
+		TileUtils.PlaceFrameImportantTiles(x, y - 2, 2, 2, TileID.FishingCrate);
+		TileUtils.PlaceFrameImportantTiles(x + 2, y - 2, 2, 2, TileID.FishingCrate);
+		TileUtils.PlaceFrameImportantTiles(x + 1, y - Height, 2, 2, TileID.FishingCrate);
 		base.Build(ref x, y);
 	}
 }

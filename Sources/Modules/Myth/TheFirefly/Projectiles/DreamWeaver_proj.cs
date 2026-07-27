@@ -226,7 +226,7 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 	{
 		float width = 16;
 
-		int TrueL = 0;
+		int trailCount = 0;
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
 		{
 			if (Projectile.oldPos[i] == Vector2.Zero)
@@ -234,7 +234,7 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 				break;
 			}
 
-			TrueL++;
+			trailCount++;
 		}
 		var bars = new List<Vertex2D>();
 		for (int i = 1; i < Projectile.oldPos.Length; ++i)
@@ -244,12 +244,12 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 				break;
 			}
 
-			float MulColor = 1f;
+			float mulColor = 1f;
 			var normalDir = Projectile.oldPos[i - 1] - Projectile.oldPos[i];
 			normalDir = Vector2.Normalize(new Vector2(-normalDir.Y, normalDir.X));
 			if (i == 1)
 			{
-				MulColor = 0f;
+				mulColor = 0f;
 			}
 
 			if (i >= 2)
@@ -258,7 +258,7 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
 				{
-					MulColor = 0f;
+					mulColor = 0f;
 				}
 			}
 			if (i < Projectile.oldPos.Length - 1)
@@ -267,7 +267,7 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 				normalDirII = Vector2.Normalize(new Vector2(-normalDirII.Y, normalDirII.X));
 				if (Vector2.Dot(normalDirII, normalDir) <= 0.965f)
 				{
-					MulColor = 0f;
+					mulColor = 0f;
 				}
 			}
 
@@ -278,25 +278,25 @@ public class DreamWeaver_proj : ModProjectile, IWarpProjectile
 				k0 -= 6.28f;
 			}
 
-			var c0 = new Color(k0, 0.4f, 0, 0);
+			var c0 = new Color(k0, 0.04f * mulColor, 0, 0);
 
-			var factor = i / (float)TrueL;
+			var factor = i / (float)trailCount;
 			float x0 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
 			x0 %= 1f;
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 1, 0)));
-			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(x0, 0, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 1, 0)));
+			bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factor) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(x0, 0, 0)));
 			var factorII = factor;
-			factor = (i + 1) / (float)TrueL;
+			factor = (i + 1) / (float)trailCount;
 			var x1 = factor * 1.3f - (float)(Main.timeForVisualEffects / 15d) + 100000;
 			x1 %= 1f;
 			if (x0 > x1)
 			{
 				float DeltaValue = 1 - x0;
 				var factorIII = factorII * x0 + factor * DeltaValue;
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(1, 0, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 1, 0)));
-				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0 * MulColor, new Vector3(0, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(1, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(1, 0, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * -width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(0, 1, 0)));
+				bars.Add(new Vertex2D(Projectile.oldPos[i] + normalDir * width * (1 - factorIII) + new Vector2(5f) - Main.screenPosition, c0, new Vector3(0, 0, 0)));
 			}
 		}
 	}

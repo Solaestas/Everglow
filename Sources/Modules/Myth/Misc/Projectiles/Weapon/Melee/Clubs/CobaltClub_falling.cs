@@ -7,7 +7,8 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 public class CobaltClub_falling : TrailingProjectile
 {
 	public override string Texture => "Everglow/" + ModAsset.CobaltClub_Path;
-	public override void SetDef()
+
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 30;
 		Projectile.height = 30;
@@ -28,30 +29,35 @@ public class CobaltClub_falling : TrailingProjectile
 		TrailColor = new Color(0, 0.2f, 0.6f, 0f);
 		TrailWidth = 15;
 	}
-	bool HasHitTile = false;
+
+	private bool hasHitTile = false;
+
 	public override void OnSpawn(IEntitySource source)
 	{
-
 	}
+
 	public override bool OnTileCollide(Vector2 oldVelocity)
 	{
-		HasHitTile = true;
+		hasHitTile = true;
 		Projectile.tileCollide = false;
 		Projectile.position += Projectile.velocity * 2;
 		Projectile.velocity *= 0;
 		Projectile.timeLeft = 120;
 		return false;
 	}
+
 	public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
 	{
 		behindNPCsAndTiles.Add(index);
 		base.DrawBehind(index, behindNPCsAndTiles, behindNPCs, behindProjectiles, overPlayers, overWiresUI);
 	}
-	int timeCounter = 0;
+
+	private int timeCounter = 0;
+
 	public override void AI()
 	{
 		Projectile.hide = true;
-		if (!HasHitTile)
+		if (!hasHitTile)
 		{
 			if (Projectile.timeLeft < 60)
 			{
@@ -64,12 +70,14 @@ public class CobaltClub_falling : TrailingProjectile
 			}
 		}
 		Timer++;
-		if (TimeTokill >= 0 && TimeTokill <= 2)
-			Projectile.Kill();
-		TimeTokill--;
-		if (TimeTokill < 0)
+		if (TimeAfterEntityDestroy >= 0 && TimeAfterEntityDestroy <= 2)
 		{
+			Projectile.Kill();
+		}
 
+		TimeAfterEntityDestroy--;
+		if (TimeAfterEntityDestroy < 0)
+		{
 		}
 		else
 		{
@@ -81,13 +89,14 @@ public class CobaltClub_falling : TrailingProjectile
 			Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) - MathHelper.PiOver4 * 3;
 		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		return base.PreDraw(ref lightColor);
 	}
+
 	public override void DrawSelf()
 	{
-
 		Texture2D texture = ModAsset.CobaltClub_falling.Value;
 
 		Color lightColor = Lighting.GetColor((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.Y / 16f));
@@ -123,16 +132,14 @@ public class CobaltClub_falling : TrailingProjectile
 			Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, lightColor, Projectile.rotation, texture.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
 		}
 	}
+
 	public override void DrawTrail()
 	{
 		base.DrawTrail();
 	}
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		Projectile.friendly = false;
-	}
-	public override void DrawTrailDark()
-	{
-		base.DrawTrailDark();
 	}
 }

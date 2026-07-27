@@ -1,41 +1,9 @@
-using System.Reflection;
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Everglow.Commons.Netcode.Packets;
+using Mono.Cecil.Cil;
+using MonoMod.Cil;
 
 namespace Everglow.Commons.Utilities;
-
-/// <summary>
-/// This Attribute can ignore game-mode-based NPC scale.
-/// </summary>
-[AttributeUsage(AttributeTargets.Class)]
-public class NoGameModeScaleAttribute : Attribute
-{
-}
-
-public class NoGameModeScale : GlobalNPC
-{
-	/// <summary>
-	/// Rejection of base value tampering by vanilla due to mode change.
-	/// </summary>
-	/// <param name="numPlayers"></param>
-	/// <param name="balance"></param>
-	/// <param name="bossAdjustment"></param>
-	public override void ApplyDifficultyAndPlayerScaling(NPC npc, int numPlayers, float balance, float bossAdjustment)
-	{
-		Type type = npc.ModNPC?.GetType();
-		if (type != null && type.GetCustomAttribute<NoGameModeScaleAttribute>() != null)
-		{
-			NPCID.Sets.DontDoHardmodeScaling[npc.type] = true;
-			npc.lifeMax = (int)(npc.lifeMax / Main.GameModeInfo.EnemyMaxLifeMultiplier);
-			npc.damage = (int)(npc.damage / Main.GameModeInfo.EnemyDamageMultiplier);
-			npc.defense = (int)(npc.defense / Main.GameModeInfo.EnemyDefenseMultiplier);
-			npc.value = (int)(npc.value / Main.GameModeInfo.EnemyMoneyDropMultiplier);
-			npc.knockBackResist = npc.knockBackResist / Main.GameModeInfo.KnockbackToEnemiesMultiplier;
-			return;
-		}
-		base.ApplyDifficultyAndPlayerScaling(npc, numPlayers, balance, bossAdjustment);
-	}
-}
 
 public static class NPCUtils
 {
@@ -154,7 +122,7 @@ public static class NPCUtils
 				Point point = (npc.Bottom + Vector2.UnitY * -2f).ToTileCoordinates();
 				for (int i = 0; i < 200; i++)
 				{
-					if (Main.npc[i].active && Main.npc[i].aiStyle == 7 && Main.npc[i].townNPC && Main.npc[i].ai[0] == 5f && (Main.npc[i].Bottom + Vector2.UnitY * -2f).ToTileCoordinates() == point)
+					if (Main.npc[i].active && Main.npc[i].aiStyle == NPCAIStyleID.Passive && Main.npc[i].townNPC && Main.npc[i].ai[0] == 5f && (Main.npc[i].Bottom + Vector2.UnitY * -2f).ToTileCoordinates() == point)
 					{
 						flag = false;
 						break;
@@ -181,7 +149,7 @@ public static class NPCUtils
 		}
 		Point checkPoint = (npc.Bottom + new Vector2(8 * npc.direction, 8)).ToTileCoordinates() + new Point(npc.direction, -1);
 		Tile checkTile = Main.tile[checkPoint];
-		if (TileLoader.IsClosedDoor(checkTile.TileType) || checkTile.TileType == 388)
+		if (TileLoader.IsClosedDoor(checkTile.TileType) || checkTile.TileType == TileID.TallGateClosed)
 		{
 			return true;
 		}
@@ -190,7 +158,7 @@ public static class NPCUtils
 		// This check was from 2 tile over NPC's bottom to 3 tiles below.
 		for (int y = -2; y < 4; y++)
 		{
-			if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
+			if (!TileUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 15, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 15, y * 16), npc.width, npc.height))
 			{
 				empty++;
 			}
@@ -206,7 +174,7 @@ public static class NPCUtils
 			// To stop a walking NPC, a groove at lease 2 tiles is necessary.
 			for (int y = -2; y < 4; y++)
 			{
-				if (!TileCollisionUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
+				if (!TileUtils.PlatformCollision(npc.Bottom + new Vector2(npc.direction * 30, y * 16)) && !Collision.SolidCollision(npc.BottomLeft + new Vector2(npc.direction * 30, y * 16), npc.width, npc.height))
 				{
 					empty++;
 				}
@@ -245,19 +213,25 @@ public static class NPCUtils
 		return true;
 	}
 
-
 	#endregion
 
 	#region Vanilla Stats
 
-	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes)
-	{
-		return buffTypes
+	public static int GetVanillaDotDamage(this NPC npc, IEnumerable<int> buffTypes) =>
+		buffTypes
 			.Where(npc.HasBuff)
 			.Where(type => BuffUtils.VanillaDotDebuffDamageOnNPC.TryGetValue(type, out int _))
 			.Select(type => npc.buffTime[npc.FindBuffIndex(type)] * BuffUtils.VanillaDotDebuffDamageOnNPC[type])
 			.Sum();
-	}
+
+	/// <summary>
+	/// Set <see cref="NPC.lifeRegenExpectedLossPerSecond"/> to the max of current value and given value,
+	/// avoiding multiple debuffs stacking incorrectly.
+	/// </summary>
+	/// <param name="npc"></param>
+	/// <param name="value"></param>
+	public static void SetLifeRegenExpectedLossPerSecond(this NPC npc, int value) =>
+		npc.lifeRegenExpectedLossPerSecond = Math.Max(npc.lifeRegenExpectedLossPerSecond, value);
 
 	#endregion
 

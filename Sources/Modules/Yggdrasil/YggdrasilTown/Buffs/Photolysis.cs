@@ -21,6 +21,6 @@ public class Photolysis : ModBuff
 		float lightStrength = (lightValue.Length() / MathF.Sqrt(3) * 255 - 150) / 105f;
 		int loseValue = (int)Utils.Lerp(1, 11, lightStrength);
 		npc.lifeRegen -= loseValue * 2;
-		npc.lifeRegenExpectedLossPerSecond = loseValue;
+		npc.SetLifeRegenExpectedLossPerSecond(loseValue);
 	}
 }

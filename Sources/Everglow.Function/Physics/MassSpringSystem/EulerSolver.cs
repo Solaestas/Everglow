@@ -13,7 +13,7 @@ public class EulerSolver(int iterations) : Solver
 		return -elasticity * (length - restLength) * unit;
 	}
 
-	public override void Step(MassSpringSystem system, float deltaTime)
+	public override void Step(MassSpringContainer system, float deltaTime)
 	{
 		for (int i = 0; i < system.Masses.Count; i++)
 		{

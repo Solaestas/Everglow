@@ -341,10 +341,10 @@ public class StonePost : ModProjectile, IWarpProjectile
 				DrawCen + RotByPro(new Vector2(0, -k0 * 40)) * WaveRange,
 				DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
 				true,
-				new Color(1f * k2, 0.7f * k2, 0f, 0f),
-				new Color(1f * k3, 0.6f * k3, 0f, 0f));
+				new Color(1f * k2, 0.07f * k2, 0f, 0f),
+				new Color(1f * k3, 0.06f * k3, 0f, 0f));
 		}
-		spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 255, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None);
+		spriteBatch.Draw(BackG, Projectile.Center - Main.screenPosition, null, new Color(255, 25, 255, 255), Projectile.rotation, new Vector2(BackG.Width / 2f, BackG.Height), 1, SpriteEffects.None);
 
 		if (k0 < 1)
 		{
@@ -358,8 +358,8 @@ public class StonePost : ModProjectile, IWarpProjectile
 				DrawCen + RotByPro(new Vector2(0, k0 * 50)) * WaveRange,
 				DrawCen + RotByPro(new Vector2(k0 * -150, 0)) * WaveRange,
 				false,
-				new Color(1f * k2, 0.7f * k2, 0f, 0f),
-				new Color(1f * k3, 0.6f * k3, 0f, 0f));
+				new Color(1f * k2, 0.07f * k2, 0f, 0f),
+				new Color(1f * k3, 0.06f * k3, 0f, 0f));
 		}
 	}
 }

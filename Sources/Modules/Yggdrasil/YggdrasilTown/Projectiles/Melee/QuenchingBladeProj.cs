@@ -10,11 +10,10 @@ public class QuenchingBladeProj : MeleeProj
 	public override void SetDef()
 	{
 		maxAttackType = 4;
-		trailLength = 20;
+		maxSlashTrailLength = 20;
 		longHandle = true;
-		AutoEnd = true;
-		CanLongLeftClick = true;
-		selfWarp = false;
+		autoEnd = true;
+		canLongLeftClick = true;
 		Omega = 0;
 	}
 
@@ -61,8 +60,8 @@ public class QuenchingBladeProj : MeleeProj
 		spriteBatch.End();
 		spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 
-		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
-		DrawVertexByTwoLine(texGlow, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainVec * drawScale.X, drawCenter + mainVec * drawScale.Y);
+		DrawVertexByTwoLine(tex, lightColor, diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
+		DrawVertexByTwoLine(texGlow, new Color(1f, 1f, 1f, 0), diagonal.XY(), diagonal.ZW(), drawCenter + mainAxisDirection * drawScale.X, drawCenter + mainAxisDirection * drawScale.Y);
 
 		spriteBatch.End();
 		spriteBatch.Begin(sBS);
@@ -72,7 +71,7 @@ public class QuenchingBladeProj : MeleeProj
 	{
 		// 伤害倍率
 		float ShakeStrength = 0.2f;
-		if (attackType == 3)
+		if (currantAttackType == 3)
 		{
 			modifiers.FinalDamage *= 1.4f;
 			ShakeStrength = 1f;
@@ -89,17 +88,17 @@ public class QuenchingBladeProj : MeleeProj
 		Tplayer.HideLeg = true;
 		float timeMul = 1f / player.meleeSpeed;
 
-		useTrail = true;
-		if (attackType == 0 || attackType == 2)
+		useSlash = true;
+		if (currantAttackType == 0 || currantAttackType == 2)
 		{
 			if (timer < 20 * timeMul)
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 1.2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(8 * timeMul))
 			{
@@ -108,8 +107,8 @@ public class QuenchingBladeProj : MeleeProj
 
 			if (timer > 20 * timeMul && timer < 75 * timeMul)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.06f, 0f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.06f, 0f);
+				canHit = true;
 				if (timer < 30 * timeMul)
 				{
 					Omega += 0.04f / timeMul;
@@ -119,7 +118,7 @@ public class QuenchingBladeProj : MeleeProj
 					Omega *= 0.5f / MathF.Log(timeMul * MathHelper.E);
 				}
 				Projectile.rotation += Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 				var lineStart = Vector2.zeroVector;
 				var lineEnd = Vector2.zeroVector;
 				if (timer > 25 * timeMul && timer < 43 * timeMul)
@@ -176,16 +175,16 @@ public class QuenchingBladeProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (attackType == 1)
+		if (currantAttackType == 1)
 		{
 			if (timer < 20 * timeMul)
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(8 * timeMul))
 			{
@@ -194,8 +193,8 @@ public class QuenchingBladeProj : MeleeProj
 
 			if (timer > 20 * timeMul && timer < 75 * timeMul)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.06f, 0f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.06f, 0f);
+				canHit = true;
 				if (timer < 30 * timeMul)
 				{
 					Omega += 0.04f / timeMul;
@@ -205,7 +204,7 @@ public class QuenchingBladeProj : MeleeProj
 					Omega *= 0.5f / MathF.Log(timeMul * MathHelper.E);
 				}
 				Projectile.rotation -= Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -1.2f, 0, 1000);
 				var lineStart = Vector2.zeroVector;
 				var lineEnd = Vector2.zeroVector;
 				if (timer > 25 * timeMul && timer < 43 * timeMul)
@@ -262,16 +261,16 @@ public class QuenchingBladeProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (attackType == 3)
+		if (currantAttackType == 3)
 		{
 			if (timer < 20 * timeMul)
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(Player);
 				float targetRot = -MathHelper.PiOver2 - Player.direction * 2f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
-				mainVec += Projectile.DirectionFrom(Player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(180, targetRot, -1.2f), 0.15f);
+				mainAxisDirection += Projectile.DirectionFrom(Player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(8 * timeMul))
 			{
@@ -283,8 +282,8 @@ public class QuenchingBladeProj : MeleeProj
 			}
 			if (timer > 20 * timeMul && timer < 75 * timeMul)
 			{
-				Lighting.AddLight(Projectile.Center + mainVec, 0.24f, 0.06f, 0f);
-				isAttacking = true;
+				Lighting.AddLight(Projectile.Center + mainAxisDirection, 0.24f, 0.06f, 0f);
+				canHit = true;
 				if (timer < 30 * timeMul)
 				{
 					Omega += 0.04f / timeMul;
@@ -294,7 +293,7 @@ public class QuenchingBladeProj : MeleeProj
 					Omega *= 0.5f / MathF.Log(timeMul * MathHelper.E);
 				}
 				Projectile.rotation -= Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(250, Projectile.rotation, -0f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -0f, 0, 1000);
 
 				if (timer > 25 * timeMul && timer < 43 * timeMul)
 				{
@@ -344,7 +343,7 @@ public class QuenchingBladeProj : MeleeProj
 			{
 				Omega *= 0.75f / MathF.Log(timeMul * MathHelper.E);
 				Projectile.rotation -= Projectile.spriteDirection * Omega;
-				mainVec = Vector2Elipse(250, Projectile.rotation, -0f, 0, 1000);
+				mainAxisDirection = Vector2Elipse(250, Projectile.rotation, -0f, 0, 1000);
 			}
 			if (timer > 85 * timeMul)
 			{
@@ -361,7 +360,7 @@ public class QuenchingBladeProj : MeleeProj
 				Tplayer.HeadRotation = -BodyRotation;
 			}
 		}
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			if (timer == 1)
 			{
@@ -381,7 +380,7 @@ public class QuenchingBladeProj : MeleeProj
 
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
@@ -389,13 +388,13 @@ public class QuenchingBladeProj : MeleeProj
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		if (trailVecs.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			Vector2 vec = trailVecs.ToArray()[trailVecs.Count - 1];
+			Vector2 vec = slashTrail.ToArray()[slashTrail.Count - 1];
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		Vector2 center = Projectile.Center - Vector2.Normalize(mainVec) * disFromPlayer;
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainAxisDirection) * disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 		{
@@ -470,7 +469,7 @@ public class QuenchingBladeProj : MeleeProj
 
 	public override bool PreDraw(ref Color lightColor)
 	{
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			return false;
 		}
@@ -500,11 +499,11 @@ public class QuenchingBladeProj : MeleeProj
 
 	public override void DrawWarp(VFXBatch spriteBatch)
 	{
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			return;
 		}
-		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(trailVecs.ToList()); // 平滑
+		List<Vector2> smoothTrail_current = GraphicsUtils.CatmullRom(slashTrail.ToList()); // 平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x < smoothTrail_current.Count - 1; x++)
 		{
@@ -512,13 +511,13 @@ public class QuenchingBladeProj : MeleeProj
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		if (trailVecs.Count != 0)
+		if (slashTrail.Count != 0)
 		{
-			Vector2 vec = trailVecs.ToArray()[trailVecs.Count - 1];
+			Vector2 vec = slashTrail.ToArray()[slashTrail.Count - 1];
 
 			SmoothTrail.Add(Vector2.Normalize(vec) * (vec.Length() + disFromPlayer));
 		}
-		Vector2 center = Projectile.Center - Vector2.Normalize(mainVec) * disFromPlayer;
+		Vector2 center = Projectile.Center - Vector2.Normalize(mainAxisDirection) * disFromPlayer;
 		int length = SmoothTrail.Count;
 		if (length <= 3)
 		{

@@ -1,4 +1,5 @@
 using Everglow.Commons.Enums;
+using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
@@ -140,7 +141,7 @@ public class TileDataReaderSystem : Visual
 
 	public string GetDatas(int i, int j)
 	{
-		Tile tile = SafeGetTile(i, j);
+		Tile tile = TileUtils.SafeGetTile(i, j);
 
 		string datas = "\nCoordinate: [" + i + ", " + j + "]";
 		datas += "\nHasTile: " + tile.HasTile;
@@ -213,7 +214,7 @@ public class TileDataReaderSystem : Visual
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
 				var point = new Point(checkX, checkY);
-				Tile tile = SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
 				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
@@ -253,7 +254,7 @@ public class TileDataReaderSystem : Visual
 				int checkX = tilePos.X + dx;
 				int checkY = tilePos.Y + dy;
 				var point = new Point(checkX, checkY);
-				Tile tile = SafeGetTile(checkX, checkY);
+				Tile tile = TileUtils.SafeGetTile(checkX, checkY);
 
 				// 检查边界和障碍物
 				if (checkX >= 20 && checkX < Main.maxTilesX - 20 && checkY >= 20 && checkY < Main.maxTilesY - 20 &&
@@ -286,10 +287,5 @@ public class TileDataReaderSystem : Visual
 		};
 
 		Ins.Batch.Draw(Texture, bars, PrimitiveType.TriangleList);
-	}
-
-	public static Tile SafeGetTile(int i, int j)
-	{
-		return Main.tile[Math.Clamp(i, 20, Main.maxTilesX - 20), Math.Clamp(j, 20, Main.maxTilesY - 20)];
 	}
 }

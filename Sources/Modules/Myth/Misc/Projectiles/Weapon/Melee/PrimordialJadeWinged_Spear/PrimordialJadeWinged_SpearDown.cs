@@ -7,6 +7,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear
 public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 {
 	public override string Texture => "Everglow/Myth/Misc/Projectiles/Weapon/Melee/PrimordialJadeWinged_Spear/PrimordialJadeWinged_Spear";
+
 	public override void SetDefaults()
 	{
 		Projectile.CloneDefaults(ProjectileID.Spear);
@@ -19,18 +20,24 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		Projectile.usesLocalNPCImmunity = true;
 		Projectile.localNPCHitCooldown = 90;
 	}
+
 	public bool Crash = false;
 	private Vector2 stopPoint = Vector2.Zero;
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		Player player = Main.player[Projectile.owner];
 		Projectile.extraUpdates = (int)(12 * player.meleeSpeed);
 	}
+
 	public override bool PreAI()
 	{
 		Player player = Main.player[Projectile.owner];
 		if (player.direction == -Math.Sign(Projectile.velocity.X))
+		{
 			player.direction *= -1;
+		}
+
 		player.heldProj = Projectile.whoAmI;
 
 		Projectile.rotation = MathF.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + MathHelper.PiOver4;
@@ -40,7 +47,6 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 			int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<XiaoBlackWave>(), 0, 0, player.whoAmI, Math.Clamp(Projectile.velocity.Length() / 8f, 0f, 4f), 0);
 			Main.projectile[h].rotation = (float)(Math.Atan2(v.Y, v.X) + Math.PI / 2d);
 		}
-
 
 		Projectile.velocity *= 0.995f;
 		if (Main.rand.NextBool(9))
@@ -53,19 +59,19 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		}
 		bool shouldStop = false;
 
-		for(int t = -8;t < Projectile.velocity.Length() + 8;t+=1)
+		for (int t = -8; t < Projectile.velocity.Length() + 8; t += 1)
 		{
-			if (TileCollisionUtils.PlatformCollision(Projectile.Center + Vector2.Normalize(Projectile.velocity) * t))
+			if (TileUtils.PlatformCollision(Projectile.Center + Vector2.Normalize(Projectile.velocity) * t))
 			{
-				if(stopPoint == Vector2.zeroVector)
+				if (stopPoint == Vector2.zeroVector)
 				{
 					stopPoint = Projectile.Center + Vector2.Normalize(Projectile.velocity) * (t - 2);
 				}
-				shouldStop = true; 
+				shouldStop = true;
 				break;
 			}
 		}
-		if(Crash)
+		if (Crash)
 		{
 			shouldStop = true;
 		}
@@ -83,7 +89,9 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					Vector2 coordV = v / 16f;
 					Tile tile2 = Main.tile[(int)coordV.X, (int)coordV.Y];
 					if (TileID.Sets.Platforms[tile2.TileType])
+					{
 						Collision.HitTiles(v, Projectile.velocity * 20, 16, 16);
+					}
 				}
 			}
 			if (!Crash)
@@ -95,7 +103,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(Pos))
+						if (!TileUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -106,11 +114,16 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 						}
 					}
 					if (empty)
+					{
 						continue;
+					}
+
 					Projectile p = Projectile.NewProjectileDirect(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<PrimordialJadeWinged_SpearSpice>(), (int)(Projectile.damage * Main.rand.NextFloat(0.85f, 1.15f)), Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(50f, 110f), Main.rand.NextFloat(0f, 1f), Main.rand.NextFloat(0f, 1f));
 					p.timeLeft = Main.rand.Next(128, 132);
 					if (player.gravDir == 1)
+					{
 						p.rotation = Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
+					}
 					else
 					{
 						p.rotation = MathF.PI - Main.rand.NextFloat((f - 3.5f) / 15f - 0.3f, (f - 3.5f) / 15f + 0.3f);
@@ -123,7 +136,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					bool empty = false;
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(Pos))
+						if (!TileUtils.PlatformCollision(Pos))
 						{
 							Pos.Y += 8 * player.gravDir;
 							empty = true;
@@ -134,12 +147,16 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 						}
 					}
 					if (empty)
+					{
 						continue;
+					}
+
 					int h = Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), Pos, Vector2.Zero, ModContent.ProjectileType<PrimordialJadeWinged_SpearShake>(), 0, Projectile.knockBack, player.whoAmI, Main.rand.NextFloat(17f, 32f) * (Math.Abs(f - 5.5f) + 0.5f), 0);
 
-
 					if (player.gravDir == 1)
+					{
 						Main.projectile[h].rotation = Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
+					}
 					else
 					{
 						Main.projectile[h].rotation = MathF.PI - Main.rand.NextFloat((f - 5.5f) / 15f - 0.1f + Math.Sign(f - 5.5f) * 0.75f, (f - 5.5f) / 15f + 0.1f + Math.Sign(f - 5.5f) * 0.75f);
@@ -153,7 +170,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 					var positionVFX = Projectile.Center + new Vector2((f - times / 2) * 24, -60 * player.gravDir) + newVec * Main.rand.NextFloat(0.7f, 1f);
 					for (int i = 0; i < 75; i++)
 					{
-						if (!TileCollisionUtils.PlatformCollision(positionVFX))
+						if (!TileUtils.PlatformCollision(positionVFX))
 						{
 							positionVFX.Y += 12 * player.gravDir;
 						}
@@ -170,7 +187,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 						Visible = true,
 						position = positionVFX,
 						maxTime = Main.rand.Next(17, 26),
-						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(18f, 60f) }
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(18f, 60f) },
 					};
 					Ins.VFXManager.Add(filthy);
 					var filthy2 = new FilthyLucreFlameDust
@@ -180,7 +197,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 						Visible = true,
 						position = positionVFX,
 						maxTime = Main.rand.Next(17, 26),
-						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0f, 0f), Main.rand.NextFloat(18f, 40f) }
+						ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0f, 0f), Main.rand.NextFloat(18f, 40f) },
 					};
 					Ins.VFXManager.Add(filthy2);
 					var smog = new FilthyFragileDust
@@ -196,7 +213,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 						rotation2 = Main.rand.NextFloat(6.283f),
 						omega = Main.rand.NextFloat(-30f, 30f),
 						phi = Main.rand.NextFloat(6.283f),
-						ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) }
+						ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) },
 					};
 					Ins.VFXManager.Add(smog);
 				}
@@ -210,7 +227,9 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		{
 			player.Center = Projectile.Center - new Vector2(0, 80 * player.gravDir);
 			if (Projectile.velocity.Length() < 100)
+			{
 				Projectile.velocity *= 1.05f;
+			}
 		}
 		if (Projectile.timeLeft > 6 && Crash)
 		{
@@ -227,6 +246,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		myplayer.InvincibleFrameTime = 15;
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float timeValue = 1f;
@@ -237,33 +257,35 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		Vector2 normalized = Vector2.Normalize(Projectile.velocity.RotatedBy(Math.PI * 0.5)) * 60f * timeValue;
 		Vector2 start = Projectile.Center + Vector2.Normalize(Projectile.velocity) * 150;
 		Vector2 end = Projectile.Center - Vector2.Normalize(Projectile.velocity) * 750;
-		float value = (Projectile.timeLeft) / 135f;
+		float value = Projectile.timeLeft / 135f;
 		Vector2 middle = Vector2.Lerp(end, start, MathF.Sqrt(value) * 0.5f);
 		float time = (float)(Main.time * 0.03);
 		Color alphaColor = Color.White;
 		alphaColor.A = 0;
 		alphaColor.R = (byte)(((Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 6.283 + Math.PI) % 6.283) / 6.283 * 255);
-		alphaColor.G = (byte)(250 - collisionTimer * 6);
+		alphaColor.G = (byte)((250 - collisionTimer * 6) * 0.1f);
 
 		Color alphaColor2 = alphaColor;
 		alphaColor2.G = 0;
 
 		List<Vertex2D> bars = new List<Vertex2D>
-			{
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 24f), 0, 0),new Vector3(1 + time, 0.25f, 0)),
-				new Vertex2D(start- Main.screenPosition,new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 24f), 0, 0),new Vector3(1 + time, 0.75f, 0)),
-				new Vertex2D(middle + normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 0, 0.5f)),
-				new Vertex2D(middle - normalized- Main.screenPosition,alphaColor,new Vector3(0.5f + time, 1, 0.5f)),
-				new Vertex2D(end + normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 0, 1)),
-				new Vertex2D(end - normalized - Main.screenPosition,alphaColor2,new Vector3(0f + time, 1, 1))
-			};
+		{
+			new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 240f), 0, 0), new Vector3(1 + time, 0.25f, 0)),
+			new Vertex2D(start - Main.screenPosition, new Color(alphaColor.R, (int)(40 * (24 - collisionTimer) / 240f), 0, 0), new Vector3(1 + time, 0.75f, 0)),
+			new Vertex2D(middle + normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 0, 0.5f)),
+			new Vertex2D(middle - normalized - Main.screenPosition, alphaColor, new Vector3(0.5f + time, 1, 0.5f)),
+			new Vertex2D(end + normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 0, 1)),
+			new Vertex2D(end - normalized - Main.screenPosition, alphaColor2, new Vector3(0f + time, 1, 1)),
+		};
 		spriteBatch.Draw(Commons.ModAsset.Noise_spiderNet.Value, bars, PrimitiveType.TriangleStrip);
 	}
+
 	public int collisionTimer = 0;
+
 	private void GenerateVFX()
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
-		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 60));
+		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-30f, 30f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 60);
 		if (Collision.SolidCollision(Projectile.Center, 1, 1))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-40f, 40f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
@@ -276,15 +298,16 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 			Visible = true,
 			position = positionVFX,
 			maxTime = Main.rand.Next(17, 26),
-			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.004f, 0.004f), Main.rand.NextFloat(18f, 30f) }
+			ai = new float[] { Main.rand.NextFloat(0.1f, 1f), Main.rand.NextFloat(-0.004f, 0.004f), Main.rand.NextFloat(18f, 30f) },
 		};
 		Ins.VFXManager.Add(filthy);
 	}
+
 	public void GenerateSpark()
 	{
 		Vector2 velocityLeft = Vector2.Normalize(Projectile.velocity).RotatedBy(-MathHelper.PiOver2);
-		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * (Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0));
-		if (TileCollisionUtils.PlatformCollision(Projectile.Center))
+		var positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(Projectile.timeLeft - 120, Projectile.timeLeft + 0);
+		if (TileUtils.PlatformCollision(Projectile.Center))
 		{
 			positionVFX = Projectile.Center + velocityLeft * Main.rand.NextFloat(-90f, 90f) + Vector2.Normalize(Projectile.velocity) * Main.rand.NextFloat(-480f, 0f);
 		}
@@ -301,10 +324,11 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 			rotation2 = Main.rand.NextFloat(6.283f),
 			omega = Main.rand.NextFloat(-30f, 30f),
 			phi = Main.rand.NextFloat(6.283f),
-			ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) }
+			ai = new float[] { Main.rand.NextFloat(0f, 0.2f), Main.rand.NextFloat(0.2f, 0.5f) },
 		};
 		Ins.VFXManager.Add(smog);
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		Texture2D mainTex = ModAsset.PrimordialJadeWinged_Spear_PrimordialJadeWinged_Spear.Value;
@@ -348,7 +372,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 			{
 				value = (trailLength - 1 - x) / 16f;
 			}
-			float width2 = 1 - Math.Min((x / 35f), 0.5f);
+			float width2 = 1 - Math.Min(x / 35f, 0.5f);
 
 			bars.Add(drawCenter - vel * 17 * x + width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 1, width2));
 			bars.Add(drawCenter - vel * 17 * x - width, drawColor * value, new Vector3(x / 1000f - timeEffectValue, 0, width2));
@@ -362,7 +386,7 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 			{
 				value = (trailLength - 1 - x) / 16f;
 			}
-			float width2 = 1 - Math.Min((x / 35f), 0.5f);
+			float width2 = 1 - Math.Min(x / 35f, 0.5f);
 
 			barsDark.Add(drawCenter - vel * 17 * x + width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 1, width2));
 			barsDark.Add(drawCenter - vel * 17 * x - width, Color.White * value, new Vector3(x / 1000f - timeEffectValue, 0, width2));
@@ -399,22 +423,24 @@ public class PrimordialJadeWinged_SpearDown : ModProjectile, IWarpProjectile
 		Main.graphics.graphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-
-
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
 		return false;
 	}
+
 	public static int CyanStrike = 0;
+
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		CyanStrike = 1;
 		Projectile.NewProjectile(Terraria.Entity.InheritSource(Projectile), target.Center, Vector2.Zero, ModContent.ProjectileType<XiaoHit>(), 0, 0, Projectile.owner, 0.45f);
 	}
+
 	public override void Load()
 	{
 		On_CombatText.NewText_Rectangle_Color_string_bool_bool += CombatText_NewText_Rectangle_Color_string_bool_bool;
 	}
+
 	private int CombatText_NewText_Rectangle_Color_string_bool_bool(On_CombatText.orig_NewText_Rectangle_Color_string_bool_bool orig, Rectangle location, Color color, string text, bool dramatic, bool dot)
 	{
 		if (CyanStrike > 0)

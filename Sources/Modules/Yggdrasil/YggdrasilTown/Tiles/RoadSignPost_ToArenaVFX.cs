@@ -30,7 +30,7 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 					{
 						for (int y = -8; y < 9; y++)
 						{
-							Tile tile = YggdrasilWorldGeneration.SafeGetTile(i + x, j + y);
+							Tile tile = TileUtils.SafeGetTile(i + x, j + y);
 							if (tile.TileType == ModContent.TileType<RoadSignPost_ToArena>())
 							{
 								if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
@@ -56,13 +56,13 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 		{
 			for (int y = 20; y < 200; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.HasTile = false;
 				tile.wall = 0;
 			}
 			for (int y = 200; y < Main.maxTilesY - 20; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.TileType = (ushort)ModContent.TileType<UnionMarbleTile_Khaki>();
 				if (y > 201)
 				{
@@ -77,15 +77,15 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 			int y2 = 185;
 			int y3 = 201;
 
-			Tile tile1 = YggdrasilWorldGeneration.SafeGetTile(x, y1);
+			Tile tile1 = TileUtils.SafeGetTile(x, y1);
 			tile1.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
 			tile1.HasTile = true;
 
-			Tile tile2 = YggdrasilWorldGeneration.SafeGetTile(x, y2);
+			Tile tile2 = TileUtils.SafeGetTile(x, y2);
 			tile2.TileType = (ushort)ModContent.TileType<LampWoodPlatform>();
 			tile2.HasTile = true;
 
-			Tile tile3 = YggdrasilWorldGeneration.SafeGetTile(x, y3);
+			Tile tile3 = TileUtils.SafeGetTile(x, y3);
 			tile3.TileType = (ushort)ModContent.TileType<ShieldTile>();
 			tile3.HasTile = true;
 		}
@@ -94,7 +94,7 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 		{
 			for (int y = 20; y < 23; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.wall = 1;
 				ushort typeChange = (ushort)ModContent.TileType<ArenaCommandBlock>();
 				if (y == 22)
@@ -115,19 +115,19 @@ public class RoadSignPost_ToArenaVFX : BackgroundVFX
 		{
 			for (int y = 196; y < 200; y++)
 			{
-				Tile tile = YggdrasilWorldGeneration.SafeGetTile(x, y);
+				Tile tile = TileUtils.SafeGetTile(x, y);
 				tile.WallType = (ushort)ModContent.WallType<UnionMarbleWall_Dark>();
 				tile.HasTile = false;
 			}
 		}
-		YggdrasilWorldGeneration.PlaceFrameImportantTiles(60, 196, 5, 4, ModContent.TileType<WoodenRoomDoor_exit>());
+		TileUtils.PlaceFrameImportantTiles(60, 196, 5, 4, ModContent.TileType<WoodenRoomDoor_exit>());
 		Point msg = YggdrasilTownCentralSystem.FightingRequestPlayerNPCType;
 		if (msg.X >= 0 && msg.Y >= 0)
 		{
 			NPC.NewNPCDirect(WorldGen.GetNPCSource_TileBreak(180, 190), new Point(180, 190).ToWorldCoordinates(), msg.Y);
 		}
 		YggdrasilWorldGeneration.SmoothTile(20, 20, Main.maxTilesX - 20, Main.maxTilesY - 20);
-		YggdrasilWorldGeneration.PlaceFrameImportantTiles(70, 198, 2, 2, ModContent.TileType<ArenaChallengeSettingTile>());
+		TileUtils.PlaceFrameImportantTiles(70, 198, 2, 2, ModContent.TileType<ArenaChallengeSettingTile>());
 		WorldGen.PlaceChest(72, 199, 21, false, 33);
 	}
 

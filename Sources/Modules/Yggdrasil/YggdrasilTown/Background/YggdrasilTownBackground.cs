@@ -243,7 +243,7 @@ public class YggdrasilTownBackground : ModSystem
 					{
 						for (int y = 50; y < Main.maxTilesY - 50; y++)
 						{
-							Tile tile = SafeGetTile(x, y);
+							Tile tile = TileUtils.SafeGetTile(x, y);
 							if (tile.TileType == ModContent.TileType<SquamousShellSeal>())
 							{
 								if (tile.TileFrameX == 180 && tile.TileFrameY == 162)

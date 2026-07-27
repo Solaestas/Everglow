@@ -16,16 +16,16 @@ public class ChcolateDust : ModDust
 		}
 		dust.velocity *= 0.98f;
 		dust.position += dust.velocity;
-		if(!TileCollisionUtils.PlatformCollision(dust.position))
+		if(!TileUtils.PlatformCollision(dust.position))
 		{
 			dust.velocity.Y += 0.15f;
 		}
 		dust.rotation *= dust.velocity.X * 0.4f;
-		if(TileCollisionUtils.PlatformCollision(dust.position + new Vector2(dust.velocity.X, 0)))
+		if(TileUtils.PlatformCollision(dust.position + new Vector2(dust.velocity.X, 0)))
 		{
 			dust.velocity.X *= -0.7f;
 		}
-		if (TileCollisionUtils.PlatformCollision(dust.position + new Vector2(0, dust.velocity.Y)))
+		if (TileUtils.PlatformCollision(dust.position + new Vector2(0, dust.velocity.Y)))
 		{
 			dust.velocity.Y *= -0.7f;
 		}

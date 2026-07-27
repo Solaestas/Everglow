@@ -8,18 +8,12 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee
 	{
 		public float Power = 0;
 
-		public override void SetDefaults()
+		public override void SetCustomDefaults()
 		{
-			base.SetDefaults();
-			Color = new Color(71, 89, 99);
-			TradeShade = 0.7f;
-			Shade = 0.2f;
-			FadeShade = 0.44f;
-			FadeScale = 1;
-			TradeLightColorValue = 1f;
-			FadeLightColorValue = 0.4f;
-			MaxLength = 0.70f;
-			DrawWidth = 0.4f;
+			StabColor = new Color(71, 89, 99);
+			StabShade = 0.2f;
+			StabDistance = 0.70f;
+			StabEffectWidth = 0.4f;
 		}
 
 		public override void DrawEffect(Color lightColor)
@@ -46,22 +40,23 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Projectiles.Melee
 			}
 			modifiers.FinalDamage += Math.Max(0, 180 - distanceValue) / 180f;
 			modifiers.FinalDamage *= mulDamage;
-			//ResistanceWireBayonet rWB = null;
-			//if (player.HeldItem.ModItem is not null)
-			//{
-			//	rWB = player.HeldItem.ModItem as ResistanceWireBayonet;
-			//}
-			//if (rWB != null)
-			//{
-			//	if (rWB.Power > 10)
-			//	{
-			//		rWB.Power -= 10;
-			//	}
-			//	else
-			//	{
-			//		rWB.Power = 0;
-			//	}
-			//}
+
+			// ResistanceWireBayonet rWB = null;
+			// if (player.HeldItem.ModItem is not null)
+			// {
+			// rWB = player.HeldItem.ModItem as ResistanceWireBayonet;
+			// }
+			// if (rWB != null)
+			// {
+			// if (rWB.Power > 10)
+			// {
+			// rWB.Power -= 10;
+			// }
+			// else
+			// {
+			// rWB.Power = 0;
+			// }
+			// }
 			base.ModifyHitNPC(target, ref modifiers);
 		}
 

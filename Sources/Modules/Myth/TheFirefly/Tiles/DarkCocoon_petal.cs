@@ -43,10 +43,10 @@ public class DarkCocoon_petal : ModTile
 			switch (Main.rand.Next(2))
 			{
 				case 0:
-					WorldGenMisc.PlaceFrameImportantTiles(i, j - 3, 1, 3, ModContent.TileType<BluishGiantGentian>(), 120 * Main.rand.Next(12));
+					TileUtils.PlaceFrameImportantTiles(i, j - 3, 1, 3, ModContent.TileType<BluishGiantGentian>(), 120 * Main.rand.Next(12));
 					break;
 				case 1:
-					WorldGenMisc.PlaceFrameImportantTiles(i, j - 2, 1, 2, (ushort)ModContent.TileType<BluishGiantGentian_small>(), 48 * Main.rand.Next(6));
+					TileUtils.PlaceFrameImportantTiles(i, j - 2, 1, 2, (ushort)ModContent.TileType<BluishGiantGentian_small>(), 48 * Main.rand.Next(6));
 					break;
 			}
 			return;

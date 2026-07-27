@@ -1,224 +1,100 @@
+using Everglow.Commons.Enums;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.EternalResolve.Buffs;
-using Everglow.EternalResolve.Common;
-using ReLogic.Content;
+using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.EternalResolve.VFXs;
 
-internal class YoenLeZedElecticFlowPipeline : Pipeline
+[Pipeline(typeof(ElectricCurrentPipeline))]
+public class YoenLeZedElecticFlow : Visual
 {
-	public override void Load()
-	{
-		effect = ModContent.Request<Effect>("Everglow/EternalResolve/VFXs/YoenLeZedElecticFlow", AssetRequestMode.ImmediateLoad);
-		effect.Value.Parameters["uNoise"].SetValue(ModAsset.HiveCyberNoise.Value);
-	}
-	public override void BeginRender()
-	{
-		var effect = this.effect.Value;
-		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
-		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
-		effect.Parameters["uTransform"].SetValue(model * projection);
-		Texture2D FlameColor = ModAsset.YoenLeZedElecticFlow_Color.Value;
-		Ins.Batch.BindTexture<Vertex2D>(FlameColor);
-		Main.graphics.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
-		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
-		effect.CurrentTechnique.Passes[0].Apply();
-	}
+	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
 
-	public override void EndRender()
-	{
-		Ins.Batch.End();
-	}
-}
-[Pipeline(typeof(YoenLeZedElecticFlowPipeline))]
-public abstract class YoenLeZedElecticFlow : ShaderDraw
-{
 	public List<Vector2> oldPos = new List<Vector2>();
+	public Vector2 position;
+	public Vector2 velocity;
+	public float[] ai;
 	public float timer;
 	public float maxTime;
-	public YoenLeZedElecticFlow() { }
-	public YoenLeZedElecticFlow(int maxTime, Vector2 position, Vector2 velocity, params float[] ai) : base(position, velocity, ai)
-	{
-		this.maxTime = maxTime;
-	}
+	public float scale;
 
 	public override void Update()
 	{
-		position += velocity;
-		position += Main.player[(int)ai[3]].velocity;
-		oldPos.Add(position);
-		if (oldPos.Count > 15)
-			oldPos.RemoveAt(0);
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
-		velocity = velocity.RotatedBy(ai[1]);
+			return;
+		}
+		if (timer < 2)
+		{
+			for (int i = 0; i < 16; i++)
+			{
+				UpdateInside();
+			}
+		}
+		UpdateInside();
+	}
 
-		ai[2] += 0.4f;
-		if (Collision.SolidCollision(position, 0, 0))
+	private void UpdateInside()
+	{
+		if (position.X <= 720 || position.X >= Main.maxTilesX * 16 - 720)
 		{
-			velocity *= 0.2f;
-			if(velocity.Length() < 0.02f)
-			{
-				Active = false;
-			}
+			timer = maxTime;
+			Active = false;
+			return;
 		}
-		for(int x = 0;x < 5;x++)
+		if (position.Y <= 720 || position.Y >= Main.maxTilesY * 16 - 720)
 		{
-			int randomHitNPC = Main.rand.Next(Main.npc.Length);
-			NPC npc = Main.npc[randomHitNPC];
-			if (npc != null)
-			{
-				if (npc.active)
-				{
-					if (!npc.buffImmune[ModContent.BuffType<OnElectric>()])
-					{
-						if ((npc.Center - position).Length() < 40)
-						{
-							Main.npc[randomHitNPC].AddBuff(ModContent.BuffType<OnElectric>(), 180);
-						}
-					}
-				}
-			}
+			timer = maxTime;
+			Active = false;
+			return;
 		}
+		oldPos.Add(position);
+
+		for (int x = 0; x < oldPos.Count; x++)
+		{
+			oldPos[x] += new Vector2(0, Main.rand.NextFloat(2f)).RotatedByRandom(6.283);
+		}
+		position += velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f) / scale * 4f) * Main.rand.NextFloat(0.75f, 1.25f);
+		velocity = velocity.RotatedBy(Main.rand.NextFloat(-0.1f, 0.1f) / scale * 12f * ai[1]);
 	}
 
 	public override void Draw()
 	{
 		Vector2[] pos = oldPos.Reverse<Vector2>().ToArray();
-		float fx = timer / maxTime;
+		float pocession = timer / maxTime;
 		int len = pos.Length;
-		if (len <= 2)
-			return;
-		var bars = new Vertex2D[len * 2 - 1];
+
+		var bars = new List<Vertex2D>();
 		for (int i = 1; i < len; i++)
 		{
 			Vector2 normal = oldPos[i] - oldPos[i - 1];
+
+			Vector2 normal2 = oldPos[i] - oldPos[i - 1];
+			if (i < len - 1)
+			{
+				normal2 = oldPos[i + 1] - oldPos[i];
+			}
+			normal = normal + normal2;
 			normal = Vector2.Normalize(normal).RotatedBy(Math.PI * 0.5);
-			Color light = Lighting.GetColor((int)(oldPos[i].X / 16f), (int)(oldPos[i].Y / 16f));
 
-			var drawcRope = new Color(Math.Min(fx * fx * fx + 0.2f - i / (float)len, 0.8f), light.R / 255f, light.G / 255f, light.B / 255f);
-			float width = ai[2] * (float)Math.Sin(i / (double)len * Math.PI);
-			bars[2 * i - 1] = new Vertex2D(oldPos[i] + normal * width, drawcRope, new Vector3(0 + ai[0], (i + 15 - len) / 60f + timer / 1500f * velocity.Length(), light.A / 255f));
-			bars[2 * i] = new Vertex2D(oldPos[i] - normal * width, drawcRope, new Vector3(0.2f + ai[0], (i + 15 - len) / 60f + timer / 1500f * velocity.Length(), light.A / 255f));
+			float k = i / (float)len;
+			bars.Add(oldPos[i] + normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.3f));
+			bars.Add(oldPos[i] - normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(3.4f + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.7f));
+
+			float pocessionInv = 1 - pocession;
+			float c = pocessionInv * 1.0f;
+			Lighting.AddLight(oldPos[i], new Vector3(MathF.Pow(c, 0.5f) * 0.7f, c * 0.9f, c * c * 2.6f) * scale / 30f);
 		}
-		bars[0] = new Vertex2D((bars[1].position + bars[2].position) * 0.5f, Color.White, new Vector3(0.5f, 0, 0));
+		if (bars.Count < 2)
+		{
+			bars.Add(position, Color.Transparent, Vector3.zero);
+			bars.Add(position, Color.Transparent, Vector3.zero);
+
+			bars.Add(position, Color.Transparent, Vector3.zero);
+			bars.Add(position, Color.Transparent, Vector3.zero);
+		}
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);
-	}
-}
-[Pipeline(typeof(YoenLeZedElecticFlowPipeline))]
-internal class YoenLeZedElecticFlowDust : YoenLeZedElecticFlow
-{
-	public override void Update()
-	{
-		if (Main.tile[(int)(position.X / 16f), (int)(position.Y / 16f)].LiquidAmount > 0)
-		{
-			if(velocity.Length() < 30)
-			{
-				velocity = Vector2.Normalize(velocity) * 32f;
-			}
-			if(Main.rand.NextBool(4))
-			{
-				timer--;
-			}
-			if (Main.rand.NextBool(2))
-			{
-				velocity = velocity.RotatedBy(Main.rand.NextFloat(-1.4f, 1.4f));
-			}
-			Vector2 newPos = position + velocity * 2f;
-			if(Main.tile[(int)(newPos.X / 16f), (int)(newPos.Y / 16f)].LiquidAmount <= 0)
-			{
-				velocity.Y *= -1;
-			}
-		}
-		base.Update();
-	}
-}
-[Pipeline(typeof(YoenLeZedElecticFlowPipeline))]
-internal class YoenLeZedElecticFlowDust_split : YoenLeZedElecticFlow
-{
-	public override void Update()
-	{
-		base.Update();
-		if (ai[4] > 0)
-		{
-			if (Main.rand.NextBool(7))
-			{
-				GenerateVFX(1);
-			}
-		}
-	}
-	public void GenerateVFX(int Frequency)
-	{
-		float mulVelocity = 1f;
-		for (int g = 0; g < Frequency; g++)
-		{
-			Vector2 afterVelocity = velocity;
-			afterVelocity.RotatedBy(Main.rand.NextFloat(-2.3f, 2.3f));
-			Vector2 afterPosition = position;
-			float ai3 = ai[3];
-			float ai4 = ai[4] - 1;
-			float mulWidth = 1f;
-			var yoenLeZedElecticFlowDust_split = new YoenLeZedElecticFlowDust_split
-			{
-				velocity = afterVelocity * Main.rand.NextFloat(1.5f, 1.6f) * mulVelocity,
-				Active = true,
-				Visible = true,
-				position = afterPosition,
-				maxTime = Main.rand.Next(4, 8),
-				ai = new float[] { Main.rand.NextFloat(0.0f, 0.93f), Main.rand.NextFloat(-0.08f, 0.08f), Main.rand.NextFloat(26.6f, 28f) * mulWidth, ai3, ai4 }
-			};
-			Ins.VFXManager.Add(yoenLeZedElecticFlowDust_split);
-		}
-	}
-}
-[Pipeline(typeof(YoenLeZedElecticFlowPipeline))]
-internal class YoenLeZedElecticFlowDust_split_withoutPlayer : YoenLeZedElecticFlow
-{
-	public override void Update()
-	{
-		position += velocity;
-		oldPos.Add(position);
-		if (oldPos.Count > 15)
-			oldPos.RemoveAt(0);
-		timer++;
-		if (timer > maxTime)
-			Active = false;
-		velocity = velocity.RotatedBy(ai[1]);
-
-		ai[2] += 0.4f;
-		if (Collision.SolidCollision(position, 0, 0))
-		{
-			velocity *= 0.2f;
-			if (velocity.Length() < 0.02f)
-			{
-				Active = false;
-			}
-		}
-		for (int x = 0; x < 5; x++)
-		{
-			int randomHitNPC = Main.rand.Next(Main.npc.Length);
-			NPC npc = Main.npc[randomHitNPC];
-			if (npc != null)
-			{
-				if (npc.active)
-				{
-					if (!npc.friendly)
-					{
-						if (!npc.buffImmune[ModContent.BuffType<OnElectric>()])
-						{
-							if (!npc.HasBuff(ModContent.BuffType<OnElectric>()))
-							{
-								if ((npc.Center - position).Length() < 40)
-								{
-									Main.npc[randomHitNPC].AddBuff(ModContent.BuffType<OnElectric>(), (int)(maxTime - timer) / 2);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 }

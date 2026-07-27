@@ -25,7 +25,7 @@ public class Living_Jawbone_Huge_ground_Wave : ModProjectile
 
 	public override void OnSpawn(IEntitySource source)
 	{
-		Vector2 checkDir = TileCollisionUtils.GetTopographicGradient(Projectile.Center, 20);
+		Vector2 checkDir = TileUtils.GetTopographicGradient(Projectile.Center, 20);
 		for (int y = 0; y < 100; y++)
 		{
 			if (Collision.SolidCollision(Projectile.Center - new Vector2(8), 16, 16))
@@ -52,7 +52,7 @@ public class Living_Jawbone_Huge_ground_Wave : ModProjectile
 						{
 							if (IsBoundaryTile(tileCoord))
 							{
-								WavedTiles.Add((tileCoord, TileCollisionUtils.GetTopographicGradient(tileCoord.ToWorldCoordinates(), 4).ToRotation()));
+								WavedTiles.Add((tileCoord, TileUtils.GetTopographicGradient(tileCoord.ToWorldCoordinates(), 4).ToRotation()));
 							}
 						}
 					}

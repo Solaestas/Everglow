@@ -1,14 +1,13 @@
-using Everglow.Commons.DataStructures;
 using Everglow.Commons.MEAC;
 using Everglow.Commons.Vertex;
 using Everglow.Commons.VFX;
-using Everglow.Ocean.Common;
 
 namespace Everglow.Ocean.Projectiles.Weapons;
 
 public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjectile
 {
 	public override string Texture => "Everglow/Ocean/Projectiles/Weapons/TsunamiShark/TsunamiShark_proj";
+
 	public override void SetDefaults()
 	{
 		Projectile.width = 32;
@@ -25,6 +24,7 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 	public override void AI()
 	{
 	}
+
 	private static void DrawWarpTexCircle_VFXBatch(VFXBatch spriteBatch, float radious, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -51,8 +51,11 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radious - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radious).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	private static void DrawTexFlame_VFXBatch(VFXBatch spriteBatch, float length, float width, Color color, Vector2 center, Texture2D tex, double rotation, float process)
 	{
 		var flame = new List<Vertex2D>();
@@ -67,7 +70,10 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 			}
 			float widthII = width;
 			if (length - h < 120)
+			{
 				widthII = width * (length - h) / 120f;
+			}
+
 			float processII = (process + h / 150f) % 1f;
 
 			flame.Add(new Vertex2D(center + new Vector2(h, 0).RotatedBy(rotation) + new Vector2(0, widthII / 2f).RotatedBy(rotation), color, new Vector3(processII, 0.8f, 0)));
@@ -84,8 +90,11 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 		}
 
 		if (flame.Count > 2)
+		{
 			spriteBatch.Draw(tex, flame, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -94,12 +103,16 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		Ins.Batch.Begin();
 		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -108,10 +121,13 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.2f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition + new Vector2(30, 0).RotatedBy(Projectile.ai[1]), t);
+		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.2f, new Color(colorV, colorV * 0.07f, colorV, 0f), Projectile.Center - Main.screenPosition + new Vector2(30, 0).RotatedBy(Projectile.ai[1]), t);
 	}
+
 	public void DrawBloom()
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -120,7 +136,10 @@ public class TsunamiShark_flame : ModProjectile, IWarpProjectile, IBloomProjecti
 		Texture2D t = ModAsset.FogTraceLight.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		Ins.Batch.Begin();
 		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.2f, new Color(0, colorV * colorV * 1.6f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.32f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();

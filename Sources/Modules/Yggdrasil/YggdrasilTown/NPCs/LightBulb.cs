@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Miscs;
 using Everglow.Yggdrasil.YggdrasilTown.Biomes;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.Items.Materials;
@@ -7,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.NPCs;
+
 [NoGameModeScale]
 public class LightBulb : ModNPC
 {

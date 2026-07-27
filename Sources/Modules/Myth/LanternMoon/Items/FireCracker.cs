@@ -7,5 +7,6 @@ public class FireCracker : ModItem
 		Item.width = 28;
 		Item.height = 50;
 		Item.value = 10000;
+		Item.maxStack = Item.CommonMaxStack;
 	}
 }

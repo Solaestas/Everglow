@@ -5,7 +5,7 @@ public enum CodeLayer
 	None,
 	PostSetupContent,
 
-	//绘制
+	// 绘制
 	PreDrawFilter,
 	[Obsolete("换用PreDrawFilter")]
 	PostDrawFilter,
@@ -17,15 +17,20 @@ public enum CodeLayer
 	PostDrawMapIcons,
 	PostDrawBG,
 
-	//加载
+	// 加载
 	PostUpdateEverything,
 	PostUpdateProjectiles,
 	PostUpdatePlayers,
 	PostUpdateNPCs,
 	PostUpdateDusts,
 	PostUpdateInvasions,
+
+	PreEnterWorld_Single,
 	PostEnterWorld_Single,
+	PreEnterWorld_Server,
 	PostEnterWorld_Server,
-	PostExitWorld_Single,
-	ResolutionChanged
+	PreSaveAndQuit,
+	PostSaveAndQuit,
+
+	ResolutionChanged,
 }

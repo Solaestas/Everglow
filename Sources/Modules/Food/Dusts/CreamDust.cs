@@ -11,7 +11,7 @@ public class CreamDust : ModDust
 
 	public override bool Update(Dust dust)
 	{
-		if (!TileCollisionUtils.PlatformCollision(dust.position))
+		if (!TileUtils.PlatformCollision(dust.position))
 		{
 			dust.velocity.Y += 0.15f;
 		}

@@ -25,9 +25,9 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 		Projectile.friendly = true;
 		longHandle = true;
 		maxAttackType = 4;
-		trailLength = 20;
+		maxSlashTrailLength = 20;
 		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
-		AutoEnd = false;
+		autoEnd = false;
 	}
 	public override string TrailShapeTex()
 	{
@@ -64,18 +64,18 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 		base.AI();
 		TestPlayerDrawer Tplayer = player.GetModPlayer<TestPlayerDrawer>();
 		Tplayer.HideLeg = true;
-		useTrail = true;
+		useSlash = true;
 		float timeMul = 1 / player.meleeSpeed;
-		if (attackType == 0)
+		if (currantAttackType == 0)
 		{
 			if (timer < 3 * timeMul)//前摇
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(170, targetRot, 2f), 0.7f);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(170, targetRot, 2f), 0.7f);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
@@ -86,9 +86,9 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 			}
 			if (timer > 3 * timeMul && timer < 30 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.25f / timeMul;
-				mainVec = Vector2Elipse(190, Projectile.rotation, 0.6f);
+				mainAxisDirection = Vector2Elipse(190, Projectile.rotation, 0.6f);
 				GenerateVFX();
 				GenerateSpark();
 			}
@@ -100,24 +100,24 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 				NextAttackType();
 			}
 		}
-		if (attackType == 1)
+		if (currantAttackType == 1)
 		{
 			if (timer < 24 * timeMul)//前摇
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 0.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, targetRot, +1.2f), 0.4f / timeMul);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(210, targetRot, +1.2f), 0.4f / timeMul);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
 			if (timer > 16 * timeMul && timer < 50 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation -= Projectile.spriteDirection * 0.25f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(240, Projectile.rotation, -1.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(240, Projectile.rotation, -1.2f, 0.3f * Projectile.spriteDirection), 0.4f / timeMul);
 				GenerateVFX();
 				GenerateSpark();
 			}
@@ -125,48 +125,48 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 				NextAttackType();
 
 		}
-		if (attackType == 2)
+		if (currantAttackType == 2)
 		{
 			if (timer < 24 * timeMul)//前摇
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0.4f), 0.4f / timeMul);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(190, targetRot, 0.4f), 0.4f / timeMul);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
 			if (timer > 16 * timeMul && timer < 30 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.15f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.2f / timeMul);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.2f / timeMul);
 				GenerateVFX();
 				GenerateSpark();
 			}
 			if (timer > 30 * timeMul && timer < 45 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.35f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.4f / timeMul);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(210, Projectile.rotation, 0.4f, 0f), 0.4f / timeMul);
 				GenerateVFX();
 				GenerateSpark();
 			}
 			if (timer > 55 * timeMul)
 				NextAttackType();
 		}
-		if (attackType == 3)
+		if (currantAttackType == 3)
 		{
 			if (timer < 24 * timeMul)//前摇
 			{
-				useTrail = false;
+				useSlash = false;
 				LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 1.27f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(190, targetRot, 1.27f, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
@@ -176,9 +176,9 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 				AttSound(SoundID.Item1);
 			if (timer > 16 * timeMul && timer < 57 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * 0.29f / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(270, Projectile.rotation, 1.27f, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(270, Projectile.rotation, 1.27f, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
 				GenerateVFX();
 				GenerateSpark();
 			}
@@ -190,24 +190,24 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 			if (timer > 83 * timeMul)
 				NextAttackType();
 		}
-		if (attackType == 4)
+		if (currantAttackType == 4)
 		{
 			if (timer < 24 * timeMul)//前摇
 			{
-				useTrail = false;
+				useSlash = false;
 				//LockPlayerDir(player);
 				float targetRot = -MathHelper.PiOver2 - player.direction * 2.5f;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(190, targetRot, 0, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
-				mainVec += Projectile.DirectionFrom(player.Center) * 3;
-				Projectile.rotation = mainVec.ToRotation();
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(190, targetRot, 0, -0.3f * Projectile.spriteDirection), 0.4f / timeMul);
+				mainAxisDirection += Projectile.DirectionFrom(player.Center) * 3;
+				Projectile.rotation = mainAxisDirection.ToRotation();
 			}
 			if (timer == (int)(20 * timeMul))
 				AttSound(SoundID.Item1);
 			if (timer > 16 * timeMul && timer < 50 * timeMul)
 			{
-				isAttacking = true;
+				canHit = true;
 				Projectile.rotation += Projectile.spriteDirection * ((timer - 16 * timeMul) / 110f) / timeMul / timeMul;
-				mainVec = Vector2.Lerp(mainVec, Vector2Elipse(200, Projectile.rotation, 0, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
+				mainAxisDirection = Vector2.Lerp(mainAxisDirection, Vector2Elipse(200, Projectile.rotation, 0, -0.2f * Projectile.spriteDirection), 0.3f / timeMul);
 				GenerateVFX();
 				GenerateSpark();
 			}
@@ -227,14 +227,14 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 	}
 	public override void DrawTrail(Color color)
 	{
-		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(trailVecs.ToList());//平滑
+		List<Vector2> SmoothTrailX = GraphicsUtils.CatmullRom(slashTrail.ToList());//平滑
 		var SmoothTrail = new List<Vector2>();
 		for (int x = 0; x <= SmoothTrailX.Count - 1; x++)
 		{
 			SmoothTrail.Add(SmoothTrailX[x]);
 		}
-		if (trailVecs.Count != 0)
-			SmoothTrail.Add(trailVecs.ToArray()[trailVecs.Count - 1]);
+		if (slashTrail.Count != 0)
+			SmoothTrail.Add(slashTrail.ToArray()[slashTrail.Count - 1]);
 
 		int length = SmoothTrail.Count;
 		if (length <= 3)
@@ -254,8 +254,8 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * 0.3f * Projectile.scale, c0, new Vector3(factor, 1, 0f)));
 			bars.Add(new Vertex2D(Projectile.Center + trail[i] * Projectile.scale, c0, new Vector3(factor, 0, w)));
 		}
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
-		bars.Add(new Vertex2D(Projectile.Center + mainVec * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
+		bars.Add(new Vertex2D(Projectile.Center + mainAxisDirection * 0.3f * Projectile.scale, Color.White, new Vector3(0, 1, 0f)));
+		bars.Add(new Vertex2D(Projectile.Center + mainAxisDirection * Projectile.scale, Color.White, new Vector3(0, 0, 1)));
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Immediate, TrailBlendState(), SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone);
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
@@ -283,7 +283,7 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 		}
 		for(int x = 0;x < times;x++)
 		{
-			Vector2 newVec = mainVec;
+			Vector2 newVec = mainAxisDirection;
 			newVec *= player.gravDir;
 			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2 * player.gravDir);
 			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 1f);
@@ -320,7 +320,7 @@ public class PrimordialJadeWinged_Spear : MeleeProj
 		}
 		for (int x = 0; x < times; x++)
 		{
-			Vector2 newVec = mainVec;
+			Vector2 newVec = mainAxisDirection;
 			newVec *= player.gravDir;
 			Vector2 mainVecLeft = Vector2.Normalize(newVec).RotatedBy(-MathHelper.PiOver2 * player.gravDir);
 			var positionVFX = Projectile.Center + mainVecLeft * Main.rand.NextFloat(-30f, 30f) + newVec * Main.rand.NextFloat(0.7f, 1f);

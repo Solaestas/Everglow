@@ -3,7 +3,7 @@ using Everglow.Commons.Templates.Weapons;
 
 namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 
-internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
+internal class DreamWeaverArray : NoTextureProjectile
 {
 	public override void SetDefaults()
 	{
@@ -106,9 +106,5 @@ internal class DreamWeaverArray : NoTextureProjectile, IWarpProjectile
 
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(sBS);
-	}
-
-	public void DrawWarp(VFXBatch spriteBatch)
-	{
 	}
 }

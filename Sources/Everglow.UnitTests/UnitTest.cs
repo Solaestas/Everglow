@@ -22,7 +22,7 @@ public class UnitTest
 	[TestMethod]
 	public void RopeTest()
 	{
-		var rope = Rope.Create(
+		var rope = Rope.Create_Fixed_StartAndEnd_WithKnots(
 			new Vector2(0, 0),
 			new Vector2(10, 0),
 			11,
@@ -34,13 +34,13 @@ public class UnitTest
 			Assert.AreEqual(i, mass.Position.X);
 		}
 
-		var system = new MassSpringSystem();
+		var system = new MassSpringContainer();
 		system.AddMassSpringMesh(rope);
 
 		var solver = new EulerSolver(10);
 		Enumerable.Repeat(0, 60).ToList().ForEach(_ =>
 		{
-			rope.ApplyForce();
+			rope.ApplyForce_Gravity_Wind();
 			solver.Step(system, 1f);
 		});
 

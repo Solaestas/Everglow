@@ -1,5 +1,5 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
-using Everglow.Myth.LanternMoon.Projectiles;
+using Everglow.Myth.LanternMoon.Projectiles.Item_Shoot;
 using Terraria.DataStructures;
 using Terraria.ObjectData;
 

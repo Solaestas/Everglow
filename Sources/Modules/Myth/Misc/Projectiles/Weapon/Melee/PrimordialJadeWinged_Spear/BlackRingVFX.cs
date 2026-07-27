@@ -1,36 +1,38 @@
 using Everglow.Commons.Templates.Weapons.StabbingSwords.VFX;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.PrimordialJadeWinged_Spear;
+
 public class BlackRingVFXPipeline : Pipeline
 {
-
 	public override void BeginRender()
 	{
 		effect = ModAsset.DrawPrim3D;
 		Ins.Batch.Begin(BlendState.AlphaBlend);
 	}
+
 	public override void EndRender()
 	{
 		var camPos = new Vector3(Main.screenWidth / 2 + Main.screenPosition.X, Main.screenHeight / 2 + Main.screenPosition.Y, 0);
 		var matrix = Matrix.CreateLookAt(camPos, new Vector3(camPos.X, camPos.Y, 1), Vector3.Down);
 		matrix *= Matrix.CreatePerspectiveFieldOfView(MathHelper.Pi / 2f, Main.graphics.GraphicsDevice.Viewport.AspectRatio, 1, 2000);
 
-
-
 		effect.Value.Parameters["uTransform"].SetValue(matrix);
 		effect.Value.CurrentTechnique.Passes[0].Apply();
 
 		Ins.Batch.End();
 	}
+
 	public override void Load()
 	{
 		Ins.Batch.RegisterVertex<Vertex3D_2>();
 	}
 }
+
 [Pipeline(typeof(Draw3DPipieline))]
 public class BlackRingVFX : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawProjectiles;
+
 	public Vector2 pos;
 	public Vector2 vel;
 	public float scale = 30;
@@ -39,6 +41,7 @@ public class BlackRingVFX : Visual
 	public float alpha = 1f;
 	public float width = 10;
 	public int maxtime = 20;
+
 	public BlackRingVFX()
 	{
 		alpha = 0.6f;
@@ -46,13 +49,15 @@ public class BlackRingVFX : Visual
 		randomRot = Main.rand.NextFloatDirection() * 0.5f;
 	}
 
-	public static Vector3 RotatedBy(Vector3 v, Vector3 u, float ang)//v以u为轴旋转
+	public static Vector3 RotatedBy(Vector3 v, Vector3 u, float ang)// v以u为轴旋转
 	{
 		float cos = (float)Math.Cos(ang);
 		return v * cos + Vector3.Dot(v, u) * u * (1 - cos) + Vector3.Cross(u, v) * (float)Math.Sin(ang);
 	}
+
 	public float speed = 1f;
 	public float randomRot = 0;
+
 	public override void Update()
 	{
 		if (timeleft < maxtime * 2f / 3f)
@@ -63,11 +68,15 @@ public class BlackRingVFX : Visual
 		width = 5;
 		timeleft--;
 		if (timeleft <= 0)
+		{
 			Kill();
+		}
+
 		pos -= vel * speed * 30f / maxtime;
 
 		scale += 0.6f;
 	}
+
 	public override void Draw()
 	{
 		List<Vertex3D_2> vertices = new();
@@ -93,5 +102,3 @@ public class BlackRingVFX : Visual
 		Ins.Batch.Draw(Commons.ModAsset.Trail_2_black_thick.Value, vertices, PrimitiveType.TriangleStrip);
 	}
 }
-
-

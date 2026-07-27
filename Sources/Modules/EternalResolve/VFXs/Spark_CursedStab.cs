@@ -4,6 +4,7 @@ using Everglow.Commons.VFX;
 using Everglow.Commons.VFX.Pipelines;
 
 namespace Everglow.EternalResolve.VFXs;
+
 public class Spark_CursedStabPipeline : Pipeline
 {
 	public override void Load()
@@ -11,6 +12,7 @@ public class Spark_CursedStabPipeline : Pipeline
 		effect = ModAsset.Spark_CursedStab;
 		effect.Value.Parameters["uHeatMap"].SetValue(ModAsset.HeatMap_Cursed.Value);
 	}
+
 	public override void BeginRender()
 	{
 		var effect = this.effect.Value;
@@ -23,15 +25,18 @@ public class Spark_CursedStabPipeline : Pipeline
 		Ins.Batch.Begin(BlendState.AlphaBlend, DepthStencilState.None, SamplerState.PointWrap, RasterizerState.CullNone);
 		effect.CurrentTechnique.Passes[0].Apply();
 	}
+
 	public override void EndRender()
 	{
 		Ins.Batch.End();
 	}
 }
+
 [Pipeline(typeof(Spark_CursedStabPipeline), typeof(BloomPipeline))]
 public class Spark_CursedStabDust : Visual
 {
 	public override CodeLayer DrawLayer => CodeLayer.PostDrawDusts;
+
 	public Vector2 position;
 	public Vector2 velocity;
 	public float[] ai;
@@ -39,7 +44,11 @@ public class Spark_CursedStabDust : Visual
 	public float maxTime;
 	public float scale;
 	public float rotation;
-	public Spark_CursedStabDust() { }
+
+	public Spark_CursedStabDust()
+	{
+	}
+
 	public override void Update()
 	{
 		ai[1] *= 0.99f;
@@ -57,7 +66,10 @@ public class Spark_CursedStabDust : Visual
 		scale *= 0.995f;
 		timer++;
 		if (timer > maxTime)
+		{
 			Active = false;
+		}
+
 		velocity = velocity.RotatedBy(ai[1]);
 		if (Collision.SolidCollision(position, 0, 0))
 		{
@@ -65,11 +77,11 @@ public class Spark_CursedStabDust : Visual
 			timer += 10;
 		}
 		var tile = Main.tile[(int)(position.X / 16), (int)(position.Y / 16)];
-		if(position.Y % 1 < tile.LiquidAmount / 256f)
+		if (position.Y % 1 < tile.LiquidAmount / 256f)
 		{
 			timer += 120;
 		}
-		if(scale < 0.5f)
+		if (scale < 0.5f)
 		{
 			timer += 20;
 		}
@@ -84,11 +96,11 @@ public class Spark_CursedStabDust : Visual
 		Vector2 toCorner = new Vector2(0, scale * 0.2f).RotatedBy(rotation);
 		List<Vertex2D> bars = new List<Vertex2D>()
 		{
-			new Vertex2D(position + toCorner + velocity * 3,new Color(0, 0,pocession, 0.0f), new Vector3(0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5),new Color(0, 1, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner + velocity * 3, new Color(0, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 0.5), new Color(0, 1, pocession, 0.0f), new Vector3(0)),
 
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5),new Color(1, 0 ,pocession, 0.0f), new Vector3(0)),
-			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1) - velocity,new Color(1, 1, pocession, 0.0f), new Vector3(0))
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1.5), new Color(1, 0, pocession, 0.0f), new Vector3(0)),
+			new Vertex2D(position + toCorner.RotatedBy(Math.PI * 1) - velocity, new Color(1, 1, pocession, 0.0f), new Vector3(0)),
 		};
 
 		Ins.Batch.Draw(bars, PrimitiveType.TriangleStrip);

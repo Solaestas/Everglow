@@ -7,40 +7,33 @@ namespace Everglow.Myth.TheFirefly.Projectiles.DreamWeaver;
 
 public class DreamWeaverII : TrailingProjectile
 {
-	public override void SetDefaults()
-	{
-		base.SetDefaults();
-	}
 
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		TrailColor = new Color(0, 0.2f, 0.6f, 0f);
+		TrailBackgroundDarkness = 0.1f;
 		TrailWidth = 8f;
 		SelfLuminous = true;
 		Projectile.extraUpdates = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
+		TrailLength = 12;
 		TrailTexture = Commons.ModAsset.Trail_1.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
-		TrailShader = Commons.ModAsset.Trailing.Value;
 		ProjectileID.Sets.DrawScreenCheckFluff[Type] = 10800;
 	}
 
-	private int breakTime = 200;
-
 	public override void OnSpawn(IEntitySource source)
 	{
-		base.OnSpawn(source);
 		if (Projectile.ai[0] == 3)
 		{
 			TrailWidth = 5f;
 		}
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
-		base.AI();
+		Projectile.rotation = Projectile.velocity.ToRotationSafe();
 		Projectile.velocity.Y += 0.6f;
-		if (Projectile.ai[0] != 3 && TimeTokill < 0)
+		if (Projectile.ai[0] != 3 && TimeAfterEntityDestroy < 0)
 		{
 			for (int x = 0; x < 3; x++)
 			{
@@ -50,7 +43,7 @@ public class DreamWeaverII : TrailingProjectile
 				d0.velocity = Projectile.velocity * 0.2f;
 			}
 		}
-		if (Projectile.ai[0] == 3 && TimeTokill < 0)
+		if (Projectile.ai[0] == 3 && TimeAfterEntityDestroy < 0)
 		{
 			Vector2 basePos = Projectile.Center - new Vector2(4);
 			var d0 = Dust.NewDustDirect(basePos, 0, 0, ModContent.DustType<BlueGlowAppearStoppedByTile>(), 0, 0, 0, default, Main.rand.NextFloat(0.3f, 0.6f));
@@ -59,7 +52,7 @@ public class DreamWeaverII : TrailingProjectile
 		}
 	}
 
-	public override void KillMainStructure()
+	public override void DestroyEntityEffect()
 	{
 		SoundEngine.PlaySound(SoundID.Drip, Projectile.Center);
 		for (int x = 0; x < 5 * (4 - Projectile.ai[0]); x++)
@@ -94,13 +87,7 @@ public class DreamWeaverII : TrailingProjectile
 				}
 			}
 		}
-
-		Projectile.velocity = Projectile.oldVelocity;
-		if (TimeTokill < 0)
-		{
-			Explosion();
-		}
-		TimeTokill = ProjectileID.Sets.TrailCacheLength[Projectile.type];
+		TimeAfterEntityDestroy = ProjectileID.Sets.TrailCacheLength[Projectile.type];
 		float power = 3f;
 		if (Projectile.ai[0] == 3)
 		{
@@ -108,6 +95,10 @@ public class DreamWeaverII : TrailingProjectile
 		}
 		Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<DreamWeaver_hit>(), Projectile.damage, Projectile.knockBack, Projectile.owner, power);
 	}
+
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
 
 	public override void DrawSelf()
 	{

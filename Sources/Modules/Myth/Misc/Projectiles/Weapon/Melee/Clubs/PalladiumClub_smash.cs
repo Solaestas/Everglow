@@ -1,10 +1,14 @@
-using Everglow.Commons.Templates.Weapons.Clubs;
-
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee.Clubs;
 
-public class PalladiumClub_smash : ClubProj_Smash_metal
+public class PalladiumClub_smash : ClubProjSmash
 {
-	public override string Texture => "Everglow/" + ModAsset.PalladiumClub_Path;
+	public override string Texture => ModAsset.PalladiumClub_Mod;
+
+	public override void SetDef()
+	{
+		EnableReflection = true;
+	}
+
 	public override void Smash(int level)
 	{
 		if (level == 0)

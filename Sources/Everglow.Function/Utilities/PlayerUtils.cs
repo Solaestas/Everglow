@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.BiomesText;
 using Everglow.Commons.Mechanics.Cooldown;
 using Everglow.Commons.Mechanics.ElementalDebuff;
 using Terraria.GameContent.Events;
@@ -77,7 +78,7 @@ public static class PlayerUtils
 
 	public static void ListenMouseWorld(this Player player)
 	{
-		if(Main.myPlayer == player.whoAmI)
+		if (Main.myPlayer == player.whoAmI)
 		{
 			player.Everglow().listenMouseWorld = true;
 		}
@@ -85,7 +86,7 @@ public static class PlayerUtils
 
 	public static void ListenMouseRotation(this Player player)
 	{
-		if(Main.myPlayer == player.whoAmI)
+		if (Main.myPlayer == player.whoAmI)
 		{
 			player.Everglow().listenMouseRotation = true;
 		}
@@ -122,6 +123,18 @@ public static class PlayerUtils
 	#endregion
 
 	#region Vanilla Stats
+
+	/// <summary>
+	/// Determines if the player is in specified vanilla biome.
+	/// <br/>Get biome keys from <see cref="VanillaBiomes"/>.
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="biomeKey"></param>
+	/// <returns></returns>
+	public static bool InVanillaBiome(this Player player, string biomeKey)
+	{
+		return VanillaBiomes.VanillaBiomeIndex.TryGetValue(biomeKey, out var biome) ? biome.Condition(player) : false;
+	}
 
 	/// <summary>
 	/// Heal life then show life text.

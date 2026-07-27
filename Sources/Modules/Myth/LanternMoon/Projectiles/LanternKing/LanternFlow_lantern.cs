@@ -17,6 +17,8 @@ public class LanternFlow_lantern : Visual
 	public int maxTime = 60;
 	public NPC npcOwner;
 
+	public Vector2 TargetCenter => npcOwner != null ? npcOwner.Center + new Vector2(0, 50) : Vector2.Zero;
+
 	public override void OnSpawn()
 	{
 		maxTime = 120;
@@ -40,10 +42,10 @@ public class LanternFlow_lantern : Visual
 		}
 		rotation = velocity.X / scale * 0.1f;
 		float maxDis = 400;
-		if ((npcOwner.Center - position).Length() < maxDis)
+		if ((TargetCenter - position).Length() < maxDis)
 		{
-			velocity += Vector2.Normalize(npcOwner.Center - position - velocity) * ((400 - (npcOwner.Center - position).Length()) / 400f);
-			timer += (int)((maxDis - (npcOwner.Center - position).Length()) / 40f);
+			velocity += Vector2.Normalize(TargetCenter - position - velocity) * ((400 - (TargetCenter - position).Length()) / 400f);
+			timer += (int)((maxDis - (TargetCenter - position).Length()) / 40f);
 		}
 		Lighting.AddLight(position, new Vector3(1f, 0.3f, 0) * scale * alpha);
 		base.Update();
@@ -73,7 +75,6 @@ public class LanternFlow_lantern : Visual
 			new Vertex2D(v2, c0, new Vector3(0, 1, 0)),
 			new Vertex2D(v3, c0, new Vector3(1, 1, 0)),
 		};
-		Main.graphics.GraphicsDevice.Textures[0] = texture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }

@@ -391,16 +391,16 @@ public class TuskGen : ModSystem
 				switch (stonetype)
 				{
 					case 1:
-						MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone1>());
+						TileUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone1>());
 						break;
 					case 2:
-						MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone2>());
+						TileUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone2>());
 						break;
 					case 3:
-						MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone3>());
+						TileUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone3>());
 						break;
 					case 4:
-						MythUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone4>());
+						TileUtils.PlaceFrameImportantTiles(x, y + j - 7, 1, 7, ModContent.TileType<StrangeTuskStone4>());
 						break;
 				}
 				break;

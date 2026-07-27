@@ -43,8 +43,11 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(1, 0.8f, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(1, 0.2f, 0)));
 		if (circle.Count > 2)
+		{
 			spriteBatch.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	private static void DrawTexFlame_VFXBatch(VFXBatch spriteBatch, float length, float width, Color color, Vector2 center, Texture2D tex, double rotation, float process)
 	{
 		var flame = new List<Vertex2D>();
@@ -55,7 +58,10 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		{
 			float widthII = width;
 			if (length - h < 120)
+			{
 				widthII = width * (length - h) / 120f;
+			}
+
 			float processII = (process + h / 150f) % 1f;
 
 			flame.Add(new Vertex2D(center + new Vector2(h, 0).RotatedBy(rotation) + new Vector2(0, widthII / 2f).RotatedBy(rotation), color, new Vector3(processII, 0.8f, 0)));
@@ -72,8 +78,11 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		}
 
 		if (flame.Count > 2)
+		{
 			spriteBatch.Draw(tex, flame, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -82,12 +91,16 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		Ins.Batch.Begin();
 		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.3f, new Color(0, colorV * colorV * 4f, colorV * 12f, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.02f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();
 		return false;
 	}
+
 	public void DrawWarp(VFXBatch spriteBatch)
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -96,10 +109,13 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
 
-		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.3f, new Color(colorV, colorV * 0.7f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
+		DrawWarpTexCircle_VFXBatch(spriteBatch, value * 160 * Projectile.ai[0], width * 0.3f, new Color(colorV, colorV * 0.07f, colorV, 0f), Projectile.Center - Main.screenPosition, t);
 	}
+
 	public void DrawBloom()
 	{
 		float value = (200 - Projectile.timeLeft) / 200f;
@@ -108,7 +124,10 @@ public class GlowBeadGunShootFlame : ModProjectile, IWarpProjectile, IBloomProje
 		Texture2D t = Commons.ModAsset.Trail_2.Value;
 		float width = 120;
 		if (Projectile.timeLeft < 120)
+		{
 			width = Projectile.timeLeft;
+		}
+
 		Ins.Batch.Begin();
 		DrawTexFlame_VFXBatch(Ins.Batch, value * 1370 * Projectile.ai[0], width * 0.3f, new Color(colorV * 12f, colorV * colorV * 1.6f, 0, 0f), Projectile.Center - Main.screenPosition, t, Projectile.ai[1], (float)-Main.timeForVisualEffects * 0.02f + 1000000 + Projectile.ai[1] * 200);
 		Ins.Batch.End();

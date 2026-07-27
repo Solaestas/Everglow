@@ -5,7 +5,7 @@ namespace Everglow.Yggdrasil.KelpCurtain.Projectiles.Ranged;
 
 public class HuskburstBullet_SubProj : TrailingProjectile
 {
-	public override void SetDef()
+	public override void SetCustomDefaults()
 	{
 		Projectile.width = 20;
 		Projectile.height = 20;
@@ -16,8 +16,8 @@ public class HuskburstBullet_SubProj : TrailingProjectile
 		Projectile.timeLeft = 20;
 		TrailTexture = Commons.ModAsset.Trail.Value;
 		TrailTextureBlack = Commons.ModAsset.Trail_black.Value;
-		ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-		ProjectileID.Sets.TrailCacheLength[Projectile.type] = 7;
+		TrailBackgroundDarkness = 0.5f;
+		TrailLength = 7;
 		TrailColor = new Color(0.88f, 0.02f, 0f, 0f);
 		TrailWidth = 6f;
 	}
@@ -28,7 +28,7 @@ public class HuskburstBullet_SubProj : TrailingProjectile
 		base.OnSpawn(source);
 	}
 
-	public override void AI()
+	public override void Behaviors()
 	{
 		if (Projectile.timeLeft <= 19)
 		{
@@ -36,9 +36,8 @@ public class HuskburstBullet_SubProj : TrailingProjectile
 		}
 		if (Projectile.timeLeft == 10)
 		{
-			KillMainStructure();
+			DestroyEntity();
 		}
-		base.AI();
 	}
 
 	public override void DrawSelf()
@@ -58,13 +57,12 @@ public class HuskburstBullet_SubProj : TrailingProjectile
 		return;
 	}
 
+	public override Color GetTrailColor(int style, Vector2 worldPos, int index, ref float factor, float extraValue0 = 0, float extraValue1 = 0) => base.GetTrailColor(style, worldPos, index, ref factor, extraValue0, extraValue1);
+
+	public override Vector3 ModifyTrailTextureCoordinate(float factor, float timeValue, float phase, float widthValue) => base.ModifyTrailTextureCoordinate(factor, timeValue, phase, widthValue);
+
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		base.OnHitNPC(target, hit, damageDone);
-	}
-
-	public override void KillMainStructure()
-	{
-		base.KillMainStructure();
 	}
 }

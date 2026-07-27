@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 
 namespace Everglow.SpellAndSkull.Projectiles.GoldenShower;
 
-internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
+public class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 {
 	public override void SetDef()
 	{
@@ -20,6 +20,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 
 		effectColor = new Color(255, 175, 0, 0);
 	}
+
 	public override void OnSpawn(IEntitySource source)
 	{
 		FrontTexture = ModAsset.GoldenShower_A.Value;
@@ -34,6 +35,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 		}
 		base.OnSpawn(source);
 	}
+
 	public override void SpecialAI()
 	{
 		Player player = Main.player[Projectile.owner];
@@ -71,8 +73,8 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 				p.CritChance = player.GetWeaponCrit(player.HeldItem);
 			}
 		}
-
 	}
+
 	internal int constantUsingTime = 0;
 
 	public override void SpecialDraw()
@@ -83,7 +85,10 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
+			{
 				Fade = 0;
+			}
+
 			Rain *= Fade;
 			DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain, Rain, Rain), Projectile.Center - Main.screenPosition, ModAsset.DarklineWave.Value, 0);
 			DrawTexCircle(tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
@@ -98,6 +103,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			DrawTexCircle(timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
 		}
 	}
+
 	private static void DrawTexCircle(float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -116,6 +122,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, circle.ToArray(), 0, circle.Count - 2);
 		}
 	}
+
 	private static void DrawTexCircle(VFXBatch sb, float radius, float width, Color color, Vector2 center, Texture2D tex, double addRot = 0)
 	{
 		var circle = new List<Vertex2D>();
@@ -129,8 +136,11 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 		circle.Add(new Vertex2D(center + new Vector2(0, Math.Max(radius - width, 0)).RotatedBy(addRot), color, new Vector3(0, 1, 0)));
 		circle.Add(new Vertex2D(center + new Vector2(0, radius).RotatedBy(addRot), color, new Vector3(0, 0, 0)));
 		if (circle.Count > 0)
+		{
 			sb.Draw(tex, circle, PrimitiveType.TriangleStrip);
+		}
 	}
+
 	public void DrawWarp(VFXBatch sb)
 	{
 		if (timer < 24 && constantUsingTime > 150)
@@ -139,9 +149,12 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (24 - tTimer) / 24f;
 			if (Fade < 0)
+			{
 				Fade = 0;
+			}
+
 			Rain *= Fade;
-			DrawTexCircle(sb, tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
+			DrawTexCircle(sb, tTimer * 24 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.09f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
 		}
 
 		if (timer < 22 && constantUsingTime > 150)
@@ -149,7 +162,7 @@ internal class GoldenShowerBook : MagicBookProjectile, IWarpProjectile
 			float Rain = Math.Min(constantUsingTime / 6, 120) / 120f;
 			float Fade = (22 - timer) / 22f;
 			Rain *= Fade;
-			DrawTexCircle(sb, timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.9f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
+			DrawTexCircle(sb, timer * 40 * Rain / Fade, 184 * Fade, new Color(Rain, Rain * 0.09f, 0, 0), Projectile.Center - Main.screenPosition, ModAsset.LightlineWave.Value, 0);
 		}
 	}
 }

@@ -232,7 +232,7 @@ public class DarkCocoon : ModTile
 			switch (Main.rand.Next(5))
 			{
 				case 0:
-					WorldGenMisc.PlaceFrameImportantTiles(i, j - 3, 1, 3, ModContent.TileType<BluishGiantGentian>(), 120 * Main.rand.Next(12));
+					TileUtils.PlaceFrameImportantTiles(i, j - 3, 1, 3, ModContent.TileType<BluishGiantGentian>(), 120 * Main.rand.Next(12));
 					break;
 				case 1:
 					t1.TileType = (ushort)ModContent.TileType<BlackStarShrubSmall>();
@@ -274,7 +274,7 @@ public class DarkCocoon : ModTile
 					t3.TileFrameY = 0;
 					break;
 				case 4:
-					WorldGenMisc.PlaceFrameImportantTiles(i, j - 2, 1, 2, (ushort)ModContent.TileType<BluishGiantGentian_small>(), 48 * Main.rand.Next(6));
+					TileUtils.PlaceFrameImportantTiles(i, j - 2, 1, 2, (ushort)ModContent.TileType<BluishGiantGentian_small>(), 48 * Main.rand.Next(6));
 					break;
 			}
 			return;
@@ -290,7 +290,7 @@ public class DarkCocoon : ModTile
 					case 0:
 						if (canPlace3x2)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
 						}
 
 						break;
@@ -298,7 +298,7 @@ public class DarkCocoon : ModTile
 					case 1:
 						if (canPlace2x2)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
 						}
 
 						break;
@@ -306,7 +306,7 @@ public class DarkCocoon : ModTile
 					case 2:
 						if (canPlace3x2)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 2, 3, 2, ModContent.TileType<BlackFrenLarge>(), 54 * Main.rand.Next(3));
 						}
 
 						break;
@@ -314,7 +314,7 @@ public class DarkCocoon : ModTile
 					case 3:
 						if (canPlace2x2)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 2, 2, 2, ModContent.TileType<BlackFren>(), 36 * Main.rand.Next(3));
 						}
 
 						break;
@@ -322,7 +322,7 @@ public class DarkCocoon : ModTile
 					case 4:
 						if (canPlace2x1)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
 						}
 
 						break;
@@ -330,7 +330,7 @@ public class DarkCocoon : ModTile
 					case 5:
 						if (canPlace2x1)
 						{
-							Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
+							TileUtils.PlaceFrameImportantTiles(i, j - 1, 2, 1, ModContent.TileType<CocoonRock>(), 36 * Main.rand.Next(3));
 						}
 
 						break;
@@ -342,14 +342,14 @@ public class DarkCocoon : ModTile
 		{
 			if (nearWater)
 			{
-				Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<GlowingReed>(), 18 * Main.rand.Next(5));
+				TileUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<GlowingReed>(), 18 * Main.rand.Next(5));
 			}
 			else
 			{
 				switch (Main.rand.Next(2))
 				{
 					case 0:
-						Common.MythUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
+						TileUtils.PlaceFrameImportantTiles(i, j - 1, 1, 1, ModContent.TileType<DarkCocoonGrass>(), 18 * Main.rand.Next(6));
 						break;
 
 					case 1:

@@ -1,4 +1,5 @@
 namespace Everglow.Myth.LanternMoon.Projectiles.LanternKing;
+
 [Pipeline(typeof(WCSPipeline))]
 public class LanternFlow_lantern2 : Visual
 {
@@ -14,6 +15,7 @@ public class LanternFlow_lantern2 : Visual
 	public int height;
 	public Texture2D texture = ModAsset.LanternFlow.Value;
 	public int maxTime = 500;
+
 	public override void OnSpawn()
 	{
 		maxTime = 500;
@@ -21,6 +23,7 @@ public class LanternFlow_lantern2 : Visual
 		width = texture.Width;
 		height = texture.Height;
 	}
+
 	public override void Update()
 	{
 		timer++;
@@ -35,6 +38,7 @@ public class LanternFlow_lantern2 : Visual
 		Lighting.AddLight(position, new Vector3(1f, 0.3f, 0) * scale * alpha);
 		base.Update();
 	}
+
 	public override void Draw()
 	{
 		Vector2 v0 = position + new Vector2(-width, -height).RotatedBy(rotation) * 0.5f * scale;
@@ -57,9 +61,8 @@ public class LanternFlow_lantern2 : Visual
 			new Vertex2D(v1, c0, new Vector3(1, 0, 0)),
 
 			new Vertex2D(v2, c0, new Vector3(0, 1, 0)),
-			new Vertex2D(v3, c0, new Vector3(1, 1, 0))
+			new Vertex2D(v3, c0, new Vector3(1, 1, 0)),
 		};
-		Main.graphics.GraphicsDevice.Textures[0] = texture;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+		Ins.Batch.Draw(texture, bars, PrimitiveType.TriangleStrip);
 	}
 }
