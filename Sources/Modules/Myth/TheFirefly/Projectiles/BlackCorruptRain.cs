@@ -8,7 +8,7 @@ public class BlackCorruptRain : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("Black Corrupt Rain");
-			}
+	}
 
 	public override void SetDefaults()
 	{

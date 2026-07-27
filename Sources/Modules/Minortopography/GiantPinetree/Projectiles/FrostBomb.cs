@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.VFX.CommonVFXDusts;
+using Everglow.Commons.VFX.CommonVFXDusts;
 using Everglow.Minortopography.GiantPinetree.Dusts;
 using SteelSeries.GameSense;
 using Terraria.Audio;
@@ -23,7 +23,7 @@ public class FrostBomb : ModProjectile
 	public override void AI()
 	{
 		Projectile.rotation += Projectile.velocity.X * 0.03f;
-		if(Projectile.velocity.Length() >= 1)
+		if (Projectile.velocity.Length() >= 1)
 		{
 			GenerateDust();
 		}
@@ -38,14 +38,14 @@ public class FrostBomb : ModProjectile
 		}
 
 		//超过一定时间开始下坠
-		if(Projectile.timeLeft < 350)
+		if (Projectile.timeLeft < 350)
 		{
 			Projectile.velocity.Y += 0.25f;
 			Projectile.velocity *= 0.98f;
 		}
-		if(Projectile.lavaWet)
+		if (Projectile.lavaWet)
 		{
-			if(Projectile.timeLeft > 2)
+			if (Projectile.timeLeft > 2)
 			{
 				Projectile.timeLeft = 2;
 			}
@@ -53,7 +53,7 @@ public class FrostBomb : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(Projectile.timeLeft < 5)
+		if (Projectile.timeLeft < 5)
 		{
 			bool bool0 = (targetHitbox.TopLeft() - projHitbox.Center()).Length() < 80;
 			bool bool1 = (targetHitbox.TopRight() - projHitbox.Center()).Length() < 80;
@@ -143,7 +143,7 @@ public class FrostBomb : ModProjectile
 	}
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
-		if(Projectile.timeLeft > 5)
+		if (Projectile.timeLeft > 5)
 		{
 			Projectile.timeLeft = 5;
 		}

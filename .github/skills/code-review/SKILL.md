@@ -110,7 +110,6 @@ Rules for the suggestion block:
 - The block must contain **complete, valid** code that would compile if applied — not a sketch.
 - Only use a suggestion block when you can write the exact replacement. If you can only describe the fix in prose (e.g. "refactor this method to …"), put it in the `### Detailed Findings` section without a fence.
 - **Never emit a no-op suggestion.** If the suggested body is identical to the current line(s), do not use a `suggestion` fence (and usually do not comment at all). Classic failure mode: claiming "add a trailing newline" while suggesting the same line text unchanged — GitHub Apply then either does nothing useful or silently violates repo style.
-- **Never flag or "fix" EOF / trailing newlines in this repo.** `.editorconfig` sets `insert_final_newline = false` and `AGENTS.md` requires 文件末尾不加新行. Missing final newline is **correct** here, not a defect. Do not suggest adding one.
 - Do **not** use the suggestion fence for non-code content (config YAML, hjson, plain prose, `.gitattributes`). For non-C# files, describe the change in prose (or use a non-`suggestion` fence such as ```yaml … ``` / ```hjson … ``` only as an illustration). GitHub's "Apply suggestion" button only fires on the `suggestion` fence inside a review thread adjacent to a diff line, so use it sparingly and correctly.
 
 ---
@@ -249,7 +248,7 @@ Apply these checks on every PR (in addition to the general process above). For e
 
 ### Conventions
 - [ ] C# files use file-scoped namespace (`namespace Everglow.<Module>.<Area>.<Type>;`).
-- [ ] Tab indentation (width 4), CRLF, no trailing newline, Allman braces, braces mandatory on control statements.
+- [ ] Tab indentation (width 4), LF, trailing newline, UTF-8 without BOM, Allman braces, braces mandatory on control statements.
 - [ ] No new `?` nullable annotations in `Sources/Everglow` or `Sources/Everglow.Function` (only `Everglow.UnitTests` enables `<Nullable>`).
 - [ ] Don't mass-reformat historical files — style is mixed deliberately (AGENTS.md "最小改动").
 - [ ] No binary/art assets committed (`.png/.obj/.ttf/.atlas/.xnb` under `Resources/`, `Libraries/`, module assets, `Tools/*.exe|dll`, `icon*.png` are read-only — do not modify).

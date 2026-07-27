@@ -1,6 +1,7 @@
 using Everglow.Commons.VFX.CommonVFXDusts;
 
 namespace Everglow.Yggdrasil.KelpCurtain.VFXs;
+
 public class MyceliumTilesPipeline : Pipeline
 {
 	public override void Load()

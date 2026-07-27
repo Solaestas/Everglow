@@ -1,6 +1,6 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
-    public class Vertebral : ModDust
+	public class Vertebral : ModDust
 	{
 		public override bool Update(Dust dust)
 		{

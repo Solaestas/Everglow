@@ -58,7 +58,7 @@ public class DarkGlimmeringRods : ModNPC
 		NPC.rotation = MathF.Log(MathF.Abs(NPC.velocity.X) + 1) * 0.2f * NPC.direction * 0.05f + NPC.rotation * 0.95f;
 		Vector2 aimTarget = TargetPos + new Vector2(210f * MathF.Sin(timeValue * 2 + NPC.whoAmI) * NPC.scale, -50f + 30f * MathF.Sin(timeValue * 0.15f + NPC.whoAmI));
 		Vector2 toAim = aimTarget - NPC.Center - NPC.velocity;
-		if(toAim.Length() > 50)
+		if (toAim.Length() > 50)
 		{
 			NPC.velocity += Vector2.Normalize(toAim) * 0.15f * NPC.scale;
 		}
@@ -87,7 +87,7 @@ public class DarkGlimmeringRods : ModNPC
 		float timeValue = (float)(NPC.frameCounter);
 		List<Vertex2D> bars = new List<Vertex2D>();
 		Vector2 drawCenter = NPC.Center - Main.screenPosition + new Vector2(BodyLength * 5f * 0.75f, 0).RotatedBy(NPC.rotation) * NPC.scale;
-		for (int i = 0;i < BodyLength;i++)
+		for (int i = 0; i < BodyLength; i++)
 		{
 			float jointIndex = i / (float)BodyLength;
 			int frameY = (int)(timeValue + i) % Main.npcFrameCount[NPC.type];

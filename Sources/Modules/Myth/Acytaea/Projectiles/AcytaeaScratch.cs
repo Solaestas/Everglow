@@ -4,6 +4,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaScratch : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -67,13 +68,13 @@ public class AcytaeaScratch : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		for(int k = 0;k < Projectile.oldPos.Length;k++)
+		for (int k = 0; k < Projectile.oldPos.Length; k++)
 		{
 			Vector2 deltaVector = Projectile.oldPos[k] - Projectile.position;
 			Rectangle newProjectileHitBox = projHitbox;
 			newProjectileHitBox.X -= (int)deltaVector.X;
 			newProjectileHitBox.Y -= (int)deltaVector.Y;
-			if(newProjectileHitBox.Intersects(targetHitbox))
+			if (newProjectileHitBox.Intersects(targetHitbox))
 			{
 				return true;
 			}

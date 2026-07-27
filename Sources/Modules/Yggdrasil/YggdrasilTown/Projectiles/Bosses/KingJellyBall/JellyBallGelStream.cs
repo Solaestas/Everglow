@@ -120,7 +120,7 @@ public class JellyBallGelStream : TrailingProjectile
 	public override bool PreDraw(ref Color lightColor)
 	{
 		float value = (Projectile.timeLeft - 540) / 60f;
-		if(value > 1)
+		if (value > 1)
 		{
 			value = 1;
 		}

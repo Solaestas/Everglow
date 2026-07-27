@@ -1,4 +1,4 @@
-﻿using Everglow.Commons.Interfaces;
+using Everglow.Commons.Interfaces;
 using MonoMod.RuntimeDetour;
 
 namespace Everglow.Commons.Hooks;

@@ -145,7 +145,7 @@ public class GeyserAirBudsPlatform : ModTile, ITileFluentlyDrawn
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(8, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);
 		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(8, 6), 0.21f, 0.45f, 0.32f);
 		Lighting.AddLight(pos.ToWorldCoordinates() + new Vector2(-8, 6), 0.21f, 0.45f, 0.32f);
-		if(!Main.gamePaused && Main.rand.NextBool(21))
+		if (!Main.gamePaused && Main.rand.NextBool(21))
 		{
 			Vector2 dustPos = pos.ToWorldCoordinates() + new Vector2(8, -20) - new Vector2(4);
 			Dust d = Dust.NewDustDirect(dustPos, 0, 0, ModContent.DustType<GeyserBudPollen>());

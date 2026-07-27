@@ -45,8 +45,8 @@ public class GlowStar : ModProjectile
 			}
 		}
 		else
-		{ 
-			if(!Main.npc[targetWhoAmI].active)
+		{
+			if (!Main.npc[targetWhoAmI].active)
 			{
 				targetWhoAmI = -1;
 				return;

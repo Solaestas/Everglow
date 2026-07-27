@@ -33,7 +33,7 @@ public abstract class VisualGore : Visual
 	public override void Update()
 	{
 		timer++;
-		if((width <= 0 || height <= 0) && Texture is not null)
+		if ((width <= 0 || height <= 0) && Texture is not null)
 		{
 			width = Texture.Width;
 			height = Texture.Height;

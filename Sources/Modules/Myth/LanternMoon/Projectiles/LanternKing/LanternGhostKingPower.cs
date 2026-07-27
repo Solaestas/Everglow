@@ -47,7 +47,7 @@ public class LanternGhostKingPower : TrailingProjectile
 		{
 			DestroyEntity();
 		}
-		if(musicTimer < 0.85f)
+		if (musicTimer < 0.85f)
 		{
 			float moveTimer = (float)Main.time * 0.06f + MathHelper.PiOver2 * Projectile.ai[0];
 			Vector2 targetPos = targetNPCPos + new Vector2(MathF.Cos(moveTimer) * 480, MathF.Sin(moveTimer * 2.4f) * 320) * (1.3f - musicTimer) + new Vector2(0, 150) * musicTimer;
@@ -57,7 +57,7 @@ public class LanternGhostKingPower : TrailingProjectile
 		}
 		else
 		{
-			if(!ReachedTarget)
+			if (!ReachedTarget)
 			{
 				Vector2 targetPos = targetNPCPos + new Vector2(0, 150) * musicTimer;
 				Vector2 toTarget = targetPos - Projectile.Center - Projectile.velocity;
@@ -93,7 +93,7 @@ public class LanternGhostKingPower : TrailingProjectile
 		{
 			LanternMoonMusicManager musicSystem = ModContent.GetInstance<LanternMoonMusicManager>();
 			float mulColor = 0.1f;
-			if(musicSystem.Wave15StartTimer > 300)
+			if (musicSystem.Wave15StartTimer > 300)
 			{
 				mulColor = 0.1f + (musicSystem.Wave15StartTimer - 300) / 540f;
 				mulColor = Math.Min(mulColor, 1);

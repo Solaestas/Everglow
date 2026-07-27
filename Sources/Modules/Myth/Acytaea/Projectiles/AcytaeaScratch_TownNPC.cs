@@ -45,7 +45,7 @@ public class AcytaeaScratch_TownNPC : ModProjectile
 		{
 			float rotValue = Projectile.timeLeft / 55f;
 			rotValue = MathF.Pow(rotValue, 4) * 4 + 1.3f;
-			if(rotValue < 3f)
+			if (rotValue < 3f)
 			{
 				rotValue = 3;
 			}

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Myth.Common.VFXPipelines;
+namespace Everglow.Myth.Common.VFXPipelines;
 
 internal class BasePipeline : Pipeline
 {

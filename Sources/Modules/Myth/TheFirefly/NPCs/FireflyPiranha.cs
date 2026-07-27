@@ -39,14 +39,14 @@ public class FireflyPiranha : ModNPC
 				WanderingWithoutTarget();
 			}
 			NPC.knockBackResist = 0.4f;
-			NPC.noGravity= true;
+			NPC.noGravity = true;
 
-			if(NPC.HasPlayerTarget && PhysicalStrength > 0)
+			if (NPC.HasPlayerTarget && PhysicalStrength > 0)
 			{
 				Player player = Main.player[NPC.target];
 				NormalAttack(player);
 				PhysicalStrength -= 1;
-				if(PhysicalStrength <= 2)
+				if (PhysicalStrength <= 2)
 				{
 					PhysicalStrength = -600;
 					if (NPC.Center.X > player.Center.X)
@@ -73,18 +73,18 @@ public class FireflyPiranha : ModNPC
 		}
 		else
 		{
-			NPC.knockBackResist= 0;
-			if(PhysicalStrength > 0)
+			NPC.knockBackResist = 0;
+			if (PhysicalStrength > 0)
 			{
 				PhysicalStrength -= 1;
 			}
 			NPC.localAI[0] += 1;
-			NPC.noGravity= false;
+			NPC.noGravity = false;
 			NPC.velocity.Y += 0.15f;
 			if (NPC.localAI[0] % 4 == 0 && NPC.collideY)
 			{
 				PhysicalStrength -= 100;
-				NPC.velocity += new Vector2(Main.rand.NextFloat(-2f, 2f),Main.rand.NextFloat(-12f, -6f));
+				NPC.velocity += new Vector2(Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-12f, -6f));
 				NPC.rotation = Main.rand.NextFloat(-0.2f, 0.2f);
 			}
 			if (NPC.collideX)
@@ -93,8 +93,8 @@ public class FireflyPiranha : ModNPC
 				NPC.velocity += new Vector2(Main.rand.NextFloat(-6f, 6f), Main.rand.NextFloat(-4f, -2f));
 				NPC.rotation = Main.rand.NextFloat(-0.2f, 0.2f);
 			}
-			NPC.velocity *= MathF.Pow(0.996f,NPC.velocity.Length());
-			if(PhysicalStrength > 0)
+			NPC.velocity *= MathF.Pow(0.996f, NPC.velocity.Length());
+			if (PhysicalStrength > 0)
 			{
 				NPC.rotation = NPC.velocity.ToRotation() + (1 - NPC.spriteDirection) * MathF.PI / 2f;
 			}
@@ -103,7 +103,7 @@ public class FireflyPiranha : ModNPC
 				NPC.rotation += MathF.Sin((float)Main.time * 0.03f + NPC.whoAmI) * 0.03f;
 			}
 		}
-		if(NPC.velocity.X > 0)
+		if (NPC.velocity.X > 0)
 		{
 			NPC.spriteDirection = 1;
 		}
@@ -111,14 +111,14 @@ public class FireflyPiranha : ModNPC
 		{
 			NPC.spriteDirection = -1;
 		}
-		
+
 	}
 	private void NormalAttack(Player target)
 	{
 		Vector2 toPlayer = target.Center - NPC.Center;
 		if (toPlayer.Length() > 200f && Collision.CanHit(NPC, target) && target.wet)
 		{
-			if(toPlayer.Length() > 600f)
+			if (toPlayer.Length() > 600f)
 			{
 				NPC.target = 255;
 				return;
@@ -130,7 +130,7 @@ public class FireflyPiranha : ModNPC
 		}
 		if (toPlayer.Length() > 160f && toPlayer.Length() <= 200f && Collision.CanHit(NPC, target))
 		{
-			if(Main.rand.NextBool(20))
+			if (Main.rand.NextBool(20))
 			{
 				Vector2 velocityRotation = Vector2.Normalize(toPlayer) * 45f;
 				NPC.velocity = velocityRotation * 0.55f + NPC.velocity * 0.45f;
@@ -141,9 +141,9 @@ public class FireflyPiranha : ModNPC
 	{
 		int waterDepth = 0;
 		int x = (int)(NPC.Center.X / 16f);
-		if(x < 20 || x > Main.maxTilesX - 20)
+		if (x < 20 || x > Main.maxTilesX - 20)
 		{
-			NPC.active= false;
+			NPC.active = false;
 			return;
 		}
 		while (Main.tile[x, (int)(NPC.Center.Y / 16f) - waterDepth].LiquidAmount > 0)
@@ -190,7 +190,7 @@ public class FireflyPiranha : ModNPC
 				NPC.velocity.X += Main.rand.NextFloat(-0.1f, 0.1f);
 			}
 		}
-		if(NPC.collideX)
+		if (NPC.collideX)
 		{
 			NPC.velocity.X *= -1f;
 		}
@@ -215,11 +215,11 @@ public class FireflyPiranha : ModNPC
 			waterDepth++;
 		}
 		Vector2 toPlayer = target.Center - NPC.Center;
-		if(MathF.Abs(toPlayer.X) > 200 && Main.rand.NextBool(200))
+		if (MathF.Abs(toPlayer.X) > 200 && Main.rand.NextBool(200))
 		{
 			Vector2 velocityRotation = Vector2.Normalize(toPlayer) * 5f;
-			NPC.velocity.Y= velocityRotation.Y;
-			if(NPC.Center.X > target.Center.X)
+			NPC.velocity.Y = velocityRotation.Y;
+			if (NPC.Center.X > target.Center.X)
 			{
 				NPC.velocity.X = -5 * NPC.scale;
 			}
@@ -243,7 +243,7 @@ public class FireflyPiranha : ModNPC
 				NPC.velocity.Y -= 0.03f;
 			}
 		}
-		if(MathF.Abs(NPC.velocity.Y) > 2f)
+		if (MathF.Abs(NPC.velocity.Y) > 2f)
 		{
 			NPC.velocity.Y *= 0.94f;
 		}
@@ -254,9 +254,9 @@ public class FireflyPiranha : ModNPC
 		NPC.frameCounter += Math.Max(Math.Abs(NPC.velocity.X), 0.5f);
 		if (NPC.frameCounter > 15)
 		{
-			if(NPC.frame.Y < 192)
+			if (NPC.frame.Y < 192)
 			{
-			    NPC.frame.Y += frameHeight;
+				NPC.frame.Y += frameHeight;
 			}
 			else
 			{

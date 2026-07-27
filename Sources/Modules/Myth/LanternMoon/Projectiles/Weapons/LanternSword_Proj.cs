@@ -61,7 +61,7 @@ public class LanternSword_Proj : MeleeProj_3D
 					Owner.immune = true;
 					Owner.immuneTime = 30;
 					var lanternPlayer = Owner.GetModPlayer<LanternSword_player>();
-					if(lanternPlayer is not null)
+					if (lanternPlayer is not null)
 					{
 						lanternPlayer.Active = true;
 						lanternPlayer.OldPos = Main.screenPosition;

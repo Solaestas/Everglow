@@ -26,7 +26,8 @@ public class DarkMassacreDagger_Projectile : MeleeProj
 		longHandle = false;
 		maxAttackType = 0;
 		maxSlashTrailLength = 20;
-		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;;
+		shaderType = Commons.MEAC.Enums.MeleeTrailShaderType.ArcBladeTransparentedByZ;
+		;
 		autoEnd = false;
 	}
 

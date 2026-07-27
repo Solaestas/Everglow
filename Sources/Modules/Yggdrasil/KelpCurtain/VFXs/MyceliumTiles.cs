@@ -24,7 +24,7 @@ public class MyceliumTiles : Visual
 
 	public List<Point> ContinueTiles = new List<Point>();
 
-	public List<Projectile>SporeZones = new List<Projectile>();
+	public List<Projectile> SporeZones = new List<Projectile>();
 
 	public override void OnSpawn()
 	{

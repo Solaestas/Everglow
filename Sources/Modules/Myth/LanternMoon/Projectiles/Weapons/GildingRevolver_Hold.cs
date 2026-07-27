@@ -275,7 +275,7 @@ public class GildingRevolver_Hold : HandholdProjectile
 	{
 		Player player = Main.player[Projectile.owner];
 		SpriteEffects sprite = SpriteEffects.None;
-		if(player.gravDir == -1)
+		if (player.gravDir == -1)
 		{
 			sprite = SpriteEffects.FlipVertically;
 		}
@@ -337,7 +337,7 @@ public class GildingRevolver_Hold : HandholdProjectile
 			Rectangle lanternbulletFrameCooling = new Rectangle(52, 30, 14, 30);
 			int duration = (int)(30f * LanternBulletCooling / LanternBulletCoolingMax);
 			Rectangle lanternbulletFrameCooling_Draw = new Rectangle(52, 60 - duration, 14, duration);
-			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, (-50 + 30 - duration) * player.gravDir                 ), lanternbulletFrameCooling_Draw, Color.White * 0.5f, 0, lanternbulletFrameCooling.Size() * 0.5f, 1f, sprite, 0);
+			Main.spriteBatch.Draw(textureUI, player.Center - Main.screenPosition + new Vector2(39, (-50 + 30 - duration) * player.gravDir), lanternbulletFrameCooling_Draw, Color.White * 0.5f, 0, lanternbulletFrameCooling.Size() * 0.5f, 1f, sprite, 0);
 		}
 	}
 }

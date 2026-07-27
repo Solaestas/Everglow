@@ -61,7 +61,7 @@ public class ColorLasersTrap : ForegroundVFX
 		length = count;
 		foreach (var player in Main.player)
 		{
-			if(player != null && player.active && player.GetModPlayer<ColorLaserPlayer>().ImmuneStyle != Style)
+			if (player != null && player.active && player.GetModPlayer<ColorLaserPlayer>().ImmuneStyle != Style)
 			{
 				if (Collision.CheckAABBvLineCollision(player.Hitbox.TopLeft(), player.Hitbox.Size(), position, position + collisionUnit * length))
 				{
@@ -98,7 +98,7 @@ public class ColorLasersTrap : ForegroundVFX
 		Vector2 collisionUnit = new Vector2(0, -8).RotatedBy(Rotation);
 		Vector2 normalUnit = collisionUnit.RotatedBy(MathHelper.PiOver2) * 0.5f;
 		Color laserColor = new Color(GetColor().X, GetColor().Y, GetColor().Z, 0);
-		if(Main.LocalPlayer.GetModPlayer<ColorLaserPlayer>().ImmuneStyle == Style)
+		if (Main.LocalPlayer.GetModPlayer<ColorLaserPlayer>().ImmuneStyle == Style)
 		{
 			laserColor *= 0.2f;
 		}

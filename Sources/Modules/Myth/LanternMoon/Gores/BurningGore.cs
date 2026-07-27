@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria.GameContent;
 
 namespace Everglow.Myth.LanternMoon.Gores;
+
 public abstract class BurningGore : VisualGore
 {
 	public float rotateSpeed;

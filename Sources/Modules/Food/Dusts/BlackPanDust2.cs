@@ -1,4 +1,4 @@
-﻿namespace Everglow.Food.Dusts;
+namespace Everglow.Food.Dusts;
 
 public class BlackPanDust2 : ModDust
 {

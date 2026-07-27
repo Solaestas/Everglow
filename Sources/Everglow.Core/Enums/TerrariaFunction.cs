@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Everglow.Commons.Enums;
+
 [Flags]
 public enum TerrariaFunction
 {

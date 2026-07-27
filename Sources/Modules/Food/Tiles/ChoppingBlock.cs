@@ -47,7 +47,7 @@ public class ChoppingBlock : ModTile
 		Item item = Main.LocalPlayer.HeldItem;
 		FoodIngredientItem foodIngredientItem = item.ModItem as FoodIngredientItem;
 		var tile = Main.tile[i, j];
-		if(foodIngredientItem != null)
+		if (foodIngredientItem != null)
 		{
 			foodIngredientItem.SliceDown((int)(i - (tile.TileFrameX % 54 - 18f) / 18f), j);
 		}
@@ -74,12 +74,12 @@ public class ChoppingBlock : ModTile
 		FoodIngredientItem foodIngredientItem = item.ModItem as FoodIngredientItem;
 		if (foodIngredientItem != null)
 		{
-			if(foodIngredientItem.SlicedItemType > 0)
+			if (foodIngredientItem.SlicedItemType > 0)
 			{
 				Main.instance.MouseText("[i:" + item.type + "] → [i:" + foodIngredientItem.SlicedItemType + "]", ItemRarityID.White);
 			}
 		}
-		if(item.type == ItemID.SpicyPepper)
+		if (item.type == ItemID.SpicyPepper)
 		{
 			Main.instance.MouseText("[i:" + item.type + "] → [i:" + ModContent.ItemType<SpicyPepperRing>() + "]", ItemRarityID.White);
 		}

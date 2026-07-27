@@ -23,19 +23,19 @@ public class ThunderSpellDust : Visual
 		Position += Velocity;
 		Velocity *= 0.93f;
 		TrailPos.Enqueue(Position + new Vector2(0, Main.rand.NextFloat(0, 0.8f)).RotatedByRandom(MathHelper.TwoPi));
-		if(TrailPos.Count > 16)
+		if (TrailPos.Count > 16)
 		{
 			TrailPos.Dequeue();
 		}
 		Lighting.AddLight(Position, Scale * 0.1f, Scale * 0.09f, Scale * 0.03f);
-		if(!Collided && Collision.IsWorldPointSolid(Position))
+		if (!Collided && Collision.IsWorldPointSolid(Position))
 		{
 			Collided = true;
 		}
-		if(Collided)
+		if (Collided)
 		{
 			Velocity *= 0;
-			if(MaxTime - Timer > 30)
+			if (MaxTime - Timer > 30)
 			{
 				Timer = MaxTime - 30;
 			}
@@ -56,11 +56,11 @@ public class ThunderSpellDust : Visual
 		List<Vertex2D> bars = new List<Vertex2D>();
 		var drawColor = new Color(1f, 0.9f, 0.3f, 0);
 		float fade = 1;
-		if(MaxTime - Timer < 30)
+		if (MaxTime - Timer < 30)
 		{
 			fade = (MaxTime - Timer) / 30f;
 		}
-		if(TrailPos.Count > 2)
+		if (TrailPos.Count > 2)
 		{
 			for (int i = 0; i < TrailPos.Count; i++)
 			{
@@ -80,7 +80,7 @@ public class ThunderSpellDust : Visual
 				bars.Add(pos - dir, drawColor, new Vector3(0.7f, value, 0));
 			}
 		}
-		if(bars.Count > 0)
+		if (bars.Count > 0)
 		{
 			Ins.Batch.Draw(tex, bars, PrimitiveType.TriangleStrip);
 		}

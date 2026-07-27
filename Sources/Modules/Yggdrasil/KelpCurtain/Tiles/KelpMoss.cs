@@ -1,6 +1,7 @@
 using Everglow.Yggdrasil.KelpCurtain.Dusts;
 
 namespace Everglow.Yggdrasil.KelpCurtain.Tiles;
+
 public class KelpMoss : ModTile
 {
 	public override void PostSetDefaults()

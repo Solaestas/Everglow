@@ -50,14 +50,14 @@ internal class StaffOfCorruptDust : ModProjectile
 		{
 			Projectile.timeLeft = 5;
 		}
-		else if(Projectile.timeLeft >= 5)
+		else if (Projectile.timeLeft >= 5)
 		{
 			Projectile.timeLeft = 1;
 		}
 		Projectile.localAI[0] += 1;
 		if (Projectile.localAI[0] % 12 == 2)
 		{
-			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_medium").WithPitchOffset(Main.rand.NextFloat(-0.1f,0.1f)), Projectile.Center);
+			SoundEngine.PlaySound(new SoundStyle("Everglow/Myth/Sounds/CorruptDust_medium").WithPitchOffset(Main.rand.NextFloat(-0.1f, 0.1f)), Projectile.Center);
 		}
 	}
 	public override bool PreDraw(ref Color lightColor)

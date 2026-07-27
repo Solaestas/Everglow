@@ -1,4 +1,4 @@
-﻿sampler uImage0 : register(s0);
+sampler uImage0 : register(s0);
 sampler uImage1 : register(s1);
 
 float4 PSFunction(float2 coords : TEXCOORD0) : COLOR0//用一张图片（uImage1）遮挡特效的绘制

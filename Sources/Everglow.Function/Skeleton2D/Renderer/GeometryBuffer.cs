@@ -9,6 +9,7 @@ using Spine;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.Skeleton2D.Renderer;
+
 public class GeometryBuffer
 {
 	private List<Vertex2D> vertices = new List<Vertex2D>();

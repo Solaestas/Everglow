@@ -53,7 +53,7 @@ public class DrainOutlet : ModTile
 		if (style >= 0 && tile.LiquidType == LiquidID.Water && tile.LiquidAmount == 255)
 		{
 			int timeValue0 = (int)((Main.time * 0.1f + topLeft.X + topLeft.Y) % 40);
-			if(timeValue0 == style * 10)
+			if (timeValue0 == style * 10)
 			{
 				Vector2 pos = new Point(i, j).ToWorldCoordinates();
 				Projectile p0 = Projectile.NewProjectileDirect(WorldGen.GetProjectileSource_TileBreak(i, j), pos, new Vector2(0, -5), ModContent.ProjectileType<SpongeOxygenBubble>(), 20, 0);

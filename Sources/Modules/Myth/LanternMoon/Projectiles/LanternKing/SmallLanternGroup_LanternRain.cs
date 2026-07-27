@@ -127,7 +127,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 					{
 						// Notice that in this case, velocity is work for center.
 						float offset = 0;
-						if(Timer % 120 == 0)
+						if (Timer % 120 == 0)
 						{
 							offset = 300;
 						}
@@ -154,7 +154,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 					if (Timer % 30 == 0)
 					{
 						int deltaX = 0;
-						if(Timer % 60 == 0)
+						if (Timer % 60 == 0)
 						{
 							deltaX = 150;
 						}
@@ -163,7 +163,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 							for (int j = 0; j <= 6; j++)
 							{
 								MovingEntity entity = new MovingEntity();
-								entity.Position = Projectile.Center + new Vector2(i * 300 + deltaX, -1200 -j * 30);
+								entity.Position = Projectile.Center + new Vector2(i * 300 + deltaX, -1200 - j * 30);
 								entity.Velocity = new Vector2(0, 6);
 								entity.Scale = 1;
 								entity.Rotation = 0;
@@ -210,7 +210,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 			if (entity.Active)
 			{
 				// ai[0] == 2 means it act as several descending wheels.
-				if(Projectile.ai[0] != 2)
+				if (Projectile.ai[0] != 2)
 				{
 					entity.Position += entity.Velocity;
 					entity.Velocity = entity.Velocity.RotatedBy(entity.RotationSpeed);
@@ -233,7 +233,7 @@ public class SmallLanternGroup_LanternRain : ModProjectile
 
 				entity.RotationSpeed *= 0.96f;
 				entity.Rotation = entity.Velocity.ToRotation() + MathHelper.PiOver2;
-				if(Projectile.ai[0] == 2)
+				if (Projectile.ai[0] == 2)
 				{
 					int dir = 1;
 					if (entity.ai[2] % 2 == 1)

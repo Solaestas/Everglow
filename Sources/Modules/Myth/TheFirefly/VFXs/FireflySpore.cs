@@ -1,4 +1,5 @@
 namespace Everglow.Myth.TheFirefly.VFXs;
+
 public class FireflySporePipeline : Pipeline
 {
 	public override void Load()

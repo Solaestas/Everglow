@@ -44,11 +44,11 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 				AmmoValue = kThrower.AmmoAmount;
 				HoverButtom = false;
 				Vector2 buttomWorldPos = Owner.MountedCenter + new Vector2(0, -40 * Owner.gravDir) + new Vector2(78 * ButtonValue - 39, 3);
-				if(Main.MouseWorld.X > buttomWorldPos.X - 5 && Main.MouseWorld.X < buttomWorldPos.X + 5)
+				if (Main.MouseWorld.X > buttomWorldPos.X - 5 && Main.MouseWorld.X < buttomWorldPos.X + 5)
 				{
 					if (Main.MouseWorld.Y > buttomWorldPos.Y - 8 && Main.MouseWorld.Y < buttomWorldPos.Y + 8)
 					{
-						if(Main.mouseLeft && Main.mouseLeftRelease)
+						if (Main.mouseLeft && Main.mouseLeftRelease)
 						{
 							HoldingButton = true;
 						}
@@ -60,7 +60,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 					HoverButtom = true;
 					kThrower.PowerRate = Math.Clamp((Main.MouseWorld.X - Owner.MountedCenter.X + 39) / 78f, 0, 1f);
 					ButtonValue = kThrower.PowerRate;
-					if(!Main.mouseLeft)
+					if (!Main.mouseLeft)
 					{
 						HoldingButton = false;
 					}
@@ -101,7 +101,7 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 		Rectangle buttom_highlight = new Rectangle(104, 36, 10, 16);
 
 		SpriteEffects sprite = SpriteEffects.None;
-		if(Owner.gravDir == -1)
+		if (Owner.gravDir == -1)
 		{
 			sprite = SpriteEffects.FlipVertically;
 		}
@@ -111,20 +111,20 @@ public class KeroseneLanternFlameThrower_UI_Bar : Visual
 		Ins.Batch.Draw(tex, drawPos, ui_framework, envColor, 0, ui_framework.Size() * 0.5f, Fade, sprite);
 		Ins.Batch.Draw(tex, drawPos + new Vector2(0, 3 * Owner.gravDir), powerBar_realtime, flameColor, 0, powerBar.Size() * 0.5f, Fade, sprite);
 		Ins.Batch.Draw(tex, drawPos + new Vector2(0, 10 * Owner.gravDir), ammoBar_realtime, envColor, 0, ammoBar.Size() * 0.5f, Fade, sprite);
-		if(AmmoValue < 100)
+		if (AmmoValue < 100)
 		{
 			Rectangle ammoBar_end = new Rectangle(98, 62, 2, 2);
 			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * AmmoValue / 100f - 39, 10 * Owner.gravDir), ammoBar_end, envColor, 0, ammoBar_end.Size() * 0.5f, Fade, sprite);
 		}
 		Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtonValue - 39, 3 * Owner.gravDir), buttom, envColor, 0, buttom.Size() * 0.5f, Fade, sprite);
-		if(HoverButtom)
+		if (HoverButtom)
 		{
 			Color hoverColor = new Color(0.6f, 0.2f, 0f, 0);
-			if(Main.mouseLeft)
+			if (Main.mouseLeft)
 			{
 				hoverColor = new Color(1f, 1f, 1f, 0);
 			}
-			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtonValue - 39, 3 * Owner.gravDir), buttom_highlight,hoverColor, 0, buttom_highlight.Size() * 0.5f, Fade, sprite);
+			Ins.Batch.Draw(tex, drawPos + new Vector2(78 * ButtonValue - 39, 3 * Owner.gravDir), buttom_highlight, hoverColor, 0, buttom_highlight.Size() * 0.5f, Fade, sprite);
 		}
 	}
 }

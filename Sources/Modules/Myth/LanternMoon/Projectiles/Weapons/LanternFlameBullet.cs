@@ -20,7 +20,7 @@ public class LanternFlameBullet : ModProjectile
 
 	public override void AI()
 	{
-		if(Projectile.timeLeft < 3597)
+		if (Projectile.timeLeft < 3597)
 		{
 			Dust dust = Dust.NewDustPerfect(Projectile.Center, DustID.Torch, Projectile.velocity * 0.3f);
 			dust.scale = 1.2f;

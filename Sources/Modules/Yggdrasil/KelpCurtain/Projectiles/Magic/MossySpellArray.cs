@@ -111,7 +111,7 @@ public class MossySpellArray : NoTextureProjectile
 				{
 					Vector2 velLeft = Vector2.Normalize(pointVel).RotatedBy(MathHelper.PiOver2) * ArrayScale * 0.5f;
 					float factor = s / (float)(maxStep - 1);
-					if(maxStep - 1 == 0)
+					if (maxStep - 1 == 0)
 					{
 						factor = 0;
 					}

@@ -54,7 +54,7 @@ public class PrimordialJadeWinged_SpearSpice : ModProjectile
 		var projection = Matrix.CreateOrthographicOffCenter(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 		var model = Matrix.CreateTranslation(new Vector3(-Main.screenPosition.X, -Main.screenPosition.Y, 0)) * Main.GameViewMatrix.TransformationMatrix;
 		float dissolveDuration = Projectile.timeLeft / 80f - 0.2f;
-		if(Projectile.timeLeft > 80)
+		if (Projectile.timeLeft > 80)
 		{
 			dissolveDuration = 1.2f;
 		}
@@ -73,7 +73,7 @@ public class PrimordialJadeWinged_SpearSpice : ModProjectile
 		drawRoot -= Main.screenPosition;
 		bars = new List<Vertex2D>();
 		float heatGreenDuration = (Projectile.timeLeft - 90) / 30f;
-		var cHeat = new Color(MathF.Pow(heatGreenDuration, 3), MathF.Pow(heatGreenDuration, 0.4f), MathF.Pow(heatGreenDuration , 0.6f), heatGreenDuration);
+		var cHeat = new Color(MathF.Pow(heatGreenDuration, 3), MathF.Pow(heatGreenDuration, 0.4f), MathF.Pow(heatGreenDuration, 0.6f), heatGreenDuration);
 		bars.Add(new Vertex2D(drawRoot + v0 * 2, cHeat, new Vector3(1, 0, 0)));
 		bars.Add(new Vertex2D(drawRoot + (v0 + v0T) * fadeG + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1, fadeG, 0)));
 		bars.Add(new Vertex2D(drawRoot + v0 * 2 * (1 - fadeG), cHeat, new Vector3(1 - fadeG, fadeG, 0)));

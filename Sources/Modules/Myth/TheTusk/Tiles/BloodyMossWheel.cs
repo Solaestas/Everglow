@@ -316,7 +316,7 @@ public class BloodyMossWheel : ModTile
 		}
 
 		Texture2D Tdoor = ModAsset.CosmicFlame.Value;
-		Texture2D Tdoor2 =ModAsset.CosmicVort.Value;
+		Texture2D Tdoor2 = ModAsset.CosmicVort.Value;
 		Texture2D Tdoor3 = ModAsset.CosmicPerlin.Value;
 		if (CanK)
 		{

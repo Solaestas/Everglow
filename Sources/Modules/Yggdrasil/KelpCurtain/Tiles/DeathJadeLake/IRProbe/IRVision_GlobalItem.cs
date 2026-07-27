@@ -13,7 +13,7 @@ public class IRVision_GlobalItem : GlobalItem
 		//	IR_Visualize_Item.AddRange(new List<int>() { ItemID.Sunglasses, ItemID.AviatorSunglasses });
 		//}
 		base.Update(item, ref gravity, ref maxFallSpeed);
-	} 
+	}
 
 	public override void UpdateAccessory(Item item, Player player, bool hideVisual)
 	{

@@ -57,9 +57,9 @@ public class ElectricCurrent : Visual
 			Active = false;
 			return;
 		}
-		if(timer < 2)
+		if (timer < 2)
 		{
-			for(int i = 0;i < 16;i++)
+			for (int i = 0; i < 16; i++)
 			{
 				UpdateInside();
 			}
@@ -144,7 +144,7 @@ public class ElectricCurrent : Visual
 			bars.Add(oldPos[i] + normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(0 + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.3f));
 			bars.Add(oldPos[i] - normal * scale, new Color(pocession + 1 - MathF.Sin(k * MathF.PI), 0, 0, 0), new Vector3(3.4f + ai[0], (i + 15 - len) / 10f + timer / 1500f * velocity.Length(), 0.7f));
 		}
-		if(bars.Count < 2)
+		if (bars.Count < 2)
 		{
 			bars.Add(position, Color.Transparent, Vector3.zero);
 			bars.Add(position, Color.Transparent, Vector3.zero);

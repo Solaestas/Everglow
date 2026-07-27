@@ -1,4 +1,4 @@
-﻿float4x4 uModel;
+float4x4 uModel;
 float4x4 uViewProjection;
 float4x4 uModelNormal;
 

@@ -41,16 +41,16 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
 			{
 				Projectile.scale *= 0.85f;
 				Projectile.velocity *= 0.1f;
-				if(Projectile.scale < 0.01f)
+				if (Projectile.scale < 0.01f)
 				{
 					Projectile.active = false;
 				}
-				if(!HasHitTile && Energy > 50f)
+				if (!HasHitTile && Energy > 50f)
 				{
 					HasHitTile = true;
 					Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.zeroVector, ModContent.ProjectileType<GlowMoonBlade_ash>(), Projectile.damage * 3 / 2, Projectile.knockBack, player.whoAmI, player.direction);
 					p0.rotation = Projectile.rotation + MathF.PI / 2f;
-					for(int x = 0;x < 60;x++)
+					for (int x = 0; x < 60; x++)
 					{
 						var spark = new RayDustDust
 						{
@@ -74,7 +74,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
 					p0.scale = Energy / 50f;
 				}
 			}
-			if(Energy > 50f)
+			if (Energy > 50f)
 			{
 				var spark = new RayDustDust
 				{
@@ -102,7 +102,7 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
 		{
 			double range = Projectile.scale * 2.2f;
 			double range2 = Projectile.scale * 2.2f;
-	    	Texture2D tex = ModAsset.GlowMoonBlade.Value;
+			Texture2D tex = ModAsset.GlowMoonBlade.Value;
 			Vector2 drawOrigin = tex.Size() * 0.5f;
 			float mulColor = Energy / 400f;
 			for (int k = 0; k < Projectile.oldPos.Length; k++)
@@ -124,9 +124,9 @@ namespace Everglow.Myth.Misc.Projectiles.Weapon.Melee
 		{
 			target.AddBuff(24, 120);
 			Projectile p0 = Projectile.NewProjectileDirect(Projectile.GetSource_FromAI(), target.Center, Vector2.zeroVector, ModContent.ProjectileType<GlowMoonBlade_ash>(), Projectile.damage / 2, Projectile.knockBack / 4f, Projectile.owner);
-			p0.rotation = Projectile.rotation  + Main.rand.NextFloat(-0.8f, 0.8f);
+			p0.rotation = Projectile.rotation + Main.rand.NextFloat(-0.8f, 0.8f);
 			p0.scale = 0.6f;
-			if(Energy < 50)
+			if (Energy < 50)
 			{
 				p0.scale = Energy / 50f * 0.6f;
 			}

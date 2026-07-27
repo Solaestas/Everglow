@@ -104,7 +104,7 @@ public class StreetLantern : ModTile, ITileFluentlyDrawn
 		}
 
 
-		DrawLanternPiece(new Rectangle(recX, recY, 48, 108), 0, offX - 4, -10, pos + new Point(0, 0), pos + new Point(0, 0), drawCenterPos, spriteBatch, tileDrawing);		
+		DrawLanternPiece(new Rectangle(recX, recY, 48, 108), 0, offX - 4, -10, pos + new Point(0, 0), pos + new Point(0, 0), drawCenterPos, spriteBatch, tileDrawing);
 	}
 	/// <summary>
 	/// 画灯笼柱

@@ -376,7 +376,7 @@ public class InnKeeper : TownNPC_LiveInYggdrasil
 			NPC.direction = -1;
 		}
 		int fire = 0;
-		if(BurningHammer)
+		if (BurningHammer)
 		{
 			fire = 1;
 		}
