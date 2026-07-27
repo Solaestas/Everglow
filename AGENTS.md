@@ -287,7 +287,21 @@ ModContent.Request<Effect>("Everglow/<模块名>/Effects/Xxx");    // 手写路�
 4. **不擅自 git 操作**：除非用户明确要求，不执行 commit/push/rebase 等任何 git 变更。
 5. **本地化键只增不删**；改 internal name 必须连带更新 hjson 与所有引用（见「本地化」）。
 6. **优先阅读再动手**：改动某模块/系统前，先看其目录下的 README/CONTRACTS/TODO（如 `Mechanics/Mission/`、`Modules/Food/FoodModule.md`）与 `Documents/` 下的中文文档。
-7. **验证**：改完必须 `dotnet build`；涉及 Function/UnitTests 逻辑时加 `dotnet test`。无法本地验证的 tML 运行时行为，在总结中明确说明未验证项。
+7. **验证**：改完必须 `dotnet build`；涉及 Function/UnitTests 逻辑时加 `dotnet test`。完成文本文件修改（尤其是批量重写）后，必须在仓库根目录运行以下 PowerShell，对相对 `origin/master` 的全部分支变更及未跟踪文件进行原始字节检查；成功时只输出汇总，失败时列出含 UTF-8 BOM（`EF BB BF`）的文件。不得以文本读取、`git diff --check` 或构建成功代替此检查，因为这些方式可能吞掉或忽略 BOM。
+
+	```powershell
+	$base = git merge-base HEAD origin/master
+	$files = @((git -c core.quotepath=false diff --name-only --diff-filter=ACMRTUXB $base --) + (git -c core.quotepath=false ls-files --others --exclude-standard)) | Sort-Object -Unique
+	$bom = @($files | Where-Object {
+		if (-not (Test-Path -LiteralPath $_ -PathType Leaf)) { return $false }
+		$b = [IO.File]::ReadAllBytes($_)
+		$b.Length -ge 3 -and $b[0] -eq 0xEF -and $b[1] -eq 0xBB -and $b[2] -eq 0xBF
+	})
+	if ($bom) { $bom | ForEach-Object { "UTF-8 BOM: $_" }; exit 1 }
+	"UTF-8 BOM check passed ($($files.Count) files)."
+	```
+
+	无法本地验证的 tML 运行时行为，在总结中明确说明未验证项。
 8. **不新建文档文件**（md 等），除非用户要求；代码自解释优先。
 9. 遇到构建/测试问题先查 `Documents/源代码编译流程.md` 与 `.cursor/rules/*.mdc`，再向用户提问。
 
