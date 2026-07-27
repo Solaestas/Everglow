@@ -88,7 +88,7 @@ public class LanternCrackingRay : Visual
 				range += (Timer - 65) * 200f;
 				targetValueY -= 20000;
 			}
-			if(Timer > 70)
+			if (Timer > 70)
 			{
 				mulColor *= (90 - Timer) / 20f;
 			}

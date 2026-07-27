@@ -7,7 +7,7 @@ public class PurpleBallEffect : ModProjectile
 	public override void SetStaticDefaults()
 	{
 		// DisplayName.SetDefault("PurpleBallEffect");
-			}
+	}
 	public override void SetDefaults()
 	{
 		Projectile.width = 20;

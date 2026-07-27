@@ -10,7 +10,8 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
 public class HeatproofDoorClosed : ModTile
 {
-	public override void SetStaticDefaults() {
+	public override void SetStaticDefaults()
+	{
 		// Properties
 		Main.tileFrameImportant[Type] = true;
 		Main.tileBlockLight[Type] = true;
@@ -35,15 +36,18 @@ public class HeatproofDoorClosed : ModTile
 		TileObjectData.addTile(Type);
 	}
 
-	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+	public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
+	{
 		return true;
 	}
 
-	public override void NumDust(int i, int j, bool fail, ref int num) {
+	public override void NumDust(int i, int j, bool fail, ref int num)
+	{
 		num = 1;
 	}
 
-	public override void MouseOver(int i, int j) {
+	public override void MouseOver(int i, int j)
+	{
 		Player player = Main.LocalPlayer;
 		player.noThrow = 2;
 		player.cursorItemIconEnabled = true;

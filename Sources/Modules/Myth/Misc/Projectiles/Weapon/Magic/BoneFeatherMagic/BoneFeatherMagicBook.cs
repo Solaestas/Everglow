@@ -1,6 +1,7 @@
 using Everglow.SpellAndSkull.Projectiles;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.BoneFeatherMagic;
+
 internal class BoneFeatherMagicBook : MagicBookProjectile
 {
 	public override string Texture => "Everglow/" + ModAsset.BoneFeatherMagic_Path;

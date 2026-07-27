@@ -437,7 +437,7 @@ public abstract partial class MeleeProj_3D : ModProjectile, IWarpProjectile_warp
 
 		int middleCoord0 = 0;
 		int middleCoord1 = 1;
-		if(Owner.direction == 1)
+		if (Owner.direction == 1)
 		{
 			(middleCoord0, middleCoord1) = (middleCoord1, middleCoord0);
 		}

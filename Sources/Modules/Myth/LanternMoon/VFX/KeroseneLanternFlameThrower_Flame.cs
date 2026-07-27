@@ -47,7 +47,7 @@ public class KeroseneLanternFlameThrower_Flame : Visual
 		pocession = MathF.Pow(pocession, 1.25f);
 		float timeValue = (float)(Main.time * 0.002);
 		float realScale = Scale;
-		if(Timer < 5)
+		if (Timer < 5)
 		{
 			realScale *= Timer / 5f;
 		}

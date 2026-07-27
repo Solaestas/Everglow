@@ -2,18 +2,18 @@ namespace Everglow.Yggdrasil.YggdrasilTown.Items.Miscs;
 
 public class GoodNeighborCoin : ModItem
 {
-    public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Miscs;
+	public override string LocalizationCategory => Everglow.Commons.Utilities.LocalizationUtils.Categories.Miscs;
 
-    public override void SetDefaults()
-    {
-        Item.width = 28;
-        Item.height = 28;
+	public override void SetDefaults()
+	{
+		Item.width = 28;
+		Item.height = 28;
 
-        Item.stack = Item.CommonMaxStack;
+		Item.stack = Item.CommonMaxStack;
 
-        Item.rare = ItemRarityID.Green;
-        Item.value = 0;
-    }
+		Item.rare = ItemRarityID.Green;
+		Item.value = 0;
+	}
 
-    public override bool CanStackInWorld(Item source) => true;
+	public override bool CanStackInWorld(Item source) => true;
 }

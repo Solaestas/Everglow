@@ -41,7 +41,7 @@ public class Tusk_ground : ModProjectile
 			{
 				Projectile.position -= Projectile.rotation.ToRotationVector2() * 4;
 			}
-			else if(Collision.SolidCollision(Projectile.Center + Projectile.rotation.ToRotationVector2() * 4, 0, 0))
+			else if (Collision.SolidCollision(Projectile.Center + Projectile.rotation.ToRotationVector2() * 4, 0, 0))
 			{
 				Projectile.position += Projectile.rotation.ToRotationVector2() * 4;
 			}
@@ -183,7 +183,7 @@ public class Tusk_ground : ModProjectile
 
 		// Gum
 		float frameY = 0;
-		if(Projectile.timeLeft is > 5 and < 72)
+		if (Projectile.timeLeft is > 5 and < 72)
 		{
 			frameY = 0.5f;
 		}

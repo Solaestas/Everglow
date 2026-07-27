@@ -4,6 +4,7 @@ using Everglow.Food.Buffs.ModFoodBuffs;
 using Everglow.Food.FoodUtilities;
 
 namespace Everglow.Food.Items.ModFood;
+
 public class TamakoSushi : FoodBase
 {
 	public override FoodInfo FoodInfo

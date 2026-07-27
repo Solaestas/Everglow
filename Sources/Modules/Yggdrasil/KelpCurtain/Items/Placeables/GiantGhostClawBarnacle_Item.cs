@@ -17,7 +17,7 @@ public class GiantGhostClawBarnacle_Item : ModItem
 
 	public override void HoldItem(Player player)
 	{
-		if(Main.mouseRight && Main.mouseRightRelease)
+		if (Main.mouseRight && Main.mouseRightRelease)
 		{
 			YggdrasilWorld.CanEnterTheGiantGhoseClawBarnacle = !YggdrasilWorld.CanEnterTheGiantGhoseClawBarnacle;
 		}

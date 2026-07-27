@@ -115,11 +115,11 @@ public class LanternFlowLine : ModProjectile
 			Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars_Dark.ToArray(), 0, bars_Dark.Count - 2);
 		}
 		int lightValue = 1;
-		if(Projectile.timeLeft > 550 && Projectile.timeLeft < 560)
+		if (Projectile.timeLeft > 550 && Projectile.timeLeft < 560)
 		{
 			lightValue = Projectile.timeLeft - 550;
 		}
-		for (int k = 0; k < lightValue;k++)
+		for (int k = 0; k < lightValue; k++)
 		{
 			if (bars_left.Count > 2)
 			{

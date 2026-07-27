@@ -9,7 +9,8 @@ namespace Everglow.Myth.TheFirefly.Tiles;
 
 public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 {
-	internal struct BasicDrawInfo {
+	internal struct BasicDrawInfo
+	{
 		internal Vector2 DrawCenterPos;
 		internal SpriteBatch SpriteBatch;
 		internal TileDrawing TileDrawing;
@@ -59,14 +60,16 @@ public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 		return false;
 	}
 
-	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
+	public void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing)
+	{
 		var tile = Main.tile[pos];
 		var drawCenterPos = pos.ToWorldCoordinates(autoAddY: 16) - screenPosition;
 		Rectangle Frame(int y) => new Rectangle(tile.TileFrameX, y, 72, 56);
 		Point SwayHitboxPos(int addX) => new Point(pos.X + addX, pos.Y);
 		Point PaintPos(int addY) => new Point(pos.X, pos.Y - addY);
 
-		var drawInfo = new BasicDrawInfo() {
+		var drawInfo = new BasicDrawInfo()
+		{
 			DrawCenterPos = drawCenterPos,
 			SpriteBatch = spriteBatch,
 			TileDrawing = tileDrawing
@@ -91,17 +94,19 @@ public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 	/// <summary>
 	/// 绘制灌木的一个小Piece
 	/// </summary>
-	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BasicDrawInfo drawInfo, Color? specialColor = null) {
+	private void DrawShrubPiece(Rectangle frame, float swayStrength, Point tilePos, Point paintPos, BasicDrawInfo drawInfo, Color? specialColor = null)
+	{
 		var drawCenterPos = drawInfo.DrawCenterPos;
 		var spriteBatch = drawInfo.SpriteBatch;
 		var tileDrawing = drawInfo.TileDrawing;
-	
+
 		var tile = Main.tile[tilePos];
 		ushort type = tile.TileType;
-		
+
 		// 回声涂料
-		if (!TileDrawing.IsVisible(tile)) return;
-		
+		if (!TileDrawing.IsVisible(tile))
+			return;
+
 		int paint = Main.tile[paintPos].TileColor;
 		int textureStyle = tile.TileFrameX + frame.Y * 50;
 		Texture2D tex = PaintedTextureSystem.TryGetPaintedTexture(ModAsset.BlackStarShrubDraw_Path, type, textureStyle, paint, tileDrawing);
@@ -116,24 +121,25 @@ public class BlackStarShrub : ModTile, ITileFluentlyDrawn
 		float highestWindGridPushComplex = tileDrawing.GetHighestWindGridPushComplex(tilePos.X, tilePos.Y, 1, 1, totalPushTime, pushForcePerFrame, 3, swapLoopDir: true);
 		windCycle += highestWindGridPushComplex;
 		float rotation = windCycle * swayStrength;
-		
+
 		// 角速度计算，源码乱抄与瞎写代码的结合，用于抖花粉
-        float factor = tilePos.X + tilePos.Y / 100;
-        float radiusNow = (float) Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double) factor);
-        float radiusPrev = (float) Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double) factor);
+		float factor = tilePos.X + tilePos.Y / 100;
+		float radiusNow = (float)Math.Cos(tileDrawing._sunflowerWindCounter * Math.PI * 2.0 + (double)factor);
+		float radiusPrev = (float)Math.Cos(_ooldWindCounter * Math.PI * 2.0 + (double)factor);
 		float angularVelocity = highestWindGridPushComplex + radiusNow - radiusPrev;
 
 		// 颜色
 		Color tileLight = Lighting.GetColor(tilePos);
 		// 万象写的specialColor特效，似乎是摇曳越强越亮
-		if (specialColor is not null) {
+		if (specialColor is not null)
+		{
 			float maxC = Math.Max(specialColor.Value.R / 255f, Math.Abs(rotation * 6));
 			maxC = Math.Clamp(maxC, 0, 1);
 			tileLight = new Color(maxC, maxC, maxC, 0);
 		}
 		tileDrawing.DrawAnimatedTile_AdjustForVisionChangers(paintPos.X, paintPos.Y, tile, type, 0, 0, ref tileLight, tileDrawing._rand.NextBool(4));
 		tileLight = tileDrawing.DrawTiles_GetLightOverride(paintPos.Y, paintPos.X, tile, type, 0, 0, tileLight);
-		
+
 		var origin = new Vector2(36, 56);
 		var tileSpriteEffect = SpriteEffects.None;
 		spriteBatch.Draw(tex, drawCenterPos + new Vector2(0, 6), frame, tileLight, rotation, origin, 1f, tileSpriteEffect, 0f);

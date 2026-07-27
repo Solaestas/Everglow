@@ -26,14 +26,14 @@ public class PlayerCollisionIndicator : Visual
 	public override void Draw()
 	{
 		float fade = 1f;
-		if(Timer > 1)
+		if (Timer > 1)
 		{
 			fade = 0.2f;
 		}
 		Color drawC = new Color(1f, 1f, 1f, 0) * fade;
 		Texture2D texture = ModAsset.LightPoint2.Value;
 		Ins.Batch.Draw(texture, Pos, null, drawC, 0, texture.Size() * 0.5f, 0.25f, SpriteEffects.None);
-		if(HitBox != default)
+		if (HitBox != default)
 		{
 			Ins.Batch.Draw(texture, HitBox, new Rectangle(24, 24, 4, 4), drawC);
 		}

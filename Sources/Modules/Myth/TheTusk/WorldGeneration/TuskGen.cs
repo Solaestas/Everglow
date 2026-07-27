@@ -33,7 +33,7 @@ public class TuskGen : ModSystem
 	/// <returns></returns>
 	public static bool TuskLandActive()
 	{
-		if(!SubworldSystem.IsActive<TuskWorld>())
+		if (!SubworldSystem.IsActive<TuskWorld>())
 		{
 			return false;
 		}
@@ -249,7 +249,7 @@ public class TuskGen : ModSystem
 	}
 	public static Point GetFlattenPoint()
 	{
-		for(int times = 0;times < 200;times++)
+		for (int times = 0; times < 200; times++)
 		{
 			int x = WorldGen.genRand.Next(400, Main.maxTilesX - 399);
 			int y = 200;
@@ -262,14 +262,14 @@ public class TuskGen : ModSystem
 				}
 			}
 			int score = 0;
-			for(int i = -20;i < 21;i++)
+			for (int i = -20; i < 21; i++)
 			{
 				for (int j = -20; j < 21; j++)
 				{
-					if(new Vector2(i, j).Length() <= 20)
+					if (new Vector2(i, j).Length() <= 20)
 					{
 						Tile tile = Main.tile[x + i, y + j];
-						if(tile.HasTile)
+						if (tile.HasTile)
 						{
 							score += j;
 						}
@@ -282,7 +282,7 @@ public class TuskGen : ModSystem
 			}
 
 			if (score > 6000)
-			{           
+			{
 				//Debug Code.
 				//for (int j = 0; j < score / 1000; j++)
 				//{

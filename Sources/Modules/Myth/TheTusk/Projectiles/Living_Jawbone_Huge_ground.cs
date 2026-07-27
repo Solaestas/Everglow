@@ -290,7 +290,7 @@ public class Living_Jawbone_Huge_ground : ModProjectile
 			for (int i = 0; i < 6; i++)
 			{
 				Vector2 position = Projectile.Center + new Vector2(Main.rand.NextFloat(-80, 80), -30).RotatedBy(Projectile.rotation + MathHelper.PiOver2);
-				if(Collision.SolidCollision(position, 0, 0))
+				if (Collision.SolidCollision(position, 0, 0))
 				{
 					for (int j = 0; j < 20; j++)
 					{

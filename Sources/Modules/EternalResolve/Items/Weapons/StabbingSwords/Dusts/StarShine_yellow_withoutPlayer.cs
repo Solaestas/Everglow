@@ -14,7 +14,7 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 			dust.position += dust.velocity;
 			dust.scale = (1 - MathF.Sin(dust.color.A / 15f)) * dust.color.R / 100f;
 			dust.color.R--;
-			if(dust.color.R <= 1)
+			if (dust.color.R <= 1)
 			{
 				dust.color.R = 1;
 			}

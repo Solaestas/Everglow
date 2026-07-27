@@ -5,6 +5,7 @@ using Humanizer.Bytes;
 using Terraria.DataStructures;
 
 namespace Everglow.Food.Projectiles;
+
 internal class CreamChocolateCup_CreamFlow : ModProjectile
 {
 	public override void SetDefaults()
@@ -43,7 +44,7 @@ internal class CreamChocolateCup_CreamFlow : ModProjectile
 			{
 				bool b = JointVelocity[i].Y < 0;
 				JointVelocity[i] = new Vector2(JointVelocity[i].X, JointVelocity[i].Y * -1) * -0.4f;
-				if(b)
+				if (b)
 				{
 					JointVelocity[i] += new Vector2(0, -0.15f);
 				}
@@ -116,7 +117,7 @@ internal class CreamChocolateCup_CreamFlow : ModProjectile
 	}
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
-		if(Projectile.timeLeft < 120)
+		if (Projectile.timeLeft < 120)
 		{
 			return false;
 		}
@@ -132,7 +133,7 @@ internal class CreamChocolateCup_CreamFlow : ModProjectile
 		{
 			Vector2 v1 = v0 + Projectile.Center;
 			Rectangle r0 = new Rectangle((int)(v1.X - 24), (int)(v1.Y - 24), 48, 48);
-			if(Rectangle.Intersect(targetHitbox, r0) != Rectangle.emptyRectangle)
+			if (Rectangle.Intersect(targetHitbox, r0) != Rectangle.emptyRectangle)
 			{
 				return true;
 			}
@@ -175,7 +176,7 @@ internal class CreamChocolateCup_CreamFlow : ModProjectile
 				if (correctionTimeLeft < 120f)
 				{
 					colorA = (byte)((1 - correctionTimeLeft / 120f) * 255);
-					if(correctionTimeLeft < 0)
+					if (correctionTimeLeft < 0)
 					{
 						colorA = 255;
 					}

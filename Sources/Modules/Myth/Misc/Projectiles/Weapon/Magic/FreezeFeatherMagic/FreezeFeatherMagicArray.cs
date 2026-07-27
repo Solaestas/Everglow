@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Everglow.Myth.Misc.Projectiles.Weapon.Magic.FreezeFeatherMagic;
+
 internal class FrozenRingPipeline : Pipeline
 {
 	public override void Load()

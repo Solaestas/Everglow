@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class Acytaea_Lock : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";

@@ -37,7 +37,7 @@ class GreenFlame1Split : ModProjectile
 		Lighting.AddLight(Projectile.Center, (byte)(color0.R * ka) / 100f, (byte)(color0.G * ka) / 100f, (byte)(color0.B * ka) / 100f);
 		if (Projectile.timeLeft < 60)
 			Projectile.scale *= 0.97f;
-		
+
 		color0.R = (byte)(color0.R * 0.94f + Aimcolor.R * 0.06f);
 		color0.G = (byte)(color0.G * 0.94f + Aimcolor.G * 0.06f);
 		color0.B = (byte)(color0.B * 0.94f + Aimcolor.B * 0.06f);

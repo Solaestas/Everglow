@@ -29,8 +29,10 @@
 
 using System;
 
-namespace Spine {
-	public class PathConstraintData : ConstraintData {
+namespace Spine
+{
+	public class PathConstraintData : ConstraintData
+	{
 		internal ExposedList<BoneData> bones = new ExposedList<BoneData>();
 		internal SlotData target;
 		internal PositionMode positionMode;
@@ -39,7 +41,8 @@ namespace Spine {
 		internal float offsetRotation;
 		internal float position, spacing, rotateMix, translateMix;
 
-		public PathConstraintData (string name) : base(name) {
+		public PathConstraintData(string name) : base(name)
+		{
 		}
 
 		public ExposedList<BoneData> Bones { get { return bones; } }
@@ -54,15 +57,18 @@ namespace Spine {
 		public float TranslateMix { get { return translateMix; } set { translateMix = value; } }
 	}
 
-	public enum PositionMode {
+	public enum PositionMode
+	{
 		Fixed, Percent
 	}
 
-	public enum SpacingMode {
+	public enum SpacingMode
+	{
 		Length, Fixed, Percent
 	}
 
-	public enum RotateMode {
+	public enum RotateMode
+	{
 		Tangent, Chain, ChainScale
 	}
 }

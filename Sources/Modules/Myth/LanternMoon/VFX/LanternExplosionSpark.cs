@@ -24,7 +24,7 @@ public class LanternExplosionSpark : Visual
 		Rotation += RotateSpeed;
 		Velocity *= MathF.Pow(0.9f, Velocity.Length() / 8f);
 		Velocity = Velocity.RotatedBy(VelocityRotateSpeed);
-		if(Fade <= 0.2)
+		if (Fade <= 0.2)
 		{
 			Scale = Fade * 5;
 		}

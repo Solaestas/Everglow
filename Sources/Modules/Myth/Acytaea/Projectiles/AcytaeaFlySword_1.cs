@@ -3,6 +3,7 @@ using Everglow.Myth.Acytaea.VFXs;
 using Terraria.Audio;
 
 namespace Everglow.Myth.Acytaea.Projectiles;
+
 public class AcytaeaFlySword_1 : ModProjectile
 {
 	public override string Texture => "Everglow/Myth/Acytaea/Projectiles/AcytaeaSword_projectile";
@@ -48,7 +49,7 @@ public class AcytaeaFlySword_1 : ModProjectile
 			}
 			else
 			{
-				if(Projectile.timeLeft <= 570 && Projectile.velocity.Length() > 60f)
+				if (Projectile.timeLeft <= 570 && Projectile.velocity.Length() > 60f)
 				{
 					for (int x = 0; x < 2; x++)
 					{
@@ -206,7 +207,7 @@ public class AcytaeaFlySword_1 : ModProjectile
 	{
 		Main.spriteBatch.End();
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-		if(TimeTokill > -50 && TimeTokill < 0)
+		if (TimeTokill > -50 && TimeTokill < 0)
 		{
 			DrawTrail(Commons.ModAsset.Trail_2_black_thick.Value, Color.White * 0.7f);
 			DrawTrail(Commons.ModAsset.Trail_6.Value, new Color(1f, 0f, 0.4f, 0f));

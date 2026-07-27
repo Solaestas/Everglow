@@ -73,7 +73,7 @@ public class ElevatorHelper : Visual
 		}
 		else
 		{
-			if(ParentElevator is not null && ParentElevator.Active)
+			if (ParentElevator is not null && ParentElevator.Active)
 			{
 				Position = ParentElevator.Box.Center + RelativePos;
 			}
@@ -101,7 +101,7 @@ public class ElevatorHelper : Visual
 		}
 		if (ParentElevator is null || !ParentElevator.Active)
 		{
-			if(AnimationTimer == 27)
+			if (AnimationTimer == 27)
 			{
 				foreach (var item in Main.item)
 				{

@@ -161,7 +161,7 @@ public class GoldenLotusStaff_subproj : ModProjectile
 					if (distance < 800 && (npc.Center - Owner.Center).Length() < 1300)
 					{
 						float value = 800 - distance - npc.defense * 50;
-						if(value > minValue)
+						if (value > minValue)
 						{
 							minValue = value;
 							targetNPC = npc;
@@ -251,11 +251,11 @@ public class GoldenLotusStaff_subproj : ModProjectile
 	public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 	{
 		bool hasHit = false;
-		foreach(var npc in HasHitTargets)
+		foreach (var npc in HasHitTargets)
 		{
-			if(npc is not null && npc.active)
+			if (npc is not null && npc.active)
 			{
-				if(npc.Hitbox == targetHitbox)
+				if (npc.Hitbox == targetHitbox)
 				{
 					hasHit = true;
 					break;
@@ -272,7 +272,7 @@ public class GoldenLotusStaff_subproj : ModProjectile
 	public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 	{
 		modifiers.FinalDamage *= 3f / (HasHitTargets.Count + 3);
-		if(HasHitTargets.Contains(target))
+		if (HasHitTargets.Contains(target))
 		{
 			modifiers.FinalDamage *= 0;
 			modifiers.Knockback *= 0;
@@ -284,7 +284,7 @@ public class GoldenLotusStaff_subproj : ModProjectile
 	public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 	{
 		HasHitTargets.Add(target);
-		if(damageDone > 1)
+		if (damageDone > 1)
 		{
 			for (int g = 0; g < 8; g++)
 			{

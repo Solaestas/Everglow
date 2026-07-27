@@ -86,7 +86,7 @@ public class DoubleArmsChineseStreetLamp : ModTile, ITileFluentlyDrawn
 		DrawLanternPiece(new Rectangle(4 + addRecX, 90, 10, 10), secondSway, new Vector2(32, 18) + firstOffsetRight, pos + new Point(2, 2), pos + new Point(2, 2), drawCenterPos, new Vector2(5, 0), spriteBatch, tileDrawing);
 		DrawLanternPiece(new Rectangle(6 + addRecX, 100, 6, 8), thirdSway, new Vector2(32, 18) + firstOffsetRight + new Vector2(0, 10).RotatedBy(GetWindRot(pos + new Point(2, 2), 1, 1, secondSway, tileDrawing)), pos + new Point(2, 3), pos + new Point(2, 3), drawCenterPos, new Vector2(3, 0), spriteBatch, tileDrawing);
 
-		if(tile.TileFrameX < 54)
+		if (tile.TileFrameX < 54)
 		{
 			addRecX = 36;
 			DrawLanternPiece(new Rectangle(2 + addRecX, 80, 14, 10), firstSway, new Vector2(0, 18), pos + new Point(0, 1), pos + new Point(0, 1), drawCenterPos, new Vector2(7, 0), spriteBatch, tileDrawing, new Color(1f, 0.5f, 0f, 0));

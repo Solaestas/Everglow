@@ -1,4 +1,4 @@
-﻿using Everglow.SpellAndSkull.Projectiles;
+using Everglow.SpellAndSkull.Projectiles;
 
 namespace Everglow.SpellAndSkull.Projectiles.CursedFlames;
 

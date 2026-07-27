@@ -1,4 +1,4 @@
-﻿namespace Everglow.PlantAndFarm.Dusts;
+namespace Everglow.PlantAndFarm.Dusts;
 
 public class PFMBuff : ModDust //PFM = Plant-Farm Module
 {

@@ -46,7 +46,7 @@ public class KillLanternMoonMobsWave : Visual
 		Ins.Batch.Draw(Commons.ModAsset.Wave_full_black.Value, bars, PrimitiveType.TriangleStrip);
 
 		bars = new List<Vertex2D>();
-		drawColor = Color.Lerp(new Color(0.5f, 0f, 0f, 0f), new Color(1f, 0.3f, 0.3f, 0),  MathF.Pow(Fade, 2)) * Fade;
+		drawColor = Color.Lerp(new Color(0.5f, 0f, 0f, 0f), new Color(1f, 0.3f, 0.3f, 0), MathF.Pow(Fade, 2)) * Fade;
 		for (int r = 0; r <= count; r++)
 		{
 			Vector2 radius = new Vector2(Range, 0).RotatedBy(r * MathHelper.TwoPi / count);

@@ -1,4 +1,4 @@
-﻿namespace Everglow.Ocean.Walls;
+namespace Everglow.Ocean.Walls;
 
 public class BasaltWall : ModWall
 {

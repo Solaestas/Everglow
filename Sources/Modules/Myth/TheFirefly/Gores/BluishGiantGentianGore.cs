@@ -9,18 +9,18 @@ public abstract class BluishGiantGentianGore : DissolveGore
 	{
 		LightValue = 0.4f;
 		base.Update();
-		if(timer < 10)
+		if (timer < 10)
 		{
-			foreach(Projectile projectile in Main.projectile)
+			foreach (Projectile projectile in Main.projectile)
 			{
-				if(projectile.active)
+				if (projectile.active)
 				{
-					if((projectile.Center - position).Length() < 350)
+					if ((projectile.Center - position).Length() < 350)
 					{
-						if(projectile.velocity.Length() > velocity.Length() * 0.2f)
+						if (projectile.velocity.Length() > velocity.Length() * 0.2f)
 						{
 							velocity += projectile.velocity * 0.1f;
-							if(Main.rand.NextBool(6))
+							if (Main.rand.NextBool(6))
 							{
 								velocity += new Vector2(Main.rand.NextFloat(4f, 15f), 0).RotatedByRandom(MathHelper.TwoPi);
 							}
@@ -32,7 +32,7 @@ public abstract class BluishGiantGentianGore : DissolveGore
 		float alpha2 = timer / (float)maxTime * 0.2f;
 		alpha2 = Math.Clamp(alpha2, 0.0f, 1.0f);
 		alpha2 = MathF.Sin(alpha2 * MathHelper.Pi);
-		if(Main.rand.NextFloat(5, 100) < velocity.Length())
+		if (Main.rand.NextFloat(5, 100) < velocity.Length())
 		{
 			Dust dust = Dust.NewDustDirect(position, width, height, ModContent.DustType<BluishGiantGentian_dust_wither>());
 			dust.velocity = velocity * Main.rand.NextFloat(0.2f, 0.8f);

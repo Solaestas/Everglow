@@ -27,7 +27,7 @@ public class TitaniumClub_smash_explosion : ModProjectile, IWarpProjectile
 
 	public override void AI()
 	{
-		if(Projectile.timeLeft == 200)
+		if (Projectile.timeLeft == 200)
 		{
 			if (Projectile.ai[0] == 20)
 			{
@@ -45,7 +45,7 @@ public class TitaniumClub_smash_explosion : ModProjectile, IWarpProjectile
 		for (int g = 0; g < frequency; g++)
 		{
 			Vector2 newVelocity = new Vector2(0, -7 * Main.player[Projectile.owner].gravDir * Main.rand.NextFloat(0.5f, 2.3f)).RotatedBy(Main.rand.NextFloat(-2f, 2f));
-			if(Projectile.ai[0] == 30)
+			if (Projectile.ai[0] == 30)
 			{
 				newVelocity *= 1.5f;
 			}

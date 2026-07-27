@@ -25,7 +25,7 @@ public class CurseSpellDust_blue : Visual
 		{
 			Scale += 0.13f;
 		}
-		if(MaxTime - Timer <= 10)
+		if (MaxTime - Timer <= 10)
 		{
 			Scale -= 0.13f;
 		}
@@ -41,7 +41,7 @@ public class CurseSpellDust_blue : Visual
 		Texture2D tex = Commons.ModAsset.LightPoint2.Value;
 		var drawColor = new Color(0.6f, 0.6f, 1f, 0);
 		float fade = 1;
-		if(MaxTime - Timer < 30)
+		if (MaxTime - Timer < 30)
 		{
 			fade = (MaxTime - Timer) / 30f;
 		}

@@ -48,7 +48,7 @@ public class GlowWoodClock : ModTile
 			zero = Vector2.Zero;
 		Texture2D tex = ModAsset.GlowWoodClockGlow.Value;
 		spriteBatch.Draw(tex, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(0.8f, 0.8f, 0.8f, 0), 0, new Vector2(0), 1, SpriteEffects.None, 0);
-		if(tile.TileFrameX == 18 && tile.TileFrameY == 72)
+		if (tile.TileFrameX == 18 && tile.TileFrameY == 72)
 		{
 			Vector2 offset = new Vector2(3.5f, -47);
 			Texture2D hourHand = ModAsset.GlowWoodClock_hourNeedle.Value;

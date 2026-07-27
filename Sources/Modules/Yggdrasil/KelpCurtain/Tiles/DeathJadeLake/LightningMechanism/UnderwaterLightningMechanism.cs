@@ -84,14 +84,14 @@ public class UnderwaterLightningMechanism : ModTile
 			mechanismEntity.SetState(MechanismState.Resting);
 			mechanismEntity.CurrentFrame = 0;
 		}
-		foreach(var proj in Main.projectile)
+		foreach (var proj in Main.projectile)
 		{
-			if(proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
+			if (proj != null && proj.active && proj.type == ModContent.ProjectileType<UnderwaterLightningMechanism_Lightning>())
 			{
 				UnderwaterLightningMechanism_Lightning uLLML = proj.ModProjectile as UnderwaterLightningMechanism_Lightning;
 				if (uLLML is not null)
 				{
-					if(uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
+					if (uLLML.Timer < 6 && (uLLML.StartPos == entityPos.ToWorldCoordinates() || uLLML.EndPos == entityPos.ToWorldCoordinates()))
 					{
 						return;
 					}
@@ -224,7 +224,7 @@ public class UnderwaterLightningMechanism : ModTile
 		Tile tile = Main.tile[i, j];
 		Point16 entityPoint = new Point16(i - tile.TileFrameX % 54 / 18 + 1, j - tile.TileFrameY / 18);
 		Tile entityTile = Main.tile[entityPoint];
-		if(entityTile.TileFrameX == 72)
+		if (entityTile.TileFrameX == 72)
 		{
 			entityPoint += new Point16(0, 4);
 		}

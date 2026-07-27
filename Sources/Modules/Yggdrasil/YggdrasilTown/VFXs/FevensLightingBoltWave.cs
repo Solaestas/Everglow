@@ -71,14 +71,14 @@ public class FevensLightingBoltWave : Visual
 		{
 			Vector2 drawPos = position;
 			Color drawC = new Color(0.7f, 0f, 0.1f, 0);
-			if(timer < 12 && timer > 4)
+			if (timer < 12 && timer > 4)
 			{
-				if(timer % 8 < 4)
+				if (timer % 8 < 4)
 				{
 					drawC = Color.Lerp(new Color(0.0f, 0f, 0.71f, 0), new Color(0.7f, 0f, 0.1f, 0), (i % 8) * 0.25f);
 				}
 			}
-			if(timer <= 4)
+			if (timer <= 4)
 			{
 				drawC = new Color(1f, 1f, 1f, 0);
 			}

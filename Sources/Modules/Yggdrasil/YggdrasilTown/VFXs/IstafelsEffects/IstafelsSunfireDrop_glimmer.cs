@@ -12,7 +12,7 @@ public class IstafelsSunfireDrop_glimmer : ModDust
 		if (dust.customData is Projectile)
 		{
 			Projectile projectile = dust.customData as Projectile;
-			if(projectile is not null)
+			if (projectile is not null)
 			{
 				dust.position = projectile.Center + (dust.velocity - projectile.velocity).NormalizeSafe() * projectile.width * 0.3f;
 				dust.scale += 0.005f;

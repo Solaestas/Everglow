@@ -25,7 +25,7 @@ class XiaoHit : ModProjectile
 	}
 	public override void OnSpawn(IEntitySource source)
 	{
-		for(int x = 0;x < 5;x++)
+		for (int x = 0; x < 5; x++)
 		{
 			GenerateVFX();
 		}

@@ -42,18 +42,22 @@ using System.Threading.Tasks;
 using Windows.Storage;
 #endif
 
-namespace Spine {
-	public class Atlas : IEnumerable<AtlasRegion> {
+namespace Spine
+{
+	public class Atlas : IEnumerable<AtlasRegion>
+	{
 		readonly List<AtlasPage> pages = new List<AtlasPage>();
 		List<AtlasRegion> regions = new List<AtlasRegion>();
 		TextureLoader textureLoader;
 
 		#region IEnumerable implementation
-		public IEnumerator<AtlasRegion> GetEnumerator () {
+		public IEnumerator<AtlasRegion> GetEnumerator()
+		{
 			return regions.GetEnumerator();
 		}
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator () {
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
 			return regions.GetEnumerator();
 		}
 		#endregion
@@ -61,8 +65,8 @@ namespace Spine {
 		public List<AtlasRegion> Regions { get { return regions; } }
 		public List<AtlasPage> Pages { get { return pages; } }
 
-		#if !(IS_UNITY)
-		#if WINDOWS_STOREAPP
+#if !(IS_UNITY)
+#if WINDOWS_STOREAPP
 		private async Task ReadFile(string path, TextureLoader textureLoader) {
 			var folder = Windows.ApplicationModel.Package.Current.InstalledLocation;
 			var file = await folder.GetFileAsync(path).AsTask().ConfigureAwait(false);
@@ -78,55 +82,68 @@ namespace Spine {
 		public Atlas(string path, TextureLoader textureLoader) {
 			this.ReadFile(path, textureLoader).Wait();
 		}
-		#else
+#else
 
-		public Atlas (string path, TextureLoader textureLoader) {
+		public Atlas(string path, TextureLoader textureLoader)
+		{
 
-			#if WINDOWS_PHONE
+#if WINDOWS_PHONE
 			Stream stream = Microsoft.Xna.Framework.TitleContainer.OpenStream(path);
 			using (StreamReader reader = new StreamReader(stream)) {
-			#else
-			using (StreamReader reader = new StreamReader(path)) {
-			#endif // WINDOWS_PHONE
+#else
+			using (StreamReader reader = new StreamReader(path))
+			{
+#endif // WINDOWS_PHONE
 
-				try {
+				try
+				{
 					Load(reader, Path.GetDirectoryName(path), textureLoader);
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					throw new Exception("Error reading atlas file: " + path, ex);
 				}
 
 			}
 		}
-		#endif // WINDOWS_STOREAPP
+#endif // WINDOWS_STOREAPP
 
-		#endif
+#endif
 
-		public Atlas (TextReader reader, string dir, TextureLoader textureLoader) {
+		public Atlas(TextReader reader, string dir, TextureLoader textureLoader)
+		{
 			Load(reader, dir, textureLoader);
 		}
 
-		public Atlas (List<AtlasPage> pages, List<AtlasRegion> regions) {
+		public Atlas(List<AtlasPage> pages, List<AtlasRegion> regions)
+		{
 			this.pages = pages;
 			this.regions = regions;
 			this.textureLoader = null;
 		}
 
-		private void Load (TextReader reader, string imagesDir, TextureLoader textureLoader) {
-			if (textureLoader == null) throw new ArgumentNullException("textureLoader", "textureLoader cannot be null.");
+		private void Load(TextReader reader, string imagesDir, TextureLoader textureLoader)
+		{
+			if (textureLoader == null)
+				throw new ArgumentNullException("textureLoader", "textureLoader cannot be null.");
 			this.textureLoader = textureLoader;
 
 			string[] tuple = new string[4];
 			AtlasPage page = null;
-			while (true) {
+			while (true)
+			{
 				string line = reader.ReadLine();
-				if (line == null) break;
+				if (line == null)
+					break;
 				if (line.Trim().Length == 0)
 					page = null;
-				else if (page == null) {
+				else if (page == null)
+				{
 					page = new AtlasPage();
 					page.name = line;
 
-					if (ReadTuple(reader, tuple) == 2) { // size is only optional for an atlas packed with an old TexturePacker.
+					if (ReadTuple(reader, tuple) == 2)
+					{ // size is only optional for an atlas packed with an old TexturePacker.
 						page.width = int.Parse(tuple[0], CultureInfo.InvariantCulture);
 						page.height = int.Parse(tuple[1], CultureInfo.InvariantCulture);
 						ReadTuple(reader, tuple);
@@ -151,7 +168,9 @@ namespace Spine {
 
 					pages.Add(page);
 
-				} else {
+				}
+				else
+				{
 					AtlasRegion region = new AtlasRegion();
 					region.name = line;
 					region.page = page;
@@ -175,10 +194,13 @@ namespace Spine {
 
 					region.u = x / (float)page.width;
 					region.v = y / (float)page.height;
-					if (region.rotate) {
+					if (region.rotate)
+					{
 						region.u2 = (x + height) / (float)page.width;
 						region.v2 = (y + width) / (float)page.height;
-					} else {
+					}
+					else
+					{
 						region.u2 = (x + width) / (float)page.width;
 						region.v2 = (y + height) / (float)page.height;
 					}
@@ -187,14 +209,16 @@ namespace Spine {
 					region.width = Math.Abs(width);
 					region.height = Math.Abs(height);
 
-					if (ReadTuple(reader, tuple) == 4) { // split is optional
-						region.splits = new [] {int.Parse(tuple[0], CultureInfo.InvariantCulture),
+					if (ReadTuple(reader, tuple) == 4)
+					{ // split is optional
+						region.splits = new[] {int.Parse(tuple[0], CultureInfo.InvariantCulture),
 												int.Parse(tuple[1], CultureInfo.InvariantCulture),
 												int.Parse(tuple[2], CultureInfo.InvariantCulture),
 												int.Parse(tuple[3], CultureInfo.InvariantCulture)};
 
-						if (ReadTuple(reader, tuple) == 4) { // pad is optional, but only present with splits
-							region.pads = new [] {int.Parse(tuple[0], CultureInfo.InvariantCulture),
+						if (ReadTuple(reader, tuple) == 4)
+						{ // pad is optional, but only present with splits
+							region.pads = new[] {int.Parse(tuple[0], CultureInfo.InvariantCulture),
 												int.Parse(tuple[1], CultureInfo.InvariantCulture),
 												int.Parse(tuple[2], CultureInfo.InvariantCulture),
 												int.Parse(tuple[3], CultureInfo.InvariantCulture)};
@@ -217,22 +241,28 @@ namespace Spine {
 			}
 		}
 
-		static string ReadValue (TextReader reader) {
+		static string ReadValue(TextReader reader)
+		{
 			string line = reader.ReadLine();
 			int colon = line.IndexOf(':');
-			if (colon == -1) throw new Exception("Invalid line: " + line);
+			if (colon == -1)
+				throw new Exception("Invalid line: " + line);
 			return line.Substring(colon + 1).Trim();
 		}
 
 		/// <summary>Returns the number of tuple values read (1, 2 or 4).</summary>
-		static int ReadTuple (TextReader reader, string[] tuple) {
+		static int ReadTuple(TextReader reader, string[] tuple)
+		{
 			string line = reader.ReadLine();
 			int colon = line.IndexOf(':');
-			if (colon == -1) throw new Exception("Invalid line: " + line);
+			if (colon == -1)
+				throw new Exception("Invalid line: " + line);
 			int i = 0, lastMatch = colon + 1;
-			for (; i < 3; i++) {
+			for (; i < 3; i++)
+			{
 				int comma = line.IndexOf(',', lastMatch);
-				if (comma == -1) break;
+				if (comma == -1)
+					break;
 				tuple[i] = line.Substring(lastMatch, comma - lastMatch).Trim();
 				lastMatch = comma + 1;
 			}
@@ -240,8 +270,10 @@ namespace Spine {
 			return i + 1;
 		}
 
-		public void FlipV () {
-			for (int i = 0, n = regions.Count; i < n; i++) {
+		public void FlipV()
+		{
+			for (int i = 0, n = regions.Count; i < n; i++)
+			{
 				AtlasRegion region = regions[i];
 				region.v = 1 - region.v;
 				region.v2 = 1 - region.v2;
@@ -251,20 +283,25 @@ namespace Spine {
 		/// <summary>Returns the first region found with the specified name. This method uses string comparison to find the region, so the result
 		/// should be cached rather than calling this method multiple times.</summary>
 		/// <returns>The region, or null.</returns>
-		public AtlasRegion FindRegion (string name) {
+		public AtlasRegion FindRegion(string name)
+		{
 			for (int i = 0, n = regions.Count; i < n; i++)
-				if (regions[i].name == name) return regions[i];
+				if (regions[i].name == name)
+					return regions[i];
 			return null;
 		}
 
-		public void Dispose () {
-			if (textureLoader == null) return;
+		public void Dispose()
+		{
+			if (textureLoader == null)
+				return;
 			for (int i = 0, n = pages.Count; i < n; i++)
 				textureLoader.Unload(pages[i].rendererObject);
 		}
 	}
 
-	public enum Format {
+	public enum Format
+	{
 		Alpha,
 		Intensity,
 		LuminanceAlpha,
@@ -274,7 +311,8 @@ namespace Spine {
 		RGBA8888
 	}
 
-	public enum TextureFilter {
+	public enum TextureFilter
+	{
 		Nearest,
 		Linear,
 		MipMap,
@@ -284,13 +322,15 @@ namespace Spine {
 		MipMapLinearLinear
 	}
 
-	public enum TextureWrap {
+	public enum TextureWrap
+	{
 		MirroredRepeat,
 		ClampToEdge,
 		Repeat
 	}
 
-	public class AtlasPage {
+	public class AtlasPage
+	{
 		public string name;
 		public Format format;
 		public TextureFilter minFilter;
@@ -300,12 +340,14 @@ namespace Spine {
 		public object rendererObject;
 		public int width, height;
 
-		public AtlasPage Clone () {
+		public AtlasPage Clone()
+		{
 			return MemberwiseClone() as AtlasPage;
 		}
 	}
 
-	public class AtlasRegion {
+	public class AtlasRegion
+	{
 		public AtlasPage page;
 		public string name;
 		public int x, y, width, height;
@@ -318,13 +360,15 @@ namespace Spine {
 		public int[] splits;
 		public int[] pads;
 
-		public AtlasRegion Clone () {
+		public AtlasRegion Clone()
+		{
 			return MemberwiseClone() as AtlasRegion;
 		}
 	}
 
-	public interface TextureLoader {
-		void Load (AtlasPage page, string path);
-		void Unload (Object texture);
+	public interface TextureLoader
+	{
+		void Load(AtlasPage page, string path);
+		void Unload(Object texture);
 	}
 }

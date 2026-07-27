@@ -144,7 +144,7 @@ public abstract class WhipProjectile : ModProjectile
 		if (Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true) > 0.5f)
 		{
 			float times = (Main.rand.NextFloat(3) - 1) * player.meleeSpeed;
-			if(times < 0)
+			if (times < 0)
 			{
 				times = 0;
 			}
@@ -170,7 +170,7 @@ public abstract class WhipProjectile : ModProjectile
 	{
 		float rangeMultiplier = WhipLength / 300f;
 		float duration = (Projectile.ai[0] - deltaStep) / TimeToFlyOut;
-		if(duration < 0)
+		if (duration < 0)
 		{
 			duration = 0;
 		}
@@ -256,7 +256,7 @@ public abstract class WhipProjectile : ModProjectile
 			Vector2 positionAdd = list0[i + 1] - positionNow;
 			float rotation = positionAdd.ToRotation() - MathHelper.PiOver2;
 			Color color = Lighting.GetColor(positionNow.ToTileCoordinates());
-			if(foreStep != 0)
+			if (foreStep != 0)
 			{
 				color *= (1 - foreStep / 3f) * 0.2f;
 			}

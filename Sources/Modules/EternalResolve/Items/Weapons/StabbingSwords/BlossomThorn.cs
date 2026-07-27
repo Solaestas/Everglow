@@ -28,5 +28,5 @@ namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords
 				Register();
 			base.AddRecipes();
 		}
-    }
+	}
 }

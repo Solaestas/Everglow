@@ -1,13 +1,13 @@
 namespace Everglow.EternalResolve.Items.Weapons.StabbingSwords.Dusts
 {
-    public class LeafDust : ModDust
+	public class LeafDust : ModDust
 	{
 		public override bool Update(Dust dust)
 		{
 			dust.position += dust.velocity;
 			dust.position += Main.player[dust.color.R].velocity;
 			dust.scale *= 0.9f;
-			if(dust.scale < 0.02f)
+			if (dust.scale < 0.02f)
 			{
 				dust.active = false;
 			}
