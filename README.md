@@ -4,7 +4,7 @@
 
 # Everglow
 
-Everglow is a *freaking awesome* mod for Terraria!.
+Everglow is a content-focused Terraria mod in active development. It adds new regions, gameplay systems, equipment, and visual effects for a fresh Terraria experience.
 
 Development in progress ✿✿ヽ(°▽°)ノ✿
 <br>
@@ -27,9 +27,19 @@ Development in progress ✿✿ヽ(°▽°)ノ✿
 
 </div>
 
-## 📖 Documentation
+## 🚀 Get Started
 
-[Everglow Docs](https://everglow.cloudea.work/docs/getting-started/introduction)
+- [Installation guide](https://everglow.cloudea.work/docs/getting-started/installation)
+- [Everglow Docs](https://everglow.cloudea.work/docs/getting-started/introduction)
+
+## 🧩 Compatibility
+
+- Terraria 1.4.4.9 via tModLoader.
+- Requires the tModLoader mod dependency [SubworldLibrary](https://github.com/jjohnsnaill/SubworldLibrary).
+
+## 🤝 Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting code, documentation, localization, or design changes. All community spaces follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## 🎯 Support us
 
