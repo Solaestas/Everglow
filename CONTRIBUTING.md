@@ -4,7 +4,7 @@ Thank you for helping improve Everglow. The project is a GPL-3.0 Terraria tModLo
 
 ## Before You Start
 
-- Search [existing issues](https://github.com/Solaestas/Everglow/issues) before opening a new one.
+- Search [existing issues](https://github.com/CycloneClub/Everglow/issues) before opening a new one.
 - Open an issue or discuss the change with maintainers before investing in a large feature, a new module, a public content rename, a build-system change, or new art/audio assets.
 - Keep one pull request focused on one problem. Avoid drive-by formatting changes or unrelated refactors.
 - Read [AGENTS.md](AGENTS.md) for the repository map, architectural boundaries, resource rules, and task-specific documentation links. It is written for coding agents but documents project constraints that apply to every contribution.
