@@ -122,7 +122,7 @@ if ($bom) { $bom | ForEach-Object { "UTF-8 BOM: $_" }; exit 1 }
 
 - Make the smallest focused patch, preserving unrelated user changes in a dirty worktree.
 - Read the relevant implementation, nearby tests, and task-specific documentation before editing.
-- Use `rg` for repository searches and `apply_patch` for source/document edits.
+- Search the codebase for callers, implementations, and related patterns before editing.
 - Verify changes in proportion to risk and report exact unverified behavior.
 
 ### Ask First
