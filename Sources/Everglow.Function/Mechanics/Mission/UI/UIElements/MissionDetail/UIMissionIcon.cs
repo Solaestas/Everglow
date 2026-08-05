@@ -192,7 +192,7 @@ public class UIMissionIcon : UIBlock
 				var drawColor = new Color(drawColorV, drawColorV, drawColorV, alpha);
 
 				float bgCV = lerpValue * 0.04f + 0.2f;
-				float bgA = (1 - lerpValue) * 0.2f + 0.6f;
+				float bgA = (1 - lerpValue) * 0.7f + 0.3f;
 				var bgC = new Color(bgCV, bgCV, bgCV, bgA);
 
 				offsetX += HitBox.Width / 2 - width;
@@ -211,7 +211,10 @@ public class UIMissionIcon : UIBlock
 			}
 		}
 
-		public override void Draw(SpriteBatch sb) => base.Draw(sb);
+		public override void Draw(SpriteBatch sb)
+		{
+			base.Draw(sb);
+		}
 
 		protected override void DrawChildren(SpriteBatch sb)
 		{
@@ -263,6 +266,17 @@ public class UIMissionIcon : UIBlock
 		private void Events_OnMouseHover(BaseElement baseElement)
 		{
 			MissionContainer.Instance.MouseText = _icon.Tooltip;
+		}
+
+		protected override void DrawSelf(SpriteBatch sb)
+		{
+			UIMissionBlock.DrawMissionPanel(sb, Info.TotalHitBox, Color.White * (PanelColor.A / 255f));
+			int x = Info.TotalHitBox.X;
+			int y = Info.TotalHitBox.Y;
+			int w = Info.TotalHitBox.Width;
+			int h = Info.TotalHitBox.Height;
+			Texture2D tex_side = ModAsset.MissionTopicFrame_bottom_side.Value;
+			sb.Draw(tex_side, new Rectangle(x + (w - 51) / 2, y + h - 7, 51, 7), null, Color.White * (PanelColor.A / 255f));
 		}
 
 		protected override void DrawChildren(SpriteBatch sb)

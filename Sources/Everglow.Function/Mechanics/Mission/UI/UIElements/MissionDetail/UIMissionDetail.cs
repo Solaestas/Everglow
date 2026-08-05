@@ -173,8 +173,8 @@ public class UIMissionDetail : UIBlock
 
 		_icon.Info.Width.SetValue(420 * Scale);
 		_icon.Info.Height.SetValue(256 * Scale);
-		_icon.Info.Left.SetValue((Info.Width - _icon.Info.Width) / 2);
-		_icon.Info.Top.SetValue(18 * Scale);
+		_icon.Info.Left.SetValue(detailPanelDistance + detailPanelWidth / 2f - 210);
+		_icon.Info.Top.SetValue(93 * Scale);
 
 		_tree.Info.Width.SetValue(81 * Scale);
 		_tree.Info.Height.SetValue(162 * Scale);
@@ -193,9 +193,9 @@ public class UIMissionDetail : UIBlock
 		_timerIcon.Info.Height = _timer.Info.Height;
 
 		_description.Info.Width.SetValue(detailPanelWidth * Scale);
-		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 520) * Scale);
+		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 560) * Scale);
 		_description.Info.Left.SetValue(detailPanelDistance * Scale);
-		_description.Info.Top.SetValue(360);
+		_description.Info.Top.SetValue(400);
 
 		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
 		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);

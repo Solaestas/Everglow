@@ -231,19 +231,6 @@ public class MissionContainer : UIContainerElement
 			_close.PanelColor = Color.Transparent;
 		};
 		_panel.Register(_close);
-
-		// Cover image
-		//_panelCoverContainer = new UIBlock();
-		//_panelCoverContainer.Info.HiddenOverflow = true;
-		//_panelCoverContainer.Info.SetMargin(0);
-		//_panelCoverContainer.Info.CanBeInteract = false;
-		//_panelCoverContainer.PanelColor = Color.Transparent;
-		//_panelCoverContainer.ShowBorder = (false, false, false, false);
-		//_panel.Register(_panelCoverContainer);
-
-		//_panelCover = new UIImage(ModAsset.Marble_Texture.Value, Color.White);
-		//_panelCover.Info.CanBeInteract = false;
-		//_panelCoverContainer.Register(_panelCover);
 	}
 
 	public override void Calculation()
