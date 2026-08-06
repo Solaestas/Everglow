@@ -9,7 +9,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 public class UIMissionDetail : UIBlock
 {
 	private static readonly Color ComponentColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
-	private static readonly Color ChangeButtonHoverColor = new Color(0.0f, 0.0f, 0.0f, 0.3f);
+	private static readonly Color ChangeButtonHoverColor = Color.White;
 	private static readonly Color MaskButtonColor = Color.White;
 	private static readonly Color MaskButtonHoverColor = new Color(1f, 1f, 1f, 0f);
 
@@ -18,10 +18,6 @@ public class UIMissionDetail : UIBlock
 	private static float FontSize => 30f * Instance.ResolutionFactor;
 
 	private UIMissionIcon _icon;
-	private UIBlock _tree;
-	private UIImage _treeIcon;
-	private UIBlock _timer;
-	private UIImage _timerIcon;
 
 	private UIMissionBlock _description;
 	private UIContainerPanel _descriptionContainer;
@@ -32,14 +28,19 @@ public class UIMissionDetail : UIBlock
 	private UIMissionTextVerticalScrollbar _objectiveTextScrollbar;
 	private UIMissionHourglassTimer _objectiveTimer;
 
-	//private UIMissionBlock _reward;
-	//private UIContainerPanel _rewardContainer;
-	//private UIMissionTextVerticalScrollbar _rewardTextScrollbar;
+	private UIMissionDurationBar _objectiveDurationBar;
 
-	private UIBlock _changeMission;
-	private UITextPlus _changeText;
+	private UIBlock _objectiveTree;
+	private UIImage _objectiveTreeIcon;
+
+	private UIMissionButton _objectiveChangeMission;
+	private UITextPlus _objectiveChangeText;
 
 	private float oldScale;
+
+	private float oldWidth;
+
+	private float oldHeight;
 
 	public class ChangeButtonText
 	{
@@ -62,46 +63,11 @@ public class UIMissionDetail : UIBlock
 		_icon = new UIMissionIcon(null);
 		Register(_icon);
 
-		// Tree
-		_tree = new UIBlock();
-		_tree.Info.SetMargin(0);
-		_tree.PanelColor = Color.Transparent;
-		_tree.BorderWidth = 0;
-		_tree.Info.IsSensitive = true;
-		_tree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
-		_tree.Events.OnLeftClick += e =>
-		{
-			DetailSub.Show<UIMissionTree>(SelectedItem?.Mission);
-		};
-		Register(_tree);
-
-		_treeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
-		_treeIcon.Events.OnMouseHover += e => _treeIcon.Color = MaskButtonHoverColor;
-		_treeIcon.Events.OnMouseOut += e => _treeIcon.Color = MaskButtonColor;
-		_tree.Register(_treeIcon);
-
-		// Timer
-		_timer = new UIBlock();
-		_timer.Info.SetMargin(0);
-		_timer.PanelColor = Color.Transparent;
-		_timer.BorderWidth = 0;
-		_timer.Info.IsSensitive = true;
-		_timer.Events.OnMouseHover += e => Instance.MouseText = "Mission Timer";
-		_timer.Events.OnLeftClick += e =>
-		{
-			DetailSub.Show<UIMissionObjectiveTimer>(SelectedItem?.Mission);
-		};
-		Register(_timer);
-
-		_timerIcon = new UIImage(ModAsset.ToClockSurface.Value, Color.White);
-		_timerIcon.Events.OnMouseHover += e => _timerIcon.Color = MaskButtonHoverColor;
-		_timerIcon.Events.OnMouseOut += e => _timerIcon.Color = MaskButtonColor;
-		_timer.Register(_timerIcon);
-
 		// Description
 		_description = new UIMissionBlock();
 		_description.PanelColor = ComponentColor;
 		_description.BorderColor = Color.Gray;
+		_description.MissionBlockStyle = 0;
 		Register(_description);
 
 		_descriptionTextScrollbar = new UIMissionTextVerticalScrollbar();
@@ -115,6 +81,7 @@ public class UIMissionDetail : UIBlock
 		_objective = new UIMissionBlock();
 		_objective.PanelColor = ComponentColor;
 		_objective.BorderColor = Color.Gray;
+		_objective.MissionBlockStyle = 1;
 		Register(_objective);
 
 		_objectiveTextScrollbar = new UIMissionTextVerticalScrollbar();
@@ -126,42 +93,83 @@ public class UIMissionDetail : UIBlock
 
 		_objectiveTimer = new UIMissionHourglassTimer();
 		_objectiveTimer.MaxTime = 120;
+		_objectiveTimer.Events.OnMouseHover += e =>
+		{
+			Instance.MouseText = "Time Remain: " + (int)(_objectiveTimer.Timer / 60f) + "s";
+			_objectiveTimer.OnSelect = true;
+		};
+		_objectiveTimer.Events.OnMouseOut += e =>
+		{
+			_objectiveTimer.OnSelect = false;
+		};
 		_objective.Register(_objectiveTimer);
 
-		// Reward
-		//_reward = new UIMissionBlock();
-		//_reward.PanelColor = ComponentColor;
-		//_reward.BorderColor = Color.Gray;
-		//Register(_reward);
+		_objectiveDurationBar = new UIMissionDurationBar();
+		_objectiveDurationBar.Events.OnMouseHover += e =>
+		{
+			Instance.MouseText = "Duration: " + (int)_objectiveDurationBar.CurrentDuration + "/" + (int)_objectiveDurationBar.MaxDuration;
+			_objectiveDurationBar.OnSelect = true;
+		};
+		_objectiveDurationBar.Events.OnMouseOut += e =>
+		{
+			_objectiveDurationBar.OnSelect = false;
+		};
+		_objective.Register(_objectiveDurationBar);
 
-		//_rewardTextScrollbar = new UIMissionTextVerticalScrollbar();
-		//_reward.Register(_rewardTextScrollbar);
+		_objectiveTree = new UIBlock();
+		_objectiveTree.Info.SetMargin(0);
+		_objectiveTree.PanelColor = Color.Transparent;
+		_objectiveTree.BorderWidth = 0;
+		_objectiveTree.Info.IsSensitive = true;
+		_objectiveTree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
+		_objectiveTree.Events.OnLeftClick += e =>
+		{
+			DetailSub.Show<UIMissionTree>(SelectedItem?.Mission);
+		};
+		_objective.Register(_objectiveTree);
 
-		//_rewardContainer = new UIContainerPanel();
-		//_rewardContainer.SetVerticalScrollbar(_rewardTextScrollbar);
-		//_reward.Register(_rewardContainer);
+		_objectiveTreeIcon = new UIImage(ModAsset.ToMissionTreeSurface.Value, Color.White);
+		_objectiveTreeIcon.SourceRectangle = new Rectangle(0, 0, 38, 85);
+		_objectiveTreeIcon.Events.OnMouseHover += e =>
+		{
+			_objectiveTreeIcon.Color = MaskButtonHoverColor;
+			_objectiveTreeIcon.SourceRectangle = new Rectangle(38, 0, 38, 85);
+		};
+		_objectiveTreeIcon.Events.OnMouseOut += e =>
+		{
+			_objectiveTreeIcon.Color = MaskButtonColor;
+			_objectiveTreeIcon.SourceRectangle = new Rectangle(0, 0, 38, 85);
+		};
+		_objectiveTree.Register(_objectiveTreeIcon);
 
 		// Button
-		_changeMission = new UIBlock();
-		_changeMission.Info.IsSensitive = true;
-		_changeMission.PanelColor = ComponentColor;
-		_changeMission.Events.OnLeftDown += OnClickChange;
-		_changeMission.Events.OnMouseHover += e =>
+		_objectiveChangeMission = new UIMissionButton();
+		_objectiveChangeMission.Info.IsSensitive = true;
+		_objectiveChangeMission.PanelColor = ChangeButtonHoverColor;
+		_objectiveChangeMission.Events.OnLeftDown += OnClickChange;
+		_objectiveChangeMission.Events.OnMouseHover += e =>
 		{
 			if (SelectedItem != null
 				&& SelectedItem.Mission.State != PlayerMissionState.Overdue
 				&& SelectedItem.Mission.State != PlayerMissionState.Failed)
 			{
-				_changeMission.PanelColor = ChangeButtonHoverColor;
+				_objectiveChangeMission.PanelColor = Color.White;
+				_objectiveChangeMission.OnSelect = true;
+				UpdateChangeButton("255,245,193");
 			}
 		};
-		_changeMission.Events.OnMouseOut += e => _changeMission.PanelColor = ComponentColor;
-		Register(_changeMission);
+		_objectiveChangeMission.Events.OnMouseOut += e =>
+		{
+			_objectiveChangeMission.PanelColor = Color.White;
+			_objectiveChangeMission.OnSelect = false;
+			UpdateChangeButton("45,38,33");
+		};
+		_objective.Register(_objectiveChangeMission);
 
-		_changeText = new UITextPlus(string.Empty);
-		_changeText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		_changeText.StringDrawer.Init(_changeText.Text);
-		_changeMission.Register(_changeText);
+		_objectiveChangeText = new UITextPlus(string.Empty);
+		_objectiveChangeText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		_objectiveChangeText.StringDrawer.Init(_objectiveChangeText.Text);
+		_objectiveChangeMission.Register(_objectiveChangeText);
 	}
 
 	public override void Calculation()
@@ -176,84 +184,69 @@ public class UIMissionDetail : UIBlock
 		_icon.Info.Left.SetValue(detailPanelDistance + detailPanelWidth / 2f - 210);
 		_icon.Info.Top.SetValue(93 * Scale);
 
-		_tree.Info.Width.SetValue(81 * Scale);
-		_tree.Info.Height.SetValue(162 * Scale);
-		_tree.Info.Left.SetValue(36 * Scale);
-		_tree.Info.Top.SetValue(60 * Scale);
-
-		_treeIcon.Info.Width = _tree.Info.Width;
-		_treeIcon.Info.Height = _tree.Info.Height;
-
-		_timer.Info.Width.SetValue(73 * Scale);
-		_timer.Info.Height.SetValue(71 * Scale);
-		_timer.Info.Left.SetValue(600 * Scale);
-		_timer.Info.Top.SetValue(110 * Scale);
-
-		_timerIcon.Info.Width = _timer.Info.Width;
-		_timerIcon.Info.Height = _timer.Info.Height;
-
 		_description.Info.Width.SetValue(detailPanelWidth * Scale);
 		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 560) * Scale);
 		_description.Info.Left.SetValue(detailPanelDistance * Scale);
 		_description.Info.Top.SetValue(400);
 
-		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
+		_descriptionContainer.Info.Width.SetValue(PositionStyle.Full.Pixel - 54f);
 		_descriptionContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
 		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
 		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 
-		_descriptionTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_descriptionTextScrollbar.Info.Height.SetValue(-60f, 1f);
 		_descriptionTextScrollbar.Info.SetToCenter();
-		_descriptionTextScrollbar.Info.Left.SetValue(-16f, 1f);
+		_descriptionTextScrollbar.Info.Left.SetValue(-20f, 1f);
 
 		_objective.Info.Width.SetValue(detailPanelWidth * Scale);
 		_objective.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 400) * Scale);
 		_objective.Info.Left.SetValue((detailPanelDistance + detailPanelWidth + detailPanelDistance) * Scale);
 		_objective.Info.Top.SetValue(60);
 
-		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
-		_objectiveContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
-		_objectiveContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
-		_objectiveContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full.Pixel - 54f);
+		_objectiveContainer.Info.Height.SetValue(_objectiveTextScrollbar.Info.Height);
+		_objectiveContainer.Info.Left.SetValue(30);
+		_objectiveContainer.Info.Top.SetValue(_objectiveTextScrollbar.Info.Top);
 
-		_objectiveTextScrollbar.Info.Height.SetValue(-16f, 1f);
+		_objectiveTextScrollbar.Info.Height.SetValue(-60f, 1f);
 		_objectiveTextScrollbar.Info.SetToCenter();
-		_objectiveTextScrollbar.Info.Left.SetValue(-16f, 1f);
+		_objectiveTextScrollbar.Info.Left.SetValue(-20f, 1f);
 
-		_objectiveTimer.Info.Left.SetValue(48f);
-		_objectiveTimer.Info.Top.SetValue(-80f, 1f);
-		_objectiveTimer.Info.Width.SetValue(0);
-		_objectiveTimer.Info.Height.SetValue(0);
+		_objectiveTimer.Info.Left.SetValue(17f);
+		_objectiveTimer.Info.Top.SetValue(-148f, 1f);
+		_objectiveTimer.Info.Width.SetValue(62);
+		_objectiveTimer.Info.Height.SetValue(116);
 
-		//_reward.Info.Width.SetValue(detailPanelWidth * Scale);
-		//_reward.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 580) * Scale);
-		//_reward.Info.Left.SetValue((detailPanelDistance + detailPanelWidth + detailPanelDistance + detailPanelWidth + detailPanelDistance) * Scale);
-		//_reward.Info.Top.SetValue(_description.Info.Top);
+		_objectiveTree.Info.Width.SetValue(38 * Scale);
+		_objectiveTree.Info.Height.SetValue(85 * Scale);
+		_objectiveTree.Info.Left.SetValue(100 * Scale);
+		_objectiveTree.Info.Top.SetValue(-130f, 1f);
 
-		//_rewardContainer.Info.Width.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Width - (PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width) * 3f);
-		//_rewardContainer.Info.Height.SetValue(_descriptionTextScrollbar.Info.Height);
-		//_rewardContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
-		//_rewardContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
+		_objectiveTreeIcon.Info.Width = _objectiveTree.Info.Width;
+		_objectiveTreeIcon.Info.Height = _objectiveTree.Info.Height;
 
-		//_rewardTextScrollbar.Info.Height.SetValue(-16f, 1f);
-		//_rewardTextScrollbar.Info.SetToCenter();
-		//_rewardTextScrollbar.Info.Left.SetValue(-16f, 1f);
+		float changeButtonWidth = (_objective.Info.HitBox.Width - 200) * Scale;
+		_objectiveChangeMission.Info.Width.SetValue(changeButtonWidth);
+		_objectiveChangeMission.Info.Height.SetValue(40 * Scale);
+		_objectiveChangeMission.Info.Left.SetValue((-changeButtonWidth - 50) * Scale, 1);
+		_objectiveChangeMission.Info.Top.SetValue(-70 * Scale, 1);
 
-		_changeMission.Info.Width.SetValue(80 * Scale);
-		_changeMission.Info.Height.SetValue(40 * Scale);
-		_changeMission.Info.Left.SetValue((detailPanelWidth * 1.5f + detailPanelDistance * 2 - 40) * Scale);
-		_changeMission.Info.Top.SetValue((ParentElement.Info.Height.Pixel - 240) * Scale);
+		_objectiveDurationBar.Info.Left.SetValue((-changeButtonWidth - 20) * Scale, 1);
+		_objectiveDurationBar.Info.Top.SetValue(-120f, 1f);
+		_objectiveDurationBar.Info.Width.SetValue(changeButtonWidth - 60);
+		_objectiveDurationBar.Info.Height.SetValue(46);
 
-		if (oldScale != Scale)
+		if (oldWidth != Info.Width.Pixel || oldHeight != Info.Height.Pixel)
 		{
-			oldScale = Scale;
-
 			if (SelectedItem != null)
 			{
 				ResetTexts();
 				SetTexts(SelectedItem.Mission);
 			}
 		}
+
+		oldWidth = Info.Width.Pixel;
+		oldHeight = Info.Height.Pixel;
 	}
 
 	public static void HideMissionSubContent() => DetailSub.Info.IsVisible = false;
@@ -322,14 +315,14 @@ public class UIMissionDetail : UIBlock
 		obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
 
 		// Rewards
-		//var rewText = new StringBuilder();
-		//rewText.Append("奖励：\n");
-		//rewText.Append(mission.GetRewards());
-		//var rew = new UITextPlus(rewText.ToString());
-		//rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		//rew.StringDrawer.Init(rew.Text);
-		//_rewardContainer.AddElement(rew);
-		//rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
+		// var rewText = new StringBuilder();
+		// rewText.Append("奖励：\n");
+		// rewText.Append(mission.GetRewards());
+		// var rew = new UITextPlus(rewText.ToString());
+		// rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		// rew.StringDrawer.Init(rew.Text);
+		// _rewardContainer.AddElement(rew);
+		// rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
 	}
 
 	private void ResetTexts()
@@ -340,8 +333,8 @@ public class UIMissionDetail : UIBlock
 		_objectiveTextScrollbar.WheelValue = 0f;
 		_objectiveContainer.ClearAllElements();
 
-		//_rewardTextScrollbar.WheelValue = 0f;
-		//_rewardContainer.ClearAllElements();
+		// _rewardTextScrollbar.WheelValue = 0f;
+		// _rewardContainer.ClearAllElements();
 	}
 
 	/// <summary>
@@ -390,50 +383,49 @@ public class UIMissionDetail : UIBlock
 	}
 
 	/// <summary>
-	/// 更新按钮的文字
+	/// 更新按钮的文字, color示例:"45,38,33"
 	/// </summary>
-	public void UpdateChangeButton()
+	public void UpdateChangeButton(string color)
 	{
 		if (SelectedItem != null)
 		{
 			if (SelectedItem.Mission.State == PlayerMissionState.Available)
 			{
-				_changeText.Text = ChangeButtonText.Accept;
+				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Accept}',Color='{color}']";
 			}
 			else if (SelectedItem.Mission.State == PlayerMissionState.Accepted)
 			{
 				if (SelectedItem.Mission.CheckComplete())
 				{
-					_changeText.Text = ChangeButtonText.Commit;
+					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Commit}',Color='{color}']";
 				}
 				else
 				{
-					_changeText.Text = ChangeButtonText.Cancel;
+					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Cancel}',Color='{color}']";
 				}
 			}
 			else if (SelectedItem.Mission.State == PlayerMissionState.Completed)
 			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='126,126,126']";
+				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='{color}']";
 			}
 			else if (SelectedItem.Mission.State == PlayerMissionState.Overdue)
 			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='126,126,126']";
+				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='{color}']";
 			}
 			else if (SelectedItem.Mission.State == PlayerMissionState.Failed)
 			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='126,126,126']";
+				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='{color}']";
 			}
 			else
 			{
-				_changeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='126,126,126']";
+				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='{color}']";
 			}
-
-			_changeText.Calculation();
-			_changeText.Info.SetToCenter();
+			_objectiveChangeText.Calculation();
+			_objectiveChangeText.Info.SetToCenter();
 		}
 		else
 		{
-			_changeText.Text = "[TextDrawer,Text='',Color='126,126,126']";
+			_objectiveChangeText.Text = "[TextDrawer,Text='',Color='{color}']";
 		}
 	}
 

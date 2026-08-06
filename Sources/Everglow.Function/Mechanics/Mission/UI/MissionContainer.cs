@@ -396,7 +396,7 @@ public class MissionContainer : UIContainerElement
 		oldSelectedItem?.OnUnselected();
 		SelectedItem?.OnSelected();
 
-		_missionDetail.UpdateChangeButton();
+		_missionDetail.UpdateChangeButton("45,38,33");
 		_missionDetail.SetMissionDetail(item);
 	}
 

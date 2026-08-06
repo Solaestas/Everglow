@@ -7,6 +7,12 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 /// </summary>
 public class UIMissionBlock : UIBlock
 {
+	/// <summary>
+	/// 0: 描述
+	/// 1: 目标
+	/// </summary>
+	public int MissionBlockStyle = 0;
+
 	public override void Draw(SpriteBatch sb)
 	{
 		// 声明光栅化状态，剔除状态为不剔除，开启剪切测试
@@ -84,6 +90,16 @@ public class UIMissionBlock : UIBlock
 		int h = Info.TotalHitBox.Height;
 		Texture2D tex_side = ModAsset.MissionMessageBoard_bottom_side.Value;
 		sb.Draw(tex_side, new Rectangle(x + (w - 177) / 2, y + h - 13, 177, 13), null, Color.White);
+		Texture2D tex_icon = ModAsset.MissionDescription_Icon.Value;
+		if(MissionBlockStyle == 1)
+		{
+			tex_icon = ModAsset.MissionObjective_Icon.Value;
+			Texture2D divider = ModAsset.MissionDetailPanelDivider.Value;
+			int halfWidth = Info.HitBox.Width / 2 - 20;
+			sb.Draw(divider, new Rectangle(x + 10, y + h - 180, halfWidth, 15), new Rectangle(0, 0, halfWidth, 15), Color.White);
+			sb.Draw(divider, new Rectangle(x + w - 35, y + h - 180, -halfWidth, 15), new Rectangle(0, 0, halfWidth, 15), Color.White);
+		}
+		sb.Draw(tex_icon, new Rectangle(x + 5, y + 6, 35, 35), null, Color.White);
 	}
 
 	public static void DrawMissionPanel(SpriteBatch sb, Rectangle hitbox, Color panelColor)

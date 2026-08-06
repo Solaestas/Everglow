@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
@@ -8,7 +7,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 public class UIMissionIcon : UIBlock
 {
 	private const int ButtonSize = 50;
-	private const int ButtonTop = 218;
+	private const int ButtonTop = 79;
 	private const int ButtonLeftRight = 10;
 
 	private UIMissionCarousel carousel;
@@ -77,13 +76,10 @@ public class UIMissionIcon : UIBlock
 			}
 		};
 		Register(prevBtn);
-		var prevIcon = new UIImage(ModAsset.MissionIconBack.Value, Color.White);
-		prevIcon.Info.Width.SetValue(0, 0.8f);
-		prevIcon.Info.Height.SetValue(0, 0.8f);
+		var prevIcon = new UIImage(ModAsset.MissionIconArrow.Value, Color.White);
 		prevBtn.Register(prevIcon);
+		prevIcon.SourceRectangle = new Rectangle(0, 0, 35, 25);
 		prevIcon.Info.SetToCenter();
-		prevIcon.Events.OnMouseHover += e => prevIcon.Color = IconGroup.IsFirstIcon ? Color.White : new Color(1f, 1f, 1f, 0f);
-		prevIcon.Events.OnMouseOut += e => prevIcon.Color = Color.White;
 
 		nextBtn = new UIBlock();
 		nextBtn.Info.CanBeInteract = true;
@@ -100,13 +96,87 @@ public class UIMissionIcon : UIBlock
 			}
 		};
 		Register(nextBtn);
-		var nextIcon = new UIImage(ModAsset.MissionIconNext.Value, Color.White);
+		var nextIcon = new UIImage(ModAsset.MissionIconArrow.Value, Color.White);
 		nextBtn.Register(nextIcon);
-		nextIcon.Info.Width.SetValue(0, 0.8f);
-		nextIcon.Info.Height.SetValue(0, 0.8f);
+		nextIcon.SourceRectangle = new Rectangle(105, 0, 35, 25);
 		nextIcon.Info.SetToCenter();
-		nextIcon.Events.OnMouseHover += e => nextIcon.Color = IconGroup.IsLastIcon ? Color.White : new Color(1f, 1f, 1f, 0f);
-		nextIcon.Events.OnMouseOut += e => nextIcon.Color = Color.White;
+		prevIcon.Info.Width.SetValue(70);
+		prevIcon.Info.SetToCenter();
+		nextIcon.Info.Width.SetValue(70);
+		nextIcon.Info.SetToCenter();
+
+		prevBtn.Events.OnMouseHover += e => PrevBtnMouseHover(prevIcon, nextIcon);
+		prevBtn.Events.OnMouseOut += e => PrevBtnMouseOut(prevIcon, nextIcon);
+		nextBtn.Events.OnMouseHover += e => NextBtnMouseHover(prevIcon, nextIcon);
+		nextBtn.Events.OnMouseOut += e => NextBtnMouseOut(prevIcon, nextIcon);
+	}
+
+	public void PrevBtnMouseHover(UIImage prevIcon, UIImage nextIcon)
+	{
+		prevIcon.SourceRectangle = new Rectangle(0, 25, 35, 25);
+		prevIcon.Color = Color.White;
+		prevIcon.Info.Width.SetValue(70);
+		prevIcon.Info.SetToCenter();
+		if (IconGroup.IsFirstIcon)
+		{
+			prevIcon.SourceRectangle = new Rectangle(0, 0, 35, 25);
+			prevIcon.Color = Color.Gray;
+		}
+		else
+		{
+			prevIcon.Info.Left.SetValue(nextIcon.Info.Left.Pixel - MathF.Sin((float)Main.time * 0.1f) * 10);
+		}
+		if (!IconGroup.IsLastIcon)
+		{
+			nextIcon.SourceRectangle = new Rectangle(105, 0, 35, 25);
+			nextIcon.Color = Color.White * 0.75f;
+		}
+	}
+
+	public void PrevBtnMouseOut(UIImage prevIcon, UIImage nextIcon)
+	{
+		prevIcon.SourceRectangle = new Rectangle(0, 0, 35, 25);
+		prevIcon.Color = Color.White * 0.75f;
+		if (IconGroup.IsFirstIcon)
+		{
+			prevIcon.Color = Color.Gray;
+		}
+		prevIcon.Info.Width.SetValue(70);
+		prevIcon.Info.SetToCenter();
+	}
+
+	public void NextBtnMouseHover(UIImage prevIcon, UIImage nextIcon)
+	{
+		nextIcon.SourceRectangle = new Rectangle(105, 25, 35, 25);
+		nextIcon.Color = Color.White;
+		nextIcon.Info.Width.SetValue(70);
+		nextIcon.Info.SetToCenter();
+		if (IconGroup.IsLastIcon)
+		{
+			nextIcon.SourceRectangle = new Rectangle(105, 0, 35, 25);
+			nextIcon.Color = Color.Gray;
+		}
+		else
+		{
+			nextIcon.Info.Left.SetValue(nextIcon.Info.Left.Pixel + MathF.Sin((float)Main.time * 0.1f) * 10);
+		}
+		if (!IconGroup.IsFirstIcon)
+		{
+			prevIcon.SourceRectangle = new Rectangle(0, 0, 35, 25);
+			prevIcon.Color = Color.White * 0.75f;
+		}
+	}
+
+	public void NextBtnMouseOut(UIImage prevIcon, UIImage nextIcon)
+	{
+		nextIcon.SourceRectangle = new Rectangle(105, 0, 35, 25);
+		nextIcon.Color = Color.White * 0.75f;
+		if (IconGroup.IsLastIcon)
+		{
+			nextIcon.Color = Color.Gray;
+		}
+		nextIcon.Info.Width.SetValue(70);
+		nextIcon.Info.SetToCenter();
 	}
 
 	public override void Calculation()
@@ -116,15 +186,17 @@ public class UIMissionIcon : UIBlock
 		carousel.Info.Width.SetFull();
 		carousel.Info.Height.SetFull();
 
-		prevBtn.Info.Width.SetValue(ButtonSize * Scale);
-		prevBtn.Info.Height.SetValue(ButtonSize * Scale);
-		prevBtn.Info.Left.SetValue(ButtonLeftRight * Scale);
-		prevBtn.Info.Top.SetValue(ButtonTop * Scale);
+		int arrow_offset_H = 180;
 
-		nextBtn.Info.Width.SetValue(ButtonSize * Scale);
-		nextBtn.Info.Height.SetValue(ButtonSize * Scale);
-		nextBtn.Info.Left.SetValue(Info.Width.Pixel - ButtonLeftRight * Scale - ButtonSize * Scale);
-		nextBtn.Info.Top.SetValue(ButtonTop * Scale);
+		prevBtn.Info.Width.SetValue(70 * Scale);
+		prevBtn.Info.Height.SetValue(50 * Scale);
+		prevBtn.Info.Left.SetValue((-70 - arrow_offset_H) * Scale, 0.5f);
+		prevBtn.Info.Top.SetValue(103 * Scale);
+
+		nextBtn.Info.Width.SetValue(70 * Scale);
+		nextBtn.Info.Height.SetValue(50 * Scale);
+		nextBtn.Info.Left.SetValue(arrow_offset_H * Scale, 0.5f);
+		nextBtn.Info.Top.SetValue(103 * Scale);
 	}
 
 	public class UIMissionCarousel : BaseElement
@@ -213,6 +285,21 @@ public class UIMissionIcon : UIBlock
 
 		public override void Draw(SpriteBatch sb)
 		{
+			if (iconGroup is not null && iconGroup.IconCount > 1)
+			{
+				Texture2D tex = ModAsset.MissionIconArrow.Value;
+				int centerY = (int)Info.HitBox.Center().Y;
+				sb.Draw(tex, new Rectangle(Info.HitBox.X, centerY - 1, Info.HitBox.Width, 2), new Rectangle(31, 12, 1, 1), Color.White);
+			}
+
+			// TODO: Add MissionStar to a mission(default 1);
+			int MissionStar = 5;
+			for (int k = 0; k < MissionStar; k++)
+			{
+				Texture2D star = ModAsset.MissionLevelStar.Value;
+				Vector2 pos = Info.HitBox.Bottom() + new Vector2((k - (MissionStar - 1) / 2f) * 50, 24);
+				sb.Draw(star, pos, null, Color.White, 0, star.Size() * 0.5f, 2f, SpriteEffects.None, 0);
+			}
 			base.Draw(sb);
 		}
 

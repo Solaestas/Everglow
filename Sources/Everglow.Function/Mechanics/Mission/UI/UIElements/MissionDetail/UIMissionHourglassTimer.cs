@@ -12,6 +12,8 @@ public class UIMissionHourglassTimer : UIBlock
 
 	public float MaxTime;
 
+	public bool OnSelect = false;
+
 	public override void Draw(SpriteBatch sb)
 	{
 		// 声明光栅化状态，剔除状态为不剔除，开启剪切测试
@@ -98,8 +100,12 @@ public class UIMissionHourglassTimer : UIBlock
 
 		Texture2D tex = ModAsset.TimeFunnel.Value;
 		Vector2 pos = Info.TotalHitBox.Center();
-		int width = tex.Width / 5;
+		int width = tex.Width / 6;
 		Rectangle frame_bound = new Rectangle(0, 0, width, tex.Height);
+		if (OnSelect)
+		{
+			frame_bound = new Rectangle(310, 0, width, tex.Height);
+		}
 		Rectangle frame_liquid_top = new Rectangle(64, 1 + bottom_liquid_height, 58, top_liquid_height);
 		Rectangle frame_liquid_bottom = new Rectangle(65, 57 + top_liquid_height, 56, bottom_liquid_height);
 		Rectangle frame_liquid_surface_top = new Rectangle(126, 1 + bottom_liquid_height, 58, 2);
@@ -121,7 +127,7 @@ public class UIMissionHourglassTimer : UIBlock
 	{
 		Texture2D tex = ModAsset.TimeFunnel.Value;
 		Vector2 pos = Info.TotalHitBox.Center();
-		int width = tex.Width / 5;
+		int width = tex.Width / 6;
 		Rectangle frame_reflection = new Rectangle(width * 4, 0, width, tex.Height);
 		sb.Draw(tex, pos, frame_reflection, Color.White, 0f, frame_reflection.Size() / 2f, 1f, SpriteEffects.None, 0f);
 	}
