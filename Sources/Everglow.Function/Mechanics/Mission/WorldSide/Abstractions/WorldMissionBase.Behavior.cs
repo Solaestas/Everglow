@@ -27,7 +27,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 
 	public virtual float Progress => Objectives.Progress;
 
-	public StructuralObjectiveContainer Objectives { get; } = new();
+	public WorldStructuralObjectiveContainer Objectives { get; } = new();
 
 	public IReadOnlyList<WorldObjectiveBase> ActiveObjectives => _activatedObjectives;
 

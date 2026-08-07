@@ -23,7 +23,7 @@ public class PlayerMissionBasePersistenceTest
 		var saved = new PersistenceStubMission { State = state };
 		var tag = new TagCompound();
 
-		// Headless TagIO rejects bool (IsVisible); State is written before that key.
+		// The headless test TagCompound currently rejects bool payloads even though player saves accept them at runtime.
 		try
 		{
 			saved.SaveData(tag);

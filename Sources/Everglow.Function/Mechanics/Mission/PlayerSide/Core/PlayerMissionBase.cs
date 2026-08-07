@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstracts;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements;
@@ -30,7 +31,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 
 	protected PlayerMissionBase()
 	{
-		Objectives = new MissionObjectiveContainer();
+		Objectives = new PlayerStructuralObjectiveContainer();
 		RewardItems = [];
 		Time = 0;
 	}
@@ -76,35 +77,19 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务目标数据
 	/// </summary>
-	public MissionObjectiveContainer Objectives { get; set; }
+	public PlayerStructuralObjectiveContainer Objectives { get; set; }
 
 	/// <summary>
 	/// 当前任务目标
 	/// </summary>
-	public MissionObjectiveBase CurrentObjective { get; set; }
+	public MissionObjectiveBase CurrentObjective => Objectives.CurrentObjective;
 
 	/// <summary>
 	/// 任务进度，最大应为 1f
 	/// </summary>
 	public virtual float Progress
 	{
-		get
-		{
-			if (Objectives.AllObjectives.Count <= 0)
-			{
-				return 1f;
-			}
-
-			float progress = 0f;
-			int oCount = 0;
-			for (MissionObjectiveBase j = Objectives.First; j != null; j = j.Next)
-			{
-				progress += j.Progress;
-				oCount++;
-			}
-
-			return progress / oCount;
-		}
+		get => Objectives.Progress;
 	}
 
 	/// <summary>
@@ -169,7 +154,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// 检查任务是否完成
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool CheckComplete() => Progress >= 1f && CurrentObjective == null;
+	public virtual bool CheckComplete() => Objectives.Completed;
 
 	/// <summary>
 	/// 检查任务是否过期
@@ -193,23 +178,10 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	{
 		UpdateTime();
 
-		// Manage objectives. If the mission is finished but not completed, skip this step.
-		if (CurrentObjective is not null)
+		if (Objectives.Update(this))
 		{
-			CurrentObjective.Update();
-
-			if (!CurrentObjective.Completed
-			&& CurrentObjective.CheckCompletion())
-			{
-				CurrentObjective.Complete();
-				CurrentObjective.Deactivate();
-
-				CurrentObjective = CurrentObjective.Next;
-				CurrentObjective?.Activate(this);
-
-				Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
-				PlayerMissionManager.NeedRefresh = true;
-			}
+			Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
+			PlayerMissionManager.NeedRefresh = true;
 		}
 	}
 
@@ -289,9 +261,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void Activate()
 	{
-		CurrentObjective = Objectives.First;
-
-		CurrentObjective?.Activate(this);
+		Objectives.Activate(this);
 	}
 
 	/// <summary>
@@ -299,7 +269,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void Deactivate()
 	{
-		CurrentObjective?.Deactivate();
+		Objectives.Deactivate();
 	}
 
 	/// <summary>
@@ -307,19 +277,13 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void Reset()
 	{
-		foreach (var o in Objectives.AllObjectives)
-		{
-			o.ResetProgress();
-		}
+		Objectives.ResetProgress();
 	}
 
 	public virtual MissionIconGroup GetIcons(MissionIconGroup iconGroup)
 	{
 		iconGroup.Add(MissionSourceIcon.Create(Source, SubSource));
-		for (var i = Objectives.First; i != null; i = i.Next)
-		{
-			i.GetObjectivesIcon(iconGroup);
-		}
+		Objectives.GetObjectivesIcon(iconGroup);
 
 		return iconGroup;
 	}
@@ -330,25 +294,22 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// <returns></returns>
 	public virtual IEnumerable<string> GetObjectives()
 	{
-		var lines = new List<string>();
 		var mainIndex = 1;
-		for (MissionObjectiveBase j = Objectives.First; j != null; j = j.Next)
+		var lines = new List<string>();
+		foreach (var (completed, objectiveLines) in Objectives.GetObjectivesText())
 		{
-			MissionObjectiveBase o = j;
-			var tempLines = new List<string>();
-			o.GetObjectivesText(tempLines);
 			int subIndex = 1;
-			for (int i = 0; i < tempLines.Count; i++)
+			for (int i = 0; i < objectiveLines.Count; i++)
 			{
-				if (o.Completed)
+				if (completed)
 				{
-					tempLines[i] = $"[TextDrawer,Text='(已完成)',Color='100,100,100,255']" + " " + tempLines[i];
+					objectiveLines[i] = $"[TextDrawer,Text='(已完成)',Color='100,100,100,255']" + " " + objectiveLines[i];
 				}
 
-				tempLines[i] = $"{mainIndex}.{subIndex++} " + tempLines[i];
+				objectiveLines[i] = $"{mainIndex}.{subIndex++} " + objectiveLines[i];
 			}
 
-			lines.AddRange(tempLines);
+			lines.AddRange(objectiveLines);
 			mainIndex++;
 		}
 
@@ -379,7 +340,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 		tag.Add(TimeSaveKey, Time);
 		tag.Add(nameof(IsVisible), IsVisible);
 
-		SaveObjectives(tag, Objectives.AllObjectives);
+		Objectives.SaveData(tag);
 	}
 
 	/// <summary>
@@ -387,7 +348,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	/// <param name="tag"></param>
 	/// <param name="objectives"></param>
-	public static void SaveObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	public static void SaveObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives, string key = nameof(Objectives))
 	{
 		var oTags = new List<TagCompound>();
 		foreach (var o in objectives)
@@ -396,7 +357,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 			o.SaveData(ot);
 			oTags.Add(ot);
 		}
-		tag.Add(nameof(Objectives), oTags);
+		tag.Add(key, oTags);
 	}
 
 	/// <summary>
@@ -428,7 +389,7 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 			IsVisible = isVisible;
 		}
 
-		LoadObjectives(tag, Objectives.AllObjectives);
+		Objectives.LoadData(tag);
 
 		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
@@ -438,18 +399,20 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	/// <param name="tag"></param>
 	/// <param name="objectives"></param>
-	public static void LoadObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	public static void LoadObjectives(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives, string key = nameof(Objectives), bool useObjectiveID = true)
 	{
-		if (tag.TryGet<IList<TagCompound>>(nameof(Objectives), out var oTags))
+		if (tag.TryGet<IList<TagCompound>>(key, out var oTags))
 		{
+			int index = 0;
 			foreach (var o in objectives)
 			{
-				if (oTags.Count <= o.ObjectiveID)
+				int tagIndex = useObjectiveID ? o.ObjectiveID : index++;
+				if (oTags.Count <= tagIndex)
 				{
 					break;
 				}
 
-				o.LoadData(oTags[o.ObjectiveID]);
+				o.LoadData(oTags[tagIndex]);
 			}
 		}
 	}

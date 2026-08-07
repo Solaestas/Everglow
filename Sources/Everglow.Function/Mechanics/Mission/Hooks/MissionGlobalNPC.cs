@@ -49,9 +49,8 @@ public class MissionGlobalNPC : GlobalNPC
 	{
 		var missions = PlayerMissionManager.GetMissionPool(PlayerMissionState.Accepted);
 
-		// Flatten all objectives recursively and filter for TalkObjective
 		var playerSideNPCs = missions
-			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
+			.SelectMany(mission => mission.Objectives.ActiveObjectives)
 			.Select(o =>
 			{
 				if (o is TalkNPCObjective talkObjective)
@@ -92,9 +91,8 @@ public class MissionGlobalNPC : GlobalNPC
 	{
 		var missions = PlayerMissionManager.GetMissionPool(PlayerMissionState.Accepted);
 
-		// Flatten all objectives recursively and filter for KillNPCObjective
 		var playerSideNPCs = missions
-			.SelectMany(mission => FlattenObjectives(mission.Objectives.AllObjectives))
+			.SelectMany(mission => mission.Objectives.ActiveObjectives)
 			.OfType<KillNPCObjective>()
 			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
 
@@ -115,32 +113,4 @@ public class MissionGlobalNPC : GlobalNPC
 		return playerSideNPCs.Concat(worldSideNPCs).Distinct();
 	}
 
-	/// <summary>
-	/// Recursively flattens a collection of objectives, including nested objectives in ParallelObjective and BranchingObjective.
-	/// </summary>
-	private static IEnumerable<MissionObjectiveBase> FlattenObjectives(IEnumerable<MissionObjectiveBase> objectives)
-	{
-		foreach (var objective in objectives)
-		{
-			// Handle nested objectives in ParallelObjective and BranchingObjective
-			if (objective is ParallelObjective parallelObjective)
-			{
-				foreach (var nestedObjective in FlattenObjectives(parallelObjective.Objectives))
-				{
-					yield return nestedObjective;
-				}
-			}
-			else if (objective is BranchingObjective branchingObjective)
-			{
-				foreach (var nestedObjective in FlattenObjectives(branchingObjective.Objectives))
-				{
-					yield return nestedObjective;
-				}
-			}
-			else
-			{
-				yield return objective;
-			}
-		}
-	}
 }

@@ -10,7 +10,7 @@ public interface IMissionBehavior
 
 	public float Progress { get; }
 
-	public StructuralObjectiveContainer Objectives { get; }
+	public WorldStructuralObjectiveContainer Objectives { get; }
 
 	public int Time { get; }
 

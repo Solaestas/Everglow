@@ -9,7 +9,7 @@ namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure;
 /// Represents a linear structural objective container.
 /// Manages structural nodes, objective lifecycle transitions, persistence, and netcode.
 /// </summary>
-public class StructuralObjectiveContainer
+public class WorldStructuralObjectiveContainer
 {
 	/// <summary>
 	/// Fired when the current structural node requires completion.
@@ -68,7 +68,7 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objective">The objective to add.</param>
 	/// <returns>The current container instance.</returns>
-	public StructuralObjectiveContainer Add(WorldObjectiveBase objective)
+	public WorldStructuralObjectiveContainer Add(WorldObjectiveBase objective)
 	{
 		if (objective is null)
 		{
@@ -78,7 +78,7 @@ public class StructuralObjectiveContainer
 		objective.ObjectiveID = _objectives.Count;
 		_objectives.Add(objective);
 
-		var node = new LeafNode(objective);
+		var node = new WorldLeafNode(objective);
 		_nodes.Add(node);
 		return this;
 	}
@@ -89,7 +89,7 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objectives">The objectives to include in the parallel node.</param>
 	/// <returns>The current container instance.</returns>
-	public StructuralObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
+	public WorldStructuralObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
 	{
 		if (objectives is null)
 		{
@@ -102,7 +102,7 @@ public class StructuralObjectiveContainer
 			_objectives.Add(o);
 		}
 
-		var node = new ParallelNode(objectives.ToList());
+		var node = new WorldParallelNode(objectives.ToList());
 		_nodes.Add(node);
 		return this;
 	}
@@ -113,7 +113,7 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objectives">The objectives to include in the optional node.</param>
 	/// <returns>The current container instance.</returns>
-	public StructuralObjectiveContainer AddOptional(params WorldObjectiveBase[] objectives)
+	public WorldStructuralObjectiveContainer AddOptional(params WorldObjectiveBase[] objectives)
 	{
 		if (objectives is null)
 		{
@@ -126,7 +126,7 @@ public class StructuralObjectiveContainer
 			_objectives.Add(o);
 		}
 
-		var node = new OptionalNode(objectives.ToList());
+		var node = new WorldOptionalNode(objectives.ToList());
 		_nodes.Add(node);
 		return this;
 	}
@@ -138,7 +138,7 @@ public class StructuralObjectiveContainer
 	/// </summary>
 	/// <param name="branches">The branches to add, each represented as a list of objectives.</param>
 	/// <returns>The current container instance.</returns>
-	public StructuralObjectiveContainer AddBranch(params List<WorldObjectiveBase>[] branches)
+	public WorldStructuralObjectiveContainer AddBranch(params List<WorldObjectiveBase>[] branches)
 	{
 		if (branches is null)
 		{
@@ -154,7 +154,7 @@ public class StructuralObjectiveContainer
 			}
 		}
 
-		var node = new BranchNode(branches.Select(b => b.ToList()).ToList());
+		var node = new WorldBranchNode(branches.Select(b => b.ToList()).ToList());
 		_nodes.Add(node);
 		return this;
 	}

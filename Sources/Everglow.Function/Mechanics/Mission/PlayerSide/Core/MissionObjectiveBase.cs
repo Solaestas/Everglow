@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstracts;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -10,8 +11,6 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	public bool Completed { get; private set; }
 
 	public int ObjectiveID { get; set; }
-
-	public MissionObjectiveBase Next { get; set; }
 
 	public virtual float Progress { get; } = 1f;
 
@@ -25,7 +24,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="MissionObjectiveContainer.Add(MissionObjectiveBase)"/>.
+	/// Invoked by <see cref="PlayerStructuralObjectiveContainer.Add(MissionObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()
@@ -62,6 +61,12 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	}
 
 	public virtual void ResetProgress() => Completed = false;
+
+	/// <summary>
+	/// Restores completion state saved by the PlayerSide structural node.
+	/// Objective-specific persistence remains owned by derived objectives.
+	/// </summary>
+	internal void RestoreStructuralCompletionState(bool completed) => Completed = completed;
 
 	public virtual void Activate(PlayerMissionBase sourceMission)
 	{

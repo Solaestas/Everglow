@@ -3,13 +3,13 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 
-public class BranchNode : WorldObjectiveNodeBase
+public class WorldBranchNode : WorldObjectiveNodeBase
 {
 	private readonly List<List<WorldObjectiveBase>> _branches;
 	private int _selected = -1;      // Selected branch index (-1 = not selected yet)
 	private int _indexInBranch = 0;  // Current objective index inside selected branch
 
-	public BranchNode(List<List<WorldObjectiveBase>> branches)
+	public WorldBranchNode(List<List<WorldObjectiveBase>> branches)
 	{
 		if (branches.Count == 0)
 		{

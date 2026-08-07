@@ -6,11 +6,11 @@ namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 /// <summary>
 /// Leaf node wrapping a single objective.
 /// </summary>
-public class LeafNode : WorldObjectiveNodeBase
+public class WorldLeafNode : WorldObjectiveNodeBase
 {
 	public WorldObjectiveBase Objective;
 
-	public LeafNode(WorldObjectiveBase obj)
+	public WorldLeafNode(WorldObjectiveBase obj)
 	{
 		if (obj is null)
 		{

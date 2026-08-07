@@ -3,9 +3,11 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 
-public class ParallelNode : WorldObjectiveNodeBase
+public class WorldOptionalNode : WorldObjectiveNodeBase
 {
-	public ParallelNode(List<WorldObjectiveBase> objectives)
+	private readonly List<WorldObjectiveBase> _objectives;
+
+	public WorldOptionalNode(List<WorldObjectiveBase> objectives)
 	{
 		if (objectives.Count == 0)
 		{
@@ -15,17 +17,18 @@ public class ParallelNode : WorldObjectiveNodeBase
 		_objectives = objectives;
 	}
 
-	private readonly List<WorldObjectiveBase> _objectives;
+	public override bool Completed => _objectives.Any(o => o.Completed);
 
-	public override bool Completed => _objectives.All(o => o.Completed);
+	public override float Progress =>
+		_objectives.Count > 0
+			? _objectives.Max(o => o.Progress)
+			: 1f;
 
-	public override float Progress => _objectives.Count > 0
-		? _objectives.Average(o => o.Progress)
-		: 1f;
+	public override List<WorldObjectiveBase> FindAllEntrances() =>
+		_objectives.Where(o => !o.Completed).ToList();
 
-	public override List<WorldObjectiveBase> FindAllEntrances() => _objectives.Where(o => !o.Completed).ToList();
-
-	public override bool CheckCompletion() => _objectives.Any(o => !o.Completed && o.CheckCompletion());
+	public override bool CheckCompletion() =>
+		_objectives.Any(o => !o.Completed && o.CheckCompletion());
 
 	public override void Update()
 	{
@@ -61,9 +64,8 @@ public class ParallelNode : WorldObjectiveNodeBase
 	{
 		for (int i = 0; i < _objectives.Count; i++)
 		{
-			var o = _objectives[i];
 			var ot = new TagCompound();
-			o.SaveData(ot);
+			_objectives[i].SaveData(ot);
 			tag.Add(i.ToString(), ot);
 		}
 	}
@@ -74,8 +76,7 @@ public class ParallelNode : WorldObjectiveNodeBase
 		{
 			if (tag.TryGet<TagCompound>(i.ToString(), out var oTag))
 			{
-				var o = _objectives[i];
-				o.LoadData(oTag);
+				_objectives[i].LoadData(oTag);
 			}
 		}
 	}
