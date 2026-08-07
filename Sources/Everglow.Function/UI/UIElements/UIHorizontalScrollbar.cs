@@ -7,7 +7,13 @@ namespace Everglow.Commons.UI.UIElements
 		private const int LEFT_HEIGHT = 1;
 		private const int RIGHT_HEIGHT = 1;
 
+		public Texture2D UIScrollbarTexture { get; protected set; }
+
 		public Texture2D UIScrollbarInnerTexture { get; protected set; }
+
+		protected Color _innerColor = Color.White;
+		protected Vector2 _innerScale = new Vector2(0.75f);
+
 		private UIImage inner;
 		private float wheelValue;
 		private float alpha = 0f;
@@ -15,27 +21,41 @@ namespace Everglow.Commons.UI.UIElements
 		public bool UseScrollWheel = false;
 		private float waitToWheelValue = 0f;
 		private float mouseX;
-		private bool isMouseDown = false;
+		protected bool _isMouseDown = false;
 		private int whell = 0;
-		public float Scale => (float)Info.HitBox.Height / (float)UIScrollbarInnerTexture.Height;
-		public float LeftMin => LEFT_HEIGHT * Scale;
-		public float LeftMax => RIGHT_HEIGHT * Scale;
+
+		public virtual float Scale => Info.HitBox.Height / (float)UIScrollbarInnerTexture.Height;
+
+		public virtual float LeftMin => LEFT_HEIGHT * Scale;
+
+		public virtual float LeftMax => RIGHT_HEIGHT * Scale;
 
 		public float WheelValue
 		{
-			get { return wheelValue; }
+			get
+			{
+				return wheelValue;
+			}
+
 			set
 			{
 				if (value > 1f)
+				{
 					waitToWheelValue = 1f;
+				}
 				else if (value < 0f)
+				{
 					waitToWheelValue = 0f;
+				}
 				else
+				{
 					waitToWheelValue = value;
+				}
 			}
 		}
 
 		private float _wheelValueMult = 1f;
+
 		public float WheelValueMult { get => _wheelValueMult; set => _wheelValueMult = value; }
 
 		public UIHorizontalScrollbar(float wheelValue = 0f)
@@ -60,7 +80,7 @@ namespace Everglow.Commons.UI.UIElements
 			base.Calculation();
 			inner.Info.Top.SetValue(-(inner.Info.Size.Y - Info.Size.Y) / 2f, 0f);
 			var t = ModAsset.HorizontalScrollbarInner.Value;
-			inner.Info.Width.Pixel = (float)t.Width / (float)t.Height * inner.Info.Size.Y;
+			inner.Info.Width.Pixel = t.Width / (float)t.Height * inner.Info.Size.Y;
 			base.Calculation();
 		}
 
@@ -69,14 +89,14 @@ namespace Everglow.Commons.UI.UIElements
 			base.LoadEvents();
 			Events.OnLeftDown += element =>
 			{
-				if (!isMouseDown)
+				if (!_isMouseDown)
 				{
-					isMouseDown = true;
+					_isMouseDown = true;
 				}
 			};
 			Events.OnLeftUp += element =>
 			{
-				isMouseDown = false;
+				_isMouseDown = false;
 			};
 		}
 
@@ -84,17 +104,26 @@ namespace Everglow.Commons.UI.UIElements
 		{
 			base.Update(gt);
 			if (ParentElement == null)
+			{
 				return;
+			}
 
 			bool isMouseHover = ParentElement.GetCanHitBox().Contains(Main.MouseScreen.ToPoint());
 			if (AlwaysOnLight)
+			{
 				alpha = 1f;
+			}
 			else
 			{
-				if ((isMouseHover || isMouseDown) && alpha < 1f)
+				if ((isMouseHover || _isMouseDown) && alpha < 1f)
+				{
 					alpha += 0.01f;
-				if ((!(isMouseHover || isMouseDown)) && alpha > 0f)
+				}
+
+				if ((!(isMouseHover || _isMouseDown)) && alpha > 0f)
+				{
 					alpha -= 0.01f;
+				}
 			}
 
 			inner.Color = Color.White * alpha;
@@ -102,16 +131,18 @@ namespace Everglow.Commons.UI.UIElements
 			MouseState state = Mouse.GetState();
 			float width = Info.Size.X - LeftMin - LeftMax - inner.Info.Size.X;
 			if (!isMouseHover)
+			{
 				whell = state.ScrollWheelValue;
+			}
 
 			if (UseScrollWheel && isMouseHover && whell != state.ScrollWheelValue)
 			{
-				WheelValue -= (float)(state.ScrollWheelValue - whell) / 6f / width * WheelValueMult;
+				WheelValue -= (state.ScrollWheelValue - whell) / 6f / width * WheelValueMult;
 				whell = state.ScrollWheelValue;
 			}
-			if (isMouseDown && mouseX != Main.mouseX)
+			if (_isMouseDown && mouseX != Main.mouseX)
 			{
-				WheelValue = ((float)Main.mouseX - Info.Location.X - LeftMin - inner.Info.Size.X / 2f) / width;
+				WheelValue = (Main.mouseX - Info.Location.X - LeftMin - inner.Info.Size.X / 2f) / width;
 				mouseX = Main.mouseX;
 			}
 
@@ -119,22 +150,27 @@ namespace Everglow.Commons.UI.UIElements
 			wheelValue += (waitToWheelValue - wheelValue) / 6f;
 
 			if (waitToWheelValue != wheelValue)
+			{
 				Calculation();
+			}
 		}
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
-			float scale = (float)Info.HitBox.Height / (float)UIScrollbarInnerTexture.Height;
+			float scale = Info.HitBox.Height / (float)UIScrollbarInnerTexture.Height;
 			int ct = (int)(12 * scale);
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X,
 				Info.HitBox.Y, ct, Info.HitBox.Height),
 				new Rectangle(0, 0, 12, UIScrollbarInnerTexture.Height), Color.White * alpha);
 
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X + ct,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X + ct,
 				Info.HitBox.Y, Info.HitBox.Width - ct * 2, Info.HitBox.Height),
 				new Rectangle(12, 0, UIScrollbarInnerTexture.Width - 24, UIScrollbarInnerTexture.Height), Color.White * alpha);
 
-			sb.Draw(UIScrollbarInnerTexture, new Rectangle(Info.HitBox.X - ct + Info.HitBox.Width,
+			sb.Draw(UIScrollbarInnerTexture, new Rectangle(
+				Info.HitBox.X - ct + Info.HitBox.Width,
 				Info.HitBox.Y, ct, Info.HitBox.Height),
 				new Rectangle(UIScrollbarInnerTexture.Width - 12, 0, 12, UIScrollbarInnerTexture.Height), Color.White * alpha);
 		}

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
@@ -35,6 +36,8 @@ public class UIMissionDetail : UIBlock
 
 	private UIMissionButton _objectiveChangeMission;
 	private UITextPlus _objectiveChangeText;
+
+	private UIRewardsPanel _rewardsPanel;
 
 	private float oldScale;
 
@@ -170,6 +173,9 @@ public class UIMissionDetail : UIBlock
 		_objectiveChangeText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 		_objectiveChangeText.StringDrawer.Init(_objectiveChangeText.Text);
 		_objectiveChangeMission.Register(_objectiveChangeText);
+
+		_rewardsPanel = new UIRewardsPanel(null);
+		Register(_rewardsPanel);
 	}
 
 	public override void Calculation()
@@ -236,6 +242,11 @@ public class UIMissionDetail : UIBlock
 		_objectiveDurationBar.Info.Width.SetValue(changeButtonWidth - 60);
 		_objectiveDurationBar.Info.Height.SetValue(46);
 
+		_rewardsPanel.Info.Width.SetValue(detailPanelWidth);
+		_rewardsPanel.Info.Height.SetValue(256 * Scale);
+		_rewardsPanel.Info.Left.SetValue((detailPanelDistance + detailPanelWidth + detailPanelDistance) * Scale);
+		_rewardsPanel.Info.Top.SetValue(-240 * Scale, 1f);
+
 		if (oldWidth != Info.Width.Pixel || oldHeight != Info.Height.Pixel)
 		{
 			if (SelectedItem != null)
@@ -256,6 +267,7 @@ public class UIMissionDetail : UIBlock
 		HideMissionSubContent();
 
 		_icon.SetIconGroup(null);
+		_rewardsPanel.SetIconGroup(null);
 		ResetTexts();
 	}
 
@@ -269,6 +281,7 @@ public class UIMissionDetail : UIBlock
 
 			PlayerMissionBase mission = missionItem.Mission;
 			_icon.SetIconGroup(mission.Icon);
+			_rewardsPanel.SetIconGroup(mission.Icon);
 			_descriptionTextScrollbar.WheelValue = 0f;
 
 			SetTexts(mission);
