@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;

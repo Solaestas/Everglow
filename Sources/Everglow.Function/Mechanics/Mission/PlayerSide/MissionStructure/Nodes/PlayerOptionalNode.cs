@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.ModLoader.IO;
 
@@ -6,9 +6,9 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
 
 public class PlayerOptionalNode : PlayerObjectiveNodeBase
 {
-	private readonly List<MissionObjectiveBase> _objectives;
+	private readonly List<PlayerObjectiveBase> _objectives;
 
-	public PlayerOptionalNode(List<MissionObjectiveBase> objectives)
+	public PlayerOptionalNode(List<PlayerObjectiveBase> objectives)
 	{
 		if (objectives.Count == 0)
 		{
@@ -22,7 +22,7 @@ public class PlayerOptionalNode : PlayerObjectiveNodeBase
 
 	public override float Progress => _objectives.Max(o => o.Progress);
 
-	public override List<MissionObjectiveBase> FindAllEntrances() => _objectives.Where(o => !o.Completed).ToList();
+	public override List<PlayerObjectiveBase> FindAllEntrances() => _objectives.Where(o => !o.Completed).ToList();
 
 	public override bool CheckCompletion() => _objectives.Any(o => !o.Completed && o.CheckCompletion());
 

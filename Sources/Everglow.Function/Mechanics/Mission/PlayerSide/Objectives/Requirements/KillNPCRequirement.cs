@@ -1,7 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 
 /// <summary>
 /// A group of npc which use the same requirement

@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
 using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;

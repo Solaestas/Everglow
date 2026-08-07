@@ -1,6 +1,6 @@
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
 public sealed class ProgressCounter
 {

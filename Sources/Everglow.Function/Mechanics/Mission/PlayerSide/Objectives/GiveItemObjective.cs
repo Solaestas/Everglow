@@ -1,4 +1,5 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
@@ -6,7 +7,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class GiveItemObjective : MissionObjectiveBase
+public class GiveItemObjective : PlayerObjectiveBase
 {
 	public GiveItemObjective()
 	{

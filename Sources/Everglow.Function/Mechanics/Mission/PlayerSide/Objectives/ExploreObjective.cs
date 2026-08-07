@@ -1,11 +1,11 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.GameContent.Personalities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class ExploreObjective : MissionObjectiveBase
+public class ExploreObjective : PlayerObjectiveBase
 {
 	public ExploreObjective()
 	{

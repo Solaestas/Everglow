@@ -1,5 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;

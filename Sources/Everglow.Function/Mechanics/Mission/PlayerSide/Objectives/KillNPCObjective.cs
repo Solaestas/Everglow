@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 using Everglow.Commons.Utilities;
@@ -7,7 +9,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class KillNPCObjective : MissionObjectiveBase
+public class KillNPCObjective : PlayerObjectiveBase
 {
 	public KillNPCObjective()
 	{

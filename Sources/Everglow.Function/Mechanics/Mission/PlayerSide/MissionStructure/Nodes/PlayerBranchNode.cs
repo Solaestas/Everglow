@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.ModLoader.IO;
 
@@ -6,11 +6,11 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
 
 public class PlayerBranchNode : PlayerObjectiveNodeBase
 {
-	private readonly List<List<MissionObjectiveBase>> _branches;
+	private readonly List<List<PlayerObjectiveBase>> _branches;
 	private int _selected = -1;
 	private int _indexInBranch;
 
-	public PlayerBranchNode(List<List<MissionObjectiveBase>> branches)
+	public PlayerBranchNode(List<List<PlayerObjectiveBase>> branches)
 	{
 		if (branches.Count == 0 || branches.Any(branch => branch.Count == 0))
 		{
@@ -35,7 +35,7 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 		}
 	}
 
-	public override List<MissionObjectiveBase> FindAllEntrances()
+	public override List<PlayerObjectiveBase> FindAllEntrances()
 	{
 		if (_selected < 0)
 		{

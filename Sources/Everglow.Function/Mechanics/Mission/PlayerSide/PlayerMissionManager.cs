@@ -1,10 +1,10 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using MathNet.Numerics;
 
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
 public static class PlayerMissionManager
 {
@@ -64,7 +64,7 @@ public static class PlayerMissionManager
 	/// Initialize mission manager with player mission data
 	/// </summary>
 	/// <param name="data"></param>
-	public static void ApplyData(MissionManagerData data)
+	public static void ApplyData(PlayerMissionManagerData data)
 	{
 		if (data == null)
 		{
@@ -361,7 +361,7 @@ public static class PlayerMissionManager
 	/// <br/>Should only be called by <see cref="ModPlayer.LoadData(TagCompound)"/>.
 	/// </summary>
 	/// <param name="tag">Provided by <see cref="ModPlayer.LoadData(TagCompound)"/>.</param>
-	public static MissionManagerData LoadData(TagCompound tag)
+	public static PlayerMissionManagerData LoadData(TagCompound tag)
 	{
 		// Load npc kill counter.
 		var nPCKillCounter = new Dictionary<int, int>();
@@ -400,7 +400,7 @@ public static class PlayerMissionManager
 			}
 		}
 
-		return new MissionManagerData(nPCKillCounter, missions);
+		return new PlayerMissionManagerData(nPCKillCounter, missions);
 	}
 
 	#endregion

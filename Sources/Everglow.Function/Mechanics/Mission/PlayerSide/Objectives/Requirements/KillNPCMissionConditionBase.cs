@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 
 public abstract class KillNPCMissionConditionBase
 {

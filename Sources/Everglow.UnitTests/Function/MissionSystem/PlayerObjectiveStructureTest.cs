@@ -1,5 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.ModLoader.IO;
@@ -14,7 +15,7 @@ public class PlayerObjectiveStructureTest
 		public override string DisplayName => nameof(TestMission);
 	}
 
-	private sealed class TestObjective : MissionObjectiveBase
+	private sealed class TestObjective : PlayerObjectiveBase
 	{
 		public bool Ready { get; set; }
 
