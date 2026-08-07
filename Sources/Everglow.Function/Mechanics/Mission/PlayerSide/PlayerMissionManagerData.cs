@@ -1,6 +1,8 @@
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 
-public class MissionManagerData
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
+
+public class PlayerMissionManagerData
 {
 	private Dictionary<int, int> nPCKillCounter;
 	private List<PlayerMissionBase> missionPools;
@@ -9,11 +11,11 @@ public class MissionManagerData
 
 	public IReadOnlyList<PlayerMissionBase> MissionPools => missionPools;
 
-	private MissionManagerData()
+	private PlayerMissionManagerData()
 	{
 	}
 
-	public MissionManagerData(
+	public PlayerMissionManagerData(
 		Dictionary<int, int> nPCKillCounter,
 		List<PlayerMissionBase> missionPools)
 	{

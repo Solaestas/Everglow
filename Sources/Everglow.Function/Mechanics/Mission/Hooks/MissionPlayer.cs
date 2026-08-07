@@ -1,5 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -18,7 +19,7 @@ public class MissionPlayer : ModPlayer
 	/// </summary>
 	public static event Action<Player, Item> OnDropSelectedItemEvent;
 
-	private MissionManagerData missionManagerData;
+	private PlayerMissionManagerData missionManagerData;
 
 	/// <summary>
 	/// Indicate to apply player mission info into <see cref="PlayerMissionManager"/>. Defaults to <c>false</c>.

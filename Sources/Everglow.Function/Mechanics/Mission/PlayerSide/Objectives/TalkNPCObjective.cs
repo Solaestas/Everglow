@@ -1,11 +1,10 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class TalkNPCObjective : MissionObjectiveBase
+public class TalkNPCObjective : PlayerObjectiveBase
 {
 	public TalkNPCObjective()
 	{

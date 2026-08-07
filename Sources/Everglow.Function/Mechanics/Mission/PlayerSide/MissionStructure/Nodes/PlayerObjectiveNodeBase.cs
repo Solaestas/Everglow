@@ -1,5 +1,5 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
@@ -15,7 +15,7 @@ public abstract class PlayerObjectiveNodeBase
 
 	public abstract float Progress { get; }
 
-	public abstract List<MissionObjectiveBase> FindAllEntrances();
+	public abstract List<PlayerObjectiveBase> FindAllEntrances();
 
 	public abstract void Update();
 
@@ -33,12 +33,12 @@ public abstract class PlayerObjectiveNodeBase
 
 	public abstract void GetObjectivesText(List<string> lines);
 
-	protected static void SaveCompletionStates(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	protected static void SaveCompletionStates(TagCompound tag, IEnumerable<PlayerObjectiveBase> objectives)
 	{
 		tag.Add(StructuralCompletionStateSaveKey, objectives.Select(objective => objective.Completed ? 1 : 0).ToList());
 	}
 
-	protected static void LoadCompletionStates(TagCompound tag, IEnumerable<MissionObjectiveBase> objectives)
+	protected static void LoadCompletionStates(TagCompound tag, IEnumerable<PlayerObjectiveBase> objectives)
 	{
 		if (!tag.TryGet<IList<int>>(StructuralCompletionStateSaveKey, out var states))
 		{

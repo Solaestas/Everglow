@@ -1,11 +1,11 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
+namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public class MissionComparer : IComparer<PlayerMissionBase>
+public class PlayerMissionComparer : IComparer<PlayerMissionBase>
 {
-	public static readonly MissionComparer Instance = new MissionComparer();
+	public static readonly PlayerMissionComparer Instance = new PlayerMissionComparer();
 
 	public int Compare(PlayerMissionBase x, PlayerMissionBase y)
 	{

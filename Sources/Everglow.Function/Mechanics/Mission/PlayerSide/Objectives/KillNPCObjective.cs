@@ -1,38 +1,56 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class KillNPCObjective : MissionObjectiveBase
+public class KillNPCObjective : PlayerObjectiveBase
 {
 	public KillNPCObjective()
 	{
 	}
 
-	public KillNPCObjective(KillNPCRequirement requirements)
+	public KillNPCObjective(List<int> npcTypes, int npcCount, bool enableIndividualCounter = false, Func<Player, NPC, bool> condition = null)
 	{
-		DemandNPC = requirements;
+		if (npcTypes.Count == 0 || npcCount <= 0)
+		{
+			throw new InvalidDataException();
+		}
+
+		NPCTypes = npcTypes;
+		NPCCount = npcCount;
+		EnableIndividualCounter = enableIndividualCounter;
+		Condition = condition;
 	}
 
-	public KillNPCRequirement DemandNPC { get; set; }
+	public List<int> NPCTypes { get; private set; } = [];
+
+	public int NPCCount { get; private set; }
+
+	public int KilledCount { get; private set; }
+
+	public bool EnableIndividualCounter { get; private set; }
+
+	public Func<Player, NPC, bool> Condition { get; set; }
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		AssetUtils.LoadVanillaNPCTextures(DemandNPC.NPCs);
+		AssetUtils.LoadVanillaNPCTextures(NPCTypes);
 	}
 
 	public override bool CheckCompletion() => Progress >= 1f;
 
-	public override float Progress => DemandNPC.Progress(PlayerMissionManager.NPCKillCounter);
+	public override float Progress => Math.Clamp((EnableIndividualCounter
+		? KilledCount
+		: PlayerMissionManager.NPCKillCounter.Where(x => NPCTypes.Contains(x.Key)).Sum(x => x.Value)) / (float)NPCCount, 0f, 1f);
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
-		foreach (var npcType in DemandNPC.NPCs)
+		foreach (var npcType in NPCTypes)
 		{
 			var npc = new NPC();
 			npc.SetDefaults(npcType);
@@ -42,57 +60,79 @@ public class KillNPCObjective : MissionObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		string progress = DemandNPC.EnableIndividualCounter
-				? $"({DemandNPC.Counter}/{DemandNPC.Requirement})"
-				: $"({PlayerMissionManager.NPCKillCounter.Where((pair) => DemandNPC.NPCs.Contains(pair.Key)).Sum(pair => pair.Value)}/{DemandNPC.Requirement})";
+		string progress = EnableIndividualCounter
+				? $"({KilledCount}/{NPCCount})"
+				: $"({PlayerMissionManager.NPCKillCounter.Where((pair) => NPCTypes.Contains(pair.Key)).Sum(pair => pair.Value)}/{NPCCount})";
 
-		if (DemandNPC.NPCs.Count > 1)
+		if (NPCTypes.Count > 1)
 		{
-			var npcString = string.Join(',', DemandNPC.NPCs.ConvertAll(npcType =>
+			var npcString = string.Join(',', NPCTypes.ConvertAll(npcType =>
 			{
 				var npc = new NPC();
 				npc.SetDefaults(npcType);
 				return npc.TypeName;
 			}));
-			lines.Add($"击杀 {npcString} 合计{DemandNPC.Requirement}个 {progress}\n");
+			lines.Add($"击杀 {npcString} 合计{NPCCount}个 {progress}\n");
 		}
 		else
 		{
 			var npc = new NPC();
-			npc.SetDefaults(DemandNPC.NPCs.First());
-			lines.Add($"击杀 {npc.TypeName} {DemandNPC.Requirement}个 {progress}\n");
+			npc.SetDefaults(NPCTypes.First());
+			lines.Add($"击杀 {npc.TypeName} {NPCCount}个 {progress}\n");
 		}
 	}
 
 	public override void Activate(PlayerMissionBase sourceMission)
 	{
-		MissionGlobalNPC.OnKillNPCEvent += MissionPlayer_OnKillNPC;
+		MissionGlobalNPC.OnKillNPCEvent += CountKill;
 	}
 
 	public override void Deactivate()
 	{
-		MissionGlobalNPC.OnKillNPCEvent -= MissionPlayer_OnKillNPC;
+		MissionGlobalNPC.OnKillNPCEvent -= CountKill;
 	}
 
 	/// <summary>
-	/// Count kill for each demand group
+	/// Count a matching NPC kill for this objective.
 	/// </summary>
-	/// <param name="npc">The type of NPC</param>
-	/// <param name="count">The count of kill. Default to 1.</param>
-	public void MissionPlayer_OnKillNPC(NPC npc)
+	/// <param name="npc">The killed NPC.</param>
+	public void CountKill(NPC npc)
 	{
-		DemandNPC.Count(npc);
+		if (!EnableIndividualCounter || !NPCTypes.Contains(npc.type))
+		{
+			return;
+		}
+
+		if (Condition != null && !Condition(Main.LocalPlayer, npc))
+		{
+			return;
+		}
+
+		KilledCount++;
+		if (KilledCount > NPCCount)
+		{
+			KilledCount = NPCCount;
+		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		tag.TryGet<KillNPCRequirement>(nameof(DemandNPC), out var demandNPC);
-		if (DemandNPC.EnableIndividualCounter)
+		if (!EnableIndividualCounter)
 		{
-			if (demandNPC != null && demandNPC.Counter > 0)
+			return;
+		}
+
+		if (tag.TryGet<int>(nameof(KilledCount), out var killedCount))
+		{
+			KilledCount = Math.Min(killedCount, NPCCount);
+		}
+		else if (tag.TryGet<TagCompound>("DemandNPC", out var demandNPC))
+		{
+			var count = demandNPC.GetInt("Counter");
+			if (count > 0)
 			{
-				DemandNPC.SetInitialCount(demandNPC.Counter);
+				KilledCount = Math.Min(count, NPCCount);
 			}
 		}
 	}
@@ -100,6 +140,6 @@ public class KillNPCObjective : MissionObjectiveBase
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(DemandNPC), DemandNPC);
+		tag.Add(nameof(KilledCount), KilledCount);
 	}
 }

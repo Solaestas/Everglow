@@ -1,6 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
@@ -13,15 +13,15 @@ public class PlayerStructuralObjectiveContainer
 	private const string StructuralObjectivesSaveKey = "StructuralObjectives";
 
 	private readonly List<PlayerObjectiveNodeBase> _nodes = [];
-	private readonly List<MissionObjectiveBase> _objectives = [];
-	private readonly List<MissionObjectiveBase> _activeObjectives = [];
+	private readonly List<PlayerObjectiveBase> _objectives = [];
+	private readonly List<PlayerObjectiveBase> _activeObjectives = [];
 
-	public MissionObjectiveBase this[int index] => _objectives[index];
+	public PlayerObjectiveBase this[int index] => _objectives[index];
 
 	/// <summary>
 	/// All leaf objectives in DSL declaration order.
 	/// </summary>
-	public List<MissionObjectiveBase> AllObjectives => _objectives;
+	public List<PlayerObjectiveBase> AllObjectives => _objectives;
 
 	public IReadOnlyList<PlayerObjectiveNodeBase> AllNodes => _nodes;
 
@@ -33,12 +33,12 @@ public class PlayerStructuralObjectiveContainer
 	/// <summary>
 	/// A compatibility view of the first active leaf objective.
 	/// </summary>
-	public MissionObjectiveBase CurrentObjective => _activeObjectives.FirstOrDefault();
+	public PlayerObjectiveBase CurrentObjective => _activeObjectives.FirstOrDefault();
 
 	/// <summary>
 	/// All currently active leaf objectives. Callers should use this instead of traversing structure nodes.
 	/// </summary>
-	public IReadOnlyList<MissionObjectiveBase> ActiveObjectives => _activeObjectives;
+	public IReadOnlyList<PlayerObjectiveBase> ActiveObjectives => _activeObjectives;
 
 	public bool RecoveredInvalidState { get; private set; }
 
@@ -48,28 +48,28 @@ public class PlayerStructuralObjectiveContainer
 
 	#region DSL
 
-	public PlayerStructuralObjectiveContainer Add(MissionObjectiveBase objective)
+	public PlayerStructuralObjectiveContainer Add(PlayerObjectiveBase objective)
 	{
 		Register(objective);
 		_nodes.Add(new PlayerLeafNode(objective));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddParallel(params MissionObjectiveBase[] objectives)
+	public PlayerStructuralObjectiveContainer AddParallel(params PlayerObjectiveBase[] objectives)
 	{
 		RegisterRange(objectives);
 		_nodes.Add(new PlayerParallelNode(objectives.ToList()));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddOptional(params MissionObjectiveBase[] objectives)
+	public PlayerStructuralObjectiveContainer AddOptional(params PlayerObjectiveBase[] objectives)
 	{
 		RegisterRange(objectives);
 		_nodes.Add(new PlayerOptionalNode(objectives.ToList()));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddBranch(params List<MissionObjectiveBase>[] branches)
+	public PlayerStructuralObjectiveContainer AddBranch(params List<PlayerObjectiveBase>[] branches)
 	{
 		if (branches is null)
 		{
@@ -94,7 +94,7 @@ public class PlayerStructuralObjectiveContainer
 	/// <summary>
 	/// Returns all active leaf objectives without exposing the node representation.
 	/// </summary>
-	public IEnumerable<MissionObjectiveBase> FindCurrentObjectives()
+	public IEnumerable<PlayerObjectiveBase> FindCurrentObjectives()
 	{
 		var current = FindCurrentNode();
 		return current is null ? [] : current.FindAllEntrances();
@@ -239,7 +239,7 @@ public class PlayerStructuralObjectiveContainer
 
 	#endregion
 
-	private void RegisterRange(IEnumerable<MissionObjectiveBase> objectives)
+	private void RegisterRange(IEnumerable<PlayerObjectiveBase> objectives)
 	{
 		if (objectives is null)
 		{
@@ -252,7 +252,7 @@ public class PlayerStructuralObjectiveContainer
 		}
 	}
 
-	private void Register(MissionObjectiveBase objective)
+	private void Register(PlayerObjectiveBase objective)
 	{
 		if (objective is null)
 		{

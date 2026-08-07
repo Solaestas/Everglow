@@ -1,12 +1,11 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstracts;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 
-public abstract class MissionObjectiveBase : ITagCompoundEntity
+public abstract class PlayerObjectiveBase : ITagCompoundEntity
 {
 	public bool Completed { get; private set; }
 
@@ -24,7 +23,7 @@ public abstract class MissionObjectiveBase : ITagCompoundEntity
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="PlayerStructuralObjectiveContainer.Add(MissionObjectiveBase)"/>.
+	/// Invoked by <see cref="PlayerStructuralObjectiveContainer.Add(PlayerObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()

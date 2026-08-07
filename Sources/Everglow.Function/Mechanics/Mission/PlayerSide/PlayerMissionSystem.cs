@@ -1,9 +1,8 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
 using Everglow.Commons.Mechanics.Mission.UI;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
-public class MissionSystem : ModSystem
+public class PlayerMissionSystem : ModSystem
 {
 	public override void Load()
 	{

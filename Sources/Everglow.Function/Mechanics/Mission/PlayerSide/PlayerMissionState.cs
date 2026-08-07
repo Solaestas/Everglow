@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
+namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
 /// <summary>
 /// 任务池类型

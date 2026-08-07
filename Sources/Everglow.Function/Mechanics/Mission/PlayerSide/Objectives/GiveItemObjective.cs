@@ -1,20 +1,19 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-public class GiveItemObjective : MissionObjectiveBase
+public class GiveItemObjective : PlayerObjectiveBase
 {
 	public GiveItemObjective()
 	{
 	}
 
-	public GiveItemObjective(ItemRequirement requirement, int npcType)
+	public GiveItemObjective(List<int> itemTypes, int itemCount, int npcType)
 	{
-		DemandGiveItem = requirement;
+		InitializeItems(itemTypes, itemCount);
 		NPCType = npcType >= NPCID.None
 			? npcType
 			: throw new InvalidDataException($"NPC type should more than 0.");
@@ -24,9 +23,9 @@ public class GiveItemObjective : MissionObjectiveBase
 		EndText = "谢谢你！";
 	}
 
-	public GiveItemObjective(ItemRequirement requirement, int npcType, string startText, string endText)
+	public GiveItemObjective(List<int> itemTypes, int itemCount, int npcType, string startText, string endText)
 	{
-		DemandGiveItem = requirement;
+		InitializeItems(itemTypes, itemCount);
 		NPCType = npcType >= NPCID.None
 			? npcType
 			: throw new InvalidDataException($"NPC type should more than 0.");
@@ -46,20 +45,22 @@ public class GiveItemObjective : MissionObjectiveBase
 
 	public string EndText { get; set; }
 
-	public ItemRequirement DemandGiveItem { get; set; }
+	public List<int> ItemTypes { get; private set; } = [];
 
-	public override float Progress => DemandGiveItem.GetInventoryProgress(Main.LocalPlayer.inventory);
+	public int ItemCount { get; private set; }
+
+	public override float Progress => GetInventoryProgress(Main.LocalPlayer.inventory);
 
 	public bool IsTalkingToNPC => NPCType == NPCID.None || (NPCType > NPCID.None && Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(DemandGiveItem.Items);
+		AssetUtils.LoadVanillaItemTextures(ItemTypes);
 		AssetUtils.LoadVanillaNPCTextures([NPCType]);
 	}
 
-	public override bool CheckCompletion() => IsTalkingToNPC && DemandGiveItem.GetInventoryProgress(Main.LocalPlayer.inventory) >= 1f;
+	public override bool CheckCompletion() => IsTalkingToNPC && GetInventoryProgress(Main.LocalPlayer.inventory) >= 1f;
 
 	public override void Update()
 	{
@@ -77,8 +78,8 @@ public class GiveItemObjective : MissionObjectiveBase
 	/// <param name="inventory"></param>
 	public void RemoveItem(IEnumerable<Item> inventory)
 	{
-		var stackCount = DemandGiveItem.Requirement;
-		foreach (var inventoryItem in inventory.Where(x => DemandGiveItem.Items.Contains(x.type)))
+		var stackCount = ItemCount;
+		foreach (var inventoryItem in inventory.Where(x => ItemTypes.Contains(x.type)))
 		{
 			if (inventoryItem.stack < stackCount)
 			{
@@ -115,7 +116,7 @@ public class GiveItemObjective : MissionObjectiveBase
 		npc.SetDefaults(NPCType);
 		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 
-		foreach (var item in DemandGiveItem.Items)
+		foreach (var item in ItemTypes)
 		{
 			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
 		}
@@ -126,15 +127,28 @@ public class GiveItemObjective : MissionObjectiveBase
 		var npc = new NPC();
 		npc.SetDefaults(NPCType);
 
-		var progress = $"({Main.LocalPlayer.inventory.Where(i => DemandGiveItem.Items.Contains(i.type)).Sum(i => i.stack)}/{DemandGiveItem.Requirement})";
-		if (DemandGiveItem.Items.Count > 1)
+		var progress = $"({Main.LocalPlayer.inventory.Where(i => ItemTypes.Contains(i.type)).Sum(i => i.stack)}/{ItemCount})";
+		if (ItemTypes.Count > 1)
 		{
-			var itemString = string.Join(' ', DemandGiveItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"向{npc.TypeName}提交{itemString}合计{DemandGiveItem.Requirement}个 {progress}\n");
+			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"向{npc.TypeName}提交{itemString}合计{ItemCount}个 {progress}\n");
 		}
 		else
 		{
-			lines.Add($"向{npc.TypeName}提交{ItemDrawer.Create(DemandGiveItem.Items.First())}{DemandGiveItem.Requirement}个 {progress}\n");
+			lines.Add($"向{npc.TypeName}提交{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
 		}
+	}
+
+	private float GetInventoryProgress(IEnumerable<Item> inventory) => Math.Clamp(inventory.Where(x => ItemTypes.Contains(x.type)).Sum(x => x.stack) / (float)ItemCount, 0f, 1f);
+
+	private void InitializeItems(List<int> itemTypes, int itemCount)
+	{
+		if (itemTypes.Count == 0 || itemCount <= 0)
+		{
+			throw new InvalidDataException();
+		}
+
+		ItemTypes = itemTypes;
+		ItemCount = itemCount;
 	}
 }

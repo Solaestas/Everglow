@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -9,34 +8,42 @@ using Terraria.ModLoader.IO;
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
 [Obsolete("This class is yet unfinished, don't use it.", true)]
-public class UseItemObjective : MissionObjectiveBase
+public class UseItemObjective : PlayerObjectiveBase
 {
 	public UseItemObjective()
 	{
 	}
 
-	public UseItemObjective(ItemRequirement requirement)
+	public UseItemObjective(List<int> itemTypes, int itemCount)
 	{
-		DemandUseItem = requirement;
+		if (itemTypes.Count == 0 || itemCount <= 0)
+		{
+			throw new InvalidDataException();
+		}
+
+		ItemTypes = itemTypes;
+		ItemCount = itemCount;
 	}
 
-	public ItemRequirement DemandUseItem { get; }
+	public List<int> ItemTypes { get; private set; } = [];
 
-	public ProgressCounter Counter { get; private set; } = new();
+	public int ItemCount { get; private set; }
 
-	public override float Progress => DemandUseItem.GetCounterProgress(Counter);
+	public int UsedCount { get; private set; }
+
+	public override float Progress => Math.Clamp(UsedCount / (float)ItemCount, 0f, 1f);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(DemandUseItem.Items);
+		AssetUtils.LoadVanillaItemTextures(ItemTypes);
 	}
 
-	public override bool CheckCompletion() => Counter.Value >= DemandUseItem.Requirement;
+	public override bool CheckCompletion() => UsedCount >= ItemCount;
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
-		foreach (var item in DemandUseItem.Items)
+		foreach (var item in ItemTypes)
 		{
 			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
 		}
@@ -44,15 +51,15 @@ public class UseItemObjective : MissionObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		var progress = $"({Counter.Value}/{DemandUseItem.Requirement})";
-		if (DemandUseItem.Items.Count > 1)
+		var progress = $"({UsedCount}/{ItemCount})";
+		if (ItemTypes.Count > 1)
 		{
-			var itemString = string.Join(' ', DemandUseItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"使用{itemString}合计{DemandUseItem.Requirement}次 {progress}\n");
+			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"使用{itemString}合计{ItemCount}次 {progress}\n");
 		}
 		else
 		{
-			lines.Add($"使用{ItemDrawer.Create(DemandUseItem.Items.First())}{DemandUseItem.Requirement}次 {progress}\n");
+			lines.Add($"使用{ItemDrawer.Create(ItemTypes.First())}{ItemCount}次 {progress}\n");
 		}
 	}
 
@@ -68,24 +75,28 @@ public class UseItemObjective : MissionObjectiveBase
 
 	private void MissionGlobalItem_OnUseItem(Item item)
 	{
-		if (DemandUseItem.Items.Contains(item.type))
+		if (ItemTypes.Contains(item.type))
 		{
-			Counter.Count();
+			UsedCount++;
 		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		if (tag.TryGet<ProgressCounter>(nameof(Counter), out var counter))
+		if (tag.TryGet<int>(nameof(UsedCount), out var usedCount))
 		{
-			Counter = counter;
+			UsedCount = usedCount;
+		}
+		else if (tag.TryGet<TagCompound>("Counter", out var counter))
+		{
+			UsedCount = counter.GetInt("Value");
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(Counter), Counter);
+		tag.Add(nameof(UsedCount), UsedCount);
 	}
 }

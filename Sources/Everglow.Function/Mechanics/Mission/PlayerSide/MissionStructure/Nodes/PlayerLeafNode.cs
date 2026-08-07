@@ -1,23 +1,23 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
 
 public class PlayerLeafNode : PlayerObjectiveNodeBase
 {
-	public PlayerLeafNode(MissionObjectiveBase objective)
+	public PlayerLeafNode(PlayerObjectiveBase objective)
 	{
 		Objective = objective ?? throw new InvalidDataException("Objective must not be null.");
 	}
 
-	public MissionObjectiveBase Objective { get; }
+	public PlayerObjectiveBase Objective { get; }
 
 	public override bool Completed => Objective.Completed;
 
 	public override float Progress => Objective.Progress;
 
-	public override List<MissionObjectiveBase> FindAllEntrances() => Objective.Completed ? [] : [Objective];
+	public override List<PlayerObjectiveBase> FindAllEntrances() => Objective.Completed ? [] : [Objective];
 
 	public override void Update() => Objective.Update();
 

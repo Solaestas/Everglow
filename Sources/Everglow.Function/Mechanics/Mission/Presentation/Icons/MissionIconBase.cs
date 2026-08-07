@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 public abstract class MissionIconBase
 {
