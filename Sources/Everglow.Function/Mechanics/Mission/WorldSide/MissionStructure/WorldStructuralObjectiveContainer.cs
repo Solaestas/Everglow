@@ -54,6 +54,8 @@ public class WorldStructuralObjectiveContainer
 	/// </summary>
 	public WorldObjectiveNodeBase Current { get; private set; }
 
+	public bool RecoveredInvalidState { get; private set; }
+
 	public float Progress => AllNodes.Average(n => n.Progress);
 
 	/// <summary>
@@ -345,8 +347,18 @@ public class WorldStructuralObjectiveContainer
 	/// <param name="tag">The tag compound containing saved data.</param>
 	public void LoadData(TagCompound tag)
 	{
+		RecoveredInvalidState = false;
 		if (tag.TryGet<IList<TagCompound>>(ObjectivesSaveKey, out var oTags))
 		{
+			for (int i = 0; i < oTags.Count && i < AllNodes.Count; i++)
+			{
+				if (AllNodes[i] is WorldBranchNode branch && !branch.HasValidCursor(oTags[i]))
+				{
+					RecoveredInvalidState = true;
+					return;
+				}
+			}
+
 			for (int i = 0; i < oTags.Count && i < AllNodes.Count; i++)
 			{
 				AllNodes[i].LoadData(oTags[i]);
@@ -392,10 +404,26 @@ public class WorldStructuralObjectiveContainer
 	/// <param name="br">The binary reader used for receiving data.</param>
 	public void NetReceive(BinaryReader br)
 	{
+		BeginStateRestore();
 		foreach (var node in AllNodes)
 		{
 			node.NetReceive(br);
 		}
+		CompleteStateRestore();
+	}
+
+	private void BeginStateRestore()
+	{
+		RecoveredInvalidState = false;
+		foreach (var branch in AllNodes.OfType<WorldBranchNode>())
+		{
+			branch.ClearInvalidState();
+		}
+	}
+
+	private void CompleteStateRestore()
+	{
+		RecoveredInvalidState = AllNodes.OfType<WorldBranchNode>().Any(branch => branch.InvalidStateDetected);
 	}
 
 	/// <summary>

@@ -9,6 +9,8 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 	private int _selected = -1;      // Selected branch index (-1 = not selected yet)
 	private int _indexInBranch = 0;  // Current objective index inside selected branch
 
+	internal bool InvalidStateDetected { get; private set; }
+
 	public WorldBranchNode(List<List<WorldObjectiveBase>> branches)
 	{
 		if (branches.Count == 0)
@@ -182,8 +184,8 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 
 	public override void LoadData(TagCompound tag)
 	{
-		_selected = tag.GetInt("Selected");
-		_indexInBranch = tag.GetInt("Index");
+		int selected = tag.GetInt("Selected");
+		int indexInBranch = tag.GetInt("Index");
 
 		// Load each objective's data
 		for (int i = 0; i < _branches.Count; i++)
@@ -196,7 +198,11 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 				}
 			}
 		}
+
+		RestoreCursorOrReset(selected, indexInBranch);
 	}
+
+	internal bool HasValidCursor(TagCompound tag) => IsCursorValid(tag.GetInt("Selected"), tag.GetInt("Index"));
 
 	public override void NetSend(BinaryWriter bw)
 	{
@@ -215,8 +221,8 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 
 	public override void NetReceive(BinaryReader br)
 	{
-		_selected = br.ReadInt32();
-		_indexInBranch = br.ReadInt32();
+		int selected = br.ReadInt32();
+		int indexInBranch = br.ReadInt32();
 
 		// Receive all objectives in all branches
 		foreach (var branch in _branches)
@@ -226,5 +232,33 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 				obj.NetReceive(br);
 			}
 		}
+
+		RestoreCursorOrReset(selected, indexInBranch);
+	}
+
+	private void RestoreCursorOrReset(int selected, int indexInBranch)
+	{
+		if (IsCursorValid(selected, indexInBranch))
+		{
+			_selected = selected;
+			_indexInBranch = indexInBranch;
+			return;
+		}
+
+		InvalidStateDetected = true;
+		ResetProgress();
+	}
+
+	internal void ClearInvalidState() => InvalidStateDetected = false;
+
+	private bool IsCursorValid(int selected, int indexInBranch)
+	{
+		if (selected == -1)
+		{
+			return indexInBranch == 0;
+		}
+
+		return selected >= 0 && selected < _branches.Count
+			&& indexInBranch >= 1 && indexInBranch <= _branches[selected].Count;
 	}
 }

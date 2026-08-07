@@ -117,6 +117,19 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 		LoadCompletionStates(tag, _branches.SelectMany(branch => branch));
 	}
 
+	internal bool HasValidCursor(TagCompound tag)
+	{
+		int selected = tag.GetInt("Selected");
+		int indexInBranch = tag.GetInt("Index");
+		if (selected == -1)
+		{
+			return indexInBranch == 0;
+		}
+
+		return selected >= 0 && selected < _branches.Count
+			&& indexInBranch >= 1 && indexInBranch <= _branches[selected].Count;
+	}
+
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
 		foreach (var objective in _branches.SelectMany(branch => branch))

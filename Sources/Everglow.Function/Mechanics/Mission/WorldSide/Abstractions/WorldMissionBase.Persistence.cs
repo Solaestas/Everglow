@@ -37,8 +37,10 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 		{
 			Objectives.LoadData(o);
 		}
-
-		ApplyObjectiveSnapshot(oldState, State);
+		if (!RecoverInvalidObjectiveState())
+		{
+			ApplyObjectiveSnapshot(oldState, State);
+		}
 	}
 
 	public void SaveData(TagCompound tag)
@@ -51,5 +53,28 @@ public abstract partial class WorldMissionBase : IMissionPersistence
 		var o = new TagCompound();
 		Objectives.SaveData(o);
 		tag.Add(ObjectivesSaveKey, o);
+	}
+
+	private bool RecoverInvalidObjectiveState()
+	{
+		if (!Objectives.RecoveredInvalidState)
+		{
+			return false;
+		}
+
+		Time = 0;
+		RewardClaimed = false;
+		RewardClaimedPlayers.Clear();
+		if (State == WorldMissionState.Completed)
+		{
+			State = WorldMissionState.Active;
+		}
+
+		ResetProgress();
+		if (State == WorldMissionState.Active)
+		{
+			Activate();
+		}
+		return true;
 	}
 }

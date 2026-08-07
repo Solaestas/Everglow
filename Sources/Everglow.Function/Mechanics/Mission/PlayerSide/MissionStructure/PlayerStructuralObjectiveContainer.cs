@@ -40,6 +40,8 @@ public class PlayerStructuralObjectiveContainer
 	/// </summary>
 	public IReadOnlyList<MissionObjectiveBase> ActiveObjectives => _activeObjectives;
 
+	public bool RecoveredInvalidState { get; private set; }
+
 	public bool Completed => FindCurrentNode() is null;
 
 	public float Progress => _nodes.Count == 0 ? 1f : _nodes.Average(node => node.Progress);
@@ -208,8 +210,19 @@ public class PlayerStructuralObjectiveContainer
 
 	public void LoadData(TagCompound tag)
 	{
+		RecoveredInvalidState = false;
 		if (tag.TryGet<IList<TagCompound>>(StructuralObjectivesSaveKey, out var nodeTags))
 		{
+			for (int i = 0; i < nodeTags.Count && i < _nodes.Count; i++)
+			{
+				if (_nodes[i] is PlayerBranchNode branch && !branch.HasValidCursor(nodeTags[i]))
+				{
+					RecoveredInvalidState = true;
+					Current = FindCurrentNode();
+					return;
+				}
+			}
+
 			for (int i = 0; i < nodeTags.Count && i < _nodes.Count; i++)
 			{
 				_nodes[i].LoadData(nodeTags[i]);

@@ -27,8 +27,10 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 			RewardClaimedPlayers.Add(reader.ReadString());
 		}
 		Objectives.NetReceive(reader);
-
-		ApplyObjectiveSnapshot(oldState, State);
+		if (!RecoverInvalidObjectiveState())
+		{
+			ApplyObjectiveSnapshot(oldState, State);
+		}
 
 		if (oldState != State)
 		{

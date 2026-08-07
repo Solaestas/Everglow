@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Enums;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.ModLoader.IO;
@@ -44,6 +45,7 @@ public class PlayerObjectiveStructureTest
 		{
 			Ready = tag.TryGet<int>(nameof(Ready), out var ready) && ready != 0;
 		}
+
 	}
 
 	[TestMethod]
@@ -142,6 +144,19 @@ public class PlayerObjectiveStructureTest
 	}
 
 	[TestMethod]
+	public void ResetProgress_PreservesRewardClaimState()
+	{
+		var objective = new TestObjective { Ready = true };
+		objective.Complete();
+
+		objective.ResetProgress();
+
+		Assert.IsFalse(objective.Completed);
+		Assert.IsTrue(objective.HasGivenRewardItems);
+		Assert.IsTrue(objective.Ready);
+	}
+
+	[TestMethod]
 	public void SaveData_LoadData_RoundTripsStructuralProgress()
 	{
 		var savedFirst = new TestObjective { Ready = true };
@@ -182,5 +197,66 @@ public class PlayerObjectiveStructureTest
 		Assert.IsTrue(first.Ready);
 		Assert.IsFalse(second.Ready);
 		Assert.AreSame(first, objectives.FindCurrentObjectives().Single());
+	}
+
+	[TestMethod]
+	public void LoadData_InvalidBranchCursor_ResetsWholeObjectiveStructure()
+	{
+		var savedFirst = new TestObjective { Ready = true };
+		var savedBranchA = new TestObjective { Ready = true };
+		var savedBranchB = new TestObjective { Ready = true };
+		var saved = new PlayerStructuralObjectiveContainer()
+			.Add(savedFirst)
+			.AddBranch([savedBranchA], [savedBranchB]);
+		savedFirst.Complete();
+		savedBranchA.Complete();
+		var tag = new TagCompound();
+		saved.SaveData(tag);
+		var nodeTags = tag.GetList<TagCompound>("StructuralObjectives");
+		nodeTags[1]["Selected"] = 99;
+		nodeTags[1]["Index"] = 1;
+
+		var loadedFirst = new TestObjective();
+		var loadedBranchA = new TestObjective();
+		var loadedBranchB = new TestObjective();
+		var loaded = new PlayerStructuralObjectiveContainer()
+			.Add(loadedFirst)
+			.AddBranch([loadedBranchA], [loadedBranchB]);
+		loaded.LoadData(tag);
+
+		Assert.IsTrue(loaded.RecoveredInvalidState);
+		Assert.IsTrue(loaded.AllObjectives.All(objective => !objective.Completed));
+		Assert.IsTrue(loaded.AllObjectives.All(objective => !objective.HasGivenRewardItems));
+		Assert.IsTrue(loaded.AllObjectives.Cast<TestObjective>().All(objective => !objective.Ready));
+		Assert.AreSame(loadedFirst, loaded.FindCurrentObjectives().Single());
+	}
+
+	[TestMethod]
+	public void MissionLoad_InvalidBranchCursor_ReopensCompletedMission()
+	{
+		var saved = new PlayerStructuralObjectiveContainer()
+			.Add(new TestObjective { Ready = true })
+			.AddBranch([new TestObjective { Ready = true }], [new TestObjective { Ready = true }]);
+		var tag = new TagCompound
+		{
+			[nameof(PlayerMissionBase.State)] = (int)PlayerMissionState.Completed,
+			[PlayerMissionBase.TimeSaveKey] = 120L,
+		};
+		saved.SaveData(tag);
+		var nodeTags = tag.GetList<TagCompound>("StructuralObjectives");
+		nodeTags[1]["Selected"] = -1;
+		nodeTags[1]["Index"] = 2;
+
+		var mission = new TestMission();
+		mission.Objectives
+			.Add(new TestObjective())
+			.AddBranch([new TestObjective()], [new TestObjective()]);
+
+		mission.LoadData(tag);
+
+		Assert.IsTrue(mission.Objectives.RecoveredInvalidState);
+		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
+		Assert.AreEqual(0, mission.Time);
+		Assert.IsFalse(mission.OldCheckComplete);
 	}
 }

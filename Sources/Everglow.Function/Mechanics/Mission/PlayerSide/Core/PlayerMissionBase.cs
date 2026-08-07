@@ -390,6 +390,16 @@ public abstract class PlayerMissionBase : ITagCompoundEntity
 		}
 
 		Objectives.LoadData(tag);
+		if (Objectives.RecoveredInvalidState)
+		{
+			Reset();
+			Time = 0;
+			OldCheckComplete = false;
+			if (State == PlayerMissionState.Completed)
+			{
+				State = PlayerMissionState.Accepted;
+			}
+		}
 
 		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
