@@ -1,6 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
-
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 public sealed class MissionIconGroup
 {

@@ -1,7 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Terraria.GameContent;
 
-namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 public class ItemMissionIcon : MissionIconBase
 {

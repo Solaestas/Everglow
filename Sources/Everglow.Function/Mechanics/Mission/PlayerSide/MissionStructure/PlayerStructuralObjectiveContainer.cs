@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure;

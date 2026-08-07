@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 
@@ -89,7 +89,7 @@ public class UIMissionList : UIBlock
 		}
 
 		// 排序
-		missions = missions.Order(MissionComparer.Instance);
+		missions = missions.Order(PlayerMissionComparer.Instance);
 
 		// 生成任务UI元素
 		List<BaseElement> elements = [];
