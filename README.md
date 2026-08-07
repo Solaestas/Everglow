@@ -4,7 +4,7 @@
 
 # Everglow
 
-Everglow is a content-focused Terraria mod in active development. It adds new regions, gameplay systems, equipment, and visual effects for a fresh Terraria experience.
+Everglow is a *freaking awesome* mod for Terraria!.
 
 Development in progress ✿✿ヽ(°▽°)ノ✿
 <br>
