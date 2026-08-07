@@ -1,6 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
@@ -15,15 +14,23 @@ public class CollectItemObjective : PlayerObjectiveBase
 	{
 	}
 
-	public CollectItemObjective(ItemRequirement requirement, bool enableIndividualCounter = true)
+	public CollectItemObjective(List<int> itemTypes, int itemCount, bool enableIndividualCounter = true)
 	{
-		DemandCollectItem = requirement;
+		if (itemTypes.Count == 0 || itemCount <= 0)
+		{
+			throw new InvalidDataException();
+		}
+
+		ItemTypes = itemTypes;
+		ItemCount = itemCount;
 		EnableIndividualCounter = enableIndividualCounter;
 	}
 
-	public ItemRequirement DemandCollectItem { get; set; }
+	public List<int> ItemTypes { get; private set; } = [];
 
-	public ProgressCounter Counter { get; private set; } = new();
+	public int ItemCount { get; private set; }
+
+	public int CollectedCount { get; private set; }
 
 	public bool EnableIndividualCounter { get; set; } = false;
 
@@ -36,20 +43,20 @@ public class CollectItemObjective : PlayerObjectiveBase
 	/// <param name="player"></param>
 	/// <returns></returns>
 	public float CalculateProgress(Player player) => EnableIndividualCounter
-		? DemandCollectItem.GetCounterProgress(Counter)
-		: DemandCollectItem.GetInventoryProgress(player.inventory);
+		? Math.Clamp(CollectedCount / (float)ItemCount, 0f, 1f)
+		: Math.Clamp(player.inventory.Where(x => ItemTypes.Contains(x.type)).Sum(x => x.stack) / (float)ItemCount, 0f, 1f);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(DemandCollectItem.Items);
+		AssetUtils.LoadVanillaItemTextures(ItemTypes);
 	}
 
 	public override bool CheckCompletion() => Progress >= 1f;
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
-		foreach (var item in DemandCollectItem.Items)
+		foreach (var item in ItemTypes)
 		{
 			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
 		}
@@ -58,17 +65,17 @@ public class CollectItemObjective : PlayerObjectiveBase
 	public override void GetObjectivesText(List<string> lines)
 	{
 		string progress = EnableIndividualCounter
-			? $"({Counter}/{DemandCollectItem.Requirement})"
-			: $"({Main.LocalPlayer.inventory.Where(i => DemandCollectItem.Items.Contains(i.type)).Sum(i => i.stack)}/{DemandCollectItem.Requirement})";
+			? $"({CollectedCount}/{ItemCount})"
+			: $"({Main.LocalPlayer.inventory.Where(i => ItemTypes.Contains(i.type)).Sum(i => i.stack)}/{ItemCount})";
 		var verbString = EnableIndividualCounter ? "获取" : "拥有";
-		if (DemandCollectItem.Items.Count > 1)
+		if (ItemTypes.Count > 1)
 		{
-			var itemString = string.Join(' ', DemandCollectItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"{verbString}{itemString}合计{DemandCollectItem.Requirement}个 {progress}\n");
+			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"{verbString}{itemString}合计{ItemCount}个 {progress}\n");
 		}
 		else
 		{
-			lines.Add($"{verbString}{ItemDrawer.Create(DemandCollectItem.Items.First())}{DemandCollectItem.Requirement}个 {progress}\n");
+			lines.Add($"{verbString}{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
 		}
 	}
 
@@ -78,9 +85,9 @@ public class CollectItemObjective : PlayerObjectiveBase
 	/// <param name="item"></param>
 	public void MissionPlayer_OnPickUp(Item item)
 	{
-		if (DemandCollectItem.Items.Contains(item.type) && EnableIndividualCounter)
+		if (ItemTypes.Contains(item.type) && EnableIndividualCounter)
 		{
-			Counter.Count(item.stack);
+			CollectedCount += item.stack;
 		}
 	}
 
@@ -98,9 +105,13 @@ public class CollectItemObjective : PlayerObjectiveBase
 	{
 		base.LoadData(tag);
 
-		if (tag.TryGet<ProgressCounter>(nameof(Counter), out var counter))
+		if (tag.TryGet<int>(nameof(CollectedCount), out var collectedCount))
 		{
-			Counter = counter;
+			CollectedCount = collectedCount;
+		}
+		else if (tag.TryGet<TagCompound>("Counter", out var counter))
+		{
+			CollectedCount = counter.GetInt("Value");
 		}
 	}
 
@@ -108,6 +119,6 @@ public class CollectItemObjective : PlayerObjectiveBase
 	{
 		base.SaveData(tag);
 
-		tag.Add(nameof(Counter), Counter);
+		tag.Add(nameof(CollectedCount), CollectedCount);
 	}
 }

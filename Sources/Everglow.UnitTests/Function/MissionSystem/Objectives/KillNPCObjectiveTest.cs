@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.UnitTests.Function.MissionSystem.ObjectiveTests;
 
@@ -13,21 +13,21 @@ public class KillNPCObjectiveTest
 	{
 		for (int reqCount = 1; reqCount < 30; reqCount++)
 		{
-			var objective = new KillNPCObjective(KillNPCRequirement.Create(
+			var objective = new KillNPCObjective(
 				[
 					NPCID.BlueSlime,
 					NPCID.IceSlime,
 					NPCID.SpikedJungleSlime,
 					NPCID.MotherSlime,
-				], reqCount, true));
+				], reqCount, true);
 
 			for (int i = 0; i < reqCount * 10; i++)
 			{
 				var npc = new NPC();
 				npc.type = NPCID.BlueSlime;
-				objective.DemandNPC.Count(npc);
+				objective.CountKill(npc);
 			}
-			Assert.IsTrue(objective.DemandNPC.Counter == reqCount);
+			Assert.IsTrue(objective.KilledCount == reqCount);
 		}
 	}
 
@@ -37,20 +37,19 @@ public class KillNPCObjectiveTest
 		for (int reqCount = 1; reqCount < 30; reqCount++)
 		{
 			var killNPCMission = new KillNPCObjective(
-			KillNPCRequirement.Create(
 				[
 					NPCID.BlueSlime,
 					NPCID.IceSlime,
 					NPCID.SpikedJungleSlime,
 					NPCID.MotherSlime,
-				], reqCount, true));
+				], reqCount, true);
 
 			for (int count = 0; count <= reqCount; count++)
 			{
 				Assert.IsTrue(killNPCMission.Progress == count / (float)reqCount);
 				var npc = new NPC();
 				npc.type = NPCID.BlueSlime;
-				killNPCMission.DemandNPC.Count(npc);
+				killNPCMission.CountKill(npc);
 			}
 
 			Assert.IsTrue(killNPCMission.Progress == 1f);
@@ -61,26 +60,26 @@ public class KillNPCObjectiveTest
 	public void IndividualCounter_Should_NotCount_When_NPCTypeIsInvalid()
 	{
 		int reqCount = 10;
-		var req = KillNPCRequirement.Create(
+		var objective = new KillNPCObjective(
 			[
 				NPCID.BlueSlime,
 				NPCID.IceSlime,
 				NPCID.SpikedJungleSlime,
 				NPCID.MotherSlime,
-			], reqCount, false);
+			], reqCount, true);
 
 		var npc = new NPC
 		{
 			type = NPCID.Zombie,
 		};
-		req.Count(npc);
+		objective.CountKill(npc);
 
 		npc = new NPC
 		{
 			type = NPCID.MoonLordCore,
 		};
-		req.Count(npc);
-		Assert.IsTrue(req.Counter == 0);
+		objective.CountKill(npc);
+		Assert.IsTrue(objective.KilledCount == 0);
 	}
 
 	[TestMethod]
@@ -88,30 +87,46 @@ public class KillNPCObjectiveTest
 	{
 		int reqCount = 10;
 		var killNPCMission = new KillNPCObjective(
-			KillNPCRequirement.Create(
 				[
 					NPCID.BlueSlime,
 					NPCID.IceSlime,
 					NPCID.SpikedJungleSlime,
 					NPCID.MotherSlime,
-				], reqCount, false));
+				], reqCount, false);
 		var npc = new NPC();
 		npc.type = NPCID.BlueSlime;
-		killNPCMission.DemandNPC.Count(npc);
+		killNPCMission.CountKill(npc);
 		Assert.IsTrue(true);
 	}
 
 	[TestMethod]
-	public void CreateRequirement_Should_ThrowInvalidDataException_When_ParamIsLessThanZero()
+	public void Constructor_Should_ThrowInvalidDataException_When_RequirementIsInvalid()
 	{
 		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
-			KillNPCRequirement.Create([], 1);
+			new KillNPCObjective([], 1);
 		});
 
 		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
-			KillNPCRequirement.Create([NPCID.Worm], 0);
+			new KillNPCObjective([NPCID.Worm], 0);
 		});
+	}
+
+	[TestMethod]
+	public void LoadData_Should_ReadLegacyRequirementShape()
+	{
+		var objective = new KillNPCObjective([NPCID.Worm], 10, true);
+		var legacyTag = new TagCompound()
+		{
+			["DemandNPC"] = new TagCompound()
+			{
+				["Counter"] = 7,
+			},
+		};
+
+		objective.LoadData(legacyTag);
+
+		Assert.AreEqual(7, objective.KilledCount);
 	}
 }

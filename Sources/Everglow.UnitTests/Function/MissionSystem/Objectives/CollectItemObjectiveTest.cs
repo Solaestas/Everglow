@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader.IO;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 
@@ -17,7 +17,7 @@ public class CollectItemObjectiveTest
 		for (int i = 0; i < 100; i++)
 		{
 			int testStack = random.Next(30, 120);
-			var objective = new CollectItemObjective(new ItemRequirement([ItemID.DirtBlock], testStack), false);
+			var objective = new CollectItemObjective([ItemID.DirtBlock], testStack, false);
 
 			var player = new Player();
 			player.inventory = [];
@@ -56,7 +56,7 @@ public class CollectItemObjectiveTest
 
 			int type3 = ItemID.IronOre;
 
-			var mission = new CollectItemObjective(new ItemRequirement([type1, type2, type3], testStack1), false);
+			var mission = new CollectItemObjective([type1, type2, type3], testStack1, false);
 
 			var player = new Player();
 			player.inventory = [];
@@ -103,7 +103,7 @@ public class CollectItemObjectiveTest
 		{
 			int testStack = (int)new Random().NextInt64(50, 200);
 
-			var objective = new CollectItemObjective(new ItemRequirement([ItemID.DirtBlock], testStack), false);
+			var objective = new CollectItemObjective([ItemID.DirtBlock], testStack, false);
 
 			var player = new Player();
 			player.inventory = [];
@@ -127,17 +127,34 @@ public class CollectItemObjectiveTest
 	}
 
 	[TestMethod]
-	public void CreateRequirement_Should_ThrowInvalidDataException_When_ParamIsEmpty()
+	public void Constructor_Should_ThrowInvalidDataException_When_RequirementIsInvalid()
 	{
 		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
-			new ItemRequirement([], 1);
+			new CollectItemObjective([], 1);
 		});
 
 		Assert.ThrowsExactly<InvalidDataException>(() =>
 		{
-			new ItemRequirement([ItemID.DirtBlock], 0);
+			new CollectItemObjective([ItemID.DirtBlock], 0);
 		});
+	}
+
+	[TestMethod]
+	public void LoadData_Should_ReadLegacyCounterShape()
+	{
+		var objective = new CollectItemObjective([ItemID.DirtBlock], 10);
+		var legacyTag = new TagCompound()
+		{
+			["Counter"] = new TagCompound()
+			{
+				["Value"] = 7,
+			},
+		};
+
+		objective.LoadData(legacyTag);
+
+		Assert.AreEqual(7, objective.CollectedCount);
 	}
 
 	[TestMethod]

@@ -83,7 +83,7 @@ public class MissionGlobalNPC : GlobalNPC
 				{
 					return NPCID.None;
 				}
-			}).Distinct();
+			});
 		return playerSideNPCs.Concat(worldSideNPCs).Distinct();
 	}
 
@@ -94,7 +94,7 @@ public class MissionGlobalNPC : GlobalNPC
 		var playerSideNPCs = missions
 			.SelectMany(mission => mission.Objectives.ActiveObjectives)
 			.OfType<KillNPCObjective>()
-			.SelectMany(killObjective => killObjective.DemandNPC.NPCs);
+			.SelectMany(killObjective => killObjective.NPCTypes);
 
 		var worldSideNPCs = WorldMissionManager.Instance.ActiveMissions
 			.SelectMany(m => m.ActiveObjectives)

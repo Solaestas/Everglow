@@ -1,6 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives.Requirements;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Primitives;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Shared.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
@@ -15,28 +14,36 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 	{
 	}
 
-	public ConsumeItemObjective(ItemRequirement requirement)
+	public ConsumeItemObjective(List<int> itemTypes, int itemCount)
 	{
-		DemandConsumeItem = requirement;
+		if (itemTypes.Count == 0 || itemCount <= 0)
+		{
+			throw new InvalidDataException();
+		}
+
+		ItemTypes = itemTypes;
+		ItemCount = itemCount;
 	}
 
-	public ItemRequirement DemandConsumeItem { get; set; }
+	public List<int> ItemTypes { get; private set; } = [];
 
-	public ProgressCounter Counter { get; private set; } = new();
+	public int ItemCount { get; private set; }
 
-	public override float Progress => DemandConsumeItem.GetCounterProgress(Counter);
+	public int ConsumedCount { get; private set; }
+
+	public override float Progress => Math.Clamp(ConsumedCount / (float)ItemCount, 0f, 1f);
 
 	public override void OnInitialize()
 	{
 		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(DemandConsumeItem.Items);
+		AssetUtils.LoadVanillaItemTextures(ItemTypes);
 	}
 
-	public override bool CheckCompletion() => Counter.Value >= DemandConsumeItem.Requirement;
+	public override bool CheckCompletion() => ConsumedCount >= ItemCount;
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
-		foreach (var item in DemandConsumeItem.Items)
+		foreach (var item in ItemTypes)
 		{
 			iconGroup.Add(ItemMissionIcon.Create(item, new Item(item).Name));
 		}
@@ -44,15 +51,15 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 
 	public override void GetObjectivesText(List<string> lines)
 	{
-		var progress = $"({Counter.Value}/{DemandConsumeItem.Requirement})";
-		if (DemandConsumeItem.Items.Count > 1)
+		var progress = $"({ConsumedCount}/{ItemCount})";
+		if (ItemTypes.Count > 1)
 		{
-			var itemString = string.Join(' ', DemandConsumeItem.Items.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"消耗{itemString}合计{DemandConsumeItem.Requirement}个 {progress}\n");
+			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
+			lines.Add($"消耗{itemString}合计{ItemCount}个 {progress}\n");
 		}
 		else
 		{
-			lines.Add($"消耗{ItemDrawer.Create(DemandConsumeItem.Items.First())}{DemandConsumeItem.Requirement}个 {progress}\n");
+			lines.Add($"消耗{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
 		}
 	}
 
@@ -68,24 +75,28 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 
 	private void MissionGlobalItem_OnConsumeItem(Item item)
 	{
-		if (DemandConsumeItem.Items.Contains(item.type))
+		if (ItemTypes.Contains(item.type))
 		{
-			Counter.Count();
+			ConsumedCount++;
 		}
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);
-		if (tag.TryGet<ProgressCounter>(nameof(Counter), out var counter))
+		if (tag.TryGet<int>(nameof(ConsumedCount), out var consumedCount))
 		{
-			Counter = counter;
+			ConsumedCount = consumedCount;
+		}
+		else if (tag.TryGet<TagCompound>("Counter", out var counter))
+		{
+			ConsumedCount = counter.GetInt("Value");
 		}
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);
-		tag.Add(nameof(Counter), Counter);
+		tag.Add(nameof(ConsumedCount), ConsumedCount);
 	}
 }
