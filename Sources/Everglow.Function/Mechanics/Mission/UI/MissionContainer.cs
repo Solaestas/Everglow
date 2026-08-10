@@ -127,21 +127,21 @@ public class MissionContainer : UIContainerElement
 	/// <param name="resolution"></param>
 	private void UpdateResolutionFactor(Vector2 resolution)
 	{
-		if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
-		{
-			ResolutionFactor = 1;
-		}
-		else
-		{
-			if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
-			{
-				ResolutionFactor = resolution.Y / CurrentPanelHeight;
-			}
-			else
-			{
-				ResolutionFactor = resolution.X / CurrentPanelWidth;
-			}
-		}
+		//if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
+		//{
+		//	ResolutionFactor = 1;
+		//}
+		//else
+		//{
+		//	if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
+		//	{
+		//		ResolutionFactor = resolution.Y / CurrentPanelHeight;
+		//	}
+		//	else
+		//	{
+		//		ResolutionFactor = resolution.X / CurrentPanelWidth;
+		//	}
+		//}
 	}
 
 	private void RefreshMissionContainer()
@@ -236,17 +236,41 @@ public class MissionContainer : UIContainerElement
 	public override void Calculation()
 	{
 		base.Calculation();
-
+		bool shouldSetToCenter = false;
+		if (CurrentPanelWidth > Main.screenWidth * 0.8f)
+		{
+			_panel.Info.Width.SetValue(Main.screenWidth * 0.8f, 0);
+			shouldSetToCenter = true;
+		}
+		if (CurrentPanelHeight > Main.screenHeight * 0.8f)
+		{
+			_panel.Info.Height.SetValue(Main.screenHeight * 0.8f, 0);
+			shouldSetToCenter = true;
+		}
 		if (_panel.Info.Width.Pixel > 0 && _panel.Info.Height.Pixel > 0)
 		{
 			CurrentPanelWidth = (int)_panel.Info.Width.Pixel;
 			CurrentPanelHeight = (int)_panel.Info.Height.Pixel;
+			if (CurrentPanelWidth < _panel.MinWidthPixel)
+			{
+				CurrentPanelWidth = _panel.MinWidthPixel;
+				shouldSetToCenter = true;
+			}
+			if (CurrentPanelHeight < _panel.MinHeightPixel)
+			{
+				CurrentPanelHeight = _panel.MinHeightPixel;
+				shouldSetToCenter = true;
+			}
 		}
 		float width = CurrentPanelWidth;
 		float height = CurrentPanelHeight;
 
 		_panel.Info.Width.SetValue(width, 0f);
 		_panel.Info.Height.SetValue(height, 0f);
+		if (shouldSetToCenter)
+		{
+			_panel.Info.SetToCenter();
+		}
 
 		_panelBackground.Info.Width.SetFull();
 		_panelBackground.Info.Height.SetFull();
