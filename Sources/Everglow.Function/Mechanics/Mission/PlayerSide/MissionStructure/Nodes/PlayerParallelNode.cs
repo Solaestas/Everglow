@@ -16,7 +16,10 @@ public class PlayerParallelNode : PlayerObjectiveNodeBase
 		}
 
 		_objectives = objectives;
+		Objectives = _objectives.AsReadOnly();
 	}
+
+	internal IReadOnlyList<PlayerObjectiveBase> Objectives { get; }
 
 	public override bool Completed => _objectives.All(o => o.Completed);
 

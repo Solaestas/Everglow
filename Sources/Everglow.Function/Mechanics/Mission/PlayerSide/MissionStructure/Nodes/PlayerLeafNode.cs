@@ -11,7 +11,7 @@ public class PlayerLeafNode : PlayerObjectiveNodeBase
 		Objective = objective ?? throw new InvalidDataException("Objective must not be null.");
 	}
 
-	public PlayerObjectiveBase Objective { get; }
+	internal PlayerObjectiveBase Objective { get; }
 
 	public override bool Completed => Objective.Completed;
 

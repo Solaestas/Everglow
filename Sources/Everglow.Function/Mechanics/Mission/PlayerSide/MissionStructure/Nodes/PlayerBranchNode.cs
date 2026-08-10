@@ -18,7 +18,15 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 		}
 
 		_branches = branches;
+		Branches = _branches
+			.Select(branch => (IReadOnlyList<PlayerObjectiveBase>)branch.AsReadOnly())
+			.ToList()
+			.AsReadOnly();
 	}
+
+	internal IReadOnlyList<IReadOnlyList<PlayerObjectiveBase>> Branches { get; }
+
+	internal int? SelectedBranchIndex => _selected < 0 ? null : _selected;
 
 	public override bool Completed => _selected >= 0 && _indexInBranch >= _branches[_selected].Count;
 

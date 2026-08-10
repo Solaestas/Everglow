@@ -13,9 +13,12 @@ public class WorldParallelNode : WorldObjectiveNodeBase
 		}
 
 		_objectives = objectives;
+		Objectives = _objectives.AsReadOnly();
 	}
 
 	private readonly List<WorldObjectiveBase> _objectives;
+
+	internal IReadOnlyList<WorldObjectiveBase> Objectives { get; }
 
 	public override bool Completed => _objectives.All(o => o.Completed);
 
