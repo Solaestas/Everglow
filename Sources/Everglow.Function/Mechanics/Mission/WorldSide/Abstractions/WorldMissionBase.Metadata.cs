@@ -10,6 +10,8 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public string Description { get; }
 
+	public virtual string Hint => string.Empty;
+
 	public MissionType Type { get; }
 
 	public MissionSourceBase Source { get; }

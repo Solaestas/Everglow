@@ -25,6 +25,11 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	public virtual string Description { get; } = string.Empty;
 
 	/// <summary>
+	/// 任务详情提示
+	/// </summary>
+	public virtual string Hint => string.Empty;
+
+	/// <summary>
 	/// 任务来源
 	/// </summary>
 	public virtual MissionSourceBase Source { get; private set; } = MissionSourceBase.Default;
