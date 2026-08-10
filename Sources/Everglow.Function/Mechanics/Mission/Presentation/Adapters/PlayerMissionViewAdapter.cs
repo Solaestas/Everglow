@@ -14,20 +14,25 @@ public static class PlayerMissionViewAdapter
 		ArgumentNullException.ThrowIfNull(mission);
 
 		string hint = mission.Hint ?? string.Empty;
-		bool hidesDetails = hint.Length > 0;
-		MissionIconBase[] icons = CreateIcons(mission);
-		ObjectiveNodeView[] objectiveNodes = hidesDetails ? [] : CreateObjectiveNodes(mission);
-		RewardView[] rewards = hidesDetails ? [] : CreateRewards(mission);
+		bool hidesDetails = string.IsNullOrWhiteSpace(hint);
+
 		float progress = 0f;
 		long elapsedTime = 0;
 		long? timeLimit = null;
+		ObjectiveNodeView[] objectiveNodes = [];
+		RewardView[] rewards = [];
+
 		if (!hidesDetails)
 		{
 			progress = ClampProgress(mission.Progress);
 			elapsedTime = mission.Time;
 			long missionTimeLimit = mission.TimeLimit;
 			timeLimit = missionTimeLimit <= 0 ? null : missionTimeLimit;
+			objectiveNodes = CreateObjectiveNodes(mission);
+			rewards = CreateRewards(mission);
 		}
+
+		MissionIconBase[] icons = CreateIcons(mission);
 
 		return new MissionView
 		{

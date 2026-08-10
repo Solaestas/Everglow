@@ -12,20 +12,26 @@ public static class WorldMissionViewAdapter
 	{
 		ArgumentNullException.ThrowIfNull(mission);
 
+		// Use the mission name as the definition ID for world missions, since they don't have a separate definition ID.
 		string definitionId = mission.Name;
+
 		string hint = mission.Hint ?? string.Empty;
-		bool hidesDetails = hint.Length > 0;
-		ObjectiveNodeView[] objectiveNodes = hidesDetails ? [] : CreateObjectiveNodes(mission);
-		RewardView[] rewards = hidesDetails ? [] : CreateRewards(mission);
+		bool hidesDetails = string.IsNullOrWhiteSpace(hint);
+
 		float progress = 0f;
 		long elapsedTime = 0;
 		long? timeLimit = null;
+		ObjectiveNodeView[] objectiveNodes = [];
+		RewardView[] rewards = [];
+
 		if (!hidesDetails)
 		{
 			progress = ClampProgress(mission.Progress);
 			elapsedTime = mission.Time;
 			int missionTimeLimit = mission.TimeLimit;
 			timeLimit = missionTimeLimit <= 0 ? null : missionTimeLimit;
+			objectiveNodes = CreateObjectiveNodes(mission);
+			rewards = CreateRewards(mission);
 		}
 
 		return new MissionView

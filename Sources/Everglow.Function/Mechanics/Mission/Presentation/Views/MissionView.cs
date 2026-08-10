@@ -21,7 +21,7 @@ public sealed class MissionView
 
 	public bool Visible { get; init; }
 
-	public IReadOnlyList<MissionIconBase> Icons { get; init; } = Array.Empty<MissionIconBase>();
+	public IReadOnlyList<MissionIconBase> Icons { get; init; } = [];
 
 	public MissionViewState State { get; init; }
 
@@ -35,7 +35,7 @@ public sealed class MissionView
 		? Math.Max(0, limit - ElapsedTime)
 		: null;
 
-	public IReadOnlyList<ObjectiveNodeView> ObjectiveNodes { get; init; } = Array.Empty<ObjectiveNodeView>();
+	public IReadOnlyList<ObjectiveNodeView> ObjectiveNodes { get; init; } = [];
 
-	public IReadOnlyList<RewardView> Rewards { get; init; } = Array.Empty<RewardView>();
+	public IReadOnlyList<RewardView> Rewards { get; init; } = [];
 }
