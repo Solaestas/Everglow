@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.Presentation;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 public abstract record ObjectiveNodeView;
 

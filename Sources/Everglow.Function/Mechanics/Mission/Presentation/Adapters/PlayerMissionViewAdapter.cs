@@ -3,8 +3,9 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.MissionStructure.Nodes;
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
-namespace Everglow.Commons.Mechanics.Mission.Presentation;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
 
 public static class PlayerMissionViewAdapter
 {

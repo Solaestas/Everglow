@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 

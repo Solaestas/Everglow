@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
-namespace Everglow.Commons.Mechanics.Mission.Presentation;
+namespace Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 public sealed class MissionView
 {
