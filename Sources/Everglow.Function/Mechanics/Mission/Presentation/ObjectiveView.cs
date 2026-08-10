@@ -1,9 +1,12 @@
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public class ObjectiveView
+public sealed class ObjectiveView
 {
-	public string Name;
-	public string Description;
-	public string Progress;
-	public bool Completed;
+	public int Id { get; init; }
+
+	public string Description { get; init; } = string.Empty;
+
+	public float Progress { get; init; }
+
+	public ObjectiveViewState State { get; init; }
 }

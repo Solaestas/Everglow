@@ -1,113 +1,41 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.WorldSide;
-using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public class MissionView
+public sealed class MissionView
 {
-	public MissionView(PlayerMissionBase mission)
-	{
-		DisplayName = mission.DisplayName;
-		State = MapState(mission.State);
-		Type = mission.Type;
-		TimeLimit = mission.TimeLimit;
-		Source = mission.Source;
-		Progress = mission.Progress;
-		Visible = mission.IsVisible;
-		Retriable = false;
+	public MissionIdentity Identity { get; init; }
 
-		CompletedSteps = mission.Objectives.AllObjectives.Count(x => x.Completed);
-		TotalSteps = mission.Objectives.AllObjectives.Count;
+	public MissionSourceBase Source { get; init; } = MissionSourceBase.Default;
 
-		Description = mission.Description;
-		//CompletedObjectives = mission.Objectives.AllObjectives.Where(o => o.Completed).Select(o => new ObjectiveView(o));
+	public MissionSourceBase SubSource { get; init; }
 
-		Rewards = mission.RewardItems;
-		//ExtraRewards = mission.ExtraRewardsText;
-	}
+	public MissionType Type { get; init; }
 
-	public MissionView(WorldMissionBase mission)
-	{
-		DisplayName = mission.DisplayName;
-		State = MapState(mission.State);
-		Type = mission.Type;
-		TimeLimit = mission.TimeLimit;
-		Time = mission.Time;
-		Source = mission.Source;
-		Progress = mission.Progress;
-		Visible = mission.Visible;
-		Retriable = mission.Retriable;
+	public string DisplayName { get; init; } = string.Empty;
 
-		CompletedSteps = 0;
-		TotalSteps = 0;
+	public string Description { get; init; } = string.Empty;
 
-		//Description = mission.Description;
-		//CompletedObjectives = mission.Objectives.AllObjectives.Where(o => o.Completed).Select(o => new ObjectiveView(o));
+	public string Hint { get; init; } = string.Empty;
 
-		//CurrentNode = new NodeView(mission.Objectives.FindCurrentNode());
+	public bool Visible { get; init; }
 
-		//CanClaimReward = !mission.RewardClaimed || !mission.RewardClaimedPlayers.Contains(Main.LocalPlayer.name);
-		//Rewards = mission.RewardItems;
-		//ExtraRewards = mission.ExtraRewardsText;
-	}
+	public IReadOnlyList<MissionIconBase> Icons { get; init; } = Array.Empty<MissionIconBase>();
 
-	// Overview
-	// ========
-	public string DisplayName;
-	public UIMissionState State;
-	public MissionType Type;
-	public long TimeLimit;
-	public long Time;
-	public MissionSourceBase Source;
-	public float Progress;
-	public bool Visible;
-	public bool Retriable;
+	public MissionViewState State { get; init; }
 
-	// Detail
-	// ======
+	public float Progress { get; init; }
 
-	// Progress
-	public int CompletedSteps;
-	public int TotalSteps;
+	public long ElapsedTime { get; init; }
 
-	public string Description;
+	public long? TimeLimit { get; init; }
 
-	public IEnumerable<ObjectiveView> CompletedObjectives;
+	public long? RemainingTime => TimeLimit is long limit
+		? Math.Max(0, limit - ElapsedTime)
+		: null;
 
-	// Current Objectives && Track Info
-	public NodeView CurrentNode;
+	public IReadOnlyList<ObjectiveNodeView> ObjectiveNodes { get; init; } = Array.Empty<ObjectiveNodeView>();
 
-	// Reward
-	public bool CanClaimReward;
-	public IEnumerable<Item> Rewards;
-	public IEnumerable<object> ExtraRewards;
-
-	public static UIMissionState MapState(WorldMissionState state)
-	{
-		return state switch
-		{
-			WorldMissionState.Locked => UIMissionState.Locked,
-			WorldMissionState.Active => UIMissionState.Accepted,
-			WorldMissionState.Completed => UIMissionState.Completed,
-			WorldMissionState.Failed => UIMissionState.Failed,
-			_ => throw new InvalidDataException("Unknown world mission state."),
-		};
-	}
-
-	public static UIMissionState MapState(PlayerMissionState state)
-	{
-		return state switch
-		{
-			PlayerMissionState.Available => UIMissionState.Available,
-			PlayerMissionState.Accepted => UIMissionState.Accepted,
-			PlayerMissionState.Failed => UIMissionState.Failed,
-			PlayerMissionState.Overdue => UIMissionState.Overdue,
-			PlayerMissionState.Completed => UIMissionState.Completed,
-			_ => throw new InvalidDataException("Unknown player mission state."),
-		};
-	}
+	public IReadOnlyList<RewardView> Rewards { get; init; } = Array.Empty<RewardView>();
 }

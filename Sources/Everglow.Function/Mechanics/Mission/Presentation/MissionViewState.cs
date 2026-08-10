@@ -1,10 +1,10 @@
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public enum UIMissionState
+public enum MissionViewState
 {
 	Locked,
 	Available,
-	Accepted,
+	Active,
 	Completed,
 	Failed,
 	Overdue,

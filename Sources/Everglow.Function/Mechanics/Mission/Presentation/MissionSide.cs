@@ -1,9 +1,7 @@
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public enum NodeType
+public enum MissionSide
 {
-	Leaf,
-	Parallel,
-	Optional,
-	Branch,
+	Player,
+	World,
 }
