@@ -8,8 +8,6 @@ namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 /// </summary>
 public class WorldLeafNode : WorldObjectiveNodeBase
 {
-	public WorldObjectiveBase Objective;
-
 	public WorldLeafNode(WorldObjectiveBase obj)
 	{
 		if (obj is null)
@@ -19,6 +17,8 @@ public class WorldLeafNode : WorldObjectiveNodeBase
 
 		Objective = obj;
 	}
+
+	internal WorldObjectiveBase Objective { get; }
 
 	public override bool Completed => Objective.Completed;
 

@@ -16,7 +16,10 @@ public class PlayerOptionalNode : PlayerObjectiveNodeBase
 		}
 
 		_objectives = objectives;
+		Objectives = _objectives.AsReadOnly();
 	}
+
+	internal IReadOnlyList<PlayerObjectiveBase> Objectives { get; }
 
 	public override bool Completed => _objectives.Any(o => o.Completed);
 

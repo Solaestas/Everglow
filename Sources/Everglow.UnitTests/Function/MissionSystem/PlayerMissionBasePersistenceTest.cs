@@ -35,11 +35,39 @@ public class PlayerMissionBasePersistenceTest
 
 		Assert.IsTrue(tag.TryGet<int>(nameof(PlayerMissionBase.State), out var stored));
 		Assert.AreEqual((int)state, stored);
+		Assert.IsTrue(tag.TryGet<string>(nameof(PlayerMissionBase.InstanceId), out var storedInstanceId));
+		Assert.AreEqual(saved.InstanceId, storedInstanceId);
 
 		var loaded = new PersistenceStubMission();
 		loaded.LoadData(tag);
 
 		Assert.AreEqual(state, loaded.State);
+		Assert.AreEqual(saved.InstanceId, loaded.InstanceId);
+	}
+
+	[TestMethod]
+	public void NewInstances_HaveDistinctValidIds()
+	{
+		var first = new PersistenceStubMission();
+		var second = new PersistenceStubMission();
+
+		Assert.IsTrue(Guid.TryParseExact(first.InstanceId, "N", out _));
+		Assert.IsTrue(Guid.TryParseExact(second.InstanceId, "N", out _));
+		Assert.AreNotEqual(first.InstanceId, second.InstanceId);
+	}
+
+	[TestMethod]
+	public void StateChangesAndReset_PreserveInstanceId()
+	{
+		var mission = new PersistenceStubMission { State = PlayerMissionState.Available };
+		string instanceId = mission.InstanceId;
+
+		mission.State = PlayerMissionState.Accepted;
+		mission.Reset();
+		mission.State = PlayerMissionState.Failed;
+		mission.Reset();
+
+		Assert.AreEqual(instanceId, mission.InstanceId);
 	}
 
 	[TestMethod]
@@ -55,5 +83,31 @@ public class PlayerMissionBasePersistenceTest
 		loaded.LoadData(tag);
 
 		Assert.AreEqual(PlayerMissionState.Available, loaded.State);
+	}
+
+	[TestMethod]
+	public void LoadData_MissingInstanceId_PreservesGeneratedId()
+	{
+		var loaded = new PersistenceStubMission();
+		string generatedId = loaded.InstanceId;
+
+		loaded.LoadData(new TagCompound());
+
+		Assert.AreEqual(generatedId, loaded.InstanceId);
+	}
+
+	[TestMethod]
+	public void LoadData_InvalidInstanceId_PreservesGeneratedId()
+	{
+		var tag = new TagCompound
+		{
+			{ nameof(PlayerMissionBase.InstanceId), "not-a-guid" },
+		};
+		var loaded = new PersistenceStubMission();
+		string generatedId = loaded.InstanceId;
+
+		loaded.LoadData(tag);
+
+		Assert.AreEqual(generatedId, loaded.InstanceId);
 	}
 }

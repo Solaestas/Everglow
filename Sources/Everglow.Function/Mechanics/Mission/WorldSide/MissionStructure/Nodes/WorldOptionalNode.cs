@@ -15,7 +15,10 @@ public class WorldOptionalNode : WorldObjectiveNodeBase
 		}
 
 		_objectives = objectives;
+		Objectives = _objectives.AsReadOnly();
 	}
+
+	internal IReadOnlyList<WorldObjectiveBase> Objectives { get; }
 
 	public override bool Completed => _objectives.Any(o => o.Completed);
 

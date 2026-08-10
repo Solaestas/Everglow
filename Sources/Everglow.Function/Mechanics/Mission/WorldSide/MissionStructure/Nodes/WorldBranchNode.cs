@@ -27,7 +27,15 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 		}
 
 		_branches = branches;
+		Branches = _branches
+			.Select(branch => (IReadOnlyList<WorldObjectiveBase>)branch.AsReadOnly())
+			.ToList()
+			.AsReadOnly();
 	}
+
+	internal IReadOnlyList<IReadOnlyList<WorldObjectiveBase>> Branches { get; }
+
+	internal int? SelectedBranchIndex => _selected < 0 ? null : _selected;
 
 	public override bool Completed =>
 		_selected >= 0 &&

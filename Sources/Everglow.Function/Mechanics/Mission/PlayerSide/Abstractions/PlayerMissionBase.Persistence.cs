@@ -13,6 +13,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	{
 		tag.Add(nameof(State), (int)State);
 		tag.Add(TimeSaveKey, Time);
+		tag.Add(nameof(InstanceId), InstanceId);
 		tag.Add(nameof(IsVisible), IsVisible);
 
 		Objectives.SaveData(tag);
@@ -41,6 +42,12 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// <param name="tag"></param>
 	public virtual void LoadData(TagCompound tag)
 	{
+		if (tag.TryGet<string>(nameof(InstanceId), out var instanceId)
+			&& Guid.TryParseExact(instanceId, "N", out _))
+		{
+			InstanceId = instanceId;
+		}
+
 		// Legacy flat `_missions` saves (after pool→list, before State persistence) omit this key.
 		// Enum default is Accepted (= 0); leaving it would wrongly Activate() via ApplyData.
 		// Missing State → Available (not activated on load). Pre-flat partitioned keys
