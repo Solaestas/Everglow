@@ -10,6 +10,11 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	public virtual string Name => GetType().Name;
 
 	/// <summary>
+	/// 标识当前任务实例的持久化 ID
+	/// </summary>
+	public string InstanceId { get; private set; } = Guid.NewGuid().ToString("N");
+
+	/// <summary>
 	/// 用于外部显示的名字
 	/// </summary>
 	public abstract string DisplayName { get; }
