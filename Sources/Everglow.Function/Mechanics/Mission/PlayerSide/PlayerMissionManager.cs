@@ -365,7 +365,7 @@ public static class PlayerMissionManager
 	{
 		// Load npc kill counter.
 		var nPCKillCounter = new Dictionary<int, int>();
-		tag.TryGet<List<KeyValuePair<int, int>>>(nameof(NPCKillCounter), out var nPCKillCounterStorage);
+		tag.TryGet<List<KeyValuePair<int, int>>>(nameof(_nPCKillCounter), out var nPCKillCounterStorage);
 		if (nPCKillCounterStorage != null && nPCKillCounterStorage.Count > 0)
 		{
 			nPCKillCounter = nPCKillCounterStorage.ToDictionary();
