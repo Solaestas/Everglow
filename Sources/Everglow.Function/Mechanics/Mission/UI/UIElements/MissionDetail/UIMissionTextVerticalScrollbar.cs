@@ -93,19 +93,15 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 
 		public override bool ContainsPoint(Point point)
 		{
-			var innerHeight = UIScrollbarInnerTexture.Height * _innerScale.Y;
-			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
-			var top = TopMin + height * WheelValue;
-			var p = new Vector2(
-				Info.TotalLocation.X - (UIScrollbarInnerTexture.Width * _innerScale.X - Info.TotalSize.X) / 2f,
-				Info.TotalLocation.Y + top);
-			var size = UIScrollbarInnerTexture.Size() * _innerScale;
-			return base.ContainsPoint(point) || new Rectangle((int)Math.Round(p.X), (int)Math.Round(p.Y),
-				(int)Math.Round(size.X), (int)Math.Round(size.Y)).Contains(point.X, point.Y);
+			Rectangle containBar = Info.HitBox;
+			containBar.X -= 10;
+			containBar.Width += 20;
+			return base.ContainsPoint(point) || containBar.Contains(point.X, point.Y);
 		}
 
-		protected override void DrawSelf(SpriteBatch sb)
+		public override void Calculation()
 		{
+			base.Calculation();
 			_scrollbarArrow.Info.TotalHitBox = _scrollbarTrack.Info.TotalHitBox = Info.TotalHitBox;
 
 			var innerHeight = _innerScale.Y;
@@ -121,12 +117,15 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 				_scrollbarTrack.Info.TotalHitBox.Bottom - Info.TotalHitBox.Height - 2,
 				_scrollbarThumb.Info.TotalHitBox.Bottom + 1);
 			_scrollbarTrack.Info.TotalHitBox.Height = Math.Max(2, Info.TotalHitBox.Bottom - _scrollbarTrack.Info.TotalHitBox.Y);
+		}
 
+		protected override void DrawSelf(SpriteBatch sb)
+		{
 			var trackTexture = ModAsset.MissionSideRollingGroove.Value;
 			var trackScale = new Vector2(1, Info.TotalHitBox.Height / (float)trackTexture.Height);
-			sb.Draw(trackTexture, Info.TotalHitBox.Top() + new Vector2(0, -16), new Rectangle(0, 0, 7, 6), Color.White, 0, new Vector2(3.5f, 0), 2, SpriteEffects.None, 0);
-			sb.Draw(trackTexture, new Rectangle(Info.TotalHitBox.Left - 6, Info.TotalHitBox.Top - 4, 14, Info.TotalHitBox.Height + 5), new Rectangle(0, 7, 7, 6), Color.White);
-			sb.Draw(trackTexture, Info.TotalHitBox.Top() + new Vector2(0, Info.TotalHitBox.Height + 2), new Rectangle(0, 14, 7, 7), Color.White, 0, new Vector2(3.5f, 0), 2, SpriteEffects.None, 0);
+			sb.Draw(trackTexture, Info.TotalHitBox.Top() + new Vector2(0, -8), new Rectangle(0, 0, 7, 6), Color.White, 0, new Vector2(3.5f, 0), 2, SpriteEffects.None, 0);
+			sb.Draw(trackTexture, new Rectangle(Info.TotalHitBox.Left - 6, Info.TotalHitBox.Top + 4, 14, Info.TotalHitBox.Height - 10), new Rectangle(0, 7, 7, 6), Color.White);
+			sb.Draw(trackTexture, Info.TotalHitBox.Top() + new Vector2(0, Info.TotalHitBox.Height - 6), new Rectangle(0, 14, 7, 7), Color.White, 0, new Vector2(3.5f, 0), 2, SpriteEffects.None, 0);
 			var thumbTexture = ModAsset.MissionSideRollingBlock.Value;
 			var thumbFrame = new Rectangle(0, 0, 11, 25);
 			if (MouseOver || _isMouseDown)

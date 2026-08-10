@@ -38,7 +38,7 @@ public class UIMissionDetail : UIBlock
 	private UIMissionButton _objectiveChangeMission;
 	private UITextPlus _objectiveChangeText;
 
-	private UIRewardsPanel _rewardsPanel;
+	private UIRewardsStripe _rewardsPanel;
 
 	private float oldScale;
 
@@ -175,7 +175,7 @@ public class UIMissionDetail : UIBlock
 		_objectiveChangeText.StringDrawer.Init(_objectiveChangeText.Text);
 		_objectiveChangeMission.Register(_objectiveChangeText);
 
-		_rewardsPanel = new UIRewardsPanel(null);
+		_rewardsPanel = new UIRewardsStripe();
 		Register(_rewardsPanel);
 	}
 
@@ -201,7 +201,7 @@ public class UIMissionDetail : UIBlock
 		_descriptionContainer.Info.Left.SetValue(PositionStyle.Full - _descriptionTextScrollbar.Info.Left - _descriptionTextScrollbar.Info.Width);
 		_descriptionContainer.Info.Top.SetValue(_descriptionTextScrollbar.Info.Top);
 
-		_descriptionTextScrollbar.Info.Height.SetValue(-60f, 1f);
+		_descriptionTextScrollbar.Info.Height.SetValue(-50f, 1f);
 		_descriptionTextScrollbar.Info.SetToCenter();
 		_descriptionTextScrollbar.Info.Left.SetValue(-20f, 1f);
 
@@ -211,11 +211,11 @@ public class UIMissionDetail : UIBlock
 		_objective.Info.Top.SetValue(60);
 
 		_objectiveContainer.Info.Width.SetValue(PositionStyle.Full.Pixel - 54f);
-		_objectiveContainer.Info.Height.SetValue(_objectiveTextScrollbar.Info.Height);
+		_objectiveContainer.Info.Height.SetValue(-200, 1f);
 		_objectiveContainer.Info.Left.SetValue(30);
 		_objectiveContainer.Info.Top.SetValue(_objectiveTextScrollbar.Info.Top);
 
-		_objectiveTextScrollbar.Info.Height.SetValue(-60f, 1f);
+		_objectiveTextScrollbar.Info.Height.SetValue(-50f, 1f);
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-20f, 1f);
 

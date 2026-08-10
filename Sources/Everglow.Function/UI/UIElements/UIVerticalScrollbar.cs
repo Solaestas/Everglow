@@ -147,7 +147,7 @@ namespace Everglow.Commons.UI.UIElements
 				UIScrollbarInnerTexture,
 				new Vector2(
 					Info.TotalLocation.X - (UIScrollbarInnerTexture.Width * _innerScale.X - Info.TotalSize.X) / 2f,
-				Info.TotalLocation.Y + top), null, _innerColor, 0f,
+					Info.TotalLocation.Y + top), null, _innerColor, 0f,
 				Vector2.Zero, _innerScale, SpriteEffects.None, 0f);
 		}
 	}
