@@ -237,14 +237,14 @@ public class MissionContainer : UIContainerElement
 	{
 		base.Calculation();
 		bool shouldSetToCenter = false;
-		if (CurrentPanelWidth > Main.screenWidth * 0.8f)
+		if (CurrentPanelWidth > Main.screenWidth)
 		{
-			_panel.Info.Width.SetValue(Main.screenWidth * 0.8f, 0);
+			_panel.Info.Width.SetValue(Main.screenWidth, 0);
 			shouldSetToCenter = true;
 		}
-		if (CurrentPanelHeight > Main.screenHeight * 0.8f)
+		if (CurrentPanelHeight > Main.screenHeight)
 		{
-			_panel.Info.Height.SetValue(Main.screenHeight * 0.8f, 0);
+			_panel.Info.Height.SetValue(Main.screenHeight, 0);
 			shouldSetToCenter = true;
 		}
 		if (_panel.Info.Width.Pixel > 0 && _panel.Info.Height.Pixel > 0)
