@@ -73,11 +73,11 @@ public class UIMissionItem : UIBlock
 	{
 		base.Calculation();
 		float missionListWidth = ParentElement.ParentElement.ParentElement.Info.Width.Pixel;
-		Info.Width.SetValue(missionListWidth - 60, 0f);
+		Info.Width.SetValue(missionListWidth - 120, 0f);
 		Info.Height.SetValue(93f * Scale, 0f);
 		Info.Left.SetValue(20 * Scale);
 
-		nameContainer.Info.Width.SetValue(missionListWidth - 200);
+		nameContainer.Info.Width.SetValue(missionListWidth - 240);
 		nameContainer.Info.Height.SetFull();
 		nameContainer.Info.SetToCenter();
 		nameContainer.Info.Left.SetValue(90, 0);
@@ -151,6 +151,15 @@ public class UIMissionItem : UIBlock
 
 	private void DrawPanel(SpriteBatch sb)
 	{
+		if (ParentElement.ParentElement.ParentElement is UIMissionList uiml)
+		{
+			int index = uiml.MissionItems.IndexOf(this);
+			Vector2 coord = new Vector2(HitBox.X, index * 93 + ParentElement.ParentElement.HitBox.Y) - ParentElement.ParentElement.ParentElement.ParentElement.HitBox.TopLeft();
+			Main.NewText(coord);
+			var panel_texRectangle = new Rectangle((int)coord.X, (int)coord.Y, HitBox.Width, HitBox.Height);
+			Texture2D background = ModAsset.Marble_Texture.Value;
+			sb.Draw(background, HitBox, panel_texRectangle, Color.White);
+		}
 		Texture2D tex = ModAsset.MissionStackPanel.Value;
 		var drawBox = HitBox;
 		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 38);

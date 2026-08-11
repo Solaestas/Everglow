@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
@@ -11,17 +10,21 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 
 		public override float TopMin => 4f * Scale;
 
+		public bool MouseOver = false;
+
 		private UIBlock _bar = new UIBlock();
 		private UIBlock _inner = new UIBlock();
 
 		public UIMissionListScrollbar()
 		{
 			Info.Width.SetValue(8f, 0f);
-			_innerScale = new Vector2(12f, 46f) * MissionContainer.Scale;
+			_innerScale = new Vector2(33f, 65f) * MissionContainer.Scale;
 			AlwaysOnLight = true;
 			_bar.PanelColor = Color.Transparent;
 			_inner.PanelColor = Color.Transparent;
 			_inner.ShowBorder = (false, false, false, false);
+			_inner.Info.CanBeInteract = false;
+			Register(_inner);
 		}
 
 		public override void Update(GameTime gt)
@@ -39,7 +42,8 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 				Events.Update(this, gt);
 			}
 
-			bool isMouseHover = ContainsPoint(Main.MouseScreen);
+			bool isMouseHover = _inner.ContainsPoint(Main.MouseScreen);
+			MouseOver = isMouseHover;
 			var innerHeight = 1f * _innerScale.Y;
 			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
 			if (_isMouseDown)
@@ -55,33 +59,37 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 			}
 		}
 
+		public override void Calculation()
+		{
+			base.Calculation();
+			_inner.Info.Top.SetValue(WheelValue * (ParentElement.HitBox.Height - 65), 0);
+			_inner.Info.Left.SetValue(0, 0);
+			_inner.Info.Width.SetValue(33, 0);
+			_inner.Info.Height.SetValue(65, 0);
+			_inner.Info.InteractiveMask = false;
+		}
+
 		public override bool ContainsPoint(Point point)
 		{
-			var innerHeight = UIScrollbarInnerTexture.Height * _innerScale.Y;
-			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
-			var top = TopMin + height * WheelValue;
-			var p = new Vector2(
-				Info.TotalLocation.X - (UIScrollbarInnerTexture.Width * _innerScale.X - Info.TotalSize.X) / 2f,
-				Info.TotalLocation.Y + top);
-			var size = UIScrollbarInnerTexture.Size() * _innerScale;
-			return base.ContainsPoint(point) || new Rectangle((int)Math.Round(p.X), (int)Math.Round(p.Y),
-				(int)Math.Round(size.X), (int)Math.Round(size.Y)).Contains(point.X, point.Y);
+			Rectangle containBar = HitBox;
+			return base.ContainsPoint(point) || containBar.Contains(point.X, point.Y);
 		}
 
 		protected override void DrawSelf(SpriteBatch sb)
 		{
-			_inner.Info.TotalHitBox = _bar.Info.TotalHitBox = Info.TotalHitBox;
-			// _bar.Draw(sb);
-
-			var innerHeight = _innerScale.Y;
-			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
-			var top = TopMin + height * WheelValue;
-			_inner.Info.TotalHitBox = new Rectangle(
-				(int)(Info.TotalLocation.X - (UIScrollbarInnerTexture.Width * _innerScale.X - Info.TotalSize.X) / 2f),
-				(int)(Info.TotalLocation.Y + top),
-				(int)_innerScale.X,
-				(int)_innerScale.Y);
-			//_inner.Draw(sb);
+			Texture2D tex = ModAsset.Marble_Texture.Value;
+			Rectangle frame = new Rectangle(14, 233, 1, 1);
+			sb.Draw(tex, HitBox, frame, Color.Black * 0.5f);
+			int pos_coord_x = HitBox.X - ParentElement.ParentElement.HitBox.X;
+			int pos_coord_y = HitBox.Y - ParentElement.ParentElement.HitBox.Y;
+			frame = new Rectangle(pos_coord_x, pos_coord_y, 33, 65);
+			sb.Draw(tex, _inner.Info.HitBox, frame, Color.White);
+			if (MouseOver)
+			{
+				Texture2D highlight = ModAsset.MissionListThumb.Value;
+				frame = new Rectangle(33, 0, 33, 65);
+				sb.Draw(highlight, _inner.Info.HitBox.Center(), frame, Color.White, 0, frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			}
 		}
 	}
 }

@@ -36,18 +36,6 @@ public static class ColorDefinition
 		_ => InitialLightColor,
 	};
 
-	public static Texture2D GetBackground(MissionType? missionType) => missionType switch
-	{
-		MissionType.None => ModAsset.MissionStackPanel_None.Value,
-		MissionType.MainStory => ModAsset.MissionStackPanel_MainStory.Value,
-		MissionType.SideStory => ModAsset.MissionStackPanel_SideStory.Value,
-		MissionType.Achievement => ModAsset.MissionStackPanel_Achievement.Value,
-		MissionType.Challenge => ModAsset.MissionStackPanel_Challenge.Value,
-		MissionType.Daily => ModAsset.MissionStackPanel_Daily.Value,
-		MissionType.Legendary => ModAsset.MissionStackPanel_Legendary.Value,
-		_ => ModAsset.MissionStackPanel_None.Value,
-	};
-
 	public static Rectangle GetGemFrame(MissionType? missionType) => missionType switch
 	{
 		MissionType.None => new Rectangle(231, 0, 33, 33),
@@ -58,15 +46,5 @@ public static class ColorDefinition
 		MissionType.Daily => new Rectangle(66, 0, 33, 33),
 		MissionType.Legendary => new Rectangle(132, 0, 33, 33),
 		_ => new Rectangle(0, 0, 33, 33),
-	};
-
-	public static Texture2D GetMissionStatus(PlayerMissionState? poolType) => poolType switch
-	{
-		PlayerMissionState.Accepted => ModAsset.MissionState_Accepted.Value,
-		PlayerMissionState.Available => ModAsset.MissionState_Available.Value,
-		PlayerMissionState.Completed => ModAsset.MissionState_Completed.Value,
-		PlayerMissionState.Overdue => ModAsset.MissionState_Failed.Value,
-		PlayerMissionState.Failed => ModAsset.MissionState_Failed.Value,
-		_ => ModAsset.MissionState_Accepted.Value,
 	};
 }

@@ -42,9 +42,9 @@ public class MissionContainer : UIContainerElement
 	// ==================== UI elements ==================== //
 	private UIBlock _panel;
 	private UIMissionBackground _panelBackground;
-	//private UIBlock _panelCoverContainer;
-	//private UIImage _panelCover;
 
+	// private UIBlock _panelCoverContainer;
+	// private UIImage _panelCover;
 	private UIMissionDetail _missionDetail;
 	private UIMissionDetailSubContent _missionDetailSubContent;
 	private UIMissionDetailTipContent _missionDetailTip;
@@ -127,21 +127,21 @@ public class MissionContainer : UIContainerElement
 	/// <param name="resolution"></param>
 	private void UpdateResolutionFactor(Vector2 resolution)
 	{
-		//if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
-		//{
-		//	ResolutionFactor = 1;
-		//}
-		//else
-		//{
-		//	if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
-		//	{
-		//		ResolutionFactor = resolution.Y / CurrentPanelHeight;
-		//	}
-		//	else
-		//	{
-		//		ResolutionFactor = resolution.X / CurrentPanelWidth;
-		//	}
-		//}
+		// if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
+		// {
+		// ResolutionFactor = 1;
+		// }
+		// else
+		// {
+		// if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
+		// {
+		// ResolutionFactor = resolution.Y / CurrentPanelHeight;
+		// }
+		// else
+		// {
+		// ResolutionFactor = resolution.X / CurrentPanelWidth;
+		// }
+		// }
 	}
 
 	private void RefreshMissionContainer()
@@ -301,16 +301,16 @@ public class MissionContainer : UIContainerElement
 		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
 		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 
-		float missionListWidth = 600;
+		float missionListWidth = 660;
 		if (width < squzzeLeftLimit)
 		{
-			missionListWidth = 600 - (squzzeLeftLimit - width);
+			missionListWidth = 660 - (squzzeLeftLimit - width);
 		}
 
 		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
-		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
+		_missionList.Info.Left.SetValue(40f * ResolutionFactor, 0);
 		_missionList.Info.Width.SetValue(missionListWidth, 0f);
-		_missionList.Info.Height.SetValue(height - 540 * ResolutionFactor, 0f);
+		_missionList.Info.Height.SetValue(height - 480 * ResolutionFactor, 0f);
 
 		_missionFilter.Info.Top.SetValue(35);
 		_missionFilter.Info.Left.SetValue(leftPartWidth * 0.5f - 350 * 0.5f);
@@ -321,12 +321,12 @@ public class MissionContainer : UIContainerElement
 		_close.Info.Height.SetValue(38 * ResolutionFactor);
 		_close.Info.Left.SetValue(PositionStyle.Full - _close.Info.Width + (1, 0));
 
-		//_panelCoverContainer.Info.Width.SetFull();
-		//_panelCoverContainer.Info.Height.SetFull();
+		// _panelCoverContainer.Info.Width.SetFull();
+		// _panelCoverContainer.Info.Height.SetFull();
 
-		//_panelCover.Info.Width.SetFull();
-		//_panelCover.Info.Height.SetFull();
-		//_panelCover.SourceRectangle = new Rectangle(0, 0, (int)(CurrentPanelWidth * ResolutionFactor), (int)(CurrentPanelHeight * ResolutionFactor));
+		// _panelCover.Info.Width.SetFull();
+		// _panelCover.Info.Height.SetFull();
+		// _panelCover.SourceRectangle = new Rectangle(0, 0, (int)(CurrentPanelWidth * ResolutionFactor), (int)(CurrentPanelHeight * ResolutionFactor));
 	}
 
 	public override void Update(GameTime gt)

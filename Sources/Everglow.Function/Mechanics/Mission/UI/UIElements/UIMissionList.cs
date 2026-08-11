@@ -33,8 +33,9 @@ public class UIMissionList : UIBlock
 	public override void Calculation()
 	{
 		base.Calculation();
-		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (4f, 0f));
-		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full - (20, 0f));
+		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (64f, 0f));
+		_missionScrollbar.Info.Width.SetValue(33);
+		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full);
 	}
 
 	public override void Update(GameTime gt)
@@ -46,16 +47,13 @@ public class UIMissionList : UIBlock
 			var hideList = MissionContainer.Filter.SpectrumBlockedAtInner || MissionContainer.Filter.SpectrumBlockedAtOuter;
 			_missionList.Info.IsHidden = hideList;
 			_missionList.Info.IsVisible = !hideList;
-
-			float ElementSpacing = 10 * MissionContainer.Scale;
-			PositionStyle top = (4 * MissionContainer.Scale, 0f);
+			PositionStyle top = (6 * MissionContainer.Scale, 0f);
 			foreach (var mI in _missionList.Elements)
 			{
 				mI.OnInitialization();
 				mI.Info.Top.SetValue(top);
 
 				top += mI.Info.Height;
-				top.Pixel += ElementSpacing;
 			}
 		}
 	}
