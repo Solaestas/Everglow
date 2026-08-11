@@ -275,15 +275,20 @@ public class MissionContainer : UIContainerElement
 		_panelBackground.Info.Width.SetFull();
 		_panelBackground.Info.Height.SetFull();
 
-		_missionFilter.Info.Top.SetValue(35 * ResolutionFactor);
-		_missionFilter.Info.Left.SetValue(95 * ResolutionFactor);
-
 		_missionSourceHeadshot.Info.Top.SetValue((210 - 40) * ResolutionFactor);
 		_missionSourceHeadshot.Info.Left.SetValue((270 - 40) * ResolutionFactor);
 
-		_missionDetail.Info.Left.SetValue(740, 0);
+		int squzzeLeftLimit = 1500;
+		float leftPartWidth = 740;
+		float detailWidth = width - 800;
+		if (width < squzzeLeftLimit)
+		{
+			leftPartWidth -= squzzeLeftLimit - width;
+			detailWidth = squzzeLeftLimit - 800;
+		}
+		_missionDetail.Info.Left.SetValue(leftPartWidth, 0);
 		_missionDetail.Info.Top.SetValue(60);
-		_missionDetail.Info.Width.SetValue(width - 800);
+		_missionDetail.Info.Width.SetValue(detailWidth);
 		_missionDetail.Info.Height.SetValue(height - 120);
 
 		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
@@ -296,10 +301,21 @@ public class MissionContainer : UIContainerElement
 		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
 		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
 
+		float missionListWidth = 600;
+		if (width < squzzeLeftLimit)
+		{
+			missionListWidth = 600 - (squzzeLeftLimit - width);
+		}
+
 		_missionList.Info.Top.SetValue(410f * ResolutionFactor, 0);
 		_missionList.Info.Left.SetValue(80f * ResolutionFactor, 0);
-		_missionList.Info.Width.SetValue(384f * ResolutionFactor, 0f);
+		_missionList.Info.Width.SetValue(missionListWidth, 0f);
 		_missionList.Info.Height.SetValue(height - 540 * ResolutionFactor, 0f);
+
+		_missionFilter.Info.Top.SetValue(35);
+		_missionFilter.Info.Left.SetValue(leftPartWidth * 0.5f - 350 * 0.5f);
+		_missionFilter.Info.Width.SetValue(350);
+		_missionFilter.Info.Height.SetValue(350);
 
 		_close.Info.Width.SetValue(88 * ResolutionFactor);
 		_close.Info.Height.SetValue(38 * ResolutionFactor);

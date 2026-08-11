@@ -33,7 +33,6 @@ public class UIMissionList : UIBlock
 	public override void Calculation()
 	{
 		base.Calculation();
-
 		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (4f, 0f));
 		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full - (20, 0f));
 	}

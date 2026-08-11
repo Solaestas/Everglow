@@ -1,12 +1,9 @@
-using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
-using Everglow.Commons.Vertex;
 using Terraria.GameContent;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
-using UIImage = Everglow.Commons.UI.UIElements.UIImage;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 
@@ -16,8 +13,6 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 public class UIMissionItem : UIBlock
 {
 	private UIBlock block;
-	private UIImage _background;
-	private UIImage statusBar;
 	private UIBlock nameContainer;
 	private UITextPlus name;
 
@@ -52,21 +47,6 @@ public class UIMissionItem : UIBlock
 		block.Info.SetMargin(0);
 		Register(block);
 
-		// 任务项背景
-		_background = new UIImage(ColorDefinition.GetBackground(Mission.Type), Color.White);
-		_background.Info.Width.SetFull();
-		_background.Info.Height.SetFull();
-		_background.Style = UIImage.CalculationStyle.None;
-		block.Register(_background);
-
-		// 任务进度
-		statusBar = new UIImage(ColorDefinition.GetMissionStatus(Mission.State), Color.White);
-		statusBar.Info.Top.SetValue(19f * Scale, 0);
-		statusBar.Info.Left.SetValue(291f * Scale, 0);
-		statusBar.Info.Width.SetValue(12 * Scale, 0);
-		statusBar.Info.Height.SetValue(32 * Scale, 0);
-		block.Register(statusBar);
-
 		// 任务名称
 		nameContainer = new UIBlock();
 		nameContainer.Info.Width.SetValue(220 * Scale);
@@ -92,20 +72,15 @@ public class UIMissionItem : UIBlock
 	public override void Calculation()
 	{
 		base.Calculation();
-
-		Info.Width.SetValue(320f * Scale, 0f);
-		Info.Height.SetValue(60f * Scale, 0f);
+		float missionListWidth = ParentElement.ParentElement.ParentElement.Info.Width.Pixel;
+		Info.Width.SetValue(missionListWidth - 60, 0f);
+		Info.Height.SetValue(93f * Scale, 0f);
 		Info.Left.SetValue(20 * Scale);
 
-		statusBar.Info.Top.SetValue(19f * Scale, 0);
-		statusBar.Info.Left.SetValue(291f * Scale, 0);
-		statusBar.Info.Width.SetValue(12 * Scale, 0);
-		statusBar.Info.Height.SetValue(32 * Scale, 0);
-
-		nameContainer.Info.Width.SetValue(220 * Scale);
+		nameContainer.Info.Width.SetValue(missionListWidth - 200);
 		nameContainer.Info.Height.SetFull();
 		nameContainer.Info.SetToCenter();
-		nameContainer.Info.Left.SetValue(0, 0.2f);
+		nameContainer.Info.Left.SetValue(90, 0);
 
 		if (oldScale != Scale)
 		{
@@ -130,7 +105,7 @@ public class UIMissionItem : UIBlock
 	/// <param name="e"></param>
 	private void OnMouseOver(BaseElement e)
 	{
-		if (MissionContainer.Instance.SelectedItem != this)
+		if (Instance.SelectedItem != this)
 		{
 			PanelColor = Color.Gray;
 		}
@@ -143,7 +118,7 @@ public class UIMissionItem : UIBlock
 	/// <param name="e"></param>
 	private void OnMouseLeave(BaseElement e)
 	{
-		if (MissionContainer.Instance.SelectedItem != this)
+		if (Instance.SelectedItem != this)
 		{
 			OnUnselected();
 		}
@@ -169,24 +144,93 @@ public class UIMissionItem : UIBlock
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
-		var width = 15 * MissionContainer.Scale;
-		var y1 = 12 * MissionContainer.Scale;
-		var y2 = 36 * MissionContainer.Scale;
-		var startColor = ColorDefinition.GetMissionTypeColor(Mission.Type) * 0.4f;
-		var endColor = Color.Transparent;
-		var vertices = new List<Vertex2D>();
-		{
-			vertices.Add(new Vector2(HitBox.X, HitBox.Y), endColor, new(0, 0, 0));
-			vertices.Add(new Vector2(HitBox.X, HitBox.Y + HitBox.Height), endColor, new(0, 0, 0));
-			vertices.Add(new Vector2(HitBox.X - width, HitBox.Y + y1), startColor, new(0, 0, 0));
-			vertices.Add(new Vector2(HitBox.X - width, HitBox.Y + y2), startColor, new(0, 0, 0));
-		}
-		Main.graphics.GraphicsDevice.Textures[0] = TextureAssets.MagicPixel.Value;
-		Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, vertices.ToArray(), 0, vertices.Count - 2);
-
-		base.DrawChildren(sb);
-
 		DrawTimerProgress();
+		DrawPanel(sb);
+		base.DrawChildren(sb);
+	}
+
+	private void DrawPanel(SpriteBatch sb)
+	{
+		Texture2D tex = ModAsset.MissionStackPanel.Value;
+		var drawBox = HitBox;
+		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 38);
+		drawBox.X += 5;
+		drawBox.Y += 4;
+		drawBox.Width -= 10;
+		drawBox.Height -= 8;
+		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 59, 38);
+		drawBox.X += 68;
+		drawBox.Y += 10;
+		drawBox.Width -= 79;
+		drawBox.Height -= 20;
+		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 47);
+
+		var gem_frame = ColorDefinition.GetGemFrame(Mission.Type);
+		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		gem_frame = new Rectangle(0, 36, 39, 39);
+		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+	}
+
+	private void Draw9Piece_MissionStackPanel7x7(SpriteBatch sb, Rectangle hitbox, int frameX, int frameY)
+	{
+		Texture2D tex = ModAsset.MissionStackPanel.Value;
+
+		// row1
+		Rectangle frame = new Rectangle(frameX, frameY, 3, 3);
+		Rectangle des = hitbox;
+		des.Width = 3;
+		des.Height = 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 3, frameY, 1, 3);
+		des.Width = hitbox.Width - 6;
+		des.X += 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 4, frameY, 3, 3);
+		des.Width = 3;
+		des.X = hitbox.Right - 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		// row2
+		frame = new Rectangle(frameX, frameY + 3, 3, 1);
+		des = hitbox;
+		des.Width = 3;
+		des.Height = hitbox.Height - 6;
+		des.Y += 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 3, frameY + 3, 1, 1);
+		des.Width = hitbox.Width - 6;
+		des.Height = hitbox.Height - 6;
+		des.X += 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 4, frameY + 3, 3, 1);
+		des.Width = 3;
+		des.Height = hitbox.Height - 6;
+		des.X = hitbox.Right - 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		// row3
+		frame = new Rectangle(frameX, frameY + 4, 3, 3);
+		des = hitbox;
+		des.Width = 3;
+		des.Height = 3;
+		des.Y = hitbox.Bottom - 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 3, frameY + 4, 1, 3);
+		des.Width = hitbox.Width - 6;
+		des.Height = 3;
+		des.X += 3;
+		sb.Draw(tex, des, frame, Color.White);
+
+		frame = new Rectangle(frameX + 4, frameY + 4, 3, 3);
+		des.Width = 3;
+		des.X = hitbox.Right - 3;
+		des.Height = 3;
+		sb.Draw(tex, des, frame, Color.White);
 	}
 
 	private void DrawTimerProgress()

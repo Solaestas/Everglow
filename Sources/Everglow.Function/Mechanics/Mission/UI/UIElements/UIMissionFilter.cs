@@ -1,10 +1,9 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.Presentation;
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
+using Everglow.Commons.Vertex;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 
@@ -106,18 +105,18 @@ public class UIMissionFilter : BaseElement
 
 	private static bool DistanceWithinInnerRing(float distance)
 	{
-		var innerRadius1 = 229 / 2f;
+		var innerRadius1 = 252 / 2f;
 		innerRadius1 *= MissionContainer.Scale;
-		var innerRadius2 = 229 / 2f - 42;
+		var innerRadius2 = 174 / 2f;
 		innerRadius2 *= MissionContainer.Scale;
 		return distance < innerRadius1 && distance > innerRadius2;
 	}
 
 	private static bool DistanceWithinOuterRing(float distance)
 	{
-		var outerRadius1 = 337 / 2f;
+		var outerRadius1 = 342 / 2f;
 		outerRadius1 *= MissionContainer.Scale;
-		var outerRadius2 = 337 / 2f - 48;
+		var outerRadius2 = 252 / 2f;
 		outerRadius2 *= MissionContainer.Scale;
 		return distance < outerRadius1 && distance > outerRadius2;
 	}
@@ -194,9 +193,6 @@ public class UIMissionFilter : BaseElement
 		base.Calculation();
 
 		var scale = MissionContainer.Scale;
-
-		Info.Width.SetValue(350 * scale);
-		Info.Height.SetValue(350 * scale);
 	}
 
 	public override void Update(GameTime gt)
@@ -392,106 +388,76 @@ public class UIMissionFilter : BaseElement
 		var drawPos = new Vector2(Info.HitBox.X + Info.HitBox.Width / 2, Info.HitBox.Y + Info.HitBox.Height / 2);
 		var scale = MissionContainer.Scale;
 
-		// gems and panel _outer
-		var typeTexture = ModAsset.MissionClassificationMarbleRing_Panel.Value;
-		sb.Draw(typeTexture, drawPos, null, Color.White, _outerRotation, typeTexture.Size() / 2, scale, SpriteEffects.None, 0);
-		var typeTexture_Gem = ModAsset.MissionClassificationMarbleRing_Gemstones.Value;
-		sb.Draw(typeTexture_Gem, drawPos, null, Color.White * 0.9f, _outerRotation, typeTexture.Size() / 2, scale, SpriteEffects.None, 0);
-
-		float outerGlowFade = (0.1f - _outerRotationMisaligment) * 10f;
-		outerGlowFade = MathF.Max(outerGlowFade, 0);
-		var typeTexture_Gem_select = ModAsset.MissionClassificationMarbleRing_GemstoneSelected.Value;
-		var point = new Vector2(-148.5f, 0).RotatedBy(-_outerRotation) * scale;
-		var frame = new Rectangle((int)(point.X - 20 + 168.5), (int)(point.Y - 20 + 168.5), 40, 40);
-		if (!SpectrumBlockedAtOuter)
-		{
-			// gem glow _outer
-			sb.Draw(typeTexture_Gem_select, drawPos + new Vector2(-148.5f, 0), frame, new Color(1f, 1f, 1f, 0) * outerGlowFade, _outerRotation, frame.Size() / 2, scale, SpriteEffects.None, 0);
-		}
-
+		// gems and panel
+		Vector2 panel_relativePos = drawPos - ParentElement.Info.HitBox.TopLeft();
+		Texture2D background = ModAsset.Marble_Texture.Value;
+		Vector2 parentSize = background.Size();
 		SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
 		sb.End();
-		sb.Begin(sBS);
-		sb.sortMode = SpriteSortMode.Immediate;
-		sb.blendState = BlendState.AlphaBlend;
-		Effect goldShader = ModAsset.GoldenReflection.Value;
-		goldShader.Parameters["sv_Pos_Y"].SetValue(drawPos.Y);
-		goldShader.Parameters["uSize"].SetValue(0.006f);
-		goldShader.Parameters["uHeatMap"].SetValue(ModAsset.GoldenHue_Dark.Value);
-		goldShader.CurrentTechnique.Passes[0].Apply();
-		var typeGlow = ModAsset.GoldRingTexture.Value;
-		sb.Draw(typeGlow, drawPos, null, Color.White, _outerRotation, typeGlow.Size() / 2, scale, SpriteEffects.None, 0);
+		sb.Begin(SpriteSortMode.Immediate, sBS.BlendState, SamplerState.PointWrap, sBS.DepthStencilState, sBS.RasterizerState, sBS.Effect, sBS.TransformMatrix);
+		List<Vertex2D> bars = [];
+		Main.graphics.graphicsDevice.Textures[0] = background;
+		for (int i = 0; i <= 100;i++)
+		{
+			float rot = i / 100f * MathHelper.TwoPi;
+			Vector2 addPos0 = new Vector2(-171, 0).RotatedBy(rot);
+			Vector2 addPos1 = new Vector2(-126, 0).RotatedBy(rot);
+			bars.Add(drawPos + addPos0.RotatedBy(_outerRotation), Color.White, new Vector3((panel_relativePos + addPos0) / parentSize, 0));
+			bars.Add(drawPos + addPos1.RotatedBy(_outerRotation), Color.White, new Vector3((panel_relativePos + addPos1) / parentSize, 0));
+		}
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+
+		bars = [];
+		for (int i = 0; i <= 80; i++)
+		{
+			float rot = i / 80f * MathHelper.TwoPi;
+			Vector2 addPos0 = new Vector2(-126, 0).RotatedBy(rot);
+			Vector2 addPos1 = new Vector2(-87, 0).RotatedBy(rot);
+			bars.Add(drawPos + addPos0.RotatedBy(_innerRotation), Color.White, new Vector3((panel_relativePos + addPos0) / parentSize, 0));
+			bars.Add(drawPos + addPos1.RotatedBy(_innerRotation), Color.White, new Vector3((panel_relativePos + addPos1) / parentSize, 0));
+		}
+		Main.graphics.graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 		sb.End();
 		sb.Begin(sBS);
 
-		// gem glow _inner
-		var statusFilter = ModAsset.MissionDurationMarbleRing_Panel.Value;
-		sb.Draw(statusFilter, drawPos, null, Color.White, _innerRotation, statusFilter.Size() / 2, scale, SpriteEffects.None, 0);
-		var statusFilter_Gem = ModAsset.MissionDurationMarbleRing_Gemstones.Value;
-		sb.Draw(statusFilter_Gem, drawPos, null, Color.White * 0.9f, _innerRotation, statusFilter_Gem.Size() / 2, scale, SpriteEffects.None, 0);
-
-		// gem glow _inner
-		float innerGlowFade = (0.1f - _innerRotationMisaligment) * 10f;
-		innerGlowFade = MathF.Max(innerGlowFade, 0);
-		var statusFilter_Gem_select = ModAsset.MissionDurationMarbleRing_GemstonesSelected.Value;
-		point = new Vector2(-94.5f, 0).RotatedBy(-_innerRotation) * scale;
-		frame = new Rectangle((int)(point.X - 20 + 114.5), (int)(point.Y - 20 + 114.5), 40, 40);
-		if (!SpectrumBlockedAtInner)
+		var typeFilter = ModAsset.MissionSortRing_Type.Value;
+		sb.Draw(typeFilter, drawPos, null, Color.White, _outerRotation, typeFilter.Size() / 2, 1, SpriteEffects.None, 0);
+		var gems = ModAsset.MissionSortGems.Value;
+		for (int k = 0; k < 8; k++)
 		{
-			sb.Draw(statusFilter_Gem_select, drawPos + new Vector2(-94.5f, 0), frame, new Color(1f, 1f, 1f, 0) * innerGlowFade, _innerRotation, frame.Size() / 2, scale, SpriteEffects.None, 0);
+			Rectangle frame = new Rectangle(26 * k, 0, 26, 26);
+			float subRot = k / 8f * MathHelper.TwoPi;
+			sb.Draw(gems, drawPos + new Vector2(-149, 0).RotatedBy(subRot + _outerRotation), frame, Color.White, 0, frame.Size() / 2, 1f, SpriteEffects.None, 0);
 		}
 
-		// StarEffect_Outer
-		var star = ModAsset.StarSlash.Value;
-		var star_dark = ModAsset.StarSlash_black.Value;
-		var starColor = ColorDefinition.GetMissionTypeColor(MissionTypeValue);
-		starColor.A = 0;
-		var star_darkColor = ColorDefinition.GetMissionTypeColor(MissionTypeValue);
-		star_darkColor = new Color(star_darkColor.A, star_darkColor.A, star_darkColor.A, star_darkColor.A);
-		if (!SpectrumBlockedAtOuter)
+		var statusFilter = ModAsset.MissionSortRing_Status.Value;
+		sb.Draw(statusFilter, drawPos, null, Color.White, _innerRotation, statusFilter.Size() / 2, 1, SpriteEffects.None, 0);
+		for (int k = 0; k < 6; k++)
 		{
-			sb.Draw(star_dark, drawPos + new Vector2(-148.5f, 0) * scale, null, star_darkColor * MathF.Pow(outerGlowFade, 4f), MathHelper.Pi / 6f, star_dark.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star_dark, drawPos + new Vector2(-148.5f, 0) * scale, null, star_darkColor * MathF.Pow(outerGlowFade, 4f), -MathHelper.Pi / 6f, star_dark.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star_dark, drawPos + new Vector2(-148.5f, 0) * scale, null, star_darkColor * MathF.Pow(outerGlowFade, 4f), MathHelper.PiOver2, star_dark.Size() / 2, scale * 0.4f * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-
-			sb.Draw(star, drawPos + new Vector2(-148.5f, 0) * scale, null, starColor * MathF.Pow(outerGlowFade, 4f), MathHelper.Pi / 6f, star.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star, drawPos + new Vector2(-148.5f, 0) * scale, null, starColor * MathF.Pow(outerGlowFade, 4f), -MathHelper.Pi / 6f, star.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star, drawPos + new Vector2(-148.5f, 0) * scale, null, starColor * MathF.Pow(outerGlowFade, 4f), MathHelper.PiOver2, star.Size() / 2, scale * 0.4f * MathF.Pow(outerGlowFade, 4f), SpriteEffects.None, 0);
-		}
-
-		// StarEffect_Inner
-		starColor = ColorDefinition.GetMissionStateColor(PoolTypeValue);
-		starColor.A = 0;
-		star_darkColor = ColorDefinition.GetMissionStateColor(PoolTypeValue);
-		star_darkColor = new Color(star_darkColor.A, star_darkColor.A, star_darkColor.A, star_darkColor.A);
-		if (!SpectrumBlockedAtInner)
-		{
-			sb.Draw(star_dark, drawPos + new Vector2(-94.5f, 0) * scale, null, star_darkColor * MathF.Pow(innerGlowFade, 4f), MathHelper.Pi / 6f, star_dark.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star_dark, drawPos + new Vector2(-94.5f, 0) * scale, null, star_darkColor * MathF.Pow(innerGlowFade, 4f), -MathHelper.Pi / 6f, star_dark.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star_dark, drawPos + new Vector2(-94.5f, 0) * scale, null, star_darkColor * MathF.Pow(innerGlowFade, 4f), MathHelper.PiOver2, star_dark.Size() / 2, scale * 0.4f * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
-
-			sb.Draw(star, drawPos + new Vector2(-94.5f, 0) * scale, null, starColor * MathF.Pow(innerGlowFade, 4f), MathHelper.Pi / 6f, star.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star, drawPos + new Vector2(-94.5f, 0) * scale, null, starColor * MathF.Pow(innerGlowFade, 4f), -MathHelper.Pi / 6f, star.Size() / 2, scale * new Vector2(0.4f, 0.2f) * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
-			sb.Draw(star, drawPos + new Vector2(-94.5f, 0) * scale, null, starColor * MathF.Pow(innerGlowFade, 4f), MathHelper.PiOver2, star.Size() / 2, scale * 0.4f * MathF.Pow(innerGlowFade, 4f), SpriteEffects.None, 0);
+			Rectangle frame = new Rectangle(26 * k, 26, 26, 26);
+			float subRot = k / 6f * MathHelper.TwoPi;
+			sb.Draw(gems, drawPos + new Vector2(-107, 0).RotatedBy(subRot + _innerRotation), frame, Color.White, 0, frame.Size() / 2, 1f, SpriteEffects.None, 0);
 		}
 
 		if (_innerHoverTargetRotation != null)
 		{
-			var statusFilter_Selected_black = ModAsset.MissionDurationMarbleRing_Seleted_black.Value;
-			sb.Draw(statusFilter_Selected_black, drawPos, null, Color.White, _innerRotation - _innerHoverTargetRotation.Value, statusFilter_Selected_black.Size() / 2, scale, SpriteEffects.None, 0);
-			var statusFilter_Selected = ModAsset.MissionDurationMarbleRing_Seleted.Value;
-			sb.Draw(statusFilter_Selected, drawPos, null, new Color(1f, 1f, 1f, 0), _innerRotation - _innerHoverTargetRotation.Value, statusFilter_Selected.Size() / 2, scale, SpriteEffects.None, 0);
-			var statusFilter_Selected_glow = ModAsset.MissionDurationMarbleRing_Seleted_glow.Value;
-			sb.Draw(statusFilter_Selected_glow, drawPos, null, new Color(1f, 1f, 1f, 0) * (MathF.Sin((float)(Main.timeForVisualEffects * 0.05f)) + 1) * 0.15f, _innerRotation - _innerHoverTargetRotation.Value, statusFilter_Selected_glow.Size() / 2, scale, SpriteEffects.None, 0);
+			var status_highlight = ModAsset.MissionSortRing_Status_highlight.Value;
+			int sideLength = status_highlight.Width;
+			var frame0 = new Rectangle(0, 0, sideLength, sideLength);
+			sb.Draw(status_highlight, drawPos, frame0, Color.White, _innerRotation - _innerHoverTargetRotation.Value, frame0.Size() / 2, scale, SpriteEffects.None, 0);
+			float timeValue = 0.4f;
+			var frame1 = new Rectangle(0, sideLength, sideLength, sideLength);
+			sb.Draw(status_highlight, drawPos, frame0, new Color(1f, 1f, 1f, 0) * timeValue, _innerRotation - _innerHoverTargetRotation.Value, frame1.Size() / 2, scale, SpriteEffects.None, 0);
 		}
 		if (_outerHoverTargetRotation != null)
 		{
-			var typeTexture_Selected_black = ModAsset.MissionClassificationMarbleRing_Selected_black.Value;
-			sb.Draw(typeTexture_Selected_black, drawPos, null, Color.White, _outerRotation - _outerHoverTargetRotation.Value, typeTexture_Selected_black.Size() / 2, scale, SpriteEffects.None, 0);
-			var typeTexture_Selected = ModAsset.MissionClassificationMarbleRing_Selected.Value;
-			sb.Draw(typeTexture_Selected, drawPos, null, new Color(1f, 1f, 1f, 0), _outerRotation - _outerHoverTargetRotation.Value, typeTexture_Selected.Size() / 2, scale, SpriteEffects.None, 0);
-			var typeTexture_Selected_glow = ModAsset.MissionClassificationMarbleRing_Selected_glow.Value;
-			sb.Draw(typeTexture_Selected_glow, drawPos, null, new Color(1f, 1f, 1f, 0) * (MathF.Sin((float)(Main.timeForVisualEffects * 0.05f)) + 1) * 0.15f, _outerRotation - _outerHoverTargetRotation.Value, typeTexture_Selected_glow.Size() / 2, scale, SpriteEffects.None, 0);
+			var type_highlight = ModAsset.MissionSortRing_Type_highlight.Value;
+			int sideLength = type_highlight.Width;
+			var frame0 = new Rectangle(0, 0, sideLength, sideLength);
+			sb.Draw(type_highlight, drawPos, frame0, Color.White, _outerRotation - _outerHoverTargetRotation.Value, frame0.Size() / 2, scale, SpriteEffects.None, 0);
+			float timeValue = 0.4f;
+			var frame1 = new Rectangle(0, sideLength, sideLength, sideLength);
+			sb.Draw(type_highlight, drawPos, frame0, new Color(1f, 1f, 1f, 0) * timeValue, _outerRotation - _outerHoverTargetRotation.Value, frame1.Size() / 2, scale, SpriteEffects.None, 0);
 		}
 	}
 }

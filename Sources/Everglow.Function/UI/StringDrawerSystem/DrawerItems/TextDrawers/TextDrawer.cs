@@ -1,5 +1,7 @@
 using Everglow.Commons.Utilities;
 using FontStashSharp;
+using Terraria.GameContent;
+using ReLogic.Graphics;
 
 namespace Everglow.Commons.UI.StringDrawerSystem.DrawerItems.TextDrawers;
 
@@ -258,6 +260,7 @@ public class TextDrawer : DrawerItem
 
 	public override void Draw(SpriteBatch sb)
 	{
-		sb.DrawString(Font, Text, Position + Offset, Color, Scale, Rotation, Origin, LayerDepth, CharacterSpacing, 0, TextStyle, FontSystemEffect, EffectAmount);
+		sb.DrawString(Font, Text, Position + Offset, Color, Scale, Rotation, Origin, LayerDepth, CharacterSpacing, 0, TextStyle, FontSystemEffect, 0);
+		//sb.DrawString(FontAssets.MouseText.Value, Text, Position + Offset, Color, Rotation, Origin, Scale, SpriteEffects.None, LayerDepth);
 	}
 }

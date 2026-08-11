@@ -48,6 +48,18 @@ public static class ColorDefinition
 		_ => ModAsset.MissionStackPanel_None.Value,
 	};
 
+	public static Rectangle GetGemFrame(MissionType? missionType) => missionType switch
+	{
+		MissionType.None => new Rectangle(231, 0, 33, 33),
+		MissionType.MainStory => new Rectangle(198, 0, 33, 33),
+		MissionType.SideStory => new Rectangle(165, 0, 33, 33),
+		MissionType.Achievement => new Rectangle(99, 0, 33, 33),
+		MissionType.Challenge => new Rectangle(33, 0, 33, 33),
+		MissionType.Daily => new Rectangle(66, 0, 33, 33),
+		MissionType.Legendary => new Rectangle(132, 0, 33, 33),
+		_ => new Rectangle(0, 0, 33, 33),
+	};
+
 	public static Texture2D GetMissionStatus(PlayerMissionState? poolType) => poolType switch
 	{
 		PlayerMissionState.Accepted => ModAsset.MissionState_Accepted.Value,
