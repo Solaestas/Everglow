@@ -33,12 +33,15 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	private UIBlock _no;
 	private UITextPlus _noText;
 
+	private UIMissionDetail _parentUI;
+
 	public UIMissionOperationTip()
 	{
 	}
 
-	public UIMissionOperationTip(PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
+	public UIMissionOperationTip(UIMissionDetail parent, PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
 	{
+		_parentUI = parent;
 		_mission = mission;
 		_mod = type;
 		_tipTextStr = tipText;
@@ -56,8 +59,10 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 		var scale = MissionContainer.Scale;
 
 		_main = new UIBlock();
-		_main.Info.Width.SetValue(360 * scale);
-		_main.Info.Height.SetValue(240 * scale);
+		_main.Info.Width.SetValue(_parentUI.HitBox.Width);
+		_main.Info.Height.SetValue(_parentUI.HitBox.Height);
+		_main.Info.Left.SetValue(_parentUI.HitBox.Left);
+		_main.Info.Top.SetValue(_parentUI.HitBox.Top);
 		_main.PanelColor = Color.Transparent;
 		Register(_main);
 		_main.Info.SetToCenter();
@@ -150,6 +155,22 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			_yes.Register(_yesText);
 			_yesText.Info.SetToCenter();
 		}
+	}
+
+	public override void Calculation()
+	{
+		base.Calculation();
+		Info.Width.SetValue(_parentUI.HitBox.Width);
+		Info.Height.SetValue(_parentUI.HitBox.Height);
+		Info.Left.SetValue(_parentUI.HitBox.Left);
+		Info.Top.SetValue(_parentUI.HitBox.Top);
+	}
+
+	public override void Draw(SpriteBatch sb)
+	{
+		Texture2D tex = ModAsset.MissionIconBoard.Value;
+		sb.Draw(tex, Info.TotalHitBox, new Rectangle(0, 0, 1, 1), Color.White);
+		base.Draw(sb);
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)

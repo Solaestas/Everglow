@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
@@ -39,11 +40,11 @@ public class UIMissionDetail : UIBlock
 
 	private UIRewardsStripe _rewardsPanel;
 
-	private float oldScale;
-
 	private float oldWidth;
 
 	private float oldHeight;
+
+	public UIMissionOperationTip MissionDetailInterface_2;
 
 	public class ChangeButtonText
 	{
@@ -61,7 +62,6 @@ public class UIMissionDetail : UIBlock
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
-
 		// Headshot
 		_icon = new UIMissionIcon(null);
 		Register(_icon);
@@ -373,7 +373,7 @@ public class UIMissionDetail : UIBlock
 			else // Incompleted
 			{
 				// Discard the mission (Second confirmation)
-				DetailTip.Show(new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否"));
+				DetailTip.Show(new UIMissionOperationTip(this, SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否"));
 			}
 		}
 		else if (SelectedItem.Mission.State == PlayerMissionState.Available) // Available missions
@@ -452,7 +452,18 @@ public class UIMissionDetail : UIBlock
 		}
 		else
 		{
-			base.Draw(sb);
+			var gd = sb.GraphicsDevice;
+			if (UISystem.UIScreenTarget is not null)
+			{
+				base.Draw(sb);
+				//Main.NewText(sb.graphicsDevice.renderTargetCount);
+				//gd.SetRenderTarget(UISystem.UIScreenTarget);
+				//gd.Clear(Color.Black);
+				//sb.Draw(Main.screenTargetSwap, Vector2.zeroVector, Color.White);
+				//base.Draw(sb);
+				//gd.SetRenderTarget(Main.screenTarget);
+				//sb.Draw(UISystem.UIScreenTarget, Vector2.zeroVector, Color.Red);
+			}
 		}
 	}
 

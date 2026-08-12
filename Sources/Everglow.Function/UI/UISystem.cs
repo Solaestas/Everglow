@@ -23,6 +23,8 @@ namespace Everglow.Commons.UI
 		public bool TopResizing = false;
 		public bool BottomResizing = false;
 
+		public static RenderTarget2D UIScreenTarget;
+
 		public UISystem()
 		{
 			system = new EverglowUISystem();
@@ -38,6 +40,10 @@ namespace Everglow.Commons.UI
 			{
 				system.Load();
 			}
+			Ins.MainThread.AddTask(() =>
+			{
+				UIScreenTarget = new RenderTarget2D(Main.instance.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+			});
 		}
 
 		public override void UpdateUI(GameTime gameTime)
