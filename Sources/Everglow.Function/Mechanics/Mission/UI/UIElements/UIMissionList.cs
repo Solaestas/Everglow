@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.Presentation;
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
@@ -34,8 +33,9 @@ public class UIMissionList : UIBlock
 	{
 		base.Calculation();
 		_missionScrollbar.Info.Left.SetValue(PositionStyle.Full - _missionScrollbar.Info.Width - (64f, 0f));
+		_missionScrollbar.Info.Top.SetValue(8, 0);
 		_missionScrollbar.Info.Width.SetValue(33);
-		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full);
+		_missionScrollbar.Info.Height.SetValue(PositionStyle.Full - (8, 0));
 	}
 
 	public override void Update(GameTime gt)
@@ -56,6 +56,18 @@ public class UIMissionList : UIBlock
 				top += mI.Info.Height;
 			}
 		}
+	}
+
+	public override void Draw(SpriteBatch sb)
+	{
+		Texture2D background = Commons.ModAsset.Drop.Value;
+		var newHitBox = HitBox;
+		newHitBox.Y += 8;
+		newHitBox.Height -= 8;
+		newHitBox.X += 24;
+		newHitBox.Width -= 120;
+		sb.Draw(background, newHitBox, new Rectangle(0, 0, 1, 1), Color.White * 0.5f);
+		base.Draw(sb);
 	}
 
 	/// <summary>

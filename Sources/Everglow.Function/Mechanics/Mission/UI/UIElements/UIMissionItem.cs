@@ -18,6 +18,9 @@ public class UIMissionItem : UIBlock
 
 	private float oldScale;
 
+	private bool mouseOver = false;
+	private bool selected = false;
+
 	public PlayerMissionBase Mission { get; private set; }
 
 	public UIMissionItem(PlayerMissionBase missionBase)
@@ -105,10 +108,7 @@ public class UIMissionItem : UIBlock
 	/// <param name="e"></param>
 	private void OnMouseOver(BaseElement e)
 	{
-		if (Instance.SelectedItem != this)
-		{
-			PanelColor = Color.Gray;
-		}
+		mouseOver = true;
 	}
 
 	/// <summary>
@@ -118,10 +118,7 @@ public class UIMissionItem : UIBlock
 	/// <param name="e"></param>
 	private void OnMouseLeave(BaseElement e)
 	{
-		if (Instance.SelectedItem != this)
-		{
-			OnUnselected();
-		}
+		mouseOver = false;
 	}
 
 	/// <summary>
@@ -130,7 +127,7 @@ public class UIMissionItem : UIBlock
 	/// </summary>
 	public void OnSelected()
 	{
-		PanelColor = Color.White;
+		selected = true;
 	}
 
 	/// <summary>
@@ -139,7 +136,7 @@ public class UIMissionItem : UIBlock
 	/// </summary>
 	public void OnUnselected()
 	{
-		PanelColor = Color.Transparent;
+		selected = false;
 	}
 
 	protected override void DrawChildren(SpriteBatch sb)
@@ -155,27 +152,64 @@ public class UIMissionItem : UIBlock
 		{
 			int index = uiml.MissionItems.IndexOf(this);
 			Vector2 coord = new Vector2(HitBox.X, index * 93 + ParentElement.ParentElement.HitBox.Y) - ParentElement.ParentElement.ParentElement.ParentElement.HitBox.TopLeft();
-			Main.NewText(coord);
 			var panel_texRectangle = new Rectangle((int)coord.X, (int)coord.Y, HitBox.Width, HitBox.Height);
 			Texture2D background = ModAsset.Marble_Texture.Value;
 			sb.Draw(background, HitBox, panel_texRectangle, Color.White);
 		}
 		Texture2D tex = ModAsset.MissionStackPanel.Value;
 		var drawBox = HitBox;
-		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 38);
+		int outer_coord_x = 41;
+		int outer_coord_y = 38;
+		if (mouseOver)
+		{
+			outer_coord_x = 41;
+			outer_coord_y = 65;
+			if (selected)
+			{
+				outer_coord_x = 50;
+				outer_coord_y = 65;
+			}
+		}
+		else if (selected)
+		{
+			outer_coord_x = 50;
+			outer_coord_y = 38;
+		}
+
+		// out bound
+		Draw9Piece_MissionStackPanel7x7(sb, drawBox, outer_coord_x, outer_coord_y);
+
 		drawBox.X += 5;
 		drawBox.Y += 4;
 		drawBox.Width -= 10;
 		drawBox.Height -= 8;
+
+		// golden framework
 		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 59, 38);
+
 		drawBox.X += 68;
 		drawBox.Y += 10;
 		drawBox.Width -= 79;
 		drawBox.Height -= 20;
+
+		// content area
 		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 47);
 
 		var gem_frame = ColorDefinition.GetGemFrame(Mission.Type);
-		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		if (selected)
+		{
+			gem_frame.Y += 104;
+			sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+			gem_frame.Y -= 104;
+			sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, new Color(1f, 1f, 1f, 0.5f), 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+		else
+		{
+			sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		}
+		var reflectionFrame = new Rectangle(158, 36 + gem_frame.X / 11, 33, 2);
+		sb.Draw(tex, HitBox.TopLeft() + new Vector2(40, 5), reflectionFrame, Color.White, 0, reflectionFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+		sb.Draw(tex, HitBox.TopLeft() + new Vector2(40, 88), reflectionFrame, Color.White, MathHelper.Pi, reflectionFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		gem_frame = new Rectangle(0, 36, 39, 39);
 		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}

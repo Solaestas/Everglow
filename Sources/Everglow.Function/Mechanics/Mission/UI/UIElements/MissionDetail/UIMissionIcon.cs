@@ -79,6 +79,7 @@ public class UIMissionIcon : UIBlock
 		var prevIcon = new UIImage(ModAsset.MissionIconArrow.Value, Color.White);
 		prevBtn.Register(prevIcon);
 		prevIcon.SourceRectangle = new Rectangle(0, 0, 35, 25);
+		prevIcon.Color = Color.Gray;
 		prevIcon.Info.SetToCenter();
 
 		nextBtn = new UIBlock();
@@ -185,6 +186,7 @@ public class UIMissionIcon : UIBlock
 
 		carousel.Info.Width.SetFull();
 		carousel.Info.Height.SetFull();
+		carousel.Info.SetToCenter();
 
 		int arrow_offset_H = 180;
 

@@ -62,7 +62,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 		public override void Calculation()
 		{
 			base.Calculation();
-			_inner.Info.Top.SetValue(WheelValue * (ParentElement.HitBox.Height - 65), 0);
+			_inner.Info.Top.SetValue(WheelValue * (HitBox.Height - 65), 0);
 			_inner.Info.Left.SetValue(0, 0);
 			_inner.Info.Width.SetValue(33, 0);
 			_inner.Info.Height.SetValue(65, 0);
@@ -84,10 +84,10 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 			int pos_coord_y = HitBox.Y - ParentElement.ParentElement.HitBox.Y;
 			frame = new Rectangle(pos_coord_x, pos_coord_y, 33, 65);
 			sb.Draw(tex, _inner.Info.HitBox, frame, Color.White);
-			if (MouseOver)
+			if (MouseOver || ContainsPoint(Main.MouseScreen.ToPoint()))
 			{
 				Texture2D highlight = ModAsset.MissionListThumb.Value;
-				frame = new Rectangle(33, 0, 33, 65);
+				frame = new Rectangle(37, 0, 37, 69);
 				sb.Draw(highlight, _inner.Info.HitBox.Center(), frame, Color.White, 0, frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			}
 		}

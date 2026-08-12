@@ -181,13 +181,14 @@ public class UIMissionDetail : UIBlock
 	public override void Calculation()
 	{
 		base.Calculation();
+		Info.HiddenOverflow = true;
 
 		float detailPanelWidth = (Info.Width.Pixel - 120) / 2f;
 		float detailPanelDistance = 40;
 
-		_icon.Info.Width.SetValue(420 * Scale);
+		_icon.Info.Width.SetValue(480 * Scale);
 		_icon.Info.Height.SetValue(256 * Scale);
-		_icon.Info.Left.SetValue(detailPanelDistance + detailPanelWidth / 2f - 210);
+		_icon.Info.Left.SetValue(detailPanelDistance + detailPanelWidth / 2f - 240);
 		_icon.Info.Top.SetValue(93 * Scale);
 
 		_description.Info.Width.SetValue(detailPanelWidth * Scale);
@@ -439,6 +440,19 @@ public class UIMissionDetail : UIBlock
 		else
 		{
 			_objectiveChangeText.Text = "[TextDrawer,Text='',Color='{color}']";
+		}
+	}
+
+	public override void Draw(SpriteBatch sb)
+	{
+		if (SelectedItem is null)
+		{
+			Texture2D tex = ModAsset.MissionIconBoard.Value;
+			sb.Draw(tex, Info.TotalHitBox, new Rectangle(16, 16, 16, 16), Color.White);
+		}
+		else
+		{
+			base.Draw(sb);
 		}
 	}
 
