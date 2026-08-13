@@ -1,9 +1,9 @@
-using System.Reflection;
 using System.Text;
+using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
+using Everglow.Commons.Utilities;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
@@ -62,6 +62,7 @@ public class UIMissionDetail : UIBlock
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
+
 		// Headshot
 		_icon = new UIMissionIcon(null);
 		Register(_icon);
@@ -453,17 +454,25 @@ public class UIMissionDetail : UIBlock
 		else
 		{
 			var gd = sb.GraphicsDevice;
-			if (UISystem.UIScreenTarget is not null)
-			{
-				base.Draw(sb);
-				//Main.NewText(sb.graphicsDevice.renderTargetCount);
-				//gd.SetRenderTarget(UISystem.UIScreenTarget);
-				//gd.Clear(Color.Black);
-				//sb.Draw(Main.screenTargetSwap, Vector2.zeroVector, Color.White);
-				//base.Draw(sb);
-				//gd.SetRenderTarget(Main.screenTarget);
-				//sb.Draw(UISystem.UIScreenTarget, Vector2.zeroVector, Color.Red);
-			}
+			var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
+			RenderTarget2D detailScreen = renderTargets.Resource[0];
+
+			SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
+			sb.End();
+
+			gd.SetRenderTarget(detailScreen);
+			gd.Clear(Color.Transparent);
+			sb.Begin(SpriteSortMode.Immediate, sBS.BlendState, sBS.SamplerState, sBS.DepthStencilState, sBS.RasterizerState, null, sBS.TransformMatrix);
+			base.Draw(sb);
+			sb.End();
+
+			gd.SetRenderTarget(null);
+			sb.Begin(SpriteSortMode.Immediate, sBS.BlendState, sBS.SamplerState, sBS.DepthStencilState, sBS.RasterizerState, null, sBS.TransformMatrix);
+			sb.Draw(detailScreen, Vector2.zeroVector, new Color(1f, 1f, 1f, 1f));
+			sb.End();
+			sb.Begin(sBS);
+			detailScreen = null;
+			renderTargets.Release();
 		}
 	}
 
