@@ -16,7 +16,7 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public MissionSourceBase Source { get; }
 
-	public List<Item> RewardItems { get; protected set; }
+	public List<Item> RewardItems { get; protected set; } = [];
 
 	public virtual int TimeLimit => 0;
 
