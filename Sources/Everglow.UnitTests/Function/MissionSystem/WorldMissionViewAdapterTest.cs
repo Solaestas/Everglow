@@ -275,8 +275,7 @@ public class WorldMissionViewAdapterTest
 	[TestMethod]
 	[DataRow("Follow the trail")]
 	[DataRow(MissionHintText.Masked)]
-	[DataRow(" ")]
-	public void Create_AnyNonEmptyHintShortCircuitsAllHiddenDetailReads(string hint)
+	public void Create_NonWhitespaceHintShortCircuitsAllHiddenDetailReads(string hint)
 	{
 		var reward = new Item { type = 1, stack = 2 };
 		var objective = new StubObjective
@@ -317,13 +316,16 @@ public class WorldMissionViewAdapterTest
 	}
 
 	[TestMethod]
-	public void Create_EmptyHintExportsDetailsAndLeavesWorldObjectiveDescriptionsEmpty()
+	[DataRow("")]
+	[DataRow(" ")]
+	[DataRow("\t")]
+	public void Create_BlankHintExportsDetailsAndLeavesWorldObjectiveDescriptionsEmpty(string hint)
 	{
 		var reward = new Item { type = 2, stack = 3 };
 		var objective = new StubObjective { ProgressValue = 0.35f };
 		var mission = new StubMission
 		{
-			HintValue = string.Empty,
+			HintValue = hint,
 			ProgressValue = 0.5f,
 			TimeLimitValue = 120,
 		};
@@ -334,7 +336,7 @@ public class WorldMissionViewAdapterTest
 
 		MissionView view = WorldMissionViewAdapter.Create(mission);
 
-		Assert.AreEqual(string.Empty, view.Hint);
+		Assert.AreEqual(hint, view.Hint);
 		Assert.AreEqual(0.5f, view.Progress);
 		Assert.AreEqual(45L, view.ElapsedTime);
 		Assert.AreEqual(120L, view.TimeLimit);

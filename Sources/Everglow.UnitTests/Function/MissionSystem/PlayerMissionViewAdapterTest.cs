@@ -223,8 +223,7 @@ public class PlayerMissionViewAdapterTest
 	[TestMethod]
 	[DataRow("Follow the trail")]
 	[DataRow(MissionHintText.Masked)]
-	[DataRow(" ")]
-	public void Create_AnyNonEmptyHintHidesDetailsButKeepsVisibilityAndIcons(string hint)
+	public void Create_NonWhitespaceHintHidesDetailsButKeepsVisibilityAndIcons(string hint)
 	{
 		var visibleIcon = new StubIcon();
 		var objective = new StubObjective("secret objective")
@@ -259,6 +258,25 @@ public class PlayerMissionViewAdapterTest
 		Assert.IsNull(view.RemainingTime);
 		Assert.HasCount(1, view.Icons);
 		Assert.AreSame(visibleIcon, view.Icons[0]);
+	}
+
+	[TestMethod]
+	[DataRow(" ")]
+	[DataRow("\t")]
+	public void Create_WhitespaceHintDoesNotHideDetails(string hint)
+	{
+		var mission = new StubMission
+		{
+			HintValue = hint,
+			DescriptionValue = "visible description",
+			ProgressValue = 0.75f,
+		};
+
+		MissionView view = PlayerMissionViewAdapter.Create(mission);
+
+		Assert.AreEqual(hint, view.Hint);
+		Assert.AreEqual("visible description", view.Description);
+		Assert.AreEqual(0.75f, view.Progress);
 	}
 
 	[TestMethod]

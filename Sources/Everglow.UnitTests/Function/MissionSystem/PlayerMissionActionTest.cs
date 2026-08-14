@@ -1,0 +1,182 @@
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
+
+namespace Everglow.UnitTests.Function.MissionSystem;
+
+[TestClass]
+[DoNotParallelize]
+public class PlayerMissionActionTest
+{
+	private sealed class StubMission : PlayerMissionBase
+	{
+		public bool CancellableValue { get; set; }
+
+		public bool CompleteValue { get; set; }
+
+		public string HintValue { get; set; } = string.Empty;
+
+		public override string DisplayName => nameof(StubMission);
+
+		public override bool Cancellable => CancellableValue;
+
+		public override string Hint => HintValue;
+
+		public override bool CheckComplete() => CompleteValue;
+	}
+
+	[TestInitialize]
+	public void Initialize()
+	{
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], []));
+		PlayerMissionManager.NeedRefresh = false;
+	}
+
+	[TestCleanup]
+	public void Cleanup() => PlayerMissionManager.Clear();
+
+	[TestMethod]
+	public void AvailableMission_ExportsOnlyAcceptAction()
+	{
+		var mission = new StubMission { State = PlayerMissionState.Available };
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.HasCount(1, actions);
+		Assert.AreEqual(MissionActionKind.Accept, actions[0].Kind);
+		Assert.AreEqual(mission.Name, actions[0].Mission.DefinitionId);
+		Assert.AreEqual(mission.InstanceId, actions[0].Mission.InstanceId);
+	}
+
+	[TestMethod]
+	public void CancellableIncompleteActiveMission_ExportsOnlyCancelAction()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Accepted,
+			CancellableValue = true,
+		};
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.HasCount(1, actions);
+		Assert.AreEqual(MissionActionKind.Cancel, actions[0].Kind);
+	}
+
+	[TestMethod]
+	public void AcceptAction_ChangesStateOnceAndPreservesInstanceIdentity()
+	{
+		var mission = new StubMission { State = PlayerMissionState.Available };
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
+		string instanceId = mission.InstanceId;
+
+		bool applied = PlayerMissionActions.TryExecute(action);
+		bool repeated = PlayerMissionActions.TryExecute(action);
+
+		Assert.IsTrue(applied);
+		Assert.IsFalse(repeated);
+		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
+		Assert.AreEqual(instanceId, mission.InstanceId);
+		Assert.IsTrue(PlayerMissionManager.NeedRefresh);
+	}
+
+	[TestMethod]
+	[DataRow("Follow the trail")]
+	[DataRow(MissionHintText.Masked)]
+	public void HintedAvailableMission_ExportsNoActions(string hint)
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Available,
+			HintValue = hint,
+		};
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.IsEmpty(actions);
+	}
+
+	[TestMethod]
+	[DataRow(" ")]
+	[DataRow("\t")]
+	public void WhitespaceHint_DoesNotHideOrRejectAcceptAction(string hint)
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Available,
+			HintValue = hint,
+		};
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+
+		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
+		bool applied = PlayerMissionActions.TryExecute(action);
+
+		Assert.IsTrue(applied);
+		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
+	}
+
+	[TestMethod]
+	public void CancelAction_ChangesStateOnce()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Accepted,
+			CancellableValue = true,
+		};
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
+
+		bool applied = PlayerMissionActions.TryExecute(action);
+		bool repeated = PlayerMissionActions.TryExecute(action);
+
+		Assert.IsTrue(applied);
+		Assert.IsFalse(repeated);
+		Assert.AreEqual(PlayerMissionState.Failed, mission.State);
+	}
+
+	[TestMethod]
+	public void ActionForReplacedPlayerInstance_DoesNotAffectCurrentInstance()
+	{
+		var replaced = new StubMission { State = PlayerMissionState.Available };
+		MissionAction staleAction = PlayerMissionActionAdapter.GetActions(replaced).Single();
+		var current = new StubMission { State = PlayerMissionState.Available };
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [current]));
+
+		bool applied = PlayerMissionActions.TryExecute(staleAction);
+
+		Assert.IsFalse(applied);
+		Assert.AreEqual(PlayerMissionState.Available, current.State);
+		Assert.AreNotEqual(staleAction.Mission.InstanceId, current.InstanceId);
+	}
+
+	[TestMethod]
+	public void HintAddedAfterExport_PreventsExecution()
+	{
+		var mission = new StubMission { State = PlayerMissionState.Available };
+		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
+		mission.HintValue = MissionHintText.Masked;
+
+		bool applied = PlayerMissionActions.TryExecute(action);
+
+		Assert.IsFalse(applied);
+		Assert.AreEqual(PlayerMissionState.Available, mission.State);
+	}
+
+	[TestMethod]
+	public void InvisibleAvailableMission_StillExportsAcceptAction()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Available,
+			IsVisible = false,
+		};
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.HasCount(1, actions);
+		Assert.AreEqual(MissionActionKind.Accept, actions[0].Kind);
+	}
+}
