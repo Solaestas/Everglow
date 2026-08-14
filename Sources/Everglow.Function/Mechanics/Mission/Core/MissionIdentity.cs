@@ -1,4 +1,4 @@
-namespace Everglow.Commons.Mechanics.Mission.Presentation.Views;
+namespace Everglow.Commons.Mechanics.Mission.Core;
 
 public readonly record struct MissionIdentity(
 	MissionSide Side,
