@@ -157,12 +157,14 @@ public class StringDrawer : IDrawable
 
 	public void Init(string initText)
 	{
+		drawerItems.Clear();
+		lineSize.Clear();
+		size = Vector2.Zero;
+
 		if (string.IsNullOrEmpty(initText))
 		{
 			return;
 		}
-
-		drawerItems.Clear();
 
 		// TODO: 该行会清除所有事件处理器，应该被清理
 		PreDrawerItemAdded = null;
