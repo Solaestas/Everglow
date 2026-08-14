@@ -16,7 +16,7 @@ public static class WorldMissionViewAdapter
 		string definitionId = mission.Name;
 
 		string hint = mission.Hint ?? string.Empty;
-		bool hidesDetails = string.IsNullOrWhiteSpace(hint);
+		bool hidesDetails = !string.IsNullOrWhiteSpace(hint);
 
 		float progress = 0f;
 		long elapsedTime = 0;
