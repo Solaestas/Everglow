@@ -10,7 +10,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 
 		public override float LeftMin => 4f * Scale;
 
-		public bool MouseOver = false;
+		private bool _mouseOver = false;
 
 		/// <summary>
 		/// 上下箭头
@@ -32,6 +32,15 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			Info.Width.SetValue(2f, 0f);
 			_innerScale = new Vector2(58f, 22f);
 			AlwaysOnLight = true;
+
+			Events.OnMouseHover += e =>
+			{
+				_mouseOver = true;
+			};
+			Events.OnMouseOut += e =>
+			{
+				_mouseOver = false;
+			};
 
 			_scrollbarArrow.ShowBorder = _scrollbarTrack.ShowBorder = _scrollbarThumb.ShowBorder = (false, false, false, false);
 			_scrollbarArrow.PanelColor = Color.Transparent;
@@ -56,6 +65,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			mask.Info.Top.SetValue(-2f, 1f);
 			mask.ShowBorder = (false, false, false, false);
 			mask.PanelColor = _scrollbarArrow.PanelColor;
+
 			Register(mask);
 		}
 
@@ -73,9 +83,6 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			{
 				Events.Update(this, gt);
 			}
-
-			bool isMouseHover = ContainsPoint(Main.MouseScreen);
-			MouseOver = isMouseHover;
 			var innerWidth = 1f * _innerScale.X;
 			float width = Info.TotalSize.X - LeftMax - LeftMin - innerWidth;
 			if (_isMouseDown)
@@ -93,7 +100,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 
 		public override bool ContainsPoint(Point point)
 		{
-			return base.ContainsPoint(point) || Info.HitBox.Contains(point.X, point.Y);
+			return base.ContainsPoint(point);
 		}
 
 		public override void Calculation()
@@ -130,7 +137,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			sb.Draw(trackTexture, Info.TotalHitBox.Right() + new Vector2(0, 0), new Rectangle(11, 0, 6, 7), Color.White, 0, new Vector2(0f, 3.5f), 2, SpriteEffects.None, 0);
 			var thumbTexture = ModAsset.MissionSideRollingBlock_H.Value;
 			var thumbFrame = new Rectangle(0, 0, 29, 11);
-			if (MouseOver || _isMouseDown)
+			if (_mouseOver || _isMouseDown)
 			{
 				thumbFrame = new Rectangle(0, 11, 29, 11);
 			}

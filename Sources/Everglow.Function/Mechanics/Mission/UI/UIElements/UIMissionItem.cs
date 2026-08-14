@@ -212,6 +212,9 @@ public class UIMissionItem : UIBlock
 		sb.Draw(tex, HitBox.TopLeft() + new Vector2(40, 88), reflectionFrame, Color.White, MathHelper.Pi, reflectionFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 		gem_frame = new Rectangle(0, 36, 39, 39);
 		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
+
+		var stateFrame = ColorDefinition.GetMissionStateFrame(Mission.State);
+		sb.Draw(tex, HitBox.Right() + new Vector2(-40, 0), stateFrame, Color.White, 0, stateFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
 	private void Draw9Piece_MissionStackPanel7x7(SpriteBatch sb, Rectangle hitbox, int frameX, int frameY)

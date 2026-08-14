@@ -6,6 +6,7 @@ using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
+using Spine;
 using Terraria.GameContent;
 using static Everglow.Commons.Mechanics.Mission.PlayerSide.PlayerMissionManager;
 
@@ -19,6 +20,8 @@ public class MissionContainer : UIContainerElement
 
 	public static UIMissionDetailTipContent DetailTip => Instance._missionDetailTip;
 
+	public static UIMissionDetailFailContent DetailFail => Instance._missionDetailFail;
+
 	public static UIMissionList List => Instance._missionList;
 
 	public static UIMissionBackground Background => Instance._panelBackground;
@@ -29,11 +32,6 @@ public class MissionContainer : UIContainerElement
 	/// Scale factor for all UI elements in the mission system
 	/// </summary>
 	public static float Scale => Instance.ResolutionFactor;
-
-	[Obsolete]
-	public const int PanelWidth = 1360;
-	[Obsolete]
-	public const int PanelHeight = 800;
 
 	public int CurrentPanelWidth = 1840;
 
@@ -48,6 +46,7 @@ public class MissionContainer : UIContainerElement
 	private UIMissionDetail _missionDetail;
 	private UIMissionDetailSubContent _missionDetailSubContent;
 	private UIMissionDetailTipContent _missionDetailTip;
+	private UIMissionDetailFailContent _missionDetailFail;
 
 	private UIMissionList _missionList;
 	private UIMissionFilter _missionFilter;
@@ -291,15 +290,15 @@ public class MissionContainer : UIContainerElement
 		_missionDetail.Info.Width.SetValue(detailWidth);
 		_missionDetail.Info.Height.SetValue(height - 120);
 
-		_missionDetailSubContent.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetailSubContent.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetailSubContent.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetailSubContent.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetailSubContent.Info.Left.SetValue(leftPartWidth, 0);
+		_missionDetailSubContent.Info.Top.SetValue(60);
+		_missionDetailSubContent.Info.Width.SetValue(detailWidth);
+		_missionDetailSubContent.Info.Height.SetValue(height - 120);
 
-		_missionDetailTip.Info.Left.SetValue(608 * ResolutionFactor);
-		_missionDetailTip.Info.Top.SetValue(46 * ResolutionFactor);
-		_missionDetailTip.Info.Width.SetValue(710 * ResolutionFactor, 0f);
-		_missionDetailTip.Info.Height.SetValue(724 * ResolutionFactor, 0f);
+		_missionDetailTip.Info.Left.SetValue(leftPartWidth, 0);
+		_missionDetailTip.Info.Top.SetValue(60);
+		_missionDetailTip.Info.Width.SetValue(detailWidth);
+		_missionDetailTip.Info.Height.SetValue(height - 120);
 
 		float missionListWidth = 660;
 		if (width < squzzeLeftLimit)
@@ -438,6 +437,21 @@ public class MissionContainer : UIContainerElement
 
 		_missionDetail.UpdateChangeButton("45,38,33");
 		_missionDetail.SetMissionDetail(item);
+
+		if (item is not null)
+		{
+			if (item.Mission.State == PlayerSide.PlayerMissionState.Failed)
+			{
+				_missionDetail.AnimationState = 3;
+				var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", x => { }, "确认");
+				DetailTip.Show(fail);
+			}
+			else
+			{
+				_missionDetail.AnimationState = 0;
+				_missionDetail.AnimationTimer = 0;
+			}
+		}
 	}
 
 	public override void Draw(SpriteBatch sb)

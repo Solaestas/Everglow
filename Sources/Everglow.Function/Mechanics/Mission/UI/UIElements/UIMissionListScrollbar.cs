@@ -10,7 +10,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 
 		public override float TopMin => 4f * Scale;
 
-		public bool MouseOver = false;
+		private bool _mouseOver = false;
 
 		private UIBlock _bar = new UIBlock();
 		private UIBlock _inner = new UIBlock();
@@ -24,6 +24,14 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 			_inner.PanelColor = Color.Transparent;
 			_inner.ShowBorder = (false, false, false, false);
 			_inner.Info.CanBeInteract = false;
+			Events.OnMouseHover += e =>
+			{
+				_mouseOver = true;
+			};
+			Events.OnMouseOut += e =>
+			{
+				_mouseOver = false;
+			};
 			Register(_inner);
 		}
 
@@ -41,9 +49,6 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 			{
 				Events.Update(this, gt);
 			}
-
-			bool isMouseHover = _inner.ContainsPoint(Main.MouseScreen);
-			MouseOver = isMouseHover;
 			var innerHeight = 1f * _innerScale.Y;
 			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
 			if (_isMouseDown)
@@ -84,7 +89,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements
 			int pos_coord_y = HitBox.Y - ParentElement.ParentElement.HitBox.Y;
 			frame = new Rectangle(pos_coord_x, pos_coord_y, 33, 65);
 			sb.Draw(tex, _inner.Info.HitBox, frame, Color.White);
-			if (MouseOver || ContainsPoint(Main.MouseScreen.ToPoint()))
+			if (_mouseOver || ContainsPoint(Main.MouseScreen.ToPoint()))
 			{
 				Texture2D highlight = ModAsset.MissionListThumb.Value;
 				frame = new Rectangle(37, 0, 37, 69);

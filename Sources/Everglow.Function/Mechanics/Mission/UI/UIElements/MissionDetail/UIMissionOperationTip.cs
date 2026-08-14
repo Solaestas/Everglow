@@ -1,12 +1,11 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.UI;
 using Everglow.Commons.UI.UIElements;
+
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 
 public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDetailTipContent>
 {
-	private static readonly Color ButtonInitialColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
 	private static readonly Color ButtonHoverColor = new Color(0f, 0f, 0f, 0.5f);
 
 	public enum TipType
@@ -16,7 +15,7 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 		Confirmation,
 	}
 
-	private TipType _mod;
+	private TipType _tipContent;
 	private string _tipTextStr;
 	private string _yesTextStr;
 	private string _noTextStr;
@@ -24,26 +23,23 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 
 	private UIBlock _main;
 
-	private UIBlock _tip;
+	private UIMissionBlock _tip;
 	private UITextPlus _tipText;
 
-	private UIBlock _yes;
+	private UIMissionButton _yes;
 	private UITextPlus _yesText;
 
-	private UIBlock _no;
+	private UIMissionButton _no;
 	private UITextPlus _noText;
-
-	private UIMissionDetail _parentUI;
 
 	public UIMissionOperationTip()
 	{
 	}
 
-	public UIMissionOperationTip(UIMissionDetail parent, PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
+	public UIMissionOperationTip(PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
 	{
-		_parentUI = parent;
 		_mission = mission;
-		_mod = type;
+		_tipContent = type;
 		_tipTextStr = tipText;
 		_yesTextStr = yesText;
 		_noTextStr = noText;
@@ -59,19 +55,18 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 		var scale = MissionContainer.Scale;
 
 		_main = new UIBlock();
-		_main.Info.Width.SetValue(_parentUI.HitBox.Width);
-		_main.Info.Height.SetValue(_parentUI.HitBox.Height);
-		_main.Info.Left.SetValue(_parentUI.HitBox.Left);
-		_main.Info.Top.SetValue(_parentUI.HitBox.Top);
 		_main.PanelColor = Color.Transparent;
 		Register(_main);
+		_main.Info.Width.SetFull();
+		_main.Info.Height.SetFull();
 		_main.Info.SetToCenter();
 
-		_tip = new UIBlock();
-		_tip.Info.Width.SetValue(300 * scale);
-		_tip.Info.Height.SetValue(120 * scale);
-		_tip.Info.Top.SetValue(30 * scale);
-		_tip.Info.Left.SetValue(30 * scale);
+		_tip = new UIMissionBlock();
+		_tip.Info.Width.SetValue(320);
+		_tip.Info.Height.SetValue(200);
+		_tip.Info.Left.SetValue(-_tip.Info.Width.Pixel * 0.5f, 0.5f);
+		_tip.Info.Top.SetValue(-120, 0.5f);
+		_tip.MissionBlockStyle = 2;
 		_tip.PanelColor = ButtonHoverColor;
 		_tip.Info.SetMargin(0);
 		_tip.Info.HiddenOverflow = true;
@@ -81,95 +76,158 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 		_tipText.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
 		_tipText.StringDrawer.Init(_tipText.Text);
 		_tipText.StringDrawer.SetWordWrap(_tip.Info.Width.Pixel);
-		_tipText.Info.Width.SetFull();
-		_tipText.Info.Height.SetFull();
+		_tipText.Info.Width.SetValue(-48, 1);
+		_tipText.Info.Height.SetValue(-48, 1);
+		_tipText.Info.SetToCenter();
 		_tipText.Info.SetMargin(5 * scale);
 		_tip.Register(_tipText);
 
-		if (_mod == TipType.Confirmation)
+		if (_tipContent == TipType.Confirmation)
 		{
-			_yes = new UIBlock();
-			_yes.Info.Width.SetValue(120 * scale);
-			_yes.Info.Height.SetValue(40 * scale);
-			_yes.Info.Left.SetValue(30 * scale);
-			_yes.Info.Top.SetValue(170 * scale);
-			_yes.Info.SetMargin(0);
-			_yes.Info.IsSensitive = true;
-			_yes.PanelColor = ButtonInitialColor;
+			_yes = NewButton();
 			_yes.Events.OnLeftClick += e =>
 			{
 				_yesAction?.Invoke(_mission);
 				Hide(e);
 			};
-			_yes.Events.OnMouseHover += e => _yes.PanelColor = ButtonHoverColor;
-			_yes.Events.OnMouseOut += e => _yes.PanelColor = ButtonInitialColor;
+			_yes.Events.OnMouseHover += e =>
+			{
+				_yes.OnSelect = true;
+			};
+			_yes.Events.OnMouseOut += e =>
+			{
+				_yes.OnSelect = false;
+			};
 			_main.Register(_yes);
 
 			_yesText = new UITextPlus(_yesTextStr ?? "OK");
 			_yesText.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
+			_yesText.StringDrawer.DefaultParameters.SetParameter("Color", "45,38,33");
 			_yesText.StringDrawer.Init(_yesText.Text);
 			_yes.Register(_yesText);
 			_yesText.Info.SetToCenter();
 
-			_no = new UIBlock();
-			_no.Info.Width.SetValue(120 * scale);
-			_no.Info.Height.SetValue(40 * scale);
-			_no.Info.Left.SetValue(210 * scale);
-			_no.Info.Top.SetValue(170 * scale);
-			_no.Info.SetMargin(0);
-			_no.Info.IsSensitive = true;
-			_no.PanelColor = ButtonInitialColor;
+			_no = NewButton();
 			_no.Events.OnLeftClick += Hide;
-			_no.Events.OnMouseHover += e => _no.PanelColor = ButtonHoverColor;
-			_no.Events.OnMouseOut += e => _no.PanelColor = ButtonInitialColor;
+			_no.Events.OnMouseHover += e =>
+			{
+				_no.OnSelect = true;
+			};
+			_no.Events.OnMouseOut += e =>
+			{
+				_no.OnSelect = false;
+			};
 			_main.Register(_no);
 
 			_noText = new UITextPlus(_noTextStr ?? "NO");
 			_noText.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
+			_noText.StringDrawer.DefaultParameters.SetParameter("Color", "45,38,33");
 			_noText.StringDrawer.Init(_noText.Text);
 			_no.Register(_noText);
 			_noText.Info.SetToCenter();
 		}
 		else
 		{
-			_yes = new UIBlock();
-			_yes.Info.Width.SetValue(120 * scale);
-			_yes.Info.Height.SetValue(40 * scale);
-			_yes.Info.Left.SetValue(120 * scale);
-			_yes.Info.Top.SetValue(170 * scale);
-			_yes.Info.SetMargin(0);
-			_yes.Info.IsSensitive = true;
-			_yes.PanelColor = ButtonInitialColor;
+			_yes = NewButton();
+			_yes.Events.OnMouseHover += e =>
+			{
+				_yes.OnSelect = true;
+			};
+			_yes.Events.OnMouseOut += e =>
+			{
+				_yes.OnSelect = false;
+			};
 			_yes.Events.OnLeftClick += e =>
 			{
 				_yesAction?.Invoke(_mission);
 				Hide(e);
 			};
-			_yes.Events.OnMouseHover += e => _yes.PanelColor = ButtonHoverColor;
-			_yes.Events.OnMouseOut += e => _yes.PanelColor = ButtonInitialColor;
 			_main.Register(_yes);
 
 			_yesText = new UITextPlus(_yesTextStr ?? "OK");
 			_yesText.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * scale);
+			_yesText.StringDrawer.DefaultParameters.SetParameter("Color", "45,38,33");
 			_yesText.StringDrawer.Init(_yesText.Text);
 			_yes.Register(_yesText);
 			_yesText.Info.SetToCenter();
 		}
 	}
 
+	public UIMissionButton NewButton()
+	{
+		var button = new UIMissionButton();
+		button.Info.Width.SetValue(120);
+		button.Info.Height.SetValue(40);
+		button.Info.Left.SetValue(Info.HitBox.Width / 2f - 120 - 40);
+		button.Info.Top.SetValue(Info.HitBox.Height * 0.63f, 0);
+		button.Info.SetMargin(0);
+		button.Info.IsSensitive = true;
+		button.PanelColor = Color.White;
+		return button;
+	}
+
 	public override void Calculation()
 	{
+		if (_yes.OnSelect)
+		{
+			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"255,245,193"}']";
+		}
+		if (!_yes.OnSelect)
+		{
+			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"45,38,33"}']";
+		}
+		if (_no is not null)
+		{
+			if (_no.OnSelect)
+			{
+				_noText.Text = $"[TextDrawer,Text='{_noTextStr}',Color='{"255,245,193"}']";
+			}
+			if (!_no.OnSelect)
+			{
+				_noText.Text = $"[TextDrawer,Text='{_noTextStr}',Color='{"45,38,33"}']";
+			}
+		}
+		_main.Info.Width.SetFull();
+		_main.Info.Height.SetFull();
+		_main.Info.SetToCenter();
+
+		_tip.Info.Width.SetValue(320);
+		_tip.Info.Height.SetValue(200);
+		_tip.Info.Left.SetValue(-_tip.Info.Width.Pixel * 0.5f, 0.5f);
+		_tip.Info.Top.SetValue(-120, 0.5f);
+
+		_tipText.Info.Width.SetValue(-48, 1);
+		_tipText.Info.Height.SetValue(-48, 1);
+		_tipText.Info.SetToCenter();
+
+		_yes.Info.Width.SetValue(120);
+		_yes.Info.Height.SetValue(40);
+		_yes.Info.Left.SetValue(Info.HitBox.Width / 2f - 120 - 40);
+		_yes.Info.Top.SetValue(Info.HitBox.Height * 0.63f, 0);
+
+		if (_no is not null)
+		{
+			_no.Info.Width.SetValue(120);
+			_no.Info.Height.SetValue(40);
+			_no.Info.Left.SetValue(Info.HitBox.Width / 2f + 40);
+			_no.Info.Top.SetValue(Info.HitBox.Height * 0.63f, 0);
+		}
+		else
+		{
+			_yes.Info.Width.SetValue(120);
+			_yes.Info.Height.SetValue(40);
+			_yes.Info.Left.SetValue(Info.HitBox.Width / 2f - 60);
+			_yes.Info.Top.SetValue(Info.HitBox.Height * 0.63f, 0);
+		}
 		base.Calculation();
-		Info.Width.SetValue(_parentUI.HitBox.Width);
-		Info.Height.SetValue(_parentUI.HitBox.Height);
-		Info.Left.SetValue(_parentUI.HitBox.Left);
-		Info.Top.SetValue(_parentUI.HitBox.Top);
 	}
 
 	public override void Draw(SpriteBatch sb)
 	{
-		Texture2D tex = ModAsset.MissionIconBoard.Value;
-		sb.Draw(tex, Info.TotalHitBox, new Rectangle(0, 0, 1, 1), Color.White);
+		if (_yes.Info.Width.Pixel != 120)
+		{
+			return;
+		}
 		base.Draw(sb);
 	}
 

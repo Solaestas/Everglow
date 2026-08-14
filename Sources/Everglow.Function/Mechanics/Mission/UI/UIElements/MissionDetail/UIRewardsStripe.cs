@@ -83,11 +83,9 @@ public class UIRewardsStripe : UIBlock
 		}
 
 		// Update global offset moving to current icon
-		float deltaTime = (float)gt.ElapsedGameTime.TotalSeconds;
 		float targetOffset = -Padding * _scrollBar.WheelValue * iconUIElements.Count + (Info.HitBox.Width + Padding-128) * _scrollBar.WheelValue;
 
-		float lerpFactor = 1f - (float)Math.Pow(0.01f, deltaTime);
-		globalMotionOffset = MathHelper.Lerp(globalMotionOffset, targetOffset, lerpFactor);
+		globalMotionOffset = targetOffset;
 
 		if (Math.Abs(globalMotionOffset - targetOffset) < 0.5f)
 		{

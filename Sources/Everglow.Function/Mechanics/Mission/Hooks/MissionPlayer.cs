@@ -45,6 +45,7 @@ public class MissionPlayer : ModPlayer
 			PlayerMissionManager.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new MissionObjectivesTest(), PlayerMissionState.Available);
+			PlayerMissionManager.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new OpenPanelMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new BranchingMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.AddMission(new NoneMission1(), PlayerMissionState.Available);

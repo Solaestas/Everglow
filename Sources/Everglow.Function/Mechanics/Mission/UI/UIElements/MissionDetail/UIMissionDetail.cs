@@ -2,13 +2,14 @@ using System.Text;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 
-public class UIMissionDetail : UIBlock
+public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 {
 	private static readonly Color ComponentColor = new Color(0.2f, 0.2f, 0.2f, 0.005f);
 	private static readonly Color ChangeButtonHoverColor = Color.White;
@@ -40,11 +41,22 @@ public class UIMissionDetail : UIBlock
 
 	private UIRewardsStripe _rewardsPanel;
 
+	// TODO: Add MissionStar to a mission(default 1);
+	private UIMissionStarLevel _missionLevel;
+
 	private float oldWidth;
 
 	private float oldHeight;
 
-	public UIMissionOperationTip MissionDetailInterface_2;
+	/// <summary>
+	/// Link with <see cref="AnimationState"/>.
+	/// </summary>
+	public float AnimationTimer = 0;
+
+	/// <summary>
+	/// 0: None, 1:TryToQuit, 2:CompleteAndClear, 3:Fail, 4:FailAndCrack
+	/// </summary>
+	public int AnimationState;
 
 	public class ChangeButtonText
 	{
@@ -66,6 +78,13 @@ public class UIMissionDetail : UIBlock
 		// Headshot
 		_icon = new UIMissionIcon(null);
 		Register(_icon);
+
+		// Stars
+		_missionLevel = new UIMissionStarLevel();
+		_missionLevel.Stars = 3;
+		_missionLevel.Info.Width.SetValue(100);
+		_missionLevel.Info.Height.SetValue(40);
+		Register(_missionLevel);
 
 		// Description
 		_description = new UIMissionBlock();
@@ -182,6 +201,10 @@ public class UIMissionDetail : UIBlock
 	public override void Calculation()
 	{
 		base.Calculation();
+		if (AnimationState > 0)
+		{
+			Info.CanBeInteract = false;
+		}
 		Info.HiddenOverflow = true;
 
 		float detailPanelWidth = (Info.Width.Pixel - 120) / 2f;
@@ -191,6 +214,11 @@ public class UIMissionDetail : UIBlock
 		_icon.Info.Height.SetValue(256 * Scale);
 		_icon.Info.Left.SetValue(detailPanelDistance + detailPanelWidth / 2f - 240);
 		_icon.Info.Top.SetValue(93 * Scale);
+
+		_missionLevel.Info.Width.SetValue(detailPanelWidth * Scale);
+		_missionLevel.Info.Height.SetValue(40);
+		_missionLevel.Info.Left.SetValue(detailPanelDistance * Scale);
+		_missionLevel.Info.Top.SetValue(354);
 
 		_description.Info.Width.SetValue(detailPanelWidth * Scale);
 		_description.Info.Height.SetValue((ParentElement.Info.Height.Pixel - 560) * Scale);
@@ -374,7 +402,14 @@ public class UIMissionDetail : UIBlock
 			else // Incompleted
 			{
 				// Discard the mission (Second confirmation)
-				DetailTip.Show(new UIMissionOperationTip(this, SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否"));
+				AnimationState = 1;
+				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", FailTheMission, "是", "否");
+				if (!SelectedItem.Mission.Cancellable)
+				{
+					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", DiscardMission, "确认");
+				}
+				tip.HideMask += ClearAnimation;
+				DetailTip.Show(tip);
 			}
 		}
 		else if (SelectedItem.Mission.State == PlayerMissionState.Available) // Available missions
@@ -385,7 +420,13 @@ public class UIMissionDetail : UIBlock
 		}
 	}
 
-	public static void DiscardMission(PlayerMissionBase m)
+	public void ClearAnimation(BaseElement _)
+	{
+		AnimationState = 0;
+		AnimationTimer = 0;
+	}
+
+	public void DiscardMission(PlayerMissionBase m)
 	{
 		if (SelectedItem != null
 			&& SelectedItem.Mission.State == PlayerMissionState.Accepted
@@ -395,6 +436,14 @@ public class UIMissionDetail : UIBlock
 			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 			PlayerMissionManager.NeedRefresh = true;
 		}
+	}
+
+	public void FailTheMission(PlayerMissionBase m)
+	{
+		m.State = PlayerMissionState.Failed;
+		AnimationState = 3;
+		var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", DiscardMission, "确认");
+		DetailTip.Show(fail);
 	}
 
 	/// <summary>
@@ -453,27 +502,64 @@ public class UIMissionDetail : UIBlock
 		}
 		else
 		{
-			var gd = sb.GraphicsDevice;
-			var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(1);
-			RenderTarget2D detailScreen = renderTargets.Resource[0];
-
-			SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
-			sb.End();
-
-			gd.SetRenderTarget(detailScreen);
-			gd.Clear(Color.Transparent);
-			sb.Begin(SpriteSortMode.Immediate, sBS.BlendState, sBS.SamplerState, sBS.DepthStencilState, sBS.RasterizerState, null, sBS.TransformMatrix);
-			base.Draw(sb);
-			sb.End();
-
-			gd.SetRenderTarget(null);
-			sb.Begin(SpriteSortMode.Immediate, sBS.BlendState, sBS.SamplerState, sBS.DepthStencilState, sBS.RasterizerState, null, sBS.TransformMatrix);
-			sb.Draw(detailScreen, Vector2.zeroVector, new Color(1f, 1f, 1f, 1f));
-			sb.End();
-			sb.Begin(sBS);
-			detailScreen = null;
-			renderTargets.Release();
+			var uiSystem = ModContent.GetInstance<UISystem>();
+			if (Ins.VisualQuality.High && uiSystem.UI_Screen is not null)
+			{
+				SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
+				if (AnimationState > 0)
+				{
+					if (AnimationTimer < 60)
+					{
+						AnimationTimer++;
+					}
+					sb.End();
+					sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, sBS.RasterizerState, null, sBS.TransformMatrix);
+					switch (AnimationState)
+					{
+						case 1:
+							float value = AnimationTimer / 8f;
+							value = Math.Clamp(value, 0, 1f);
+							var effect = ModAsset.MissionDetailBlur.Value;
+							effect.Parameters["uSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
+							effect.Parameters["uBlurValue"].SetValue(value);
+							effect.Parameters["uDelta"].SetValue(3f);
+							effect.CurrentTechnique.Passes["Blur"].Apply();
+							break;
+					}
+				}
+				else
+				{
+					if (AnimationTimer > 0)
+					{
+						AnimationTimer--;
+					}
+				}
+				if (AnimationState < 3)
+				{
+					sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, new Color(1f, 1f, 1f, 1f));
+				}
+				else
+				{
+					float value = AnimationTimer / 60f;
+					value = Math.Clamp(value, 0, 1f);
+					sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, Color.Lerp(Color.White,	Color.Red, value));
+				}
+				if (AnimationState > 0)
+				{
+					sb.End();
+					sb.Begin(sBS);
+				}
+			}
+			else
+			{
+				base.Draw(sb);
+			}
 		}
+	}
+
+	public void Draw_InRt2D(SpriteBatch sb)
+	{
+		base.Draw(sb);
 	}
 
 	protected override void DrawSelf(SpriteBatch sb)

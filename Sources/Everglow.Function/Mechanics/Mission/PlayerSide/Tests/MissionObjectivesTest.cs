@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
@@ -31,4 +31,6 @@ public class MissionObjectivesTest : PlayerMissionBase
 	public override string DisplayName => nameof(MissionObjectivesTest);
 
 	public override MissionType Type => MissionType.SideStory;
+
+	public override bool Cancellable => true;
 }

@@ -1,15 +1,12 @@
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.UI.UIElements;
+using Spine;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 
 public class UIMissionIcon : UIBlock
 {
-	private const int ButtonSize = 50;
-	private const int ButtonTop = 79;
-	private const int ButtonLeftRight = 10;
-
 	private UIMissionCarousel carousel;
 	private UIBlock prevBtn;
 	private UIBlock nextBtn;
@@ -292,15 +289,6 @@ public class UIMissionIcon : UIBlock
 				Texture2D tex = ModAsset.MissionIconArrow.Value;
 				int centerY = (int)Info.HitBox.Center().Y;
 				sb.Draw(tex, new Rectangle(Info.HitBox.X, centerY - 1, Info.HitBox.Width, 2), new Rectangle(31, 12, 1, 1), Color.White);
-			}
-
-			// TODO: Add MissionStar to a mission(default 1);
-			int MissionStar = 5;
-			for (int k = 0; k < MissionStar; k++)
-			{
-				Texture2D star = ModAsset.MissionLevelStar.Value;
-				Vector2 pos = Info.HitBox.Bottom() + new Vector2((k - (MissionStar - 1) / 2f) * 50, 24);
-				sb.Draw(star, pos, null, Color.White, 0, star.Size() * 0.5f, 2f, SpriteEffects.None, 0);
 			}
 			base.Draw(sb);
 		}

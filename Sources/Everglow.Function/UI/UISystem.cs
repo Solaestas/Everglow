@@ -1,3 +1,6 @@
+using Everglow.Commons.DataStructures;
+using Everglow.Commons.Enums;
+using Everglow.Commons.Utilities;
 using Terraria.UI;
 
 namespace Everglow.Commons.UI
@@ -23,6 +26,8 @@ namespace Everglow.Commons.UI
 		public bool TopResizing = false;
 		public bool BottomResizing = false;
 
+		public RenderTarget2D UI_Screen = null;
+
 		public UISystem()
 		{
 			system = new EverglowUISystem();
@@ -32,6 +37,8 @@ namespace Everglow.Commons.UI
 		public override void Load()
 		{
 			base.Load();
+			Ins.HookManager.AddHook(CodeLayer.PostDrawNPCs, PrepareUIRenderTarget);
+			On_Main.DrawInterface += HigherInterfaceVisualEffectSupport;
 			On_Main.DrawCursor += ModifyUIBlockResizeCursor;
 			On_Main.DrawThickCursor += ModifyUIBlockResizeThickCursor;
 			if (Main.netMode != NetmodeID.Server)
@@ -144,7 +151,7 @@ namespace Everglow.Commons.UI
 						tex = ModAsset.Cursor_Resize_V_Bound.Value;
 					}
 				}
-				for (int k = 0;k < 4;k++)
+				for (int k = 0; k < 4; k++)
 				{
 					Vector2 offset = new Vector2(1, 0).RotatedBy(MathHelper.PiOver2 * k);
 					Main.spriteBatch.Draw(tex, new Vector2(Main.mouseX, Main.mouseY) + Vector2.One * -11 + offset, null, Main.MouseBorderColor, 0f, default(Vector2), Main.cursorScale, SpriteEffects.None, 0f);
@@ -173,6 +180,52 @@ namespace Everglow.Commons.UI
 				resizeDir.Y = 1;
 			}
 			return resizeDir;
+		}
+
+		private void PrepareUIRenderTarget()
+		{
+			if (Ins.VisualQuality.High && Main.spriteBatch.beginCalled)
+			{
+				var sb = Main.spriteBatch;
+				var gd = sb.GraphicsDevice;
+				SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
+
+				var renderTargets = Ins.RenderTargetPool.GetRenderTarget2DArray(2);
+				UI_Screen = renderTargets.Resource[0];
+				RenderTarget2D screenSwap = renderTargets.Resource[1];
+				sb.End();
+
+				gd.SetRenderTarget(screenSwap);
+				gd.Clear(Color.Transparent);
+				sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Invert(Main.GameViewMatrix.TransformationMatrix));
+				sb.Draw(Main.screenTarget, Vector2.zeroVector, Color.White);
+				sb.End();
+
+				gd.SetRenderTarget(UI_Screen);
+				gd.Clear(Color.Transparent);
+				sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
+				system.DrawInRenderTarget(sb);
+				sb.End();
+
+				gd.SetRenderTarget(Main.screenTarget);
+				sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+				sb.Draw(screenSwap, Vector2.zeroVector, Color.White);
+				sb.End();
+				sb.Begin(sBS);
+
+				screenSwap = null;
+				renderTargets.Release();
+			}
+		}
+
+		private void HigherInterfaceVisualEffectSupport(On_Main.orig_DrawInterface orig, Main self, GameTime gameTime)
+		{
+			orig(self, gameTime);
+
+			if (UI_Screen is not null)
+			{
+				UI_Screen = null;
+			}
 		}
 	}
 }

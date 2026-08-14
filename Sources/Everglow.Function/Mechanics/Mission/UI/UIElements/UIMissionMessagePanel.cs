@@ -8,8 +8,10 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 public class UIMissionBlock : UIBlock
 {
 	/// <summary>
-	/// 0: 描述
-	/// 1: 目标
+	/// 0: 描述(description)
+	/// 1: 目标(objective)
+	/// 2: 警告(warning)
+	/// 3: 奖励(reward)
 	/// </summary>
 	public int MissionBlockStyle = 0;
 
@@ -29,7 +31,7 @@ public class UIMissionBlock : UIBlock
 			sb.End();
 
 			// 启用画笔，传参：延迟绘制（纹理合批优化），alpha颜色混合模式，点采样，不启用深度模式，UI大小矩阵
-			sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointWrap,
+			sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap,
 				DepthStencilState.None, overflowHiddenRasterizerState, null, Main.UIScaleMatrix);
 
 			// 绘制自己
@@ -99,6 +101,14 @@ public class UIMissionBlock : UIBlock
 			sb.Draw(divider, new Rectangle(x + 10, y + h - 180, halfWidth, 15), new Rectangle(0, 0, halfWidth, 15), Color.White);
 			sb.Draw(divider, new Rectangle(x + w - 35, y + h - 180, -halfWidth, 15), new Rectangle(0, 0, halfWidth, 15), Color.White);
 		}
+		if (MissionBlockStyle == 2)
+		{
+			tex_icon = ModAsset.MissionWarning_Icon.Value;
+		}
+		if (MissionBlockStyle == 3)
+		{
+			tex_icon = ModAsset.MissionReward_Icon.Value;
+		}
 		sb.Draw(tex_icon, new Rectangle(x + 5, y + 6, 35, 35), null, Color.White);
 	}
 
@@ -134,7 +144,7 @@ public class UIMissionBlock : UIBlock
 		// Top row
 		sb.Draw(tex, new Rectangle(x, y, sideListWidth, topRowHeight), new Rectangle(0, 0, sideListWidth, topRowHeight), panelColor);
 		sb.Draw(tex, new Rectangle(x + sideListWidth, y, leftList2Width, topRowHeight), new Rectangle(41, 0, 9, topRowHeight), panelColor);
-		sb.Draw(tex, new Rectangle(x + sideListWidth + leftList2Width, y, middleListWidth, topRowHeight), new Rectangle(51, 0, middleListWidth, topRowHeight), panelColor);
+		sb.Draw(tex, new Rectangle(x + sideListWidth + leftList2Width, y, middleListWidth, topRowHeight), new Rectangle(51, 0, 85, topRowHeight), panelColor);
 		sb.Draw(tex, new Rectangle(x + sideListWidth + middleListWidth + leftList2Width, y, rightList2Width, topRowHeight), new Rectangle(137, 0, 9, topRowHeight), panelColor);
 		sb.Draw(tex, new Rectangle(x + w - sideListWidth, y, sideListWidth, topRowHeight), new Rectangle(147, 0, sideListWidth, topRowHeight), panelColor);
 

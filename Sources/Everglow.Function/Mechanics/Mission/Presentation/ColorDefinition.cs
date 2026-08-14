@@ -47,4 +47,15 @@ public static class ColorDefinition
 		MissionType.Legendary => new Rectangle(132, 0, 33, 33),
 		_ => new Rectangle(0, 0, 33, 33),
 	};
+
+	public static Rectangle GetMissionStateFrame(PlayerMissionState? poolType) => poolType switch
+	{
+		PlayerMissionState.Accepted => new Rectangle(139, 36, 17, 67),
+		PlayerMissionState.Available => new Rectangle(121, 36, 17, 67),
+		PlayerMissionState.Failed => new Rectangle(103, 36, 17, 67),
+		PlayerMissionState.Overdue => new Rectangle(85, 36, 17, 67),
+		PlayerMissionState.Completed => new Rectangle(67, 36, 17, 67),
+		null => new Rectangle(157, 36, 17, 67),
+		_ => new Rectangle(157, 36, 17, 67),
+	};
 }

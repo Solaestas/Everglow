@@ -6,7 +6,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 	where TMask : UIMissionDetailMaskBase<TMask>, new()
 {
-	private static readonly Color DefaultColor = new Color(0f, 0f, 0f, 0.8f);
+	private static readonly Color DefaultColor = new Color(0f, 0f, 0f, 0.3f);
 
 	private UIBlock _container;
 	private UIMissionDetailMaskContentBase<TMask> _content;

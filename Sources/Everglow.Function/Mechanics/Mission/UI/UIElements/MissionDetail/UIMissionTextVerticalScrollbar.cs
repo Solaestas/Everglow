@@ -10,7 +10,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 
 		public override float TopMin => 4f * Scale;
 
-		public bool MouseOver = false;
+		private bool _mouseOver = false;
 
 		/// <summary>
 		/// 上下箭头
@@ -32,6 +32,15 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			Info.Width.SetValue(2f, 0f);
 			_innerScale = new Vector2(22f, 50f);
 			AlwaysOnLight = true;
+
+			Events.OnMouseHover += e =>
+			{
+				_mouseOver = true;
+			};
+			Events.OnMouseOut += e =>
+			{
+				_mouseOver = false;
+			};
 
 			_scrollbarArrow.ShowBorder = _scrollbarTrack.ShowBorder = _scrollbarThumb.ShowBorder = (false, false, false, false);
 			_scrollbarArrow.PanelColor = Color.Transparent;
@@ -74,8 +83,6 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 				Events.Update(this, gt);
 			}
 
-			bool isMouseHover = ContainsPoint(Main.MouseScreen);
-			MouseOver = isMouseHover;
 			var innerHeight = 1f * _innerScale.Y;
 			float height = Info.TotalSize.Y - TopMax - TopMin - innerHeight;
 			if (_isMouseDown)
@@ -128,7 +135,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail
 			sb.Draw(trackTexture, Info.TotalHitBox.Top() + new Vector2(0, Info.TotalHitBox.Height - 6), new Rectangle(0, 14, 7, 7), Color.White, 0, new Vector2(3.5f, 0), 2, SpriteEffects.None, 0);
 			var thumbTexture = ModAsset.MissionSideRollingBlock.Value;
 			var thumbFrame = new Rectangle(0, 0, 11, 25);
-			if (MouseOver || _isMouseDown)
+			if (_mouseOver || _isMouseDown)
 			{
 				thumbFrame = new Rectangle(11, 0, 11, 25);
 			}
