@@ -1,6 +1,6 @@
 namespace Everglow.Commons.Mechanics.Mission.Core;
 
-public enum MissionActionKind
+public enum MissionActionType
 {
 	Accept,
 	Cancel,
@@ -10,4 +10,4 @@ public enum MissionActionKind
 
 public readonly record struct MissionAction(
 	MissionIdentity Mission,
-	MissionActionKind Kind);
+	MissionActionType Type);

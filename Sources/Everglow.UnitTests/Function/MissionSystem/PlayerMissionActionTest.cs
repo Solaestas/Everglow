@@ -44,7 +44,7 @@ public class PlayerMissionActionTest
 		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
 
 		Assert.HasCount(1, actions);
-		Assert.AreEqual(MissionActionKind.Accept, actions[0].Kind);
+		Assert.AreEqual(MissionActionType.Accept, actions[0].Type);
 		Assert.AreEqual(mission.Name, actions[0].Mission.DefinitionId);
 		Assert.AreEqual(mission.InstanceId, actions[0].Mission.InstanceId);
 	}
@@ -61,7 +61,7 @@ public class PlayerMissionActionTest
 		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
 
 		Assert.HasCount(1, actions);
-		Assert.AreEqual(MissionActionKind.Cancel, actions[0].Kind);
+		Assert.AreEqual(MissionActionType.Cancel, actions[0].Type);
 	}
 
 	[TestMethod]
@@ -177,6 +177,6 @@ public class PlayerMissionActionTest
 		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
 
 		Assert.HasCount(1, actions);
-		Assert.AreEqual(MissionActionKind.Accept, actions[0].Kind);
+		Assert.AreEqual(MissionActionType.Accept, actions[0].Type);
 	}
 }

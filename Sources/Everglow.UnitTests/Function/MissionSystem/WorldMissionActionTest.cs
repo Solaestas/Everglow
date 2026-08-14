@@ -65,7 +65,7 @@ public class WorldMissionActionTest
 		IReadOnlyList<MissionAction> actions = WorldMissionActionAdapter.GetActions(mission);
 
 		Assert.HasCount(1, actions);
-		Assert.AreEqual(MissionActionKind.Retry, actions[0].Kind);
+		Assert.AreEqual(MissionActionType.Retry, actions[0].Type);
 		Assert.AreEqual(mission.Name, actions[0].Mission.DefinitionId);
 		Assert.AreEqual(mission.Name, actions[0].Mission.InstanceId);
 	}
@@ -79,7 +79,7 @@ public class WorldMissionActionTest
 		IReadOnlyList<MissionAction> actions = WorldMissionActionAdapter.GetActions(mission);
 
 		Assert.HasCount(1, actions);
-		Assert.AreEqual(MissionActionKind.ClaimReward, actions[0].Kind);
+		Assert.AreEqual(MissionActionType.ClaimReward, actions[0].Type);
 	}
 
 	[TestMethod]
@@ -182,7 +182,7 @@ public class WorldMissionActionTest
 		var actions = new WorldMissionActions(manager);
 		var action = new MissionAction(
 			new(MissionSide.World, mission.Name, "runtime-index"),
-			MissionActionKind.Retry);
+			MissionActionType.Retry);
 
 		bool applied = actions.TryExecute(action);
 

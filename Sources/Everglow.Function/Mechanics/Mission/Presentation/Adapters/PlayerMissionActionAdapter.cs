@@ -16,8 +16,8 @@ public static class PlayerMissionActionAdapter
 		}
 
 		var identity = new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId);
-		return PlayerMissionActions.GetAvailableKinds(mission)
-			.Select(kind => new MissionAction(identity, kind))
+		return PlayerMissionActions.GetAvailableTypes(mission)
+			.Select(type => new MissionAction(identity, type))
 			.ToArray();
 	}
 }

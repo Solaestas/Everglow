@@ -16,8 +16,8 @@ public static class WorldMissionActionAdapter
 		}
 
 		var identity = new MissionIdentity(MissionSide.World, mission.Name, mission.Name);
-		return WorldMissionActions.GetAvailableKinds(mission)
-			.Select(kind => new MissionAction(identity, kind))
+		return WorldMissionActions.GetAvailableTypes(mission)
+			.Select(type => new MissionAction(identity, type))
 			.ToArray();
 	}
 }

@@ -5,20 +5,20 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
 public static class PlayerMissionActions
 {
-	public static IReadOnlyList<MissionActionKind> GetAvailableKinds(PlayerMissionBase mission)
+	public static IReadOnlyList<MissionActionType> GetAvailableTypes(PlayerMissionBase mission)
 	{
 		ArgumentNullException.ThrowIfNull(mission);
 
 		if (mission.State == PlayerMissionState.Available)
 		{
-			return [MissionActionKind.Accept];
+			return [MissionActionType.Accept];
 		}
 
 		if (mission.State == PlayerMissionState.Accepted
 			&& mission.Cancellable
 			&& !mission.CheckComplete())
 		{
-			return [MissionActionKind.Cancel];
+			return [MissionActionType.Cancel];
 		}
 
 		return [];
@@ -36,17 +36,17 @@ public static class PlayerMissionActions
 		if (mission is null
 			|| !string.Equals(mission.InstanceId, identity.InstanceId, StringComparison.Ordinal)
 			|| MissionHintRules.HasContent(mission.Hint)
-			|| !GetAvailableKinds(mission).Contains(action.Kind))
+			|| !GetAvailableTypes(mission).Contains(action.Type))
 		{
 			return false;
 		}
 
-		switch (action.Kind)
+		switch (action.Type)
 		{
-			case MissionActionKind.Accept:
+			case MissionActionType.Accept:
 				PlayerMissionManager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
 				break;
-			case MissionActionKind.Cancel:
+			case MissionActionType.Cancel:
 				PlayerMissionManager.MoveMission(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 				break;
 			default:

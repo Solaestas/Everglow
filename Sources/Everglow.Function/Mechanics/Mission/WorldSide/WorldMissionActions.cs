@@ -13,7 +13,7 @@ public sealed class WorldMissionActions
 		_manager = manager ?? throw new ArgumentNullException(nameof(manager));
 	}
 
-	public static IReadOnlyList<MissionActionKind> GetAvailableKinds(WorldMissionBase mission)
+	public static IReadOnlyList<MissionActionType> GetAvailableTypes(WorldMissionBase mission)
 	{
 		ArgumentNullException.ThrowIfNull(mission);
 
@@ -24,12 +24,12 @@ public sealed class WorldMissionActions
 
 		if (mission.State == WorldMissionState.Failed && mission.Retriable)
 		{
-			return [MissionActionKind.Retry];
+			return [MissionActionType.Retry];
 		}
 
 		if (mission.State == WorldMissionState.Completed && !mission.RewardClaimed)
 		{
-			return [MissionActionKind.ClaimReward];
+			return [MissionActionType.ClaimReward];
 		}
 
 		return [];
@@ -48,15 +48,15 @@ public sealed class WorldMissionActions
 		if (mission is null
 			|| !string.Equals(mission.Name, identity.InstanceId, StringComparison.Ordinal)
 			|| MissionHintRules.HasContent(mission.Hint)
-			|| !GetAvailableKinds(mission).Contains(action.Kind))
+			|| !GetAvailableTypes(mission).Contains(action.Type))
 		{
 			return false;
 		}
 
-		return action.Kind switch
+		return action.Type switch
 		{
-			MissionActionKind.Retry => mission.RetryCore(),
-			MissionActionKind.ClaimReward => TryClaimReward(mission),
+			MissionActionType.Retry => mission.RetryCore(),
+			MissionActionType.ClaimReward => TryClaimReward(mission),
 			_ => false,
 		};
 	}
