@@ -21,5 +21,5 @@ public class CancellableKillNPCMissionTest : PlayerMissionBase
 
 	public override string DisplayName => nameof(CancellableKillNPCMissionTest);
 
-	public override MissionType Type => MissionType.MainStory;
+	public override MissionType Type => MissionType.Daily;
 }

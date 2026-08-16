@@ -10,7 +10,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
 /// <summary>
 /// 任务列表<see cref="MissionContainer"/>的任务项
 /// </summary>
-public class UIMissionItem : UIBlock
+public class UIMissionItem : UIBlock, IDrawable_InRt2D
 {
 	private UIBlock block;
 	private UIBlock nameContainer;
@@ -20,6 +20,16 @@ public class UIMissionItem : UIBlock
 
 	private bool mouseOver = false;
 	private bool selected = false;
+
+	/// <summary>
+	/// If mission failed, and the killing animation ended, this value will be the timer for removing animation.
+	/// </summary>
+	public float RemovingAnimationProgress = 0f;
+
+	/// <summary>
+	/// If mission failed, this value will be the timer for removing animation.
+	/// </summary>
+	public float KillingAnimationProgress = 0f;
 
 	public PlayerMissionBase Mission { get; private set; }
 
@@ -77,7 +87,8 @@ public class UIMissionItem : UIBlock
 		base.Calculation();
 		float missionListWidth = ParentElement.ParentElement.ParentElement.Info.Width.Pixel;
 		Info.Width.SetValue(missionListWidth - 120, 0f);
-		Info.Height.SetValue(93f * Scale, 0f);
+		float movingDuration = 1 - MathF.Pow(RemovingAnimationProgress / 60f, 2);
+		Info.Height.SetValue(93f * Scale * movingDuration, 0f);
 		Info.Left.SetValue(20 * Scale);
 
 		nameContainer.Info.Width.SetValue(missionListWidth - 240);
@@ -291,5 +302,10 @@ public class UIMissionItem : UIBlock
 		var offset = (int)(45 * MissionContainer.Scale);
 		var dest = new Rectangle(HitBox.X + offset, HitBox.Y, (int)((HitBox.Width - offset) * progress), HitBox.Height);
 		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, dest, new Color(0.5f, colorValue * 0.5f, colorValue * 0.5f, 0.1f));
+	}
+
+	public void Draw_InRt2D(SpriteBatch sb)
+	{
+		//this.Draw(sb);
 	}
 }

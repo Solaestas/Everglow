@@ -60,6 +60,7 @@ public class MissionPlayer : ModPlayer
 			PlayerMissionManager.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
 		}
 #endif
+		PlayerMissionManager.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
 	}
 
 	public override void SaveData(TagCompound tag)

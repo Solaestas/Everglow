@@ -204,6 +204,23 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		if (AnimationState > 0)
 		{
 			Info.CanBeInteract = false;
+			if (AnimationState == 4 && SelectedItem.KillingAnimationProgress > 60)
+			{
+				DiscardMission(SelectedItem.Mission);
+			}
+			switch (AnimationState)
+			{
+				case 4:
+					if (AnimationTimer < 60)
+					{
+						SelectedItem.RemovingAnimationProgress = AnimationTimer;
+					}
+					else
+					{
+						SelectedItem.KillingAnimationProgress++;
+					}
+					break;
+			}
 		}
 		Info.HiddenOverflow = true;
 
@@ -406,7 +423,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", FailTheMission, "是", "否");
 				if (!SelectedItem.Mission.Cancellable)
 				{
-					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", DiscardMission, "确认");
+					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", NothingHappenToTheMission, "确认");
 				}
 				tip.HideMask += ClearAnimation;
 				DetailTip.Show(tip);
@@ -426,24 +443,47 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		AnimationTimer = 0;
 	}
 
-	public void DiscardMission(PlayerMissionBase m)
+	public void NothingHappenToTheMission(PlayerMissionBase m)
 	{
-		if (SelectedItem != null
-			&& SelectedItem.Mission.State == PlayerMissionState.Accepted
-			&& SelectedItem.Mission.Cancellable
-			&& !SelectedItem.Mission.CheckComplete())
-		{
-			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			PlayerMissionManager.NeedRefresh = true;
-		}
 	}
 
+	/// <summary>
+	/// Quit mission step1: Display the failure interface.
+	/// </summary>
+	/// <param name="m"></param>
 	public void FailTheMission(PlayerMissionBase m)
 	{
 		m.State = PlayerMissionState.Failed;
 		AnimationState = 3;
-		var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", DiscardMission, "确认");
+		var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", RemoveMission, "确认");
 		DetailTip.Show(fail);
+	}
+
+	/// <summary>
+	/// Quit mission step2: Move the mission to failed state and refresh the mission list.
+	/// </summary>
+	/// <param name="m"></param>
+	public void RemoveMission(PlayerMissionBase m)
+	{
+		AnimationState = 4;
+		AnimationTimer = 0;
+	}
+
+	/// <summary>
+	/// Quit mission step3: Remove the mission from UIMissionList;
+	/// </summary>
+	/// <param name="m"></param>
+	public void DiscardMission(PlayerMissionBase m)
+	{
+		AnimationState = 0;
+		if (SelectedItem != null
+			&& m.State == PlayerMissionState.Accepted
+			&& m.Cancellable
+			&& !m.CheckComplete())
+		{
+			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+			PlayerMissionManager.NeedRefresh = true;
+		}
 	}
 
 	/// <summary>
@@ -503,6 +543,8 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		else
 		{
 			var uiSystem = ModContent.GetInstance<UISystem>();
+
+			// Visual effects for current mission detail interface(Submit, Fail, Quiting...)
 			if (Ins.VisualQuality.High && uiSystem.UI_Screen is not null)
 			{
 				SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
