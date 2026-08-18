@@ -72,7 +72,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnCheckCompleteChange()
 	{
-		PlayerMissionManager.NeedRefresh = true;
+		PlayerMissionManager.Instance.NeedRefresh = true;
 	}
 
 	/// <summary>
@@ -86,7 +86,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 		if (Objectives.Update(this))
 		{
 			Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
-			PlayerMissionManager.NeedRefresh = true;
+			PlayerMissionManager.Instance.NeedRefresh = true;
 		}
 	}
 
@@ -118,10 +118,10 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 			return;
 		}
 
-		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
+		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
 
 		IsVisible = true;
-		PlayerMissionManager.NeedRefresh = true;
+		PlayerMissionManager.Instance.NeedRefresh = true;
 
 		Main.NewText($"[{Name}]任务已完成", 150, 250, 150);
 
@@ -150,7 +150,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
+		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
 	}
 
 	/// <summary>
@@ -158,7 +158,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnFail()
 	{
-		PlayerMissionManager.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 	}
 
 	/// <summary>

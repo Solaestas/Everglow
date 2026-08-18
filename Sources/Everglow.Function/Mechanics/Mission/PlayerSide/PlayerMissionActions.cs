@@ -3,8 +3,17 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
-public static class PlayerMissionActions
+public sealed class PlayerMissionActions
 {
+	public static PlayerMissionActions Instance => ModContent.GetInstance<PlayerMissionSystem>().Actions;
+
+	private readonly PlayerMissionManager _manager;
+
+	public PlayerMissionActions(PlayerMissionManager manager)
+	{
+		_manager = manager ?? throw new ArgumentNullException(nameof(manager));
+	}
+
 	public static IReadOnlyList<MissionActionType> GetAvailableTypes(PlayerMissionBase mission)
 	{
 		ArgumentNullException.ThrowIfNull(mission);
@@ -24,7 +33,7 @@ public static class PlayerMissionActions
 		return [];
 	}
 
-	public static bool TryExecute(MissionAction action)
+	public bool TryExecute(MissionAction action)
 	{
 		MissionIdentity identity = action.Mission;
 		if (identity.Side != MissionSide.Player)
@@ -32,7 +41,7 @@ public static class PlayerMissionActions
 			return false;
 		}
 
-		var mission = PlayerMissionManager.GetMission(identity.DefinitionId);
+		var mission = _manager.GetMission(identity.DefinitionId);
 		if (mission is null
 			|| !string.Equals(mission.InstanceId, identity.InstanceId, StringComparison.Ordinal)
 			|| MissionHintRules.HasContent(mission.Hint)
@@ -44,16 +53,16 @@ public static class PlayerMissionActions
 		switch (action.Type)
 		{
 			case MissionActionType.Accept:
-				PlayerMissionManager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+				_manager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
 				break;
 			case MissionActionType.Cancel:
-				PlayerMissionManager.MoveMission(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+				_manager.MoveMission(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 				break;
 			default:
 				return false;
 		}
 
-		PlayerMissionManager.NeedRefresh = true;
+		_manager.NeedRefresh = true;
 		return true;
 	}
 }

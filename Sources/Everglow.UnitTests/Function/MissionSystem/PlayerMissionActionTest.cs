@@ -9,6 +9,9 @@ namespace Everglow.UnitTests.Function.MissionSystem;
 [DoNotParallelize]
 public class PlayerMissionActionTest
 {
+	private PlayerMissionManager _manager;
+	private PlayerMissionActions _actions;
+
 	private sealed class StubMission : PlayerMissionBase
 	{
 		public bool CancellableValue { get; set; }
@@ -29,12 +32,12 @@ public class PlayerMissionActionTest
 	[TestInitialize]
 	public void Initialize()
 	{
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], []));
-		PlayerMissionManager.NeedRefresh = false;
+		_manager = new PlayerMissionManager();
+		_actions = new PlayerMissionActions(_manager);
 	}
 
 	[TestCleanup]
-	public void Cleanup() => PlayerMissionManager.Clear();
+	public void Cleanup() => _manager.Clear();
 
 	[TestMethod]
 	public void AvailableMission_ExportsOnlyAcceptAction()
@@ -68,18 +71,18 @@ public class PlayerMissionActionTest
 	public void AcceptAction_ChangesStateOnceAndPreservesInstanceIdentity()
 	{
 		var mission = new StubMission { State = PlayerMissionState.Available };
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
 		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
 		string instanceId = mission.InstanceId;
 
-		bool applied = PlayerMissionActions.TryExecute(action);
-		bool repeated = PlayerMissionActions.TryExecute(action);
+		bool applied = _actions.TryExecute(action);
+		bool repeated = _actions.TryExecute(action);
 
 		Assert.IsTrue(applied);
 		Assert.IsFalse(repeated);
 		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
 		Assert.AreEqual(instanceId, mission.InstanceId);
-		Assert.IsTrue(PlayerMissionManager.NeedRefresh);
+		Assert.IsTrue(_manager.NeedRefresh);
 	}
 
 	[TestMethod]
@@ -108,10 +111,10 @@ public class PlayerMissionActionTest
 			State = PlayerMissionState.Available,
 			HintValue = hint,
 		};
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
 
 		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
-		bool applied = PlayerMissionActions.TryExecute(action);
+		bool applied = _actions.TryExecute(action);
 
 		Assert.IsTrue(applied);
 		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
@@ -125,11 +128,11 @@ public class PlayerMissionActionTest
 			State = PlayerMissionState.Accepted,
 			CancellableValue = true,
 		};
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
 		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
 
-		bool applied = PlayerMissionActions.TryExecute(action);
-		bool repeated = PlayerMissionActions.TryExecute(action);
+		bool applied = _actions.TryExecute(action);
+		bool repeated = _actions.TryExecute(action);
 
 		Assert.IsTrue(applied);
 		Assert.IsFalse(repeated);
@@ -142,9 +145,9 @@ public class PlayerMissionActionTest
 		var replaced = new StubMission { State = PlayerMissionState.Available };
 		MissionAction staleAction = PlayerMissionActionAdapter.GetActions(replaced).Single();
 		var current = new StubMission { State = PlayerMissionState.Available };
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [current]));
+		_manager.ApplyData(new PlayerMissionManagerData([], [current]));
 
-		bool applied = PlayerMissionActions.TryExecute(staleAction);
+		bool applied = _actions.TryExecute(staleAction);
 
 		Assert.IsFalse(applied);
 		Assert.AreEqual(PlayerMissionState.Available, current.State);
@@ -155,11 +158,11 @@ public class PlayerMissionActionTest
 	public void HintAddedAfterExport_PreventsExecution()
 	{
 		var mission = new StubMission { State = PlayerMissionState.Available };
-		PlayerMissionManager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
 		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
 		mission.HintValue = MissionHintText.Masked;
 
-		bool applied = PlayerMissionActions.TryExecute(action);
+		bool applied = _actions.TryExecute(action);
 
 		Assert.IsFalse(applied);
 		Assert.AreEqual(PlayerMissionState.Available, mission.State);

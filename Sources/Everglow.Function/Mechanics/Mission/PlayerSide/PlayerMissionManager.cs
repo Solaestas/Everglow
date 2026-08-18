@@ -6,65 +6,66 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
-public static class PlayerMissionManager
+public class PlayerMissionManager
 {
 	public const int UpdateInterval = 20;
+	public static PlayerMissionManager Instance => ModContent.GetInstance<PlayerMissionSystem>().Manager;
 
-	private static List<PlayerMissionBase> _missions;
+	private List<PlayerMissionBase> _missions = [];
 
-	public static IReadOnlyList<PlayerMissionBase> Missions => _missions;
+	public IReadOnlyList<PlayerMissionBase> Missions => _missions;
 
 	/// <summary>
 	/// 历史杀怪计数
 	/// </summary>
-	private static Dictionary<int, int> _nPCKillCounter;
+	private Dictionary<int, int> _nPCKillCounter = [];
+	private bool _loaded;
 
 	/// <summary>
 	/// 已接受任务的任务池
 	/// </summary>
-	private static IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.State == PlayerMissionState.Accepted);
+	private IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.State == PlayerMissionState.Accepted);
 
 	/// <summary>
 	/// 历史杀怪计数
 	/// </summary>
-	public static IReadOnlyDictionary<int, int> NPCKillCounter => _nPCKillCounter;
+	public IReadOnlyDictionary<int, int> NPCKillCounter => _nPCKillCounter;
 
 	/// <summary>
 	/// 任务列表是否需要更新
 	/// </summary>
-	public static bool NeedRefresh { get; set; } = false;
+	public bool NeedRefresh { get; set; }
 
 	#region TML Integration
 
-	public static void Load()
+	public void Load()
 	{
-		if (!Main.dedServ)
+		if (!Main.dedServ && !_loaded)
 		{
-			_missions = [];
-			_nPCKillCounter = [];
-
 			Main.OnTickForInternalCodeOnly += Update;
 			Ins.HookManager.AddHook(Commons.Enums.CodeLayer.PostSaveAndQuit, Clear);
 			MissionGlobalNPC.OnKillNPCEvent += MissionGlobalNPC_SpecialOnKill_CountKill;
+			_loaded = true;
 		}
 	}
 
-	public static void UnLoad()
+	public void Unload()
 	{
-		if (!Main.dedServ)
+		if (_loaded)
 		{
-			_missions = null;
-			_nPCKillCounter = null;
 			Main.OnTickForInternalCodeOnly -= Update;
 			MissionGlobalNPC.OnKillNPCEvent -= MissionGlobalNPC_SpecialOnKill_CountKill;
+			_loaded = false;
 		}
+
+		Clear();
 	}
 
 	/// <summary>
 	/// Initialize mission manager with player mission data
 	/// </summary>
 	/// <param name="data"></param>
-	public static void ApplyData(PlayerMissionManagerData data)
+	public void ApplyData(PlayerMissionManagerData data)
 	{
 		if (data == null)
 		{
@@ -83,12 +84,11 @@ public static class PlayerMissionManager
 	/// <summary>
 	/// 清除所有任务池中的任务
 	/// </summary>
-	public static void Clear()
+	public void Clear()
 	{
-		// Clear all events.
-		foreach (var m in _missions)
+		foreach (var mission in _missions)
 		{
-			m.Deactivate();
+			mission.Deactivate();
 		}
 
 		_nPCKillCounter.Clear();
@@ -102,7 +102,7 @@ public static class PlayerMissionManager
 	/// <summary>
 	/// 为任务每帧更新
 	/// </summary>
-	public static void Update()
+	public void Update()
 	{
 		// Main.gamePaused always be false here when triggered by Main.OnTickForInternalCodeOnly hook.
 		if (Main.gameMenu || Main.gameInactive) // || Main.gamePaused
@@ -160,7 +160,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="npc">被击杀的NPC</param>
 	/// <exception cref="InvalidParameterException">参数为空或npc类型错误</exception>
-	public static void MissionGlobalNPC_SpecialOnKill_CountKill(NPC npc)
+	public void MissionGlobalNPC_SpecialOnKill_CountKill(NPC npc)
 	{
 		if (npc.type <= NPCID.None)
 		{
@@ -184,7 +184,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <returns></returns>
-	public static PlayerMissionBase GetMission(string missionName) =>
+	public PlayerMissionBase GetMission(string missionName) =>
 		_missions.FirstOrDefault(m => m.Name == missionName);
 
 	/// <summary>
@@ -193,27 +193,27 @@ public static class PlayerMissionManager
 	/// <typeparam name="T">任务的类型</typeparam>
 	/// <param name="type">任务池类型</param>
 	/// <returns>任务池内所有该类型的任务</returns>
-	public static List<T> GetMissions<T>()
+	public List<T> GetMissions<T>()
 		where T : PlayerMissionBase =>
 		_missions.OfType<T>().ToList();
 
 	/// <summary>
 	/// Checks if a mission exists by type
 	/// </summary>
-	public static bool HasMission<T>()
+	public bool HasMission<T>()
 		where T : PlayerMissionBase =>
 		HasMission(m => m is T);
 
 	/// <summary>
 	/// Checks if a mission exists by name
 	/// </summary>
-	public static bool HasMission(string missionName) =>
+	public bool HasMission(string missionName) =>
 		HasMission(m => m.Name == missionName);
 
 	/// <summary>
 	/// Internal implementation for mission checking
 	/// </summary>
-	private static bool HasMission(Func<PlayerMissionBase, bool> predicate) =>
+	private bool HasMission(Func<PlayerMissionBase, bool> predicate) =>
 		_missions.Any(predicate);
 
 	/// <summary>
@@ -221,7 +221,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="mission">任务</param>
 	/// <param name="type">任务池类型</param>
-	public static void AddMission(PlayerMissionBase mission, PlayerMissionState type, bool showText = true)
+	public void AddMission(PlayerMissionBase mission, PlayerMissionState type, bool showText = true)
 	{
 		if (!HasMission(mission.Name))
 		{
@@ -245,7 +245,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="predicate">删除范围</param>
 	/// <returns></returns>
-	private static bool RemoveMission(Func<PlayerMissionBase, bool> predicate)
+	private bool RemoveMission(Func<PlayerMissionBase, bool> predicate)
 	{
 		foreach (var m in _missions.Where(predicate))
 		{
@@ -268,7 +268,7 @@ public static class PlayerMissionManager
 	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static bool RemoveMission(string missionName) =>
+	public bool RemoveMission(string missionName) =>
 		RemoveMission(m => m.Name == missionName);
 
 	/// <summary>
@@ -277,7 +277,7 @@ public static class PlayerMissionManager
 	/// <typeparam name="T">任务类型</typeparam>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	public static bool RemoveMission<T>()
+	public bool RemoveMission<T>()
 		where T : PlayerMissionBase =>
 		RemoveMission(m => m is T);
 
@@ -288,7 +288,7 @@ public static class PlayerMissionManager
 	/// <param name="fromType">任务目前所处任务池</param>
 	/// <param name="toType">目标任务池</param>
 	/// <returns>是否成功</returns>
-	public static bool MoveMission(string missionName, PlayerMissionState fromType, PlayerMissionState toType)
+	public bool MoveMission(string missionName, PlayerMissionState fromType, PlayerMissionState toType)
 	{
 		var mission = _missions.FirstOrDefault(m => m.Name == missionName);
 		if (mission == null)
@@ -306,7 +306,7 @@ public static class PlayerMissionManager
 	/// <param name="mission">任务实例</param>
 	/// <param name="fromType">任务目前所处任务池</param>
 	/// <param name="toType">目标任务池</param>
-	public static void MoveMission(PlayerMissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
+	public void MoveMission(PlayerMissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
 	{
 		if (fromType == toType)
 		{
@@ -331,7 +331,7 @@ public static class PlayerMissionManager
 	/// </summary>
 	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
-	public static List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.State == type).ToList();
+	public List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.State == type).ToList();
 
 	#endregion
 
@@ -342,7 +342,7 @@ public static class PlayerMissionManager
 	/// <br/>Should only be called by <see cref="ModPlayer.SaveData(TagCompound)"/>.
 	/// </summary>
 	/// <param name="tag">Provided by <see cref="ModPlayer.SaveData(TagCompound)"/>.</param>
-	public static void SaveData(TagCompound tag)
+	public void SaveData(TagCompound tag)
 	{
 		tag.Add(nameof(_nPCKillCounter), _nPCKillCounter.ToList());
 		tag.Add(nameof(_missions), _missions.ConvertAll(m =>
@@ -361,7 +361,7 @@ public static class PlayerMissionManager
 	/// <br/>Should only be called by <see cref="ModPlayer.LoadData(TagCompound)"/>.
 	/// </summary>
 	/// <param name="tag">Provided by <see cref="ModPlayer.LoadData(TagCompound)"/>.</param>
-	public static PlayerMissionManagerData LoadData(TagCompound tag)
+	public PlayerMissionManagerData LoadData(TagCompound tag)
 	{
 		// Load npc kill counter.
 		var nPCKillCounter = new Dictionary<int, int>();

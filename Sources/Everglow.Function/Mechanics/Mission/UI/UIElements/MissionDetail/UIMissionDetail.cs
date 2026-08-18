@@ -414,7 +414,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Commit the mission
 				SelectedItem.Mission.OnComplete();
-				PlayerMissionManager.NeedRefresh = true;
+				PlayerMissionManager.Instance.NeedRefresh = true;
 			}
 			else // Incompleted
 			{
@@ -432,8 +432,8 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		else if (SelectedItem.Mission.State == PlayerMissionState.Available) // Available missions
 		{
 			// Accept the mission
-			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
-			PlayerMissionManager.NeedRefresh = true;
+			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+			PlayerMissionManager.Instance.NeedRefresh = true;
 		}
 	}
 
@@ -472,8 +472,8 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			&& m.Cancellable
 			&& !m.CheckComplete())
 		{
-			PlayerMissionManager.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			PlayerMissionManager.NeedRefresh = true;
+			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+			PlayerMissionManager.Instance.NeedRefresh = true;
 		}
 	}
 

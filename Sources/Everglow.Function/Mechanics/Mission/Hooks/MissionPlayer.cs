@@ -35,42 +35,42 @@ public class MissionPlayer : ModPlayer
 	{
 		if (!missionManagerDataInitialized) // Prevent load being called when OnEnterWorld is called by subworldlibrary
 		{
-			PlayerMissionManager.ApplyData(missionManagerData);
+			PlayerMissionManager.Instance.ApplyData(missionManagerData);
 			missionManagerDataInitialized = true;
 		}
 
 #if DEBUG
-		if (!PlayerMissionManager.HasMission<PlayerMissionBase>())
+		if (!PlayerMissionManager.Instance.HasMission<PlayerMissionBase>())
 		{
-			PlayerMissionManager.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new MissionObjectivesTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new OpenPanelMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new BranchingMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission1(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission2(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission3(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission4(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission5(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new NoneMission6(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new MissionTimerTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new MissionIconTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new GiveItemMissionTest(), PlayerMissionState.Available);
-			PlayerMissionManager.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new MissionObjectivesTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new OpenPanelMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new BranchingMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission1(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission2(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission3(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission4(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission5(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new NoneMission6(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new MissionTimerTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new MissionIconTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new GiveItemMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
 		}
 #endif
-		PlayerMissionManager.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
+		PlayerMissionManager.Instance.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
 	}
 
 	public override void SaveData(TagCompound tag)
 	{
-		PlayerMissionManager.SaveData(tag);
+		PlayerMissionManager.Instance.SaveData(tag);
 	}
 
 	public override void LoadData(TagCompound tag)
 	{
-		missionManagerData = PlayerMissionManager.LoadData(tag);
+		missionManagerData = PlayerMissionManager.Instance.LoadData(tag);
 		missionManagerDataInitialized = false;
 	}
 

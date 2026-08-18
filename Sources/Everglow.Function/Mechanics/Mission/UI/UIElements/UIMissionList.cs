@@ -77,8 +77,8 @@ public class UIMissionList : UIBlock
 	{
 		// 筛选任务状态，获得初始列表
 		var missions = poolType.HasValue
-			? PlayerMissionManager.GetMissionPool(poolType.Value)
-			: Enum.GetValues<PlayerMissionState>().Select(PlayerMissionManager.GetMissionPool).SelectMany(x => x);
+			? PlayerMissionManager.Instance.GetMissionPool(poolType.Value)
+			: Enum.GetValues<PlayerMissionState>().Select(PlayerMissionManager.Instance.GetMissionPool).SelectMany(x => x);
 
 		// 筛选来源NPC
 		if (missionSource is not null) // NPC模式，去掉非对应NPC的任务

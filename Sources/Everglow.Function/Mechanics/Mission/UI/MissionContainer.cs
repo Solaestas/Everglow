@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
@@ -8,7 +9,6 @@ using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
 using Spine;
 using Terraria.GameContent;
-using static Everglow.Commons.Mechanics.Mission.PlayerSide.PlayerMissionManager;
 
 namespace Everglow.Commons.Mechanics.Mission.UI;
 
@@ -333,11 +333,11 @@ public class MissionContainer : UIContainerElement
 		base.Update(gt);
 
 		// Auto refresh mission list
-		if (NeedRefresh)
+		if (PlayerMissionManager.Instance.NeedRefresh)
 		{
 			RefreshList();
 
-			NeedRefresh = false;
+			PlayerMissionManager.Instance.NeedRefresh = false;
 		}
 
 		Calculation();

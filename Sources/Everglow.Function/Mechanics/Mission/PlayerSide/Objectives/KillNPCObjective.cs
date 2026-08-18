@@ -46,7 +46,7 @@ public class KillNPCObjective : PlayerObjectiveBase
 
 	public override float Progress => Math.Clamp((EnableIndividualCounter
 		? KilledCount
-		: PlayerMissionManager.NPCKillCounter.Where(x => NPCTypes.Contains(x.Key)).Sum(x => x.Value)) / (float)NPCCount, 0f, 1f);
+		: PlayerMissionManager.Instance.NPCKillCounter.Where(x => NPCTypes.Contains(x.Key)).Sum(x => x.Value)) / (float)NPCCount, 0f, 1f);
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
@@ -62,7 +62,7 @@ public class KillNPCObjective : PlayerObjectiveBase
 	{
 		string progress = EnableIndividualCounter
 				? $"({KilledCount}/{NPCCount})"
-				: $"({PlayerMissionManager.NPCKillCounter.Where((pair) => NPCTypes.Contains(pair.Key)).Sum(pair => pair.Value)}/{NPCCount})";
+				: $"({PlayerMissionManager.Instance.NPCKillCounter.Where(pair => NPCTypes.Contains(pair.Key)).Sum(pair => pair.Value)}/{NPCCount})";
 
 		if (NPCTypes.Count > 1)
 		{
