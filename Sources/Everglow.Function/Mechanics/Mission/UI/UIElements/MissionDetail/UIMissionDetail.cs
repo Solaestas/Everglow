@@ -420,7 +420,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Discard the mission (Second confirmation)
 				AnimationState = 1;
-				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", FailTheMission, "是", "否");
+				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", RemoveMission, "是", "否");
 				if (!SelectedItem.Mission.Cancellable)
 				{
 					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", NothingHappenToTheMission, "确认");
@@ -439,8 +439,11 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 
 	public void ClearAnimation(BaseElement _)
 	{
-		AnimationState = 0;
-		AnimationTimer = 0;
+		if (AnimationState == 1)
+		{
+			AnimationState = 0;
+			AnimationTimer = 0;
+		}
 	}
 
 	public void NothingHappenToTheMission(PlayerMissionBase m)
@@ -448,19 +451,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	}
 
 	/// <summary>
-	/// Quit mission step1: Display the failure interface.
-	/// </summary>
-	/// <param name="m"></param>
-	public void FailTheMission(PlayerMissionBase m)
-	{
-		m.State = PlayerMissionState.Failed;
-		AnimationState = 3;
-		var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", RemoveMission, "确认");
-		DetailTip.Show(fail);
-	}
-
-	/// <summary>
-	/// Quit mission step2: Move the mission to failed state and refresh the mission list.
+	/// Quit mission step1: Play the mission removal animation.
 	/// </summary>
 	/// <param name="m"></param>
 	public void RemoveMission(PlayerMissionBase m)
@@ -470,7 +461,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	}
 
 	/// <summary>
-	/// Quit mission step3: Remove the mission from UIMissionList;
+	/// Quit mission step2: Fail the mission after its removal animation finishes.
 	/// </summary>
 	/// <param name="m"></param>
 	public void DiscardMission(PlayerMissionBase m)
