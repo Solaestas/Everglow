@@ -24,6 +24,8 @@ public class WorldMissionManager
 
 	public static bool NormalUpdate => Instance.UpdateTimer % UpdateInterval == 0;
 
+	public event Action Changed;
+
 	private IGameStateProvider _gameState;
 
 	private List<WorldMissionBase> _missions = [];
@@ -77,6 +79,7 @@ public class WorldMissionManager
 		Main.OnTickForInternalCodeOnly -= Update;
 		Reset();
 		_missions = null;
+		Changed = null;
 	}
 
 	public void Initialize()
@@ -107,12 +110,16 @@ public class WorldMissionManager
 
 		if (NormalUpdate)
 		{
+			bool changed = false;
+
 			// Check locked
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Locked))
 			{
-				if (m.CanUnlock())
+				if (m.CanUnlock()
+					&& m.State == WorldMissionState.Locked)
 				{
 					m.Unlock();
+					changed = true;
 				}
 			}
 
@@ -120,6 +127,11 @@ public class WorldMissionManager
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
 				m.Update();
+			}
+
+			if (changed)
+			{
+				OnChanged();
 			}
 		}
 
@@ -197,6 +209,7 @@ public class WorldMissionManager
 		{
 			m.NetReceive(reader);
 		}
+		OnChanged();
 		Console.WriteLine("Full sync msg received!");
 	}
 
@@ -225,7 +238,11 @@ public class WorldMissionManager
 				// Handle missing mission data if necessary.
 			}
 		}
+
+		OnChanged();
 	}
 
 	#endregion
+
+	public void OnChanged() => Changed?.Invoke();
 }

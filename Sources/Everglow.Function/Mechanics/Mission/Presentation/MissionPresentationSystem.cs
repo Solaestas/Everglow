@@ -21,6 +21,7 @@ public sealed class MissionPresentationSystem : ModSystem
 		if (!Main.dedServ)
 		{
 			playerSystem.Manager.Changed += MissionContainer.Instance.RequestRefresh;
+			worldSystem.Manager.Changed += MissionContainer.Instance.RequestRefresh;
 		}
 	}
 

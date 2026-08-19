@@ -22,6 +22,7 @@ public class MissionSyncPacket : IPacket
 		var name = reader.ReadString();
 		_mission = WorldMissionManager.Instance.GetMission(name);
 		_mission.NetReceive(reader);
+		WorldMissionManager.Instance.OnChanged();
 	}
 
 	public void Send(BinaryWriter writer)

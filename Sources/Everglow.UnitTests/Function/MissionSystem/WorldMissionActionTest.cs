@@ -104,6 +104,24 @@ public class WorldMissionActionTest
 	}
 
 	[TestMethod]
+	public void SuccessfulAction_DoesNotPublishManagerChanged()
+	{
+		var mission = new StubMission();
+		mission.SetState(WorldMissionState.Failed);
+		var manager = new WorldMissionManager(new StubGameStateProvider());
+		manager.AddMission(mission);
+		var actions = new WorldMissionActions(manager);
+		int changeCount = 0;
+		manager.Changed += () => changeCount++;
+		MissionAction action = WorldMissionActionAdapter.GetActions(mission).Single();
+
+		bool applied = actions.TryExecute(action);
+
+		Assert.IsTrue(applied);
+		Assert.AreEqual(0, changeCount);
+	}
+
+	[TestMethod]
 	public void ClaimRewardAction_ClaimsOnceForLocalPlayer()
 	{
 		var mission = new StubMission();
