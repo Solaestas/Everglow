@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -202,7 +203,7 @@ public class UIMissionFilter : BaseElement
 		if (MissionTypeValue != missionType)
 		{
 			MissionTypeValue = missionType;
-			MissionContainer.Instance.RequestRefresh();
+			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 
 		// Update pool type
@@ -210,7 +211,7 @@ public class UIMissionFilter : BaseElement
 		if (PoolTypeValue != poolType)
 		{
 			PoolTypeValue = poolType;
-			MissionContainer.Instance.RequestRefresh();
+			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 
 		ManageAutoRotation();

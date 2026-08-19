@@ -2,6 +2,7 @@ using System.Text;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
@@ -414,7 +415,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Commit the mission
 				SelectedItem.Mission.OnComplete();
-				MissionContainer.Instance.RequestRefresh();
+				ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 			}
 			else // Incompleted
 			{
@@ -433,7 +434,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		{
 			// Accept the mission
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
-			MissionContainer.Instance.RequestRefresh();
+			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 	}
 
@@ -473,7 +474,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			&& !m.CheckComplete())
 		{
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			MissionContainer.Instance.RequestRefresh();
+			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 	}
 

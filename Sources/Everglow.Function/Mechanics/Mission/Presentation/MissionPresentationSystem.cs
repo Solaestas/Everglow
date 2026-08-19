@@ -8,6 +8,8 @@ public sealed class MissionPresentationSystem : ModSystem
 {
 	public MissionPresentationService Service { get; private set; }
 
+	public bool NeedRefresh { get; set; }
+
 	public override void PostSetupContent()
 	{
 		PlayerMissionSystem playerSystem = ModContent.GetInstance<PlayerMissionSystem>();
@@ -20,8 +22,8 @@ public sealed class MissionPresentationSystem : ModSystem
 
 		if (!Main.dedServ)
 		{
-			playerSystem.Manager.Changed += MissionContainer.Instance.RequestRefresh;
-			worldSystem.Manager.Changed += MissionContainer.Instance.RequestRefresh;
+			playerSystem.Manager.Changed += () => NeedRefresh = true;
+			worldSystem.Manager.Changed += () => NeedRefresh = true;
 		}
 	}
 
@@ -32,6 +34,7 @@ public sealed class MissionPresentationSystem : ModSystem
 			MissionContainer.Instance.Unload();
 		}
 
+		NeedRefresh = false;
 		Service = null;
 	}
 }
