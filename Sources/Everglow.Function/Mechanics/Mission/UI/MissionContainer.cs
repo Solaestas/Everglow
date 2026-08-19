@@ -439,7 +439,7 @@ public class MissionContainer : UIContainerElement
 		if (item is not null && item.Mission.State == PlayerSide.PlayerMissionState.Failed)
 		{
 			_missionDetail.AnimationState = 3;
-			var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", _missionDetail.RemoveMission, "确认");
+			var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", yesText: "确认");
 			DetailTip.Show(fail);
 		}
 		else

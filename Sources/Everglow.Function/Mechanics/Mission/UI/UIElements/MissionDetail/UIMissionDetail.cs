@@ -55,7 +55,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	public float AnimationTimer = 0;
 
 	/// <summary>
-	/// 0: None, 1:TryToQuit, 2:CompleteAndClear, 3:Fail, 4:FailAndCrack
+	/// 0: None, 1:TryToQuit, 2:CompleteAndClear, 3:Fail
 	/// </summary>
 	public int AnimationState;
 
@@ -203,26 +203,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	{
 		base.Calculation();
 		Info.CanBeInteract = AnimationState == 0;
-		if (AnimationState > 0)
-		{
-			if (AnimationState == 4 && SelectedItem is not null && SelectedItem.KillingAnimationProgress > 60)
-			{
-				DiscardMission(SelectedItem.Mission);
-			}
-			switch (AnimationState)
-			{
-				case 4:
-					if (AnimationTimer < 60)
-					{
-						SelectedItem.RemovingAnimationProgress = AnimationTimer;
-					}
-					else
-					{
-						SelectedItem.KillingAnimationProgress++;
-					}
-					break;
-			}
-		}
 		Info.HiddenOverflow = true;
 
 		float detailPanelWidth = (Info.Width.Pixel - 120) / 2f;
@@ -424,7 +404,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Discard the mission (Second confirmation)
 				AnimationState = 1;
-				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", RemoveMission, "是", "否");
+				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否");
 				if (!SelectedItem.Mission.Cancellable)
 				{
 					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", NothingHappenToTheMission, "确认");
@@ -455,17 +435,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	}
 
 	/// <summary>
-	/// Quit mission step1: Play the mission removal animation.
-	/// </summary>
-	/// <param name="m"></param>
-	public void RemoveMission(PlayerMissionBase m)
-	{
-		AnimationState = 4;
-		AnimationTimer = 0;
-	}
-
-	/// <summary>
-	/// Quit mission step2: Fail the mission after its removal animation finishes.
+	/// Fail the selected mission if it can be cancelled.
 	/// </summary>
 	/// <param name="m"></param>
 	public void DiscardMission(PlayerMissionBase m)

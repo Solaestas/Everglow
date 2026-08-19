@@ -21,16 +21,6 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 	private bool mouseOver = false;
 	private bool selected = false;
 
-	/// <summary>
-	/// If mission failed, and the killing animation ended, this value will be the timer for removing animation.
-	/// </summary>
-	public float RemovingAnimationProgress = 0f;
-
-	/// <summary>
-	/// If mission failed, this value will be the timer for removing animation.
-	/// </summary>
-	public float KillingAnimationProgress = 0f;
-
 	public PlayerMissionBase Mission { get; private set; }
 
 	public UIMissionItem(PlayerMissionBase missionBase)
@@ -87,8 +77,7 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 		base.Calculation();
 		float missionListWidth = ParentElement.ParentElement.ParentElement.Info.Width.Pixel;
 		Info.Width.SetValue(missionListWidth - 120, 0f);
-		float movingDuration = 1 - MathF.Pow(RemovingAnimationProgress / 60f, 2);
-		Info.Height.SetValue(93f * Scale * movingDuration, 0f);
+		Info.Height.SetValue(93f * Scale, 0f);
 		Info.Left.SetValue(20 * Scale);
 
 		nameContainer.Info.Width.SetValue(missionListWidth - 240);
