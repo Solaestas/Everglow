@@ -72,7 +72,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnCheckCompleteChange()
 	{
-		PlayerMissionManager.Instance.OnChanged();
+		PlayerMissionManager.Instance.OnMissionStatusUpdated(this);
 	}
 
 	/// <summary>
@@ -86,7 +86,6 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 		if (Objectives.Update(this))
 		{
 			Main.NewText($"[{Name}]任务当前目标已完成", 250, 250, 150);
-			PlayerMissionManager.Instance.OnChanged();
 		}
 	}
 
@@ -121,7 +120,6 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
 
 		IsVisible = true;
-		PlayerMissionManager.Instance.OnChanged();
 
 		Main.NewText($"[{Name}]任务已完成", 150, 250, 150);
 

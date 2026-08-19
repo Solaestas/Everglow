@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.Core;
@@ -24,7 +25,8 @@ public class WorldMissionManager
 
 	public static bool NormalUpdate => Instance.UpdateTimer % UpdateInterval == 0;
 
-	public event Action Changed;
+	public event Action<MissionIdentity> MissionStatusUpdated;
+	public event Action<MissionIdentity> MissionObjectiveUpdated;
 
 	private IGameStateProvider _gameState;
 
@@ -79,7 +81,8 @@ public class WorldMissionManager
 		Main.OnTickForInternalCodeOnly -= Update;
 		Reset();
 		_missions = null;
-		Changed = null;
+		MissionStatusUpdated = null;
+		MissionObjectiveUpdated = null;
 	}
 
 	public void Initialize()
@@ -110,8 +113,6 @@ public class WorldMissionManager
 
 		if (NormalUpdate)
 		{
-			bool changed = false;
-
 			// Check locked
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Locked))
 			{
@@ -119,19 +120,20 @@ public class WorldMissionManager
 					&& m.State == WorldMissionState.Locked)
 				{
 					m.Unlock();
-					changed = true;
+					OnMissionStatusUpdated(m);
 				}
 			}
 
 			// Check active
 			foreach (var m in _missions.Where(m => m.State == WorldMissionState.Active))
 			{
+				WorldMissionState oldState = m.State;
 				m.Update();
-			}
-
-			if (changed)
-			{
-				OnChanged();
+				OnMissionObjectiveUpdated(m);
+				if (m.State != oldState)
+				{
+					OnMissionStatusUpdated(m);
+				}
 			}
 		}
 
@@ -208,8 +210,9 @@ public class WorldMissionManager
 		foreach (var m in _missions)
 		{
 			m.NetReceive(reader);
+			OnMissionStatusUpdated(m);
+			OnMissionObjectiveUpdated(m);
 		}
-		OnChanged();
 		Console.WriteLine("Full sync msg received!");
 	}
 
@@ -237,12 +240,17 @@ public class WorldMissionManager
 			{
 				// Handle missing mission data if necessary.
 			}
-		}
 
-		OnChanged();
+			OnMissionStatusUpdated(m);
+			OnMissionObjectiveUpdated(m);
+		}
 	}
 
 	#endregion
 
-	public void OnChanged() => Changed?.Invoke();
+	public void OnMissionStatusUpdated(WorldMissionBase mission) => MissionStatusUpdated?.Invoke(GetIdentity(mission));
+
+	public void OnMissionObjectiveUpdated(WorldMissionBase mission) => MissionObjectiveUpdated?.Invoke(GetIdentity(mission));
+
+	private static MissionIdentity GetIdentity(WorldMissionBase mission) => new(MissionSide.World, mission.Name, mission.Name);
 }

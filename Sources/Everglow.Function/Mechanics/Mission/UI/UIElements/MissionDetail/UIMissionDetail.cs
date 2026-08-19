@@ -2,7 +2,6 @@ using System.Text;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
@@ -30,6 +29,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	private UIMissionBlock _objective;
 	private UIContainerPanel _objectiveContainer;
 	private UIMissionTextVerticalScrollbar _objectiveTextScrollbar;
+	private UITextPlus _objectiveText;
 	private UIMissionHourglassTimer _objectiveTimer;
 
 	private UIMissionDurationBar _objectiveDurationBar;
@@ -345,18 +345,34 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_descriptionContainer.AddElement(des);
 		des.StringDrawer.SetWordWrap(_descriptionContainer.HitBox.Width - _descriptionTextScrollbar.InnerScale.X);
 
-		// Objectives
+		SetObjectiveText(mission);
+	}
+
+	public void RefreshObjectives(PlayerMissionBase mission) => SetObjectiveText(mission);
+
+	private void SetObjectiveText(PlayerMissionBase mission)
+	{
 		var objText = new StringBuilder();
 		objText.Append("目标：\n");
 		foreach (var objective in mission.GetObjectives())
 		{
 			objText.Append(objective);
 		}
-		var obj = new UITextPlus(objText.ToString());
-		obj.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		obj.StringDrawer.Init(obj.Text);
-		_objectiveContainer.AddElement(obj);
-		obj.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
+
+		if (_objectiveText is null)
+		{
+			_objectiveText = new UITextPlus(objText.ToString());
+			_objectiveText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+			_objectiveContainer.AddElement(_objectiveText);
+		}
+		else
+		{
+			_objectiveText.Text = objText.ToString();
+		}
+
+		_objectiveText.StringDrawer.Init(_objectiveText.Text);
+		_objectiveText.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
+		_objectiveText.Calculation();
 
 		// Rewards
 		// var rewText = new StringBuilder();
@@ -376,6 +392,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 
 		_objectiveTextScrollbar.WheelValue = 0f;
 		_objectiveContainer.ClearAllElements();
+		_objectiveText = null;
 
 		// _rewardTextScrollbar.WheelValue = 0f;
 		// _rewardContainer.ClearAllElements();
@@ -398,7 +415,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Commit the mission
 				SelectedItem.Mission.OnComplete();
-				ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 			}
 			else // Incompleted
 			{
@@ -417,7 +433,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		{
 			// Accept the mission
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
-			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 	}
 
@@ -447,7 +462,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			&& !m.CheckComplete())
 		{
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = true;
 		}
 	}
 

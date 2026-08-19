@@ -104,21 +104,24 @@ public class WorldMissionActionTest
 	}
 
 	[TestMethod]
-	public void SuccessfulAction_DoesNotPublishManagerChanged()
+	public void RetryAction_PublishesStatusAndObjectiveUpdates()
 	{
 		var mission = new StubMission();
 		mission.SetState(WorldMissionState.Failed);
 		var manager = new WorldMissionManager(new StubGameStateProvider());
 		manager.AddMission(mission);
 		var actions = new WorldMissionActions(manager);
-		int changeCount = 0;
-		manager.Changed += () => changeCount++;
+		int statusUpdateCount = 0;
+		int objectiveUpdateCount = 0;
+		manager.MissionStatusUpdated += _ => statusUpdateCount++;
+		manager.MissionObjectiveUpdated += _ => objectiveUpdateCount++;
 		MissionAction action = WorldMissionActionAdapter.GetActions(mission).Single();
 
 		bool applied = actions.TryExecute(action);
 
 		Assert.IsTrue(applied);
-		Assert.AreEqual(0, changeCount);
+		Assert.AreEqual(1, statusUpdateCount);
+		Assert.AreEqual(1, objectiveUpdateCount);
 	}
 
 	[TestMethod]

@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Hooks;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using MathNet.Numerics;
@@ -11,7 +12,10 @@ public class PlayerMissionManager
 	public const int UpdateInterval = 20;
 	public static PlayerMissionManager Instance => ModContent.GetInstance<PlayerMissionSystem>().Manager;
 
-	public event Action Changed;
+	public event Action<MissionIdentity> MissionAdded;
+	public event Action<MissionIdentity> MissionRemoved;
+	public event Action<MissionIdentity> MissionStatusUpdated;
+	public event Action<MissionIdentity> MissionObjectiveUpdated;
 
 	private List<PlayerMissionBase> _missions = [];
 
@@ -56,7 +60,10 @@ public class PlayerMissionManager
 		}
 
 		Clear();
-		Changed = null;
+		MissionAdded = null;
+		MissionRemoved = null;
+		MissionStatusUpdated = null;
+		MissionObjectiveUpdated = null;
 	}
 
 	/// <summary>
@@ -70,12 +77,23 @@ public class PlayerMissionManager
 			return;
 		}
 
+		List<PlayerMissionBase> oldMissions = _missions;
 		_nPCKillCounter = data.NPCKillCounter.ToDictionary();
 		_missions = data.MissionPools.ToList();
+
+		foreach (PlayerMissionBase mission in oldMissions)
+		{
+			OnMissionRemoved(mission);
+		}
 
 		foreach (var m in AcceptedMissions)
 		{
 			m.Activate();
+		}
+
+		foreach (PlayerMissionBase mission in _missions)
+		{
+			OnMissionAdded(mission);
 		}
 	}
 
@@ -84,6 +102,7 @@ public class PlayerMissionManager
 	/// </summary>
 	public void Clear()
 	{
+		List<PlayerMissionBase> removedMissions = _missions.ToList();
 		foreach (var mission in _missions)
 		{
 			mission.Deactivate();
@@ -91,6 +110,11 @@ public class PlayerMissionManager
 
 		_nPCKillCounter.Clear();
 		_missions.Clear();
+
+		foreach (PlayerMissionBase mission in removedMissions)
+		{
+			OnMissionRemoved(mission);
+		}
 	}
 
 	#endregion
@@ -117,6 +141,7 @@ public class PlayerMissionManager
 		foreach (var m in AcceptedMissions)
 		{
 			m.Update();
+			OnMissionObjectiveUpdated(m);
 		}
 
 		// 处理自动提交任务
@@ -124,7 +149,6 @@ public class PlayerMissionManager
 		if (autoCommitMissions.Count > 0)
 		{
 			autoCommitMissions.ForEach(m => m.OnComplete());
-			OnChanged();
 		}
 
 		// 处理过期任务
@@ -132,7 +156,6 @@ public class PlayerMissionManager
 		if (expiredMissions.Count > 0)
 		{
 			expiredMissions.ForEach(m => m.OnExpire());
-			OnChanged();
 		}
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
@@ -235,6 +258,8 @@ public class PlayerMissionManager
 			{
 				mission.Activate();
 			}
+
+			OnMissionAdded(mission);
 		}
 	}
 
@@ -245,16 +270,17 @@ public class PlayerMissionManager
 	/// <returns></returns>
 	private bool RemoveMission(Func<PlayerMissionBase, bool> predicate)
 	{
-		foreach (var m in _missions.Where(predicate))
+		List<PlayerMissionBase> removedMissions = _missions.Where(predicate).ToList();
+		foreach (var m in removedMissions)
 		{
 			m.Deactivate();
 		}
 
 		var removed = _missions.RemoveAll(m => predicate(m));
 
-		if (removed > 0)
+		foreach (PlayerMissionBase mission in removedMissions)
 		{
-			OnChanged();
+			OnMissionRemoved(mission);
 		}
 
 		return removed > 0;
@@ -321,6 +347,8 @@ public class PlayerMissionManager
 		{
 			mission.Deactivate();
 		}
+
+		OnMissionStatusUpdated(mission);
 	}
 
 	/// <summary>
@@ -403,5 +431,13 @@ public class PlayerMissionManager
 
 	#endregion
 
-	public void OnChanged() => Changed?.Invoke();
+	public void OnMissionAdded(PlayerMissionBase mission) => MissionAdded?.Invoke(GetIdentity(mission));
+
+	public void OnMissionRemoved(PlayerMissionBase mission) => MissionRemoved?.Invoke(GetIdentity(mission));
+
+	public void OnMissionStatusUpdated(PlayerMissionBase mission) => MissionStatusUpdated?.Invoke(GetIdentity(mission));
+
+	public void OnMissionObjectiveUpdated(PlayerMissionBase mission) => MissionObjectiveUpdated?.Invoke(GetIdentity(mission));
+
+	private static MissionIdentity GetIdentity(PlayerMissionBase mission) => new(MissionSide.Player, mission.Name, mission.InstanceId);
 }

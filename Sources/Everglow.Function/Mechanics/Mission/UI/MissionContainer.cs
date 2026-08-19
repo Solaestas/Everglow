@@ -89,6 +89,20 @@ public class MissionContainer : UIContainerElement
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
 
+	public void SubscribePresentationEvents(MissionPresentationSystem presentationSystem)
+	{
+		presentationSystem.MissionAdded += _ => RefreshMissionContainer();
+		presentationSystem.MissionRemoved += _ => RefreshMissionContainer();
+		presentationSystem.MissionStatusUpdated += identity =>
+		{
+			if (identity.Side == MissionSide.Player)
+			{
+				RefreshMissionContainer();
+			}
+		};
+		presentationSystem.MissionObjectiveUpdated += OnMissionObjectiveUpdated;
+	}
+
 	public void Unload()
 	{
 		Player.Hooks.OnEnterWorld -= OnEnterWorld;
@@ -331,13 +345,6 @@ public class MissionContainer : UIContainerElement
 	public override void Update(GameTime gt)
 	{
 		base.Update(gt);
-
-		if (ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh)
-		{
-			RefreshList();
-			ModContent.GetInstance<MissionPresentationSystem>().NeedRefresh = false;
-		}
-
 		Calculation();
 	}
 
@@ -407,16 +414,30 @@ public class MissionContainer : UIContainerElement
 		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
 		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
-		// Re-select the selected mission item
-		var filteredList = _missionList.MissionItems.Where(e => e.Mission.Name == SelectedItem.Mission.Name);
-		if (SelectedItem != null && filteredList.Any())
+		if (SelectedItem is not null)
 		{
-			ChangeSelectedItem(filteredList.First());
+			UIMissionItem selectedItem = _missionList.MissionItems.FirstOrDefault(item =>
+				item.Mission.Name == SelectedItem.Mission.Name
+				&& item.Mission.InstanceId == SelectedItem.Mission.InstanceId);
+			ChangeSelectedItem(selectedItem);
 		}
 		else
 		{
 			ChangeSelectedItem(null);
 		}
+	}
+
+	private void OnMissionObjectiveUpdated(MissionIdentity identity)
+	{
+		if (SelectedItem?.Mission is not { } mission
+			|| identity.Side != MissionSide.Player
+			|| mission.Name != identity.DefinitionId
+			|| mission.InstanceId != identity.InstanceId)
+		{
+			return;
+		}
+
+		_missionDetail.RefreshObjectives(mission);
 	}
 
 	/// <summary>

@@ -70,7 +70,6 @@ public sealed class PlayerMissionActions
 				return false;
 		}
 
-		_manager.OnChanged();
 		return true;
 	}
 }

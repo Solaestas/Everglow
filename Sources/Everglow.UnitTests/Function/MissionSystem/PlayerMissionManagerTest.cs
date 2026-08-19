@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Core;
 using Terraria.ID;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
@@ -82,60 +83,86 @@ public class PlayerMissionManagerTest
 	}
 
 	[TestMethod]
-	public void Unload_ClearsChangedSubscriptions()
+	public void Unload_ClearsMissionEventSubscriptions()
 	{
 		var manager = new PlayerMissionManager();
-		int changeCount = 0;
-		manager.Changed += () => changeCount++;
+		int addedCount = 0;
+		manager.MissionAdded += _ => addedCount++;
 
 		manager.Unload();
-		manager.OnChanged();
+		manager.AddMission(new StubMission(), PlayerMissionState.Available, showText: false);
 
-		Assert.AreEqual(0, changeCount);
+		Assert.AreEqual(0, addedCount);
 	}
 
 	[TestMethod]
-	public void Changed_DoesNotSignalWithoutExistingRefreshRequest()
+	public void AddMission_PublishesAddedIdentityAfterInsertion()
 	{
-		var first = new StubMission
-		{
-			NameValue = "First",
-			State = PlayerMissionState.Available,
-		};
-		var second = new StubMission
-		{
-			NameValue = "Second",
-			State = PlayerMissionState.Available,
-		};
+		var mission = new StubMission();
 		var manager = new PlayerMissionManager();
-		int changeCount = 0;
-		manager.Changed += () => changeCount++;
+		MissionIdentity? publishedIdentity = null;
+		manager.MissionAdded += identity =>
+		{
+			publishedIdentity = identity;
+			Assert.AreSame(mission, manager.GetMission(identity.DefinitionId));
+		};
 
-		manager.ApplyData(new PlayerMissionManagerData([], [first]));
-		manager.AddMission(second, PlayerMissionState.Available, showText: false);
-		manager.MoveMission(first, PlayerMissionState.Available, PlayerMissionState.Accepted);
-		manager.Update();
-		manager.Clear();
+		manager.AddMission(mission, PlayerMissionState.Available, showText: false);
 
-		Assert.AreEqual(1, first.UpdateCount);
-		Assert.AreEqual(0, changeCount);
+		Assert.AreEqual(new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId), publishedIdentity);
 	}
 
 	[TestMethod]
-	public void RemoveMission_SignalsChangedWhenRemovalOccurs()
+	public void RemoveMission_PublishesRemovedIdentityOnce()
 	{
 		var mission = new StubMission();
 		var manager = new PlayerMissionManager();
 		manager.ApplyData(new PlayerMissionManagerData([], [mission]));
-		int changeCount = 0;
-		manager.Changed += () => changeCount++;
+		var publishedIdentities = new List<MissionIdentity>();
+		manager.MissionRemoved += publishedIdentities.Add;
 
 		bool removed = manager.RemoveMission(mission.Name);
 		bool repeated = manager.RemoveMission(mission.Name);
 
 		Assert.IsTrue(removed);
 		Assert.IsFalse(repeated);
-		Assert.AreEqual(1, changeCount);
+		Assert.HasCount(1, publishedIdentities);
+		Assert.AreEqual(new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId), publishedIdentities[0]);
+		Assert.IsNull(manager.GetMission(mission.Name));
+	}
+
+	[TestMethod]
+	public void MoveMission_PublishesStatusIdentityAfterTransition()
+	{
+		var mission = new HookMission();
+		var manager = new PlayerMissionManager();
+		manager.AddMission(mission, PlayerMissionState.Available, showText: false);
+		MissionIdentity? publishedIdentity = null;
+		manager.MissionStatusUpdated += identity =>
+		{
+			publishedIdentity = identity;
+			Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
+		};
+
+		manager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+
+		Assert.AreEqual(new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId), publishedIdentity);
+	}
+
+	[TestMethod]
+	public void Update_PublishesObjectiveIdentityForAcceptedMission()
+	{
+		var mission = new StubMission { State = PlayerMissionState.Accepted };
+		var manager = new PlayerMissionManager();
+		manager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		var publishedIdentities = new List<MissionIdentity>();
+		manager.MissionObjectiveUpdated += publishedIdentities.Add;
+
+		manager.Update();
+
+		Assert.AreEqual(1, mission.UpdateCount);
+		Assert.HasCount(1, publishedIdentities);
+		Assert.AreEqual(new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId), publishedIdentities[0]);
 	}
 
 	[TestMethod]

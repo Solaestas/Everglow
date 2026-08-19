@@ -123,8 +123,8 @@ public class PlayerMissionActionTest
 		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
 		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
 		string instanceId = mission.InstanceId;
-		int changeCount = 0;
-		_manager.Changed += () => changeCount++;
+		int statusUpdateCount = 0;
+		_manager.MissionStatusUpdated += _ => statusUpdateCount++;
 
 		bool applied = _actions.TryExecute(action);
 		bool repeated = _actions.TryExecute(action);
@@ -133,7 +133,7 @@ public class PlayerMissionActionTest
 		Assert.IsFalse(repeated);
 		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
 		Assert.AreEqual(instanceId, mission.InstanceId);
-		Assert.AreEqual(1, changeCount);
+		Assert.AreEqual(1, statusUpdateCount);
 	}
 
 	[TestMethod]

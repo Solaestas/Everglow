@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Objectives;
@@ -64,16 +65,18 @@ public class MissionManagerTest
 	}
 
 	[TestMethod]
-	public void Unload_ClearsChangedSubscriptions()
+	public void Unload_ClearsMissionEventSubscriptions()
 	{
 		var manager = new WorldMissionManager(new TestStateProvider());
-		int changeCount = 0;
-		manager.Changed += () => changeCount++;
+		var mission = new CheckingMission { NameValue = "Unload" };
+		manager.AddMission(mission);
+		int statusUpdateCount = 0;
+		manager.MissionStatusUpdated += _ => statusUpdateCount++;
 
 		manager.Unload();
-		manager.OnChanged();
+		manager.OnMissionStatusUpdated(mission);
 
-		Assert.AreEqual(0, changeCount);
+		Assert.AreEqual(0, statusUpdateCount);
 	}
 
 	[TestMethod]
@@ -93,12 +96,14 @@ public class MissionManagerTest
 		var target = new CheckingMission { NameValue = "Snapshot" };
 		var manager = new WorldMissionManager(new TestStateProvider());
 		manager.AddMission(target);
-		int changeCount = 0;
-		manager.Changed += () =>
+		var statusUpdates = new List<MissionIdentity>();
+		var objectiveUpdates = new List<MissionIdentity>();
+		manager.MissionStatusUpdated += identity =>
 		{
-			changeCount++;
+			statusUpdates.Add(identity);
 			Assert.AreEqual(WorldMissionState.Failed, target.State);
 		};
+		manager.MissionObjectiveUpdated += objectiveUpdates.Add;
 
 		using var stream = new MemoryStream();
 		using (var writer = new BinaryWriter(stream, System.Text.Encoding.UTF8, leaveOpen: true))
@@ -111,21 +116,30 @@ public class MissionManagerTest
 			manager.NetReceive(reader);
 		}
 
-		Assert.AreEqual(1, changeCount);
+		var expectedIdentity = new MissionIdentity(MissionSide.World, target.Name, target.Name);
+		Assert.HasCount(1, statusUpdates);
+		Assert.HasCount(1, objectiveUpdates);
+		Assert.AreEqual(expectedIdentity, statusUpdates[0]);
+		Assert.AreEqual(expectedIdentity, objectiveUpdates[0]);
 	}
 
 	[TestMethod]
 	public void LoadData_PublishesAfterSnapshotApplied()
 	{
 		var target = new CheckingMission { NameValue = "Snapshot" };
+		var missing = new CheckingMission { NameValue = "Missing" };
+		missing.SetState(WorldMissionState.Active);
 		var manager = new WorldMissionManager(new TestStateProvider());
 		manager.AddMission(target);
-		int changeCount = 0;
-		manager.Changed += () =>
+		manager.AddMission(missing);
+		var statusUpdates = new List<MissionIdentity>();
+		var objectiveUpdates = new List<MissionIdentity>();
+		manager.MissionStatusUpdated += identity =>
 		{
-			changeCount++;
+			statusUpdates.Add(identity);
 			Assert.AreEqual(WorldMissionState.Failed, target.State);
 		};
+		manager.MissionObjectiveUpdated += objectiveUpdates.Add;
 		var missionData = new Terraria.ModLoader.IO.TagCompound
 		{
 			[nameof(WorldMissionBase.State)] = (int)WorldMissionState.Failed,
@@ -137,7 +151,14 @@ public class MissionManagerTest
 
 		manager.LoadData(managerData);
 
-		Assert.AreEqual(1, changeCount);
+		MissionIdentity[] expectedIdentities =
+		[
+			new(MissionSide.World, target.Name, target.Name),
+			new(MissionSide.World, missing.Name, missing.Name),
+		];
+		CollectionAssert.AreEqual(expectedIdentities, statusUpdates);
+		CollectionAssert.AreEqual(expectedIdentities, objectiveUpdates);
+		Assert.AreEqual(WorldMissionState.Locked, missing.State);
 	}
 
 	private class TestMission2 : WorldMissionBase

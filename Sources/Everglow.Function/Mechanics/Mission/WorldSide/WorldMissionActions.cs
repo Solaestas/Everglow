@@ -53,12 +53,24 @@ public sealed class WorldMissionActions
 			return false;
 		}
 
-		return action.Type switch
+		bool applied = action.Type switch
 		{
 			MissionActionType.Retry => mission.RetryCore(),
 			MissionActionType.ClaimReward => TryClaimReward(mission),
 			_ => false,
 		};
+
+		if (!applied)
+		{
+			return false;
+		}
+
+		if (action.Type == MissionActionType.Retry)
+		{
+			_manager.OnMissionObjectiveUpdated(mission);
+		}
+		_manager.OnMissionStatusUpdated(mission);
+		return true;
 	}
 
 	private static bool TryClaimReward(WorldMissionBase mission)
