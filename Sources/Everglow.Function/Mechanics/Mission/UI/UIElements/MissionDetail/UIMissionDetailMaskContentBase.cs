@@ -2,7 +2,6 @@ using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
-using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
 public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 	where TMask : UIMissionDetailMaskBase<TMask>, new()
@@ -20,15 +19,6 @@ public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 		Info.SetMargin(0);
 		PanelColor = Color.Transparent;
 		BorderWidth = 0;
-	}
-
-	public override void Calculation()
-	{
-		if (Instance.SelectedItem.Mission != _mission)
-		{
-			Hide(this);
-		}
-		base.Calculation();
 	}
 
 	protected void Hide(BaseElement _)

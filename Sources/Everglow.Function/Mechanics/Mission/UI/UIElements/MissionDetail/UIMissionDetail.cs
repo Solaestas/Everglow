@@ -202,10 +202,10 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	public override void Calculation()
 	{
 		base.Calculation();
+		Info.CanBeInteract = AnimationState == 0;
 		if (AnimationState > 0)
 		{
-			Info.CanBeInteract = false;
-			if (AnimationState == 4 && SelectedItem.KillingAnimationProgress > 60)
+			if (AnimationState == 4 && SelectedItem is not null && SelectedItem.KillingAnimationProgress > 60)
 			{
 				DiscardMission(SelectedItem.Mission);
 			}
@@ -308,11 +308,14 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		oldHeight = Info.Height.Pixel;
 	}
 
-	public static void HideMissionSubContent() => DetailSub.Info.IsVisible = false;
+	public static void HideMissionSubContent() => DetailSub.HideCurrent();
+
+	public static void HideMissionTip() => DetailTip.HideCurrent();
 
 	public void ResetMissionDetail()
 	{
 		HideMissionSubContent();
+		HideMissionTip();
 
 		_icon.SetIconGroup(null);
 		_rewardsPanel.SetIconGroup(null);

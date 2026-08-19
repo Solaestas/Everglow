@@ -28,6 +28,8 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 
 	public void Show(UIMissionDetailMaskContentBase<TMask> content)
 	{
+		HideCurrent();
+
 		Info.IsVisible = true;
 
 		_content = content;
@@ -45,11 +47,22 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 		Show(content);
 	}
 
+	public void HideCurrent()
+	{
+		if (_content is not null)
+		{
+			Hide(_content);
+			return;
+		}
+
+		Info.IsVisible = false;
+	}
+
 	private void Hide(BaseElement element)
 	{
 		Info.IsVisible = false;
 
-		if(element is not UIMissionDetailMaskContentBase<TMask> content)
+		if (element is not UIMissionDetailMaskContentBase<TMask> content)
 		{
 			throw new InvalidOperationException("Invalid call.");
 		}

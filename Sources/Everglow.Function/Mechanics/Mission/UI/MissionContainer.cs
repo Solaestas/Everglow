@@ -436,19 +436,17 @@ public class MissionContainer : UIContainerElement
 		_missionDetail.UpdateChangeButton("45,38,33");
 		_missionDetail.SetMissionDetail(item);
 
-		if (item is not null)
+		if (item is not null && item.Mission.State == PlayerSide.PlayerMissionState.Failed)
 		{
-			if (item.Mission.State == PlayerSide.PlayerMissionState.Failed)
-			{
-				_missionDetail.AnimationState = 3;
-				var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", _missionDetail.RemoveMission, "确认");
-				DetailTip.Show(fail);
-			}
-			else
-			{
-				_missionDetail.AnimationState = 0;
-				_missionDetail.AnimationTimer = 0;
-			}
+			_missionDetail.AnimationState = 3;
+			var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", _missionDetail.RemoveMission, "确认");
+			DetailTip.Show(fail);
+		}
+		else
+		{
+			_missionDetail.AnimationState = 0;
+			_missionDetail.AnimationTimer = 0;
+			DetailTip.HideCurrent();
 		}
 	}
 
