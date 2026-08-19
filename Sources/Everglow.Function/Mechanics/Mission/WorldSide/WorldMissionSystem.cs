@@ -9,9 +9,12 @@ public class WorldMissionSystem : ModSystem, ICopyWorldData
 
 	public WorldMissionManager Manager { get; private set; }
 
+	public WorldMissionActions Actions { get; private set; }
+
 	public override void Load()
 	{
 		Manager = new();
+		Actions = new WorldMissionActions(Manager);
 		Manager.Load();
 	}
 
@@ -19,6 +22,7 @@ public class WorldMissionSystem : ModSystem, ICopyWorldData
 	{
 		Manager.Unload();
 		Manager = null;
+		Actions = null;
 	}
 
 	public override void SetStaticDefaults()
