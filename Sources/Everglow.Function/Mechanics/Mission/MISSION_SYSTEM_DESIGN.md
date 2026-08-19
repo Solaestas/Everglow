@@ -7,16 +7,16 @@ Everglow 的任务系统保留两套领域模型：PlayerSide 提供跟随玩家
 统一数据流为：
 
 ```text
-PlayerSide ── PlayerMissionViewAdapter ──┐
-                                         ├── MissionView ── UI
-WorldSide  ── WorldMissionViewAdapter  ──┘
+PlayerSide Manager ── Player adapter ──┐
+                                       ├── MissionPresentationService ── MissionPresentationEntry
+WorldSide Manager  ── World adapter  ──┘
+PlayerSide/WorldSide Actions <──────────── MissionPresentationService.TryExecute
 ```
 
 ## 分层职责
 
 - Mission 层保存真实状态并执行解锁、推进、完成、失败、重试、持久化、同步和发奖规则，是唯一事实来源。
-- Presentation 层用两侧独立 adapter 生成统一、只读的 `MissionView` 快照。View 不包含 Manager、delegate、领域行为或可变领域集合。
-- UI 的长期职责是只消费 View、格式化帧时间并维护选择和图标轮播等局部状态。现有 UI 仍直接依赖 PlayerSide，本轮未迁移；`Visible` 因此暂作兼容字段保留。
+- Presentation 层用两侧独立 adapter 生成统一、只读的 `MissionView` 与 `MissionAction` 快照；`MissionPresentationService` 提供查询和执行入口，`MissionPresentationSystem` 管理 Service 的运行期生命周期。View 不包含 Manager、delegate、领域行为或可变领域集合。
 
 ## 身份与状态
 
@@ -29,7 +29,7 @@ WorldSide  ── WorldMissionViewAdapter  ──┘
 
 ## 文本、Hint 与可见性
 
-DisplayName、Description、Hint、Objective 描述和非物品奖励描述均为 `string`，默认空字符串，并可继续携带现有 StringDrawer 标记。任意非空 Hint（包括空白字符串）都由 adapter 在快照层替换详情：Description 为空、ObjectiveNodes 与 Rewards 为空、Progress 和 ElapsedTime 为 0、TimeLimit 为 `null`。统一遮蔽文本使用 `MissionHintText.Masked`（`"???"`）。
+DisplayName、Description、Hint、Objective 描述和非物品奖励描述均为 `string`，默认空字符串，并可继续携带现有 StringDrawer 标记。包含非空白内容的 Hint 由 adapter 在快照层替换详情：Description 为空、ObjectiveNodes 与 Rewards 为空、Progress 和 ElapsedTime 为 0、TimeLimit 为 `null`；纯空白 Hint 不触发遮蔽。统一遮蔽文本使用 `MissionHintText.Masked`（`"???"`）。
 
 Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 World `Visible`，不新增 `IsListed`，也不把不可见自动转换为 Masked Hint。
 
@@ -46,7 +46,7 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 
 `MissionView.ObjectiveNodes` 按领域定义顺序保存互斥的只读节点：Leaf、Parallel、AnyOf（映射 Optional）和 Branch。Branch 包含有序 `ObjectiveBranchView`；未选择、已选择、已排除分别为 Candidate、Selected、Skipped。已完成的已选分支仍为 Selected，不另设分支完成态。
 
-`ObjectiveView` 只含实例内 ID、Description、Progress 和 Pending/Active/Completed/Skipped 状态。状态优先级固定为：位于已排除分支、Objective 已完成、Mission 为 Active 且属于 `FindCurrentObjectives()`、其他。Player adapter 通过 `GetObjectivesText(List<string>)` 收集多行描述；World 当前不调用尚未实现的文本方法，导出空描述。
+`ObjectiveView` 只含实例内 ID、Description、Progress 和 Pending/Active/Completed/Skipped 状态。状态优先级固定为：位于已排除分支、Objective 已完成、Mission 为 Active 且属于 `FindCurrentObjectives()`、其他。Player adapter 通过 `GetObjectivesText(List<string>)` 收集多行描述；World adapter 导出空描述。
 
 两侧具体节点仅向同程序集 adapter 提供最小 `internal` 只读出口：Leaf 的 Objective，Parallel/Optional 的 Objective 序列，Branch 的嵌套分支序列与可空 SelectedBranchIndex。出口使用只读包装，不暴露内部 List、游标、存档键或行为，也不让领域层依赖 Presentation。
 
@@ -54,8 +54,23 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 
 adapter 只读取状态、归一化空值与范围并创建数组快照；不得调用 Update、Complete、Reset、Retry、GiveRewards 或 Manager，不得改变任务、Objective、奖励、存档和网络状态，也不得访问 UI。未知领域状态或节点类型应显式失败，避免静默生成错误展示。
 
-Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 以服务器权威为设计原则；本轮保持既有权威判断、同步和存档协议不变。全任务/单任务同步、进度上传及现有 NetSend/NetReceive/Packet 继续由 WorldSide 维护；尚未完成的生命周期验证、多人重试与领奖路径按 TODO 延后。
+Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 保持既有权威判断、同步和存档协议；全任务/单任务同步、进度上传及现有 NetSend/NetReceive/Packet 由 WorldSide 维护。
 
-## 后续边界
+## Presentation 查询与操作
 
-操作能力与结果将来可作为 View 之外的并列契约设计；当前未定义任何 Action 类型、字段或执行入口。Catalog、刷新事件、UI 迁移、StringDrawer 空字符串修复、多实例历史、World Objective 文本以及网络/领奖改造均不属于当前同步层。
+`MissionPresentationEntry` 在 `MissionView` 外并列携带 `IReadOnlyList<MissionAction>`。Service 每次查询都重新读取当前 Manager 中的领域任务，并连续投影 View 与 Actions；不保存 entry 缓存，也不暴露 Manager 集合。旧 entry 及其集合层级都是数组快照，Manager 后续变化不会反向修改旧结果。
+
+`MissionPresentationService` 同时支持 Player 与 World：
+
+- `GetAll()` 投影并返回两侧全部 entry。
+- `TryGet` 使用完整 `MissionIdentity` 做 Ordinal 匹配。Player 必须同时匹配定义名与当前实例 GUID；World 必须满足 `DefinitionId == InstanceId == Name`。
+- `TryExecute` 根据 `MissionSide` 调用与对应 Manager 成对的既有 Actions；Actions 重新校验完整 Identity、Hint 和当前可用操作，并以 `bool` 表示执行结果。
+- 未知 Side、任务缺失或 Player 实例过期时返回 `false`。adapter 的投影异常直接向调用方暴露。
+
+Player 的 `Submit` 只在 Accepted、已完成且未被 Hint 遮蔽时提供；执行时调用任务既有完成入口，并以是否进入 Completed 作为结果。World 不提供 Submit，也不改变重试、领奖、奖励或 Packet 权威。
+
+## 运行期组合
+
+`MissionPresentationSystem` 在 `PostSetupContent` 从 `PlayerMissionSystem` 和 `WorldMissionSystem` 取得各自成对的 Manager/Actions，并创建 `MissionPresentationService`；不使用 Manager 静态 locator，不注册到 `Ins`，也不解析图形或 UI 服务。`Unload` 清空 Service 引用。
+
+`WorldMissionSystem` 在 `Load` 中为自身 Manager 创建 `WorldMissionActions`，并在 `Unload` 中与 Manager 一并清空引用。
