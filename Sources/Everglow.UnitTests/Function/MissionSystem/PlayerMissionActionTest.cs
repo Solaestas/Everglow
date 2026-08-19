@@ -68,6 +68,55 @@ public class PlayerMissionActionTest
 	}
 
 	[TestMethod]
+	public void CompleteAcceptedMission_ExportsOnlySubmitAction()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Accepted,
+			CancellableValue = true,
+			CompleteValue = true,
+		};
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.HasCount(1, actions);
+		Assert.AreEqual(MissionActionType.Submit, actions[0].Type);
+	}
+
+	[TestMethod]
+	public void HintedCompleteAcceptedMission_ExportsNoActions()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Accepted,
+			CompleteValue = true,
+			HintValue = MissionHintText.Masked,
+		};
+
+		IReadOnlyList<MissionAction> actions = PlayerMissionActionAdapter.GetActions(mission);
+
+		Assert.IsEmpty(actions);
+	}
+
+	[TestMethod]
+	public void CompletionLostAfterExport_PreventsSubmitExecution()
+	{
+		var mission = new StubMission
+		{
+			State = PlayerMissionState.Accepted,
+			CompleteValue = true,
+		};
+		_manager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		MissionAction action = PlayerMissionActionAdapter.GetActions(mission).Single();
+		mission.CompleteValue = false;
+
+		bool applied = _actions.TryExecute(action);
+
+		Assert.IsFalse(applied);
+		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
+	}
+
+	[TestMethod]
 	public void AcceptAction_ChangesStateOnceAndPreservesInstanceIdentity()
 	{
 		var mission = new StubMission { State = PlayerMissionState.Available };

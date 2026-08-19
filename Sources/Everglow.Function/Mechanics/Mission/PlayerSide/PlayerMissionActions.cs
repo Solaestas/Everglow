@@ -24,8 +24,13 @@ public sealed class PlayerMissionActions
 		}
 
 		if (mission.State == PlayerMissionState.Accepted
-			&& mission.Cancellable
-			&& !mission.CheckComplete())
+			&& mission.CheckComplete())
+		{
+			return [MissionActionType.Submit];
+		}
+
+		if (mission.State == PlayerMissionState.Accepted
+			&& mission.Cancellable)
 		{
 			return [MissionActionType.Cancel];
 		}
@@ -58,6 +63,9 @@ public sealed class PlayerMissionActions
 			case MissionActionType.Cancel:
 				_manager.MoveMission(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 				break;
+			case MissionActionType.Submit:
+				mission.OnComplete();
+				return mission.State == PlayerMissionState.Completed;
 			default:
 				return false;
 		}

@@ -6,6 +6,7 @@ public enum MissionActionType
 	Cancel,
 	Retry,
 	ClaimReward,
+	Submit,
 }
 
 public readonly record struct MissionAction(
