@@ -15,7 +15,21 @@ public class PlayerMissionManagerTest
 
 	private sealed class StubMission : PlayerMissionBase
 	{
-		public override string DisplayName => nameof(StubMission);
+		public string NameValue { get; init; } = nameof(StubMission);
+
+		public int UpdateCount { get; private set; }
+
+		public override string Name => NameValue;
+
+		public override string DisplayName => NameValue;
+
+		public override bool CheckComplete() => false;
+
+		public override void Update() => UpdateCount++;
+
+		public override void OnCheckCompleteChange()
+		{
+		}
 	}
 
 	private sealed class HookMission : PlayerMissionBase
@@ -68,6 +82,63 @@ public class PlayerMissionManagerTest
 	}
 
 	[TestMethod]
+	public void Unload_ClearsChangedSubscriptions()
+	{
+		var manager = new PlayerMissionManager();
+		int changeCount = 0;
+		manager.Changed += () => changeCount++;
+
+		manager.Unload();
+		manager.OnChanged();
+
+		Assert.AreEqual(0, changeCount);
+	}
+
+	[TestMethod]
+	public void Changed_DoesNotSignalWithoutExistingRefreshRequest()
+	{
+		var first = new StubMission
+		{
+			NameValue = "First",
+			State = PlayerMissionState.Available,
+		};
+		var second = new StubMission
+		{
+			NameValue = "Second",
+			State = PlayerMissionState.Available,
+		};
+		var manager = new PlayerMissionManager();
+		int changeCount = 0;
+		manager.Changed += () => changeCount++;
+
+		manager.ApplyData(new PlayerMissionManagerData([], [first]));
+		manager.AddMission(second, PlayerMissionState.Available, showText: false);
+		manager.MoveMission(first, PlayerMissionState.Available, PlayerMissionState.Accepted);
+		manager.Update();
+		manager.Clear();
+
+		Assert.AreEqual(1, first.UpdateCount);
+		Assert.AreEqual(0, changeCount);
+	}
+
+	[TestMethod]
+	public void RemoveMission_SignalsChangedWhenRemovalOccurs()
+	{
+		var mission = new StubMission();
+		var manager = new PlayerMissionManager();
+		manager.ApplyData(new PlayerMissionManagerData([], [mission]));
+		int changeCount = 0;
+		manager.Changed += () => changeCount++;
+
+		bool removed = manager.RemoveMission(mission.Name);
+		bool repeated = manager.RemoveMission(mission.Name);
+
+		Assert.IsTrue(removed);
+		Assert.IsFalse(repeated);
+		Assert.AreEqual(1, changeCount);
+	}
+
+	[TestMethod]
 	public void MutableState_IsIsolatedAcrossManagerInstances()
 	{
 		var firstMission = new StubMission();
@@ -81,16 +152,11 @@ public class PlayerMissionManagerTest
 		second.ApplyData(new PlayerMissionManagerData(
 			new Dictionary<int, int> { [NPCID.Zombie] = 7 },
 			[secondMission]));
-		first.NeedRefresh = false;
-		second.NeedRefresh = false;
-		first.NeedRefresh = true;
 
 		Assert.AreSame(firstMission, first.GetMission(nameof(StubMission)));
 		Assert.AreSame(secondMission, second.GetMission(nameof(StubMission)));
 		Assert.AreEqual(3, first.NPCKillCounter[NPCID.BlueSlime]);
 		Assert.IsFalse(second.NPCKillCounter.ContainsKey(NPCID.BlueSlime));
-		Assert.IsTrue(first.NeedRefresh);
-		Assert.IsFalse(second.NeedRefresh);
 	}
 
 	[TestMethod]

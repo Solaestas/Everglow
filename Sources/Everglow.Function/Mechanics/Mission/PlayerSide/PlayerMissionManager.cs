@@ -11,6 +11,8 @@ public class PlayerMissionManager
 	public const int UpdateInterval = 20;
 	public static PlayerMissionManager Instance => ModContent.GetInstance<PlayerMissionSystem>().Manager;
 
+	public event Action Changed;
+
 	private List<PlayerMissionBase> _missions = [];
 
 	public IReadOnlyList<PlayerMissionBase> Missions => _missions;
@@ -30,11 +32,6 @@ public class PlayerMissionManager
 	/// 历史杀怪计数
 	/// </summary>
 	public IReadOnlyDictionary<int, int> NPCKillCounter => _nPCKillCounter;
-
-	/// <summary>
-	/// 任务列表是否需要更新
-	/// </summary>
-	public bool NeedRefresh { get; set; }
 
 	#region TML Integration
 
@@ -59,6 +56,7 @@ public class PlayerMissionManager
 		}
 
 		Clear();
+		Changed = null;
 	}
 
 	/// <summary>
@@ -126,7 +124,7 @@ public class PlayerMissionManager
 		if (autoCommitMissions.Count > 0)
 		{
 			autoCommitMissions.ForEach(m => m.OnComplete());
-			NeedRefresh = true;
+			OnChanged();
 		}
 
 		// 处理过期任务
@@ -134,7 +132,7 @@ public class PlayerMissionManager
 		if (expiredMissions.Count > 0)
 		{
 			expiredMissions.ForEach(m => m.OnExpire());
-			NeedRefresh = true;
+			OnChanged();
 		}
 
 		// 检测可提交状态改变的任务，将状态改变为可提交的任务抛出信息
@@ -256,7 +254,7 @@ public class PlayerMissionManager
 
 		if (removed > 0)
 		{
-			NeedRefresh = true;
+			OnChanged();
 		}
 
 		return removed > 0;
@@ -404,4 +402,6 @@ public class PlayerMissionManager
 	}
 
 	#endregion
+
+	public void OnChanged() => Changed?.Invoke();
 }

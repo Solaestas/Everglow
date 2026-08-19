@@ -414,7 +414,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			{
 				// Commit the mission
 				SelectedItem.Mission.OnComplete();
-				PlayerMissionManager.Instance.NeedRefresh = true;
+				MissionContainer.Instance.RequestRefresh();
 			}
 			else // Incompleted
 			{
@@ -433,7 +433,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		{
 			// Accept the mission
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
-			PlayerMissionManager.Instance.NeedRefresh = true;
+			MissionContainer.Instance.RequestRefresh();
 		}
 	}
 
@@ -473,7 +473,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			&& !m.CheckComplete())
 		{
 			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
-			PlayerMissionManager.Instance.NeedRefresh = true;
+			MissionContainer.Instance.RequestRefresh();
 		}
 	}
 

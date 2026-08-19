@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
@@ -55,6 +54,7 @@ public class MissionContainer : UIContainerElement
 	private UIBlock _close;
 
 	// ==================== Private data fields ==================== //
+	private bool _needRefresh;
 	private float resolutionFactor = 1;
 
 	/// <summary>
@@ -109,6 +109,8 @@ public class MissionContainer : UIContainerElement
 			_panel.Info.SetToCenter();
 		}
 	}
+
+	internal void RequestRefresh() => _needRefresh = true;
 
 	/// <summary>
 	/// Update resolution factor and refresh ui on resolution changed
@@ -333,11 +335,10 @@ public class MissionContainer : UIContainerElement
 		base.Update(gt);
 
 		// Auto refresh mission list
-		if (PlayerMissionManager.Instance.NeedRefresh)
+		if (_needRefresh)
 		{
+			_needRefresh = false;
 			RefreshList();
-
-			PlayerMissionManager.Instance.NeedRefresh = false;
 		}
 
 		Calculation();
