@@ -3,6 +3,7 @@ using Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
 using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader.IO;
 
@@ -17,7 +18,13 @@ public partial class WorldMissionViewAdapterTest
 
 		public string DisplayNameValue { get; set; } = "World Mission";
 
+		public string DescriptionValue { get; set; } = string.Empty;
+
 		public string HintValue { get; set; } = string.Empty;
+
+		public MissionSourceBase SourceValue { get; set; } = MissionSourceBase.Default;
+
+		public MissionType TypeValue { get; set; } = MissionType.None;
 
 		public bool VisibleValue { get; set; } = true;
 
@@ -35,7 +42,13 @@ public partial class WorldMissionViewAdapterTest
 
 		public override string DisplayName => DisplayNameValue;
 
+		public override string Description => DescriptionValue;
+
 		public override string Hint => HintValue;
+
+		public override MissionSourceBase Source => SourceValue;
+
+		public override MissionType Type => TypeValue;
 
 		public override bool Visible => VisibleValue;
 
@@ -161,6 +174,18 @@ public partial class WorldMissionViewAdapterTest
 		public override void ReceiveMain(BinaryReader reader) => NetworkCalls++;
 	}
 
+	private sealed class StubSource : MissionSourceBase
+	{
+		public StubSource(string name)
+		{
+			Name = name;
+		}
+
+		public override Texture2D Texture => null;
+
+		public override string Name { get; }
+	}
+
 	[TestMethod]
 	public void Create_UsesMissionNameForBothWorldIdentityPartsInsteadOfWhoAmI()
 	{
@@ -193,26 +218,27 @@ public partial class WorldMissionViewAdapterTest
 	}
 
 	[TestMethod]
-	public void Create_NormalizesWorldMetadataWithoutInventingSubSourceOrIcons()
+	public void Create_MapsConfigurableWorldMetadata()
 	{
+		var source = new StubSource("world-source");
 		var mission = new StubMission
 		{
 			DisplayNameValue = "Mapped world mission",
+			DescriptionValue = "World mission description",
+			SourceValue = source,
+			TypeValue = MissionType.Legendary,
 			VisibleValue = false,
 		};
 
-		Assert.IsNull(mission.Source);
 		MissionView view = WorldMissionViewAdapter.Create(mission);
 
-		Assert.AreSame(MissionSourceBase.Default, view.Source);
+		Assert.AreSame(source, view.Source);
 		Assert.IsNull(view.SubSource);
-		Assert.AreEqual(MissionType.None, view.Type);
+		Assert.AreEqual(MissionType.Legendary, view.Type);
 		Assert.AreEqual("Mapped world mission", view.DisplayName);
-		Assert.AreEqual(string.Empty, view.Description);
+		Assert.AreEqual("World mission description", view.Description);
 		Assert.AreEqual(string.Empty, view.Hint);
 		Assert.IsFalse(view.Visible);
-		Assert.IsNotNull(view.Icons);
-		Assert.IsEmpty(view.Icons);
 	}
 
 	[TestMethod]

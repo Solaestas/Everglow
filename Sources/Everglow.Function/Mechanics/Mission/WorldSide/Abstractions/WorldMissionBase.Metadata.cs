@@ -8,13 +8,13 @@ public abstract partial class WorldMissionBase : IMissionMetadata
 
 	public virtual string DisplayName => Name;
 
-	public string Description { get; }
+	public virtual string Description => string.Empty;
 
 	public virtual string Hint => string.Empty;
 
-	public MissionType Type { get; }
+	public virtual MissionType Type => MissionType.None;
 
-	public MissionSourceBase Source { get; }
+	public virtual MissionSourceBase Source => MissionSourceBase.Default;
 
 	public List<Item> RewardItems { get; protected set; } = [];
 
