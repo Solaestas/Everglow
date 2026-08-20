@@ -231,7 +231,7 @@ public class UIMissionFilter : BaseElement
 		{
 			var hoverMissionType = RotationToMissionType(MathHelper.Pi - MouseRotation + _outerRotation);
 			_outerHoverTargetRotation = MissionTypeToRotation(hoverMissionType);
-			MissionContainer.Instance.MouseText = hoverMissionType?.ToString() ?? "All";
+			MissionContainer.Instance.MouseText = TextDefinition.GetMissionTypeText(hoverMissionType);
 		}
 		else
 		{

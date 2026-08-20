@@ -16,15 +16,7 @@ internal class TimerStringDrawer : TextDrawer
 	{
 		if (!TryGetMission(out MissionView mission))
 			return Vector2.Zero;
-		if (!mission.TimeLimit.HasValue)
-		{
-			text = "Indefinitely";
-		}
-		else
-		{
-			var time = new TimeSpan(0, 0, mission.RemainingTime.Value / 60);
-			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
-		}
+		text = TextDefinition.GetRemainingTimeText(mission.RemainingTime);
 		return base.GetTextSize(text);
 	}
 
@@ -45,12 +37,7 @@ internal class TimerStringDrawer : TextDrawer
 		if (!TryGetMission(out MissionView mission))
 			return;
 		var pos = Position;
-		var text = "Indefinitely";
-		if (mission.TimeLimit.HasValue)
-		{
-			var time = new TimeSpan(0, 0, mission.RemainingTime.Value / 60);
-			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
-		}
+		string text = TextDefinition.GetRemainingTimeText(mission.RemainingTime);
 		sb.DrawString(Font, text, Position + Offset, Color, Scale, Rotation,
 			Origin, LayerDepth, CharacterSpacing, 0, TextStyle,
 			FontSystemEffect, EffectAmount);

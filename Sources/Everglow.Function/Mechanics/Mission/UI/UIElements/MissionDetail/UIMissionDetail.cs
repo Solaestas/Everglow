@@ -1,4 +1,3 @@
-using System.Text;
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Presentation;
@@ -61,19 +60,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	/// </summary>
 	public int AnimationState;
 
-	public class ChangeButtonText
-	{
-		public const string Failed = "失败";
-		public const string Overdue = "过期";
-		public const string Completed = "完成";
-		public const string Cancel = "放弃";
-		public const string Commit = "提交";
-		public const string Accept = "接取";
-		public const string Unknown = "未知";
-		public const string Yes = "是";
-		public const string No = "否";
-	}
-
 	public override void OnInitialization()
 	{
 		base.OnInitialization();
@@ -121,7 +107,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveTimer.MaxTime = 120;
 		_objectiveTimer.Events.OnMouseHover += e =>
 		{
-			Instance.MouseText = "Time Remain: " + (int)(_objectiveTimer.Timer / 60f) + "s";
+			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip(_objectiveTimer.Timer);
 			_objectiveTimer.OnSelect = true;
 		};
 		_objectiveTimer.Events.OnMouseOut += e =>
@@ -133,7 +119,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveDurationBar = new UIMissionDurationBar();
 		_objectiveDurationBar.Events.OnMouseHover += e =>
 		{
-			Instance.MouseText = "Duration: " + (int)_objectiveDurationBar.CurrentDuration + "/" + (int)_objectiveDurationBar.MaxDuration;
+			Instance.MouseText = TextDefinition.GetObjectiveDurationTooltip(_objectiveDurationBar.CurrentDuration, _objectiveDurationBar.MaxDuration);
 			_objectiveDurationBar.OnSelect = true;
 		};
 		_objectiveDurationBar.Events.OnMouseOut += e =>
@@ -324,25 +310,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 
 	public void SetTexts(MissionView mission)
 	{
-		var desText = new StringBuilder();
-
-		// Time limit
-		if (mission.TimeLimit.HasValue)
-		{
-			desText.Append($"[TimerIconDrawer,MissionName='{mission.Identity.DefinitionId}'] 剩余时间:[TimerStringDrawer,MissionName='{mission.Identity.DefinitionId}']\n\n");
-		}
-
-		// Description
-		desText.Append("描述：\n");
-		if (string.IsNullOrWhiteSpace(mission.Description))
-		{
-			desText.Append("无\n");
-		}
-		else
-		{
-			desText.Append(mission.Description + "\n");
-		}
-		var des = new UITextPlus(desText.ToString());
+		var des = new UITextPlus(TextDefinition.GetMissionDetailText(mission));
 		des.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 		des.StringDrawer.Init(des.Text);
 		_descriptionContainer.AddElement(des);
@@ -355,36 +323,17 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 
 	private void SetObjectiveText(MissionView mission)
 	{
-		var objText = new StringBuilder();
-		objText.Append("目标：\n");
-		int mainIndex = 1;
-		foreach (ObjectiveNodeView node in mission.ObjectiveNodes)
-		{
-			int subIndex = 1;
-			bool completed = IsCompleted(node);
-			foreach (string objective in GetObjectiveLines(node))
-			{
-				string text = completed
-					? $"[TextDrawer,Text='(已完成)',Color='100,100,100,255'] {objective}"
-					: objective;
-				objText.Append($"{mainIndex}.{subIndex++} {text}");
-				if (!text.EndsWith('\n'))
-				{
-					objText.Append('\n');
-				}
-			}
-			mainIndex++;
-		}
+		string text = TextDefinition.GetMissionObjectivesText(mission);
 
 		if (_objectiveText is null)
 		{
-			_objectiveText = new UITextPlus(objText.ToString());
+			_objectiveText = new UITextPlus(text);
 			_objectiveText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
 			_objectiveContainer.AddElement(_objectiveText);
 		}
 		else
 		{
-			_objectiveText.Text = objText.ToString();
+			_objectiveText.Text = text;
 		}
 
 		_objectiveText.StringDrawer.Init(_objectiveText.Text);
@@ -392,42 +341,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveText.Calculation();
 
 	}
-
-	private static IEnumerable<string> GetObjectiveLines(ObjectiveNodeView node)
-	{
-		return node switch
-		{
-			LeafObjectiveNodeView leaf => [leaf.Objective.Description],
-			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => objective.Description),
-			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => objective.Description),
-			BranchObjectiveNodeView branch => branch.Branches.SelectMany((branchView, branchIndex) =>
-				branchView.Objectives.Select(objective =>
-					$"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.Description}")),
-			_ => [],
-		};
-	}
-
-	private static bool IsCompleted(ObjectiveNodeView node)
-	{
-		return node switch
-		{
-			LeafObjectiveNodeView leaf => leaf.Objective.State == ObjectiveViewState.Completed,
-			ParallelObjectiveNodeView parallel => parallel.Objectives.All(objective => objective.State == ObjectiveViewState.Completed),
-			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Any(objective => objective.State == ObjectiveViewState.Completed),
-			BranchObjectiveNodeView branch => branch.Branches.Any(branchView =>
-				branchView.State == ObjectiveBranchState.Selected
-				&& branchView.Objectives.All(objective => objective.State == ObjectiveViewState.Completed)),
-			_ => false,
-		};
-	}
-
-	private static string GetBranchColor(ObjectiveBranchState state) => state switch
-	{
-		ObjectiveBranchState.Candidate => "100,180,120,255",
-		ObjectiveBranchState.Selected => "100,255,100,255",
-		ObjectiveBranchState.Skipped => "100,100,100,255",
-		_ => "100,100,100,255",
-	};
 
 	private void ResetTexts()
 	{
@@ -532,45 +445,11 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	/// </summary>
 	public void UpdateChangeButton(string color)
 	{
-		if (SelectedItem != null)
+		_objectiveChangeText.Text = TextDefinition.GetMissionActionText(SelectedItem?.Entry, color);
+		if (SelectedItem is not null)
 		{
-			if (SelectedItem.View.State == MissionViewState.Available)
-			{
-				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Accept}',Color='{color}']";
-			}
-			else if (SelectedItem.View.State == MissionViewState.Active)
-			{
-				if (FindAction(MissionActionType.Submit).HasValue)
-				{
-					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Commit}',Color='{color}']";
-				}
-				else
-				{
-					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Cancel}',Color='{color}']";
-				}
-			}
-			else if (SelectedItem.View.State == MissionViewState.Completed)
-			{
-				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='{color}']";
-			}
-			else if (SelectedItem.View.State == MissionViewState.Overdue)
-			{
-				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='{color}']";
-			}
-			else if (SelectedItem.View.State == MissionViewState.Failed)
-			{
-				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='{color}']";
-			}
-			else
-			{
-				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Unknown}',Color='{color}']";
-			}
 			_objectiveChangeText.Calculation();
 			_objectiveChangeText.Info.SetToCenter();
-		}
-		else
-		{
-			_objectiveChangeText.Text = "[TextDrawer,Text='',Color='{color}']";
 		}
 	}
 

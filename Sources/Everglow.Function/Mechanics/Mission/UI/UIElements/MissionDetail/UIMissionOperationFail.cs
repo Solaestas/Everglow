@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
@@ -123,11 +124,11 @@ public class UIMissionOperationFail : UIMissionDetailMaskContentBase<UIMissionDe
 
 		if (_yes.OnSelect)
 		{
-			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"255,245,193"}']";
+			_yesText.Text = TextDefinition.GetColoredText(_yesTextStr, "255,245,193");
 		}
 		if (!_yes.OnSelect)
 		{
-			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"45,38,33"}']";
+			_yesText.Text = TextDefinition.GetColoredText(_yesTextStr, "45,38,33");
 		}
 		base.Calculation();
 	}

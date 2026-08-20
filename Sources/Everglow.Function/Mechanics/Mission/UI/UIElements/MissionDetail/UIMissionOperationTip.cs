@@ -177,21 +177,21 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	{
 		if (_yes.OnSelect)
 		{
-			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"255,245,193"}']";
+			_yesText.Text = TextDefinition.GetColoredText(_yesTextStr, "255,245,193");
 		}
 		if (!_yes.OnSelect)
 		{
-			_yesText.Text = $"[TextDrawer,Text='{_yesTextStr}',Color='{"45,38,33"}']";
+			_yesText.Text = TextDefinition.GetColoredText(_yesTextStr, "45,38,33");
 		}
 		if (_no is not null)
 		{
 			if (_no.OnSelect)
 			{
-				_noText.Text = $"[TextDrawer,Text='{_noTextStr}',Color='{"255,245,193"}']";
+				_noText.Text = TextDefinition.GetColoredText(_noTextStr, "255,245,193");
 			}
 			if (!_no.OnSelect)
 			{
-				_noText.Text = $"[TextDrawer,Text='{_noTextStr}',Color='{"45,38,33"}']";
+				_noText.Text = TextDefinition.GetColoredText(_noTextStr, "45,38,33");
 			}
 		}
 		_main.Info.Width.SetFull();
