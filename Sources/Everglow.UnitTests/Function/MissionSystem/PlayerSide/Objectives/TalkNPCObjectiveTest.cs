@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
 
-namespace Everglow.UnitTests.Function.MissionSystem.ObjectiveTests;
+namespace Everglow.UnitTests.Function.MissionSystem;
 
 [TestClass]
 public class TalkNPCObjectiveTest

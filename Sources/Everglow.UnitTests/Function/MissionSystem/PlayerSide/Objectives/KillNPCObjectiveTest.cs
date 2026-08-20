@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.UnitTests.Function.MissionSystem.ObjectiveTests;
+namespace Everglow.UnitTests.Function.MissionSystem;
 
 [TestClass]
 public class KillNPCObjectiveTest

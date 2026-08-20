@@ -7,7 +7,7 @@ namespace Everglow.UnitTests.Function.MissionSystem;
 
 [TestClass]
 [DoNotParallelize]
-public class MissionManagerTest
+public class WorldMissionManagerTest
 {
 	private int _originalNetMode;
 
