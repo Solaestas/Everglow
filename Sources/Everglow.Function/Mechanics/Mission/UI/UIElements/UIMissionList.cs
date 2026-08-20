@@ -99,7 +99,7 @@ public class UIMissionList : UIBlock
 		}
 
 		// 排序
-		missions = missions.OrderBy(entry => entry.View, PlayerMissionComparer.Instance);
+		missions = missions.OrderBy(entry => entry.View, MissionViewComparer.Instance);
 
 		// 生成任务UI元素
 		List<BaseElement> elements = [];

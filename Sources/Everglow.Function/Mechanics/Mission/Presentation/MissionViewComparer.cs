@@ -3,9 +3,9 @@ using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public class PlayerMissionComparer : IComparer<MissionView>
+public class MissionViewComparer : IComparer<MissionView>
 {
-	public static readonly PlayerMissionComparer Instance = new PlayerMissionComparer();
+	public static readonly MissionViewComparer Instance = new MissionViewComparer();
 
 	public int Compare(MissionView x, MissionView y)
 	{
