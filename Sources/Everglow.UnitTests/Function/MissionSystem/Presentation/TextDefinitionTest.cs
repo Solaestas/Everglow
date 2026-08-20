@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.Mechanics.Mission.Presentation.Views;
+using Microsoft.Xna.Framework;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 
@@ -84,5 +85,30 @@ public class TextDefinitionTest
 	public void GetRemainingTimeText_FormatsTicks(int? remainingTime, string expected)
 	{
 		Assert.AreEqual(expected, TextDefinition.GetRemainingTimeText(remainingTime));
+	}
+
+	[TestMethod]
+	[DataRow(MissionNotificationType.Unlocked, null, "[World Mission]任务已解锁", 150, 150, 250)]
+	[DataRow(MissionNotificationType.Restored, null, "[World Mission]任务已恢复", 150, 150, 250)]
+	[DataRow(MissionNotificationType.Failed, null, "[World Mission]任务已失败", 250, 150, 150)]
+	[DataRow(MissionNotificationType.Completed, null, "[World Mission]任务已完成", 150, 250, 150)]
+	[DataRow(MissionNotificationType.Restarted, null, "[World Mission]任务已重启", 150, 250, 150)]
+	[DataRow(MissionNotificationType.ObjectiveCompleted, "Node", "[World Mission]任务当前节点[Node]中目标已完成", 250, 250, 150)]
+	public void MissionNotificationDefinitions_ReturnPresentationValues(
+		MissionNotificationType type,
+		string detail,
+		string expectedText,
+		int red,
+		int green,
+		int blue)
+	{
+		var mission = new MissionView { DisplayName = "World Mission" };
+		var notification = new MissionNotification(
+			new MissionIdentity(MissionSide.World, "TestMission", "TestMission"),
+			type,
+			detail);
+
+		Assert.AreEqual(expectedText, TextDefinition.GetMissionNotificationText(mission, notification));
+		Assert.AreEqual(new Color(red, green, blue), ColorDefinition.GetMissionNotificationColor(type));
 	}
 }

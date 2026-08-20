@@ -17,8 +17,6 @@ public class WorldMissionManager
 	public const int NetUpdateInterval = 60;
 #endif
 
-	public static bool SendText { get; private set; } = true;
-
 	public static WorldMissionManager Instance => ModContent.GetInstance<WorldMissionSystem>().Manager;
 
 	public static bool NetUpdate => Instance.UpdateTimer % NetUpdateInterval == 0;
@@ -27,6 +25,7 @@ public class WorldMissionManager
 
 	public event Action<MissionIdentity> MissionStatusUpdated;
 	public event Action<MissionIdentity> MissionObjectiveUpdated;
+	public static event Action<MissionNotification> NotificationRequested;
 
 	private IGameStateProvider _gameState;
 
@@ -51,7 +50,6 @@ public class WorldMissionManager
 	public WorldMissionManager(IGameStateProvider gameStateProvider)
 	{
 		_gameState = gameStateProvider;
-		SendText = false;
 	}
 
 	public void Load()
@@ -83,6 +81,7 @@ public class WorldMissionManager
 		_missions = null;
 		MissionStatusUpdated = null;
 		MissionObjectiveUpdated = null;
+		NotificationRequested = null;
 	}
 
 	public void Initialize()
@@ -180,20 +179,6 @@ public class WorldMissionManager
 		throw new NotImplementedException();
 	}
 
-	public static void NewText(string text, byte R, byte G, byte B)
-	{
-		NewText(text, new Color(R, G, B));
-	}
-
-	public static void NewText(string text, Color color)
-	{
-		if (SendText)
-		{
-			Main.NewText(text, color);
-			Console.WriteLine(text);
-		}
-	}
-
 	#region Persistence & Netcode
 
 	public void NetSend(BinaryWriter writer)
@@ -251,6 +236,9 @@ public class WorldMissionManager
 	public void OnMissionStatusUpdated(WorldMissionBase mission) => MissionStatusUpdated?.Invoke(GetIdentity(mission));
 
 	public void OnMissionObjectiveUpdated(WorldMissionBase mission) => MissionObjectiveUpdated?.Invoke(GetIdentity(mission));
+
+	internal static void Notify(WorldMissionBase mission, MissionNotificationType type, string detail = null) =>
+		NotificationRequested?.Invoke(new MissionNotification(GetIdentity(mission), type, detail));
 
 	private static MissionIdentity GetIdentity(WorldMissionBase mission) => new(MissionSide.World, mission.Name, mission.Name);
 }

@@ -5,6 +5,15 @@ namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
 public static class ColorDefinition
 {
+	public static Color GetMissionNotificationColor(MissionNotificationType type) => type switch
+	{
+		MissionNotificationType.Unlocked or MissionNotificationType.Restored => new Color(150, 150, 250),
+		MissionNotificationType.Failed => new Color(250, 150, 150),
+		MissionNotificationType.Completed or MissionNotificationType.Restarted => new Color(150, 250, 150),
+		MissionNotificationType.ObjectiveCompleted => new Color(250, 250, 150),
+		_ => throw new ArgumentOutOfRangeException(nameof(type)),
+	};
+
 	public static Rectangle GetGemFrame(MissionType? missionType) => missionType switch
 	{
 		MissionType.None => new Rectangle(231, 0, 33, 33),

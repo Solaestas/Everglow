@@ -255,7 +255,7 @@ public class WorldStructuralObjectiveContainer
 		{
 			var oldObjective = Current;
 			Current = FindCurrentNode();
-			OnObjectiveSynced.Invoke(Current);
+			OnObjectiveSynced?.Invoke(Current);
 
 			if (activeBefore && activeAfter)
 			{

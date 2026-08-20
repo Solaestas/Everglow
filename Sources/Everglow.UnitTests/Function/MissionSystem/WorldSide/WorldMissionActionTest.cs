@@ -121,6 +121,35 @@ public class WorldMissionActionTest
 	}
 
 	[TestMethod]
+	public void RetryAction_PublishesRestartedNotification()
+	{
+		var mission = new StubMission();
+		mission.SetState(WorldMissionState.Failed);
+		var manager = new WorldMissionManager(new StubGameStateProvider());
+		manager.AddMission(mission);
+		var actions = new WorldMissionActions(manager);
+		MissionAction action = WorldMissionActionAdapter.GetActions(mission).Single();
+		MissionNotification? notification = null;
+		WorldMissionManager.NotificationRequested += CaptureNotification;
+
+		try
+		{
+			bool applied = actions.TryExecute(action);
+
+			Assert.IsTrue(applied);
+			Assert.AreEqual(
+				new MissionNotification(action.Mission, MissionNotificationType.Restarted),
+				notification);
+		}
+		finally
+		{
+			WorldMissionManager.NotificationRequested -= CaptureNotification;
+		}
+
+		void CaptureNotification(MissionNotification value) => notification = value;
+	}
+
+	[TestMethod]
 	public void ClaimRewardAction_ClaimsOnceForLocalPlayer()
 	{
 		var mission = new StubMission();

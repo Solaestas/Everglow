@@ -8,6 +8,22 @@ public static class TextDefinition
 {
 	public static string GetMissionTypeText(MissionType? type) => type?.ToString() ?? "All";
 
+	public static string GetMissionNotificationText(MissionView mission, MissionNotification notification)
+	{
+		ArgumentNullException.ThrowIfNull(mission);
+
+		return notification.Type switch
+		{
+			MissionNotificationType.Unlocked => $"[{mission.DisplayName}]任务已解锁",
+			MissionNotificationType.Restored => $"[{mission.DisplayName}]任务已恢复",
+			MissionNotificationType.Failed => $"[{mission.DisplayName}]任务已失败",
+			MissionNotificationType.Completed => $"[{mission.DisplayName}]任务已完成",
+			MissionNotificationType.Restarted => $"[{mission.DisplayName}]任务已重启",
+			MissionNotificationType.ObjectiveCompleted => $"[{mission.DisplayName}]任务当前节点[{notification.Detail}]中目标已完成",
+			_ => throw new ArgumentOutOfRangeException(nameof(notification)),
+		};
+	}
+
 	public static string GetMissionStateText(MissionViewState? state) => state switch
 	{
 		MissionViewState.Active => "Accepted",

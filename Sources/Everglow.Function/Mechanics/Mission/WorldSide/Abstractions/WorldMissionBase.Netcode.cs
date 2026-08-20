@@ -1,3 +1,5 @@
+using Everglow.Commons.Mechanics.Mission.Core;
+
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 
 public abstract partial class WorldMissionBase : IMissionNetcode
@@ -38,28 +40,20 @@ public abstract partial class WorldMissionBase : IMissionNetcode
 			{
 				if (oldState == WorldMissionState.Locked)
 				{
-					var unlockText = $"[{DisplayName}]任务已解锁";
-					var unlockTextColor = new Color(150, 150, 250);
-					WorldMissionManager.NewText(unlockText, unlockTextColor);
+					WorldMissionManager.Notify(this, MissionNotificationType.Unlocked);
 				}
 				else
 				{
-					var unlockText = $"[{DisplayName}]任务已恢复";
-					var unlockTextColor = new Color(150, 150, 250);
-					WorldMissionManager.NewText(unlockText, unlockTextColor);
+					WorldMissionManager.Notify(this, MissionNotificationType.Restored);
 				}
 			}
 			else if (State == WorldMissionState.Completed)
 			{
-				var completeText = $"[{DisplayName}]任务已完成";
-				var completeTextColor = new Color(150, 250, 150);
-				WorldMissionManager.NewText(completeText, completeTextColor);
+				WorldMissionManager.Notify(this, MissionNotificationType.Completed);
 			}
 			else if (State == WorldMissionState.Failed)
 			{
-				var failText = $"[{DisplayName}]任务已失败";
-				var failTextColor = new Color(250, 150, 150);
-				WorldMissionManager.NewText(failText, failTextColor);
+				WorldMissionManager.Notify(this, MissionNotificationType.Failed);
 			}
 		}
 	}
