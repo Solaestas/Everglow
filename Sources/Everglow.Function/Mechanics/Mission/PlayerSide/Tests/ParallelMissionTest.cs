@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
-using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
@@ -18,10 +17,6 @@ public class ParallelMissionTest : PlayerMissionBase
 
 		var objective2 = new KillNPCObjective([NPCID.ChaosBallTim], 3, true);
 		Objectives.Add(objective2);
-
-		Icon.AddRange(objective1_1.NPCTypes.Select(i => NPCMissionIcon.Create(i)));
-		Icon.AddRange(objective1_2.ItemTypes.Select(i => ItemMissionIcon.Create(i)));
-		Icon.AddRange(objective2.NPCTypes.Select(i => NPCMissionIcon.Create(i)));
 	}
 
 	public override string DisplayName => nameof(ParallelMissionTest);

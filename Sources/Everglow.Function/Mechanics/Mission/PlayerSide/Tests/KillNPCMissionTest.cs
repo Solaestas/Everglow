@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
-using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
@@ -11,8 +10,6 @@ public class KillNPCMissionTest : PlayerMissionBase
 	{
 		var objective = new KillNPCObjective([NPCID.CursedSkull, NPCID.DemonEye], 10, true);
 		Objectives.Add(objective);
-
-		Icon.AddRange(objective.NPCTypes.Select(i => NPCMissionIcon.Create(i)));
 
 		RewardItems.Add(new(ItemID.DirtBlock, 10));
 	}

@@ -56,10 +56,10 @@ public static class PlayerMissionViewAdapter
 
 	private static MissionIconBase[] CreateIcons(PlayerMissionBase mission)
 	{
-		MissionIconGroup iconGroup = mission.Icon;
-		return iconGroup is null
-			? []
-			: iconGroup.Icons.Where(icon => icon is not MissionSourceIcon).ToArray();
+		var iconGroup = new MissionIconGroup();
+		iconGroup.Add(MissionSourceIcon.Create(mission.Source ?? MissionSourceBase.Default, mission.SubSource));
+		mission.Objectives.GetObjectivesIcon(iconGroup);
+		return iconGroup.Icons.ToArray();
 	}
 
 	private static ObjectiveNodeView[] CreateObjectiveNodes(PlayerMissionBase mission)

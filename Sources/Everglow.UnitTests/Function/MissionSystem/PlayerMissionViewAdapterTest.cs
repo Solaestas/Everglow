@@ -33,10 +33,6 @@ public class PlayerMissionViewAdapterTest
 
 		public int TimeLimitValue { get; set; } = -1;
 
-		public MissionIconGroup? IconValue { get; set; }
-
-		public bool UseDefaultIcons { get; set; }
-
 		public override string Name => NameValue;
 
 		public override string DisplayName => DisplayNameValue;
@@ -54,8 +50,6 @@ public class PlayerMissionViewAdapterTest
 		public override float Progress => ProgressValue;
 
 		public override int TimeLimit => TimeLimitValue;
-
-		public override MissionIconGroup Icon => UseDefaultIcons ? base.Icon : IconValue!;
 	}
 
 	private sealed class StubObjective : PlayerObjectiveBase
@@ -228,6 +222,7 @@ public class PlayerMissionViewAdapterTest
 		var visibleIcon = new StubIcon();
 		var objective = new StubObjective("secret objective")
 		{
+			Icon = visibleIcon,
 			ProgressValue = 0.8f,
 			ThrowOnTextRead = true,
 		};
@@ -238,7 +233,6 @@ public class PlayerMissionViewAdapterTest
 			ProgressValue = 0.75f,
 			Time = 45,
 			TimeLimitValue = 120,
-			IconValue = new MissionIconGroup(visibleIcon),
 			IsVisible = false,
 			State = PlayerMissionState.Accepted,
 		};
@@ -256,8 +250,9 @@ public class PlayerMissionViewAdapterTest
 		Assert.AreEqual(0, view.ElapsedTime);
 		Assert.IsNull(view.TimeLimit);
 		Assert.IsNull(view.RemainingTime);
-		Assert.HasCount(1, view.Icons);
-		Assert.AreSame(visibleIcon, view.Icons[0]);
+		Assert.HasCount(2, view.Icons);
+		Assert.IsInstanceOfType<MissionSourceIcon>(view.Icons[0]);
+		Assert.AreSame(visibleIcon, view.Icons[1]);
 	}
 
 	[TestMethod]
@@ -412,51 +407,54 @@ public class PlayerMissionViewAdapterTest
 	}
 
 	[TestMethod]
-	public void Create_FiltersSourceIconsKeepsObjectiveIconsAndSnapshotsTheResult()
+	public void Create_IncludesSourceAndObjectiveIcons()
 	{
 		var source = new StubSource("source");
 		var subSource = new StubSource("sub-source");
-		var sourceIcon = MissionSourceIcon.Create(source, subSource);
-		var ordinaryIcon = new StubIcon();
-		var addedLater = new StubIcon();
-		var iconGroup = new MissionIconGroup(sourceIcon, ordinaryIcon);
+		var icon = new StubIcon();
 		var mission = new StubMission
 		{
 			SourceValue = source,
 			SubSourceValue = subSource,
-			IconValue = iconGroup,
 		};
+		mission.Objectives.Add(new StubObjective("objective") { Icon = icon });
 
 		MissionView view = PlayerMissionViewAdapter.Create(mission);
-		iconGroup.Add(addedLater);
 
-		Assert.HasCount(1, view.Icons);
-		Assert.AreSame(ordinaryIcon, view.Icons[0]);
-
-		var objectiveIcon = new StubIcon();
-		var missionWithDefaultIcons = new StubMission
-		{
-			SourceValue = source,
-			SubSourceValue = subSource,
-			UseDefaultIcons = true,
-		};
-		missionWithDefaultIcons.Objectives.Add(new StubObjective("objective") { Icon = objectiveIcon });
-
-		MissionView objectiveIconView = PlayerMissionViewAdapter.Create(missionWithDefaultIcons);
-
-		Assert.HasCount(1, objectiveIconView.Icons);
-		Assert.AreSame(objectiveIcon, objectiveIconView.Icons[0]);
+		Assert.HasCount(2, view.Icons);
+		var sourceIcon = (MissionSourceIcon)view.Icons[0];
+		Assert.AreSame(source, sourceIcon.Source);
+		Assert.AreSame(subSource, sourceIcon.SubSource);
+		Assert.AreSame(icon, view.Icons[1]);
 	}
 
 	[TestMethod]
-	public void Create_NullIconProducesAnEmptySnapshot()
+	public void Create_SnapshotsObjectiveIcons()
 	{
-		var mission = new StubMission { IconValue = null };
+		var objectiveIcon = new StubIcon();
+		var addedLater = new StubIcon();
+		var objective = new StubObjective("objective") { Icon = objectiveIcon };
+		var mission = new StubMission();
+		mission.Objectives.Add(objective);
+
+		MissionView view = PlayerMissionViewAdapter.Create(mission);
+		objective.Icon = addedLater;
+
+		Assert.HasCount(2, view.Icons);
+		Assert.IsInstanceOfType<MissionSourceIcon>(view.Icons[0]);
+		Assert.AreSame(objectiveIcon, view.Icons[1]);
+	}
+
+	[TestMethod]
+	public void Create_NoObjectiveIconsProducesSourceIcon()
+	{
+		var mission = new StubMission();
 
 		MissionView view = PlayerMissionViewAdapter.Create(mission);
 
 		Assert.IsNotNull(view.Icons);
-		Assert.IsEmpty(view.Icons);
+		Assert.HasCount(1, view.Icons);
+		Assert.IsInstanceOfType<MissionSourceIcon>(view.Icons[0]);
 	}
 
 	[TestMethod]

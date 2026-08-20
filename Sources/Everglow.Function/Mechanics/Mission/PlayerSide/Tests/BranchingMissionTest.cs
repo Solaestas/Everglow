@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.PlayerSide.Objectives;
-using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Tests;
 
@@ -26,9 +25,6 @@ public class BranchingMissionTest : PlayerMissionBase
 				], 2, true);
 
 		Objectives.Add(objective1).AddBranch([objective2_1, objective2_2], [objective3]);
-
-		Icon.AddRange(objective1.NPCTypes.Select(i => NPCMissionIcon.Create(i)));
-		Icon.AddRange(objective2_1.ItemTypes.Select(i => ItemMissionIcon.Create(i)));
 	}
 
 	public override string DisplayName => nameof(BranchingMissionTest);

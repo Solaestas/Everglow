@@ -391,15 +391,6 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveText.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
 		_objectiveText.Calculation();
 
-		// Rewards
-		// var rewText = new StringBuilder();
-		// rewText.Append("奖励：\n");
-		// rewText.Append(mission.GetRewards());
-		// var rew = new UITextPlus(rewText.ToString());
-		// rew.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-		// rew.StringDrawer.Init(rew.Text);
-		// _rewardContainer.AddElement(rew);
-		// rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
 	}
 
 	private static IEnumerable<string> GetObjectiveLines(ObjectiveNodeView node)
