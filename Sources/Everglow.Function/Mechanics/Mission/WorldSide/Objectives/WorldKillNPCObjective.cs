@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -30,6 +31,13 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync { get; protected set; } = false;
 
 	public override bool CheckCompletion() => KilledCount >= NPCCount;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
+	}
 
 	public override void Activate(WorldMissionBase sourceMission)
 	{

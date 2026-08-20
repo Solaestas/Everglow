@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -29,6 +30,10 @@ public class WorldExploreObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync => _localDistance > 0;
 
 	public override bool CheckCompletion() => CurrentDistance >= Distance;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+	}
 
 	public override void Update()
 	{

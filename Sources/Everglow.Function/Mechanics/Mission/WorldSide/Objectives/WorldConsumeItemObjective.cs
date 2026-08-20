@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -30,6 +31,9 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 	public override float Progress => Math.Clamp(ConsumedCount / (float)ItemCount, 0, 1);
 
 	public override bool CheckCompletion() => ConsumedCount >= ItemCount;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup) =>
+		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
 
 	public override void ResetProgress()
 	{

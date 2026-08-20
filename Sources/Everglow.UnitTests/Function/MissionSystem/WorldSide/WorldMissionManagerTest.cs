@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
@@ -53,6 +54,10 @@ public class WorldMissionManagerTest
 	private sealed class PassiveObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
+
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+		{
+		}
 	}
 
 	[TestMethod]

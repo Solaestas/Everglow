@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
@@ -58,6 +59,8 @@ public abstract class WorldObjectiveNodeBase
 	/// All child objectives should also reset their internal state.
 	/// </summary>
 	public abstract void ResetProgress();
+
+	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
 
 	/// <summary>
 	/// Saves node-specific data into the provided tag compound.

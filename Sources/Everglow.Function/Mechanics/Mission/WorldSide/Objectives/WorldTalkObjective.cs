@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -28,6 +29,13 @@ public class WorldTalkObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync { get; protected set; } = false;
 
 	public override bool CheckCompletion() => Talked;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
+	}
 
 	public override void Update()
 	{

@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria;
 using Terraria.ID;
 
@@ -30,6 +31,10 @@ public class WorldMissionActionTest
 	private sealed class StubObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
+
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+		{
+		}
 	}
 
 	private sealed class StubGameStateProvider : IGameStateProvider

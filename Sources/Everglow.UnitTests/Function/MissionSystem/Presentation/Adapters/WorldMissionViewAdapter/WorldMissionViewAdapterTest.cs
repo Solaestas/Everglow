@@ -1,8 +1,10 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ModLoader.IO;
@@ -101,6 +103,8 @@ public partial class WorldMissionViewAdapterTest
 
 		public bool ThrowOnProgressRead { get; set; }
 
+		public MissionIconBase Icon { get; set; }
+
 		public int ProgressReadCount { get; private set; }
 
 		public int CheckCompletionCalls { get; private set; }
@@ -137,6 +141,14 @@ public partial class WorldMissionViewAdapterTest
 		{
 			CheckCompletionCalls++;
 			return Ready;
+		}
+
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+		{
+			if (Icon is not null)
+			{
+				iconGroup.Add(Icon);
+			}
 		}
 
 		public override void Update() => UpdateCalls++;
@@ -184,6 +196,13 @@ public partial class WorldMissionViewAdapterTest
 		public override Texture2D Texture => null;
 
 		public override string Name { get; }
+	}
+
+	private sealed class StubIcon : MissionIconBase
+	{
+		public override void Draw(SpriteBatch spriteBatch, Rectangle destinationRectangle, Color color, float baseScale)
+		{
+		}
 	}
 
 	[TestMethod]

@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -29,6 +30,10 @@ public class WorldReachObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync { get; protected set; } = false;
 
 	public override bool CheckCompletion() => Reached;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+	}
 
 	public override void Update()
 	{

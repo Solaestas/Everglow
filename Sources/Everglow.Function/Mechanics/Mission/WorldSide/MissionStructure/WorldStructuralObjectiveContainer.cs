@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 using Terraria.ModLoader.IO;
@@ -194,6 +195,18 @@ public class WorldStructuralObjectiveContainer
 		}
 
 		return [];
+	}
+
+	#endregion
+
+	#region Presentation
+
+	public void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		foreach (WorldObjectiveNodeBase node in _nodes)
+		{
+			node.GetObjectivesIcon(iconGroup);
+		}
 	}
 
 	#endregion

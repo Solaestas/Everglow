@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -33,6 +34,14 @@ public class WorldGiveObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync { get; protected set; }
 
 	public override bool CheckCompletion() => Given;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
+		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
+	}
 
 	public override void Update()
 	{
