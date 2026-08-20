@@ -80,6 +80,19 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	public void GetMissionActionText_UsesLockedStateLabel()
+	{
+		var identity = new MissionIdentity(MissionSide.World, "TestMission", "TestMission");
+		var entry = new MissionPresentationEntry(
+			new MissionView { Identity = identity, State = MissionViewState.Locked },
+			[]);
+
+		Assert.AreEqual(
+			"[TextDrawer,Text='锁定',Color='45,38,33']",
+			TextDefinition.GetMissionActionText(entry, "45,38,33"));
+	}
+
+	[TestMethod]
 	[DataRow(null, "Indefinitely")]
 	[DataRow(3720, "1Min 2s")]
 	public void GetRemainingTimeText_FormatsTicks(int? remainingTime, string expected)

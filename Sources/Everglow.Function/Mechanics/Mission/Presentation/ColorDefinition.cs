@@ -31,9 +31,21 @@ public static class ColorDefinition
 		MissionViewState.Active => new Rectangle(139, 36, 17, 67),
 		MissionViewState.Available => new Rectangle(121, 36, 17, 67),
 		MissionViewState.Failed => new Rectangle(103, 36, 17, 67),
-		MissionViewState.Overdue => new Rectangle(85, 36, 17, 67),
+		MissionViewState.Overdue or MissionViewState.Locked => new Rectangle(85, 36, 17, 67),
 		MissionViewState.Completed => new Rectangle(67, 36, 17, 67),
 		null => new Rectangle(157, 36, 17, 67),
 		_ => new Rectangle(157, 36, 17, 67),
 	};
+
+	public static Rectangle GetMissionStateGemFrame(MissionViewState? missionState)
+	{
+		const int FrameSize = 26;
+		int frameIndex = missionState switch
+		{
+			null => 0,
+			MissionViewState.Locked => (int)MissionViewState.Overdue,
+			_ => (int)missionState.Value,
+		};
+		return new Rectangle(FrameSize * frameIndex, FrameSize, FrameSize, FrameSize);
+	}
 }

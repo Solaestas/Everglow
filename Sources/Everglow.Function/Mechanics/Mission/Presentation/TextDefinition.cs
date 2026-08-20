@@ -88,6 +88,7 @@ public static class TextDefinition
 			MissionViewState.Completed => "完成",
 			MissionViewState.Overdue => "过期",
 			MissionViewState.Failed => "失败",
+			MissionViewState.Locked => "锁定",
 			_ => "未知",
 		};
 		return GetColoredText(text, color);

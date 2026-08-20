@@ -45,6 +45,7 @@ public class UIMissionFilter : BaseElement
 		MissionViewState.Completed,
 		MissionViewState.Failed,
 		MissionViewState.Overdue,
+		MissionViewState.Locked,
 	];
 
 	/// <summary>
@@ -441,10 +442,10 @@ public class UIMissionFilter : BaseElement
 
 		var statusFilter = ModAsset.MissionSortRing_Status.Value;
 		sb.Draw(statusFilter, drawPos, null, Color.White, _innerRotation, statusFilter.Size() / 2, 1, SpriteEffects.None, 0);
-		for (int k = 0; k < 6; k++)
+		for (int k = 0; k < MissionStateList.Count; k++)
 		{
-			Rectangle frame = new Rectangle(26 * k, 26, 26, 26);
-			float subRot = k / 6f * MathHelper.TwoPi;
+			Rectangle frame = ColorDefinition.GetMissionStateGemFrame(MissionStateList[k]);
+			float subRot = k / (float)MissionStateList.Count * MathHelper.TwoPi;
 			sb.Draw(gems, drawPos + new Vector2(-107, 0).RotatedBy(subRot + _innerRotation), frame, Color.White, 0, frame.Size() / 2, 1f, SpriteEffects.None, 0);
 		}
 
