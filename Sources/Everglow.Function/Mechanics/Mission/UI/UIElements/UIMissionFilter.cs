@@ -35,9 +35,9 @@ public class UIMissionFilter : BaseElement
 	private float _innerRotationMisaligment;
 
 	/// <summary>
-	/// Available pool type selections (null represents "All" option)
+	/// Available mission state selections (null represents "All" option)
 	/// </summary>
-	private static List<MissionViewState?> PoolTypeList { get; } =
+	private static List<MissionViewState?> MissionStateList { get; } =
 	[
 		null,
 		MissionViewState.Available,
@@ -53,9 +53,9 @@ public class UIMissionFilter : BaseElement
 	private static List<MissionType?> MissionTypeList { get; } = [null, .. Enum.GetValues<MissionType>()];
 
 	/// <summary>
-	/// Currently selected pool type filter
+	/// Currently selected mission state filter
 	/// </summary>
-	public MissionViewState? PoolTypeValue { get; private set; }
+	public MissionViewState? MissionStateValue { get; private set; }
 
 	/// <summary>
 	/// Currently selected mission type filter
@@ -89,28 +89,28 @@ public class UIMissionFilter : BaseElement
 		return MissionTypeList[index];
 	}
 
-	private static MissionViewState? RotationToPoolType(float rotation)
+	private static MissionViewState? RotationToMissionState(float rotation)
 	{
-		var unit = MathHelper.TwoPi / PoolTypeList.Count;
+		var unit = MathHelper.TwoPi / MissionStateList.Count;
 		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
-		var index = (int)Math.Round(standard / unit) % PoolTypeList.Count;
-		return PoolTypeList[index];
+		var index = (int)Math.Round(standard / unit) % MissionStateList.Count;
+		return MissionStateList[index];
 	}
 
-	private MissionViewState? RotationToPoolTypeCheckGemMisalignment(float rotation)
+	private MissionViewState? RotationToMissionStateCheckGemMisalignment(float rotation)
 	{
-		var unit = MathHelper.TwoPi / PoolTypeList.Count;
+		var unit = MathHelper.TwoPi / MissionStateList.Count;
 		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
-		var index = (int)Math.Round(standard / unit) % PoolTypeList.Count;
+		var index = (int)Math.Round(standard / unit) % MissionStateList.Count;
 		float angularMisalignment = MathF.Abs((standard + unit * 0.5f) % unit - unit * 0.5f);
 		_innerRotationMisaligment = angularMisalignment;
 
-		return PoolTypeList[index];
+		return MissionStateList[index];
 	}
 
 	private static float MissionTypeToRotation(MissionType? type) => MissionTypeList.IndexOf(type) * MathHelper.TwoPi / MissionTypeList.Count;
 
-	private static float PoolTypeToRotation(MissionViewState? type) => PoolTypeList.IndexOf(type) * MathHelper.TwoPi / PoolTypeList.Count;
+	private static float MissionStateToRotation(MissionViewState? state) => MissionStateList.IndexOf(state) * MathHelper.TwoPi / MissionStateList.Count;
 
 	private static bool DistanceWithinInnerRing(float distance)
 	{
@@ -214,11 +214,11 @@ public class UIMissionFilter : BaseElement
 			MissionContainer.Instance.RefreshList();
 		}
 
-		// Update pool type
-		var poolType = RotationToPoolTypeCheckGemMisalignment(_innerRotation);
-		if (PoolTypeValue != poolType)
+		// Update mission state
+		var missionState = RotationToMissionStateCheckGemMisalignment(_innerRotation);
+		if (MissionStateValue != missionState)
 		{
-			PoolTypeValue = poolType;
+			MissionStateValue = missionState;
 			MissionContainer.Instance.RefreshList();
 		}
 
@@ -238,12 +238,12 @@ public class UIMissionFilter : BaseElement
 			_outerHoverTargetRotation = null;
 		}
 
-		// Inner ring hover logic: show mission type text and highlight the selected mission type
+		// Inner ring hover logic: show mission state text and highlight the selected mission state
 		if (DistanceWithinInnerRing(distanceToCenter))
 		{
-			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
-			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
-			MissionContainer.Instance.MouseText = TextDefinition.GetPoolTypeText(hoverPoolType);
+			var hoverMissionState = RotationToMissionState(MathHelper.Pi - MouseRotation + _innerRotation);
+			_innerHoverTargetRotation = MissionStateToRotation(hoverMissionState);
+			MissionContainer.Instance.MouseText = TextDefinition.GetMissionStateText(hoverMissionState);
 		}
 		else
 		{
@@ -355,14 +355,14 @@ public class UIMissionFilter : BaseElement
 			// TODO: _innerDispalcement will reset to Vector2.zero when resolution change. This caused the filter rotated.
 			if (_innerDispalcement.Length() < MouseHoldDisplacementLimitForAutoRotation/* && _innerDispalcement.Length() != 0*/)
 			{
-				var clickedPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
-				_innerClickTargetRotation = PoolTypeToRotation(clickedPoolType);
+				var clickedMissionState = RotationToMissionState(MathHelper.Pi - MouseRotation + _innerRotation);
+				_innerClickTargetRotation = MissionStateToRotation(clickedMissionState);
 			}
 			_innerDispalcement = new Vector2(1000);
 			_innerClickPoint = Main.MouseScreen;
 
 			// If there's no click target rotation, then fix the rotation to nearest snap.
-			_innerClickTargetRotation ??= CalculateNearestSnapRotation(_innerRotation, PoolTypeList.Count);
+			_innerClickTargetRotation ??= CalculateNearestSnapRotation(_innerRotation, MissionStateList.Count);
 
 			RotateRingTo(_innerClickTargetRotation.Value, ref _innerRotation);
 		}

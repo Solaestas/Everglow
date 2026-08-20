@@ -413,8 +413,8 @@ public class MissionContainer : UIContainerElement
 	public void RefreshList()
 	{
 		MissionIdentity? selectedMission = _selectedMission;
-		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
-		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
+		_missionList.RefreshList(_missionFilter.MissionStateValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
+		_panelBackground.SetSpectrumColor(_missionFilter.MissionStateValue, _missionFilter.MissionTypeValue);
 
 		if (selectedMission is MissionIdentity identity)
 		{

@@ -46,7 +46,7 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public static IEnumerable<int> GetTalkNPCTypes()
 	{
-		var missions = PlayerMissionManager.Instance.GetMissionPool(PlayerMissionState.Accepted);
+		var missions = PlayerMissionManager.Instance.GetMissions(PlayerMissionState.Accepted);
 
 		var playerSideNPCs = missions
 			.SelectMany(mission => mission.Objectives.ActiveObjectives)
@@ -88,7 +88,7 @@ public class MissionGlobalNPC : GlobalNPC
 
 	public static IEnumerable<int> GetKillNPCTypes()
 	{
-		var missions = PlayerMissionManager.Instance.GetMissionPool(PlayerMissionState.Accepted);
+		var missions = PlayerMissionManager.Instance.GetMissions(PlayerMissionState.Accepted);
 
 		var playerSideNPCs = missions
 			.SelectMany(mission => mission.Objectives.ActiveObjectives)

@@ -45,7 +45,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// Mission state, managed by <see cref="PlayerMissionManager"/>.
 	/// </summary>
 	/// <remarks>
-	/// Should only be changed in <see cref="PlayerMissionManager"/> to keep the mission syncing to its pool collection.
+	/// Should only be changed in <see cref="PlayerMissionManager"/> to keep mission state transitions synchronized.
 	/// </remarks>
 	public PlayerMissionState State { get; set; }
 
@@ -112,7 +112,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 			return;
 		}
 
-		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
+		PlayerMissionManager.Instance.ChangeMissionState(this, PlayerMissionState.Accepted, PlayerMissionState.Completed);
 
 		IsVisible = true;
 
@@ -143,7 +143,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
+		PlayerMissionManager.Instance.ChangeMissionState(this, PlayerMissionState.Accepted, PlayerMissionState.Overdue);
 	}
 
 	/// <summary>
@@ -151,7 +151,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnFail()
 	{
-		PlayerMissionManager.Instance.MoveMission(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+		PlayerMissionManager.Instance.ChangeMissionState(this, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 	}
 
 	/// <summary>

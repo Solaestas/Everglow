@@ -8,11 +8,11 @@ public static class TextDefinition
 {
 	public static string GetMissionTypeText(MissionType? type) => type?.ToString() ?? "All";
 
-	public static string GetPoolTypeText(MissionViewState? type) => type switch
+	public static string GetMissionStateText(MissionViewState? state) => state switch
 	{
 		MissionViewState.Active => "Accepted",
 		null => "All",
-		_ => type.ToString(),
+		_ => state.ToString(),
 	};
 
 	public static string GetMissionDetailText(MissionView mission)

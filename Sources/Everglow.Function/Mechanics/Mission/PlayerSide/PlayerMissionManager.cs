@@ -28,7 +28,7 @@ public class PlayerMissionManager
 	private bool _loaded;
 
 	/// <summary>
-	/// 已接受任务的任务池
+	/// 已接受的任务
 	/// </summary>
 	private IEnumerable<PlayerMissionBase> AcceptedMissions => _missions.Where(m => m.State == PlayerMissionState.Accepted);
 
@@ -79,7 +79,7 @@ public class PlayerMissionManager
 
 		List<PlayerMissionBase> oldMissions = _missions;
 		_nPCKillCounter = data.NPCKillCounter.ToDictionary();
-		_missions = data.MissionPools.ToList();
+		_missions = data.Missions.ToList();
 
 		foreach (PlayerMissionBase mission in oldMissions)
 		{
@@ -98,7 +98,7 @@ public class PlayerMissionManager
 	}
 
 	/// <summary>
-	/// 清除所有任务池中的任务
+	/// 清除所有任务
 	/// </summary>
 	public void Clear()
 	{
@@ -212,8 +212,7 @@ public class PlayerMissionManager
 	/// 获取某个类型的所有任务
 	/// </summary>
 	/// <typeparam name="T">任务的类型</typeparam>
-	/// <param name="type">任务池类型</param>
-	/// <returns>任务池内所有该类型的任务</returns>
+	/// <returns>所有该类型的任务</returns>
 	public List<T> GetMissions<T>()
 		where T : PlayerMissionBase =>
 		_missions.OfType<T>().ToList();
@@ -238,23 +237,23 @@ public class PlayerMissionManager
 		_missions.Any(predicate);
 
 	/// <summary>
-	/// 向任务池中添加任务
+	/// 添加任务
 	/// </summary>
 	/// <param name="mission">任务</param>
-	/// <param name="type">任务池类型</param>
-	public void AddMission(PlayerMissionBase mission, PlayerMissionState type, bool showText = true)
+	/// <param name="state">任务状态</param>
+	public void AddMission(PlayerMissionBase mission, PlayerMissionState state, bool showText = true)
 	{
 		if (!HasMission(mission.Name))
 		{
 			_missions.Add(mission);
-			mission.State = type;
+			mission.State = state;
 
 			if (showText)
 			{
 				Main.NewText($"新的任务任务已添加[{mission.DisplayName}]", 250, 250, 150);
 			}
 
-			if (type == PlayerMissionState.Accepted)
+			if (state == PlayerMissionState.Accepted)
 			{
 				mission.Activate();
 			}
@@ -264,7 +263,7 @@ public class PlayerMissionManager
 	}
 
 	/// <summary>
-	/// 移除任务池内指定条件的所有任务
+	/// 移除满足指定条件的所有任务
 	/// </summary>
 	/// <param name="predicate">删除范围</param>
 	/// <returns></returns>
@@ -287,32 +286,30 @@ public class PlayerMissionManager
 	}
 
 	/// <summary>
-	/// 移除任务池内某个任务名的任务
+	/// 移除指定任务名的任务
 	/// </summary>
 	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <param name="type">任务池类型</param>
 	/// <returns></returns>
 	public bool RemoveMission(string missionName) =>
 		RemoveMission(m => m.Name == missionName);
 
 	/// <summary>
-	/// 移除任务池内某个任务
+	/// 移除指定类型的任务
 	/// </summary>
 	/// <typeparam name="T">任务类型</typeparam>
-	/// <param name="type"></param>
 	/// <returns></returns>
 	public bool RemoveMission<T>()
 		where T : PlayerMissionBase =>
 		RemoveMission(m => m is T);
 
 	/// <summary>
-	/// 将某个任务从目前任务池移到另一个
+	/// 更改指定任务的状态
 	/// </summary>
 	/// <param name="missionName">任务名称</param>
-	/// <param name="fromType">任务目前所处任务池</param>
-	/// <param name="toType">目标任务池</param>
+	/// <param name="fromState">任务当前状态</param>
+	/// <param name="toState">任务目标状态</param>
 	/// <returns>是否成功</returns>
-	public bool MoveMission(string missionName, PlayerMissionState fromType, PlayerMissionState toType)
+	public bool ChangeMissionState(string missionName, PlayerMissionState fromState, PlayerMissionState toState)
 	{
 		var mission = _missions.FirstOrDefault(m => m.Name == missionName);
 		if (mission == null)
@@ -320,26 +317,26 @@ public class PlayerMissionManager
 			return false;
 		}
 
-		MoveMission(mission, fromType, toType);
+		ChangeMissionState(mission, fromState, toState);
 		return true;
 	}
 
 	/// <summary>
-	/// 将某个任务从目前任务池移到另一个
+	/// 更改指定任务的状态
 	/// </summary>
 	/// <param name="mission">任务实例</param>
-	/// <param name="fromType">任务目前所处任务池</param>
-	/// <param name="toType">目标任务池</param>
-	public void MoveMission(PlayerMissionBase mission, PlayerMissionState fromType, PlayerMissionState toType)
+	/// <param name="fromState">任务当前状态</param>
+	/// <param name="toState">任务目标状态</param>
+	public void ChangeMissionState(PlayerMissionBase mission, PlayerMissionState fromState, PlayerMissionState toState)
 	{
-		if (fromType == toType)
+		if (fromState == toState)
 		{
 			return;
 		}
 
-		mission.State = toType;
+		mission.State = toState;
 
-		if (toType == PlayerMissionState.Accepted)
+		if (toState == PlayerMissionState.Accepted)
 		{
 			mission.Activate();
 		}
@@ -352,12 +349,12 @@ public class PlayerMissionManager
 	}
 
 	/// <summary>
-	/// 获取任务池内的所有任务
-	/// <para/>注: 该方法返回的是任务池的副本，修改该副本不会造成任何影响
+	/// 获取指定状态的所有任务
+	/// <para/>注: 该方法返回的是任务列表的副本，修改该副本不会造成任何影响
 	/// </summary>
-	/// <param name="type">任务池类型</param>
+	/// <param name="state">任务状态</param>
 	/// <returns></returns>
-	public List<PlayerMissionBase> GetMissionPool(PlayerMissionState type) => _missions.Where(m => m.State == type).ToList();
+	public List<PlayerMissionBase> GetMissions(PlayerMissionState state) => _missions.Where(m => m.State == state).ToList();
 
 	#endregion
 

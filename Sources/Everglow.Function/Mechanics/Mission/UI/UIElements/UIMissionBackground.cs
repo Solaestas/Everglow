@@ -11,19 +11,19 @@ public class UIMissionBackground : UIBlock
 {
 	private static readonly Color InitialColor = new Color(1f, 1f, 1f, 0f) * 0.8f;
 
-	private MissionViewState? poolType = null;
+	private MissionViewState? missionState = null;
 
 	private MissionType? missionType = null;
 
 	private float chainMovement = 0;
 
-	private Color PoolTypeColor => ColorDefinition.GetMissionStateColor(poolType);
+	private Color MissionStateColor => ColorDefinition.GetMissionStateColor(missionState);
 
 	private Color MissionTypeColor => ColorDefinition.GetMissionTypeColor(missionType);
 
-	public void SetSpectrumColor(MissionViewState? poolType, MissionType? missionType)
+	public void SetSpectrumColor(MissionViewState? missionState, MissionType? missionType)
 	{
-		this.poolType = poolType;
+		this.missionState = missionState;
 		this.missionType = missionType;
 	}
 

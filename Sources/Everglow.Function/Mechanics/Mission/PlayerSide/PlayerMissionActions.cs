@@ -58,10 +58,10 @@ public sealed class PlayerMissionActions
 		switch (action.Type)
 		{
 			case MissionActionType.Accept:
-				_manager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+				_manager.ChangeMissionState(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
 				break;
 			case MissionActionType.Cancel:
-				_manager.MoveMission(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+				_manager.ChangeMissionState(mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
 				break;
 			case MissionActionType.Submit:
 				mission.OnComplete();

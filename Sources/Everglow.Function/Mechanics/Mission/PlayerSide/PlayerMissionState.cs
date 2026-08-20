@@ -1,7 +1,7 @@
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
 /// <summary>
-/// 任务池类型
+/// 任务状态
 /// <list type="table">
 ///     <item>Accepted: 已接取</item>
 ///     <item>Available: 可接取</item>

@@ -76,7 +76,7 @@ public class PlayerMissionManagerTest
 		var manager = new PlayerMissionManager();
 		manager.AddMission(mission, PlayerMissionState.Available, showText: false);
 
-		manager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+		manager.ChangeMissionState(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
 
 		Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
 		Assert.AreEqual(1, mission.ActivateHookCount);
@@ -144,7 +144,7 @@ public class PlayerMissionManagerTest
 			Assert.AreEqual(PlayerMissionState.Accepted, mission.State);
 		};
 
-		manager.MoveMission(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+		manager.ChangeMissionState(mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
 
 		Assert.AreEqual(new MissionIdentity(MissionSide.Player, mission.Name, mission.InstanceId), publishedIdentity);
 	}

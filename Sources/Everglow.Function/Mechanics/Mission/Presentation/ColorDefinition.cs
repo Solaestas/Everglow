@@ -7,7 +7,7 @@ public static class ColorDefinition
 {
 	public static readonly Color InitialLightColor = new Color(1f, 1f, 1f, 0f) * 0.8f;
 
-	public static Color GetMissionStateColor(MissionViewState? poolType) => poolType switch
+	public static Color GetMissionStateColor(MissionViewState? missionState) => missionState switch
 	{
 		MissionViewState.Active => new Color(0f, 1f, 0f, 0f),
 		MissionViewState.Available => new Color(0.9f, 0.88f, 0.06f, 0f),
@@ -48,7 +48,7 @@ public static class ColorDefinition
 		_ => new Rectangle(0, 0, 33, 33),
 	};
 
-	public static Rectangle GetMissionStateFrame(MissionViewState? poolType) => poolType switch
+	public static Rectangle GetMissionStateFrame(MissionViewState? missionState) => missionState switch
 	{
 		MissionViewState.Active => new Rectangle(139, 36, 17, 67),
 		MissionViewState.Available => new Rectangle(121, 36, 17, 67),

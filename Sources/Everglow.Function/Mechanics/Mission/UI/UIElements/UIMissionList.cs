@@ -73,14 +73,14 @@ public class UIMissionList : UIBlock
 	/// <summary>
 	/// 刷新任务列表
 	/// </summary>
-	public void RefreshList(MissionViewState? poolType, MissionType? missionType, MissionSourceBase missionSource)
+	public void RefreshList(MissionViewState? missionState, MissionType? missionType, MissionSourceBase missionSource)
 	{
 		// 筛选任务状态，获得初始列表
 		IEnumerable<MissionPresentationEntry> missions = MissionContainer.Service.GetAll()
 			.Where(entry => entry.View.Identity.Side == MissionSide.Player);
-		if (poolType.HasValue)
+		if (missionState.HasValue)
 		{
-			missions = missions.Where(entry => entry.View.State == poolType.Value);
+			missions = missions.Where(entry => entry.View.State == missionState.Value);
 		}
 
 		// 筛选来源NPC
