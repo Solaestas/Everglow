@@ -8,8 +8,6 @@ namespace Everglow.UnitTests.Function.MissionSystem;
 [TestClass]
 public class CollectItemObjectiveTest
 {
-	public TestContext TestContext { get; set; } = default!;
-
 	[TestMethod]
 	public void Progress_Should_CalculateCorrectly_When_TypeIsSingle()
 	{
@@ -157,11 +155,4 @@ public class CollectItemObjectiveTest
 		Assert.AreEqual(7, objective.CollectedCount);
 	}
 
-	[TestMethod]
-	public void Test_CreatePlayerInstanceInUnitTest()
-	{
-		var player = new Player();
-		player.inventory = new Item[59];
-		TestContext.WriteLine("Inventory Size: " + player.inventory.Length.ToString());
-	}
 }

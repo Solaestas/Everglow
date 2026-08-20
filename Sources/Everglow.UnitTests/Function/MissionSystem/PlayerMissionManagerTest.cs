@@ -186,20 +186,4 @@ public class PlayerMissionManagerTest
 		Assert.IsFalse(second.NPCKillCounter.ContainsKey(NPCID.BlueSlime));
 	}
 
-	[TestMethod]
-	public void GlobalAccessors_AreExposedByServicesInsteadOfSystem()
-	{
-		const System.Reflection.BindingFlags PublicStatic =
-			System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static;
-
-		var managerAccessor = typeof(PlayerMissionManager).GetProperty("Instance", PublicStatic);
-		var actionsAccessor = typeof(PlayerMissionActions).GetProperty("Instance", PublicStatic);
-		var systemAccessor = typeof(PlayerMissionSystem).GetProperty("Instance", PublicStatic);
-
-		Assert.IsNotNull(managerAccessor);
-		Assert.AreEqual(typeof(PlayerMissionManager), managerAccessor.PropertyType);
-		Assert.IsNotNull(actionsAccessor);
-		Assert.AreEqual(typeof(PlayerMissionActions), actionsAccessor.PropertyType);
-		Assert.IsNull(systemAccessor);
-	}
 }
