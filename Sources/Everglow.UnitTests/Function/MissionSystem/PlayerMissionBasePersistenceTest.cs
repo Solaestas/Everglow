@@ -46,6 +46,41 @@ public class PlayerMissionBasePersistenceTest
 	}
 
 	[TestMethod]
+	public void SaveData_StoresTimeAsInt()
+	{
+		var saved = new PersistenceStubMission { Time = 120 };
+		var tag = new TagCompound();
+
+		// The headless test TagCompound currently rejects bool payloads even though player saves accept them at runtime.
+		try
+		{
+			saved.SaveData(tag);
+		}
+		catch (IOException)
+		{
+		}
+
+		Assert.IsInstanceOfType<int>(tag[PlayerMissionBase.TimeSaveKey]);
+		Assert.AreEqual(120, tag.GetInt(PlayerMissionBase.TimeSaveKey));
+	}
+
+	[TestMethod]
+	[DataRow((long)int.MaxValue + 1, int.MaxValue)]
+	[DataRow((long)int.MinValue - 1, int.MinValue)]
+	public void LoadData_LegacyLongTime_ClampsToIntRange(long storedTime, int expectedTime)
+	{
+		var tag = new TagCompound
+		{
+			{ PlayerMissionBase.TimeSaveKey, storedTime },
+		};
+		var loaded = new PersistenceStubMission();
+
+		loaded.LoadData(tag);
+
+		Assert.AreEqual(expectedTime, loaded.Time);
+	}
+
+	[TestMethod]
 	public void NewInstances_HaveDistinctValidIds()
 	{
 		var first = new PersistenceStubMission();

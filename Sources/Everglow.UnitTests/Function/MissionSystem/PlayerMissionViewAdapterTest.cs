@@ -31,7 +31,7 @@ public class PlayerMissionViewAdapterTest
 
 		public float ProgressValue { get; set; }
 
-		public long TimeLimitValue { get; set; } = -1;
+		public int TimeLimitValue { get; set; } = -1;
 
 		public MissionIconGroup? IconValue { get; set; }
 
@@ -53,7 +53,7 @@ public class PlayerMissionViewAdapterTest
 
 		public override float Progress => ProgressValue;
 
-		public override long TimeLimit => TimeLimitValue;
+		public override int TimeLimit => TimeLimitValue;
 
 		public override MissionIconGroup Icon => UseDefaultIcons ? base.Icon : IconValue!;
 	}
@@ -209,13 +209,13 @@ public class PlayerMissionViewAdapterTest
 		MissionView zeroLimitView = PlayerMissionViewAdapter.Create(zeroLimit);
 		MissionView negativeLimitView = PlayerMissionViewAdapter.Create(negativeLimit);
 
-		Assert.AreEqual(120L, expiredView.ElapsedTime);
-		Assert.AreEqual(100L, expiredView.TimeLimit);
-		Assert.AreEqual(0L, expiredView.RemainingTime);
-		Assert.AreEqual(25L, zeroLimitView.ElapsedTime);
+		Assert.AreEqual(120, expiredView.ElapsedTime);
+		Assert.AreEqual(100, expiredView.TimeLimit);
+		Assert.AreEqual(0, expiredView.RemainingTime);
+		Assert.AreEqual(25, zeroLimitView.ElapsedTime);
 		Assert.IsNull(zeroLimitView.TimeLimit);
 		Assert.IsNull(zeroLimitView.RemainingTime);
-		Assert.AreEqual(30L, negativeLimitView.ElapsedTime);
+		Assert.AreEqual(30, negativeLimitView.ElapsedTime);
 		Assert.IsNull(negativeLimitView.TimeLimit);
 		Assert.IsNull(negativeLimitView.RemainingTime);
 	}
@@ -253,7 +253,7 @@ public class PlayerMissionViewAdapterTest
 		Assert.IsEmpty(view.ObjectiveNodes);
 		Assert.IsEmpty(view.Rewards);
 		Assert.AreEqual(0f, view.Progress);
-		Assert.AreEqual(0L, view.ElapsedTime);
+		Assert.AreEqual(0, view.ElapsedTime);
 		Assert.IsNull(view.TimeLimit);
 		Assert.IsNull(view.RemainingTime);
 		Assert.HasCount(1, view.Icons);

@@ -11,5 +11,5 @@ public class MissionTimerTest : PlayerMissionBase
 {
 	public override string DisplayName => GetType().Name;
 
-	public override long TimeLimit => 18000;
+	public override int TimeLimit => 18000;
 }

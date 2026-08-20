@@ -17,8 +17,8 @@ public static class PlayerMissionViewAdapter
 		bool hidesDetails = MissionHintRules.HasContent(hint);
 
 		float progress = 0f;
-		long elapsedTime = 0;
-		long? timeLimit = null;
+		int elapsedTime = 0;
+		int? timeLimit = null;
 		ObjectiveNodeView[] objectiveNodes = [];
 		RewardView[] rewards = [];
 
@@ -26,7 +26,7 @@ public static class PlayerMissionViewAdapter
 		{
 			progress = ClampProgress(mission.Progress);
 			elapsedTime = mission.Time;
-			long missionTimeLimit = mission.TimeLimit;
+			int missionTimeLimit = mission.TimeLimit;
 			timeLimit = missionTimeLimit <= 0 ? null : missionTimeLimit;
 			objectiveNodes = CreateObjectiveNodes(mission);
 			rewards = CreateRewards(mission);

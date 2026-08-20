@@ -27,11 +27,11 @@ public sealed class MissionView
 
 	public float Progress { get; init; }
 
-	public long ElapsedTime { get; init; }
+	public int ElapsedTime { get; init; }
 
-	public long? TimeLimit { get; init; }
+	public int? TimeLimit { get; init; }
 
-	public long? RemainingTime => TimeLimit is long limit
+	public int? RemainingTime => TimeLimit is int limit
 		? Math.Max(0, limit - ElapsedTime)
 		: null;
 

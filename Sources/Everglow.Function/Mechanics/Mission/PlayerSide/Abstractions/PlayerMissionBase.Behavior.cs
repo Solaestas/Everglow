@@ -28,7 +28,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// <br>86400帧为泰拉内一天</br>
 	/// <br>值为-1时即不限时</br>
 	/// </summary>
-	public virtual long TimeLimit => -1;
+	public virtual int TimeLimit => -1;
 
 	/// <summary>
 	/// 是否启用计时器
@@ -39,7 +39,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// 任务计时器
 	/// <br>单位为帧</br>
 	/// </summary>
-	public virtual long Time { get; set; }
+	public virtual int Time { get; set; }
 
 	/// <summary>
 	/// Mission state, managed by <see cref="PlayerMissionManager"/>.
@@ -97,12 +97,7 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	{
 		if (EnableTime)
 		{
-			Time += PlayerMissionManager.UpdateInterval;
-
-			if (Time > TimeLimit)
-			{
-				Time = TimeLimit;
-			}
+			Time = (int)Math.Min((long)Time + PlayerMissionManager.UpdateInterval, TimeLimit);
 		}
 	}
 

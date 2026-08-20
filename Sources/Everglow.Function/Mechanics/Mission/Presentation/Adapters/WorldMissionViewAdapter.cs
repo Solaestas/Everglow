@@ -19,8 +19,8 @@ public static class WorldMissionViewAdapter
 		bool hidesDetails = MissionHintRules.HasContent(hint);
 
 		float progress = 0f;
-		long elapsedTime = 0;
-		long? timeLimit = null;
+		int elapsedTime = 0;
+		int? timeLimit = null;
 		ObjectiveNodeView[] objectiveNodes = [];
 		RewardView[] rewards = [];
 
