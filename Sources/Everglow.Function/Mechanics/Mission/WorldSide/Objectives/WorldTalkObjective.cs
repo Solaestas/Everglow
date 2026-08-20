@@ -71,8 +71,6 @@ public class WorldTalkObjective : WorldObjectiveBase
 		oldTalking = false;
 	}
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
-
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);

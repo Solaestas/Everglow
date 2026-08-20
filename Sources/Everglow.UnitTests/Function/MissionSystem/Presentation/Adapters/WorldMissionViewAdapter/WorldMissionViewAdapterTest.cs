@@ -92,8 +92,6 @@ public partial class WorldMissionViewAdapterTest
 
 		public int CheckCompletionCalls { get; private set; }
 
-		public int TextReadCalls { get; private set; }
-
 		public int UpdateCalls { get; private set; }
 
 		public int CompleteCalls { get; private set; }
@@ -126,12 +124,6 @@ public partial class WorldMissionViewAdapterTest
 		{
 			CheckCompletionCalls++;
 			return Ready;
-		}
-
-		public override void GetObjectivesText()
-		{
-			TextReadCalls++;
-			throw new InvalidOperationException("World objective text is not implemented and must not be read.");
 		}
 
 		public override void Update() => UpdateCalls++;
@@ -310,7 +302,6 @@ public partial class WorldMissionViewAdapterTest
 		Assert.AreEqual(0, mission.ProgressReadCount);
 		Assert.AreEqual(0, mission.TimeLimitReadCount);
 		Assert.AreEqual(0, objective.ProgressReadCount);
-		Assert.AreEqual(0, objective.TextReadCalls);
 		Assert.IsFalse(mission.RewardClaimed);
 	}
 
@@ -344,7 +335,6 @@ public partial class WorldMissionViewAdapterTest
 		Assert.HasCount(1, view.Rewards);
 		var objectiveView = ((LeafObjectiveNodeView)view.ObjectiveNodes[0]).Objective;
 		Assert.AreEqual(string.Empty, objectiveView.Description);
-		Assert.AreEqual(0, objective.TextReadCalls);
 	}
 
 	private static void SetWhoAmI(WorldMissionBase mission, int value)

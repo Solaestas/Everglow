@@ -40,7 +40,7 @@ public class MissionPlayer : ModPlayer
 		}
 
 #if DEBUG
-		if (!PlayerMissionManager.Instance.HasMission<PlayerMissionBase>())
+		if (PlayerMissionManager.Instance.Missions.Count == 0)
 		{
 			PlayerMissionManager.Instance.AddMission(new KillNPCMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.Instance.AddMission(new ParallelMissionTest(), PlayerMissionState.Available);
@@ -58,9 +58,9 @@ public class MissionPlayer : ModPlayer
 			PlayerMissionManager.Instance.AddMission(new MissionIconTest(), PlayerMissionState.Available);
 			PlayerMissionManager.Instance.AddMission(new GiveItemMissionTest(), PlayerMissionState.Available);
 			PlayerMissionManager.Instance.AddMission(new ExploreMissionTest(), PlayerMissionState.Available);
+			PlayerMissionManager.Instance.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
 		}
 #endif
-		PlayerMissionManager.Instance.AddMission(new CancellableKillNPCMissionTest(), PlayerMissionState.Available);
 	}
 
 	public override void SaveData(TagCompound tag)

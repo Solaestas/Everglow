@@ -90,8 +90,6 @@ public class WorldGiveObjective : WorldObjectiveBase
 		localSubmitted = false;
 	}
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
-
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);

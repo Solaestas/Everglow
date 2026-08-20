@@ -18,7 +18,6 @@ public class UIMissionList : UIBlock
 
 		// Mission list
 		_missionList = new UIContainerPanel();
-		_missionList.Events.OnUpdate += (e, gt) => MissionContainer.Background?.SetChainValue(_missionList.VerticalScrollDistance);
 		Register(_missionList);
 
 		// Mission list scrollbar

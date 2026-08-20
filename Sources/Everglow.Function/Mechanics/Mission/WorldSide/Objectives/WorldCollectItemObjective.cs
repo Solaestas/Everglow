@@ -106,8 +106,6 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 		globalMax = 0;
 	}
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
-
 	public override void SaveData(TagCompound tag)
 	{
 		base.SaveData(tag);

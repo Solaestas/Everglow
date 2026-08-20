@@ -32,7 +32,6 @@ public partial class WorldMissionViewAdapterTest
 		Assert.IsEmpty(mission.RewardClaimedPlayers);
 		Assert.IsFalse(objective.Completed);
 		Assert.AreEqual(0, objective.CheckCompletionCalls);
-		Assert.AreEqual(0, objective.TextReadCalls);
 		Assert.AreEqual(0, objective.UpdateCalls);
 		Assert.AreEqual(0, objective.CompleteCalls);
 		Assert.AreEqual(0, objective.ActivateCalls);

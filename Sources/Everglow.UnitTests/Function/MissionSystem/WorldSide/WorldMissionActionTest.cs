@@ -30,10 +30,6 @@ public class WorldMissionActionTest
 	private sealed class StubObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
-
-		public override void GetObjectivesText()
-		{
-		}
 	}
 
 	private sealed class StubGameStateProvider : IGameStateProvider

@@ -80,8 +80,6 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	{
 	}
 
-	public abstract void GetObjectivesText();
-
 	public virtual void LoadData(TagCompound tag)
 	{
 		if (tag.TryGet<bool>(nameof(Completed), out var completed))

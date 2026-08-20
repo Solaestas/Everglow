@@ -8,8 +8,6 @@ public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override bool CheckCompletion() => false;
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
-
 	public void ReceiveDelta(BinaryReader br)
 	{
 		var value = br.ReadInt32();

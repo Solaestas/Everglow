@@ -40,10 +40,6 @@ public class WorldObjectiveStructureRecoveryTest
 
 		public override bool CheckCompletion() => false;
 
-		public override void GetObjectivesText()
-		{
-		}
-
 		public override void ResetProgress()
 		{
 			base.ResetProgress();

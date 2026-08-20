@@ -5,8 +5,6 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 
 public sealed class PlayerMissionActions
 {
-	public static PlayerMissionActions Instance => ModContent.GetInstance<PlayerMissionSystem>().Actions;
-
 	private readonly PlayerMissionManager _manager;
 
 	public PlayerMissionActions(PlayerMissionManager manager)

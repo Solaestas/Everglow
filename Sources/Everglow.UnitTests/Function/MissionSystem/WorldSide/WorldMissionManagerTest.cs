@@ -53,10 +53,6 @@ public class WorldMissionManagerTest
 	private sealed class PassiveObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
-
-		public override void GetObjectivesText()
-		{
-		}
 	}
 
 	[TestMethod]

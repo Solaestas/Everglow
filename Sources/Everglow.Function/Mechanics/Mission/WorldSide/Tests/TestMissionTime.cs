@@ -14,7 +14,5 @@ public class TestMissionTime : WorldMissionBase
 	public class TestMissionTimeObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => false;
-
-		public override void GetObjectivesText() => throw new NotImplementedException();
 	}
 }

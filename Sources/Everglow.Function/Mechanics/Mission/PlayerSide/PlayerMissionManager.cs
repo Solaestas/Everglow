@@ -209,41 +209,13 @@ public class PlayerMissionManager
 		_missions.FirstOrDefault(m => m.Name == missionName);
 
 	/// <summary>
-	/// 获取某个类型的所有任务
-	/// </summary>
-	/// <typeparam name="T">任务的类型</typeparam>
-	/// <returns>所有该类型的任务</returns>
-	public List<T> GetMissions<T>()
-		where T : PlayerMissionBase =>
-		_missions.OfType<T>().ToList();
-
-	/// <summary>
-	/// Checks if a mission exists by type
-	/// </summary>
-	public bool HasMission<T>()
-		where T : PlayerMissionBase =>
-		HasMission(m => m is T);
-
-	/// <summary>
-	/// Checks if a mission exists by name
-	/// </summary>
-	public bool HasMission(string missionName) =>
-		HasMission(m => m.Name == missionName);
-
-	/// <summary>
-	/// Internal implementation for mission checking
-	/// </summary>
-	private bool HasMission(Func<PlayerMissionBase, bool> predicate) =>
-		_missions.Any(predicate);
-
-	/// <summary>
 	/// 添加任务
 	/// </summary>
 	/// <param name="mission">任务</param>
 	/// <param name="state">任务状态</param>
 	public void AddMission(PlayerMissionBase mission, PlayerMissionState state, bool showText = true)
 	{
-		if (!HasMission(mission.Name))
+		if (!_missions.Any(m => m.Name == mission.Name))
 		{
 			_missions.Add(mission);
 			mission.State = state;
@@ -263,19 +235,19 @@ public class PlayerMissionManager
 	}
 
 	/// <summary>
-	/// 移除满足指定条件的所有任务
+	/// 移除指定任务名的任务
 	/// </summary>
-	/// <param name="predicate">删除范围</param>
+	/// <param name="missionName">任务名字，或者说 ID</param>
 	/// <returns></returns>
-	private bool RemoveMission(Func<PlayerMissionBase, bool> predicate)
+	public bool RemoveMission(string missionName)
 	{
-		List<PlayerMissionBase> removedMissions = _missions.Where(predicate).ToList();
+		List<PlayerMissionBase> removedMissions = _missions.Where(m => m.Name == missionName).ToList();
 		foreach (var m in removedMissions)
 		{
 			m.Deactivate();
 		}
 
-		var removed = _missions.RemoveAll(m => predicate(m));
+		var removed = _missions.RemoveAll(m => m.Name == missionName);
 
 		foreach (PlayerMissionBase mission in removedMissions)
 		{
@@ -283,42 +255,6 @@ public class PlayerMissionManager
 		}
 
 		return removed > 0;
-	}
-
-	/// <summary>
-	/// 移除指定任务名的任务
-	/// </summary>
-	/// <param name="missionName">任务名字，或者说 ID</param>
-	/// <returns></returns>
-	public bool RemoveMission(string missionName) =>
-		RemoveMission(m => m.Name == missionName);
-
-	/// <summary>
-	/// 移除指定类型的任务
-	/// </summary>
-	/// <typeparam name="T">任务类型</typeparam>
-	/// <returns></returns>
-	public bool RemoveMission<T>()
-		where T : PlayerMissionBase =>
-		RemoveMission(m => m is T);
-
-	/// <summary>
-	/// 更改指定任务的状态
-	/// </summary>
-	/// <param name="missionName">任务名称</param>
-	/// <param name="fromState">任务当前状态</param>
-	/// <param name="toState">任务目标状态</param>
-	/// <returns>是否成功</returns>
-	public bool ChangeMissionState(string missionName, PlayerMissionState fromState, PlayerMissionState toState)
-	{
-		var mission = _missions.FirstOrDefault(m => m.Name == missionName);
-		if (mission == null)
-		{
-			return false;
-		}
-
-		ChangeMissionState(mission, fromState, toState);
-		return true;
 	}
 
 	/// <summary>

@@ -31,8 +31,6 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 
 	public override bool CheckCompletion() => KilledCount >= NPCCount;
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
-
 	public override void Activate(WorldMissionBase sourceMission)
 	{
 		MissionGlobalNPC.OnNPCKilled += WorldMissionGlobalNPC_OnNPCKilled;

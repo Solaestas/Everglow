@@ -12,7 +12,5 @@ public class TestGeneralLifeCycle : WorldMissionBase
 	public class TestGeneralMissionLifeCycleObjective : WorldObjectiveBase
 	{
 		public override bool CheckCompletion() => true;
-
-		public override void GetObjectivesText() => throw new NotImplementedException();
 	}
 }

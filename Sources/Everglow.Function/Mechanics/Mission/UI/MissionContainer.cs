@@ -5,7 +5,6 @@ using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
-using Everglow.Commons.Utilities;
 using Microsoft.CodeAnalysis;
 using ReLogic.Graphics;
 using Spine;
@@ -20,12 +19,6 @@ public class MissionContainer : UIContainerElement
 	public static UIMissionDetailSubContent DetailSub => Instance._missionDetailSubContent;
 
 	public static UIMissionDetailTipContent DetailTip => Instance._missionDetailTip;
-
-	public static UIMissionDetailFailContent DetailFail => Instance._missionDetailFail;
-
-	public static UIMissionList List => Instance._missionList;
-
-	public static UIMissionBackground Background => Instance._panelBackground;
 
 	public static UIMissionFilter Filter => Instance._missionFilter;
 
@@ -49,7 +42,6 @@ public class MissionContainer : UIContainerElement
 	private UIMissionDetail _missionDetail;
 	private UIMissionDetailSubContent _missionDetailSubContent;
 	private UIMissionDetailTipContent _missionDetailTip;
-	private UIMissionDetailFailContent _missionDetailFail;
 
 	private UIMissionList _missionList;
 	private UIMissionFilter _missionFilter;
@@ -90,8 +82,6 @@ public class MissionContainer : UIContainerElement
 
 	public MissionContainer()
 	{
-		UpdateResolutionFactor(ScreenUtils.CurrentResolution);
-
 		Player.Hooks.OnEnterWorld += OnEnterWorld;
 		Main.OnResolutionChanged += OnResolutionChanged_Adapt;
 	}
@@ -119,7 +109,6 @@ public class MissionContainer : UIContainerElement
 		if (player.whoAmI == Main.myPlayer)
 		{
 			Close();
-			UpdateResolutionFactor(ScreenUtils.CurrentResolution);
 			RefreshMissionContainer();
 			_panel.Info.SetToCenter();
 		}
@@ -131,31 +120,7 @@ public class MissionContainer : UIContainerElement
 	/// <param name="resolution"></param>
 	private void OnResolutionChanged_Adapt(Vector2 resolution)
 	{
-		UpdateResolutionFactor(resolution);
 		_panel.Info.SetToCenter();
-	}
-
-	/// <summary>
-	/// Update resolution factor and refresh ui
-	/// </summary>
-	/// <param name="resolution"></param>
-	private void UpdateResolutionFactor(Vector2 resolution)
-	{
-		// if (resolution.X > CurrentPanelWidth && resolution.Y > CurrentPanelHeight)
-		// {
-		// ResolutionFactor = 1;
-		// }
-		// else
-		// {
-		// if (resolution.X / resolution.Y > CurrentPanelWidth / (float)CurrentPanelHeight)
-		// {
-		// ResolutionFactor = resolution.Y / CurrentPanelHeight;
-		// }
-		// else
-		// {
-		// ResolutionFactor = resolution.X / CurrentPanelWidth;
-		// }
-		// }
 	}
 
 	private void RefreshMissionContainer()
@@ -414,7 +379,6 @@ public class MissionContainer : UIContainerElement
 	{
 		MissionIdentity? selectedMission = _selectedMission;
 		_missionList.RefreshList(_missionFilter.MissionStateValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
-		_panelBackground.SetSpectrumColor(_missionFilter.MissionStateValue, _missionFilter.MissionTypeValue);
 
 		if (selectedMission is MissionIdentity identity)
 		{
