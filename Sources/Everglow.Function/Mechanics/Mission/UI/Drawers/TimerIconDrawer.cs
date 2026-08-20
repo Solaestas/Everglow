@@ -1,5 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.StringDrawerSystem;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems;
 using Terraria.GameContent;
@@ -12,7 +13,6 @@ internal class TimerIconDrawer : DrawerItem
 	public int Size;
 	public Color Color;
 	public int Thickness;
-	private PlayerMissionBase _mission;
 
 	public override string ToString()
 	{
@@ -21,9 +21,7 @@ internal class TimerIconDrawer : DrawerItem
 
 	public override void Draw(SpriteBatch sb)
 	{
-		if (_mission == null)
-			_mission = PlayerMissionManager.Instance.GetMission(MissionName);
-		if (_mission == null || _mission.TimeLimit < 0)
+		if (!TryGetMission(out MissionView mission) || mission.TimeLimit is not int timeLimit)
 			return;
 		var scissorRectangle = sb.GraphicsDevice.ScissorRectangle;
 		var overflowHiddenRasterizerState = new RasterizerState
@@ -40,7 +38,7 @@ internal class TimerIconDrawer : DrawerItem
 		effect.Parameters["uScaleFactor"].SetValue(Vector2.One / Size);
 		effect.Parameters["uRadius"].SetValue(Size / 2f);
 		effect.Parameters["uThickness"].SetValue(1f);
-		effect.Parameters["uProgress"].SetValue(_mission.TimeLimit == 0 ? 1f : (float)(_mission.Time / (double)_mission.TimeLimit));
+		effect.Parameters["uProgress"].SetValue((float)(mission.ElapsedTime / (double)timeLimit));
 		effect.Parameters["uColor"].SetValue(new Vector4(Color.R / 255f, Color.G / 255f, Color.B / 255f, Color.A / 255f));
 		effect.Parameters["uOpposite"].SetValue(true);
 		effect.Parameters["uInterval"].SetValue(new Vector2(0, 0));
@@ -84,8 +82,22 @@ internal class TimerIconDrawer : DrawerItem
 		MissionName = stringParameters.GetString("MissionName",
 			stringDrawer.DefaultParameters.GetString("MITMissionName", string.Empty));
 
-		_mission = PlayerMissionManager.Instance.GetMission(MissionName);
 		Size += Size % 2;
+	}
+
+	private bool TryGetMission(out MissionView mission)
+	{
+		mission = null;
+		MissionPresentationService service = MissionContainer.Service;
+		if (service is null)
+		{
+			return false;
+		}
+
+		mission = service.GetAll()
+			.FirstOrDefault(entry => entry.View.Identity.Side == MissionSide.Player && entry.View.Identity.DefinitionId == MissionName)
+			?.View;
+		return mission is not null;
 	}
 
 	public override float WordWrap(ref int index, List<DrawerItem> drawerItems, ref int line, float width, float originWidth, int? maxLine = null)

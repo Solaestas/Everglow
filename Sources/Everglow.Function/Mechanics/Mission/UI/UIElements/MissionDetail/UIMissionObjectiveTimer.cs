@@ -18,8 +18,8 @@ public class UIMissionObjectiveTimer : UIMissionDetailMaskContentBase<UIMissionD
 	/// <summary>
 	/// Mission timer progress
 	/// </summary>
-	private float Progress => _mission is not null && _mission.EnableTime // TODO: Replace mission timer with objective timer
-		? _mission.Time / (float)_mission.TimeLimit : 0;
+	private float Progress => _mission?.TimeLimit is int timeLimit // TODO: Replace mission timer with objective timer
+		? _mission.ElapsedTime / (float)timeLimit : 0;
 
 	public override void OnInitialization()
 	{

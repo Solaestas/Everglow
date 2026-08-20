@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 using Everglow.Commons.UI;
@@ -27,6 +28,8 @@ public class MissionContainer : UIContainerElement
 	public static UIMissionBackground Background => Instance._panelBackground;
 
 	public static UIMissionFilter Filter => Instance._missionFilter;
+
+	public static MissionPresentationService Service => ModContent.GetInstance<MissionPresentationSystem>().Service;
 
 	/// <summary>
 	/// Scale factor for all UI elements in the mission system
@@ -74,12 +77,16 @@ public class MissionContainer : UIContainerElement
 	/// </summary>
 	public string MouseText { get; set; } = string.Empty;
 
+	private MissionIdentity? _selectedMission;
+
 	/// <summary>
 	/// UI instance of the selected mission.
 	/// <para/>Use <see cref="ChangeSelectedItem(UIMissionItem)"/> to change this value.
 	/// <para/>If <c>null</c>, no mission item is selected.
 	/// </summary>
-	public UIMissionItem SelectedItem { get; private set; }
+	public UIMissionItem SelectedItem => _selectedMission is MissionIdentity identity
+		? _missionList?.MissionItems.FirstOrDefault(item => item.View.Identity == identity)
+		: null;
 
 	public MissionContainer()
 	{
@@ -392,7 +399,7 @@ public class MissionContainer : UIContainerElement
 
 		foreach (var missionItem in _missionList.MissionItems)
 		{
-			if (missionItem.Mission.Name == missionName)
+			if (missionItem.View.Identity.DefinitionId == missionName)
 			{
 				ChangeSelectedItem(missionItem);
 				return;
@@ -405,14 +412,13 @@ public class MissionContainer : UIContainerElement
 	/// </summary>
 	public void RefreshList()
 	{
+		MissionIdentity? selectedMission = _selectedMission;
 		_missionList.RefreshList(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue, _missionSourceHeadshot.Source);
 		_panelBackground.SetSpectrumColor(_missionFilter.PoolTypeValue, _missionFilter.MissionTypeValue);
 
-		if (SelectedItem is not null)
+		if (selectedMission is MissionIdentity identity)
 		{
-			UIMissionItem selectedItem = _missionList.MissionItems.FirstOrDefault(item =>
-				item.Mission.Name == SelectedItem.Mission.Name
-				&& item.Mission.InstanceId == SelectedItem.Mission.InstanceId);
+			UIMissionItem selectedItem = _missionList.MissionItems.FirstOrDefault(item => item.View.Identity == identity);
 			ChangeSelectedItem(selectedItem);
 		}
 		else
@@ -423,15 +429,16 @@ public class MissionContainer : UIContainerElement
 
 	private void OnMissionObjectiveUpdated(MissionIdentity identity)
 	{
-		if (SelectedItem?.Mission is not { } mission
+		if (SelectedItem is not { } selectedItem
 			|| identity.Side != MissionSide.Player
-			|| mission.Name != identity.DefinitionId
-			|| mission.InstanceId != identity.InstanceId)
+			|| selectedItem.View.Identity != identity
+			|| !Service.TryGet(identity, out MissionPresentationEntry entry))
 		{
 			return;
 		}
 
-		_missionDetail.RefreshObjectives(mission);
+		selectedItem.UpdateEntry(entry);
+		_missionDetail.RefreshObjectives(entry.View);
 	}
 
 	/// <summary>
@@ -442,7 +449,7 @@ public class MissionContainer : UIContainerElement
 	{
 		// 更新选中的任务
 		var oldSelectedItem = SelectedItem;
-		SelectedItem = item;
+		_selectedMission = item?.View.Identity;
 
 		// 更新选中的任务的颜色
 		oldSelectedItem?.OnUnselected();
@@ -451,10 +458,10 @@ public class MissionContainer : UIContainerElement
 		_missionDetail.UpdateChangeButton("45,38,33");
 		_missionDetail.SetMissionDetail(item);
 
-		if (item is not null && item.Mission.State == PlayerSide.PlayerMissionState.Failed)
+		if (item is not null && item.View.State == MissionViewState.Failed)
 		{
 			_missionDetail.AnimationState = 3;
-			var fail = new UIMissionOperationFail(SelectedItem?.Mission, "任务失败", yesText: "确认");
+			var fail = new UIMissionOperationFail("任务失败", yesText: "确认");
 			DetailTip.Show(fail);
 		}
 		else

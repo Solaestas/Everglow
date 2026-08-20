@@ -1,5 +1,4 @@
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
-using Everglow.Commons.Mechanics.Mission.UI.UIElements;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 
 namespace Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
@@ -11,13 +10,6 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// <br>!为null时不显示</br>
 	/// </summary>
 	public virtual MissionIconGroup Icon => GetIcons(new());
-
-	/// <summary>
-	/// 绑定的UI显示
-	/// <br>类型必须继承自<see cref="UIMissionItem"/></br>
-	/// <br>类型必须存在一个仅有一个参数为目前任务类型或父类的构造函数</br>
-	/// </summary>
-	public virtual Type BindingUIItem => typeof(UIMissionItem);
 
 	public virtual MissionIconGroup GetIcons(MissionIconGroup iconGroup)
 	{
@@ -60,12 +52,4 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 	/// </summary>
 	/// <returns></returns>
 	public virtual string GetRewards() => string.Join(' ', RewardItems.ConvertAll(i => ItemDrawer.Create(i.type, i.stack, new Color(196, 241, 255))));
-
-	/// <summary>
-	/// 获取时间文本
-	/// </summary>
-	/// <returns></returns>
-	public string GetTime() => EnableTime
-		? $"[TimerIconDrawer,MissionName='{Name}'] 剩余时间:[TimerStringDrawer,MissionName='{Name}']\n"
-		: string.Empty;
 }

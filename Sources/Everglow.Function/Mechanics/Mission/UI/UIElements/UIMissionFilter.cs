@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -36,7 +37,15 @@ public class UIMissionFilter : BaseElement
 	/// <summary>
 	/// Available pool type selections (null represents "All" option)
 	/// </summary>
-	private static List<PlayerMissionState?> PoolTypeList { get; } = [null, .. Enum.GetValues<PlayerMissionState>()];
+	private static List<MissionViewState?> PoolTypeList { get; } =
+	[
+		null,
+		MissionViewState.Available,
+		MissionViewState.Active,
+		MissionViewState.Completed,
+		MissionViewState.Failed,
+		MissionViewState.Overdue,
+	];
 
 	/// <summary>
 	/// Available mission type selections (null represents "All" option)
@@ -46,7 +55,7 @@ public class UIMissionFilter : BaseElement
 	/// <summary>
 	/// Currently selected pool type filter
 	/// </summary>
-	public PlayerMissionState? PoolTypeValue { get; private set; }
+	public MissionViewState? PoolTypeValue { get; private set; }
 
 	/// <summary>
 	/// Currently selected mission type filter
@@ -80,7 +89,7 @@ public class UIMissionFilter : BaseElement
 		return MissionTypeList[index];
 	}
 
-	private static PlayerMissionState? RotationToPoolType(float rotation)
+	private static MissionViewState? RotationToPoolType(float rotation)
 	{
 		var unit = MathHelper.TwoPi / PoolTypeList.Count;
 		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
@@ -88,7 +97,7 @@ public class UIMissionFilter : BaseElement
 		return PoolTypeList[index];
 	}
 
-	private PlayerMissionState? RotationToPoolTypeCheckGemMisalignment(float rotation)
+	private MissionViewState? RotationToPoolTypeCheckGemMisalignment(float rotation)
 	{
 		var unit = MathHelper.TwoPi / PoolTypeList.Count;
 		var standard = ((rotation % MathHelper.TwoPi) + MathHelper.TwoPi) % MathHelper.TwoPi;
@@ -101,7 +110,7 @@ public class UIMissionFilter : BaseElement
 
 	private static float MissionTypeToRotation(MissionType? type) => MissionTypeList.IndexOf(type) * MathHelper.TwoPi / MissionTypeList.Count;
 
-	private static float PoolTypeToRotation(PlayerMissionState? type) => PoolTypeList.IndexOf(type) * MathHelper.TwoPi / PoolTypeList.Count;
+	private static float PoolTypeToRotation(MissionViewState? type) => PoolTypeList.IndexOf(type) * MathHelper.TwoPi / PoolTypeList.Count;
 
 	private static bool DistanceWithinInnerRing(float distance)
 	{
@@ -234,7 +243,7 @@ public class UIMissionFilter : BaseElement
 		{
 			var hoverPoolType = RotationToPoolType(MathHelper.Pi - MouseRotation + _innerRotation);
 			_innerHoverTargetRotation = PoolTypeToRotation(hoverPoolType);
-			MissionContainer.Instance.MouseText = hoverPoolType?.ToString() ?? "All";
+			MissionContainer.Instance.MouseText = TextDefinition.GetPoolTypeText(hoverPoolType);
 		}
 		else
 		{

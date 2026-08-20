@@ -1,17 +1,17 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
-public class PlayerMissionComparer : IComparer<PlayerMissionBase>
+public class PlayerMissionComparer : IComparer<MissionView>
 {
 	public static readonly PlayerMissionComparer Instance = new PlayerMissionComparer();
 
-	public int Compare(PlayerMissionBase x, PlayerMissionBase y)
+	public int Compare(MissionView x, MissionView y)
 	{
 		if (x.State != y.State)
 		{
-			return x.State - y.State;
+			return x.State.CompareTo(y.State);
 		}
 		else if (x.Type != y.Type)
 		{
@@ -25,7 +25,7 @@ public class PlayerMissionComparer : IComparer<PlayerMissionBase>
 				return -1;
 			}
 
-			return x.Type - y.Type;
+			return x.Type.CompareTo(y.Type);
 		}
 		else
 		{

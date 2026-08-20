@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
@@ -39,7 +39,7 @@ public abstract class UIMissionDetailMaskBase<TMask> : UIBlock
 		PanelColor = _content.BackgroundColor ?? DefaultColor;
 	}
 
-	public void Show<TContent>(PlayerMissionBase mission)
+	public void Show<TContent>(MissionView mission)
 		where TContent : UIMissionDetailMaskContentBase<TMask>, new()
 	{
 		var content = new TContent();

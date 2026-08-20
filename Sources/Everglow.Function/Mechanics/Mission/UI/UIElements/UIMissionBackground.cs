@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
 using Everglow.Commons.Vertex;
@@ -11,7 +11,7 @@ public class UIMissionBackground : UIBlock
 {
 	private static readonly Color InitialColor = new Color(1f, 1f, 1f, 0f) * 0.8f;
 
-	private PlayerMissionState? poolType = null;
+	private MissionViewState? poolType = null;
 
 	private MissionType? missionType = null;
 
@@ -21,7 +21,7 @@ public class UIMissionBackground : UIBlock
 
 	private Color MissionTypeColor => ColorDefinition.GetMissionTypeColor(missionType);
 
-	public void SetSpectrumColor(PlayerMissionState? poolType, MissionType? missionType)
+	public void SetSpectrumColor(MissionViewState? poolType, MissionType? missionType)
 	{
 		this.poolType = poolType;
 		this.missionType = missionType;

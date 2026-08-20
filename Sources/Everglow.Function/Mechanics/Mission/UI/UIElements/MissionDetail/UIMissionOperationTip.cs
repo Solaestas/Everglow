@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI.UIElements;
 
 
@@ -19,7 +19,8 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	private string _tipTextStr;
 	private string _yesTextStr;
 	private string _noTextStr;
-	private Action<PlayerMissionBase> _yesAction;
+	private MissionPresentationEntry _entry;
+	private Action<MissionPresentationEntry> _yesAction;
 
 	private UIBlock _main;
 
@@ -36,9 +37,9 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 	{
 	}
 
-	public UIMissionOperationTip(PlayerMissionBase? mission, TipType type, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null, string noText = null)
+	public UIMissionOperationTip(MissionPresentationEntry entry, TipType type, string tipText, Action<MissionPresentationEntry> yes = null, string yesText = null, string noText = null)
 	{
-		_mission = mission;
+		_entry = entry;
 		_tipContent = type;
 		_tipTextStr = tipText;
 		_yesTextStr = yesText;
@@ -87,7 +88,10 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			_yes = NewButton();
 			_yes.Events.OnLeftClick += e =>
 			{
-				_yesAction?.Invoke(_mission);
+				if (_entry is not null)
+				{
+					_yesAction?.Invoke(_entry);
+				}
 				Hide(e);
 			};
 			_yes.Events.OnMouseHover += e =>
@@ -139,7 +143,10 @@ public class UIMissionOperationTip : UIMissionDetailMaskContentBase<UIMissionDet
 			};
 			_yes.Events.OnLeftClick += e =>
 			{
-				_yesAction?.Invoke(_mission);
+				if (_entry is not null)
+				{
+					_yesAction?.Invoke(_entry);
+				}
 				Hide(e);
 			};
 			_main.Register(_yes);

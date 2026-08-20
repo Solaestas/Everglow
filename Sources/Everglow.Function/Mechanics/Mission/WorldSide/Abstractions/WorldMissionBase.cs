@@ -17,9 +17,6 @@ namespace Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 /// <item>
 /// <see href="">WorldMissionBase.Persistence.cs</see>
 /// </item>
-/// <item>
-/// <see href="">WorldMissionBase.Presentation.cs</see>
-/// </item>
 /// </list>
 /// </remarks>
 public abstract partial class WorldMissionBase

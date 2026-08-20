@@ -1,4 +1,3 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
@@ -10,7 +9,7 @@ public class UIMissionOperationFail : UIMissionDetailMaskContentBase<UIMissionDe
 
 	private string _tipTextStr;
 	private string _yesTextStr;
-	private Action<PlayerMissionBase> _yesAction;
+	private Action _yesAction;
 
 	private UIBlock _main;
 
@@ -24,9 +23,8 @@ public class UIMissionOperationFail : UIMissionDetailMaskContentBase<UIMissionDe
 	{
 	}
 
-	public UIMissionOperationFail(PlayerMissionBase? mission, string tipText, Action<PlayerMissionBase> yes = null, string yesText = null)
+	public UIMissionOperationFail(string tipText, Action yes = null, string yesText = null)
 	{
-		_mission = mission;
 		_tipTextStr = tipText;
 		_yesTextStr = yesText;
 		_yesAction = yes;
@@ -69,7 +67,7 @@ public class UIMissionOperationFail : UIMissionDetailMaskContentBase<UIMissionDe
 		_yes = NewButton();
 		_yes.Events.OnLeftClick += e =>
 		{
-			_yesAction?.Invoke(_mission);
+			_yesAction?.Invoke();
 			Hide(e);
 		};
 		_yes.Events.OnMouseHover += e =>

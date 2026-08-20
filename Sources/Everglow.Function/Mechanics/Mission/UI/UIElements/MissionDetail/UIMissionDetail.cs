@@ -1,7 +1,9 @@
 using System.Text;
 using Everglow.Commons.DataStructures;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Everglow.Commons.Utilities;
@@ -148,7 +150,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveTree.Events.OnMouseHover += e => Instance.MouseText = "Mission Tree";
 		_objectiveTree.Events.OnLeftClick += e =>
 		{
-			DetailSub.Show<UIMissionTree>(SelectedItem?.Mission);
+			DetailSub.Show<UIMissionTree>(SelectedItem?.View);
 		};
 		_objective.Register(_objectiveTree);
 
@@ -174,8 +176,8 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		_objectiveChangeMission.Events.OnMouseHover += e =>
 		{
 			if (SelectedItem != null
-				&& SelectedItem.Mission.State != PlayerMissionState.Overdue
-				&& SelectedItem.Mission.State != PlayerMissionState.Failed)
+				&& SelectedItem.View.State != MissionViewState.Overdue
+				&& SelectedItem.View.State != MissionViewState.Failed)
 			{
 				_objectiveChangeMission.PanelColor = Color.White;
 				_objectiveChangeMission.OnSelect = true;
@@ -280,7 +282,7 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			if (SelectedItem != null)
 			{
 				ResetTexts();
-				SetTexts(SelectedItem.Mission);
+				SetTexts(SelectedItem.View);
 			}
 		}
 
@@ -310,23 +312,24 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		{
 			HideMissionSubContent();
 
-			PlayerMissionBase mission = missionItem.Mission;
-			_icon.SetIconGroup(mission.Icon);
-			_rewardsPanel.SetIconGroup(mission.Icon);
+			MissionView mission = missionItem.View;
+			var iconGroup = new MissionIconGroup(mission.Icons);
+			_icon.SetIconGroup(iconGroup);
+			_rewardsPanel.SetIconGroup(iconGroup);
 			_descriptionTextScrollbar.WheelValue = 0f;
 
 			SetTexts(mission);
 		}
 	}
 
-	public void SetTexts(PlayerMissionBase mission)
+	public void SetTexts(MissionView mission)
 	{
 		var desText = new StringBuilder();
 
 		// Time limit
-		if (mission.TimeLimit > 0)
+		if (mission.TimeLimit.HasValue)
 		{
-			desText.Append(mission.GetTime() + "\n");
+			desText.Append($"[TimerIconDrawer,MissionName='{mission.Identity.DefinitionId}'] 剩余时间:[TimerStringDrawer,MissionName='{mission.Identity.DefinitionId}']\n\n");
 		}
 
 		// Description
@@ -348,15 +351,29 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		SetObjectiveText(mission);
 	}
 
-	public void RefreshObjectives(PlayerMissionBase mission) => SetObjectiveText(mission);
+	public void RefreshObjectives(MissionView mission) => SetObjectiveText(mission);
 
-	private void SetObjectiveText(PlayerMissionBase mission)
+	private void SetObjectiveText(MissionView mission)
 	{
 		var objText = new StringBuilder();
 		objText.Append("目标：\n");
-		foreach (var objective in mission.GetObjectives())
+		int mainIndex = 1;
+		foreach (ObjectiveNodeView node in mission.ObjectiveNodes)
 		{
-			objText.Append(objective);
+			int subIndex = 1;
+			bool completed = IsCompleted(node);
+			foreach (string objective in GetObjectiveLines(node))
+			{
+				string text = completed
+					? $"[TextDrawer,Text='(已完成)',Color='100,100,100,255'] {objective}"
+					: objective;
+				objText.Append($"{mainIndex}.{subIndex++} {text}");
+				if (!text.EndsWith('\n'))
+				{
+					objText.Append('\n');
+				}
+			}
+			mainIndex++;
 		}
 
 		if (_objectiveText is null)
@@ -385,6 +402,42 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		// rew.StringDrawer.SetWordWrap(_rewardContainer.HitBox.Width - _rewardTextScrollbar.InnerScale.X);
 	}
 
+	private static IEnumerable<string> GetObjectiveLines(ObjectiveNodeView node)
+	{
+		return node switch
+		{
+			LeafObjectiveNodeView leaf => [leaf.Objective.Description],
+			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => objective.Description),
+			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => objective.Description),
+			BranchObjectiveNodeView branch => branch.Branches.SelectMany((branchView, branchIndex) =>
+				branchView.Objectives.Select(objective =>
+					$"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.Description}")),
+			_ => [],
+		};
+	}
+
+	private static bool IsCompleted(ObjectiveNodeView node)
+	{
+		return node switch
+		{
+			LeafObjectiveNodeView leaf => leaf.Objective.State == ObjectiveViewState.Completed,
+			ParallelObjectiveNodeView parallel => parallel.Objectives.All(objective => objective.State == ObjectiveViewState.Completed),
+			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Any(objective => objective.State == ObjectiveViewState.Completed),
+			BranchObjectiveNodeView branch => branch.Branches.Any(branchView =>
+				branchView.State == ObjectiveBranchState.Selected
+				&& branchView.Objectives.All(objective => objective.State == ObjectiveViewState.Completed)),
+			_ => false,
+		};
+	}
+
+	private static string GetBranchColor(ObjectiveBranchState state) => state switch
+	{
+		ObjectiveBranchState.Candidate => "100,180,120,255",
+		ObjectiveBranchState.Selected => "100,255,100,255",
+		ObjectiveBranchState.Skipped => "100,100,100,255",
+		_ => "100,100,100,255",
+	};
+
 	private void ResetTexts()
 	{
 		_descriptionTextScrollbar.WheelValue = 0f;
@@ -409,30 +462,34 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 			return;
 		}
 
-		if (SelectedItem.Mission.State == PlayerMissionState.Accepted) // Accepted missions
+		MissionAction? submit = FindAction(MissionActionType.Submit);
+		if (submit.HasValue)
 		{
-			if (SelectedItem.Mission.CheckComplete()) // Completed
-			{
-				// Commit the mission
-				SelectedItem.Mission.OnComplete();
-			}
-			else // Incompleted
-			{
-				// Discard the mission (Second confirmation)
-				AnimationState = 1;
-				var tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否");
-				if (!SelectedItem.Mission.Cancellable)
-				{
-					tip = new UIMissionOperationTip(SelectedItem?.Mission, UIMissionOperationTip.TipType.Information, "该任务无法放弃", NothingHappenToTheMission, "确认");
-				}
-				tip.HideMask += ClearAnimation;
-				DetailTip.Show(tip);
-			}
+			Service.TryExecute(submit.Value);
 		}
-		else if (SelectedItem.Mission.State == PlayerMissionState.Available) // Available missions
+		else if (SelectedItem.View.State == MissionViewState.Active)
 		{
-			// Accept the mission
-			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Available, PlayerMissionState.Accepted);
+			MissionAction? cancel = FindAction(MissionActionType.Cancel);
+			AnimationState = 1;
+			UIMissionOperationTip tip;
+			if (cancel.HasValue)
+			{
+				tip = new UIMissionOperationTip(SelectedItem.Entry, UIMissionOperationTip.TipType.Confirmation, "是否放弃任务", DiscardMission, "是", "否");
+			}
+			else
+			{
+				tip = new UIMissionOperationTip(SelectedItem.Entry, UIMissionOperationTip.TipType.Information, "该任务无法放弃", yesText: "确认");
+			}
+			tip.HideMask += ClearAnimation;
+			DetailTip.Show(tip);
+		}
+		else
+		{
+			MissionAction? accept = FindAction(MissionActionType.Accept);
+			if (accept.HasValue)
+			{
+				Service.TryExecute(accept.Value);
+			}
 		}
 	}
 
@@ -445,24 +502,38 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 		}
 	}
 
-	public void NothingHappenToTheMission(PlayerMissionBase m)
-	{
-	}
-
 	/// <summary>
 	/// Fail the selected mission if it can be cancelled.
 	/// </summary>
-	/// <param name="m"></param>
-	public void DiscardMission(PlayerMissionBase m)
+	/// <param name="entry"></param>
+	public void DiscardMission(MissionPresentationEntry entry)
 	{
 		AnimationState = 0;
-		if (SelectedItem != null
-			&& m.State == PlayerMissionState.Accepted
-			&& m.Cancellable
-			&& !m.CheckComplete())
+		MissionAction? cancel = FindAction(entry, MissionActionType.Cancel);
+		if (cancel.HasValue)
 		{
-			PlayerMissionManager.Instance.MoveMission(SelectedItem.Mission, PlayerMissionState.Accepted, PlayerMissionState.Failed);
+			Service.TryExecute(cancel.Value);
 		}
+	}
+
+	private static MissionAction? FindAction(MissionActionType type) => FindAction(SelectedItem?.Entry, type);
+
+	private static MissionAction? FindAction(MissionPresentationEntry entry, MissionActionType type)
+	{
+		if (entry is null)
+		{
+			return null;
+		}
+
+		foreach (MissionAction action in entry.Actions)
+		{
+			if (action.Type == type)
+			{
+				return action;
+			}
+		}
+
+		return null;
 	}
 
 	/// <summary>
@@ -472,13 +543,13 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 	{
 		if (SelectedItem != null)
 		{
-			if (SelectedItem.Mission.State == PlayerMissionState.Available)
+			if (SelectedItem.View.State == MissionViewState.Available)
 			{
 				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Accept}',Color='{color}']";
 			}
-			else if (SelectedItem.Mission.State == PlayerMissionState.Accepted)
+			else if (SelectedItem.View.State == MissionViewState.Active)
 			{
-				if (SelectedItem.Mission.CheckComplete())
+				if (FindAction(MissionActionType.Submit).HasValue)
 				{
 					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Commit}',Color='{color}']";
 				}
@@ -487,15 +558,15 @@ public class UIMissionDetail : UIBlock, IDrawable_InRt2D
 					_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Cancel}',Color='{color}']";
 				}
 			}
-			else if (SelectedItem.Mission.State == PlayerMissionState.Completed)
+			else if (SelectedItem.View.State == MissionViewState.Completed)
 			{
 				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Completed}',Color='{color}']";
 			}
-			else if (SelectedItem.Mission.State == PlayerMissionState.Overdue)
+			else if (SelectedItem.View.State == MissionViewState.Overdue)
 			{
 				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Overdue}',Color='{color}']";
 			}
-			else if (SelectedItem.Mission.State == PlayerMissionState.Failed)
+			else if (SelectedItem.View.State == MissionViewState.Failed)
 			{
 				_objectiveChangeText.Text = $"[TextDrawer,Text='{ChangeButtonText.Failed}',Color='{color}']";
 			}

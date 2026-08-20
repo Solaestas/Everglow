@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
@@ -8,11 +8,6 @@ namespace Everglow.UnitTests.Function.MissionSystem;
 public class UIMissionDetailMaskBaseTest
 {
 	private bool _originalDedServ;
-
-	private sealed class StubMission : PlayerMissionBase
-	{
-		public override string DisplayName => nameof(StubMission);
-	}
 
 	private sealed class TestMask : UIMissionDetailMaskBase<TestMask>
 	{
@@ -41,7 +36,7 @@ public class UIMissionDetailMaskBaseTest
 	{
 		var mask = CreateMask();
 		var content = new TestContent();
-		content.SetMission(new StubMission());
+		content.SetMission(new MissionView());
 		mask.Show(content);
 
 		mask.HideCurrent();
@@ -55,7 +50,7 @@ public class UIMissionDetailMaskBaseTest
 	{
 		var mask = CreateMask();
 		var content = new TestContent();
-		content.SetMission(new StubMission());
+		content.SetMission(new MissionView());
 		mask.Show(content);
 
 		mask.Calculation();
@@ -67,7 +62,7 @@ public class UIMissionDetailMaskBaseTest
 	[TestMethod]
 	public void Show_ReplacesExistingContentWithoutThrowing()
 	{
-		var mission = new StubMission();
+		var mission = new MissionView();
 		var mask = CreateMask();
 		var first = new TestContent();
 		var second = new TestContent();

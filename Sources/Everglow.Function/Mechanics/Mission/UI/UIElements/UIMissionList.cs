@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
 using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements;
@@ -73,44 +73,47 @@ public class UIMissionList : UIBlock
 	/// <summary>
 	/// 刷新任务列表
 	/// </summary>
-	public void RefreshList(PlayerMissionState? poolType, MissionType? missionType, MissionSourceBase missionSource)
+	public void RefreshList(MissionViewState? poolType, MissionType? missionType, MissionSourceBase missionSource)
 	{
 		// 筛选任务状态，获得初始列表
-		var missions = poolType.HasValue
-			? PlayerMissionManager.Instance.GetMissionPool(poolType.Value)
-			: Enum.GetValues<PlayerMissionState>().Select(PlayerMissionManager.Instance.GetMissionPool).SelectMany(x => x);
+		IEnumerable<MissionPresentationEntry> missions = MissionContainer.Service.GetAll()
+			.Where(entry => entry.View.Identity.Side == MissionSide.Player);
+		if (poolType.HasValue)
+		{
+			missions = missions.Where(entry => entry.View.State == poolType.Value);
+		}
 
 		// 筛选来源NPC
 		if (missionSource is not null) // NPC模式，去掉非对应NPC的任务
 		{
-			missions = missions.Where(m => m.Source == missionSource || m.SubSource == missionSource);
+			missions = missions.Where(entry => entry.View.Source == missionSource || entry.View.SubSource == missionSource);
 		}
 		else // 全局模式，去掉有来源NPC的未接取任务
 		{
-			missions = missions.Where(m => !(m.State is PlayerMissionState.Available && m.Source is not null && m.Source != MissionSourceBase.Default));
+			missions = missions.Where(entry => !(entry.View.State is MissionViewState.Available && entry.View.Source is not null && entry.View.Source != MissionSourceBase.Default));
 		}
 
 		// 筛选任务类型
 		if (missionType.HasValue)
 		{
-			missions = missions.Where(m => m.Type == missionType);
+			missions = missions.Where(entry => entry.View.Type == missionType);
 		}
 
 		// 排序
-		missions = missions.Order(PlayerMissionComparer.Instance);
+		missions = missions.OrderBy(entry => entry.View, PlayerMissionComparer.Instance);
 
 		// 生成任务UI元素
 		List<BaseElement> elements = [];
 		float ElementSpacing = 10 * MissionContainer.Scale;
 		PositionStyle top = (4 * MissionContainer.Scale, 0f);
-		foreach (var m in missions.ToList())
+		foreach (MissionPresentationEntry entry in missions)
 		{
-			if (!m.IsVisible)
+			if (!entry.View.Visible)
 			{
 				continue;
 			}
 
-			var element = (BaseElement)Activator.CreateInstance(m.BindingUIItem, [m]);
+			var element = new UIMissionItem(entry);
 			element.OnInitialization();
 			element.Info.Top.SetValue(top);
 			element.Events.OnLeftDown += e =>
