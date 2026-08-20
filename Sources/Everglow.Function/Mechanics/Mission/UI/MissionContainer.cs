@@ -93,13 +93,7 @@ public class MissionContainer : UIContainerElement
 	{
 		presentationSystem.MissionAdded += _ => RefreshMissionContainer();
 		presentationSystem.MissionRemoved += _ => RefreshMissionContainer();
-		presentationSystem.MissionStatusUpdated += identity =>
-		{
-			if (identity.Side == MissionSide.Player)
-			{
-				RefreshMissionContainer();
-			}
-		};
+		presentationSystem.MissionStatusUpdated += _ => RefreshMissionContainer();
 		presentationSystem.MissionObjectiveUpdated += OnMissionObjectiveUpdated;
 	}
 
