@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure;
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Packets;
@@ -14,7 +15,6 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		Objectives.OnObjectiveActivated += Objectives_OnObjectiveActivated;
 		Objectives.OnObjectiveDeactivated += Objectives_OnObjectiveDeactivated;
 		Objectives.OnMPSyncTriggered += Objectives_OnMPSyncTriggered;
-		Objectives.OnObjectiveSynced += Objectives_OnObjectiveSynced;
 	}
 
 	public const string RewardItemsSourceContext = "Everglow.MissionSystem";
@@ -54,8 +54,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		if (UnlockCore())
 		{
 			var unlockText = $"[{DisplayName}]任务已解锁";
-			var unlockTextColor = new Color(150, 150, 250);
-			WorldMissionManager.NewText(unlockText, unlockTextColor);
+			WorldMissionManager.Notify(this, MissionNotificationType.Unlocked);
 
 			if (NetUtils.IsMainServer)
 			{
@@ -110,8 +109,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			if (ExpireCore())
 			{
 				var failText = $"[{DisplayName}]任务已失败";
-				var failTextColor = new Color(250, 150, 150);
-				WorldMissionManager.NewText(failText, failTextColor);
+				WorldMissionManager.Notify(this, MissionNotificationType.Failed);
 
 				if (NetUtils.IsMainServer)
 				{
@@ -145,8 +143,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		if (CompleteMissionCore())
 		{
 			var completeText = $"[{DisplayName}]任务已完成";
-			var completeTextColor = new Color(150, 250, 150);
-			WorldMissionManager.NewText(completeText, completeTextColor);
+			WorldMissionManager.Notify(this, MissionNotificationType.Completed);
 
 			if (NetUtils.IsMainServer)
 			{
@@ -181,8 +178,6 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 			{
 				return;
 			}
-
-			WorldMissionManager.NewText($"[{DisplayName}]任务已重启", 150, 250, 150);
 		}
 		else if (NetUtils.IsMainServer)
 		{
@@ -206,6 +201,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		Time = 0;
 		ResetProgress();
 		Activate();
+		WorldMissionManager.Notify(this, MissionNotificationType.Restarted);
 
 		return true;
 	}
@@ -312,8 +308,7 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 	private void Objectives_OnNodeCompleted(WorldObjectiveNodeBase current)
 	{
 		var objectiveCompleteText = $"[{DisplayName}]任务当前节点[{current?.GetType().Name}]中目标已完成";
-		var objectiveCompleteTextColor = new Color(250, 250, 150);
-		WorldMissionManager.NewText(objectiveCompleteText, objectiveCompleteTextColor);
+		WorldMissionManager.Notify(this, MissionNotificationType.ObjectiveCompleted, current?.GetType().Name);
 
 		if (NetUtils.IsMainServer)
 		{
@@ -364,14 +359,5 @@ public abstract partial class WorldMissionBase : IMissionBehavior
 		{
 			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(Name, deltaSync), RouteDestination.AllDownstream);
 		}
-	}
-
-	private void Objectives_OnObjectiveSynced(WorldObjectiveNodeBase node)
-	{
-		var newObjectives = node is not null
-			? string.Join(' ', node.FindAllEntrances().Select(x => x.ObjectiveID))
-			: "-1";
-		WorldMissionManager.NewText($"节点已同步为: {newObjectives}", 150, 250, 150);
-		WorldMissionManager.NewText($"目标进度已同步为: {node?.Progress ?? -1}", 150, 250, 150);
 	}
 }

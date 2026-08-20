@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -80,7 +81,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	{
 	}
 
-	public abstract void GetObjectivesText();
+	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
 
 	public virtual void LoadData(TagCompound tag)
 	{

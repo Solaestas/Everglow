@@ -5,11 +5,11 @@ namespace Everglow.Commons.Mechanics.Mission.PlayerSide;
 public class PlayerMissionManagerData
 {
 	private Dictionary<int, int> nPCKillCounter;
-	private List<PlayerMissionBase> missionPools;
+	private List<PlayerMissionBase> missions;
 
 	public IReadOnlyDictionary<int, int> NPCKillCounter => nPCKillCounter;
 
-	public IReadOnlyList<PlayerMissionBase> MissionPools => missionPools;
+	public IReadOnlyList<PlayerMissionBase> Missions => missions;
 
 	private PlayerMissionManagerData()
 	{
@@ -17,9 +17,9 @@ public class PlayerMissionManagerData
 
 	public PlayerMissionManagerData(
 		Dictionary<int, int> nPCKillCounter,
-		List<PlayerMissionBase> missionPools)
+		List<PlayerMissionBase> missions)
 	{
 		this.nPCKillCounter = nPCKillCounter;
-		this.missionPools = missionPools;
+		this.missions = missions;
 	}
 }

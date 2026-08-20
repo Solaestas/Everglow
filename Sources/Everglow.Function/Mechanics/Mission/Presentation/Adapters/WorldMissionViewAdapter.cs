@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
@@ -19,8 +20,8 @@ public static class WorldMissionViewAdapter
 		bool hidesDetails = MissionHintRules.HasContent(hint);
 
 		float progress = 0f;
-		long elapsedTime = 0;
-		long? timeLimit = null;
+		int elapsedTime = 0;
+		int? timeLimit = null;
 		ObjectiveNodeView[] objectiveNodes = [];
 		RewardView[] rewards = [];
 
@@ -34,6 +35,8 @@ public static class WorldMissionViewAdapter
 			rewards = CreateRewards(mission);
 		}
 
+		MissionIconBase[] icons = CreateIcons(mission);
+
 		return new MissionView
 		{
 			Identity = new MissionIdentity(MissionSide.World, definitionId, definitionId),
@@ -44,7 +47,7 @@ public static class WorldMissionViewAdapter
 			Description = hidesDetails ? string.Empty : mission.Description ?? string.Empty,
 			Hint = hint,
 			Visible = mission.Visible,
-			Icons = [],
+			Icons = icons,
 			State = MapState(mission.State),
 			Progress = progress,
 			ElapsedTime = elapsedTime,
@@ -52,6 +55,14 @@ public static class WorldMissionViewAdapter
 			ObjectiveNodes = objectiveNodes,
 			Rewards = rewards,
 		};
+	}
+
+	private static MissionIconBase[] CreateIcons(WorldMissionBase mission)
+	{
+		var iconGroup = new MissionIconGroup();
+		iconGroup.Add(MissionSourceIcon.Create(mission.Source ?? MissionSourceBase.Default, null));
+		mission.Objectives.GetObjectivesIcon(iconGroup);
+		return iconGroup.Icons.ToArray();
 	}
 
 	private static ObjectiveNodeView[] CreateObjectiveNodes(WorldMissionBase mission)

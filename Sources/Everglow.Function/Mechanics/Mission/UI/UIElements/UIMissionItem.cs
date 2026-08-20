@@ -1,5 +1,5 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI;
 using Everglow.Commons.UI.UIElements;
 using Terraria.GameContent;
@@ -21,11 +21,13 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 	private bool mouseOver = false;
 	private bool selected = false;
 
-	public PlayerMissionBase Mission { get; private set; }
+	public MissionPresentationEntry Entry { get; private set; }
 
-	public UIMissionItem(PlayerMissionBase missionBase)
+	public MissionView View => Entry.View;
+
+	public UIMissionItem(MissionPresentationEntry entry)
 	{
-		Mission = missionBase;
+		Entry = entry;
 		PanelColor = Color.Transparent;
 		BorderWidth = 0;
 
@@ -62,7 +64,7 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 		block.Register(nameContainer);
 
 		var font = FontManager.FusionPixel12.GetFont(40f * Scale);
-		name = new UITextPlus(Mission.DisplayName);
+		name = new UITextPlus(View.DisplayName);
 		name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * Scale);
 		name.StringDrawer.Init(name.Text);
 		nameContainer.Register(name);
@@ -90,7 +92,7 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 			oldScale = Scale;
 
 			nameContainer.ChildrenElements.RemoveAll(m => m is UITextPlus);
-			name = new UITextPlus(Mission.DisplayName);
+			name = new UITextPlus(View.DisplayName);
 			name.StringDrawer.DefaultParameters.SetParameter("FontSize", 36f * Scale);
 			name.StringDrawer.Init(name.Text);
 			nameContainer.Register(name);
@@ -195,7 +197,7 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 		// content area
 		Draw9Piece_MissionStackPanel7x7(sb, drawBox, 41, 47);
 
-		var gem_frame = ColorDefinition.GetGemFrame(Mission.Type);
+		var gem_frame = ColorDefinition.GetGemFrame(View.Type);
 		if (selected)
 		{
 			gem_frame.Y += 104;
@@ -213,7 +215,7 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 		gem_frame = new Rectangle(0, 36, 39, 39);
 		sb.Draw(tex, HitBox.Left() + new Vector2(40, 0), gem_frame, Color.White, 0, gem_frame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 
-		var stateFrame = ColorDefinition.GetMissionStateFrame(Mission.State);
+		var stateFrame = ColorDefinition.GetMissionStateFrame(View.State);
 		sb.Draw(tex, HitBox.Right() + new Vector2(-40, 0), stateFrame, Color.White, 0, stateFrame.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 	}
 
@@ -281,16 +283,21 @@ public class UIMissionItem : UIBlock, IDrawable_InRt2D
 
 	private void DrawTimerProgress()
 	{
-		if (Mission.TimeLimit < 0)
+		if (View.TimeLimit is not int timeLimit)
 		{
 			return;
 		}
 
-		var progress = 1 - Mission.Time / (float)Mission.TimeLimit;
+		var progress = 1 - View.ElapsedTime / (float)timeLimit;
 		var colorValue = MathF.Sqrt(progress);
 		var offset = (int)(45 * MissionContainer.Scale);
 		var dest = new Rectangle(HitBox.X + offset, HitBox.Y, (int)((HitBox.Width - offset) * progress), HitBox.Height);
 		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, dest, new Color(0.5f, colorValue * 0.5f, colorValue * 0.5f, 0.1f));
+	}
+
+	public void UpdateEntry(MissionPresentationEntry entry)
+	{
+		Entry = entry;
 	}
 
 	public void Draw_InRt2D(SpriteBatch sb)

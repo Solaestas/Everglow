@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
 
 namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
@@ -6,7 +6,7 @@ namespace Everglow.Commons.Mechanics.Mission.UI.UIElements.MissionDetail;
 public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 	where TMask : UIMissionDetailMaskBase<TMask>, new()
 {
-	protected PlayerMissionBase _mission;
+	protected MissionView _mission;
 
 	public event Action<BaseElement> HideMask;
 
@@ -26,7 +26,7 @@ public abstract class UIMissionDetailMaskContentBase<TMask> : UIBlock
 		HideMask?.Invoke(this);
 	}
 
-	public virtual void SetMission(PlayerMissionBase mission)
+	public virtual void SetMission(MissionView mission)
 	{
 		_mission = mission;
 	}

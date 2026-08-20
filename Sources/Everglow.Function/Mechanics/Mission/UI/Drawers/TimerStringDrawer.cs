@@ -1,5 +1,6 @@
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
-using Everglow.Commons.Mechanics.Mission.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Core;
+using Everglow.Commons.Mechanics.Mission.Presentation;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 using Everglow.Commons.UI.StringDrawerSystem;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.TextDrawers;
 using FontStashSharp;
@@ -10,21 +11,12 @@ internal class TimerStringDrawer : TextDrawer
 {
 	public string MissionName;
 	public int TimerStyle = 0;
-	private PlayerMissionBase _mission;
 
 	protected override Vector2 GetTextSize(string text)
 	{
-		if (_mission == null)
+		if (!TryGetMission(out MissionView mission))
 			return Vector2.Zero;
-		if (_mission.TimeLimit < 0)
-		{
-			text = "Indefinitely";
-		}
-		else
-		{
-			var time = new TimeSpan(0, 0, (int)((_mission.TimeLimit - _mission.Time) / 60));
-			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
-		}
+		text = TextDefinition.GetRemainingTimeText(mission.RemainingTime);
 		return base.GetTextSize(text);
 	}
 
@@ -38,22 +30,31 @@ internal class TimerStringDrawer : TextDrawer
 		TimerStyle = stringParameters.GetInt("TimerStyle",
 			stringDrawer.DefaultParameters.GetInt("MSTTimerStyle", 0));
 
-		_mission = PlayerMissionManager.Instance.GetMission(MissionName);
 	}
 
 	public override void Draw(SpriteBatch sb)
 	{
-		if (_mission == null)
+		if (!TryGetMission(out MissionView mission))
 			return;
 		var pos = Position;
-		var text = "Indefinitely";
-		if (_mission.TimeLimit >= 0)
-		{
-			var time = new TimeSpan(0, 0, (int)((_mission.TimeLimit - _mission.Time) / 60));
-			text = $"{(int)time.TotalMinutes}Min {time.Seconds}s";
-		}
+		string text = TextDefinition.GetRemainingTimeText(mission.RemainingTime);
 		sb.DrawString(Font, text, Position + Offset, Color, Scale, Rotation,
 			Origin, LayerDepth, CharacterSpacing, 0, TextStyle,
 			FontSystemEffect, EffectAmount);
+	}
+
+	private bool TryGetMission(out MissionView mission)
+	{
+		mission = null;
+		MissionPresentationService service = MissionContainer.Service;
+		if (service is null)
+		{
+			return false;
+		}
+
+		mission = service.GetAll()
+			.FirstOrDefault(entry => entry.View.Identity.Side == MissionSide.Player && entry.View.Identity.DefinitionId == MissionName)
+			?.View;
+		return mission is not null;
 	}
 }

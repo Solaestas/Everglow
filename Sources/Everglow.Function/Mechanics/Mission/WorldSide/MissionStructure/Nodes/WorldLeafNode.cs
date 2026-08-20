@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
@@ -34,6 +35,8 @@ public class WorldLeafNode : WorldObjectiveNodeBase
 	public override void Complete() => Objective.Complete();
 
 	public override void ResetProgress() => Objective.ResetProgress();
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup) => Objective.GetObjectivesIcon(iconGroup);
 
 	public override void SaveData(TagCompound tag) => Objective.SaveData(tag);
 

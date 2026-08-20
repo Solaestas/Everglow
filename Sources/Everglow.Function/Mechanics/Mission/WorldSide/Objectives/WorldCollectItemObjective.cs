@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using SubworldLibrary;
 using Terraria.ModLoader.IO;
@@ -33,6 +34,9 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 	public override bool NeedDeltaSync { get; protected set; }
 
 	public override bool CheckCompletion() => Reached;
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup) =>
+		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
 
 	public override void Update()
 	{
@@ -105,8 +109,6 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 		localMax = 0;
 		globalMax = 0;
 	}
-
-	public override void GetObjectivesText() => throw new NotImplementedException();
 
 	public override void SaveData(TagCompound tag)
 	{

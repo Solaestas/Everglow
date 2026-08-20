@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
@@ -40,7 +41,7 @@ public class WorldObjectiveStructureRecoveryTest
 
 		public override bool CheckCompletion() => false;
 
-		public override void GetObjectivesText()
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 		{
 		}
 

@@ -1,39 +1,17 @@
 using Everglow.Commons.Mechanics.Mission.Core;
-using Everglow.Commons.Mechanics.Mission.PlayerSide;
+using Everglow.Commons.Mechanics.Mission.Presentation.Views;
 
 namespace Everglow.Commons.Mechanics.Mission.Presentation;
 
 public static class ColorDefinition
 {
-	public static readonly Color InitialLightColor = new Color(1f, 1f, 1f, 0f) * 0.8f;
-
-	public static Color GetMissionStateColor(PlayerMissionState? poolType) => poolType switch
+	public static Color GetMissionNotificationColor(MissionNotificationType type) => type switch
 	{
-		PlayerMissionState.Accepted => new Color(0f, 1f, 0f, 0f),
-		PlayerMissionState.Available => new Color(0.9f, 0.88f, 0.06f, 0f),
-		PlayerMissionState.Failed => new Color(1f, 0f, 0f, 0.3f),
-		PlayerMissionState.Overdue => new Color(0.5f, 0f, 0.2f, 0.7f),
-		PlayerMissionState.Completed => new Color(0.2f, 0.6f, 1f, 0.2f),
-		null => InitialLightColor,
-		_ => InitialLightColor,
-	};
-
-	public static Color GetMissionTypeColor(MissionType? missionType) => missionType switch
-	{
-		MissionType.None => new Color(0f, 0f, 0f, 1f),
-		MissionType.MainStory => new Color(1f, 0.9f, 0.1f, 0f),
-		MissionType.SideStory => new Color(0.4f, 0.1f, 1f, 0.4f),
-		MissionType.Legendary => Color.Lerp(
-			new Color(
-			MathF.Sin((float)Main.timeForVisualEffects * 0.04f),
-			MathF.Sin((float)Main.timeForVisualEffects * 0.04f + MathHelper.TwoPi / 3f),
-			MathF.Sin((float)Main.timeForVisualEffects * 0.04f + MathHelper.TwoPi / 3f * 2),
-			0f), new Color(1f, 1f, 1f, 0), 0.35f),
-		MissionType.Achievement => new Color(0.15f, 0.7f, 0.3f, 0.3f),
-		MissionType.Daily => new Color(0f, 0.2f, 1f, 0.4f),
-		MissionType.Challenge => new Color(1f, 0f, 0f, 0.3f),
-		null => InitialLightColor,
-		_ => InitialLightColor,
+		MissionNotificationType.Unlocked or MissionNotificationType.Restored => new Color(150, 150, 250),
+		MissionNotificationType.Failed => new Color(250, 150, 150),
+		MissionNotificationType.Completed or MissionNotificationType.Restarted => new Color(150, 250, 150),
+		MissionNotificationType.ObjectiveCompleted => new Color(250, 250, 150),
+		_ => throw new ArgumentOutOfRangeException(nameof(type)),
 	};
 
 	public static Rectangle GetGemFrame(MissionType? missionType) => missionType switch
@@ -48,14 +26,26 @@ public static class ColorDefinition
 		_ => new Rectangle(0, 0, 33, 33),
 	};
 
-	public static Rectangle GetMissionStateFrame(PlayerMissionState? poolType) => poolType switch
+	public static Rectangle GetMissionStateFrame(MissionViewState? missionState) => missionState switch
 	{
-		PlayerMissionState.Accepted => new Rectangle(139, 36, 17, 67),
-		PlayerMissionState.Available => new Rectangle(121, 36, 17, 67),
-		PlayerMissionState.Failed => new Rectangle(103, 36, 17, 67),
-		PlayerMissionState.Overdue => new Rectangle(85, 36, 17, 67),
-		PlayerMissionState.Completed => new Rectangle(67, 36, 17, 67),
+		MissionViewState.Active => new Rectangle(139, 36, 17, 67),
+		MissionViewState.Available => new Rectangle(121, 36, 17, 67),
+		MissionViewState.Failed => new Rectangle(103, 36, 17, 67),
+		MissionViewState.Overdue or MissionViewState.Locked => new Rectangle(85, 36, 17, 67),
+		MissionViewState.Completed => new Rectangle(67, 36, 17, 67),
 		null => new Rectangle(157, 36, 17, 67),
 		_ => new Rectangle(157, 36, 17, 67),
 	};
+
+	public static Rectangle GetMissionStateGemFrame(MissionViewState? missionState)
+	{
+		const int FrameSize = 26;
+		int frameIndex = missionState switch
+		{
+			null => 0,
+			MissionViewState.Locked => (int)MissionViewState.Overdue,
+			_ => (int)missionState.Value,
+		};
+		return new Rectangle(FrameSize * frameIndex, FrameSize, FrameSize, FrameSize);
+	}
 }

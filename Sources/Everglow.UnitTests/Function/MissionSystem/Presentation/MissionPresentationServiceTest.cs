@@ -114,7 +114,7 @@ public class MissionPresentationServiceTest
 		var context = CreateService([player], []);
 		MissionPresentationEntry oldEntry = context.Service.GetAll().Single();
 
-		context.PlayerManager.MoveMission(player, PlayerMissionState.Available, PlayerMissionState.Accepted);
+		context.PlayerManager.ChangeMissionState(player, PlayerMissionState.Available, PlayerMissionState.Accepted);
 		MissionPresentationEntry currentEntry = context.Service.GetAll().Single();
 
 		Assert.AreEqual(MissionViewState.Available, oldEntry.View.State);

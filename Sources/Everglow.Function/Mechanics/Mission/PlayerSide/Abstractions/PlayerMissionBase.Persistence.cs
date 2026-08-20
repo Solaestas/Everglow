@@ -61,9 +61,13 @@ public abstract partial class PlayerMissionBase : ITagCompoundEntity
 			State = PlayerMissionState.Available;
 		}
 
-		if (tag.TryGet<long>(TimeSaveKey, out var mt))
+		if (tag.ContainsKey(TimeSaveKey) && tag[TimeSaveKey] is int mt)
 		{
 			Time = mt;
+		}
+		else if (tag.ContainsKey(TimeSaveKey) && tag[TimeSaveKey] is long legacyMt)
+		{
+			Time = (int)Math.Clamp(legacyMt, int.MinValue, int.MaxValue);
 		}
 
 		if (tag.TryGet<bool>(nameof(IsVisible), out var isVisible))

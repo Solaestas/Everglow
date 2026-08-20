@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.Tests;
 
@@ -8,7 +9,9 @@ public class TestDeltaSyncObjective : WorldObjectiveBase, IDeltaSyncObjective
 
 	public override bool CheckCompletion() => false;
 
-	public override void GetObjectivesText() => throw new NotImplementedException();
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+	}
 
 	public void ReceiveDelta(BinaryReader br)
 	{

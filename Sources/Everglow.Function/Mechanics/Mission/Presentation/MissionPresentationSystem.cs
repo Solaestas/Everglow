@@ -16,6 +16,7 @@ public sealed class MissionPresentationSystem : ModSystem
 	}
 
 	private readonly List<(MissionEventType Type, MissionIdentity Identity)> _pendingEvents = [];
+	private readonly List<MissionNotification> _pendingNotifications = [];
 
 	public event Action<MissionIdentity> MissionAdded;
 	public event Action<MissionIdentity> MissionRemoved;
@@ -42,6 +43,7 @@ public sealed class MissionPresentationSystem : ModSystem
 			playerSystem.Manager.MissionObjectiveUpdated += identity => QueueEvent(MissionEventType.ObjectiveUpdated, identity);
 			worldSystem.Manager.MissionStatusUpdated += identity => QueueEvent(MissionEventType.StatusUpdated, identity);
 			worldSystem.Manager.MissionObjectiveUpdated += identity => QueueEvent(MissionEventType.ObjectiveUpdated, identity);
+			WorldMissionManager.NotificationRequested += QueueNotification;
 			MissionContainer.Instance.SubscribePresentationEvents(this);
 		}
 	}
@@ -69,16 +71,31 @@ public sealed class MissionPresentationSystem : ModSystem
 					break;
 			}
 		}
+
+		MissionNotification[] pendingNotifications = _pendingNotifications.Distinct().ToArray();
+		_pendingNotifications.Clear();
+
+		foreach (MissionNotification notification in pendingNotifications)
+		{
+			if (Service.TryGet(notification.Mission, out MissionPresentationEntry entry))
+			{
+				Main.NewText(
+					TextDefinition.GetMissionNotificationText(entry.View, notification),
+					ColorDefinition.GetMissionNotificationColor(notification.Type));
+			}
+		}
 	}
 
 	public override void Unload()
 	{
 		if (!Main.dedServ)
 		{
+			WorldMissionManager.NotificationRequested -= QueueNotification;
 			MissionContainer.Instance.Unload();
 		}
 
 		_pendingEvents.Clear();
+		_pendingNotifications.Clear();
 		MissionAdded = null;
 		MissionRemoved = null;
 		MissionStatusUpdated = null;
@@ -87,4 +104,6 @@ public sealed class MissionPresentationSystem : ModSystem
 	}
 
 	private void QueueEvent(MissionEventType type, MissionIdentity identity) => _pendingEvents.Add((type, identity));
+
+	private void QueueNotification(MissionNotification notification) => _pendingNotifications.Add(notification);
 }

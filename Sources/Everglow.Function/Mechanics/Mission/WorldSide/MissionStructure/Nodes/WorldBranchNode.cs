@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.MissionStructure.Nodes;
@@ -170,6 +171,14 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			{
 				obj.ResetProgress();
 			}
+		}
+	}
+
+	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+	{
+		foreach (WorldObjectiveBase objective in _branches.SelectMany(branch => branch))
+		{
+			objective.GetObjectivesIcon(iconGroup);
 		}
 	}
 

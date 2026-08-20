@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Mission.Presentation;
 using Everglow.Commons.UI.UIElements;
 using static Everglow.Commons.Mechanics.Mission.UI.MissionContainer;
 
@@ -16,7 +17,7 @@ public class UIMissionStarLevel : BaseElement
 		{
 			if (Math.Abs(Main.MouseScreen.X - HitBox.Center.X) < Stars * 50 / 2f)
 			{
-				Instance.MouseText = "Mission Level: " + Stars;
+				Instance.MouseText = TextDefinition.GetMissionLevelTooltip(Stars);
 				_mouseOver = true;
 			}
 			else

@@ -2,6 +2,7 @@ using Everglow.Commons.Mechanics.Mission.Presentation.Adapters;
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria;
 using Terraria.ID;
 
@@ -31,7 +32,7 @@ public class WorldMissionActionTest
 	{
 		public override bool CheckCompletion() => false;
 
-		public override void GetObjectivesText()
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 		{
 		}
 	}
@@ -122,6 +123,35 @@ public class WorldMissionActionTest
 		Assert.IsTrue(applied);
 		Assert.AreEqual(1, statusUpdateCount);
 		Assert.AreEqual(1, objectiveUpdateCount);
+	}
+
+	[TestMethod]
+	public void RetryAction_PublishesRestartedNotification()
+	{
+		var mission = new StubMission();
+		mission.SetState(WorldMissionState.Failed);
+		var manager = new WorldMissionManager(new StubGameStateProvider());
+		manager.AddMission(mission);
+		var actions = new WorldMissionActions(manager);
+		MissionAction action = WorldMissionActionAdapter.GetActions(mission).Single();
+		MissionNotification? notification = null;
+		WorldMissionManager.NotificationRequested += CaptureNotification;
+
+		try
+		{
+			bool applied = actions.TryExecute(action);
+
+			Assert.IsTrue(applied);
+			Assert.AreEqual(
+				new MissionNotification(action.Mission, MissionNotificationType.Restarted),
+				notification);
+		}
+		finally
+		{
+			WorldMissionManager.NotificationRequested -= CaptureNotification;
+		}
+
+		void CaptureNotification(MissionNotification value) => notification = value;
 	}
 
 	[TestMethod]

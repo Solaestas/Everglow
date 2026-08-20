@@ -1,4 +1,5 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 
 namespace Everglow.Commons.Mechanics.Mission.WorldSide.Tests;
 
@@ -13,6 +14,8 @@ public class TestGeneralLifeCycle : WorldMissionBase
 	{
 		public override bool CheckCompletion() => true;
 
-		public override void GetObjectivesText() => throw new NotImplementedException();
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
+		{
+		}
 	}
 }

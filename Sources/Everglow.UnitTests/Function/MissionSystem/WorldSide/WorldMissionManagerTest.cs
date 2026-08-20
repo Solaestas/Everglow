@@ -1,14 +1,14 @@
 using Everglow.Commons.Mechanics.Mission.Core;
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
-using Everglow.Commons.Mechanics.Mission.WorldSide.Objectives;
+using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Terraria;
 
 namespace Everglow.UnitTests.Function.MissionSystem;
 
 [TestClass]
 [DoNotParallelize]
-public class MissionManagerTest
+public class WorldMissionManagerTest
 {
 	private int _originalNetMode;
 
@@ -37,10 +37,6 @@ public class MissionManagerTest
 		public bool GamePaused => false;
 	}
 
-	private class TestMission1 : WorldMissionBase
-	{
-	}
-
 	private sealed class CheckingMission : WorldMissionBase
 	{
 		public string NameValue { get; init; }
@@ -59,7 +55,7 @@ public class MissionManagerTest
 	{
 		public override bool CheckCompletion() => false;
 
-		public override void GetObjectivesText()
+		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 		{
 		}
 	}
@@ -77,15 +73,6 @@ public class MissionManagerTest
 		manager.OnMissionStatusUpdated(mission);
 
 		Assert.AreEqual(0, statusUpdateCount);
-	}
-
-	[TestMethod]
-	public void GetMissionTest()
-	{
-		var manager = new WorldMissionManager(new TestStateProvider());
-		manager.AddMission(new TestMission1());
-		var m = manager.GetMission<TestMission1>();
-		Assert.IsNotNull(m);
 	}
 
 	[TestMethod]
@@ -161,44 +148,4 @@ public class MissionManagerTest
 		Assert.AreEqual(WorldMissionState.Locked, missing.State);
 	}
 
-	private class TestMission2 : WorldMissionBase
-	{
-		public TestMission2()
-		{
-			State = WorldMissionState.Active;
-		}
-
-		public override int TimeLimit => 20;
-
-		public override void Initialize()
-		{
-			Objectives.Add(new WorldExploreObjective(1, (a) => false));
-		}
-	}
-
-	[TestMethod]
-	public void TimeLimitTest()
-	{
-		//var provider = new TestStateProvider();
-		//provider.TimeForVisualEffects = 60;
-		//var manager = new WorldMissionManager(provider);
-		//manager.AddMission(new TestMission2());
-		//var m = manager.GetMission<TestMission2>();
-		//m.Initialize();
-		//Assert.IsNotNull(m);
-
-		//for (int i = 0; i < 30; i++)
-		//{
-		//	manager.Update();
-
-		//	if (i < 20)
-		//	{
-		//		Assert.AreEqual(WorldMissionState.Active, m.State);
-		//	}
-		//	else
-		//	{
-		//		Assert.AreEqual(WorldMissionState.Failed, m.State);
-		//	}
-		//}
-	}
 }
