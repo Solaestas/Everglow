@@ -31,8 +31,6 @@ public abstract class PlayerObjectiveNodeBase
 
 	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
 
-	public abstract void GetObjectivesText(List<string> lines);
-
 	protected static void SaveCompletionStates(TagCompound tag, IEnumerable<PlayerObjectiveBase> objectives)
 	{
 		tag.Add(StructuralCompletionStateSaveKey, objectives.Select(objective => objective.Completed ? 1 : 0).ToList());

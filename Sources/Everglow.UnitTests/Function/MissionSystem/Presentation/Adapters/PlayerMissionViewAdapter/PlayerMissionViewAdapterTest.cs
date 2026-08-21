@@ -54,11 +54,8 @@ public partial class PlayerMissionViewAdapterTest
 
 	private sealed class StubObjective : PlayerObjectiveBase
 	{
-		private readonly string[] lines;
-
 		public StubObjective(params string[] lines)
 		{
-			this.lines = lines;
 			ObjectiveTextValue = string.Join('\n', lines);
 		}
 
@@ -86,16 +83,6 @@ public partial class PlayerMissionViewAdapterTest
 			{
 				iconGroup.Add(Icon);
 			}
-		}
-
-		public override void GetObjectivesText(List<string> output)
-		{
-			if (ThrowOnTextRead)
-			{
-				throw new InvalidOperationException("Hidden objective text must not be read.");
-			}
-
-			output.AddRange(lines);
 		}
 
 		public override string GetObjectiveText()

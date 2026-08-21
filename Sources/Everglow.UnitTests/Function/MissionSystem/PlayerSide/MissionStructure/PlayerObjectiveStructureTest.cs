@@ -37,8 +37,6 @@ public class PlayerObjectiveStructureTest
 
 		public override string GetObjectiveText() => "Test";
 
-		public override void GetObjectivesText(List<string> lines) => lines.Add("Test\n");
-
 		public override void SaveData(TagCompound tag)
 		{
 			tag.Add(nameof(Ready), Ready ? 1 : 0);

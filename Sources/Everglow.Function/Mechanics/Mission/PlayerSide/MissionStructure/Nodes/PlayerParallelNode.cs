@@ -78,12 +78,4 @@ public class PlayerParallelNode : PlayerObjectiveNodeBase
 			objective.GetObjectivesIcon(iconGroup);
 		}
 	}
-
-	public override void GetObjectivesText(List<string> lines)
-	{
-		foreach (var objective in _objectives)
-		{
-			objective.GetObjectivesText(lines);
-		}
-	}
 }

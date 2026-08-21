@@ -81,8 +81,6 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	public abstract string GetObjectiveText();
 
-	public abstract void GetObjectivesText(List<string> lines);
-
 	public virtual void LoadData(TagCompound tag)
 	{
 		if (tag.TryGet<bool>(nameof(HasGivenRewardItems), out var hasGiven))

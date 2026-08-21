@@ -80,8 +80,6 @@ public class KillNPCObjective : PlayerObjectiveBase
 		return $"击杀 {npc.TypeName} {NPCCount}个 {progress}";
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
-
 	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalNPC.OnKillNPCEvent += CountKill;

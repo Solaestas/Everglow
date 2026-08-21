@@ -43,6 +43,4 @@ public class PlayerLeafNode : PlayerObjectiveNodeBase
 	}
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup) => Objective.GetObjectivesIcon(iconGroup);
-
-	public override void GetObjectivesText(List<string> lines) => Objective.GetObjectivesText(lines);
 }

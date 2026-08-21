@@ -181,16 +181,6 @@ public class PlayerStructuralObjectiveContainer
 		}
 	}
 
-	public IEnumerable<(bool Completed, List<string> Lines)> GetObjectivesText()
-	{
-		foreach (var node in _nodes)
-		{
-			var lines = new List<string>();
-			node.GetObjectivesText(lines);
-			yield return (node.Completed, lines);
-		}
-	}
-
 	#endregion
 
 	#region Persistence

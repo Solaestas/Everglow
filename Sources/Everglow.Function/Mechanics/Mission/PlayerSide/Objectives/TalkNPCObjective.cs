@@ -56,6 +56,4 @@ public class TalkNPCObjective : PlayerObjectiveBase
 
 		return $"和{npc.TypeName}对话";
 	}
-
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 }

@@ -61,8 +61,6 @@ public class ExploreObjective : PlayerObjectiveBase
 		return "探索" + biomeName;
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText());
-
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);

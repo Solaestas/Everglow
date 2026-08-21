@@ -76,8 +76,6 @@ public class CollectItemObjective : PlayerObjectiveBase
 		return $"{verbString}{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
-
 	/// <summary>
 	/// Count pick item.
 	/// </summary>

@@ -137,8 +137,6 @@ public class GiveItemObjective : PlayerObjectiveBase
 		return $"向{npc.TypeName}提交{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
-
 	private float GetInventoryProgress(IEnumerable<Item> inventory) => Math.Clamp(inventory.Where(x => ItemTypes.Contains(x.type)).Sum(x => x.stack) / (float)ItemCount, 0f, 1f);
 
 	private void InitializeItems(List<int> itemTypes, int itemCount)

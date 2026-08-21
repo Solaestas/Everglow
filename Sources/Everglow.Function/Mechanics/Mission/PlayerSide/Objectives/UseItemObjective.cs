@@ -61,8 +61,6 @@ public class UseItemObjective : PlayerObjectiveBase
 		return $"使用{ItemDrawer.Create(ItemTypes.First())}{ItemCount}次 {progress}";
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
-
 	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalItem.PlayerSide_OnUseItemEvent += MissionGlobalItem_OnUseItem;

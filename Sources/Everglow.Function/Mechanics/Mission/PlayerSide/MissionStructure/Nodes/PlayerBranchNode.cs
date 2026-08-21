@@ -145,20 +145,4 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 			objective.GetObjectivesIcon(iconGroup);
 		}
 	}
-
-	public override void GetObjectivesText(List<string> lines)
-	{
-		for (int branchIndex = 0; branchIndex < _branches.Count; branchIndex++)
-		{
-			var color = _selected < 0
-				? "100,180,120,255"
-				: branchIndex == _selected ? "100,255,100,255" : "100,100,100,255";
-			foreach (var objective in _branches[branchIndex])
-			{
-				var objectiveLines = new List<string>();
-				objective.GetObjectivesText(objectiveLines);
-				lines.AddRange(objectiveLines.Select(line => $"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{color}'] {line}"));
-			}
-		}
-	}
 }

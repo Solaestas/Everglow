@@ -60,8 +60,6 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 		return $"消耗{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
 
-	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
-
 	public override void Activate(PlayerMissionBase sourceMission)
 	{
 		MissionGlobalItem.PlayerSide_OnConsumeItemEvent += MissionGlobalItem_OnConsumeItem;
