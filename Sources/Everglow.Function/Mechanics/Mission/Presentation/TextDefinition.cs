@@ -117,12 +117,12 @@ public static class TextDefinition
 	{
 		return node switch
 		{
-			LeafObjectiveNodeView leaf => [leaf.Objective.Description],
-			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => objective.Description),
-			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => objective.Description),
+			LeafObjectiveNodeView leaf => [leaf.Objective.ObjectiveText],
+			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => objective.ObjectiveText),
+			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => objective.ObjectiveText),
 			BranchObjectiveNodeView branch => branch.Branches.SelectMany((branchView, branchIndex) =>
 				branchView.Objectives.Select(objective =>
-					$"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.Description}")),
+					$"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.ObjectiveText}")),
 			_ => [],
 		};
 	}

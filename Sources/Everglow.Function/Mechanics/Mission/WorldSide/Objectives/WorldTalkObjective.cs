@@ -37,6 +37,13 @@ public class WorldTalkObjective : WorldObjectiveBase
 		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 	}
 
+	public override string GetObjectiveText()
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		return $"和{npc.TypeName}对话";
+	}
+
 	public override void Update()
 	{
 		if (NetUtils.IsSingle || NetUtils.IsMainServer)

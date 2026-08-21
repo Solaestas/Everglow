@@ -39,6 +39,13 @@ public class WorldKillNPCObjective : WorldObjectiveBase
 		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 	}
 
+	public override string GetObjectiveText()
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		return $"击杀 {npc.TypeName} {NPCCount}个 ({KilledCount}/{NPCCount})";
+	}
+
 	public override void Activate(WorldMissionBase sourceMission)
 	{
 		MissionGlobalNPC.OnNPCKilled += WorldMissionGlobalNPC_OnNPCKilled;

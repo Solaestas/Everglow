@@ -47,7 +47,7 @@ public class ExploreObjective : PlayerObjectiveBase
 	{
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		var biomeName = Biome is ModBiome modBiome
 			? modBiome.DisplayName.ToString()
@@ -55,13 +55,13 @@ public class ExploreObjective : PlayerObjectiveBase
 
 		if (MoveRequirement > 0)
 		{
-			lines.Add($"在{biomeName}中走过{MoveRequirement}米. ({Math.Round(distanceMoved)}/{MoveRequirement})");
+			return $"在{biomeName}中走过{MoveRequirement}米. ({Math.Round(distanceMoved)}/{MoveRequirement})";
 		}
-		else
-		{
-			lines.Add("探索" + biomeName);
-		}
+
+		return "探索" + biomeName;
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText());
 
 	public override void LoadData(TagCompound tag)
 	{

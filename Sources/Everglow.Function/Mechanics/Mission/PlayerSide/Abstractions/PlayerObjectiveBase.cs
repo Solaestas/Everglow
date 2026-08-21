@@ -11,6 +11,8 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	public int ObjectiveID { get; set; }
 
+	public virtual string Description => string.Empty;
+
 	public virtual float Progress { get; } = 1f;
 
 	/// <summary>
@@ -76,6 +78,8 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 	}
 
 	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
+
+	public abstract string GetObjectiveText();
 
 	public abstract void GetObjectivesText(List<string> lines);
 

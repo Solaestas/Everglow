@@ -6,6 +6,8 @@ public sealed class ObjectiveView
 
 	public string Description { get; init; } = string.Empty;
 
+	public string ObjectiveText { get; init; } = string.Empty;
+
 	public float Progress { get; init; }
 
 	public ObjectiveViewState State { get; init; }

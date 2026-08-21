@@ -145,12 +145,11 @@ public static class PlayerMissionViewAdapter
 			progress = ClampProgress(objective.Progress);
 		}
 
-		var lines = new List<string>();
-		objective.GetObjectivesText(lines);
 		return new ObjectiveView
 		{
 			Id = objective.ObjectiveID,
-			Description = string.Join('\n', lines),
+			Description = objective.Description,
+			ObjectiveText = objective.GetObjectiveText(),
 			Progress = progress,
 			State = state,
 		};

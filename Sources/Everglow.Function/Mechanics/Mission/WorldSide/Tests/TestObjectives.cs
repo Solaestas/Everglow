@@ -27,7 +27,7 @@ public class TestExplore : WorldMissionBase
 {
 	public override void Initialize()
 	{
-		Objectives.Add(new WorldExploreObjective(500, p => p.InVanillaBiome(VanillaBiomes.Jungle)));
+		Objectives.Add(new WorldExploreObjective(500, p => p.InVanillaBiome(VanillaBiomes.Jungle), "在丛林中探索"));
 	}
 }
 
@@ -53,7 +53,7 @@ public class TestReach : WorldMissionBase
 {
 	public override void Initialize()
 	{
-		Objectives.Add(new WorldReachObjective((p) => p.InVanillaBiome(VanillaBiomes.Desert)));
+		Objectives.Add(new WorldReachObjective((p) => p.InVanillaBiome(VanillaBiomes.Desert), "到达沙漠"));
 	}
 }
 

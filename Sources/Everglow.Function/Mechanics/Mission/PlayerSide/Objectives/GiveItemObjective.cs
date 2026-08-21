@@ -122,7 +122,7 @@ public class GiveItemObjective : PlayerObjectiveBase
 		}
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		var npc = new NPC();
 		npc.SetDefaults(NPCType);
@@ -131,13 +131,13 @@ public class GiveItemObjective : PlayerObjectiveBase
 		if (ItemTypes.Count > 1)
 		{
 			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"向{npc.TypeName}提交{itemString}合计{ItemCount}个 {progress}\n");
+			return $"向{npc.TypeName}提交{itemString}合计{ItemCount}个 {progress}";
 		}
-		else
-		{
-			lines.Add($"向{npc.TypeName}提交{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
-		}
+
+		return $"向{npc.TypeName}提交{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 
 	private float GetInventoryProgress(IEnumerable<Item> inventory) => Math.Clamp(inventory.Where(x => ItemTypes.Contains(x.type)).Sum(x => x.stack) / (float)ItemCount, 0f, 1f);
 

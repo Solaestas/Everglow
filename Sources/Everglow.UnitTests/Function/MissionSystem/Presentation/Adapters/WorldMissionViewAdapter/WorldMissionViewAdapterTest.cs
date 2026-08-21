@@ -97,6 +97,10 @@ public partial class WorldMissionViewAdapterTest
 
 	private sealed class StubObjective : WorldObjectiveBase
 	{
+		public string DescriptionValue { get; set; } = string.Empty;
+
+		public string ObjectiveTextValue { get; set; } = string.Empty;
+
 		public bool Ready { get; set; }
 
 		public float ProgressValue { get; set; }
@@ -123,6 +127,8 @@ public partial class WorldMissionViewAdapterTest
 
 		public int NetworkCalls { get; private set; }
 
+		public override string Description => DescriptionValue;
+
 		public override float Progress
 		{
 			get
@@ -142,6 +148,8 @@ public partial class WorldMissionViewAdapterTest
 			CheckCompletionCalls++;
 			return Ready;
 		}
+
+		public override string GetObjectiveText() => ObjectiveTextValue;
 
 		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 		{
@@ -239,11 +247,13 @@ public partial class WorldMissionViewAdapterTest
 	[TestMethod]
 	public void Create_MapsConfigurableWorldMetadata()
 	{
+		const string description = "[TextDrawer,Text='world body',Color='1,2,3,255']";
+		const string hint = "[TextDrawer,Text='world hint',Color='4,5,6,255']";
 		var source = new StubSource("world-source");
 		var mission = new StubMission
 		{
 			DisplayNameValue = "Mapped world mission",
-			DescriptionValue = "World mission description",
+			DescriptionValue = description,
 			SourceValue = source,
 			TypeValue = MissionType.Legendary,
 			VisibleValue = false,
@@ -255,9 +265,14 @@ public partial class WorldMissionViewAdapterTest
 		Assert.IsNull(view.SubSource);
 		Assert.AreEqual(MissionType.Legendary, view.Type);
 		Assert.AreEqual("Mapped world mission", view.DisplayName);
-		Assert.AreEqual("World mission description", view.Description);
+		Assert.AreEqual(description, view.Description);
 		Assert.AreEqual(string.Empty, view.Hint);
 		Assert.IsFalse(view.Visible);
+
+		mission.HintValue = hint;
+		MissionView hintedView = WorldMissionViewAdapter.Create(mission);
+
+		Assert.AreEqual(hint, hintedView.Hint);
 	}
 
 	[TestMethod]

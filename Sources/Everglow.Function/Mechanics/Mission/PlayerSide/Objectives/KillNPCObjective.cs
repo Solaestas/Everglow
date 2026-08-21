@@ -58,7 +58,7 @@ public class KillNPCObjective : PlayerObjectiveBase
 		}
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		string progress = EnableIndividualCounter
 				? $"({KilledCount}/{NPCCount})"
@@ -72,15 +72,15 @@ public class KillNPCObjective : PlayerObjectiveBase
 				npc.SetDefaults(npcType);
 				return npc.TypeName;
 			}));
-			lines.Add($"击杀 {npcString} 合计{NPCCount}个 {progress}\n");
+			return $"击杀 {npcString} 合计{NPCCount}个 {progress}";
 		}
-		else
-		{
-			var npc = new NPC();
-			npc.SetDefaults(NPCTypes.First());
-			lines.Add($"击杀 {npc.TypeName} {NPCCount}个 {progress}\n");
-		}
+
+		var npc = new NPC();
+		npc.SetDefaults(NPCTypes.First());
+		return $"击杀 {npc.TypeName} {NPCCount}个 {progress}";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 
 	public override void Activate(PlayerMissionBase sourceMission)
 	{

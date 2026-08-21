@@ -61,7 +61,7 @@ public class CollectItemObjective : PlayerObjectiveBase
 		}
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		string progress = EnableIndividualCounter
 			? $"({CollectedCount}/{ItemCount})"
@@ -70,13 +70,13 @@ public class CollectItemObjective : PlayerObjectiveBase
 		if (ItemTypes.Count > 1)
 		{
 			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"{verbString}{itemString}合计{ItemCount}个 {progress}\n");
+			return $"{verbString}{itemString}合计{ItemCount}个 {progress}";
 		}
-		else
-		{
-			lines.Add($"{verbString}{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
-		}
+
+		return $"{verbString}{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 
 	/// <summary>
 	/// Count pick item.

@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -41,6 +42,13 @@ public class WorldGiveObjective : WorldObjectiveBase
 		npc.SetDefaults(NPCType);
 		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
+	}
+
+	public override string GetObjectiveText()
+	{
+		var npc = new NPC();
+		npc.SetDefaults(NPCType);
+		return $"向{npc.TypeName}提交{ItemDrawer.Create(ItemType)}{ItemCount}个";
 	}
 
 	public override void Update()

@@ -12,14 +12,18 @@ public class WorldReachObjective : WorldObjectiveBase
 	{
 	}
 
-	public WorldReachObjective(Func<Player, bool> condition)
+	public WorldReachObjective(Func<Player, bool> condition, string objectiveText)
 	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(objectiveText);
 		Condition = condition;
+		this.objectiveText = objectiveText;
 	}
 
 	private bool reaching;
 
 	private bool oldReaching;
+
+	private string objectiveText = string.Empty;
 
 	public bool Reached { get; private set; }
 
@@ -34,6 +38,8 @@ public class WorldReachObjective : WorldObjectiveBase
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 	{
 	}
+
+	public override string GetObjectiveText() => objectiveText;
 
 	public override void Update()
 	{

@@ -1,6 +1,7 @@
 using Everglow.Commons.Mechanics.Mission.Hooks;
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
@@ -34,6 +35,8 @@ public class WorldConsumeItemObjective : WorldObjectiveBase
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup) =>
 		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
+
+	public override string GetObjectiveText() => $"消耗{ItemDrawer.Create(ItemType)}{ItemCount}个 ({ConsumedCount}/{ItemCount})";
 
 	public override void ResetProgress()
 	{

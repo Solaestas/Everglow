@@ -49,11 +49,13 @@ public class TalkNPCObjective : PlayerObjectiveBase
 		iconGroup.Add(NPCMissionIcon.Create(NPCType, npc.TypeName));
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		var npc = new NPC();
 		npc.SetDefaults(NPCType);
 
-		lines.Add($"和{npc.TypeName}对话\n");
+		return $"和{npc.TypeName}对话";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 }

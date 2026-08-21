@@ -55,6 +55,26 @@ public partial class WorldMissionViewAdapterTest
 	}
 
 	[TestMethod]
+	public void Create_MapsAuthoredObjectiveStringsWithoutModification()
+	{
+		const string description = "[TextDrawer,Text='supplement',Color='1,2,3,255']";
+		const string objectiveText = "[ItemDrawer,ItemType='1'] collect\nwithout splitting the objective";
+		var objective = new StubObjective
+		{
+			DescriptionValue = description,
+			ObjectiveTextValue = objectiveText,
+		};
+		var mission = new StubMission();
+		mission.Objectives.Add(objective);
+
+		MissionView view = WorldMissionViewAdapter.Create(mission);
+		var objectiveView = ((LeafObjectiveNodeView)view.ObjectiveNodes.Single()).Objective;
+
+		Assert.AreEqual(description, objectiveView.Description);
+		Assert.AreEqual(objectiveText, objectiveView.ObjectiveText);
+	}
+
+	[TestMethod]
 	public void Create_DerivesCompletedActiveAndPendingObjectiveStates()
 	{
 		var completed = new StubObjective { ProgressValue = -1f };

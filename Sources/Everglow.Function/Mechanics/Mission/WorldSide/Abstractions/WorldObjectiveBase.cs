@@ -17,6 +17,8 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	public WorldObjectiveBase Next { get; set; }
 
+	public virtual string Description => string.Empty;
+
 	public virtual float Progress { get; } = 1f;
 
 	/// <summary>
@@ -82,6 +84,8 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	}
 
 	public abstract void GetObjectivesIcon(MissionIconGroup iconGroup);
+
+	public abstract string GetObjectiveText();
 
 	public virtual void LoadData(TagCompound tag)
 	{

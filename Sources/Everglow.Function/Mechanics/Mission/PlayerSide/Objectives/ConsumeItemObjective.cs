@@ -48,19 +48,19 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 		}
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		var progress = $"({ConsumedCount}/{ItemCount})";
 		if (ItemTypes.Count > 1)
 		{
 			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"消耗{itemString}合计{ItemCount}个 {progress}\n");
+			return $"消耗{itemString}合计{ItemCount}个 {progress}";
 		}
-		else
-		{
-			lines.Add($"消耗{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}\n");
-		}
+
+		return $"消耗{ItemDrawer.Create(ItemTypes.First())}{ItemCount}个 {progress}";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 
 	public override void Activate(PlayerMissionBase sourceMission)
 	{

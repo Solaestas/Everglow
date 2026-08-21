@@ -49,19 +49,19 @@ public class UseItemObjective : PlayerObjectiveBase
 		}
 	}
 
-	public override void GetObjectivesText(List<string> lines)
+	public override string GetObjectiveText()
 	{
 		var progress = $"({UsedCount}/{ItemCount})";
 		if (ItemTypes.Count > 1)
 		{
 			var itemString = string.Join(' ', ItemTypes.ConvertAll(i => ItemDrawer.Create(i)));
-			lines.Add($"使用{itemString}合计{ItemCount}次 {progress}\n");
+			return $"使用{itemString}合计{ItemCount}次 {progress}";
 		}
-		else
-		{
-			lines.Add($"使用{ItemDrawer.Create(ItemTypes.First())}{ItemCount}次 {progress}\n");
-		}
+
+		return $"使用{ItemDrawer.Create(ItemTypes.First())}{ItemCount}次 {progress}";
 	}
+
+	public override void GetObjectivesText(List<string> lines) => lines.Add(GetObjectiveText() + "\n");
 
 	public override void Activate(PlayerMissionBase sourceMission)
 	{

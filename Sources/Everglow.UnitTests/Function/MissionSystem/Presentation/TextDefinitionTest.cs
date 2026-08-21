@@ -28,15 +28,16 @@ public class TextDefinitionTest
 	[TestMethod]
 	public void GetMissionDetailText_FormatsTimerAndDescription()
 	{
+		const string description = "[TextDrawer,Text='Description',Color='1,2,3,255']";
 		var mission = new MissionView
 		{
 			Identity = new MissionIdentity(MissionSide.Player, "TestMission", "TestMission"),
-			Description = "Description",
+			Description = description,
 			TimeLimit = 60,
 		};
 
 		Assert.AreEqual(
-			"[TimerIconDrawer,MissionName='TestMission'] 剩余时间:[TimerStringDrawer,MissionName='TestMission']\n\n描述：\nDescription\n",
+			$"[TimerIconDrawer,MissionName='TestMission'] 剩余时间:[TimerStringDrawer,MissionName='TestMission']\n\n描述：\n{description}\n",
 			TextDefinition.GetMissionDetailText(mission));
 	}
 
@@ -49,21 +50,29 @@ public class TextDefinitionTest
 			[
 				new LeafObjectiveNodeView(new ObjectiveView
 				{
-					Description = "First",
+					Description = "must not render",
+					ObjectiveText = "First",
 					State = ObjectiveViewState.Completed,
 				}),
 				new BranchObjectiveNodeView(
 				[
 					new ObjectiveBranchView(
 						ObjectiveBranchState.Candidate,
-						[new ObjectiveView { Description = "Second" }]),
+						[new ObjectiveView
+						{
+							Description = "must not render",
+							ObjectiveText = "Second",
+						}]),
 				]),
 			],
 		};
 
+		string text = TextDefinition.GetMissionObjectivesText(mission);
+
 		Assert.AreEqual(
 			"目标：\n1.1 [TextDrawer,Text='(已完成)',Color='100,100,100,255'] First\n2.1 [TextDrawer,Text='(Branch 1)',Color='100,180,120,255'] Second\n",
-			TextDefinition.GetMissionObjectivesText(mission));
+			text);
+		Assert.DoesNotContain("must not render", text);
 	}
 
 	[TestMethod]

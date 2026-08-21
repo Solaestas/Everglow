@@ -1,5 +1,6 @@
 using Everglow.Commons.Mechanics.Mission.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Mission.Presentation.Icons;
+using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
 using Everglow.Commons.Utilities;
 using SubworldLibrary;
 using Terraria.ModLoader.IO;
@@ -37,6 +38,8 @@ public class WorldCollectItemObjective : WorldObjectiveBase
 
 	public override void GetObjectivesIcon(MissionIconGroup iconGroup) =>
 		iconGroup.Add(ItemMissionIcon.Create(ItemType, new Item(ItemType).Name));
+
+	public override string GetObjectiveText() => $"拥有{ItemDrawer.Create(ItemType)}{ItemCount}个 ({globalMax}/{ItemCount})";
 
 	public override void Update()
 	{

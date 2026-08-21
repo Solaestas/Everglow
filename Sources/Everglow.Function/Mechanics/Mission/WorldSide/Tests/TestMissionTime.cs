@@ -16,6 +16,8 @@ public class TestMissionTime : WorldMissionBase
 	{
 		public override bool CheckCompletion() => false;
 
+		public override string GetObjectiveText() => string.Empty;
+
 		public override void GetObjectivesIcon(MissionIconGroup iconGroup)
 		{
 		}

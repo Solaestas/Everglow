@@ -37,22 +37,22 @@ public partial class PlayerMissionViewAdapterTest
 		var anyOfView = (AnyOfObjectiveNodeView)view.ObjectiveNodes[2];
 		var branchView = (BranchObjectiveNodeView)view.ObjectiveNodes[3];
 		Assert.AreEqual(0, leafView.Objective.Id);
-		Assert.AreEqual("leaf line one\nleaf line two", leafView.Objective.Description);
+		Assert.AreEqual("leaf line one\nleaf line two", leafView.Objective.ObjectiveText);
 		Assert.AreEqual(ObjectiveViewState.Pending, leafView.Objective.State);
 		CollectionAssert.AreEqual(
 			new[] { "parallel first", "parallel second" },
-			parallelView.Objectives.Select(objective => objective.Description).ToArray());
+			parallelView.Objectives.Select(objective => objective.ObjectiveText).ToArray());
 		CollectionAssert.AreEqual(
 			new[] { "any-of first", "any-of second" },
-			anyOfView.Objectives.Select(objective => objective.Description).ToArray());
+			anyOfView.Objectives.Select(objective => objective.ObjectiveText).ToArray());
 		Assert.AreEqual(ObjectiveBranchState.Candidate, branchView.Branches[0].State);
 		Assert.AreEqual(ObjectiveBranchState.Candidate, branchView.Branches[1].State);
 		CollectionAssert.AreEqual(
 			new[] { "branch A first", "branch A second" },
-			branchView.Branches[0].Objectives.Select(objective => objective.Description).ToArray());
+			branchView.Branches[0].Objectives.Select(objective => objective.ObjectiveText).ToArray());
 		CollectionAssert.AreEqual(
 			new[] { "branch B first" },
-			branchView.Branches[1].Objectives.Select(objective => objective.Description).ToArray());
+			branchView.Branches[1].Objectives.Select(objective => objective.ObjectiveText).ToArray());
 		CollectionAssert.AreEqual(new[] { 1, 2 }, parallelView.Objectives.Select(objective => objective.Id).ToArray());
 		CollectionAssert.AreEqual(new[] { 3, 4 }, anyOfView.Objectives.Select(objective => objective.Id).ToArray());
 		CollectionAssert.AreEqual(new[] { 5, 6 }, branchView.Branches[0].Objectives.Select(objective => objective.Id).ToArray());
@@ -62,6 +62,26 @@ public partial class PlayerMissionViewAdapterTest
 		leaf.ProgressValue = 0.9f;
 		Assert.HasCount(4, view.ObjectiveNodes);
 		Assert.AreEqual(0.1f, leafView.Objective.Progress);
+	}
+
+	[TestMethod]
+	public void Create_MapsAuthoredObjectiveStringsWithoutModification()
+	{
+		const string description = "[TextDrawer,Text='supplement',Color='1,2,3,255']";
+		const string objectiveText = "[ItemDrawer,ItemType='1'] collect\nwithout splitting the objective";
+		var objective = new StubObjective
+		{
+			DescriptionValue = description,
+			ObjectiveTextValue = objectiveText,
+		};
+		var mission = new StubMission();
+		mission.Objectives.Add(objective);
+
+		MissionView view = PlayerMissionViewAdapter.Create(mission);
+		var objectiveView = ((LeafObjectiveNodeView)view.ObjectiveNodes.Single()).Objective;
+
+		Assert.AreEqual(description, objectiveView.Description);
+		Assert.AreEqual(objectiveText, objectiveView.ObjectiveText);
 	}
 
 	[TestMethod]

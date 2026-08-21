@@ -59,7 +59,12 @@ public partial class PlayerMissionViewAdapterTest
 		public StubObjective(params string[] lines)
 		{
 			this.lines = lines;
+			ObjectiveTextValue = string.Join('\n', lines);
 		}
+
+		public string DescriptionValue { get; set; } = string.Empty;
+
+		public string ObjectiveTextValue { get; set; } = string.Empty;
 
 		public bool Ready { get; set; }
 
@@ -68,6 +73,8 @@ public partial class PlayerMissionViewAdapterTest
 		public MissionIconBase? Icon { get; set; }
 
 		public bool ThrowOnTextRead { get; set; }
+
+		public override string Description => DescriptionValue;
 
 		public override float Progress => ProgressValue;
 
@@ -89,6 +96,16 @@ public partial class PlayerMissionViewAdapterTest
 			}
 
 			output.AddRange(lines);
+		}
+
+		public override string GetObjectiveText()
+		{
+			if (ThrowOnTextRead)
+			{
+				throw new InvalidOperationException("Hidden objective text must not be read.");
+			}
+
+			return ObjectiveTextValue;
 		}
 	}
 
@@ -114,13 +131,15 @@ public partial class PlayerMissionViewAdapterTest
 	[TestMethod]
 	public void Create_MapsIdentityMetadataSourcesAndVisibility()
 	{
+		const string description = "[TextDrawer,Text='mission body',Color='1,2,3,255']";
+		const string hint = "[TextDrawer,Text='mission hint',Color='4,5,6,255']";
 		var source = new StubSource("source");
 		var subSource = new StubSource("sub-source");
 		var mission = new StubMission
 		{
 			NameValue = "mission-definition",
 			DisplayNameValue = "Mission title",
-			DescriptionValue = "Visible details",
+			DescriptionValue = description,
 			SourceValue = source,
 			SubSourceValue = subSource,
 			TypeValue = MissionType.Legendary,
@@ -138,9 +157,14 @@ public partial class PlayerMissionViewAdapterTest
 		Assert.AreSame(subSource, view.SubSource);
 		Assert.AreEqual(MissionType.Legendary, view.Type);
 		Assert.AreEqual("Mission title", view.DisplayName);
-		Assert.AreEqual("Visible details", view.Description);
+		Assert.AreEqual(description, view.Description);
 		Assert.AreEqual(string.Empty, view.Hint);
 		Assert.IsFalse(view.Visible);
+
+		mission.HintValue = hint;
+		MissionView hintedView = PlayerMissionViewAdapter.Create(mission);
+
+		Assert.AreEqual(hint, hintedView.Hint);
 
 		mission.SourceValue = null;
 		MissionView defaultSourceView = PlayerMissionViewAdapter.Create(mission);

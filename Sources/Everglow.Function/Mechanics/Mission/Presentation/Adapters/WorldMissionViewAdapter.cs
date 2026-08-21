@@ -151,7 +151,8 @@ public static class WorldMissionViewAdapter
 		return new ObjectiveView
 		{
 			Id = objective.ObjectiveID,
-			Description = string.Empty,
+			Description = objective.Description,
+			ObjectiveText = objective.GetObjectiveText(),
 			Progress = progress,
 			State = state,
 		};
