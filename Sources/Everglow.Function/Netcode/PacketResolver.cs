@@ -33,7 +33,7 @@ public enum RouteDestination
 	///     <description>Sends directly to main world server.</description>
 	/// </item>
 	/// </list>
-	/// Typical use: mission progress reporting, validation requests, data aggregation.
+	/// Typical use: quest progress reporting, validation requests, data aggregation.
 	/// </summary>
 	MainServer,
 

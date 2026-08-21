@@ -50,7 +50,7 @@ Do not use tModLoader's in-game **Build Mod** action for this repository. The MS
 Run `dotnet build` for every code change. Run the full test command above when changing `Everglow.Function`, unit tests, or shared logic. For a focused test run:
 
 ```powershell
-dotnet test --filter "FullyQualifiedName~MissionSystem"
+dotnet test --filter "FullyQualifiedName~QuestSystem"
 ```
 
 Tests use MSTest and live in `Sources/Everglow.UnitTests`. Terraria static state makes graphics-dependent tests unsuitable; favor pure logic tests. Before a test first accesses `Terraria.Main`, set `Program.SavePath = string.Empty;` in `[TestInitialize]`. See `.cursor/rules/unit-testing-terraria-main.mdc` before writing those tests.

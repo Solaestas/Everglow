@@ -9,14 +9,14 @@
 | 任务 | 先阅读 |
 | --- | --- |
 | 构建、打包或 CI | `Documents/源代码编译流程.md`、`Sources/Directory.Build.props`、`.github/workflows/build-and-test.yml` |
-| Mission 任务系统 | `Sources/Everglow.Function/Mechanics/Mission/README.md`、`CONTRACTS.md` |
+| Quest 任务系统 | `Sources/Everglow.Function/Mechanics/Quest/README.md`、`Sources/Everglow.Function/Mechanics/Quest/QUEST_SYSTEM_DESIGN.md` |
 | 触及 `Terraria.Main` 的测试 | `.cursor/rules/unit-testing-terraria-main.mdc` 与临近测试 |
 | Food 模块 | `Sources/Modules/Food/FoodModule.md` |
 | 新增游戏内容 | `Sources/Modules/Example/` 中相同内容类型的范例 |
 | 子世界或 IL 修改 | `Documents/子世界.md`、`Documents/ILDoc/` |
 | Yggdrasil | `Sources/Modules/Yggdrasil/AGENTS.md`、其 `README.md` |
 
-`Documents/`、子系统 README、`CONTRACTS.md` 与局部 `AGENTS.md` 是本文件的补充，不要将其内容复制回根指南。
+`Documents/`、子系统 README、`QUEST_SYSTEM_DESIGN.md` 与局部 `AGENTS.md` 是本文件的补充，不要将其内容复制回根指南。
 
 ## Repository Map
 
@@ -48,7 +48,7 @@ dotnet restore
 dotnet build
 dotnet build /p:Configuration=Release /p:WarningLevel=0
 dotnet test --verbosity normal /p:WarningLevel=0
-dotnet test --filter "FullyQualifiedName~MissionSystem"
+dotnet test --filter "FullyQualifiedName~QuestSystem"
 .\update.bat
 ```
 

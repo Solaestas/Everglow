@@ -1,0 +1,65 @@
+using Everglow.Commons.Mechanics.Quest.Core;
+
+namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
+
+public abstract partial class WorldQuestBase : IQuestNetcode
+{
+	public virtual void NetSend(BinaryWriter writer)
+	{
+		writer.Write((int)State);
+		writer.Write(Time);
+		writer.Write(RewardClaimed);
+		writer.Write(RewardClaimedPlayers.Count);
+		foreach (var player in RewardClaimedPlayers)
+		{
+			writer.Write(player);
+		}
+		Objectives.NetSend(writer);
+	}
+
+	public virtual void NetReceive(BinaryReader reader)
+	{
+		var oldState = State;
+		State = (WorldQuestState)reader.ReadInt32();
+		Time = reader.ReadInt32();
+		RewardClaimed = reader.ReadBoolean();
+		int rewardPlayerCount = reader.ReadInt32();
+		for (int i = 0; i < rewardPlayerCount; i++)
+		{
+			RewardClaimedPlayers.Add(reader.ReadString());
+		}
+		Objectives.NetReceive(reader);
+		if (!RecoverInvalidObjectiveState())
+		{
+			ApplyObjectiveSnapshot(oldState, State);
+		}
+
+		if (oldState != State)
+		{
+			if (State == WorldQuestState.Active)
+			{
+				if (oldState == WorldQuestState.Locked)
+				{
+					WorldQuestManager.Notify(this, QuestNotificationType.Unlocked);
+				}
+				else
+				{
+					WorldQuestManager.Notify(this, QuestNotificationType.Restored);
+				}
+			}
+			else if (State == WorldQuestState.Completed)
+			{
+				WorldQuestManager.Notify(this, QuestNotificationType.Completed);
+			}
+			else if (State == WorldQuestState.Failed)
+			{
+				WorldQuestManager.Notify(this, QuestNotificationType.Failed);
+			}
+		}
+	}
+
+	public void OnMPSync()
+	{
+		Objectives.OnMPSync();
+	}
+}
