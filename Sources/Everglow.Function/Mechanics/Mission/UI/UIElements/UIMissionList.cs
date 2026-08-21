@@ -75,8 +75,7 @@ public class UIMissionList : UIBlock
 	public void RefreshList(MissionViewState? missionState, MissionType? missionType, MissionSourceBase missionSource)
 	{
 		// 筛选任务状态，获得初始列表
-		IEnumerable<MissionPresentationEntry> missions = MissionContainer.Service.GetAll()
-			.Where(entry => entry.View.Identity.Side == MissionSide.Player);
+		IEnumerable<MissionPresentationEntry> missions = MissionContainer.Service.GetAll();
 		if (missionState.HasValue)
 		{
 			missions = missions.Where(entry => entry.View.State == missionState.Value);

@@ -34,12 +34,6 @@ public partial class WorldMissionViewAdapterTest
 
 		public int TimeLimitValue { get; set; }
 
-		public bool ThrowOnDetailRead { get; set; }
-
-		public int ProgressReadCount { get; private set; }
-
-		public int TimeLimitReadCount { get; private set; }
-
 		public override string Name => NameValue;
 
 		public override string DisplayName => DisplayNameValue;
@@ -54,33 +48,9 @@ public partial class WorldMissionViewAdapterTest
 
 		public override bool Visible => VisibleValue;
 
-		public override float Progress
-		{
-			get
-			{
-				ProgressReadCount++;
-				if (ThrowOnDetailRead)
-				{
-					throw new InvalidOperationException("Hidden mission progress must not be read.");
-				}
+		public override float Progress => ProgressValue;
 
-				return ProgressValue;
-			}
-		}
-
-		public override int TimeLimit
-		{
-			get
-			{
-				TimeLimitReadCount++;
-				if (ThrowOnDetailRead)
-				{
-					throw new InvalidOperationException("Hidden mission time limit must not be read.");
-				}
-
-				return TimeLimitValue;
-			}
-		}
+		public override int TimeLimit => TimeLimitValue;
 
 		public void SetState(WorldMissionState state) => State = state;
 
@@ -105,11 +75,7 @@ public partial class WorldMissionViewAdapterTest
 
 		public float ProgressValue { get; set; }
 
-		public bool ThrowOnProgressRead { get; set; }
-
 		public MissionIconBase Icon { get; set; }
-
-		public int ProgressReadCount { get; private set; }
 
 		public int CheckCompletionCalls { get; private set; }
 
@@ -129,19 +95,7 @@ public partial class WorldMissionViewAdapterTest
 
 		public override string Description => DescriptionValue;
 
-		public override float Progress
-		{
-			get
-			{
-				ProgressReadCount++;
-				if (ThrowOnProgressRead)
-				{
-					throw new InvalidOperationException("Hidden objective progress must not be read.");
-				}
-
-				return ProgressValue;
-			}
-		}
+		public override float Progress => ProgressValue;
 
 		public override bool CheckCompletion()
 		{
@@ -326,21 +280,21 @@ public partial class WorldMissionViewAdapterTest
 	[TestMethod]
 	[DataRow("Follow the trail")]
 	[DataRow(MissionHintText.Masked)]
-	public void Create_NonWhitespaceHintShortCircuitsAllHiddenDetailReads(string hint)
+	public void Create_NonWhitespaceHintPreservesCompleteView(string hint)
 	{
 		var reward = new Item { type = 1, stack = 2 };
 		var objective = new StubObjective
 		{
 			ProgressValue = 0.8f,
-			ThrowOnProgressRead = true,
+			ObjectiveTextValue = "secret objective",
 		};
 		var mission = new StubMission
 		{
 			HintValue = hint,
+			DescriptionValue = "secret description",
 			VisibleValue = false,
 			ProgressValue = 0.75f,
 			TimeLimitValue = 120,
-			ThrowOnDetailRead = true,
 		};
 		mission.SetState(WorldMissionState.Active);
 		mission.SetTime(45);
@@ -352,17 +306,14 @@ public partial class WorldMissionViewAdapterTest
 		Assert.AreEqual(hint, view.Hint);
 		Assert.IsFalse(view.Visible);
 		Assert.AreEqual(MissionViewState.Active, view.State);
-		Assert.AreEqual(string.Empty, view.Description);
-		Assert.IsEmpty(view.ObjectiveNodes);
-		Assert.IsEmpty(view.Rewards);
-		Assert.AreEqual(0f, view.Progress);
-		Assert.AreEqual(0, view.ElapsedTime);
-		Assert.IsNull(view.TimeLimit);
-		Assert.IsNull(view.RemainingTime);
-		Assert.AreEqual(0, mission.ProgressReadCount);
-		Assert.AreEqual(0, mission.TimeLimitReadCount);
-		Assert.AreEqual(0, objective.ProgressReadCount);
-		Assert.IsFalse(mission.RewardClaimed);
+		Assert.AreEqual("secret description", view.Description);
+		Assert.HasCount(1, view.ObjectiveNodes);
+		Assert.AreEqual("secret objective", ((LeafObjectiveNodeView)view.ObjectiveNodes[0]).Objective.ObjectiveText);
+		Assert.HasCount(1, view.Rewards);
+		Assert.AreEqual(0.75f, view.Progress);
+		Assert.AreEqual(45, view.ElapsedTime);
+		Assert.AreEqual(120, view.TimeLimit);
+		Assert.AreEqual(75, view.RemainingTime);
 	}
 
 	[TestMethod]

@@ -69,8 +69,6 @@ public partial class PlayerMissionViewAdapterTest
 
 		public MissionIconBase? Icon { get; set; }
 
-		public bool ThrowOnTextRead { get; set; }
-
 		public override string Description => DescriptionValue;
 
 		public override float Progress => ProgressValue;
@@ -85,15 +83,7 @@ public partial class PlayerMissionViewAdapterTest
 			}
 		}
 
-		public override string GetObjectiveText()
-		{
-			if (ThrowOnTextRead)
-			{
-				throw new InvalidOperationException("Hidden objective text must not be read.");
-			}
-
-			return ObjectiveTextValue;
-		}
+		public override string GetObjectiveText() => ObjectiveTextValue;
 	}
 
 	private sealed class StubSource : MissionSourceBase
@@ -228,14 +218,13 @@ public partial class PlayerMissionViewAdapterTest
 	[TestMethod]
 	[DataRow("Follow the trail")]
 	[DataRow(MissionHintText.Masked)]
-	public void Create_NonWhitespaceHintHidesDetailsButKeepsVisibilityAndIcons(string hint)
+	public void Create_NonWhitespaceHintPreservesCompleteView(string hint)
 	{
 		var visibleIcon = new StubIcon();
 		var objective = new StubObjective("secret objective")
 		{
 			Icon = visibleIcon,
 			ProgressValue = 0.8f,
-			ThrowOnTextRead = true,
 		};
 		var mission = new StubMission
 		{
@@ -254,13 +243,14 @@ public partial class PlayerMissionViewAdapterTest
 
 		Assert.AreEqual(hint, view.Hint);
 		Assert.IsFalse(view.Visible);
-		Assert.AreEqual(string.Empty, view.Description);
-		Assert.IsEmpty(view.ObjectiveNodes);
-		Assert.IsEmpty(view.Rewards);
-		Assert.AreEqual(0f, view.Progress);
-		Assert.AreEqual(0, view.ElapsedTime);
-		Assert.IsNull(view.TimeLimit);
-		Assert.IsNull(view.RemainingTime);
+		Assert.AreEqual("secret description", view.Description);
+		Assert.HasCount(1, view.ObjectiveNodes);
+		Assert.AreEqual("secret objective", ((LeafObjectiveNodeView)view.ObjectiveNodes[0]).Objective.ObjectiveText);
+		Assert.HasCount(1, view.Rewards);
+		Assert.AreEqual(0.75f, view.Progress);
+		Assert.AreEqual(45, view.ElapsedTime);
+		Assert.AreEqual(120, view.TimeLimit);
+		Assert.AreEqual(75, view.RemainingTime);
 		Assert.HasCount(2, view.Icons);
 		Assert.IsInstanceOfType<MissionSourceIcon>(view.Icons[0]);
 		Assert.AreSame(visibleIcon, view.Icons[1]);

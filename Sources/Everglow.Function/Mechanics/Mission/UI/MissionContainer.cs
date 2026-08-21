@@ -394,7 +394,6 @@ public class MissionContainer : UIContainerElement
 	private void OnMissionObjectiveUpdated(MissionIdentity identity)
 	{
 		if (SelectedItem is not { } selectedItem
-			|| identity.Side != MissionSide.Player
 			|| selectedItem.View.Identity != identity
 			|| !Service.TryGet(identity, out MissionPresentationEntry entry))
 		{
