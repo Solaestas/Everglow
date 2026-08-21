@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Quest.Core;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
-public abstract partial class WorldQuestBase : IQuestMetadata
+public abstract partial class WorldQuestBase
 {
 	public virtual string Name => GetType().Name;
 

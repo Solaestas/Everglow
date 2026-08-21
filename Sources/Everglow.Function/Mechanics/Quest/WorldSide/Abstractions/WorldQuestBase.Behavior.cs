@@ -7,7 +7,7 @@ using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
-public abstract partial class WorldQuestBase : IQuestBehavior
+public abstract partial class WorldQuestBase
 {
 	protected WorldQuestBase()
 	{

@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Quest.Core;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
-public abstract partial class WorldQuestBase : IQuestNetcode
+public abstract partial class WorldQuestBase
 {
 	public virtual void NetSend(BinaryWriter writer)
 	{

@@ -2,7 +2,7 @@ using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
-public abstract partial class WorldQuestBase : IQuestPersistence
+public abstract partial class WorldQuestBase
 {
 	private const string StateKey = nameof(State);
 	private const string TimeKey = nameof(Time);
