@@ -143,7 +143,7 @@ public abstract partial class PlayerQuestBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void OnExpire()
 	{
-		PlayerQuestManager.Instance.ChangeQuestState(this, PlayerQuestState.Accepted, PlayerQuestState.Overdue);
+		PlayerQuestManager.Instance.ChangeQuestState(this, PlayerQuestState.Accepted, PlayerQuestState.Failed);
 	}
 
 	/// <summary>

@@ -31,7 +31,7 @@ public static class ColorDefinition
 		QuestViewState.Active => new Rectangle(139, 36, 17, 67),
 		QuestViewState.Available => new Rectangle(121, 36, 17, 67),
 		QuestViewState.Failed => new Rectangle(103, 36, 17, 67),
-		QuestViewState.Overdue or QuestViewState.Locked => new Rectangle(85, 36, 17, 67),
+		QuestViewState.Locked => new Rectangle(85, 36, 17, 67),
 		QuestViewState.Completed => new Rectangle(67, 36, 17, 67),
 		null => new Rectangle(157, 36, 17, 67),
 		_ => new Rectangle(157, 36, 17, 67),
@@ -40,10 +40,11 @@ public static class ColorDefinition
 	public static Rectangle GetQuestStateGemFrame(QuestViewState? questState)
 	{
 		const int FrameSize = 26;
+		const int LockedFrameIndex = 5;
 		int frameIndex = questState switch
 		{
 			null => 0,
-			QuestViewState.Locked => (int)QuestViewState.Overdue,
+			QuestViewState.Locked => LockedFrameIndex,
 			_ => (int)questState.Value,
 		};
 		return new Rectangle(FrameSize * frameIndex, FrameSize, FrameSize, FrameSize);

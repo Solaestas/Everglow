@@ -7,5 +7,4 @@ public enum QuestViewState
 	Active,
 	Completed,
 	Failed,
-	Overdue,
 }

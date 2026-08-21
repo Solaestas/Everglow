@@ -17,7 +17,6 @@ public class PlayerQuestBasePersistenceTest
 	[DataRow(PlayerQuestState.Accepted)]
 	[DataRow(PlayerQuestState.Available)]
 	[DataRow(PlayerQuestState.Failed)]
-	[DataRow(PlayerQuestState.Overdue)]
 	[DataRow(PlayerQuestState.Completed)]
 	public void SaveData_LoadData_PreservesState(PlayerQuestState state)
 	{

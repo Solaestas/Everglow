@@ -44,7 +44,6 @@ public class UIQuestFilter : BaseElement
 		QuestViewState.Active,
 		QuestViewState.Completed,
 		QuestViewState.Failed,
-		QuestViewState.Overdue,
 		QuestViewState.Locked,
 	];
 

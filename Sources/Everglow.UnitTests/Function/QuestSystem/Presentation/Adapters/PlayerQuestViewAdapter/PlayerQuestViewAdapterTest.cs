@@ -155,7 +155,6 @@ public partial class PlayerQuestViewAdapterTest
 	[DataRow(PlayerQuestState.Accepted, QuestViewState.Active)]
 	[DataRow(PlayerQuestState.Completed, QuestViewState.Completed)]
 	[DataRow(PlayerQuestState.Failed, QuestViewState.Failed)]
-	[DataRow(PlayerQuestState.Overdue, QuestViewState.Overdue)]
 	public void Create_MapsEveryPlayerState(PlayerQuestState state, QuestViewState expected)
 	{
 		var quest = new StubQuest { State = state };

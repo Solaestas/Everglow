@@ -162,7 +162,6 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveChangeQuest.Events.OnMouseHover += e =>
 		{
 			if (SelectedItem != null
-				&& SelectedItem.View.State != QuestViewState.Overdue
 				&& SelectedItem.View.State != QuestViewState.Failed)
 			{
 				_objectiveChangeQuest.PanelColor = Color.White;

@@ -160,7 +160,6 @@ public static class PlayerQuestViewAdapter
 			PlayerQuestState.Accepted => QuestViewState.Active,
 			PlayerQuestState.Completed => QuestViewState.Completed,
 			PlayerQuestState.Failed => QuestViewState.Failed,
-			PlayerQuestState.Overdue => QuestViewState.Overdue,
 			_ => throw new InvalidDataException($"Unknown player quest state {state}."),
 		};
 	}

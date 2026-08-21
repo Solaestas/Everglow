@@ -25,7 +25,7 @@ PlayerSide/WorldSide Actions <──────────── QuestPresenta
 - Player：`DefinitionId = Name`；对象构造时生成 N 格式 GUID 作为 `InstanceId`。Available、Accepted、Cancel 回池以及当前对象的 Retry/Reset 不更换 ID；重新创建对象会产生新 ID。Manager 仍按 `Name` 判重，不支持同定义多实例并存。
 - World：固定单实例，`DefinitionId = InstanceId = Name`；运行期 `WhoAmI` 不进入展示身份。
 
-统一展示状态为 Locked、Available、Active、Completed、Failed、Overdue。Player 的 Available/Accepted/Completed/Failed/Overdue 分别映射到同名语义（Accepted 映射 Active）；World 的 Locked/Active/Completed/Failed 直接映射。展示状态不推导重试、领奖或按钮能力。
+统一展示状态为 Locked、Available、Active、Completed、Failed。Player 的 Available/Accepted/Completed/Failed 分别映射到同名语义（Accepted 映射 Active）；World 的 Locked/Active/Completed/Failed 直接映射。任务到期与其他失败原因统一进入 Failed；展示状态不推导重试、领奖或按钮能力。
 
 ## 文本、Hint 与可见性
 

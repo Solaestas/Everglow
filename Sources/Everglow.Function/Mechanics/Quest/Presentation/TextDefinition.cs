@@ -86,7 +86,6 @@ public static class TextDefinition
 			QuestViewState.Active when entry.Actions.Any(action => action.Type == QuestActionType.Submit) => "提交",
 			QuestViewState.Active => "放弃",
 			QuestViewState.Completed => "完成",
-			QuestViewState.Overdue => "过期",
 			QuestViewState.Failed => "失败",
 			QuestViewState.Locked => "锁定",
 			_ => "未知",
