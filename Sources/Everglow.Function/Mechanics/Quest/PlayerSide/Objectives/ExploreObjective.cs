@@ -13,7 +13,7 @@ public class ExploreObjective : PlayerObjectiveBase
 
 	public ExploreObjective(IShoppingBiome biome, float moveRequirement = 0)
 	{
-		if (MoveRequirement < 0)
+		if (moveRequirement < 0)
 		{
 			throw new ArgumentOutOfRangeException("Move requirement should not less than 0.");
 		}

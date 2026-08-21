@@ -45,7 +45,7 @@ public class TalkNPCObjective : PlayerObjectiveBase
 	public override void GetObjectivesIcon(QuestIconGroup iconGroup)
 	{
 		var npc = new NPC();
-		new NPC().SetDefaults(NPCType);
+		npc.SetDefaults(NPCType);
 		iconGroup.Add(NPCQuestIcon.Create(NPCType, npc.TypeName));
 	}
 
