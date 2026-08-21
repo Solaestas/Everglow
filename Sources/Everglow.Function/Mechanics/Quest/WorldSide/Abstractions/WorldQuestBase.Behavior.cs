@@ -1,6 +1,6 @@
 using Everglow.Commons.Mechanics.Quest.Core;
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure;
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure.Nodes;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure.Nodes;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Packets;
 using Everglow.Commons.Netcode;
 using Everglow.Commons.Utilities;
@@ -27,7 +27,7 @@ public abstract partial class WorldQuestBase : IQuestBehavior
 
 	public virtual float Progress => Objectives.Progress;
 
-	public WorldStructuralObjectiveContainer Objectives { get; } = new();
+	public WorldObjectiveContainer Objectives { get; } = new();
 
 	public IReadOnlyList<WorldObjectiveBase> ActiveObjectives => _activatedObjectives;
 

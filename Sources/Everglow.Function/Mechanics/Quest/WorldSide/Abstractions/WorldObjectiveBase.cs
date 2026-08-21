@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -33,7 +33,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="WorldStructuralObjectiveContainer.Add(WorldObjectiveBase)"/>.
+	/// Invoked by <see cref="WorldObjectiveContainer.Add(WorldObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()

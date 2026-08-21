@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Quest.PlayerSide;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.PlayerSide;
-using Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
@@ -162,7 +162,7 @@ public class PlayerObjectiveStructureTest
 	{
 		var savedFirst = new TestObjective { Ready = true };
 		var savedSecond = new TestObjective();
-		var saved = new PlayerStructuralObjectiveContainer().Add(new TestObjective { Ready = true }).AddParallel(savedFirst, savedSecond);
+		var saved = new PlayerObjectiveContainer().Add(new TestObjective { Ready = true }).AddParallel(savedFirst, savedSecond);
 		var quest = new TestQuest();
 		saved.Activate(quest);
 		saved.Update(quest);
@@ -172,7 +172,7 @@ public class PlayerObjectiveStructureTest
 
 		var loadedFirst = new TestObjective();
 		var loadedSecond = new TestObjective();
-		var loaded = new PlayerStructuralObjectiveContainer().Add(new TestObjective()).AddParallel(loadedFirst, loadedSecond);
+		var loaded = new PlayerObjectiveContainer().Add(new TestObjective()).AddParallel(loadedFirst, loadedSecond);
 		loaded.LoadData(tag);
 
 		Assert.IsTrue(loadedFirst.Completed);
@@ -191,7 +191,7 @@ public class PlayerObjectiveStructureTest
 		});
 		var first = new TestObjective();
 		var second = new TestObjective();
-		var objectives = new PlayerStructuralObjectiveContainer().Add(first).Add(second);
+		var objectives = new PlayerObjectiveContainer().Add(first).Add(second);
 
 		objectives.LoadData(legacyTag);
 
@@ -206,7 +206,7 @@ public class PlayerObjectiveStructureTest
 		var savedFirst = new TestObjective { Ready = true };
 		var savedBranchA = new TestObjective { Ready = true };
 		var savedBranchB = new TestObjective { Ready = true };
-		var saved = new PlayerStructuralObjectiveContainer()
+		var saved = new PlayerObjectiveContainer()
 			.Add(savedFirst)
 			.AddBranch([savedBranchA], [savedBranchB]);
 		savedFirst.Complete();
@@ -220,7 +220,7 @@ public class PlayerObjectiveStructureTest
 		var loadedFirst = new TestObjective();
 		var loadedBranchA = new TestObjective();
 		var loadedBranchB = new TestObjective();
-		var loaded = new PlayerStructuralObjectiveContainer()
+		var loaded = new PlayerObjectiveContainer()
 			.Add(loadedFirst)
 			.AddBranch([loadedBranchA], [loadedBranchB]);
 		loaded.LoadData(tag);
@@ -235,7 +235,7 @@ public class PlayerObjectiveStructureTest
 	[TestMethod]
 	public void QuestLoad_InvalidBranchCursor_ReopensCompletedQuest()
 	{
-		var saved = new PlayerStructuralObjectiveContainer()
+		var saved = new PlayerObjectiveContainer()
 			.Add(new TestObjective { Ready = true })
 			.AddBranch([new TestObjective { Ready = true }], [new TestObjective { Ready = true }]);
 		var tag = new TagCompound

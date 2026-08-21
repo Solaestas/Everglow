@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 
@@ -22,7 +22,7 @@ public abstract partial class PlayerQuestBase : ITagCompoundEntity
 
 	protected PlayerQuestBase()
 	{
-		Objectives = new PlayerStructuralObjectiveContainer();
+		Objectives = new PlayerObjectiveContainer();
 		RewardItems = [];
 		Time = 0;
 	}

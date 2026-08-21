@@ -1,7 +1,7 @@
 using Everglow.Commons.Mechanics.Quest.Presentation.Adapters;
 using Everglow.Commons.Mechanics.Quest.Presentation.Views;
 using Everglow.Commons.Mechanics.Quest.WorldSide;
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure.Nodes;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure.Nodes;
 
 namespace Everglow.UnitTests.Function.QuestSystem;
 

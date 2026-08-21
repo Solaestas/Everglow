@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 
@@ -7,7 +7,7 @@ public abstract partial class PlayerQuestBase : ITagCompoundEntity
 	/// <summary>
 	/// 任务目标数据
 	/// </summary>
-	public PlayerStructuralObjectiveContainer Objectives { get; set; }
+	public PlayerObjectiveContainer Objectives { get; set; }
 
 	/// <summary>
 	/// 当前任务目标

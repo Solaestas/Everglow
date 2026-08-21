@@ -12,7 +12,7 @@
 
 ## 测试放置与写法
 
-- 使用现有 MSTest 项目，并在 `Sources/Everglow.UnitTests/Function/QuestSystem/` 下按生产边界组织测试：`PlayerSide/`、`WorldSide/`、`Presentation/` 与 `UI/`；继续镜像有意义的 `Abstractions/`、`QuestStructure/`、`Objectives/`、`Adapters/` 与 `Views/` 子目录。`WorldSide/Tests/` 与 `PlayerSide/Tests/` 是模组内示例/调试任务内容，不是 MSTest 测试目录。
+- 使用现有 MSTest 项目，并在 `Sources/Everglow.UnitTests/Function/QuestSystem/` 下按生产边界组织测试：`PlayerSide/`、`WorldSide/`、`Presentation/` 与 `UI/`；继续镜像有意义的 `Abstractions/`、`Structure/`、`Objectives/`、`Adapters/` 与 `Views/` 子目录。`WorldSide/Tests/` 与 `PlayerSide/Tests/` 是模组内示例/调试任务内容，不是 MSTest 测试目录。
 - 所有任务系统测试保持 `Everglow.UnitTests.Function.QuestSystem` 命名空间，不要让物理目录制造无意义的命名空间差异。测试文件应以主要被测类型命名；单个类型的测试过大时，在该类型的专属目录中按可观察行为拆为 `Type.BehaviorTests.cs`，并用 `partial` 复用局部 Stub 与辅助方法。不要仅为对称而拆分小文件或 UI 内部目录。
 - 优先测试不依赖 Terraria 运行期的纯逻辑。复用邻近测试中的私有 `Stub`/`Test` 派生类、`IGameStateProvider` 测试替身和局部创建方法；不要因单个用例引入全局工厂、Mock 框架或新的测试抽象层。
 - 用公开状态、返回值、事件、持久化数据或 Presentation View/Action 断言可观察结果。只有当公开边界无法表达既有契约时，才沿用邻近测试的反射方式；不要把实现细节锁死在测试中。

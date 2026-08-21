@@ -1,14 +1,14 @@
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
-using Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure.Nodes;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure.Nodes;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure;
+namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 
 /// <summary>
 /// Player-side objective structure and lifecycle owner.
 /// </summary>
-public class PlayerStructuralObjectiveContainer
+public class PlayerObjectiveContainer
 {
 	private const string StructuralObjectivesSaveKey = "StructuralObjectives";
 
@@ -48,28 +48,28 @@ public class PlayerStructuralObjectiveContainer
 
 	#region DSL
 
-	public PlayerStructuralObjectiveContainer Add(PlayerObjectiveBase objective)
+	public PlayerObjectiveContainer Add(PlayerObjectiveBase objective)
 	{
 		Register(objective);
 		_nodes.Add(new PlayerLeafNode(objective));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddParallel(params PlayerObjectiveBase[] objectives)
+	public PlayerObjectiveContainer AddParallel(params PlayerObjectiveBase[] objectives)
 	{
 		RegisterRange(objectives);
 		_nodes.Add(new PlayerParallelNode(objectives.ToList()));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddOptional(params PlayerObjectiveBase[] objectives)
+	public PlayerObjectiveContainer AddOptional(params PlayerObjectiveBase[] objectives)
 	{
 		RegisterRange(objectives);
 		_nodes.Add(new PlayerOptionalNode(objectives.ToList()));
 		return this;
 	}
 
-	public PlayerStructuralObjectiveContainer AddBranch(params List<PlayerObjectiveBase>[] branches)
+	public PlayerObjectiveContainer AddBranch(params List<PlayerObjectiveBase>[] branches)
 	{
 		if (branches is null)
 		{

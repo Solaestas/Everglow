@@ -1,16 +1,16 @@
 using System.Diagnostics.CodeAnalysis;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure.Nodes;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure.Nodes;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure;
+namespace Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
 
 /// <summary>
 /// Represents a linear structural objective container.
 /// Manages structural nodes, objective lifecycle transitions, persistence, and netcode.
 /// </summary>
-public class WorldStructuralObjectiveContainer
+public class WorldObjectiveContainer
 {
 	/// <summary>
 	/// Fired when the current structural node requires completion.
@@ -71,7 +71,7 @@ public class WorldStructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objective">The objective to add.</param>
 	/// <returns>The current container instance.</returns>
-	public WorldStructuralObjectiveContainer Add(WorldObjectiveBase objective)
+	public WorldObjectiveContainer Add(WorldObjectiveBase objective)
 	{
 		if (objective is null)
 		{
@@ -92,7 +92,7 @@ public class WorldStructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objectives">The objectives to include in the parallel node.</param>
 	/// <returns>The current container instance.</returns>
-	public WorldStructuralObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
+	public WorldObjectiveContainer AddParallel(params WorldObjectiveBase[] objectives)
 	{
 		if (objectives is null)
 		{
@@ -116,7 +116,7 @@ public class WorldStructuralObjectiveContainer
 	/// </summary>
 	/// <param name="objectives">The objectives to include in the optional node.</param>
 	/// <returns>The current container instance.</returns>
-	public WorldStructuralObjectiveContainer AddOptional(params WorldObjectiveBase[] objectives)
+	public WorldObjectiveContainer AddOptional(params WorldObjectiveBase[] objectives)
 	{
 		if (objectives is null)
 		{
@@ -141,7 +141,7 @@ public class WorldStructuralObjectiveContainer
 	/// </summary>
 	/// <param name="branches">The branches to add, each represented as a list of objectives.</param>
 	/// <returns>The current container instance.</returns>
-	public WorldStructuralObjectiveContainer AddBranch(params List<WorldObjectiveBase>[] branches)
+	public WorldObjectiveContainer AddBranch(params List<WorldObjectiveBase>[] branches)
 	{
 		if (branches is null)
 		{

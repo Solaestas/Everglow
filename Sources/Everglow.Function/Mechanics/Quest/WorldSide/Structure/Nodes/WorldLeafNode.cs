@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure.Nodes;
+namespace Everglow.Commons.Mechanics.Quest.WorldSide.Structure.Nodes;
 
 /// <summary>
 /// Leaf node wrapping a single objective.

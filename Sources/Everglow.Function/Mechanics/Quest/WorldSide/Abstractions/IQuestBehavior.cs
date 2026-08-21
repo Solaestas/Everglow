@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Quest.WorldSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
@@ -10,7 +10,7 @@ public interface IQuestBehavior
 
 	public float Progress { get; }
 
-	public WorldStructuralObjectiveContainer Objectives { get; }
+	public WorldObjectiveContainer Objectives { get; }
 
 	public int Time { get; }
 

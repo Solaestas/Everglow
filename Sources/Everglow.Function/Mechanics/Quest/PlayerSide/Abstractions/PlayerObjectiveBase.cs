@@ -1,4 +1,4 @@
-using Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
@@ -25,7 +25,7 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 	public abstract bool CheckCompletion();
 
 	/// <summary>
-	/// Invoked by <see cref="PlayerStructuralObjectiveContainer.Add(PlayerObjectiveBase)"/>.
+	/// Invoked by <see cref="PlayerObjectiveContainer.Add(PlayerObjectiveBase)"/>.
 	/// <para/>In this hook you can do initializations, like load vanilla textures.
 	/// </summary>
 	public virtual void OnInitialize()

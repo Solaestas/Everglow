@@ -2,7 +2,7 @@ using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Terraria.ModLoader.IO;
 
-namespace Everglow.Commons.Mechanics.Quest.PlayerSide.QuestStructure.Nodes;
+namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Structure.Nodes;
 
 /// <summary>
 /// Player-quest-only structural objective node.
