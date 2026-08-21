@@ -119,7 +119,7 @@ public partial class PlayerMissionViewAdapterTest
 			DescriptionValue = description,
 			SourceValue = source,
 			SubSourceValue = subSource,
-			TypeValue = MissionType.Legendary,
+			TypeValue = MissionType.Legend,
 			IsVisible = false,
 			State = PlayerMissionState.Available,
 		};
@@ -132,7 +132,7 @@ public partial class PlayerMissionViewAdapterTest
 		Assert.IsTrue(Guid.TryParseExact(view.Identity.InstanceId, "N", out _));
 		Assert.AreSame(source, view.Source);
 		Assert.AreSame(subSource, view.SubSource);
-		Assert.AreEqual(MissionType.Legendary, view.Type);
+		Assert.AreEqual(MissionType.Legend, view.Type);
 		Assert.AreEqual("Mission title", view.DisplayName);
 		Assert.AreEqual(description, view.Description);
 		Assert.AreEqual(string.Empty, view.Hint);

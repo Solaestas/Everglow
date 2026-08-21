@@ -24,7 +24,7 @@ public enum MissionType
 	/// <summary>
 	/// 传说任务 - 彩
 	/// </summary>
-	Legendary,
+	Legend,
 
 	/// <summary>
 	/// 成就任务 - 绿

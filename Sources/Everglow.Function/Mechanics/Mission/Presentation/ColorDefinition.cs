@@ -22,7 +22,7 @@ public static class ColorDefinition
 		MissionType.Achievement => new Rectangle(99, 0, 33, 33),
 		MissionType.Challenge => new Rectangle(33, 0, 33, 33),
 		MissionType.Daily => new Rectangle(66, 0, 33, 33),
-		MissionType.Legendary => new Rectangle(132, 0, 33, 33),
+		MissionType.Legend => new Rectangle(132, 0, 33, 33),
 		_ => new Rectangle(0, 0, 33, 33),
 	};
 

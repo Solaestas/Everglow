@@ -1,6 +1,6 @@
 The world-side mission system aims to deliver a structured static experience through several key features.
 
-(Types) All world-side missions fall into 3 categories: Main Story, Side Story, and Legendary. Main story missions are the core of the game, designed to guide players through the main storyline. Side story missions are optional, offering additional content and rewards. Legendary missions are a special subset of side story missions. They feature unique content and exclusive rewards, setting them apart from regular side story missions.
+(Types) All world-side missions fall into 3 categories: Main Story, Side Story, and Legend. Main story missions are the core of the game, designed to guide players through the main storyline. Side story missions are optional, offering additional content and rewards. Legend missions are a special subset of side story missions. They feature unique content and exclusive rewards, setting them apart from regular side story missions.
 
 (Features-Main) Missions are locked before players reach certain milestones, though the unlocking requirements is visible. Some missions only become visible after specific conditions are met. Some of the missions are time-limited. Once the time limit expires, the mission becomes unavailable until a player chooses to restart it.
 

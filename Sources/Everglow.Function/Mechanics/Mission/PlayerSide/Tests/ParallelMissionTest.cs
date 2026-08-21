@@ -21,5 +21,5 @@ public class ParallelMissionTest : PlayerMissionBase
 
 	public override string DisplayName => nameof(ParallelMissionTest);
 
-	public override MissionType Type => MissionType.Legendary;
+	public override MissionType Type => MissionType.Legend;
 }

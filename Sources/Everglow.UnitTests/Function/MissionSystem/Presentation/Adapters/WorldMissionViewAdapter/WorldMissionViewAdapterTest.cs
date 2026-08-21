@@ -209,7 +209,7 @@ public partial class WorldMissionViewAdapterTest
 			DisplayNameValue = "Mapped world mission",
 			DescriptionValue = description,
 			SourceValue = source,
-			TypeValue = MissionType.Legendary,
+			TypeValue = MissionType.Legend,
 			VisibleValue = false,
 		};
 
@@ -217,7 +217,7 @@ public partial class WorldMissionViewAdapterTest
 
 		Assert.AreSame(source, view.Source);
 		Assert.IsNull(view.SubSource);
-		Assert.AreEqual(MissionType.Legendary, view.Type);
+		Assert.AreEqual(MissionType.Legend, view.Type);
 		Assert.AreEqual("Mapped world mission", view.DisplayName);
 		Assert.AreEqual(description, view.Description);
 		Assert.AreEqual(string.Empty, view.Hint);
