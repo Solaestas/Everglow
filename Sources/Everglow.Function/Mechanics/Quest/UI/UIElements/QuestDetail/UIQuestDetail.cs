@@ -30,8 +30,8 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 	private UIQuestBlock _objective;
 	private UIContainerPanel _objectiveContainer;
 	private UIQuestTextVerticalScrollbar _objectiveTextScrollbar;
-	private UITextPlus _objectiveText;
-	private UIQuestHourglassTimer _objectiveTimer;
+	private UITextPlus _objectiveHeader;
+	private readonly List<UIQuestObjectiveItem> _objectiveItems = [];
 
 	private UIQuestDurationBar _objectiveDurationBar;
 
@@ -102,19 +102,6 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveContainer = new UIContainerPanel();
 		_objectiveContainer.SetVerticalScrollbar(_objectiveTextScrollbar);
 		_objective.Register(_objectiveContainer);
-
-		_objectiveTimer = new UIQuestHourglassTimer();
-		_objectiveTimer.Info.IsVisible = false;
-		_objectiveTimer.Events.OnMouseHover += e =>
-		{
-			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip(_objectiveTimer.Timer);
-			_objectiveTimer.OnSelect = true;
-		};
-		_objectiveTimer.Events.OnMouseOut += e =>
-		{
-			_objectiveTimer.OnSelect = false;
-		};
-		_objective.Register(_objectiveTimer);
 
 		_objectiveDurationBar = new UIQuestDurationBar();
 		_objectiveDurationBar.Events.OnMouseHover += e =>
@@ -233,11 +220,6 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveTextScrollbar.Info.SetToCenter();
 		_objectiveTextScrollbar.Info.Left.SetValue(-20f, 1f);
 
-		_objectiveTimer.Info.Left.SetValue(17f);
-		_objectiveTimer.Info.Top.SetValue(-111f, 1f);
-		_objectiveTimer.Info.Width.SetValue(34);
-		_objectiveTimer.Info.Height.SetValue(64);
-
 		_objectiveTree.Info.Width.SetValue(38 * Scale);
 		_objectiveTree.Info.Height.SetValue(85 * Scale);
 		_objectiveTree.Info.Left.SetValue(100 * Scale);
@@ -322,23 +304,60 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 
 	private void SetObjectiveText(QuestView quest)
 	{
-		string text = TextDefinition.GetQuestObjectivesText(quest);
-
-		if (_objectiveText is null)
+		IReadOnlyList<ObjectiveLineView> lines = TextDefinition.GetQuestObjectiveLines(quest);
+		if (_objectiveHeader is null || _objectiveItems.Count != lines.Count)
 		{
-			_objectiveText = new UITextPlus(text);
-			_objectiveText.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
-			_objectiveContainer.AddElement(_objectiveText);
+			RebuildObjectiveItems(lines);
 		}
 		else
 		{
-			_objectiveText.Text = text;
+			for (int i = 0; i < lines.Count; i++)
+			{
+				_objectiveItems[i].SetLine(lines[i]);
+			}
 		}
 
-		_objectiveText.StringDrawer.Init(_objectiveText.Text);
-		_objectiveText.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
-		_objectiveText.Calculation();
-		BindObjectiveTimer(quest);
+		LayoutObjectiveItems();
+	}
+
+	private void RebuildObjectiveItems(IReadOnlyList<ObjectiveLineView> lines)
+	{
+		_objectiveContainer.ClearAllElements();
+		_objectiveItems.Clear();
+
+		float contentWidth = Math.Max(1f, _objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
+		_objectiveHeader = new UITextPlus("目标：");
+		_objectiveHeader.StringDrawer.DefaultParameters.SetParameter("FontSize", FontSize);
+		_objectiveHeader.StringDrawer.Init(_objectiveHeader.Text);
+		_objectiveHeader.StringDrawer.SetWordWrap(contentWidth);
+		_objectiveHeader.Calculation();
+
+		List<BaseElement> elements = [_objectiveHeader];
+		foreach (ObjectiveLineView line in lines)
+		{
+			var item = new UIQuestObjectiveItem(line, FontSize, contentWidth);
+			_objectiveItems.Add(item);
+			elements.Add(item);
+		}
+		_objectiveContainer.AddElements(elements);
+	}
+
+	private void LayoutObjectiveItems()
+	{
+		const float itemSpacing = 6f;
+		float top = 0f;
+
+		_objectiveHeader.Info.Top.SetValue(top);
+		_objectiveHeader.Calculation();
+		top += _objectiveHeader.Info.Height.Pixel + itemSpacing;
+
+		foreach (UIQuestObjectiveItem item in _objectiveItems)
+		{
+			item.Info.Top.SetValue(top);
+			item.Calculation();
+			top += item.Info.Height.Pixel + itemSpacing;
+		}
+		_objectiveContainer.Calculation();
 	}
 
 	private void ResetTexts()
@@ -348,21 +367,11 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 
 		_objectiveTextScrollbar.WheelValue = 0f;
 		_objectiveContainer.ClearAllElements();
-		_objectiveText = null;
-		_objectiveTimer.Timer = 0;
-		_objectiveTimer.MaxTime = 0;
-		_objectiveTimer.Info.IsVisible = false;
+		_objectiveHeader = null;
+		_objectiveItems.Clear();
 
 		// _rewardTextScrollbar.WheelValue = 0f;
 		// _rewardContainer.ClearAllElements();
-	}
-
-	private void BindObjectiveTimer(QuestView quest)
-	{
-		TimerView timer = quest.PrimaryObjectiveTimer;
-		_objectiveTimer.Info.IsVisible = timer is not null;
-		_objectiveTimer.MaxTime = timer?.TimeLimit ?? 0;
-		_objectiveTimer.Timer = timer?.RemainingTime ?? 0;
 	}
 
 	/// <summary>

@@ -76,7 +76,65 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
-	public void GetQuestObjectivesText_AppendsRemainingTimeToEveryTimedObjective()
+	public void GetQuestObjectiveLines_PreservesEachObjectivesTimer()
+	{
+		var firstTimer = new TimerView { TimeLimit = 600, ElapsedTime = 120 };
+		var secondTimer = new TimerView { TimeLimit = 300, ElapsedTime = 60 };
+		var firstObjective = new ObjectiveView
+		{
+			ObjectiveText = "First",
+			State = ObjectiveViewState.Active,
+			Timer = firstTimer,
+		};
+		var secondObjective = new ObjectiveView
+		{
+			ObjectiveText = "Second",
+			State = ObjectiveViewState.Pending,
+			Timer = secondTimer,
+		};
+		var quest = new QuestView
+		{
+			ObjectiveNodes =
+			[
+				new ParallelObjectiveNodeView([firstObjective, secondObjective]),
+			],
+		};
+
+		IReadOnlyList<ObjectiveLineView> lines = TextDefinition.GetQuestObjectiveLines(quest);
+
+		Assert.AreEqual(2, lines.Count);
+		Assert.AreSame(firstObjective, lines[0].Objective);
+		Assert.AreSame(firstTimer, lines[0].Timer);
+		Assert.StartsWith("1.1 First", lines[0].Text);
+		Assert.AreSame(secondObjective, lines[1].Objective);
+		Assert.AreSame(secondTimer, lines[1].Timer);
+		Assert.StartsWith("1.2 Second", lines[1].Text);
+	}
+
+	[TestMethod]
+	[DataRow(ObjectiveViewState.Pending, true)]
+	[DataRow(ObjectiveViewState.Active, true)]
+	[DataRow(ObjectiveViewState.TimedOut, true)]
+	[DataRow(ObjectiveViewState.Completed, false)]
+	[DataRow(ObjectiveViewState.Skipped, false)]
+	public void ObjectiveLineView_TimerVisibilityFollowsObjectiveState(ObjectiveViewState state, bool expectedVisible)
+	{
+		var timer = new TimerView { TimeLimit = 60 };
+		var objective = new ObjectiveView { State = state, Timer = timer };
+		var line = new ObjectiveLineView(objective, "Objective");
+
+		if (expectedVisible)
+		{
+			Assert.AreSame(timer, line.Timer);
+		}
+		else
+		{
+			Assert.IsNull(line.Timer);
+		}
+	}
+
+	[TestMethod]
+	public void GetQuestObjectiveLines_OmitDuplicateRemainingTimeText()
 	{
 		var quest = new QuestView
 		{
@@ -100,10 +158,10 @@ public class TextDefinitionTest
 			],
 		};
 
-		string text = TextDefinition.GetQuestObjectivesText(quest);
+		IReadOnlyList<ObjectiveLineView> lines = TextDefinition.GetQuestObjectiveLines(quest);
 
-		Assert.Contains("First [TextDrawer,Text='剩余 1Min 2s',Color='180,140,70,255']", text);
-		Assert.Contains("Second [TextDrawer,Text='剩余 0Min 2s',Color='180,140,70,255']", text);
+		Assert.AreEqual("1.1 First", lines[0].Text);
+		Assert.AreEqual("1.2 Second", lines[1].Text);
 	}
 
 	[TestMethod]
@@ -125,7 +183,7 @@ public class TextDefinitionTest
 		string text = TextDefinition.GetQuestObjectivesText(quest);
 
 		Assert.Contains("[TextDrawer,Text='(已超时)',Color='210,90,70,255'] Rescue NPC", text);
-		Assert.Contains("[TextDrawer,Text='剩余 0Min 0s',Color='210,90,70,255']", text);
+		Assert.DoesNotContain("剩余", text);
 	}
 
 	[TestMethod]

@@ -6,7 +6,6 @@ namespace Everglow.Commons.Mechanics.Quest.Presentation;
 
 public static class TextDefinition
 {
-	private const string ObjectiveTimerColor = "180,140,70,255";
 	private const string TimedOutObjectiveColor = "210,90,70,255";
 
 	public static string GetQuestTypeText(QuestType? type) => type?.ToString() ?? "All";
@@ -54,6 +53,23 @@ public static class TextDefinition
 		ArgumentNullException.ThrowIfNull(quest);
 
 		var text = new StringBuilder("目标：\n");
+		foreach (ObjectiveLineView line in GetQuestObjectiveLines(quest))
+		{
+			text.Append(line.Text);
+			if (!line.Text.EndsWith('\n'))
+			{
+				text.Append('\n');
+			}
+		}
+
+		return text.ToString();
+	}
+
+	public static IReadOnlyList<ObjectiveLineView> GetQuestObjectiveLines(QuestView quest)
+	{
+		ArgumentNullException.ThrowIfNull(quest);
+
+		List<ObjectiveLineView> lines = [];
 		int mainIndex = 1;
 		foreach (ObjectiveNodeView node in quest.ObjectiveNodes)
 		{
@@ -65,16 +81,12 @@ public static class TextDefinition
 				string line = completed
 					? $"[TextDrawer,Text='(已完成)',Color='100,100,100,255'] {formattedObjective}"
 					: formattedObjective;
-				text.Append($"{mainIndex}.{subIndex++} {line}");
-				if (!line.EndsWith('\n'))
-				{
-					text.Append('\n');
-				}
+				lines.Add(new ObjectiveLineView(objective, $"{mainIndex}.{subIndex++} {line}"));
 			}
 			mainIndex++;
 		}
 
-		return text.ToString();
+		return lines.ToArray();
 	}
 
 	public static string GetQuestActionText(QuestPresentationEntry entry, string color)
@@ -134,19 +146,10 @@ public static class TextDefinition
 	{
 		if (objective.State == ObjectiveViewState.TimedOut)
 		{
-			text = $"[TextDrawer,Text='(已超时)',Color='{TimedOutObjectiveColor}'] {text}";
+			return $"[TextDrawer,Text='(已超时)',Color='{TimedOutObjectiveColor}'] {text}";
 		}
 
-		if (objective.Timer is null
-			|| objective.State is ObjectiveViewState.Completed or ObjectiveViewState.Skipped)
-		{
-			return text;
-		}
-
-		string color = objective.State == ObjectiveViewState.TimedOut
-			? TimedOutObjectiveColor
-			: ObjectiveTimerColor;
-		return $"{text} [TextDrawer,Text='剩余 {GetRemainingTimeText(objective.Timer.RemainingTime)}',Color='{color}']";
+		return text;
 	}
 
 	private static bool IsCompleted(ObjectiveNodeView node)
