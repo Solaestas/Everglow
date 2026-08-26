@@ -37,5 +37,43 @@ public sealed class QuestView
 
 	public IReadOnlyList<ObjectiveNodeView> ObjectiveNodes { get; init; } = [];
 
+	public TimerView PrimaryObjectiveTimer => EnumerateObjectives()
+		.Where(objective => objective.Timer is not null
+			&& objective.State is ObjectiveViewState.Active or ObjectiveViewState.TimedOut)
+		.OrderBy(objective => objective.Timer.RemainingTime)
+		.Select(objective => objective.Timer)
+		.FirstOrDefault();
+
 	public IReadOnlyList<RewardView> Rewards { get; init; } = [];
+
+	private IEnumerable<ObjectiveView> EnumerateObjectives()
+	{
+		foreach (ObjectiveNodeView node in ObjectiveNodes)
+		{
+			switch (node)
+			{
+				case LeafObjectiveNodeView leaf:
+					yield return leaf.Objective;
+					break;
+				case ParallelObjectiveNodeView parallel:
+					foreach (ObjectiveView objective in parallel.Objectives)
+					{
+						yield return objective;
+					}
+					break;
+				case AnyOfObjectiveNodeView anyOf:
+					foreach (ObjectiveView objective in anyOf.Objectives)
+					{
+						yield return objective;
+					}
+					break;
+				case BranchObjectiveNodeView branch:
+					foreach (ObjectiveView objective in branch.Branches.SelectMany(branchView => branchView.Objectives))
+					{
+						yield return objective;
+					}
+					break;
+			}
+		}
+	}
 }

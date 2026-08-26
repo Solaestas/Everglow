@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
+using Everglow.Commons.Mechanics.Quest.PlayerSide.Objectives;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Tests;
 
 public class QuestTimerTest : PlayerQuestBase
 {
-	public override string DisplayName => GetType().Name;
+	public QuestTimerTest()
+	{
+		Objectives.Add(new KillNPCObjective([NPCID.BlueSlime], 3, true).WithTimeLimit(10 * 60));
+	}
 
-	public override int TimeLimit => 18000;
+	public override string DisplayName => GetType().Name;
 }

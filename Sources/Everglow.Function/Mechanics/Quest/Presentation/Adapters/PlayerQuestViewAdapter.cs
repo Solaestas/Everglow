@@ -126,6 +126,11 @@ public static class PlayerQuestViewAdapter
 			state = ObjectiveViewState.Completed;
 			progress = 1f;
 		}
+		else if (objective.IsTimedOut)
+		{
+			state = ObjectiveViewState.TimedOut;
+			progress = ClampProgress(objective.Progress);
+		}
 		else
 		{
 			state = activeObjectives.Contains(objective)
@@ -141,6 +146,13 @@ public static class PlayerQuestViewAdapter
 			ObjectiveText = objective.GetObjectiveText(),
 			Progress = progress,
 			State = state,
+			Timer = objective.Timer is null
+				? null
+				: new TimerView
+				{
+					TimeLimit = objective.Timer.TimeLimit,
+					ElapsedTime = objective.Timer.ElapsedTime,
+				},
 		};
 	}
 

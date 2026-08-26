@@ -57,14 +57,14 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 	{
 		foreach (var objective in FindAllEntrances())
 		{
-			if (!objective.CheckCompletion())
+			if (objective.CanProgress && !objective.CheckCompletion())
 			{
 				objective.Update();
 			}
 		}
 	}
 
-	public override bool CheckCompletion() => FindAllEntrances().Any(objective => objective.CheckCompletion());
+	public override bool CheckCompletion() => FindAllEntrances().Any(objective => objective.CanProgress && objective.CheckCompletion());
 
 	public override void Complete()
 	{
@@ -73,7 +73,7 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 			for (int i = 0; i < _branches.Count; i++)
 			{
 				var objective = _branches[i][0];
-				if (!objective.Completed && objective.CheckCompletion())
+				if (objective.CanProgress && objective.CheckCompletion())
 				{
 					objective.Complete();
 					_selected = i;
@@ -85,7 +85,7 @@ public class PlayerBranchNode : PlayerObjectiveNodeBase
 		else if (!Completed)
 		{
 			var objective = _branches[_selected][_indexInBranch];
-			if (objective.CheckCompletion())
+			if (objective.CanProgress && objective.CheckCompletion())
 			{
 				objective.Complete();
 				_indexInBranch++;

@@ -104,7 +104,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objective.Register(_objectiveContainer);
 
 		_objectiveTimer = new UIQuestHourglassTimer();
-		_objectiveTimer.MaxTime = 120;
+		_objectiveTimer.Info.IsVisible = false;
 		_objectiveTimer.Events.OnMouseHover += e =>
 		{
 			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip(_objectiveTimer.Timer);
@@ -234,9 +234,9 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveTextScrollbar.Info.Left.SetValue(-20f, 1f);
 
 		_objectiveTimer.Info.Left.SetValue(17f);
-		_objectiveTimer.Info.Top.SetValue(-148f, 1f);
-		_objectiveTimer.Info.Width.SetValue(62);
-		_objectiveTimer.Info.Height.SetValue(116);
+		_objectiveTimer.Info.Top.SetValue(-111f, 1f);
+		_objectiveTimer.Info.Width.SetValue(34);
+		_objectiveTimer.Info.Height.SetValue(64);
 
 		_objectiveTree.Info.Width.SetValue(38 * Scale);
 		_objectiveTree.Info.Height.SetValue(85 * Scale);
@@ -338,7 +338,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveText.StringDrawer.Init(_objectiveText.Text);
 		_objectiveText.StringDrawer.SetWordWrap(_objectiveContainer.HitBox.Width - _objectiveTextScrollbar.InnerScale.X);
 		_objectiveText.Calculation();
-
+		BindObjectiveTimer(quest);
 	}
 
 	private void ResetTexts()
@@ -349,9 +349,20 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveTextScrollbar.WheelValue = 0f;
 		_objectiveContainer.ClearAllElements();
 		_objectiveText = null;
+		_objectiveTimer.Timer = 0;
+		_objectiveTimer.MaxTime = 0;
+		_objectiveTimer.Info.IsVisible = false;
 
 		// _rewardTextScrollbar.WheelValue = 0f;
 		// _rewardContainer.ClearAllElements();
+	}
+
+	private void BindObjectiveTimer(QuestView quest)
+	{
+		TimerView timer = quest.PrimaryObjectiveTimer;
+		_objectiveTimer.Info.IsVisible = timer is not null;
+		_objectiveTimer.MaxTime = timer?.TimeLimit ?? 0;
+		_objectiveTimer.Timer = timer?.RemainingTime ?? 0;
 	}
 
 	/// <summary>

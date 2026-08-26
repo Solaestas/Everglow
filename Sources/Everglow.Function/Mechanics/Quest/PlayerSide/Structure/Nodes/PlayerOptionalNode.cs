@@ -27,13 +27,13 @@ public class PlayerOptionalNode : PlayerObjectiveNodeBase
 
 	public override List<PlayerObjectiveBase> FindAllEntrances() => _objectives.Where(o => !o.Completed).ToList();
 
-	public override bool CheckCompletion() => _objectives.Any(o => !o.Completed && o.CheckCompletion());
+	public override bool CheckCompletion() => _objectives.Any(o => o.CanProgress && o.CheckCompletion());
 
 	public override void Update()
 	{
 		foreach (var objective in _objectives)
 		{
-			if (!objective.Completed && !objective.CheckCompletion())
+			if (objective.CanProgress && !objective.CheckCompletion())
 			{
 				objective.Update();
 			}
@@ -44,7 +44,7 @@ public class PlayerOptionalNode : PlayerObjectiveNodeBase
 	{
 		foreach (var objective in _objectives)
 		{
-			if (!objective.Completed && objective.CheckCompletion())
+			if (objective.CanProgress && objective.CheckCompletion())
 			{
 				objective.Complete();
 			}

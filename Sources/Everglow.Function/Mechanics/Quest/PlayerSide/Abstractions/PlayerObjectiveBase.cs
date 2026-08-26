@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Quest.Core;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Utilities;
@@ -7,7 +8,15 @@ namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 
 public abstract class PlayerObjectiveBase : ITagCompoundEntity
 {
+	private const string TimerElapsedTimeSaveKey = "TimerElapsedTime";
+
 	public bool Completed { get; private set; }
+
+	public QuestTimer Timer { get; private set; }
+
+	public bool IsTimedOut => Timer?.IsExpired == true;
+
+	internal bool CanProgress => !Completed && !IsTimedOut;
 
 	public int ObjectiveID { get; set; }
 
@@ -67,7 +76,17 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 		return this;
 	}
 
-	public virtual void ResetProgress() => Completed = false;
+	public PlayerObjectiveBase WithTimeLimit(int timeLimit)
+	{
+		Timer = new QuestTimer(timeLimit);
+		return this;
+	}
+
+	public virtual void ResetProgress()
+	{
+		Completed = false;
+		Timer?.Reset();
+	}
 
 	/// <summary>
 	/// Restores completion state saved by the PlayerSide structural node.
@@ -89,6 +108,14 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	public virtual void LoadData(TagCompound tag)
 	{
+		if (Timer is not null)
+		{
+			int elapsedTime = tag.TryGet<int>(TimerElapsedTimeSaveKey, out var storedElapsedTime)
+				? storedElapsedTime
+				: 0;
+			Timer.RestoreElapsedTime(elapsedTime);
+		}
+
 		if (tag.TryGet<bool>(nameof(HasGivenRewardItems), out var hasGiven))
 		{
 			HasGivenRewardItems = hasGiven;
@@ -97,6 +124,11 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	public virtual void SaveData(TagCompound tag)
 	{
+		if (Timer is not null)
+		{
+			tag.Add(TimerElapsedTimeSaveKey, Timer.ElapsedTime);
+		}
+
 		tag.Add(nameof(HasGivenRewardItems), HasGivenRewardItems);
 	}
 }

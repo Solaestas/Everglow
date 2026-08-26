@@ -6,6 +6,9 @@ namespace Everglow.Commons.Mechanics.Quest.Presentation;
 
 public static class TextDefinition
 {
+	private const string ObjectiveTimerColor = "180,140,70,255";
+	private const string TimedOutObjectiveColor = "210,90,70,255";
+
 	public static string GetQuestTypeText(QuestType? type) => type?.ToString() ?? "All";
 
 	public static string GetQuestNotificationText(QuestView quest, QuestNotification notification)
@@ -56,11 +59,12 @@ public static class TextDefinition
 		{
 			int subIndex = 1;
 			bool completed = IsCompleted(node);
-			foreach (string objective in GetObjectiveLines(node))
+			foreach ((ObjectiveView objective, string objectiveText) in GetObjectiveLines(node))
 			{
+				string formattedObjective = FormatObjective(objective, objectiveText);
 				string line = completed
-					? $"[TextDrawer,Text='(已完成)',Color='100,100,100,255'] {objective}"
-					: objective;
+					? $"[TextDrawer,Text='(已完成)',Color='100,100,100,255'] {formattedObjective}"
+					: formattedObjective;
 				text.Append($"{mainIndex}.{subIndex++} {line}");
 				if (!line.EndsWith('\n'))
 				{
@@ -112,18 +116,37 @@ public static class TextDefinition
 
 	public static string GetColoredText(string text, string color) => $"[TextDrawer,Text='{text}',Color='{color}']";
 
-	private static IEnumerable<string> GetObjectiveLines(ObjectiveNodeView node)
+	private static IEnumerable<(ObjectiveView Objective, string Text)> GetObjectiveLines(ObjectiveNodeView node)
 	{
 		return node switch
 		{
-			LeafObjectiveNodeView leaf => [leaf.Objective.ObjectiveText],
-			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => objective.ObjectiveText),
-			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => objective.ObjectiveText),
+			LeafObjectiveNodeView leaf => [(leaf.Objective, leaf.Objective.ObjectiveText)],
+			ParallelObjectiveNodeView parallel => parallel.Objectives.Select(objective => (objective, objective.ObjectiveText)),
+			AnyOfObjectiveNodeView anyOf => anyOf.Objectives.Select(objective => (objective, objective.ObjectiveText)),
 			BranchObjectiveNodeView branch => branch.Branches.SelectMany((branchView, branchIndex) =>
 				branchView.Objectives.Select(objective =>
-					$"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.ObjectiveText}")),
+					(objective, $"[TextDrawer,Text='(Branch {branchIndex + 1})',Color='{GetBranchColor(branchView.State)}'] {objective.ObjectiveText}"))),
 			_ => [],
 		};
+	}
+
+	private static string FormatObjective(ObjectiveView objective, string text)
+	{
+		if (objective.State == ObjectiveViewState.TimedOut)
+		{
+			text = $"[TextDrawer,Text='(已超时)',Color='{TimedOutObjectiveColor}'] {text}";
+		}
+
+		if (objective.Timer is null
+			|| objective.State is ObjectiveViewState.Completed or ObjectiveViewState.Skipped)
+		{
+			return text;
+		}
+
+		string color = objective.State == ObjectiveViewState.TimedOut
+			? TimedOutObjectiveColor
+			: ObjectiveTimerColor;
+		return $"{text} [TextDrawer,Text='剩余 {GetRemainingTimeText(objective.Timer.RemainingTime)}',Color='{color}']";
 	}
 
 	private static bool IsCompleted(ObjectiveNodeView node)

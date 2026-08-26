@@ -11,4 +11,6 @@ public sealed class ObjectiveView
 	public float Progress { get; init; }
 
 	public ObjectiveViewState State { get; init; }
+
+	public TimerView Timer { get; init; }
 }

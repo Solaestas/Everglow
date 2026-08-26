@@ -6,4 +6,5 @@ public enum ObjectiveViewState
 	Active,
 	Completed,
 	Skipped,
+	TimedOut,
 }

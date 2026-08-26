@@ -19,13 +19,23 @@ public class PlayerObjectiveStructureTest
 	{
 		public bool Ready { get; set; }
 
+		public bool CompleteDuringUpdate { get; set; }
+
 		public int Activations { get; private set; }
 
 		public int Deactivations { get; private set; }
 
+		public int UpdateCalls { get; private set; }
+
 		public override float Progress => Ready ? 1f : 0f;
 
 		public override bool CheckCompletion() => Ready;
+
+		public override void Update()
+		{
+			UpdateCalls++;
+			Ready |= CompleteDuringUpdate;
+		}
 
 		public override void Activate(PlayerQuestBase sourceQuest) => Activations++;
 
@@ -155,6 +165,89 @@ public class PlayerObjectiveStructureTest
 		Assert.IsFalse(objective.Completed);
 		Assert.IsTrue(objective.HasGivenRewardItems);
 		Assert.IsTrue(objective.Ready);
+	}
+
+	[TestMethod]
+	public void TimedObjective_AdvancesOnlyWhileActiveAndExpiresInPlace()
+	{
+		var timed = new TestObjective();
+		timed.WithTimeLimit(PlayerQuestManager.UpdateInterval * 2);
+		var pending = new TestObjective();
+		pending.WithTimeLimit(PlayerQuestManager.UpdateInterval);
+		var quest = new TestQuest();
+		quest.Objectives.Add(timed).Add(pending);
+		quest.Objectives.Activate(quest);
+
+		quest.Objectives.Update(quest);
+		Assert.AreEqual(PlayerQuestManager.UpdateInterval, timed.Timer.ElapsedTime);
+		Assert.AreEqual(0, pending.Timer.ElapsedTime);
+
+		quest.Objectives.Update(quest);
+		Assert.IsTrue(timed.IsTimedOut);
+		Assert.IsFalse(timed.Completed);
+		Assert.AreSame(timed, quest.Objectives.FindCurrentObjectives().Single());
+		Assert.IsEmpty(quest.Objectives.ActiveObjectives);
+		Assert.AreEqual(1, timed.Deactivations);
+
+		quest.Objectives.Update(quest);
+		Assert.AreEqual(2, timed.UpdateCalls);
+		Assert.AreEqual(PlayerQuestManager.UpdateInterval * 2, timed.Timer.ElapsedTime);
+		Assert.AreEqual(1, timed.Deactivations);
+		Assert.AreEqual(0, pending.Timer.ElapsedTime);
+	}
+
+	[TestMethod]
+	public void TimedObjective_CompletionWinsAtExpiryBoundary()
+	{
+		var timed = new TestObjective { CompleteDuringUpdate = true };
+		timed.WithTimeLimit(PlayerQuestManager.UpdateInterval);
+		var next = new TestObjective();
+		var quest = new TestQuest();
+		quest.Objectives.Add(timed).Add(next);
+		quest.Objectives.Activate(quest);
+
+		quest.Objectives.Update(quest);
+
+		Assert.IsTrue(timed.Completed);
+		Assert.IsFalse(timed.IsTimedOut);
+		Assert.AreEqual(0, timed.Timer.ElapsedTime);
+		Assert.AreSame(next, quest.CurrentObjective);
+	}
+
+	[TestMethod]
+	public void TimedObjective_ResetAllowsReactivation()
+	{
+		var timed = new TestObjective();
+		timed.WithTimeLimit(PlayerQuestManager.UpdateInterval);
+		var quest = new TestQuest();
+		quest.Objectives.Add(timed);
+		quest.Objectives.Activate(quest);
+		quest.Objectives.Update(quest);
+
+		quest.Reset();
+		quest.Activate();
+
+		Assert.IsFalse(timed.IsTimedOut);
+		Assert.AreEqual(0, timed.Timer.ElapsedTime);
+		Assert.AreEqual(2, timed.Activations);
+		CollectionAssert.AreEqual(new[] { timed }, quest.Objectives.ActiveObjectives.ToArray());
+	}
+
+	[TestMethod]
+	public void NewlyActivatedTimedObjective_DoesNotConsumePreviousInterval()
+	{
+		var first = new TestObjective { Ready = true };
+		var second = new TestObjective();
+		second.WithTimeLimit(PlayerQuestManager.UpdateInterval);
+		var quest = new TestQuest();
+		quest.Objectives.Add(first).Add(second);
+		quest.Objectives.Activate(quest);
+
+		quest.Objectives.Update(quest);
+
+		Assert.AreSame(second, quest.CurrentObjective);
+		Assert.AreEqual(0, second.Timer.ElapsedTime);
+		Assert.IsFalse(second.IsTimedOut);
 	}
 
 	[TestMethod]

@@ -131,17 +131,29 @@ public class PlayerObjectiveContainer
 			return false;
 		}
 
+		var activeAtStart = _activeObjectives.ToArray();
 		Current.Update();
-		if (!Current.CheckCompletion())
+		bool completed = Current.CheckCompletion();
+		if (completed)
 		{
-			return false;
+			Current.Complete();
+			Deactivate();
+			Current = FindCurrentNode();
+			ActivateCurrent(quest);
 		}
 
-		Current.Complete();
-		Deactivate();
-		Current = FindCurrentNode();
-		ActivateCurrent(quest);
-		return true;
+		foreach (var objective in activeAtStart)
+		{
+			if (_activeObjectives.Contains(objective)
+				&& objective.CanProgress
+				&& objective.Timer?.Update(PlayerQuestManager.UpdateInterval) == true)
+			{
+				objective.Deactivate();
+				_activeObjectives.Remove(objective);
+			}
+		}
+
+		return completed;
 	}
 
 	public void ResetProgress()
@@ -164,6 +176,11 @@ public class PlayerObjectiveContainer
 
 		foreach (var objective in Current.FindAllEntrances())
 		{
+			if (!objective.CanProgress)
+			{
+				continue;
+			}
+
 			objective.Activate(quest);
 			_activeObjectives.Add(objective);
 		}

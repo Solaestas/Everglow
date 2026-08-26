@@ -76,6 +76,73 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	public void GetQuestObjectivesText_AppendsRemainingTimeToEveryTimedObjective()
+	{
+		var quest = new QuestView
+		{
+			ObjectiveNodes =
+			[
+				new ParallelObjectiveNodeView(
+				[
+					new ObjectiveView
+					{
+						ObjectiveText = "First",
+						State = ObjectiveViewState.Active,
+						Timer = new TimerView { TimeLimit = 7200, ElapsedTime = 3480 },
+					},
+					new ObjectiveView
+					{
+						ObjectiveText = "Second",
+						State = ObjectiveViewState.Pending,
+						Timer = new TimerView { TimeLimit = 120, ElapsedTime = 0 },
+					},
+				]),
+			],
+		};
+
+		string text = TextDefinition.GetQuestObjectivesText(quest);
+
+		Assert.Contains("First [TextDrawer,Text='剩余 1Min 2s',Color='180,140,70,255']", text);
+		Assert.Contains("Second [TextDrawer,Text='剩余 0Min 2s',Color='180,140,70,255']", text);
+	}
+
+	[TestMethod]
+	public void GetQuestObjectivesText_MarksTimedOutObjective()
+	{
+		var quest = new QuestView
+		{
+			ObjectiveNodes =
+			[
+				new LeafObjectiveNodeView(new ObjectiveView
+				{
+					ObjectiveText = "Rescue NPC",
+					State = ObjectiveViewState.TimedOut,
+					Timer = new TimerView { TimeLimit = 60, ElapsedTime = 60 },
+				}),
+			],
+		};
+
+		string text = TextDefinition.GetQuestObjectivesText(quest);
+
+		Assert.Contains("[TextDrawer,Text='(已超时)',Color='210,90,70,255'] Rescue NPC", text);
+		Assert.Contains("[TextDrawer,Text='剩余 0Min 0s',Color='210,90,70,255']", text);
+	}
+
+	[TestMethod]
+	public void GetQuestObjectivesText_LeavesUntimedObjectiveUnchanged()
+	{
+		var quest = new QuestView
+		{
+			ObjectiveNodes =
+			[
+				new LeafObjectiveNodeView(new ObjectiveView { ObjectiveText = "Untimed" }),
+			],
+		};
+
+		Assert.AreEqual("目标：\n1.1 Untimed\n", TextDefinition.GetQuestObjectivesText(quest));
+	}
+
+	[TestMethod]
 	public void GetQuestActionText_UsesAvailableSubmitAction()
 	{
 		var identity = new QuestIdentity(QuestSide.Player, "TestQuest", "TestQuest");
