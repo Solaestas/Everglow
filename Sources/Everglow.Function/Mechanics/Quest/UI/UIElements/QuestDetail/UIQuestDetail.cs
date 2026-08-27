@@ -466,49 +466,52 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 			// Visual effects for current quest detail interface(Submit, Fail, Quiting...)
 			if (Ins.VisualQuality.High && uiSystem.UI_Screen is not null)
 			{
-				SpriteBatchState sBS = GraphicsUtils.GetState(sb).Value;
-				if (AnimationState > 0)
+				SpriteBatchState previousState = GraphicsUtils.GetState(sb).Value;
+				var renderTargetState = new SpriteBatchState(
+					SpriteSortMode.Immediate,
+					BlendState.AlphaBlend,
+					SamplerState.PointWrap,
+					DepthStencilState.None,
+					previousState.RasterizerState,
+					Matrix.Identity,
+					null);
+
+				using (renderTargetState.BeginScope(sb))
 				{
-					if (AnimationTimer < 60)
+					if (AnimationState > 0)
 					{
-						AnimationTimer++;
+						if (AnimationTimer < 60)
+						{
+							AnimationTimer++;
+						}
+						switch (AnimationState)
+						{
+							case 1:
+								float value = AnimationTimer / 8f;
+								value = Math.Clamp(value, 0, 1f);
+								var effect = ModAsset.QuestDetailBlur.Value;
+								effect.Parameters["uSize"].SetValue(new Vector2(uiSystem.UI_Screen.Width, uiSystem.UI_Screen.Height));
+								effect.Parameters["uBlurValue"].SetValue(value);
+								effect.Parameters["uDelta"].SetValue(3f);
+								effect.CurrentTechnique.Passes["Blur"].Apply();
+								break;
+						}
 					}
-					sb.End();
-					sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, sBS.RasterizerState, null, sBS.TransformMatrix);
-					switch (AnimationState)
-					{
-						case 1:
-							float value = AnimationTimer / 8f;
-							value = Math.Clamp(value, 0, 1f);
-							var effect = ModAsset.QuestDetailBlur.Value;
-							effect.Parameters["uSize"].SetValue(new Vector2(Main.screenWidth, Main.screenHeight));
-							effect.Parameters["uBlurValue"].SetValue(value);
-							effect.Parameters["uDelta"].SetValue(3f);
-							effect.CurrentTechnique.Passes["Blur"].Apply();
-							break;
-					}
-				}
-				else
-				{
-					if (AnimationTimer > 0)
+					else if (AnimationTimer > 0)
 					{
 						AnimationTimer--;
 					}
-				}
-				if (AnimationState < 3)
-				{
-					sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, new Color(1f, 1f, 1f, 1f));
-				}
-				else
-				{
-					float value = AnimationTimer / 60f;
-					value = Math.Clamp(value, 0, 1f);
-					sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, Color.Lerp(Color.White,	Color.Red, value));
-				}
-				if (AnimationState > 0)
-				{
-					sb.End();
-					sb.Begin(sBS);
+
+					if (AnimationState < 3)
+					{
+						sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, new Color(1f, 1f, 1f, 1f));
+					}
+					else
+					{
+						float value = AnimationTimer / 60f;
+						value = Math.Clamp(value, 0, 1f);
+						sb.Draw(uiSystem.UI_Screen, Vector2.zeroVector, Color.Lerp(Color.White, Color.Red, value));
+					}
 				}
 			}
 			else
