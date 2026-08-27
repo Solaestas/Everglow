@@ -2,7 +2,6 @@ using Everglow.Commons.Mechanics.Quest.Hooks;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
-using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Objectives;
@@ -32,12 +31,6 @@ public class UseItemObjective : PlayerObjectiveBase
 	public int UsedCount { get; private set; }
 
 	public override float Progress => Math.Clamp(UsedCount / (float)ItemCount, 0f, 1f);
-
-	public override void OnInitialize()
-	{
-		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(ItemTypes);
-	}
 
 	public override bool CheckCompletion() => UsedCount >= ItemCount;
 

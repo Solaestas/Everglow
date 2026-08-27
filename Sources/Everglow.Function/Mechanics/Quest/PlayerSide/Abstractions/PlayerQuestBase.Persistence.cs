@@ -1,4 +1,3 @@
-using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
@@ -86,8 +85,6 @@ public abstract partial class PlayerQuestBase : ITagCompoundEntity
 				State = PlayerQuestState.Accepted;
 			}
 		}
-
-		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>

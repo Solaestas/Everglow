@@ -3,16 +3,45 @@ namespace Everglow.Commons.Utilities;
 public static class AssetUtils
 {
 	/// <summary>
+	/// Load a vanilla item texture when graphics are available.
+	/// </summary>
+	/// <param name="type">The item type.</param>
+	public static void LoadVanillaItemTexture(int type)
+	{
+		if (Main.dedServ || Main.instance is null || type < 0 || type >= ItemID.Count)
+		{
+			return;
+		}
+
+		Main.instance.LoadItem(type);
+	}
+
+	/// <summary>
 	/// Load not-loaded textures for vanilla items
 	/// </summary>
 	/// <param name="types"></param>
 	public static void LoadVanillaItemTextures(IEnumerable<int> types)
 	{
-		foreach (var type in types.Distinct().Where(t => t <= ItemID.Count))
+		ArgumentNullException.ThrowIfNull(types);
+
+		foreach (var type in types)
 		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadItem(type);
+			LoadVanillaItemTexture(type);
 		}
+	}
+
+	/// <summary>
+	/// Load a vanilla NPC texture when graphics are available.
+	/// </summary>
+	/// <param name="type">The NPC type.</param>
+	public static void LoadVanillaNPCTexture(int type)
+	{
+		if (Main.dedServ || Main.instance is null || type < 0 || type >= NPCID.Count)
+		{
+			return;
+		}
+
+		Main.instance.LoadNPC(type);
 	}
 
 	/// <summary>
@@ -21,10 +50,11 @@ public static class AssetUtils
 	/// <param name="types"></param>
 	public static void LoadVanillaNPCTextures(IEnumerable<int> types)
 	{
-		foreach (var type in types.Distinct().Where(t => t <= NPCID.Count))
+		ArgumentNullException.ThrowIfNull(types);
+
+		foreach (var type in types)
 		{
-			// The Main.LoadItem function will skip the loaded items
-			Main.instance.LoadNPC(type);
+			LoadVanillaNPCTexture(type);
 		}
 	}
 }

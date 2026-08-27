@@ -1,3 +1,4 @@
+using Everglow.Commons.Utilities;
 using Terraria.GameContent;
 
 namespace Everglow.Commons.Mechanics.Quest.Presentation.Icons;
@@ -53,6 +54,7 @@ public class NPCQuestIcon : QuestIconBase
 		{
 			throw new InvalidDataException();
 		}
+		AssetUtils.LoadVanillaNPCTexture(nPCType);
 
 		return new NPCQuestIcon()
 		{

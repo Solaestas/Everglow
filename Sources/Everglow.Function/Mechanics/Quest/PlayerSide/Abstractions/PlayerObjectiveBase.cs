@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Quest.Core;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
-using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
@@ -35,11 +34,10 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	/// <summary>
 	/// Invoked by <see cref="PlayerObjectiveContainer.Add(PlayerObjectiveBase)"/>.
-	/// <para/>In this hook you can do initializations, like load vanilla textures.
+	/// <para/>Override this hook to perform objective-specific initialization.
 	/// </summary>
 	public virtual void OnInitialize()
 	{
-		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>

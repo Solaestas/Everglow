@@ -1,6 +1,5 @@
 using Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
-using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
@@ -34,11 +33,10 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	/// <summary>
 	/// Invoked by <see cref="WorldObjectiveContainer.Add(WorldObjectiveBase)"/>.
-	/// <para/>In this hook you can do initializations, like load vanilla textures.
+	/// <para/>Override this hook to perform objective-specific initialization.
 	/// </summary>
 	public virtual void OnInitialize()
 	{
-		AssetUtils.LoadVanillaItemTextures(RewardItems.Select(x => x.type));
 	}
 
 	/// <summary>

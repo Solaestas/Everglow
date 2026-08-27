@@ -1,7 +1,6 @@
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.UI.StringDrawerSystem.DrawerItems.ImageDrawers;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Objectives;
 
@@ -52,13 +51,6 @@ public class GiveItemObjective : PlayerObjectiveBase
 	public override float Progress => GetInventoryProgress(Main.LocalPlayer.inventory);
 
 	public bool IsTalkingToNPC => NPCType == NPCID.None || (NPCType > NPCID.None && Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType);
-
-	public override void OnInitialize()
-	{
-		base.OnInitialize();
-		AssetUtils.LoadVanillaItemTextures(ItemTypes);
-		AssetUtils.LoadVanillaNPCTextures([NPCType]);
-	}
 
 	public override bool CheckCompletion() => IsTalkingToNPC && GetInventoryProgress(Main.LocalPlayer.inventory) >= 1f;
 

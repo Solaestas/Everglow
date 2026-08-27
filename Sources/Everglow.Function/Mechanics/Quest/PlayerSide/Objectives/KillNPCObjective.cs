@@ -2,7 +2,6 @@ using Everglow.Commons.Mechanics.Quest.Hooks;
 using Everglow.Commons.Mechanics.Quest.PlayerSide;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
-using Everglow.Commons.Utilities;
 using Terraria.ModLoader.IO;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Objectives;
@@ -35,12 +34,6 @@ public class KillNPCObjective : PlayerObjectiveBase
 	public bool EnableIndividualCounter { get; private set; }
 
 	public Func<Player, NPC, bool> Condition { get; set; }
-
-	public override void OnInitialize()
-	{
-		base.OnInitialize();
-		AssetUtils.LoadVanillaNPCTextures(NPCTypes);
-	}
 
 	public override bool CheckCompletion() => Progress >= 1f;
 

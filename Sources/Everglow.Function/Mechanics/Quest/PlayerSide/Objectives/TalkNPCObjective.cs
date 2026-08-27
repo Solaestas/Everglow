@@ -1,6 +1,5 @@
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
-using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Quest.PlayerSide.Objectives;
 
@@ -24,12 +23,6 @@ public class TalkNPCObjective : PlayerObjectiveBase
 	public int NPCType { get; set; }
 
 	public string NPCText { get; set; }
-
-	public override void OnInitialize()
-	{
-		base.OnInitialize();
-		AssetUtils.LoadVanillaNPCTextures([NPCType]);
-	}
 
 	public override float Progress => Main.LocalPlayer.talkNPC >= NPCID.None && Main.npc[Main.LocalPlayer.talkNPC].type == NPCType ? 1f : 0f;
 
