@@ -1,5 +1,8 @@
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
+using Everglow.Commons.Mechanics.Quest.Presentation.Views;
 using Everglow.Commons.UI.UIElements;
+using ReLogic.Graphics;
+using Terraria.GameContent;
 
 namespace Everglow.Commons.Mechanics.Quest.UI.UIElements.QuestDetail;
 
@@ -11,38 +14,34 @@ public class UIRewardsStripe : UIBlock
 
 	private UIQuestRewardHorizontalScrollbar _scrollBar;
 
-	private List<UIRewardsStripeItem> iconUIElements;
-	private QuestIconGroup iconGroup;
+	private List<UIRewardsStripeItem> rewardUIElements;
+	private IReadOnlyList<RewardView> rewards = [];
 
-	public QuestIconGroup IconGroup
+	public IReadOnlyList<RewardView> Rewards
 	{
-		get => iconGroup;
+		get => rewards;
 		set
 		{
-			iconGroup = value;
+			rewards = value ?? [];
 
 			ChildrenElements.Clear();
-			if (iconGroup != null)
+			rewardUIElements = rewards.Select(reward => new UIRewardsStripeItem(reward)).ToList();
+			foreach (UIRewardsStripeItem rewardElement in rewardUIElements)
 			{
-				iconUIElements = iconGroup.Icons.Select(icon => new UIRewardsStripeItem(icon)).ToList();
-				foreach (var iE in iconUIElements)
-				{
-					Register(iE);
-				}
-				if(iconUIElements.Count * Padding > Info.HitBox.Width)
-				{
-					_scrollBar = new UIQuestRewardHorizontalScrollbar();
-					Register(_scrollBar);
-					_scrollBar.WheelValue = 0f;
-				}
+				Register(rewardElement);
+			}
+			if (rewardUIElements.Count * Padding > Info.HitBox.Width)
+			{
+				_scrollBar = new UIQuestRewardHorizontalScrollbar();
+				Register(_scrollBar);
+				_scrollBar.WheelValue = 0f;
 			}
 		}
 	}
 
-	public void SetIconGroup(QuestIconGroup iconGroup)
+	public void SetRewards(IReadOnlyList<RewardView> rewards)
 	{
-		this.iconGroup = iconGroup;
-		IconGroup = iconGroup;
+		Rewards = rewards;
 	}
 
 	public override void OnInitialization()
@@ -73,17 +72,14 @@ public class UIRewardsStripe : UIBlock
 	{
 		base.Update(gt);
 
-		if (IconGroup == null)
-		{
-			return;
-		}
-		if (iconUIElements == null)
+		if (rewardUIElements == null || rewardUIElements.Count == 0)
 		{
 			return;
 		}
 
 		// Update global offset moving to current icon
-		float targetOffset = -Padding * _scrollBar.WheelValue * iconUIElements.Count + (Info.HitBox.Width + Padding-128) * _scrollBar.WheelValue;
+		float wheelValue = _scrollBar?.WheelValue ?? 0f;
+		float targetOffset = -Padding * wheelValue * rewardUIElements.Count + (Info.HitBox.Width + Padding - 128) * wheelValue;
 
 		globalMotionOffset = targetOffset;
 
@@ -91,7 +87,7 @@ public class UIRewardsStripe : UIBlock
 		{
 			globalMotionOffset = targetOffset;
 		}
-		for (int i = 0; i < iconUIElements.Count; i++)
+		for (int i = 0; i < rewardUIElements.Count; i++)
 		{
 			var scale = QuestContainer.Scale;
 			var offsetX = (int)((Padding * i + globalMotionOffset) * QuestContainer.Scale);
@@ -103,7 +99,7 @@ public class UIRewardsStripe : UIBlock
 
 			offsetY += HitBox.Height / 2 - width;
 
-			var icon = iconUIElements[i];
+			var icon = rewardUIElements[i];
 			icon.BorderColor = Color.Gray;
 			icon.Info.HiddenOverflow = true;
 			icon.Info.Width.SetValue(width * 2);
@@ -123,17 +119,13 @@ public class UIRewardsStripe : UIBlock
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
-		if (IconGroup == null || IconGroup.IconCount == 0)
+		if (rewardUIElements == null || rewardUIElements.Count == 0)
 		{
 			return;
 		}
-		if (iconUIElements == null || iconUIElements.Count == 0)
+		for (int i = 0; i < rewardUIElements.Count; i++)
 		{
-			return;
-		}
-		for (int i = 0; i < iconUIElements.Count; i++)
-		{
-			iconUIElements[i].Draw(sb);
+			rewardUIElements[i].Draw(sb);
 		}
 		if (ChildrenElements.Contains(_scrollBar))
 		{
@@ -144,21 +136,36 @@ public class UIRewardsStripe : UIBlock
 
 public class UIRewardsStripeItem : UIBlock
 {
-	private readonly QuestIconBase _icon;
+	public RewardView Reward { get; }
+
+	public QuestIconBase Icon { get; }
 
 	public Color Color { get; set; } = Color.White;
 
 	public float Scale { get; set; } = 1f;
 
-	public UIRewardsStripeItem(QuestIconBase icon)
+	public UIRewardsStripeItem(RewardView reward)
 	{
-		_icon = icon;
+		ArgumentNullException.ThrowIfNull(reward);
+
+		Reward = reward;
+		Icon = Reward.Item is null
+			? TextureQuestIcon.Create(ModAsset.Point.Value)
+			: ItemQuestIcon.Create(Reward.Item.type);
 		Events.OnMouseHover += Events_OnMouseHover;
 	}
 
 	private void Events_OnMouseHover(BaseElement baseElement)
 	{
-		QuestContainer.Instance.MouseText = _icon.Tooltip;
+		if (Reward.Item is not null)
+		{
+			Main.hoverItemName = Reward.Item.Name;
+			Main.HoverItem = Reward.Item.Clone();
+		}
+		else
+		{
+			QuestContainer.Instance.MouseText = Reward.Description;
+		}
 	}
 
 	protected override void DrawSelf(SpriteBatch sb)
@@ -174,6 +181,15 @@ public class UIRewardsStripeItem : UIBlock
 
 	protected override void DrawChildren(SpriteBatch sb)
 	{
-		_icon.Draw(sb, HitBox, Color, Scale * 2.5f);
+		Icon.Draw(sb, HitBox, Color, Scale * 2.5f);
+
+		if (Reward.Item is not null && Reward.Item.stack > 1)
+		{
+			string stack = Reward.Item.stack.ToString();
+			var font = FontAssets.ItemStack.Value;
+			var position = new Vector2(HitBox.Right - 8f, HitBox.Bottom - 8f);
+			var origin = font.MeasureString(stack);
+			sb.DrawString(font, stack, position, Color.White, 0f, origin, Scale, SpriteEffects.None, 0f);
+		}
 	}
 }

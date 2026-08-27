@@ -267,7 +267,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		HideQuestTip();
 
 		_icon.SetIconGroup(null);
-		_rewardsPanel.SetIconGroup(null);
+		_rewardsPanel.SetRewards([]);
 		ResetTexts();
 	}
 
@@ -282,7 +282,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 			QuestView quest = questItem.View;
 			var iconGroup = new QuestIconGroup(quest.Icons);
 			_icon.SetIconGroup(iconGroup);
-			_rewardsPanel.SetIconGroup(iconGroup);
+			_rewardsPanel.SetRewards(quest.Rewards);
 			_descriptionTextScrollbar.WheelValue = 0f;
 
 			SetTexts(quest);
