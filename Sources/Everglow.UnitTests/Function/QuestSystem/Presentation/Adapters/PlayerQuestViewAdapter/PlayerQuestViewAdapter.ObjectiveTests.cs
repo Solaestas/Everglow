@@ -71,9 +71,9 @@ public partial class PlayerQuestViewAdapterTest
 		const string objectiveText = "[ItemDrawer,ItemType='1'] collect\nwithout splitting the objective";
 		var objective = new StubObjective
 		{
-			DescriptionValue = description,
 			ObjectiveTextValue = objectiveText,
 		};
+		objective.WithDescription(description);
 		var quest = new StubQuest();
 		quest.Objectives.Add(objective);
 

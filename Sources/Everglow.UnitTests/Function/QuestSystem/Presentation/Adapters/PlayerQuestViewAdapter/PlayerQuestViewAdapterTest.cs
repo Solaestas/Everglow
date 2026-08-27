@@ -59,8 +59,6 @@ public partial class PlayerQuestViewAdapterTest
 			ObjectiveTextValue = string.Join('\n', lines);
 		}
 
-		public string DescriptionValue { get; set; } = string.Empty;
-
 		public string ObjectiveTextValue { get; set; } = string.Empty;
 
 		public bool Ready { get; set; }
@@ -68,8 +66,6 @@ public partial class PlayerQuestViewAdapterTest
 		public float ProgressValue { get; set; }
 
 		public QuestIconBase? Icon { get; set; }
-
-		public override string Description => DescriptionValue;
 
 		public override float Progress => ProgressValue;
 

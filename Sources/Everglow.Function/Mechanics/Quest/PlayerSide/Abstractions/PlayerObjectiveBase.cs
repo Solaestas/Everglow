@@ -11,7 +11,7 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 	public int ObjectiveID { get; set; }
 
-	public virtual string Description => string.Empty;
+	public string Description { get; private set; } = string.Empty;
 
 	public virtual float Progress { get; } = 1f;
 
@@ -59,6 +59,12 @@ public abstract class PlayerObjectiveBase : ITagCompoundEntity
 
 			Completed = true;
 		}
+	}
+
+	public PlayerObjectiveBase WithDescription(string description)
+	{
+		Description = description;
+		return this;
 	}
 
 	public virtual void ResetProgress() => Completed = false;
