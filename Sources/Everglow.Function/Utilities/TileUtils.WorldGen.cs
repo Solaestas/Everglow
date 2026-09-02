@@ -1,4 +1,5 @@
 using Everglow.Commons.TileHelper;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 using Terraria.ObjectData;
 using Terraria.Utilities;
 
@@ -2190,6 +2191,28 @@ public partial class TileUtils
 			for (int y = worldPos.ToTileCoordinates().Y; y <= (worldPos + size).ToTileCoordinates().Y; y++)
 			{
 				tilePoses.Add(new Point(x, y));
+			}
+		}
+		return tilePoses;
+	}
+
+	/// <summary>
+	/// Get the tile positions in the given rectangle area. Tile coord.
+	/// </summary>
+	/// <param name="polygon"></param>
+	/// <returns></returns>
+	public static List<Point> GetAABBAreaOfTile(int x, int y, int w, int h)
+	{
+		int minX = Math.Min(x, x + w);
+		int minY = Math.Min(y, y + h);
+		int maxX = Math.Max(x, x + w);
+		int maxY = Math.Max(y, y + h);
+		List<Point> tilePoses = new List<Point>();
+		for (int i = minX; i <= maxX; i++)
+		{
+			for (int j = minY; j <= maxY; j++)
+			{
+				tilePoses.Add(new Point(i, j));
 			}
 		}
 		return tilePoses;

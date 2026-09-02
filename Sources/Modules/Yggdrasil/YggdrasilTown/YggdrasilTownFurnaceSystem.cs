@@ -10,6 +10,8 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 
 	public static int CurrentEnergy = 0;
 
+	public static List<int> MeltingAnimationTimer = new List<int>();
+
 	public static int EnergtMax = 100000;
 
 	public static int SwitchPlayerCooling = 0;
@@ -44,6 +46,17 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 		else
 		{
 			SwitchPlayerCooling = 0;
+		}
+		for (int k = MeltingAnimationTimer.Count - 1; k >= 0; k--)
+		{
+			if (MeltingAnimationTimer[k] > 0)
+			{
+				MeltingAnimationTimer[k]--;
+			}
+			else
+			{
+				MeltingAnimationTimer.RemoveAt(k);
+			}
 		}
 		base.PostUpdateEverything();
 	}

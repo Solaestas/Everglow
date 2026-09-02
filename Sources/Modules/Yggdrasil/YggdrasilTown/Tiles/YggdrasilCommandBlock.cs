@@ -3,6 +3,7 @@ using Everglow.Commons.VFX.Scene;
 using Everglow.Yggdrasil.YggdrasilTown.Background;
 using Everglow.Yggdrasil.YggdrasilTown.Dusts;
 using Everglow.Yggdrasil.YggdrasilTown.NPCs.TownNPCs;
+using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 using SubworldLibrary;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -48,15 +49,15 @@ public class YggdrasilCommandBlock : ModTile
 
 	public override void NearbyEffects(int i, int j, bool closer)
 	{
-		//var tile = Main.tile[i, j];
-		//if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
-		//{
-		//	BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
-		//	if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
-		//	{
-		//		AddBackground(bgSystem, i, j);
-		//	}
-		//}
+		var tile = Main.tile[i, j];
+		if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+		{
+			BackgroundSystem bgSystem = ModContent.GetInstance<BackgroundSystem>();
+			if (!bgSystem.HasBgSlide("Everglow.Yggdrasil.YggdrasilTown.Background.YggdrasilTown_Construct"))
+			{
+				AddBackground(bgSystem, i, j);
+			}
+		}
 	}
 
 	public void AddBackground(BackgroundSystem bgSystem, int i, int j)
@@ -80,5 +81,23 @@ public class YggdrasilCommandBlock : ModTile
 		ytc.BgTiles = bgArea;
 		ytc.TileAnchor = new Point(i, j);
 		bgSystem.AddBackgroundSlide(ytc);
+
+		GiantFurnace_Construct gfc = new GiantFurnace_Construct();
+		gfc.WorldAnchor = centerPosWorld + new Vector2(181, 63) * 16 + new Vector2(4, 24);
+		gfc.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 134, (int)centerPosWorld.Y / 16 + 32, 92, 60);
+		gfc.TileAnchor = new Point(i, j);
+		bgSystem.AddBackgroundSlide(gfc);
+
+		GiantFurnace_Construct_far gfcf = new GiantFurnace_Construct_far();
+		gfcf.WorldAnchor = centerPosWorld + new Vector2(181, 63) * 16 + new Vector2(-264, -164);
+		gfcf.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 106, (int)centerPosWorld.Y / 16 + 34, 112, 60);
+		gfcf.TileAnchor = new Point(i, j);
+		bgSystem.AddBackgroundSlide(gfcf);
+
+		GiantFurnace_Construct_sky gfcs = new GiantFurnace_Construct_sky();
+		gfcs.WorldAnchor = centerPosWorld + new Vector2(0, -240);
+		gfcs.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 106, (int)centerPosWorld.Y / 16 + 4, 112, 90);
+		gfcs.TileAnchor = new Point(i, j);
+		bgSystem.AddBackgroundSlide(gfcs);
 	}
 }

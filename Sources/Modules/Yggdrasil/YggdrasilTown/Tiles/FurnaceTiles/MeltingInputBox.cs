@@ -138,7 +138,7 @@ public class MeltingInputBox : ModTile
 			if (chestIndex >= 0)
 			{
 				Chest chest = Main.chest[chestIndex];
-				var zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+				var zero = new Vector2(Main.offScreenRange);
 				if (Main.drawToScreen)
 				{
 					zero = Vector2.Zero;
@@ -151,11 +151,37 @@ public class MeltingInputBox : ModTile
 		return base.PreDraw(i, j, spriteBatch);
 	}
 
-	public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData) => base.DrawEffects(i, j, spriteBatch, ref drawData);
+	public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+	{
+		int maxTimer = 0;
+		foreach (var timer in YggdrasilTownFurnaceSystem.MeltingAnimationTimer)
+		{
+			if (timer > maxTimer)
+			{
+				maxTimer = timer;
+			}
+		}
+		maxTimer -= 80;
+		if (maxTimer > 0)
+		{
+			var tile = Main.tile[i, j];
+			float value = maxTimer / 40f;
+			if (tile.TileFrameX == 36 && tile.TileFrameY == 18)
+			{
+				var zero = new Vector2(Main.offScreenRange);
+				if (Main.drawToScreen)
+				{
+					zero = Vector2.Zero;
+				}
+				var glow = ModAsset.MeltingInputBox_meltingGlow.Value;
+				spriteBatch.Draw(glow, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-28, -14), null, new Color(1f, 1f, 1f, 0) * value, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 
-	public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) => base.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tileFrameX, ref tileFrameY);
-
-	public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch) => base.SpecialDraw(i, j, spriteBatch);
+				var bloom = ModAsset.MeltingInputBox_meltingBloom.Value;
+				spriteBatch.Draw(bloom, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-28 - 28, -14 - 32), null, new Color(1f, 1f, 1f, 0) * value, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
+			}
+			Lighting.AddLight(new Vector2(i, j) * 16 + new Vector2(8), new Vector3(2f, 1.1f, 0.3f) * value);
+		}
+	}
 
 	public override bool RightClick(int i, int j)
 	{
@@ -262,7 +288,6 @@ public class MeltingInputBox : ModTile
 			Chest chest = Main.chest[chestIndex];
 			if (chest.frame == 0)
 			{
-
 			}
 			string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY); // This gets the ContainerName text for the currently selected language
 			player.cursorItemIconText = chest.name.Length > 0 ? chest.name : defaultName;
@@ -284,7 +309,7 @@ public class MeltingInputBox : ModTile
 		if (player.cursorItemIconText == string.Empty)
 		{
 			player.cursorItemIconEnabled = false;
-			player.cursorItemIconID = 0;
+			player.cursorItemIconID = ItemID.None;
 		}
 	}
 }

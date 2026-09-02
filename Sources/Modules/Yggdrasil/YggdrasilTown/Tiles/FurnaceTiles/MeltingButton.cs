@@ -114,6 +114,8 @@ public class MeltingButton : ModTile
 							fPlayer.FurnaceScore += totalValue;
 						}
 						YggdrasilTownFurnaceSystem.CurrentEnergy += totalValue;
+						YggdrasilTownFurnaceSystem.MeltingAnimationTimer.Add(120);
+						CombatText.NewText(Main.LocalPlayer.Hitbox, new Color(1f, 0.45f, 0.02f, 1f), "Furnace Energy + " + totalValue);
 					}
 				}
 			}
