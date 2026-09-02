@@ -14,9 +14,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	public int ObjectiveID { get; set; }
 
-	public WorldObjectiveBase Next { get; set; }
-
-	public virtual string Description => string.Empty;
+	public string Description { get; private set; } = string.Empty;
 
 	public virtual float Progress { get; } = 1f;
 
@@ -28,6 +26,12 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	public bool RewardClaimed { get; private set; } = false;
 
 	public virtual bool NeedDeltaSync { get; protected set; } = false;
+
+	public WorldObjectiveBase WithDescription(string description)
+	{
+		Description = description;
+		return this;
+	}
 
 	public abstract bool CheckCompletion();
 
