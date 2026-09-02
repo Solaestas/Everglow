@@ -129,6 +129,32 @@ public static class TextDefinition
 		return $"{(int)time.TotalMinutes}Min {time.Seconds}s";
 	}
 
+	public static string GetObjectiveTimerText(int remainingTime)
+	{
+		int totalSeconds = Math.Max(0, remainingTime) / 60;
+		int hours = totalSeconds / 3600;
+		int minutes = totalSeconds % 3600 / 60;
+		int seconds = totalSeconds % 60;
+
+		var text = new StringBuilder();
+		if (hours > 0)
+		{
+			text.Append(hours).Append('h');
+		}
+
+		if (hours > 0 || minutes > 0)
+		{
+			text.Append(minutes).Append('m');
+		}
+
+		if (seconds > 0 || text.Length == 0)
+		{
+			text.Append(seconds).Append('s');
+		}
+
+		return text.ToString();
+	}
+
 	public static string GetObjectiveTimerTooltip(float timer) => $"Time Remain: {(int)(timer / 60f)}s";
 
 	public static string GetObjectiveDurationTooltip(float currentDuration, float maxDuration) => $"Duration: {(int)currentDuration}/{(int)maxDuration}";

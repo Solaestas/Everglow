@@ -9,10 +9,14 @@ public sealed class UIQuestObjectiveItem : BaseElement
 {
 	private const float TimerWidth = 18f;
 	private const float TimerHeight = 34f;
-	private const float TimerSpacing = 8f;
+	private const float TimerColumnWidth = 72f;
+	private const float TimerColumnSpacing = 8f;
+	private const float TimerTextSpacing = 2f;
+	private const float TimerTextFontScale = 0.5f;
 
 	private readonly UITextPlus _text;
 	private readonly UIQuestHourglassTimer _timer;
+	private readonly UITextPlus _timerText;
 
 	public UIQuestObjectiveItem(ObjectiveLineView line, float fontSize, float width)
 	{
@@ -26,7 +30,7 @@ public sealed class UIQuestObjectiveItem : BaseElement
 		_timer = new UIQuestHourglassTimer();
 		_timer.Info.Width.SetValue(TimerWidth);
 		_timer.Info.Height.SetValue(TimerHeight);
-		_timer.Info.Left.SetValue(-TimerWidth, 1f);
+		_timer.Info.Left.SetValue(-(TimerColumnWidth + TimerWidth) * 0.5f, 1f);
 		_timer.Events.OnMouseHover += e =>
 		{
 			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip(_timer.Timer);
@@ -34,6 +38,10 @@ public sealed class UIQuestObjectiveItem : BaseElement
 		};
 		_timer.Events.OnMouseOut += e => _timer.OnSelect = false;
 		Register(_timer);
+
+		_timerText = new UITextPlus(string.Empty);
+		_timerText.StringDrawer.DefaultParameters.SetParameter("FontSize", fontSize * TimerTextFontScale);
+		Register(_timerText);
 
 		SetLine(line);
 	}
@@ -43,24 +51,44 @@ public sealed class UIQuestObjectiveItem : BaseElement
 		ArgumentNullException.ThrowIfNull(line);
 
 		TimerView timer = line.Timer;
-		_timer.Info.IsVisible = timer is not null;
+		bool hasTimer = timer is not null;
+
+		_timer.Info.IsVisible = hasTimer;
 		_timer.MaxTime = timer?.TimeLimit ?? 0;
 		_timer.Timer = timer?.RemainingTime ?? 0;
-		if (timer is null)
+
+		_timerText.Info.IsVisible = hasTimer;
+		_timerText.Text = hasTimer
+			? TextDefinition.GetObjectiveTimerText(timer.RemainingTime)
+			: string.Empty;
+		_timerText.Calculation();
+
+		if (!hasTimer)
 		{
 			_timer.OnSelect = false;
 		}
 
 		_text.Text = line.Text;
-		float timerSpace = timer is null ? 0f : TimerWidth + TimerSpacing;
+		float timerSpace = hasTimer ? TimerColumnWidth + TimerColumnSpacing : 0f;
 		_text.StringDrawer.SetWordWrap(Math.Max(1f, Info.Width.Pixel - timerSpace));
 		_text.Calculation();
 
-		float height = Math.Max(_text.Info.Height.Pixel, timer is null ? 0f : TimerHeight);
+		float timerColumnHeight = hasTimer
+			? TimerHeight + TimerTextSpacing + _timerText.Info.Height.Pixel
+			: 0f;
+		float height = Math.Max(_text.Info.Height.Pixel, timerColumnHeight);
 		Info.Height.SetValue(height);
 		_text.Info.Top.SetValue((height - _text.Info.Height.Pixel) * 0.5f);
-		_timer.Info.Top.SetValue((height - TimerHeight) * 0.5f);
+
+		if (hasTimer)
+		{
+			float timerTop = (height - timerColumnHeight) * 0.5f;
+			_timer.Info.Top.SetValue(timerTop);
+
+			_timerText.Info.Left.SetValue(-(TimerColumnWidth + _timerText.Info.Width.Pixel) * 0.5f, 1f);
+			_timerText.Info.Top.SetValue(timerTop + TimerHeight + TimerTextSpacing);
+		}
+
 		Calculation();
 	}
 }
-

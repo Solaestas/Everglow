@@ -266,6 +266,18 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	[DataRow(-60, "0s")]
+	[DataRow(0, "0s")]
+	[DataRow(1020, "17s")]
+	[DataRow(7500, "2m5s")]
+	[DataRow(216300, "1h0m5s")]
+	[DataRow(443040, "2h3m4s")]
+	public void GetObjectiveTimerText_FormatsCompactTimeUnits(int remainingTime, string expected)
+	{
+		Assert.AreEqual(expected, TextDefinition.GetObjectiveTimerText(remainingTime));
+	}
+
+	[TestMethod]
 	[DataRow(QuestNotificationType.Unlocked, null, "[World Quest]任务已解锁", 150, 150, 250)]
 	[DataRow(QuestNotificationType.Restored, null, "[World Quest]任务已恢复", 150, 150, 250)]
 	[DataRow(QuestNotificationType.Failed, null, "[World Quest]任务已失败", 250, 150, 150)]
