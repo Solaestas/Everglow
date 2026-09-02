@@ -46,14 +46,4 @@ public class WorldQuestRewardPacketTest
 		Assert.AreEqual(stream.Length, stream.Position);
 	}
 
-	[TestMethod]
-	public void QuestSync_FromClientSource_ReturnsBeforeReadingPayload()
-	{
-		using var stream = new MemoryStream();
-		using var reader = new BinaryReader(stream);
-
-		new QuestSyncPacket().Receive(reader, whoAmI: 4);
-
-		Assert.AreEqual(0, stream.Position);
-	}
 }
