@@ -20,6 +20,7 @@ public abstract partial class WorldQuestBase
 	public const string RewardItemsSourceContext = "Everglow.QuestSystem";
 
 	private readonly List<WorldObjectiveBase> _activatedObjectives = [];
+	private readonly HashSet<string> _rewardClaimedPlayers = new(StringComparer.Ordinal);
 
 	public int WhoAmI { get; internal set; }
 
@@ -35,9 +36,7 @@ public abstract partial class WorldQuestBase
 
 	public bool Retriable => true;
 
-	public bool RewardClaimed { get; protected set; }
-
-	public HashSet<string> RewardClaimedPlayers { get; protected set; } = [];
+	public IReadOnlySet<string> RewardClaimedPlayers => _rewardClaimedPlayers;
 
 	public void Activate()
 	{
@@ -206,48 +205,20 @@ public abstract partial class WorldQuestBase
 		return true;
 	}
 
-	/// <summary>
-	/// Requests the quest reward. Called by clicking the 'reward' button in the quest panel.
-	/// </summary>
-	public void GiveRewards()
+	public bool CanClaimReward(string playerName) =>
+		State == WorldQuestState.Completed
+		&& !string.IsNullOrEmpty(playerName)
+		&& !_rewardClaimedPlayers.Contains(playerName);
+
+	public bool TryRecordRewardClaim(string playerName) =>
+		CanClaimReward(playerName) && _rewardClaimedPlayers.Add(playerName);
+
+	public void GiveRewards(Player player)
 	{
-		if (RewardClaimed || State != WorldQuestState.Completed)
+		foreach (Item item in RewardItems)
 		{
-			return;
+			player.QuickSpawnItem(player.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
 		}
-
-		if (NetUtils.IsSingle)
-		{
-			if (GiveRewardsCore(Main.LocalPlayer.name))
-			{
-				foreach (var item in RewardItems)
-				{
-					Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc(RewardItemsSourceContext), item, item.stack);
-				}
-			}
-		}
-		else if (NetUtils.IsClient)
-		{
-			// TODO: Send reward claim request packet to server
-		}
-	}
-
-	private bool GiveRewardsCore(string player)
-	{
-		if (State != WorldQuestState.Completed)
-		{
-			return false;
-		}
-
-		if (!RewardClaimed)
-		{
-			RewardClaimed = true;
-		}
-
-		// TODO: We haven't decided how to handle rewards for multiplayers yet.
-		RewardClaimedPlayers.Add(player);
-
-		return true;
 	}
 
 	/// <summary>
@@ -259,8 +230,7 @@ public abstract partial class WorldQuestBase
 	{
 		State = WorldQuestState.Locked;
 		Time = 0;
-		RewardClaimed = false;
-		RewardClaimedPlayers = [];
+		_rewardClaimedPlayers.Clear();
 		ResetProgress();
 		OnReset();
 	}

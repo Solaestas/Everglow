@@ -52,9 +52,9 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 
 ## Adapter 与领域边界
 
-adapter 只读取状态、归一化空值与范围并创建数组快照；不得调用 Update、Complete、Reset、Retry、GiveRewards 或 Manager，不得改变任务、Objective、奖励、存档和网络状态，也不得访问 UI。未知领域状态或节点类型应显式失败，避免静默生成错误展示。
+adapter 只读取状态、归一化空值与范围并创建数组快照；不得调用 Update、Complete、Reset、Retry、`TryRecordRewardClaim`、`GrantRewardItems` 或 Manager，不得改变任务、Objective、奖励、存档和网络状态，也不得访问 UI。未知领域状态或节点类型应显式失败，避免静默生成错误展示。
 
-Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 保持既有权威判断、同步和存档协议；全任务/单任务同步、进度上传及现有 NetSend/NetReceive/Packet 由 WorldSide 维护。
+Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 的任务生命周期与多人领奖均由主世界服务器授权；全任务/单任务同步、进度上传、奖励请求与子世界授权发奖由 WorldSide 的 NetSend/NetReceive/Packet 维护。
 
 ## Presentation 查询与操作
 
@@ -67,10 +67,12 @@ Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式
 - `TryExecute` 根据 `QuestSide` 调用与对应 Manager 成对的既有 Actions；Actions 重新校验完整 Identity、Hint 和当前可用操作，并以 `bool` 表示执行结果。
 - 未知 Side、任务缺失或 Player 实例过期时返回 `false`。adapter 的投影异常直接向调用方暴露。
 
-Player 的 `Submit` 只在 Accepted、已完成且未被 Hint 遮蔽时提供；执行时调用任务既有完成入口，并以是否进入 Completed 作为结果。World 不提供 Submit，也不改变重试、领奖、奖励或 Packet 权威。
+Player 的 `Submit` 只在 Accepted、已完成且未被 Hint 遮蔽时提供；执行时调用任务既有完成入口，并以是否进入 Completed 作为结果。World 不提供 Submit；Failed 状态下的 `Retry` 仍只在单机导出。Completed 状态下，当前玩家名不在 Ordinal 领取名单时导出 `ClaimReward`。单机执行后直接记录并发奖；多人执行只发送任务名并等待主服快照，玩家身份不进入 `QuestAction`。
+
+WorldSide 领奖只保存 `RewardClaimedPlayers`，不保存全局 bool。主服根据经 `PacketResolver` 校正的真实槽位读取 `Netplay.Clients[whoAmI].Name`：主世界活动玩家本地发奖，子世界玩家通过 `AllDownstream` 授权包交由持有匹配活动槽位的子服发奖。授权包要求服务器来源 `sourceWhoAmI == -1`；普通客户端的来源会被强制改为真实槽位，不能伪造。主服随后广播完整任务快照，`NetReceive` 以服务器名单覆盖本地名单。
 
 ## 运行期组合
 
-`QuestPresentationSystem` 在 `PostSetupContent` 从 `PlayerQuestSystem` 和 `WorldQuestSystem` 取得各自成对的 Manager/Actions，并创建 `QuestPresentationService`；不使用 Manager 静态 locator，不注册到 `Ins`，也不解析图形或 UI 服务。`Unload` 清空 Service 引用。
+`QuestPresentationSystem` 在 `PostSetupContent` 从 `PlayerQuestSystem` 和 `WorldQuestSystem` 取得各自成对的 Manager/Actions，并创建 `QuestPresentationService`；World entry 的 Adapter 不接收身份参数，`WorldQuestActions` 仅在投影或执行本地 Action 时读取 `Main.LocalPlayer.name`，不会在构造或专用服务器初始化阶段读取本地玩家。系统不使用 Manager 静态 locator，不注册到 `Ins`，也不解析图形或 UI 服务。`Unload` 清空 Service 引用。
 
 `WorldQuestSystem` 在 `Load` 中为自身 Manager 创建 `WorldQuestActions`，并在 `Unload` 中与 Manager 一并清空引用。

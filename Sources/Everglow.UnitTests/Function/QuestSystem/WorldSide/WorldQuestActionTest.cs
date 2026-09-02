@@ -171,8 +171,23 @@ public class WorldQuestActionTest
 
 		Assert.IsTrue(applied);
 		Assert.IsFalse(repeated);
-		Assert.IsTrue(quest.RewardClaimed);
 		Assert.IsTrue(quest.RewardClaimedPlayers.Contains("ActionTester"));
+	}
+
+	[TestMethod]
+	public void CompletedQuest_ExportsClaimForOtherUnclaimedName()
+	{
+		var quest = new StubQuest();
+		quest.SetState(WorldQuestState.Completed);
+		Assert.IsTrue(quest.TryRecordRewardClaim("ActionTester"));
+
+		IReadOnlyList<QuestAction> claimedActions = WorldQuestActionAdapter.GetActions(quest);
+		Main.LocalPlayer.name = "OtherPlayer";
+		IReadOnlyList<QuestAction> otherActions = WorldQuestActionAdapter.GetActions(quest);
+
+		Assert.IsEmpty(claimedActions);
+		Assert.HasCount(1, otherActions);
+		Assert.AreEqual(QuestActionType.ClaimReward, otherActions[0].Type);
 	}
 
 	[TestMethod]

@@ -96,16 +96,25 @@ public static class TextDefinition
 			return "[TextDrawer,Text='',Color='{color}']";
 		}
 
-		string text = entry.View.State switch
-		{
-			QuestViewState.Available => "接取",
-			QuestViewState.Active when entry.Actions.Any(action => action.Type == QuestActionType.Submit) => "提交",
-			QuestViewState.Active => "放弃",
-			QuestViewState.Completed => "完成",
-			QuestViewState.Failed => "失败",
-			QuestViewState.Locked => "锁定",
-			_ => "未知",
-		};
+		string text = entry.Actions.Count > 0
+			? entry.Actions[0].Type switch
+			{
+				QuestActionType.Accept => "接取",
+				QuestActionType.Cancel => "放弃",
+				QuestActionType.Retry => "重试",
+				QuestActionType.ClaimReward => "领取奖励",
+				QuestActionType.Submit => "提交",
+				_ => "未知",
+			}
+			: entry.View.State switch
+			{
+				QuestViewState.Available => "接取",
+				QuestViewState.Active => "放弃",
+				QuestViewState.Completed => "完成",
+				QuestViewState.Failed => "失败",
+				QuestViewState.Locked => "锁定",
+				_ => "未知",
+			};
 		return GetColoredText(text, color);
 	}
 

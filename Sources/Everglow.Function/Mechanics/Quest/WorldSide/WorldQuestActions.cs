@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.Quest.Core;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Packets;
+using Everglow.Commons.Netcode;
 using Everglow.Commons.Utilities;
 
 namespace Everglow.Commons.Mechanics.Quest.WorldSide;
@@ -15,19 +17,17 @@ public sealed class WorldQuestActions
 
 	public static IReadOnlyList<QuestActionType> GetAvailableTypes(WorldQuestBase quest)
 	{
-		ArgumentNullException.ThrowIfNull(quest);
+		return GetAvailableTypesForPlayer(quest, Main.LocalPlayer.name);
+	}
 
-		if (!NetUtils.IsSingle)
-		{
-			return [];
-		}
-
-		if (quest.State == WorldQuestState.Failed && quest.Retriable)
+	private static IReadOnlyList<QuestActionType> GetAvailableTypesForPlayer(WorldQuestBase quest, string playerName)
+	{
+		if (quest.State == WorldQuestState.Failed && quest.Retriable && NetUtils.IsSingle)
 		{
 			return [QuestActionType.Retry];
 		}
 
-		if (quest.State == WorldQuestState.Completed && !quest.RewardClaimed)
+		if (quest.CanClaimReward(playerName))
 		{
 			return [QuestActionType.ClaimReward];
 		}
@@ -45,37 +45,59 @@ public sealed class WorldQuestActions
 		}
 
 		var quest = _manager.GetQuest(identity.DefinitionId);
+		string playerName = Main.LocalPlayer.name;
 		if (quest is null
 			|| !string.Equals(quest.Name, identity.InstanceId, StringComparison.Ordinal)
 			|| QuestHintRules.HasContent(quest.Hint)
-			|| !GetAvailableTypes(quest).Contains(action.Type))
+			|| !GetAvailableTypesForPlayer(quest, playerName).Contains(action.Type))
 		{
 			return false;
 		}
 
-		bool applied = action.Type switch
+		return action.Type switch
 		{
-			QuestActionType.Retry => quest.RetryCore(),
-			QuestActionType.ClaimReward => TryClaimReward(quest),
+			QuestActionType.Retry => TryRetry(quest),
+			QuestActionType.ClaimReward => TryClaimReward(quest, playerName),
 			_ => false,
 		};
+	}
 
-		if (!applied)
+	private bool TryRetry(WorldQuestBase quest)
+	{
+		if (!quest.RetryCore())
 		{
 			return false;
 		}
 
-		if (action.Type == QuestActionType.Retry)
-		{
-			_manager.OnQuestObjectiveUpdated(quest);
-		}
+		_manager.OnQuestObjectiveUpdated(quest);
 		_manager.OnQuestStatusUpdated(quest);
 		return true;
 	}
 
-	private static bool TryClaimReward(WorldQuestBase quest)
+	private bool TryClaimReward(WorldQuestBase quest, string playerName)
 	{
-		quest.GiveRewards();
-		return quest.RewardClaimed;
+		if (NetUtils.IsSingle)
+		{
+			Player player = Main.LocalPlayer;
+			if (!string.Equals(player.name, playerName, StringComparison.Ordinal)
+				|| !quest.TryRecordRewardClaim(playerName))
+			{
+				return false;
+			}
+
+			quest.GiveRewards(player);
+			_manager.OnQuestStatusUpdated(quest);
+			return true;
+		}
+		else if (NetUtils.IsClient)
+		{
+			ModIns.PacketResolver.Route(
+				new QuestClaimRewardPacket(quest.Name),
+				RouteDestination.MainServer);
+
+			return true;
+		}
+
+		return false;
 	}
 }

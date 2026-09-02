@@ -26,9 +26,9 @@ public class WorldObjectiveStructureRecoveryTest
 
 		public void SeedActiveClaimedState()
 		{
+			State = WorldQuestState.Completed;
+			TryRecordRewardClaim("Player");
 			State = WorldQuestState.Active;
-			RewardClaimed = true;
-			RewardClaimedPlayers.Add("Player");
 			Activate();
 		}
 	}
@@ -104,7 +104,6 @@ public class WorldObjectiveStructureRecoveryTest
 		Assert.IsTrue(quest.Objectives.RecoveredInvalidState);
 		Assert.AreEqual(WorldQuestState.Active, quest.State);
 		Assert.AreEqual(0, quest.Time);
-		Assert.IsFalse(quest.RewardClaimed);
 		Assert.IsEmpty(quest.RewardClaimedPlayers);
 		Assert.IsTrue(quest.Objectives.AllObjectives.All(objective => !objective.Completed));
 		Assert.IsTrue(quest.Objectives.AllObjectives.All(objective => !objective.RewardClaimed));
@@ -121,7 +120,6 @@ public class WorldObjectiveStructureRecoveryTest
 		using var writer = new BinaryWriter(stream);
 		writer.Write((int)WorldQuestState.Completed);
 		writer.Write(120);
-		writer.Write(true);
 		writer.Write(1);
 		writer.Write("ServerPlayer");
 		WriteObjective(writer, value: 5);
@@ -140,7 +138,6 @@ public class WorldObjectiveStructureRecoveryTest
 		Assert.AreEqual(12345, reader.ReadInt32());
 		Assert.AreEqual(WorldQuestState.Active, quest.State);
 		Assert.AreEqual(0, quest.Time);
-		Assert.IsFalse(quest.RewardClaimed);
 		Assert.IsEmpty(quest.RewardClaimedPlayers);
 		Assert.IsTrue(quest.Objectives.AllObjectives.All(objective => !objective.Completed));
 		Assert.IsTrue(quest.Objectives.AllObjectives.All(objective => !objective.RewardClaimed));

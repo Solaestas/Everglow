@@ -22,7 +22,6 @@ public partial class WorldQuestViewAdapterTest
 		Assert.HasCount(1, view.Rewards);
 		Assert.AreSame(firstReward, view.Rewards[0].Item);
 		Assert.AreEqual(string.Empty, view.Rewards[0].Description);
-		Assert.IsFalse(quest.RewardClaimed);
 		Assert.IsEmpty(quest.RewardClaimedPlayers);
 	}
 }

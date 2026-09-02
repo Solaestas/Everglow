@@ -148,8 +148,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		_objectiveChangeQuest.Events.OnLeftDown += OnClickChange;
 		_objectiveChangeQuest.Events.OnMouseHover += e =>
 		{
-			if (SelectedItem != null
-				&& SelectedItem.View.State != QuestViewState.Failed)
+			if (GetFirstAction(SelectedItem?.Entry).HasValue)
 			{
 				_objectiveChangeQuest.PanelColor = Color.White;
 				_objectiveChangeQuest.OnSelect = true;
@@ -178,6 +177,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		base.Calculation();
 		Info.CanBeInteract = AnimationState == 0;
 		Info.HiddenOverflow = true;
+		_objectiveChangeQuest.Info.CanBeInteract = GetFirstAction(SelectedItem?.Entry).HasValue;
 
 		float detailPanelWidth = (Info.Width.Pixel - 120) / 2f;
 		float detailPanelDistance = 40;
@@ -385,34 +385,22 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 			return;
 		}
 
-		QuestAction? submit = FindAction(QuestActionType.Submit);
-		if (submit.HasValue)
+		QuestAction? action = GetFirstAction(SelectedItem.Entry);
+		if (!action.HasValue)
 		{
-			Service.TryExecute(submit.Value);
+			return;
 		}
-		else if (SelectedItem.View.State == QuestViewState.Active)
+
+		if (action.Value.Type == QuestActionType.Cancel)
 		{
-			QuestAction? cancel = FindAction(QuestActionType.Cancel);
 			AnimationState = 1;
-			UIQuestOperationTip tip;
-			if (cancel.HasValue)
-			{
-				tip = new UIQuestOperationTip(SelectedItem.Entry, UIQuestOperationTip.TipType.Confirmation, "是否放弃任务", DiscardQuest, "是", "否");
-			}
-			else
-			{
-				tip = new UIQuestOperationTip(SelectedItem.Entry, UIQuestOperationTip.TipType.Information, "该任务无法放弃", yesText: "确认");
-			}
+			var tip = new UIQuestOperationTip(SelectedItem.Entry, UIQuestOperationTip.TipType.Confirmation, "是否放弃任务", DiscardQuest, "是", "否");
 			tip.HideMask += ClearAnimation;
 			DetailTip.Show(tip);
 		}
 		else
 		{
-			QuestAction? accept = FindAction(QuestActionType.Accept);
-			if (accept.HasValue)
-			{
-				Service.TryExecute(accept.Value);
-			}
+			Service.TryExecute(action.Value);
 		}
 	}
 
@@ -439,7 +427,8 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		}
 	}
 
-	private static QuestAction? FindAction(QuestActionType type) => FindAction(SelectedItem?.Entry, type);
+	private static QuestAction? GetFirstAction(QuestPresentationEntry entry) =>
+		entry is not null && entry.Actions.Count > 0 ? entry.Actions[0] : null;
 
 	private static QuestAction? FindAction(QuestPresentationEntry entry, QuestActionType type)
 	{

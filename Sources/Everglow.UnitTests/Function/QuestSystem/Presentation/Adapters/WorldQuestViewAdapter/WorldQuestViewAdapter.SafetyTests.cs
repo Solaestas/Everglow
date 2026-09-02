@@ -28,7 +28,6 @@ public partial class WorldQuestViewAdapterTest
 		Assert.AreEqual(WorldQuestState.Active, quest.State);
 		Assert.AreEqual(90, quest.Time);
 		Assert.AreEqual(19, quest.WhoAmI);
-		Assert.IsFalse(quest.RewardClaimed);
 		Assert.IsEmpty(quest.RewardClaimedPlayers);
 		Assert.IsFalse(objective.Completed);
 		Assert.AreEqual(0, objective.CheckCompletionCalls);

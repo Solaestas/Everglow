@@ -1,5 +1,7 @@
 using Everglow.Commons.Mechanics.Quest.Core;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
+using Everglow.Commons.Mechanics.Quest.WorldSide.Packets;
+using Everglow.Commons.Netcode;
 using Everglow.Commons.Utilities;
 using Terraria.ModLoader.Core;
 using Terraria.ModLoader.IO;
@@ -46,7 +48,6 @@ public class WorldQuestManager
 	/// For test only
 	/// </summary>
 	/// <param name="gameStateProvider"></param>
-	/// <param name="quests"></param>
 	public WorldQuestManager(IGameStateProvider gameStateProvider)
 	{
 		_gameState = gameStateProvider;
@@ -167,11 +168,73 @@ public class WorldQuestManager
 		_quests.Add(quest);
 	}
 
-	public void GiveRewards(WorldQuestBase quest)
+	internal bool TryClaimReward(string questName, int whoAmI)
 	{
-		// The request for giving rewards should be sent to server first for validation
-		// before the actual method to give rewards is called.
-		throw new NotImplementedException();
+		if (!NetUtils.IsMainServer
+			|| !NetUtils.TryGetConnectedPlayerName(whoAmI, out string playerName))
+		{
+			return false;
+		}
+
+		WorldQuestBase quest = GetQuest(questName);
+		if (quest is null || QuestHintRules.HasContent(quest.Hint))
+		{
+			return false;
+		}
+
+		bool playerIsInMainWorld = PlayerUtils.TryGetActivePlayer(whoAmI, out Player player);
+		if (playerIsInMainWorld
+			&& !string.Equals(player.name, playerName, StringComparison.Ordinal))
+		{
+			return false;
+		}
+
+		if (!quest.TryRecordRewardClaim(playerName))
+		{
+			return false;
+		}
+
+		if (playerIsInMainWorld)
+		{
+			quest.GiveRewards(player);
+		}
+		else
+		{
+			ModIns.PacketResolver.Route(
+				new QuestGiveRewardPacket(quest.Name, whoAmI, playerName),
+				RouteDestination.AllDownstream);
+		}
+
+		OnQuestStatusUpdated(quest);
+		ModIns.PacketResolver.Route(new QuestSyncPacket(quest), RouteDestination.AllDownstream);
+		return true;
+	}
+
+	internal bool TryGiveRewards(
+		string questName,
+		int whoAmI,
+		string expectedPlayerName,
+		int sourceWhoAmI)
+	{
+		if (!NetUtils.IsSubServer
+			|| sourceWhoAmI != -1
+			|| !PlayerUtils.TryGetActivePlayer(whoAmI, out Player player)
+			|| !string.Equals(player.name, expectedPlayerName, StringComparison.Ordinal))
+		{
+			return false;
+		}
+
+		WorldQuestBase quest = GetQuest(questName);
+		if (quest is null
+			|| QuestHintRules.HasContent(quest.Hint)
+			|| !quest.TryRecordRewardClaim(expectedPlayerName))
+		{
+			return false;
+		}
+
+		quest.GiveRewards(player);
+		OnQuestStatusUpdated(quest);
+		return true;
 	}
 
 	public bool ResetQuest(WorldQuestBase quest)

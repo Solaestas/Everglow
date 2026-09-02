@@ -214,6 +214,37 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	[DataRow(QuestActionType.Retry, QuestViewState.Failed, "重试")]
+	[DataRow(QuestActionType.ClaimReward, QuestViewState.Completed, "领取奖励")]
+	public void GetQuestActionText_UsesExportedActionBeforeState(
+		QuestActionType actionType,
+		QuestViewState state,
+		string expectedText)
+	{
+		var identity = new QuestIdentity(QuestSide.World, "TestQuest", "TestQuest");
+		var entry = new QuestPresentationEntry(
+			new QuestView { Identity = identity, State = state },
+			[new QuestAction(identity, actionType)]);
+
+		Assert.AreEqual(
+			$"[TextDrawer,Text='{expectedText}',Color='45,38,33']",
+			TextDefinition.GetQuestActionText(entry, "45,38,33"));
+	}
+
+	[TestMethod]
+	public void GetQuestActionText_CompletedWithoutActionUsesPassiveStateLabel()
+	{
+		var identity = new QuestIdentity(QuestSide.World, "TestQuest", "TestQuest");
+		var entry = new QuestPresentationEntry(
+			new QuestView { Identity = identity, State = QuestViewState.Completed },
+			[]);
+
+		Assert.AreEqual(
+			"[TextDrawer,Text='完成',Color='45,38,33']",
+			TextDefinition.GetQuestActionText(entry, "45,38,33"));
+	}
+
+	[TestMethod]
 	public void GetQuestActionText_UsesLockedStateLabel()
 	{
 		var identity = new QuestIdentity(QuestSide.World, "TestQuest", "TestQuest");

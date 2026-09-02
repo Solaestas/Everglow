@@ -6,7 +6,6 @@ public abstract partial class WorldQuestBase
 {
 	private const string StateKey = nameof(State);
 	private const string TimeKey = nameof(Time);
-	private const string RewardKey = nameof(RewardClaimed);
 	private const string RewardPlayerKey = nameof(RewardClaimedPlayers);
 	private const string ObjectivesSaveKey = nameof(Objectives);
 
@@ -23,14 +22,10 @@ public abstract partial class WorldQuestBase
 			Time = mt;
 		}
 
-		if (tag.TryGet<bool>(RewardKey, out var rc))
-		{
-			RewardClaimed = rc;
-		}
-
+		_rewardClaimedPlayers.Clear();
 		if (tag.TryGet<IList<string>>(RewardPlayerKey, out var rp))
 		{
-			RewardClaimedPlayers = rp.ToHashSet();
+			_rewardClaimedPlayers.UnionWith(rp);
 		}
 
 		if (tag.TryGet<TagCompound>(ObjectivesSaveKey, out var o))
@@ -47,8 +42,7 @@ public abstract partial class WorldQuestBase
 	{
 		tag.Add(StateKey, (int)State);
 		tag.Add(TimeKey, Time);
-		tag.Add(RewardKey, RewardClaimed);
-		tag.Add(RewardPlayerKey, RewardClaimedPlayers.ToList());
+		tag.Add(RewardPlayerKey, _rewardClaimedPlayers.ToList());
 
 		var o = new TagCompound();
 		Objectives.SaveData(o);
@@ -63,8 +57,7 @@ public abstract partial class WorldQuestBase
 		}
 
 		Time = 0;
-		RewardClaimed = false;
-		RewardClaimedPlayers.Clear();
+		_rewardClaimedPlayers.Clear();
 		if (State == WorldQuestState.Completed)
 		{
 			State = WorldQuestState.Active;

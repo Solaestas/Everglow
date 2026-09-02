@@ -8,9 +8,8 @@ public abstract partial class WorldQuestBase
 	{
 		writer.Write((int)State);
 		writer.Write(Time);
-		writer.Write(RewardClaimed);
-		writer.Write(RewardClaimedPlayers.Count);
-		foreach (var player in RewardClaimedPlayers)
+		writer.Write(_rewardClaimedPlayers.Count);
+		foreach (string player in _rewardClaimedPlayers)
 		{
 			writer.Write(player);
 		}
@@ -22,11 +21,11 @@ public abstract partial class WorldQuestBase
 		var oldState = State;
 		State = (WorldQuestState)reader.ReadInt32();
 		Time = reader.ReadInt32();
-		RewardClaimed = reader.ReadBoolean();
 		int rewardPlayerCount = reader.ReadInt32();
+		_rewardClaimedPlayers.Clear();
 		for (int i = 0; i < rewardPlayerCount; i++)
 		{
-			RewardClaimedPlayers.Add(reader.ReadString());
+			_rewardClaimedPlayers.Add(reader.ReadString());
 		}
 		Objectives.NetReceive(reader);
 		if (!RecoverInvalidObjectiveState())

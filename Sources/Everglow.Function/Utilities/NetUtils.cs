@@ -24,4 +24,22 @@ public static class NetUtils
 	public static bool IsSubServer => SubworldSystem.Current != null && Main.netMode == NetmodeID.Server;
 
 	public static bool IsSubClient => SubworldSystem.Current != null && Main.netMode == NetmodeID.MultiplayerClient;
+
+	public static bool TryGetConnectedPlayerName(int whoAmI, out string playerName)
+	{
+		playerName = string.Empty;
+		if (whoAmI < 0 || whoAmI >= Main.maxPlayers)
+		{
+			return false;
+		}
+
+		RemoteClient client = Netplay.Clients[whoAmI];
+		if (client is null || !client.IsActive || string.IsNullOrEmpty(client.Name))
+		{
+			return false;
+		}
+
+		playerName = client.Name;
+		return true;
+	}
 }
