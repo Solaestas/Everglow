@@ -12,7 +12,7 @@ public sealed class UIQuestObjectiveItem : BaseElement
 	private const float TimerColumnWidth = 72f;
 	private const float TimerColumnSpacing = 8f;
 	private const float TimerTextSpacing = 2f;
-	private const float TimerTextFontScale = 0.5f;
+	private const float TimerTextFontScale = 0.8f;
 
 	private readonly UITextPlus _text;
 	private readonly UIQuestHourglassTimer _timer;
