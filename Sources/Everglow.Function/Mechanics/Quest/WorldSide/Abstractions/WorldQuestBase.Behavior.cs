@@ -325,7 +325,7 @@ public abstract partial class WorldQuestBase
 		{
 			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_SubProgress(Name, deltaSync), RouteDestination.MainServer);
 		}
-		else
+		else if (NetUtils.IsMainServer)
 		{
 			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(Name, deltaSync), RouteDestination.AllDownstream);
 		}
