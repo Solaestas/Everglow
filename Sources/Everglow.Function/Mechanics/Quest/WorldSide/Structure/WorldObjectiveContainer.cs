@@ -37,6 +37,11 @@ public class WorldObjectiveContainer
 	/// </summary>
 	public event Action<WorldObjectiveNodeBase> OnObjectiveSynced;
 
+	/// <summary>
+	/// Fired when an active objective reaches its time limit.
+	/// </summary>
+	public event Action<WorldObjectiveBase> OnObjectiveTimedOut;
+
 	private readonly List<WorldObjectiveNodeBase> _nodes = [];
 	private readonly List<WorldObjectiveBase> _objectives = [];
 
@@ -297,11 +302,30 @@ public class WorldObjectiveContainer
 			return;
 		}
 
+		var activeAtStart = Current.FindAllEntrances()
+			.Where(objective => objective.CanProgress)
+			.ToArray();
 		Current.Update();
 
 		if (Current.CheckCompletion())
 		{
 			CompleteNode();
+		}
+
+		IEnumerable<WorldObjectiveBase> activeAfterUpdate = FindCurrentObjectives();
+		foreach (WorldObjectiveBase objective in activeAtStart)
+		{
+			if (activeAfterUpdate.Contains(objective)
+				&& objective.CanProgress
+				&& objective.Timer?.Update(WorldQuestManager.UpdateInterval) == true)
+			{
+				if (objective.NeedDeltaSync)
+				{
+					OnMPSyncTriggered?.Invoke(objective);
+				}
+
+				OnObjectiveTimedOut?.Invoke(objective);
+			}
 		}
 	}
 
@@ -446,7 +470,9 @@ public class WorldObjectiveContainer
 	{
 		foreach (var current in FindCurrentObjectives())
 		{
-			if (current is IDeltaSyncObjective deltaSync && deltaSync.NeedDeltaSync)
+			if (current.CanProgress
+				&& current is IDeltaSyncObjective deltaSync
+				&& deltaSync.NeedDeltaSync)
 			{
 				OnMPSyncTriggered.Invoke(deltaSync);
 			}

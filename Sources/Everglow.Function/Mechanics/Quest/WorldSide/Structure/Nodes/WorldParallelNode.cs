@@ -29,13 +29,13 @@ public class WorldParallelNode : WorldObjectiveNodeBase
 
 	public override List<WorldObjectiveBase> FindAllEntrances() => _objectives.Where(o => !o.Completed).ToList();
 
-	public override bool CheckCompletion() => _objectives.Any(o => !o.Completed && o.CheckCompletion());
+	public override bool CheckCompletion() => _objectives.Any(o => o.CanProgress && o.CheckCompletion());
 
 	public override void Update()
 	{
 		foreach (var o in _objectives)
 		{
-			if (!o.Completed && !o.CheckCompletion())
+			if (o.CanProgress && !o.CheckCompletion())
 			{
 				o.Update();
 			}
@@ -46,7 +46,7 @@ public class WorldParallelNode : WorldObjectiveNodeBase
 	{
 		foreach (var o in _objectives)
 		{
-			if (!o.Completed && o.CheckCompletion())
+			if (o.CanProgress && o.CheckCompletion())
 			{
 				o.Complete();
 			}

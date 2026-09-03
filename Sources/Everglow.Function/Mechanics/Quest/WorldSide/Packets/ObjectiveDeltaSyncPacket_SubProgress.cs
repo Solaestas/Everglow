@@ -25,16 +25,22 @@ public class ObjectiveDeltaSyncPacket_SubProgress : IPacket
 		var questName = reader.ReadString();
 		var objectiveId = reader.ReadInt32();
 		var quest = WorldQuestManager.Instance.GetQuest(questName);
+		if (quest is null
+			|| quest.State != WorldQuestState.Active
+			|| objectiveId < 0
+			|| objectiveId >= quest.Objectives.AllObjectives.Count)
+		{
+			return;
+		}
+
 		var objective = quest.Objectives.AllObjectives[objectiveId];
-		if (objective is IDeltaSyncObjective deltaSyncObjective)
+		if (!objective.CanProgress || !quest.ActiveObjectives.Contains(objective))
 		{
-			deltaSyncObjective.ReceiveDelta(reader);
-			ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(questName, deltaSyncObjective), RouteDestination.AllDownstream);
+			return;
 		}
-		else
-		{
-			Ins.Logger.Error($"{questName} {objectiveId} {objective.GetType().Name} is not {nameof(IDeltaSyncObjective)}.");
-		}
+
+		objective.ReceiveDelta(reader);
+		ModIns.PacketResolver.Route(new ObjectiveDeltaSyncPacket_MainProgress(questName, objective), RouteDestination.AllDownstream);
 	}
 
 	public void Send(BinaryWriter writer)

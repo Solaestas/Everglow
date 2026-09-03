@@ -88,7 +88,7 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			foreach (var b in _branches)
 			{
 				var head = b[0];
-				if (!head.Completed && !head.CheckCompletion())
+				if (head.CanProgress && !head.CheckCompletion())
 				{
 					head.Update();
 				}
@@ -101,7 +101,7 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			if (_indexInBranch < branch.Count)
 			{
 				var obj = branch[_indexInBranch];
-				if (!obj.Completed && !obj.CheckCompletion())
+				if (obj.CanProgress && !obj.CheckCompletion())
 				{
 					obj.Update();
 				}
@@ -114,7 +114,7 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 		if (_selected < 0)
 		{
 			// Before selection: any head completing triggers selection
-			return _branches.Any(b => !b[0].Completed && b[0].CheckCompletion());
+			return _branches.Any(b => b[0].CanProgress && b[0].CheckCompletion());
 		}
 
 		var branch = _branches[_selected];
@@ -123,7 +123,8 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			return true; // Branch fully completed
 		}
 
-		return branch[_indexInBranch].CheckCompletion(); // Check current objective
+		WorldObjectiveBase objective = branch[_indexInBranch];
+		return objective.CanProgress && objective.CheckCompletion(); // Check current objective
 	}
 
 	public override void Complete()
@@ -134,7 +135,7 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			for (int i = 0; i < _branches.Count; i++)
 			{
 				var head = _branches[i][0];
-				if (!head.Completed && head.CheckCompletion())
+				if (head.CanProgress && head.CheckCompletion())
 				{
 					head.Complete();
 					_selected = i;
@@ -150,7 +151,7 @@ public class WorldBranchNode : WorldObjectiveNodeBase
 			if (_indexInBranch < branch.Count)
 			{
 				var obj = branch[_indexInBranch];
-				if (obj.CheckCompletion())
+				if (obj.CanProgress && obj.CheckCompletion())
 				{
 					obj.Complete();
 					_indexInBranch++; // Advance to next objective

@@ -14,6 +14,7 @@ public abstract partial class WorldQuestBase
 		Objectives.OnNodeCompleted += Objectives_OnNodeCompleted;
 		Objectives.OnObjectiveActivated += Objectives_OnObjectiveActivated;
 		Objectives.OnObjectiveDeactivated += Objectives_OnObjectiveDeactivated;
+		Objectives.OnObjectiveTimedOut += Objectives_OnObjectiveTimedOut;
 		Objectives.OnMPSyncTriggered += Objectives_OnMPSyncTriggered;
 	}
 
@@ -257,6 +258,26 @@ public abstract partial class WorldQuestBase
 		var questActiveBefore = oldState == WorldQuestState.Active;
 		var questActiveAfter = newState == WorldQuestState.Active;
 		Objectives.ApplyObjectiveSnapshot(questActiveBefore, questActiveAfter);
+		RefreshActivatedObjectives(questActiveAfter);
+	}
+
+	private void RefreshActivatedObjectives(bool questActive)
+	{
+		List<WorldObjectiveBase> desiredObjectives = questActive
+			? Objectives.FindCurrentObjectives().Where(objective => objective.CanProgress).ToList()
+			: [];
+
+		foreach (WorldObjectiveBase objective in _activatedObjectives.Except(desiredObjectives).ToList())
+		{
+			objective.Deactivate();
+			_activatedObjectives.Remove(objective);
+		}
+
+		foreach (WorldObjectiveBase objective in desiredObjectives.Except(_activatedObjectives).ToList())
+		{
+			objective.Activate(this);
+			_activatedObjectives.Add(objective);
+		}
 	}
 
 	public virtual void OnUnlock()
@@ -304,8 +325,28 @@ public abstract partial class WorldQuestBase
 
 		foreach (var objective in node.FindAllEntrances())
 		{
+			if (!objective.CanProgress)
+			{
+				continue;
+			}
+
 			objective.Activate(this);
 			_activatedObjectives.Add(objective);
+		}
+	}
+
+	private void Objectives_OnObjectiveTimedOut(WorldObjectiveBase objective)
+	{
+		if (!_activatedObjectives.Remove(objective))
+		{
+			return;
+		}
+
+		objective.Deactivate();
+
+		if (NetUtils.IsMainServer)
+		{
+			ModIns.PacketResolver.Route(new QuestSyncPacket(this), RouteDestination.AllDownstream);
 		}
 	}
 

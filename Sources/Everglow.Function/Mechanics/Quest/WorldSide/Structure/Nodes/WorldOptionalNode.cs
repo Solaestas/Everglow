@@ -32,13 +32,13 @@ public class WorldOptionalNode : WorldObjectiveNodeBase
 		_objectives.Where(o => !o.Completed).ToList();
 
 	public override bool CheckCompletion() =>
-		_objectives.Any(o => !o.Completed && o.CheckCompletion());
+		_objectives.Any(o => o.CanProgress && o.CheckCompletion());
 
 	public override void Update()
 	{
 		foreach (var o in _objectives)
 		{
-			if (!o.Completed && !o.CheckCompletion())
+			if (o.CanProgress && !o.CheckCompletion())
 			{
 				o.Update();
 			}
@@ -49,7 +49,7 @@ public class WorldOptionalNode : WorldObjectiveNodeBase
 	{
 		foreach (var o in _objectives)
 		{
-			if (!o.Completed && o.CheckCompletion())
+			if (o.CanProgress && o.CheckCompletion())
 			{
 				o.Complete();
 			}

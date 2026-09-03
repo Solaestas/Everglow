@@ -28,9 +28,15 @@ public class WorldLeafNode : WorldObjectiveNodeBase
 	public override List<WorldObjectiveBase> FindAllEntrances() =>
 		Objective.Completed ? [] : [Objective];
 
-	public override void Update() => Objective.Update();
+	public override void Update()
+	{
+		if (Objective.CanProgress)
+		{
+			Objective.Update();
+		}
+	}
 
-	public override bool CheckCompletion() => Objective.CheckCompletion();
+	public override bool CheckCompletion() => Objective.CanProgress && Objective.CheckCompletion();
 
 	public override void Complete() => Objective.Complete();
 

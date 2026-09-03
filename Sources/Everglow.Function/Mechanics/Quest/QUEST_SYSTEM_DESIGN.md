@@ -36,7 +36,7 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 ## 进度、时间、来源、图标与奖励
 
 - Quest 与 Objective 进度在导出时约束到 `[0, 1]`，NaN 归零；Completed Objective 强制为 1，Skipped Objective 强制为 0。
-- 时间统一使用游戏帧。ElapsedTime 来自两侧 `Time`；`TimeLimit <= 0` 归一化为 `null`；RemainingTime 不小于 0。UI 负责换算秒或分钟。
+- 时间统一使用游戏帧。Quest 的 ElapsedTime 来自两侧 `Time`；`TimeLimit <= 0` 归一化为 `null`；RemainingTime 不小于 0。Objective 可通过 `WithTimeLimit` 持有独立 `QuestTimer`，只有当前激活目标推进计时，完成判定优先于同一时间片的到期判定。超时目标保持未完成并停止推进，任务重置或重试时计时归零。UI 负责换算秒或分钟。
 - QuestType 原样导出，仅作为无行为的展示和筛选标签，不推导状态、操作能力或 UI 布局。
 - Source 继续使用 `QuestSourceBase`，空值归一化为 `Default`；仅 Player 有 SubSource。来源图标与任务图标分离，UI 可按 Source/SubSource 单独创建来源图标。
 - Icons 永不为 `null`。Player adapter 对现有图标结果生成数组快照并过滤 `QuestSourceIcon`，保留普通任务及汇总后的 Objective 图标；World 当前导出空数组。轮播状态和默认占位图属于 UI，`DrawerItem` 不进入 View。
@@ -46,7 +46,7 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 
 `QuestView.ObjectiveNodes` 按领域定义顺序保存互斥的只读节点：Leaf、Parallel、AnyOf（映射 Optional）和 Branch。Branch 包含有序 `ObjectiveBranchView`；未选择、已选择、已排除分别为 Candidate、Selected、Skipped。已完成的已选分支仍为 Selected，不另设分支完成态。
 
-`ObjectiveView` 只含实例内 ID、Description、Progress 和 Pending/Active/Completed/Skipped 状态。状态优先级固定为：位于已排除分支、Objective 已完成、Quest 为 Active 且属于 `FindCurrentObjectives()`、其他。Player adapter 通过 `GetObjectivesText(List<string>)` 收集多行描述；World adapter 导出空描述。
+`ObjectiveView` 只含实例内 ID、Description、Progress、可空 Timer 和 Pending/Active/Completed/TimedOut/Skipped 状态。状态优先级固定为：位于已排除分支、Objective 已完成、Objective 已超时、Quest 为 Active 且属于 `FindCurrentObjectives()`、其他。两侧 adapter 都将领域 `QuestTimer` 导出为独立 `TimerView` 快照。Player adapter 通过 `GetObjectivesText(List<string>)` 收集多行描述；World adapter 导出目标定义提供的描述。
 
 两侧具体节点仅向同程序集 adapter 提供最小 `internal` 只读出口：Leaf 的 Objective，Parallel/Optional 的 Objective 序列，Branch 的嵌套分支序列与可空 SelectedBranchIndex。出口使用只读包装，不暴露内部 List、游标、存档键或行为，也不让领域层依赖 Presentation。
 
@@ -54,7 +54,7 @@ Hint 与 `Visible` 相互独立；adapter 原样导出 Player `IsVisible` 或 Wo
 
 adapter 只读取状态、归一化空值与范围并创建数组快照；不得调用 Update、Complete、Reset、Retry、`TryRecordRewardClaim`、`GrantRewardItems` 或 Manager，不得改变任务、Objective、奖励、存档和网络状态，也不得访问 UI。未知领域状态或节点类型应显式失败，避免静默生成错误展示。
 
-Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 的任务生命周期与多人领奖均由主世界服务器授权；全任务/单任务同步、进度上传、奖励请求与子世界授权发奖由 WorldSide 的 NetSend/NetReceive/Packet 维护。
+Player `InstanceId` 随任务写入玩家存档；加载时只有合法 N 格式 GUID 才覆盖构造 ID，缺失或非法旧数据保留新 ID。World 的任务生命周期与多人领奖均由主世界服务器授权；World Objective 的计时进度随目标存档和全量/单任务网络快照传输。客户端与子服在本地到期时先刷新待发送差量，此后停止上传；主服仅在任务为 Active、目标仍是当前激活实例且尚未超时时接收差量，并只广播已接受的进度。全任务/单任务同步、进度上传、奖励请求与子世界授权发奖由 WorldSide 的 NetSend/NetReceive/Packet 维护。
 
 ## Presentation 查询与操作
 

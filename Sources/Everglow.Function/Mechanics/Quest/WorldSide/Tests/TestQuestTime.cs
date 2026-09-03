@@ -5,11 +5,9 @@ namespace Everglow.Commons.Mechanics.Quest.WorldSide.Tests;
 
 public class TestQuestTime : WorldQuestBase
 {
-	public override int TimeLimit => 600;
-
 	public override void Initialize()
 	{
-		Objectives.Add(new TestQuestTimeObjective());
+		Objectives.Add(new TestQuestTimeObjective().WithTimeLimit(600));
 	}
 
 	public class TestQuestTimeObjective : WorldObjectiveBase

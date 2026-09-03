@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Quest.Core;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Structure;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Terraria.ModLoader.IO;
@@ -6,11 +7,19 @@ namespace Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 
 public abstract class WorldObjectiveBase : IDeltaSyncObjective
 {
+	private const string TimerElapsedTimeSaveKey = "TimerElapsedTime";
+
 	public WorldObjectiveBase()
 	{
 	}
 
 	public bool Completed { get; private set; }
+
+	public QuestTimer Timer { get; private set; }
+
+	public bool IsTimedOut => Timer?.IsExpired == true;
+
+	internal bool CanProgress => !Completed && !IsTimedOut;
 
 	public int ObjectiveID { get; set; }
 
@@ -30,6 +39,12 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	public WorldObjectiveBase WithDescription(string description)
 	{
 		Description = description;
+		return this;
+	}
+
+	public WorldObjectiveBase WithTimeLimit(int timeLimit)
+	{
+		Timer = new QuestTimer(timeLimit);
 		return this;
 	}
 
@@ -75,6 +90,7 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	{
 		RewardClaimed = false;
 		Completed = false;
+		Timer?.Reset();
 	}
 
 	public virtual void Activate(WorldQuestBase sourceQuest)
@@ -91,6 +107,14 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	public virtual void LoadData(TagCompound tag)
 	{
+		if (Timer is not null)
+		{
+			int elapsedTime = tag.TryGet<int>(TimerElapsedTimeSaveKey, out var storedElapsedTime)
+				? storedElapsedTime
+				: 0;
+			Timer.RestoreElapsedTime(elapsedTime);
+		}
+
 		if (tag.TryGet<bool>(nameof(Completed), out var completed))
 		{
 			Completed = completed;
@@ -104,6 +128,11 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 
 	public virtual void SaveData(TagCompound tag)
 	{
+		if (Timer is not null)
+		{
+			tag.Add(TimerElapsedTimeSaveKey, Timer.ElapsedTime);
+		}
+
 		tag.Add(nameof(Completed), Completed);
 		tag.Add(nameof(RewardClaimed), RewardClaimed);
 	}
@@ -112,12 +141,20 @@ public abstract class WorldObjectiveBase : IDeltaSyncObjective
 	{
 		writer.Write(Completed);
 		writer.Write(RewardClaimed);
+		if (Timer is not null)
+		{
+			writer.Write(Timer.ElapsedTime);
+		}
 	}
 
 	public virtual void NetReceive(BinaryReader reader)
 	{
 		Completed = reader.ReadBoolean();
 		RewardClaimed = reader.ReadBoolean();
+		if (Timer is not null)
+		{
+			Timer.RestoreElapsedTime(reader.ReadInt32());
+		}
 	}
 
 	public virtual void SendDelta(BinaryWriter bw)
