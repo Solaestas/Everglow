@@ -44,11 +44,16 @@ public sealed class WorldQuestActions
 			return false;
 		}
 
-		var quest = _manager.GetQuest(identity.DefinitionId);
-		string playerName = Main.LocalPlayer.name;
+		WorldQuestBase quest = _manager.GetQuest(identity.DefinitionId);
 		if (quest is null
 			|| !string.Equals(quest.Name, identity.InstanceId, StringComparison.Ordinal)
-			|| QuestHintRules.HasContent(quest.Hint)
+			|| action.Args is not null)
+		{
+			return false;
+		}
+
+		string playerName = Main.LocalPlayer.name;
+		if (QuestHintRules.HasContent(quest.Hint)
 			|| !GetAvailableTypesForPlayer(quest, playerName).Contains(action.Type))
 		{
 			return false;

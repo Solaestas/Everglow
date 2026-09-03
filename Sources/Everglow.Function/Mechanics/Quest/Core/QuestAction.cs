@@ -11,4 +11,5 @@ public enum QuestActionType
 
 public readonly record struct QuestAction(
 	QuestIdentity Quest,
-	QuestActionType Type);
+	QuestActionType Type,
+	object? Args = null);

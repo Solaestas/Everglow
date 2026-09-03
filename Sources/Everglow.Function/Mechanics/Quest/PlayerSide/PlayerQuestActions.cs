@@ -47,6 +47,7 @@ public sealed class PlayerQuestActions
 		var quest = _manager.GetQuest(identity.DefinitionId);
 		if (quest is null
 			|| !string.Equals(quest.InstanceId, identity.InstanceId, StringComparison.Ordinal)
+			|| action.Args is not null
 			|| QuestHintRules.HasContent(quest.Hint)
 			|| !GetAvailableTypes(quest).Contains(action.Type))
 		{

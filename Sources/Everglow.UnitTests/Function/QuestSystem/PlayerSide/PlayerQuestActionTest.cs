@@ -137,6 +137,19 @@ public class PlayerQuestActionTest
 	}
 
 	[TestMethod]
+	public void AcceptAction_WithUnexpectedArgs_IsRejected()
+	{
+		var quest = new StubQuest { State = PlayerQuestState.Available };
+		_manager.ApplyData(new PlayerQuestManagerData([], [quest]));
+		QuestAction action = PlayerQuestActionAdapter.GetActions(quest).Single() with { Args = 0 };
+
+		bool applied = _actions.TryExecute(action);
+
+		Assert.IsFalse(applied);
+		Assert.AreEqual(PlayerQuestState.Available, quest.State);
+	}
+
+	[TestMethod]
 	[DataRow("Follow the trail")]
 	[DataRow(QuestHintText.Masked)]
 	public void HintedAvailableQuest_ExportsNoActions(string hint)

@@ -107,6 +107,22 @@ public class WorldQuestActionTest
 	}
 
 	[TestMethod]
+	public void RetryAction_WithUnexpectedArgs_IsRejected()
+	{
+		var quest = new StubQuest();
+		quest.SetState(WorldQuestState.Failed);
+		var manager = new WorldQuestManager(new StubGameStateProvider());
+		manager.AddQuest(quest);
+		var actions = new WorldQuestActions(manager);
+		QuestAction action = WorldQuestActionAdapter.GetActions(quest).Single() with { Args = "unexpected" };
+
+		bool applied = actions.TryExecute(action);
+
+		Assert.IsFalse(applied);
+		Assert.AreEqual(WorldQuestState.Failed, quest.State);
+	}
+
+	[TestMethod]
 	public void RetryAction_PublishesStatusAndObjectiveUpdates()
 	{
 		var quest = new StubQuest();
