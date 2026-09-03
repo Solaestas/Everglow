@@ -16,10 +16,12 @@ public partial class WorldQuestViewAdapterTest
 		var quest = new StubQuest();
 		quest.SetState(WorldQuestState.Active);
 		quest.Objectives.Add(objective);
+		quest.Activate();
 
 		var activeView = ((LeafObjectiveNodeView)WorldQuestViewAdapter.Create(quest).ObjectiveNodes.Single()).Objective;
 
 		Assert.AreEqual(ObjectiveViewState.Active, activeView.State);
+		Assert.IsFalse(activeView.CanRetry);
 		Assert.IsNotNull(activeView.Timer);
 		Assert.AreEqual(100, activeView.Timer.TimeLimit);
 		Assert.AreEqual(40, activeView.Timer.ElapsedTime);
@@ -29,8 +31,14 @@ public partial class WorldQuestViewAdapterTest
 		var timedOutView = ((LeafObjectiveNodeView)WorldQuestViewAdapter.Create(quest).ObjectiveNodes.Single()).Objective;
 
 		Assert.AreEqual(ObjectiveViewState.TimedOut, timedOutView.State);
+		Assert.IsTrue(timedOutView.CanRetry);
 		Assert.IsNotNull(timedOutView.Timer);
 		Assert.AreEqual(0, timedOutView.Timer.RemainingTime);
+
+		quest.SetState(WorldQuestState.Failed);
+		var failedQuestView = ((LeafObjectiveNodeView)WorldQuestViewAdapter.Create(quest).ObjectiveNodes.Single()).Objective;
+
+		Assert.IsFalse(failedQuestView.CanRetry);
 	}
 
 	[TestMethod]

@@ -63,32 +63,34 @@ public static class WorldQuestViewAdapter
 		}
 
 		return quest.Objectives.AllNodes
-			.Select(node => CreateObjectiveNode(node, activeObjectives))
+			.Select(node => CreateObjectiveNode(quest, node, activeObjectives))
 			.ToArray();
 	}
 
 	private static ObjectiveNodeView CreateObjectiveNode(
+		WorldQuestBase quest,
 		WorldObjectiveNodeBase node,
 		IReadOnlySet<WorldObjectiveBase> activeObjectives)
 	{
 		return node switch
 		{
 			WorldLeafNode leaf => new LeafObjectiveNodeView(
-				CreateObjective(leaf.Objective, activeObjectives, skipped: false)),
+				CreateObjective(quest, leaf.Objective, activeObjectives, skipped: false)),
 			WorldParallelNode parallel => new ParallelObjectiveNodeView(
 				parallel.Objectives
-					.Select(objective => CreateObjective(objective, activeObjectives, skipped: false))
+					.Select(objective => CreateObjective(quest, objective, activeObjectives, skipped: false))
 					.ToArray()),
 			WorldOptionalNode optional => new AnyOfObjectiveNodeView(
 				optional.Objectives
-					.Select(objective => CreateObjective(objective, activeObjectives, skipped: false))
+					.Select(objective => CreateObjective(quest, objective, activeObjectives, skipped: false))
 					.ToArray()),
-			WorldBranchNode branch => CreateBranchNode(branch, activeObjectives),
+			WorldBranchNode branch => CreateBranchNode(quest, branch, activeObjectives),
 			_ => throw new InvalidDataException($"Unknown world objective node type {node.GetType().FullName}."),
 		};
 	}
 
 	private static BranchObjectiveNodeView CreateBranchNode(
+		WorldQuestBase quest,
 		WorldBranchNode node,
 		IReadOnlySet<WorldObjectiveBase> activeObjectives)
 	{
@@ -104,7 +106,7 @@ public static class WorldQuestViewAdapter
 			};
 			bool skipped = state == ObjectiveBranchState.Skipped;
 			ObjectiveView[] objectives = node.Branches[branchIndex]
-				.Select(objective => CreateObjective(objective, activeObjectives, skipped))
+				.Select(objective => CreateObjective(quest, objective, activeObjectives, skipped))
 				.ToArray();
 			branches[branchIndex] = new ObjectiveBranchView(state, objectives);
 		}
@@ -113,6 +115,7 @@ public static class WorldQuestViewAdapter
 	}
 
 	private static ObjectiveView CreateObjective(
+		WorldQuestBase quest,
 		WorldObjectiveBase objective,
 		IReadOnlySet<WorldObjectiveBase> activeObjectives,
 		bool skipped)
@@ -149,6 +152,7 @@ public static class WorldQuestViewAdapter
 			ObjectiveText = objective.GetObjectiveText(),
 			Progress = progress,
 			State = state,
+			CanRetry = quest.CanRetryObjective(objective.ObjectiveID),
 			Timer = objective.Timer is null
 				? null
 				: new TimerView

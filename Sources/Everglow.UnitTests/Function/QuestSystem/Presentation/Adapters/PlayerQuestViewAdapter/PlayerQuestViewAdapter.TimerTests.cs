@@ -27,6 +27,7 @@ public partial class PlayerQuestViewAdapterTest
 		var timedOutView = ((LeafObjectiveNodeView)PlayerQuestViewAdapter.Create(quest).ObjectiveNodes.Single()).Objective;
 
 		Assert.AreEqual(ObjectiveViewState.TimedOut, timedOutView.State);
+		Assert.IsFalse(timedOutView.CanRetry);
 		Assert.IsNotNull(timedOutView.Timer);
 		Assert.AreEqual(0, timedOutView.Timer.RemainingTime);
 	}

@@ -19,6 +19,7 @@ public sealed class UIQuestObjectiveItem : BaseElement
 	private readonly UITextPlus _timerText;
 	private readonly Action<int> _retryObjective;
 	private int _objectiveId;
+	private bool _canRetry;
 
 	public UIQuestObjectiveItem(
 		ObjectiveLineView line,
@@ -40,11 +41,20 @@ public sealed class UIQuestObjectiveItem : BaseElement
 		_timer.Info.Left.SetValue(-(TimerColumnWidth + TimerWidth) * 0.5f, 1f);
 		_timer.Events.OnMouseHover += e =>
 		{
-			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip();
+			if (_canRetry)
+			{
+				Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip();
+			}
 			_timer.OnSelect = true;
 		};
 		_timer.Events.OnMouseOut += e => _timer.OnSelect = false;
-		_timer.Events.OnLeftClick += e => _retryObjective(_objectiveId);
+		_timer.Events.OnLeftClick += e =>
+		{
+			if (_canRetry)
+			{
+				_retryObjective(_objectiveId);
+			}
+		};
 		Register(_timer);
 
 		_timerText = new UITextPlus(string.Empty);
@@ -58,6 +68,7 @@ public sealed class UIQuestObjectiveItem : BaseElement
 	{
 		ArgumentNullException.ThrowIfNull(line);
 		_objectiveId = line.Objective.Id;
+		_canRetry = line.Objective.CanRetry;
 
 		TimerView timer = line.Timer;
 		bool hasTimer = timer is not null;

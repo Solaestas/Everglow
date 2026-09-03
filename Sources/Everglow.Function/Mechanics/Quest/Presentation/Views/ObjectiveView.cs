@@ -12,5 +12,7 @@ public sealed class ObjectiveView
 
 	public ObjectiveViewState State { get; init; }
 
+	public bool CanRetry { get; init; }
+
 	public TimerView Timer { get; init; }
 }
