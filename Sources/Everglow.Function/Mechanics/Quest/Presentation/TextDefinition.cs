@@ -109,7 +109,7 @@ public static class TextDefinition
 			: entry.View.State switch
 			{
 				QuestViewState.Available => "接取",
-				QuestViewState.Active => "放弃",
+				QuestViewState.Active => "进行中",
 				QuestViewState.Completed => "完成",
 				QuestViewState.Failed => "失败",
 				QuestViewState.Locked => "锁定",

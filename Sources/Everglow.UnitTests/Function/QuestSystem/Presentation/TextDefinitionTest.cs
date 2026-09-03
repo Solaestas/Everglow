@@ -232,6 +232,19 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	public void GetQuestActionText_WorldActiveWithoutActionUsesInProgressStateLabel()
+	{
+		var identity = new QuestIdentity(QuestSide.World, "TestQuest", "TestQuest");
+		var entry = new QuestPresentationEntry(
+			new QuestView { Identity = identity, State = QuestViewState.Active },
+			[]);
+
+		Assert.AreEqual(
+			"[TextDrawer,Text='进行中',Color='45,38,33']",
+			TextDefinition.GetQuestActionText(entry, "45,38,33"));
+	}
+
+	[TestMethod]
 	public void GetQuestActionText_CompletedWithoutActionUsesPassiveStateLabel()
 	{
 		var identity = new QuestIdentity(QuestSide.World, "TestQuest", "TestQuest");
