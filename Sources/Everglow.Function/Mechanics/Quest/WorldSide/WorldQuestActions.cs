@@ -46,8 +46,17 @@ public sealed class WorldQuestActions
 
 		WorldQuestBase quest = _manager.GetQuest(identity.DefinitionId);
 		if (quest is null
-			|| !string.Equals(quest.Name, identity.InstanceId, StringComparison.Ordinal)
-			|| action.Args is not null)
+			|| !string.Equals(quest.Name, identity.InstanceId, StringComparison.Ordinal))
+		{
+			return false;
+		}
+
+		if (action is { Type: QuestActionType.Retry, Args: int objectiveId })
+		{
+			return TryRetryObjective(quest, objectiveId);
+		}
+
+		if (action.Args is not null)
 		{
 			return false;
 		}
@@ -65,6 +74,29 @@ public sealed class WorldQuestActions
 			QuestActionType.ClaimReward => TryClaimReward(quest, playerName),
 			_ => false,
 		};
+	}
+
+	private bool TryRetryObjective(WorldQuestBase quest, int objectiveId)
+	{
+		if (!quest.CanRetryObjective(objectiveId))
+		{
+			return false;
+		}
+
+		if (NetUtils.IsSingle)
+		{
+			return _manager.TryRetryObjective(quest.Name, objectiveId);
+		}
+
+		if (NetUtils.IsClient)
+		{
+			ModIns.PacketResolver.Route(
+				new ObjectiveRetryRequestPacket(quest.Name, objectiveId),
+				RouteDestination.MainServer);
+			return true;
+		}
+
+		return false;
 	}
 
 	private bool TryRetry(WorldQuestBase quest)

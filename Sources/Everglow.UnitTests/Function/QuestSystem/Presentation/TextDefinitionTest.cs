@@ -278,6 +278,12 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	public void GetObjectiveTimerTooltip_ReturnsRetryText()
+	{
+		Assert.AreEqual("重试", TextDefinition.GetObjectiveTimerTooltip());
+	}
+
+	[TestMethod]
 	[DataRow(QuestNotificationType.Unlocked, null, "[World Quest]任务已解锁", 150, 150, 250)]
 	[DataRow(QuestNotificationType.Restored, null, "[World Quest]任务已恢复", 150, 150, 250)]
 	[DataRow(QuestNotificationType.Failed, null, "[World Quest]任务已失败", 250, 150, 150)]

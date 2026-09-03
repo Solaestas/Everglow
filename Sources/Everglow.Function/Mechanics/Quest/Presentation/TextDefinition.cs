@@ -155,7 +155,7 @@ public static class TextDefinition
 		return text.ToString();
 	}
 
-	public static string GetObjectiveTimerTooltip(float timer) => $"Time Remain: {(int)(timer / 60f)}s";
+	public static string GetObjectiveTimerTooltip() => "重试";
 
 	public static string GetObjectiveDurationTooltip(float currentDuration, float maxDuration) => $"Duration: {(int)currentDuration}/{(int)maxDuration}";
 

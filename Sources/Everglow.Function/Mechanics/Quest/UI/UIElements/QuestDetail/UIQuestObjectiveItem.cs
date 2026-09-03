@@ -17,9 +17,16 @@ public sealed class UIQuestObjectiveItem : BaseElement
 	private readonly UITextPlus _text;
 	private readonly UIQuestHourglassTimer _timer;
 	private readonly UITextPlus _timerText;
+	private readonly Action<int> _retryObjective;
+	private int _objectiveId;
 
-	public UIQuestObjectiveItem(ObjectiveLineView line, float fontSize, float width)
+	public UIQuestObjectiveItem(
+		ObjectiveLineView line,
+		float fontSize,
+		float width,
+		Action<int> retryObjective)
 	{
+		_retryObjective = retryObjective;
 		Info.SetMargin(0f);
 		Info.Width.SetValue(Math.Max(1f, width));
 
@@ -33,10 +40,11 @@ public sealed class UIQuestObjectiveItem : BaseElement
 		_timer.Info.Left.SetValue(-(TimerColumnWidth + TimerWidth) * 0.5f, 1f);
 		_timer.Events.OnMouseHover += e =>
 		{
-			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip(_timer.Timer);
+			Instance.MouseText = TextDefinition.GetObjectiveTimerTooltip();
 			_timer.OnSelect = true;
 		};
 		_timer.Events.OnMouseOut += e => _timer.OnSelect = false;
+		_timer.Events.OnLeftClick += e => _retryObjective(_objectiveId);
 		Register(_timer);
 
 		_timerText = new UITextPlus(string.Empty);
@@ -49,6 +57,7 @@ public sealed class UIQuestObjectiveItem : BaseElement
 	public void SetLine(ObjectiveLineView line)
 	{
 		ArgumentNullException.ThrowIfNull(line);
+		_objectiveId = line.Objective.Id;
 
 		TimerView timer = line.Timer;
 		bool hasTimer = timer is not null;

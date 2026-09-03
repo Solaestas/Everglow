@@ -6,6 +6,25 @@ namespace Everglow.UnitTests.Function.QuestSystem;
 public class WorldQuestRewardPacketTest
 {
 	[TestMethod]
+	public void ObjectiveRetryRequest_RoundTripsOnlyQuestNameAndObjectiveId()
+	{
+		var sent = new ObjectiveRetryRequestPacket("TimedQuest", 7);
+		using var stream = new MemoryStream();
+		using var writer = new BinaryWriter(stream);
+
+		sent.Send(writer);
+		writer.Flush();
+		stream.Position = 0;
+		var received = new ObjectiveRetryRequestPacket();
+		using var reader = new BinaryReader(stream);
+		received.Receive(reader, whoAmI: 23);
+
+		Assert.AreEqual("TimedQuest", received.QuestName);
+		Assert.AreEqual(7, received.ObjectiveId);
+		Assert.AreEqual(stream.Length, stream.Position);
+	}
+
+	[TestMethod]
 	public void ClaimRequest_RoundTripsOnlyQuestName()
 	{
 		var sent = new QuestClaimRewardPacket("RewardQuest");

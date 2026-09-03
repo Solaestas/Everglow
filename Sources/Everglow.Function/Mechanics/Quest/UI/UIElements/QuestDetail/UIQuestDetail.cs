@@ -307,7 +307,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		IReadOnlyList<ObjectiveLineView> lines = TextDefinition.GetQuestObjectiveLines(quest);
 		if (_objectiveHeader is null || _objectiveItems.Count != lines.Count)
 		{
-			RebuildObjectiveItems(lines);
+			RebuildObjectiveItems(quest.Identity, lines);
 		}
 		else
 		{
@@ -320,7 +320,7 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		LayoutObjectiveItems();
 	}
 
-	private void RebuildObjectiveItems(IReadOnlyList<ObjectiveLineView> lines)
+	private void RebuildObjectiveItems(QuestIdentity questIdentity, IReadOnlyList<ObjectiveLineView> lines)
 	{
 		_objectiveContainer.ClearAllElements();
 		_objectiveItems.Clear();
@@ -335,7 +335,11 @@ public class UIQuestDetail : UIBlock, IDrawable_InRt2D
 		List<BaseElement> elements = [_objectiveHeader];
 		foreach (ObjectiveLineView line in lines)
 		{
-			var item = new UIQuestObjectiveItem(line, FontSize, contentWidth);
+			var item = new UIQuestObjectiveItem(
+				line,
+				FontSize,
+				contentWidth,
+				objectiveId => Service.TryExecute(new QuestAction(questIdentity, QuestActionType.Retry, objectiveId)));
 			_objectiveItems.Add(item);
 			elements.Add(item);
 		}

@@ -3,9 +3,12 @@ using Everglow.Commons.Mechanics.Quest.PlayerSide;
 using Everglow.Commons.Mechanics.Quest.PlayerSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation;
 using Everglow.Commons.Mechanics.Quest.Presentation.Adapters;
+using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Mechanics.Quest.Presentation.Views;
 using Everglow.Commons.Mechanics.Quest.WorldSide;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
+using Terraria;
+using Terraria.ID;
 
 namespace Everglow.UnitTests.Function.QuestSystem;
 
@@ -13,6 +16,8 @@ namespace Everglow.UnitTests.Function.QuestSystem;
 [DoNotParallelize]
 public class QuestPresentationServiceTest
 {
+	private int _originalNetMode;
+
 	private sealed class StubPlayerQuest : PlayerQuestBase
 	{
 		public string NameValue { get; init; } = nameof(StubPlayerQuest);
@@ -41,6 +46,38 @@ public class QuestPresentationServiceTest
 		public override float Progress => 0f;
 	}
 
+	private sealed class TimedWorldQuest : WorldQuestBase
+	{
+		public TimedWorldQuest()
+		{
+			Objective = new TimedWorldObjective();
+			Objective.WithTimeLimit(WorldQuestManager.UpdateInterval);
+			Objectives.Add(Objective);
+		}
+
+		public override string Name => nameof(TimedWorldQuest);
+
+		public TimedWorldObjective Objective { get; }
+
+		public void ActivateAndExpire()
+		{
+			State = WorldQuestState.Active;
+			Activate();
+			Objectives.UpdateNode();
+		}
+	}
+
+	private sealed class TimedWorldObjective : WorldObjectiveBase
+	{
+		public override bool CheckCompletion() => false;
+
+		public override void GetObjectivesIcon(QuestIconGroup iconGroup)
+		{
+		}
+
+		public override string GetObjectiveText() => string.Empty;
+	}
+
 	private sealed class StubGameStateProvider : IGameStateProvider
 	{
 		public double TimeForVisualEffects => 0;
@@ -50,6 +87,20 @@ public class QuestPresentationServiceTest
 		public bool GameInactive => false;
 
 		public bool GamePaused => false;
+	}
+
+	[TestInitialize]
+	public void Initialize()
+	{
+		Terraria.Program.SavePath = string.Empty;
+		_originalNetMode = Main.netMode;
+		Main.netMode = NetmodeID.SinglePlayer;
+	}
+
+	[TestCleanup]
+	public void Cleanup()
+	{
+		Main.netMode = _originalNetMode;
 	}
 
 	[TestMethod]
@@ -156,6 +207,38 @@ public class QuestPresentationServiceTest
 		Assert.IsFalse(staleExecuted);
 		Assert.IsFalse(rejectedExecuted);
 		Assert.AreEqual(PlayerQuestState.Accepted, rejected.State);
+	}
+
+	[TestMethod]
+	public void TryExecute_DispatchesObjectiveRetryAction()
+	{
+		var world = new TimedWorldQuest();
+		world.ActivateAndExpire();
+		var context = CreateService([], [world]);
+		var identity = new QuestIdentity(QuestSide.World, world.Name, world.Name);
+		var action = new QuestAction(identity, QuestActionType.Retry, world.Objective.ObjectiveID);
+
+		bool retried = context.Service.TryExecute(action);
+
+		Assert.IsTrue(retried);
+		Assert.AreEqual(0, world.Objective.Timer.ElapsedTime);
+		Assert.IsFalse(world.Objective.IsTimedOut);
+	}
+
+	[TestMethod]
+	public void TryExecute_RejectsInvalidObjectiveRetryActions()
+	{
+		var world = new TimedWorldQuest();
+		world.ActivateAndExpire();
+		var context = CreateService([], [world]);
+		var identity = new QuestIdentity(QuestSide.World, world.Name, world.Name);
+		var playerIdentity = new QuestIdentity(QuestSide.Player, world.Name, world.Name);
+		int objectiveId = world.Objective.ObjectiveID;
+
+		Assert.IsFalse(context.Service.TryExecute(new QuestAction(playerIdentity, QuestActionType.Retry, objectiveId)));
+		Assert.IsFalse(context.Service.TryExecute(new QuestAction(identity with { InstanceId = "stale" }, QuestActionType.Retry, objectiveId)));
+		Assert.IsFalse(context.Service.TryExecute(new QuestAction(identity, QuestActionType.Retry, objectiveId.ToString())));
+		Assert.IsTrue(world.Objective.IsTimedOut);
 	}
 
 	private static (

@@ -206,6 +206,34 @@ public abstract partial class WorldQuestBase
 		return true;
 	}
 
+	public bool CanRetryObjective(int objectiveId)
+	{
+		if (State != WorldQuestState.Active
+			|| Objectives.Current is null
+			|| !ReferenceEquals(Objectives.Current, Objectives.FindCurrentNode())
+			|| (uint)objectiveId >= (uint)Objectives.AllObjectives.Count)
+		{
+			return false;
+		}
+
+		WorldObjectiveBase objective = Objectives.AllObjectives[objectiveId];
+		return !objective.Completed
+			&& objective.Timer?.IsExpired == true
+			&& Objectives.Current.FindAllEntrances().Contains(objective);
+	}
+
+	public bool TryRetryObjectiveCore(int objectiveId)
+	{
+		if (!CanRetryObjective(objectiveId))
+		{
+			return false;
+		}
+
+		Objectives.AllObjectives[objectiveId].ResetProgress();
+		RefreshActivatedObjectives(questActive: true);
+		return true;
+	}
+
 	public bool CanClaimReward(string playerName) =>
 		State == WorldQuestState.Completed
 		&& !string.IsNullOrEmpty(playerName)

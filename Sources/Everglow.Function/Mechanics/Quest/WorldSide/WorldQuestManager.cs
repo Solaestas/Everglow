@@ -168,6 +168,28 @@ public class WorldQuestManager
 		_quests.Add(quest);
 	}
 
+	internal bool TryRetryObjective(string questName, int objectiveId)
+	{
+		if (!NetUtils.IsSingle && !NetUtils.IsMainServer)
+		{
+			return false;
+		}
+
+		WorldQuestBase quest = GetQuest(questName);
+		if (quest is null || !quest.TryRetryObjectiveCore(objectiveId))
+		{
+			return false;
+		}
+
+		OnQuestObjectiveUpdated(quest);
+		if (NetUtils.IsMainServer)
+		{
+			ModIns.PacketResolver.Route(new QuestSyncPacket(quest), RouteDestination.AllDownstream);
+		}
+
+		return true;
+	}
+
 	internal bool TryClaimReward(string questName, int whoAmI)
 	{
 		if (!NetUtils.IsMainServer
