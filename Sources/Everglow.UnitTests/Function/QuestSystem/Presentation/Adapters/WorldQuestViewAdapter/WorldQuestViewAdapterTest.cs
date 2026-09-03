@@ -67,7 +67,10 @@ public partial class WorldQuestViewAdapterTest
 
 	private sealed class StubObjective : WorldObjectiveBase
 	{
-		public string DescriptionValue { get; set; } = string.Empty;
+		public string DescriptionValue
+		{
+			set => WithDescription(value);
+		}
 
 		public string ObjectiveTextValue { get; set; } = string.Empty;
 
@@ -92,8 +95,6 @@ public partial class WorldQuestViewAdapterTest
 		public int PersistenceCalls { get; private set; }
 
 		public int NetworkCalls { get; private set; }
-
-		public override string Description => DescriptionValue;
 
 		public override float Progress => ProgressValue;
 
