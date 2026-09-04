@@ -1,4 +1,5 @@
 using Everglow.Commons.Utilities.BackgroundHelper;
+using Spine;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.UI;
@@ -77,7 +78,7 @@ public class FurnaceScoreShop : BackgroundSlideBase
 		{
 			Main.instance.MouseText("Furnace Points Redemption");
 			MouseOverSaleGirl = true;
-			if (Main.mouseRight && Main.mouseRightRelease)
+			if (Main.mouseRight && Main.mouseRightRelease && CanInteract())
 			{
 				Main.playerInventory = true;
 				YggdrasilTownFurnaceSystem.FurnaceScoreShopOpen = true;
@@ -121,11 +122,18 @@ public class FurnaceScoreShop : BackgroundSlideBase
 				break;
 		}
 		Main.spriteBatch.Draw(girl, pos - Main.screenPosition, girlFrame, Lighting.GetColor(pos.ToTileCoordinates()), 0, new Vector2(girlFrame.Width * 0.5f, girlFrame.Height), 1f, SpriteEffects.None, 0);
-		if (MouseOverSaleGirl && (player.Center - pos).Length() < new Vector2(player.lastTileRangeX, player.lastTileRangeY).Length() * 16 + 16)
+		if (MouseOverSaleGirl && CanInteract())
 		{
 			Texture2D chatBubble = TextureAssets.Chat.Value;
 			Main.spriteBatch.Draw(chatBubble, pos - Main.screenPosition + new Vector2(0, -16), null, Lighting.GetColor(pos.ToTileCoordinates()), 0, new Vector2(0, chatBubble.Height), 1f, SpriteEffects.None, 0);
 		}
+	}
+
+	public bool CanInteract()
+	{
+		Player player = Main.LocalPlayer;
+		Vector2 pos = WorldAnchor + new Vector2(1964, 528);
+		return (player.Center - pos).Length() < new Vector2(player.lastTileRangeX, player.lastTileRangeY).Length() * 16 + 16;
 	}
 
 	public override bool CanActive()

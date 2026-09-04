@@ -211,8 +211,8 @@ public class YggdrasilTownBiome : ModBiome
 		bgSystem.AddBackgroundSlide(gfcs);
 
 		FurnaceScoreShop fSS = new FurnaceScoreShop();
-		fSS.WorldAnchor = centerPosWorld + new Vector2(-156, 920);
-		fSS.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 100, (int)centerPosWorld.Y / 16 + 78, 20, 14);
+		fSS.WorldAnchor = centerPosWorld + new Vector2(-124, 920);
+		fSS.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 102, (int)centerPosWorld.Y / 16 + 78, 20, 14);
 		fSS.TileAnchor = centerPosWorld.ToTileCoordinates() + new Point(-14, 29);
 		bgSystem.AddBackgroundSlide(fSS);
 	}
