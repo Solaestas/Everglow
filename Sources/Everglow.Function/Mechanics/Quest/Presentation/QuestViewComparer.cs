@@ -15,21 +15,24 @@ public class QuestViewComparer : IComparer<QuestView>
 		}
 		else if (x.Type != y.Type)
 		{
-			if (x.Type is QuestType.None)
-			{
-				return 1;
-			}
-
-			if (y.Type is QuestType.None)
-			{
-				return -1;
-			}
-
-			return x.Type.CompareTo(y.Type);
+			int typeOrderComparison = GetTypeSortOrder(x.Type).CompareTo(GetTypeSortOrder(y.Type));
+			return typeOrderComparison != 0 ? typeOrderComparison : x.Type.CompareTo(y.Type);
 		}
 		else
 		{
 			return string.Compare(x.DisplayName, y.DisplayName);
 		}
 	}
+
+	private static int GetTypeSortOrder(QuestType type) => type switch
+	{
+		QuestType.MainStory => 0,
+		QuestType.SideStory => 1,
+		QuestType.Achievement => 2,
+		QuestType.Challenge => 3,
+		QuestType.Daily => 4,
+		QuestType.Legend => 5,
+		QuestType.None => 7,
+		_ => 6,
+	};
 }
