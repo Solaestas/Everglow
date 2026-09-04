@@ -209,5 +209,11 @@ public class YggdrasilTownBiome : ModBiome
 		gfcs.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 106, (int)centerPosWorld.Y / 16 + 4, 112, 90);
 		gfcs.TileAnchor = centerPosWorld.ToTileCoordinates() + new Point(-14, 29);
 		bgSystem.AddBackgroundSlide(gfcs);
+
+		FurnaceScoreShop fSS = new FurnaceScoreShop();
+		fSS.WorldAnchor = centerPosWorld + new Vector2(-156, 920);
+		fSS.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 100, (int)centerPosWorld.Y / 16 + 78, 20, 14);
+		fSS.TileAnchor = centerPosWorld.ToTileCoordinates() + new Point(-14, 29);
+		bgSystem.AddBackgroundSlide(fSS);
 	}
 }

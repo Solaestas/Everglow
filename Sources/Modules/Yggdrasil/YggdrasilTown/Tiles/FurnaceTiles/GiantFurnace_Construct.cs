@@ -74,7 +74,7 @@ public class GiantFurnace_Construct : BackgroundSlideBase
 	public override void Update()
 	{
 		base.Update();
-		for (int i = 0; i < 92; i++)
+		for (int i = 0; i < 76; i++)
 		{
 			Vector2 worldPos = new Vector2(i * 16, 0) + WorldAnchor - (new Vector2(47, 63 - 92) * 16 + new Vector2(4, 24));
 			Lighting.AddLight(worldPos, new Vector3(3f, 1.8f, 0.6f));
@@ -113,6 +113,22 @@ public class GiantFurnace_Construct : BackgroundSlideBase
 					}
 				}
 			}
+		}
+		Texture2D screen = ModAsset.FurnaceScreen_Animation.Value;
+		if (YggdrasilTownFurnaceSystem.CurrentPlayer is not null || YggdrasilTownFurnaceSystem.PlayerLeaveFloorScaleTimer > 0)
+		{
+			var frame = new Rectangle(0, 0, 80, 48);
+			if (YggdrasilTownFurnaceSystem.PlayerDropInFloorScaleTimer > 0)
+			{
+				int value = (int)((30 - YggdrasilTownFurnaceSystem.PlayerDropInFloorScaleTimer) / 30f * 7f);
+				frame = new Rectangle(0, 336 + 48 * value, 80, 48);
+			}
+			if (YggdrasilTownFurnaceSystem.PlayerLeaveFloorScaleTimer > 0)
+			{
+				int value = (int)((30 - YggdrasilTownFurnaceSystem.PlayerLeaveFloorScaleTimer) / 30f * 7f);
+				frame = new Rectangle(0, 48 * value, 80, 48);
+			}
+			Main.spriteBatch.Draw(screen, new Rectangle((int)pos.X - 166, (int)pos.Y + 96, frame.Width, frame.Height), frame, Color.White);
 		}
 	}
 

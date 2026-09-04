@@ -99,5 +99,11 @@ public class YggdrasilCommandBlock : ModTile
 		gfcs.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 106, (int)centerPosWorld.Y / 16 + 4, 112, 90);
 		gfcs.TileAnchor = new Point(i, j);
 		bgSystem.AddBackgroundSlide(gfcs);
+
+		FurnaceScoreShop fSS = new FurnaceScoreShop();
+		fSS.WorldAnchor = centerPosWorld + new Vector2(-156, 920);
+		fSS.BgTiles = TileUtils.GetAABBAreaOfTile((int)centerPosWorld.X / 16 + 100, (int)centerPosWorld.Y / 16 + 78, 20, 14);
+		fSS.TileAnchor = new Point(i, j);
+		bgSystem.AddBackgroundSlide(fSS);
 	}
 }

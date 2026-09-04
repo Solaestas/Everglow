@@ -36,7 +36,7 @@ public class MailBox : ModTile
 
 		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
 		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation.
-		RegisterItemDrop(ModContent.ItemType<MeltingInputBox_Item>(), 1);
+		RegisterItemDrop(ModContent.ItemType<FurnaceMeltingChest_Item>(), 1);
 
 		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
 		// RegisterItemDrop(ItemID.Chest);

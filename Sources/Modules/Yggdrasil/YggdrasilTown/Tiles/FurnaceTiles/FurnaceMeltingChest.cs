@@ -6,10 +6,11 @@ using Terraria.Enums;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.Localization;
 using Terraria.ObjectData;
+using Terraria.UI;
 
 namespace Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
 
-public class MeltingInputBox : ModTile
+public class FurnaceMeltingChest : ModTile
 {
 	public override void SetStaticDefaults()
 	{
@@ -37,7 +38,7 @@ public class MeltingInputBox : ModTile
 
 		// Style 1 is ExampleChest when locked. We want that tile style to drop the ExampleChest item as well. Use the Chest Lock item to lock this chest.
 		// No item places ExampleChest in the locked style, so the automatically determined item drop is unknown, this is why RegisterItemDrop is necessary in this situation.
-		RegisterItemDrop(ModContent.ItemType<MeltingInputBox_Item>(), 1);
+		RegisterItemDrop(ModContent.ItemType<FurnaceMeltingChest_Item>(), 1);
 
 		// Sometimes mods remove content, such as tile styles, or tiles accidentally get corrupted. We can, if desired, register a fallback item for any tile style that doesn't have an automatically determined item drop. This is done by omitting the tileStyles parameter.
 		// RegisterItemDrop(ItemID.Chest);
@@ -173,10 +174,10 @@ public class MeltingInputBox : ModTile
 				{
 					zero = Vector2.Zero;
 				}
-				var glow = ModAsset.MeltingInputBox_meltingGlow.Value;
+				var glow = ModAsset.FurnaceMeltingChest_meltingGlow.Value;
 				spriteBatch.Draw(glow, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-28, -14), null, new Color(1f, 1f, 1f, 0) * value, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 
-				var bloom = ModAsset.MeltingInputBox_meltingBloom.Value;
+				var bloom = ModAsset.FurnaceMeltingChest_meltingBloom.Value;
 				spriteBatch.Draw(bloom, new Vector2(i, j) * 16 - Main.screenPosition + zero + new Vector2(-28 - 28, -14 - 32), null, new Color(1f, 1f, 1f, 0) * value, 0, Vector2.zeroVector, 1, SpriteEffects.None, 0);
 			}
 			Lighting.AddLight(new Vector2(i, j) * 16 + new Vector2(8), new Vector3(2f, 1.1f, 0.3f) * value);
@@ -293,7 +294,7 @@ public class MeltingInputBox : ModTile
 			player.cursorItemIconText = chest.name.Length > 0 ? chest.name : defaultName;
 			if (player.cursorItemIconText == defaultName)
 			{
-				player.cursorItemIconID = ModContent.ItemType<MeltingInputBox_Item>();
+				player.cursorItemIconID = ModContent.ItemType<FurnaceMeltingChest_Item>();
 				player.cursorItemIconText = string.Empty;
 			}
 		}
