@@ -73,10 +73,14 @@ public class GiveItemObjective : PlayerObjectiveBase
 		var stackCount = ItemCount;
 		foreach (var inventoryItem in inventory.Where(x => ItemTypes.Contains(x.type)))
 		{
-			if (inventoryItem.stack < stackCount)
+			if (inventoryItem.stack <= stackCount)
 			{
 				stackCount -= inventoryItem.stack;
-				inventoryItem.stack = 0;
+				inventoryItem.TurnToAir();
+				if (stackCount == 0)
+				{
+					break;
+				}
 			}
 			else
 			{
