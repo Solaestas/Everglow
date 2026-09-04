@@ -1,3 +1,4 @@
+using Everglow.Commons.Mechanics.Quest.WorldSide;
 using Everglow.Commons.Mechanics.Quest.WorldSide.Abstractions;
 using Everglow.Commons.Mechanics.Quest.Presentation.Icons;
 using Everglow.Commons.Utilities;
@@ -45,13 +46,14 @@ public class WorldExploreObjective : WorldObjectiveBase
 		var player = Main.LocalPlayer;
 		if (Condition(player))
 		{
+			float traveled = player.velocity.Length() * WorldQuestManager.UpdateInterval;
 			if (NetUtils.IsSingle)
 			{
-				CurrentDistance += player.velocity.Length();
+				CurrentDistance += traveled;
 			}
 			else if (NetUtils.IsClient)
 			{
-				_localDistance += player.velocity.Length();
+				_localDistance += traveled;
 			}
 		}
 	}
