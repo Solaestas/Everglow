@@ -175,6 +175,7 @@ public abstract partial class PlayerQuestBase : ITagCompoundEntity
 	/// </summary>
 	public virtual void Reset()
 	{
+		Time = 0;
 		Objectives.ResetProgress();
 	}
 }

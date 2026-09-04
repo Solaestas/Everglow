@@ -62,6 +62,12 @@ public class ExploreObjective : PlayerObjectiveBase
 		return "探索" + biomeName;
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		distanceMoved = 0;
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);

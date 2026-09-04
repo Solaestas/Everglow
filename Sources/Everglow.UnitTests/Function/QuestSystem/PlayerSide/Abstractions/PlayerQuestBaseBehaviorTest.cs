@@ -48,6 +48,16 @@ public class PlayerQuestBaseBehaviorTest
 		Assert.AreEqual(PlayerQuestState.Failed, quest.State);
 	}
 
+	[TestMethod]
+	public void Reset_ClearsElapsedTime()
+	{
+		var quest = new StubQuest { Time = 120 };
+
+		quest.Reset();
+
+		Assert.AreEqual(0, quest.Time);
+	}
+
 	private void SetManager(PlayerQuestManager manager)
 	{
 		PropertyInfo managerProperty = typeof(PlayerQuestSystem).GetProperty(nameof(PlayerQuestSystem.Manager))!;

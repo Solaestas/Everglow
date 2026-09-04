@@ -71,6 +71,12 @@ public class ConsumeItemObjective : PlayerObjectiveBase
 		}
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		ConsumedCount = 0;
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);

@@ -91,6 +91,12 @@ public class CollectItemObjective : PlayerObjectiveBase
 		QuestPlayer.OnPickupEvent -= QuestPlayer_OnPickUp;
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		CollectedCount = 0;
+	}
+
 	public override void LoadData(TagCompound tag)
 	{
 		base.LoadData(tag);

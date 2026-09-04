@@ -83,6 +83,12 @@ public class KillNPCObjective : PlayerObjectiveBase
 		QuestGlobalNPC.OnKillNPCEvent -= CountKill;
 	}
 
+	public override void ResetProgress()
+	{
+		base.ResetProgress();
+		KilledCount = 0;
+	}
+
 	/// <summary>
 	/// Count a matching NPC kill for this objective.
 	/// </summary>
