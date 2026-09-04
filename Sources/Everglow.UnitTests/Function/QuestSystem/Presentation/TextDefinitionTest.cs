@@ -201,6 +201,14 @@ public class TextDefinitionTest
 	}
 
 	[TestMethod]
+	public void GetQuestActionText_NullEntrySubstitutesColorArgument()
+	{
+		Assert.AreEqual(
+			"[TextDrawer,Text='',Color='45,38,33']",
+			TextDefinition.GetQuestActionText(null, "45,38,33"));
+	}
+
+	[TestMethod]
 	public void GetQuestActionText_UsesAvailableSubmitAction()
 	{
 		var identity = new QuestIdentity(QuestSide.Player, "TestQuest", "TestQuest");

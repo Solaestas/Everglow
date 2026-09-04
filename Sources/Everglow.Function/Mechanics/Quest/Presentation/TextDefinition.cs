@@ -93,7 +93,7 @@ public static class TextDefinition
 	{
 		if (entry is null)
 		{
-			return "[TextDrawer,Text='',Color='{color}']";
+			return GetColoredText(string.Empty, color);
 		}
 
 		string text = entry.Actions.Count > 0
