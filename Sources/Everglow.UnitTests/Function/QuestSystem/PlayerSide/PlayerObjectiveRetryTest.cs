@@ -204,6 +204,24 @@ public class PlayerObjectiveRetryTest
 	}
 
 	[TestMethod]
+	public void RetryAction_RejectsNonRetriableTimedOutObjective()
+	{
+		var timed = new TestObjective();
+		timed.WithTimeLimit(20, retriable: false);
+		var quest = new TestQuest();
+		quest.Objectives.Add(timed);
+		_manager.AddQuest(quest, PlayerQuestState.Accepted, showText: false);
+		quest.Objectives.Update(quest);
+
+		Assert.IsFalse(timed.IsRetriable);
+		Assert.IsTrue(timed.IsTimedOut);
+		Assert.IsFalse(quest.CanRetryObjective(timed.ObjectiveID));
+		Assert.IsFalse(_actions.TryExecute(RetryAction(quest, timed)));
+		Assert.IsTrue(timed.IsTimedOut);
+		Assert.AreEqual(20, timed.Timer.ElapsedTime);
+	}
+
+	[TestMethod]
 	public void RetryAction_RejectsUntimedUnexpiredAndCompletedObjectives()
 	{
 		var untimed = new TestObjective();
