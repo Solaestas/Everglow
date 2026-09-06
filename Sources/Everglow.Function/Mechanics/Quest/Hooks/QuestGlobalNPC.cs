@@ -102,7 +102,7 @@ public class QuestGlobalNPC : GlobalNPC
 			.SelectMany(m => m.ActiveObjectives)
 			.Where(o => !o.IsTimedOut)
 			.OfType<WorldKillNPCObjective>()
-			.Select(killObjective => killObjective.NPCType);
+			.SelectMany(killObjective => killObjective.NPCTypes);
 
 		return playerSideNPCs.Concat(worldSideNPCs).Distinct();
 	}
