@@ -1,4 +1,6 @@
+using Everglow.Commons.UI;
 using Everglow.Yggdrasil.YggdrasilTown.Tiles.FurnaceTiles;
+using Everglow.Yggdrasil.YggdrasilTown.UI;
 using MonoMod.Cil;
 using ReLogic.Graphics;
 using Terraria.GameContent;
@@ -31,15 +33,12 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 
 	public override void Load()
 	{
-		// TODO: Hooks should move to UISystem after branch merge, but for now, we need to keep it here to avoid a crash when the mod is loaded in a world without the furnace system.
-		On_ChestUI.DrawSlots += On_ChestUI_DrawPanel_FurnaceMeltingChest;
-		IL_Main.DrawTrashItemSlot += IL_Main_DrawTrashItemSlot;
 		base.Load();
+		UISystem.Instance.PostDrawChestUI += DrawFurnaceMeltingChest;
 	}
 
-	private void On_ChestUI_DrawPanel_FurnaceMeltingChest(On_ChestUI.orig_DrawSlots orig, SpriteBatch spriteBatch)
+	public void DrawFurnaceMeltingChest(UISystem system, SpriteBatch spriteBatch)
 	{
-		orig(spriteBatch);
 		Player player = Main.LocalPlayer;
 		if (player.chest >= 0)
 		{
@@ -66,11 +65,11 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 				}
 				if (EnquiryMeltingDown)
 				{
-					spriteBatch.DrawString(FontAssets.MouseText.Value, "Clear the chest and get points?", new Vector2(86, 436), Color.White);
+					Utils.DrawBorderStringFourWay(spriteBatch,FontAssets.MouseText.Value, "Clear the chest and get points?", 86, 436, Color.White, Color.Black, Vector2.zeroVector);
 				}
 				else
 				{
-					spriteBatch.DrawString(FontAssets.MouseText.Value, "Furnace Points: " + totalValue, new Vector2(86, 436), Color.White);
+					Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, "Furnace Points: " + totalValue, 86, 436, Color.White, Color.Black, Vector2.zeroVector);
 				}
 
 				// Meltdown button
@@ -153,48 +152,11 @@ public class YggdrasilTownFurnaceSystem : ModSystem
 					noTextColor = new Color(1f, 1f, 1f, 1f);
 					Draw9Piece_ChatBack_Highlight(spriteBatch, no_button);
 				}
-				spriteBatch.DrawString(FontAssets.MouseText.Value, "Yes", yes_button.Center() - new Vector2(12, 12), yesTextColor);
-				spriteBatch.DrawString(FontAssets.MouseText.Value, "No", no_button.Center() - new Vector2(12, 12), noTextColor);
+				Vector2 yesPos = yes_button.Center() - new Vector2(12, 12);
+				Vector2 noPos = no_button.Center() - new Vector2(12, 12);
+				Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, "Yes", yesPos.X, yesPos.Y, yesTextColor,Color.Black,Vector2.zeroVector);
+				Utils.DrawBorderStringFourWay(spriteBatch, FontAssets.MouseText.Value, "No", noPos.X, noPos.Y, noTextColor, Color.Black, Vector2.zeroVector);
 			}
-		}
-	}
-
-	private void IL_Main_DrawTrashItemSlot(ILContext il)
-	{
-		ILCursor c = new(il);
-		if (c.TryGotoNext(
-			MoveType.After,
-			x => x.MatchLdelemRef(),
-			x => x.MatchLdfld(out _),
-			x => x.MatchLdcI4(-1),
-			x => x.MatchBneUn(out _)))
-		{
-			c.EmitDelegate(IsFurnaceShopEnable);
-		}
-
-		if (c.TryGotoNext(
-			MoveType.After,
-			x => x.MatchBle(out _),
-			x => x.MatchLdsfld(out _),
-			x => x.MatchBrtrue(out _)))
-		{
-			c.EmitDelegate(DisposeFurnaceShopEnable);
-		}
-	}
-
-	private void IsFurnaceShopEnable()
-	{
-		if (FurnaceScoreShopOpen && Main.npcShop == 0)
-		{
-			Main.npcShop = 65536;
-		}
-	}
-
-	private void DisposeFurnaceShopEnable()
-	{
-		if (Main.npcShop == 65536)
-		{
-			Main.npcShop = 0;
 		}
 	}
 

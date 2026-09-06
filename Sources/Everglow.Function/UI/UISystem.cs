@@ -1,6 +1,7 @@
 using Everglow.Commons.DataStructures;
 using Everglow.Commons.Enums;
 using Everglow.Commons.Utilities;
+using MonoMod.Cil;
 using Terraria.UI;
 
 namespace Everglow.Commons.UI
@@ -26,6 +27,17 @@ namespace Everglow.Commons.UI
 		public bool TopResizing = false;
 		public bool BottomResizing = false;
 
+		/// <summary>
+		/// ID: -1:None; 0: FurnaceScoreShop
+		/// </summary>
+		public int CurrentSpecialShop = -1;
+
+		public int OldTalkNPC = -1;
+
+		public delegate void ChestUIDraw(UISystem system, SpriteBatch spriteBatch);
+
+		public event ChestUIDraw PostDrawChestUI;
+
 		public RenderTarget2D UI_Screen = null;
 
 		public UISystem()
@@ -34,6 +46,12 @@ namespace Everglow.Commons.UI
 			instance = this;
 		}
 
+		public int HookIndex = 0;
+
+		public Chest CurrentShop = new Chest(false);
+
+		public Chest OldChest = new Chest(false);
+
 		public override void Load()
 		{
 			base.Load();
@@ -41,6 +59,9 @@ namespace Everglow.Commons.UI
 			On_Main.DrawInterface += HigherInterfaceVisualEffectSupport;
 			On_Main.DrawCursor += ModifyUIBlockResizeCursor;
 			On_Main.DrawThickCursor += ModifyUIBlockResizeThickCursor;
+			On_ChestUI.DrawSlots += On_ChestUI_DrawPanel;
+			On_Main.DrawInventory += On_Main_DrawInventory;
+			IL_Main.DrawInventory += IL_Main_DrawInventory;
 			if (Main.netMode != NetmodeID.Server)
 			{
 				system.Load();
@@ -226,6 +247,86 @@ namespace Everglow.Commons.UI
 			{
 				UI_Screen = null;
 			}
+		}
+
+		private void IL_Main_DrawInventory(ILContext il)
+		{
+			ILCursor c = new(il);
+			if (c.TryGotoNext(
+				MoveType.After,
+				x => x.MatchLdindU2(),
+				x => x.MatchLdelemU1(),
+				x => x.MatchBrtrue(out _),
+				x => x.MatchLdsfld(out _),
+				x => x.MatchLdsfld(out _),
+				x => x.MatchLdelemRef(),
+				x => x.MatchLdcI4(-1),
+				x => x.MatchStfld(out _),
+				x => x.MatchLdcI4(0),
+				x => x.MatchCall(out _),
+				x => x.MatchLdcI4(0),
+				x => x.MatchStloc(out _)))
+			{
+				c.EmitDelegate(CheckFurnaceShopEnable_ModifyNpcShop);
+			}
+		}
+
+		private void On_ChestUI_DrawPanel(On_ChestUI.orig_DrawSlots orig, SpriteBatch spriteBatch)
+		{
+			orig(spriteBatch);
+			PostDrawChestUI?.Invoke(this, spriteBatch);
+		}
+
+		private void On_Main_DrawInventory(On_Main.orig_DrawInventory orig, Main self)
+		{
+			//HookIndex = 0;
+			CheckFurnaceShopEnable_ModifyNpcShop();
+			orig(self);
+			DisposeFurnaceShopEnable_ModifyNpcShop();
+		}
+
+		private void CheckFurnaceShopEnable_ModifyNpcShop()
+		{
+			//HookIndex++;
+			//Main.NewText(Main.npcShop + ", " + HookIndex);
+			if (CurrentSpecialShop >= 0 && Main.npcShop == 0)
+			{
+				Main.npcShop = 65536 + CurrentSpecialShop;
+			}
+		}
+
+		private void DisposeFurnaceShopEnable_ModifyNpcShop()
+		{
+			if (Main.npcShop >= 65536)
+			{
+				Main.npcShop = 0;
+			}
+		}
+
+		private void CheckFurnaceShopEnable_ModifyTalkNPC()
+		{
+			if (CurrentSpecialShop >= 0 && Main.LocalPlayer.talkNPC < 0)
+			{
+				OldTalkNPC = Main.LocalPlayer.talkNPC;
+				Main.LocalPlayer.talkNPC = 65536 + CurrentSpecialShop;
+				Main.npcShop = 0;
+				OldChest = Main.instance.shop[0];
+				SetupShop(CurrentShop);
+			}
+		}
+
+		private void DisposeFurnaceShopEnable_ModifyTalkNPC()
+		{
+			if (Main.LocalPlayer.talkNPC >= 65536)
+			{
+				Main.LocalPlayer.talkNPC = OldTalkNPC;
+				Main.instance.shop[0] = OldChest;
+			}
+		}
+
+		public void SetupShop(Chest chest)
+		{
+			Main.instance.shop[0] = chest;
 		}
 	}
 }

@@ -7,7 +7,7 @@ using Terraria.Map;
 
 namespace Everglow.Yggdrasil;
 
-internal class YggdrasilModule : EverglowModule
+public class YggdrasilModule : EverglowModule
 {
 	public override string Name => "Yggdrasil";
 

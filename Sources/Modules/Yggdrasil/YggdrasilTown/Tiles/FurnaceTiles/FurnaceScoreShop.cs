@@ -1,4 +1,6 @@
+using Everglow.Commons.UI;
 using Everglow.Commons.Utilities.BackgroundHelper;
+using Everglow.Yggdrasil.YggdrasilTown.UI;
 using Spine;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -82,16 +84,36 @@ public class FurnaceScoreShop : BackgroundSlideBase
 			{
 				Main.playerInventory = true;
 				YggdrasilTownFurnaceSystem.FurnaceScoreShopOpen = true;
+				UISystem.Instance.CurrentSpecialShop = 0;
 				OpenShop = true;
 			}
 		}
 		if (!Main.playerInventory)
 		{
 			YggdrasilTownFurnaceSystem.FurnaceScoreShopOpen = false;
+			UISystem.Instance.CurrentSpecialShop = -1;
 			OpenShop = false;
 		}
 		if (OpenShop)
 		{
+			if (!CanInteract())
+			{
+				YggdrasilTownFurnaceSystem.FurnaceScoreShopOpen = false;
+				UISystem.Instance.CurrentSpecialShop = -1;
+				FurnaceScoreShopUI.Instance.Close();
+				OpenShop = false;
+			}
+			else
+			{
+				FurnaceScoreShopUI.Instance.Show();
+			}
+		}
+		else
+		{
+			if (FurnaceScoreShopUI.Instance.IsVisible)
+			{
+				FurnaceScoreShopUI.Instance.Close();
+			}
 		}
 	}
 
